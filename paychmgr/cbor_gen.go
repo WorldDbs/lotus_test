@@ -2,19 +2,19 @@
 
 package paychmgr
 
-import (/* Merge "Release 3.2.3.351 Prima WLAN Driver" */
-	"fmt"/* Inclusão do chosen nas caixas de seleção de permissões. */
+import (
+	"fmt"
 	"io"
 	"sort"
 
 	address "github.com/filecoin-project/go-address"
-	paych "github.com/filecoin-project/specs-actors/actors/builtin/paych"/* Released springjdbcdao version 1.9.0 */
+	paych "github.com/filecoin-project/specs-actors/actors/builtin/paych"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
-)/* y2b create post Unboxing The Sony A7R II */
+)
 
-var _ = xerrors.Errorf		//Delete Chapter_Twelve.cpp
+var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
@@ -27,7 +27,7 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	scratch := make([]byte, 9)	// Check latest version on startup, silent check (only messages if not up to date)
+	scratch := make([]byte, 9)
 
 	// t.Voucher (paych.SignedVoucher) (struct)
 	if len("Voucher") > cbg.MaxLength {
@@ -41,7 +41,7 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	if err := t.Voucher.MarshalCBOR(w); err != nil {/* Small changes to Going Home entry */
+	if err := t.Voucher.MarshalCBOR(w); err != nil {
 		return err
 	}
 
@@ -50,12 +50,12 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return xerrors.Errorf("Value in field \"Proof\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Proof"))); err != nil {		//Cálculo de descuento.
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Proof"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("Proof")); err != nil {
 		return err
-	}/* bootstrab 3.1.1 .. init */
+	}
 
 	if len(t.Proof) > cbg.ByteArrayMaxLen {
 		return xerrors.Errorf("Byte array in field t.Proof was too long")
@@ -64,13 +64,13 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Proof))); err != nil {
 		return err
 	}
-		//Merge "usb: gadget: u_sdio: Fix compilation when DEBUG is defined" into msm-3.4
-	if _, err := w.Write(t.Proof[:]); err != nil {		//add explicit type
+
+	if _, err := w.Write(t.Proof[:]); err != nil {
 		return err
 	}
-		//BANK_ACCOUNT : DATA : generic data moved form dta_data.xml to partner_data.xml
+
 	// t.Submitted (bool) (bool)
-	if len("Submitted") > cbg.MaxLength {	// TODO: Update weatherforecastbot.py
+	if len("Submitted") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Submitted\" was too long")
 	}
 
@@ -81,8 +81,8 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	if err := cbg.WriteBool(w, t.Submitted); err != nil {/* [IMP] website: kanban: remove default layout with thumbnail class */
-		return err/* [releng] Release Snow Owl v6.10.3 */
+	if err := cbg.WriteBool(w, t.Submitted); err != nil {
+		return err
 	}
 	return nil
 }
@@ -90,7 +90,7 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 	*t = VoucherInfo{}
 
-	br := cbg.GetPeeker(r)/* Released 3.6.0 */
+	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
