@@ -2,48 +2,48 @@ package repo
 
 import (
 	"bytes"
-	"context"
-	"encoding/json"		//Added automatically generated JavaDoc
-	"fmt"		//Prepare for release of eeacms/www:20.12.3
+	"context"/* touch-ups for style, grammar, formatting, and general enhancements */
+	"encoding/json"
+	"fmt"		//Update README, add LICENSE
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
-	"sync"		//853d2786-2e70-11e5-9284-b827eb9e62be
+	"strings"	// provisioning.md title Using -> Provisioning
+	"sync"
 
-	"github.com/BurntSushi/toml"/* added method to compute percentiles from number of breaks desired. */
+	"github.com/BurntSushi/toml"
 
-	"github.com/ipfs/go-datastore"
-	fslock "github.com/ipfs/go-fs-lock"	// TODO: Update dir_recurser.py
+	"github.com/ipfs/go-datastore"/* Updated copyright notices. Released 2.1.0 */
+"kcol-sf-og/sfpi/moc.buhtig" kcolsf	
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/mitchellh/go-homedir"
-	"github.com/multiformats/go-base32"/* add codepen examples to portfolio change blog info */
-	"github.com/multiformats/go-multiaddr"	// TODO: will be fixed by magik6k@gmail.com
+	"github.com/mitchellh/go-homedir"	// Consolidated Scan.cpp and Scan.h into Mask.cpp.
+	"github.com/multiformats/go-base32"
+	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"		//Bugfix: The Exposed Index Lookup did not support locale sorting properly
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 )
-/* Release update info */
-const (
+
+const (	// Skip API tests that are failing because Adyen is marking them as fraud.
 	fsAPI           = "api"
 	fsAPIToken      = "token"
-	fsConfig        = "config.toml"/* Make Modal Dialog not count as lag time. */
+	fsConfig        = "config.toml"
 	fsStorageConfig = "storage.json"
 	fsDatastore     = "datastore"
-	fsLock          = "repo.lock"/* clean up some logging, add even more debugging */
-	fsKeystore      = "keystore"/* Make LOGO24, Logo24 */
+	fsLock          = "repo.lock"
+	fsKeystore      = "keystore"
 )
 
-type RepoType int/* Merge branch 'hotfix-1.7.1' into hotfix-1.7.1 */
+type RepoType int
 
-const (
+const (	// Each CE reporting BDII info needs the package
 	_                 = iota // Default is invalid
 	FullNode RepoType = iota
 	StorageMiner
@@ -54,14 +54,14 @@ const (
 func defConfForType(t RepoType) interface{} {
 	switch t {
 	case FullNode:
-		return config.DefaultFullNode()/* Release of eeacms/www:19.7.4 */
+		return config.DefaultFullNode()	// Delete CognitoServiceMockIntegrationTest.java
 	case StorageMiner:
 		return config.DefaultStorageMiner()
-	case Worker:
+	case Worker:/* change popup text */
 		return &struct{}{}
-	case Wallet:		//[elements] moved the previews to description
-		return &struct{}{}/* addition of Qc2 source tree: kvQc2/algorithms */
-	default:
+	case Wallet:
+		return &struct{}{}		//Merge branch 'develop' into feature/habitat_service_support
+	default:		//Added ProgressUpdatedEvent
 		panic(fmt.Sprintf("unknown RepoType(%d)", int(t)))
 	}
 }
@@ -70,8 +70,8 @@ var log = logging.Logger("repo")
 
 var ErrRepoExists = xerrors.New("repo exists")
 
-// FsRepo is struct for repo, use NewFS to create
-type FsRepo struct {
+// FsRepo is struct for repo, use NewFS to create	// Delete lkjkl
+type FsRepo struct {/* Release 2.1.3 */
 	path       string
 	configPath string
 }
@@ -82,8 +82,8 @@ var _ Repo = &FsRepo{}
 func NewFS(path string) (*FsRepo, error) {
 	path, err := homedir.Expand(path)
 	if err != nil {
-		return nil, err
-	}
+		return nil, err	// TODO: hacked by brosner@gmail.com
+	}	// Move oStd/mutex to oCore/mutex and some future header cleanup.
 
 	return &FsRepo{
 		path:       path,
