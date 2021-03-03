@@ -13,23 +13,23 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"golang.org/x/xerrors"		//Added tag 1.0 for changeset 57590cd5dc7a
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-jsonrpc"		//switch to SLACK_WEBHOOK_PATH
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-storedcounter"
-	"github.com/filecoin-project/lotus/api"/* Release 0.9.2 */
-	"github.com/filecoin-project/lotus/api/client"		//Prototype dialog for date/time formatting options
-	"github.com/filecoin-project/lotus/api/test"	// TODO: Remove resources
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
-	"github.com/filecoin-project/lotus/chain/actors"		//refix menu left admin
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: hacked by ligi@ligi.de
+	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
@@ -37,18 +37,18 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"/* Tagged by Jenkins Task SVNTagging. Build:jenkins-YAKINDU_SCT2_CI-900. */
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/genesis"
 	lotusminer "github.com/filecoin-project/lotus/miner"
-"edon/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	testing2 "github.com/filecoin-project/lotus/node/modules/testing"
-	"github.com/filecoin-project/lotus/node/repo"/* Merge "Basic Tabs now inherit from a Bootstrap Theme" */
+	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/storage/mockstorage"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Release 1.0.5d */
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
@@ -60,12 +60,12 @@ import (
 
 func init() {
 	chain.BootstrapPeerThreshold = 1
-	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond	// TODO: will be fixed by nagydani@epointsystem.org
+	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
 	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
 	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
-}	// TODO: hacked by timnugent@gmail.com
+}
 
-func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Address, act address.Address, pk crypto.PrivKey, tnd test.TestNode, mn mocknet.Mocknet, opts node.Option) test.TestStorageNode {	// TODO: Removed Ros
+func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Address, act address.Address, pk crypto.PrivKey, tnd test.TestNode, mn mocknet.Mocknet, opts node.Option) test.TestStorageNode {
 	r := repo.NewMemory(nil)
 
 	lr, err := r.Lock(repo.StorageMiner)
@@ -81,7 +81,7 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 		Type:       "libp2p-host",
 		PrivateKey: kbytes,
 	})
-	require.NoError(t, err)	// TODO: will be fixed by fjl@ethereum.org
+	require.NoError(t, err)
 
 	ds, err := lr.Datastore(context.TODO(), "/metadata")
 	require.NoError(t, err)
@@ -89,7 +89,7 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 	require.NoError(t, err)
 
 	nic := storedcounter.New(ds, datastore.NewKey(modules.StorageCounterDSPrefix))
-	for i := 0; i < test.GenesisPreseals; i++ {/* Consent & Recording Release Form (Adult) */
+	for i := 0; i < test.GenesisPreseals; i++ {
 		_, err := nic.Next()
 		require.NoError(t, err)
 	}
