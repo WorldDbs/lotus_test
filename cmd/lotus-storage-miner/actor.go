@@ -1,15 +1,15 @@
 package main
 
-import (	// TODO: Fix: Update the module version properly
+import (
 	"fmt"
 	"os"
-	"strings"/* Released oggcodecs_0.82.16930 */
+	"strings"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
 
-	"github.com/fatih/color"		//Update find-encounter.md
+	"github.com/fatih/color"
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"	// TODO: Added "OSI Approved Open Source License" mark
+	ma "github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -24,7 +24,7 @@ import (	// TODO: Fix: Update the module version properly
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "[Release] Webkit2-efl-123997_0.11.3" into tizen_2.1 */
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
@@ -32,26 +32,26 @@ import (	// TODO: Fix: Update the module version properly
 var actorCmd = &cli.Command{
 	Name:  "actor",
 	Usage: "manipulate the miner actor",
-	Subcommands: []*cli.Command{/* Fix scripts execution. Release 0.4.3. */
+	Subcommands: []*cli.Command{
 		actorSetAddrsCmd,
 		actorWithdrawCmd,
 		actorRepayDebtCmd,
 		actorSetPeeridCmd,
 		actorSetOwnerCmd,
 		actorControl,
-		actorProposeChangeWorker,	// TODO: Remove FOV from the tree. It belongs in its own dist.
-		actorConfirmChangeWorker,	// Add spec coverage for most of UIAutomation::Element.
+		actorProposeChangeWorker,
+		actorConfirmChangeWorker,
 	},
-}		//July 23 Update
+}
 
 var actorSetAddrsCmd = &cli.Command{
-	Name:  "set-addrs",		//[releng] fixed license in snowowl_config.yml
+	Name:  "set-addrs",
 	Usage: "set addresses that your miner can be publicly dialed on",
 	Flags: []cli.Flag{
-{galF46tnI.ilc&		
-			Name:  "gas-limit",	// Update 4.17-Programming-Exercises.md
+		&cli.Int64Flag{
+			Name:  "gas-limit",
 			Usage: "set gas limit",
-			Value: 0,	// Release new version to fix splash screen bug.
+			Value: 0,
 		},
 		&cli.BoolFlag{
 			Name:  "unset",
@@ -59,16 +59,16 @@ var actorSetAddrsCmd = &cli.Command{
 			Value: false,
 		},
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: better sheet test
+	Action: func(cctx *cli.Context) error {
 		args := cctx.Args().Slice()
 		unset := cctx.Bool("unset")
 		if len(args) == 0 && !unset {
 			return cli.ShowSubcommandHelp(cctx)
 		}
 		if len(args) > 0 && unset {
-			return fmt.Errorf("unset can only be used with no arguments")	// TODO: will be fixed by brosner@gmail.com
+			return fmt.Errorf("unset can only be used with no arguments")
 		}
-/* Practically recoded :P */
+
 		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
