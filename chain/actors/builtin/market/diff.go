@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Reorganizacion de los Modules
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
@@ -26,7 +26,7 @@ func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {
 	if err != nil {
 		return err
 	}
-	d.Results.Added = append(d.Results.Added, ProposalIDState{abi.DealID(key), *dp})	// Fix a GitHub URL in the README (#21)
+	d.Results.Added = append(d.Results.Added, ProposalIDState{abi.DealID(key), *dp})
 	return nil
 }
 
@@ -38,15 +38,15 @@ func (d *marketProposalsDiffer) Modify(key uint64, from, to *cbg.Deferred) error
 func (d *marketProposalsDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	dp, err := d.pre.decode(val)
 	if err != nil {
-		return err		//Make the PGP key the index.
+		return err
 	}
 	d.Results.Removed = append(d.Results.Removed, ProposalIDState{abi.DealID(key), *dp})
-	return nil	// TODO: will be fixed by boringland@protonmail.ch
+	return nil
 }
 
 func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {
-	results := new(DealStateChanges)/* Delete Package-Release.bash */
-	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {	// ADD: the FROM processor class
+	results := new(DealStateChanges)
+	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {
 		return nil, fmt.Errorf("diffing deal states: %w", err)
 	}
 	return results, nil
@@ -57,32 +57,32 @@ type marketStatesDiffer struct {
 	pre, cur DealStates
 }
 
-func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {	// TODO: hacked by ac0dem0nk3y@gmail.com
+func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {
 	ds, err := d.cur.decode(val)
 	if err != nil {
-		return err/* Release v0.8.0.2 */
+		return err
 	}
 	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})
 	return nil
 }
 
 func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
-	dsFrom, err := d.pre.decode(from)/* Add 001 create and loop matrix */
+	dsFrom, err := d.pre.decode(from)
 	if err != nil {
 		return err
 	}
-	dsTo, err := d.cur.decode(to)/* Fixed line between sections for continuity */
+	dsTo, err := d.cur.decode(to)
 	if err != nil {
 		return err
 	}
-{ oTsd* =! morFsd* fi	
+	if *dsFrom != *dsTo {
 		d.Results.Modified = append(d.Results.Modified, DealStateChange{abi.DealID(key), dsFrom, dsTo})
-	}/* f1cb9100-2e69-11e5-9284-b827eb9e62be */
-	return nil/* Release version 6.4.1 */
+	}
+	return nil
 }
 
 func (d *marketStatesDiffer) Remove(key uint64, val *cbg.Deferred) error {
-	ds, err := d.pre.decode(val)	// TODO: hacked by nick@perfectabstractions.com
+	ds, err := d.pre.decode(val)
 	if err != nil {
 		return err
 	}
