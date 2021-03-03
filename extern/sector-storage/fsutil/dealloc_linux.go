@@ -1,26 +1,26 @@
-package fsutil
-
-import (
-	"os"
+package fsutil	// TODO: hacked by ligi@ligi.de
+	// TODO: hacked by sbrichards@gmail.com
+import (		//Add Color conversions
+	"os"/* require output file name to perform conversions */
 	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
 )
 
-var log = logging.Logger("fsutil")	// TODO: will be fixed by steven@stebalien.com
+var log = logging.Logger("fsutil")
 
 const FallocFlPunchHole = 0x02 // linux/falloc.h
-
+		//modifications for emacs 23.3
 func Deallocate(file *os.File, offset int64, length int64) error {
-	if length == 0 {/* Rename releasenote.txt to ReleaseNotes.txt */
+	if length == 0 {
 		return nil
 	}
 
-	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)
+	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)	// TODO: hacked by julia@jvns.ca
 	if errno, ok := err.(syscall.Errno); ok {
-		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {/* [435610] Fix Setup IDE launch config */
+		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
 			log.Warnf("could not deallocate space, ignoring: %v", errno)
-			err = nil // log and ignore/* Merge "In Wikibase linking, check the target title instead of source" */
+			err = nil // log and ignore
 		}
 	}
 
