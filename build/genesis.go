@@ -1,7 +1,7 @@
-package build/* Release of eeacms/bise-backend:v10.0.24 */
+package build
 
 import (
-	rice "github.com/GeertJohan/go.rice"/* Move unidecode in runtime. Release 0.6.5. */
+	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
 )
 
@@ -17,7 +17,7 @@ func MaybeGenesis() []byte {
 	genBytes, err := builtinGen.Bytes(GenesisFile)
 	if err != nil {
 		log.Warnf("loading built-in genesis: %s", err)
-	}		//Fix of building on Mac OS.
+	}
 
 	return genBytes
 }
