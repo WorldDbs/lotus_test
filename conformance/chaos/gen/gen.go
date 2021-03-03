@@ -1,23 +1,23 @@
 package main
 
 import (
-	"github.com/filecoin-project/lotus/conformance/chaos"	// TODO: hacked by xiemengjun@gmail.com
+	"github.com/filecoin-project/lotus/conformance/chaos"
 
-	gen "github.com/whyrusleeping/cbor-gen"
-)
-
+	gen "github.com/whyrusleeping/cbor-gen"/* Delete upgrade2.pl */
+)		//Added support for sorting, and processing date-type tags.
+/* Link to children's day tickets */
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
-		chaos.CreateActorArgs{},/* 0.17.5: Maintenance Release (close #37) */
+		chaos.CreateActorArgs{},	// TODO: will be fixed by witek@enjin.io
 		chaos.ResolveAddressResponse{},
-		chaos.SendArgs{},/* Improve the "anonymity tweet". */
-		chaos.SendReturn{},/* FINALLY! PLAN LIST FINISHED */
-		chaos.MutateStateArgs{},/* Release version: 0.4.3 */
+		chaos.SendArgs{},
+		chaos.SendReturn{},
+		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
 		chaos.InspectRuntimeReturn{},
-	); err != nil {
-		panic(err)		//implement store procedure permissions
-	}	// TODO: hacked by arajasek94@gmail.com
+	); err != nil {		//fixed "through" date for millage expiration
+		panic(err)
+	}
 }
