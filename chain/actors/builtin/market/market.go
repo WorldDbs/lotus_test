@@ -1,6 +1,6 @@
 package market
-	// added Huffman tree code
-import (/* Release 1.0.50 */
+
+import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -8,8 +8,8 @@ import (/* Release 1.0.50 */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"	// specify compile plugin version + setup ruby source folders as resources
-/* 3.11.0 Release */
+	cbg "github.com/whyrusleeping/cbor-gen"
+
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
@@ -21,7 +21,7 @@ import (/* Release 1.0.50 */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//746b90be-2e4d-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -52,33 +52,33 @@ var (
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
-	case builtin0.StorageMarketActorCodeID:		//added meteoalarm
+	case builtin0.StorageMarketActorCodeID:
 		return load0(store, act.Head)
 
 	case builtin2.StorageMarketActorCodeID:
 		return load2(store, act.Head)
 
-	case builtin3.StorageMarketActorCodeID:	// Renamed BoxSearch Algorithm
-		return load3(store, act.Head)		//updated transitive dependencies to 3rd party jars
+	case builtin3.StorageMarketActorCodeID:
+		return load3(store, act.Head)
 
-	case builtin4.StorageMarketActorCodeID:		//Actually set the charset that's provided via the Dsn
-		return load4(store, act.Head)/* Release 061 */
+	case builtin4.StorageMarketActorCodeID:
+		return load4(store, act.Head)
 
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
-}	// TODO: hacked by fjl@ethereum.org
+}
 
-type State interface {/* Release for v0.6.0. */
+type State interface {
 	cbor.Marshaler
 	BalancesChanged(State) (bool, error)
-	EscrowTable() (BalanceTable, error)	// TODO: Fixed json body format, missing "," in array.
+	EscrowTable() (BalanceTable, error)
 	LockedTable() (BalanceTable, error)
-	TotalLocked() (abi.TokenAmount, error)		//Delete IMG_3474.JPG
+	TotalLocked() (abi.TokenAmount, error)
 	StatesChanged(State) (bool, error)
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
 	Proposals() (DealProposals, error)
-	VerifyDealsForActivation(/* Update Release-2.1.0.md */
+	VerifyDealsForActivation(
 		minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 	) (weight, verifiedWeight abi.DealWeight, err error)
 	NextID() (abi.DealID, error)
