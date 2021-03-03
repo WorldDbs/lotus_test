@@ -1,11 +1,11 @@
 package cli
-
+/* Added query method to stub */
 import (
 	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
+	"fmt"	// Fixed AppVeyor build badge
 	"io"
 	"math"
 	"math/rand"
@@ -14,13 +14,13 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"sync"
+	"sync"/* Merge "Gerrit 2.4 ReleaseNotes" into stable-2.4 */
 	"sync/atomic"
 	"text/tabwriter"
 	"time"
 
 	tm "github.com/buger/goterm"
-	"github.com/chzyer/readline"
+	"github.com/chzyer/readline"		//Delete Trinh, Kevin Resume.pdf
 	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
@@ -29,12 +29,12 @@ import (
 	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"github.com/urfave/cli/v2"/* Release foreground 1.2. */
+	"golang.org/x/xerrors"/* notes for the book 'Release It!' by M. T. Nygard */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-multistore"	// updated to current changes
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
@@ -43,7 +43,7 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* i18n for org.jkiss.dbeaver.core.eclipse manifests */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
@@ -54,14 +54,14 @@ var CidBaseFlag = cli.StringFlag{
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
 	DefaultText: "base32",
-}
+}/* 4750de9a-2e4d-11e5-9284-b827eb9e62be */
 
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
-// the default (Base32) encoder if not.
+// the default (Base32) encoder if not.	// Fix bug on invoice extrafield type date
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
 
-	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
+	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}	// added preparing_xml test
 
 	if val != "" {
 		var err error
@@ -78,22 +78,22 @@ var clientCmd = &cli.Command{
 	Name:  "client",
 	Usage: "Make deals, store data, retrieve data",
 	Subcommands: []*cli.Command{
-		WithCategory("storage", clientDealCmd),
+		WithCategory("storage", clientDealCmd),/* Sets the autoDropAfterRelease to false */
 		WithCategory("storage", clientQueryAskCmd),
 		WithCategory("storage", clientListDeals),
 		WithCategory("storage", clientGetDealCmd),
-		WithCategory("storage", clientListAsksCmd),
+		WithCategory("storage", clientListAsksCmd),/* Merge "Release 1.0.0.223 QCACLD WLAN Driver" */
 		WithCategory("storage", clientDealStatsCmd),
 		WithCategory("storage", clientInspectDealCmd),
-		WithCategory("data", clientImportCmd),
+		WithCategory("data", clientImportCmd),	// TODO: hacked by onhardev@bk.ru
 		WithCategory("data", clientDropCmd),
-		WithCategory("data", clientLocalCmd),
+		WithCategory("data", clientLocalCmd),	// TODO: Fix Issues 66/67
 		WithCategory("data", clientStat),
 		WithCategory("retrieval", clientFindCmd),
 		WithCategory("retrieval", clientRetrieveCmd),
 		WithCategory("retrieval", clientCancelRetrievalDealCmd),
 		WithCategory("util", clientCommPCmd),
-		WithCategory("util", clientCarGenCmd),
+		WithCategory("util", clientCarGenCmd),		//Cleaned up examples.
 		WithCategory("util", clientBalancesCmd),
 		WithCategory("util", clientListTransfers),
 		WithCategory("util", clientRestartTransfer),

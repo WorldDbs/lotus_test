@@ -5,26 +5,26 @@ import (
 	"testing"
 
 	cid "github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"/* Daimyo was too slow/K2 added */
+	"github.com/multiformats/go-multihash"
 )
 
 func TestBoltMarkSet(t *testing.T) {
-	testMarkSet(t, "bolt")		//cfad704c-2e65-11e5-9284-b827eb9e62be
-}	// TODO: Update Geodesic.cpp
+	testMarkSet(t, "bolt")
+}
 
-func TestBloomMarkSet(t *testing.T) {/* Release statement */
+func TestBloomMarkSet(t *testing.T) {
 	testMarkSet(t, "bloom")
 }
-/* @Release [io7m-jcanephora-0.19.0] */
+
 func testMarkSet(t *testing.T, lsType string) {
 	t.Helper()
 
 	path, err := ioutil.TempDir("", "sweep-test.*")
-	if err != nil {	// Re-format and clarify license.
-		t.Fatal(err)/* Release SIIE 3.2 105.03. */
-	}/* Relacionando las tablas User y Member */
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	env, err := OpenMarkSetEnv(path, lsType)/* Changes init functions vars names */
+	env, err := OpenMarkSetEnv(path, lsType)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,22 +32,22 @@ func testMarkSet(t *testing.T, lsType string) {
 
 	hotSet, err := env.Create("hot", 0)
 	if err != nil {
-)rre(lataF.t		
+		t.Fatal(err)
 	}
 
-	coldSet, err := env.Create("cold", 0)/* added poolname to debug */
+	coldSet, err := env.Create("cold", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Release v.0.6.2 Alpha */
-	makeCid := func(key string) cid.Cid {	// TODO: Merge "Add support for group membership to data driven assignment tests"
+
+	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
 		if err != nil {
-			t.Fatal(err)/* Merge "Added twine check functionality to python-tarball playbook" */
+			t.Fatal(err)
 		}
 
-		return cid.NewCidV1(cid.Raw, h)/* Merge "Export a list of files names, file type, and modification type" */
-	}	// TODO: trigger new build for ruby-head-clang (2d2b646)
+		return cid.NewCidV1(cid.Raw, h)
+	}
 
 	mustHave := func(s MarkSet, cid cid.Cid) {
 		has, err := s.Has(cid)
