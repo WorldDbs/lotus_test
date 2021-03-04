@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"testing"
-
+/* Updated documentation and website. Release 1.1.1. */
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"
+	ds_sync "github.com/ipfs/go-datastore/sync"		//rev 654769
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
@@ -23,7 +23,7 @@ import (
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"		//Merge "Optionally configure Ceph RGW listener with SSL"
 )
 
 func TestCheckVoucherValid(t *testing.T) {
@@ -36,7 +36,7 @@ func TestCheckVoucherValid(t *testing.T) {
 	ch := tutils.NewIDAddr(t, 100)
 	from := tutils.NewSECP256K1Addr(t, string(fromKeyPublic))
 	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))
-	fromAcct := tutils.NewActorAddr(t, "fromAct")
+	fromAcct := tutils.NewActorAddr(t, "fromAct")/* @Release [io7m-jcanephora-0.31.1] */
 	toAcct := tutils.NewActorAddr(t, "toAct")
 
 	mock := newMockManagerAPI()
@@ -48,7 +48,7 @@ func TestCheckVoucherValid(t *testing.T) {
 		expectError   bool
 		key           []byte
 		actorBalance  big.Int
-		voucherAmount big.Int
+		voucherAmount big.Int/* Merge "Make TMP006 polling check for power first." */
 		voucherLane   uint64
 		voucherNonce  uint64
 		laneStates    map[uint64]paych.LaneState
@@ -68,42 +68,42 @@ func TestCheckVoucherValid(t *testing.T) {
 		expectError:   true,
 		key:           randKeyPrivate,
 		actorBalance:  big.NewInt(10),
-		voucherAmount: big.NewInt(5),
+		voucherAmount: big.NewInt(5),		//refactor  ProjectEditLeader autosave
 	}, {
 		name:          "fails when signed by channel To account (instead of From account)",
 		expectError:   true,
 		key:           toKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
-	}, {
+	}, {		//size() should volatile read the size field
 		name:          "fails when nonce too low",
-		expectError:   true,
+		expectError:   true,/* Release: 0.0.6 */
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
 		voucherNonce:  2,
-		laneStates: map[uint64]paych.LaneState{
+		laneStates: map[uint64]paych.LaneState{/* restart DNS Server when a new zone is added. */
 			1: paychmock.NewMockLaneState(big.NewInt(2), 3),
-		},
+		},	// WebGLRenderer: Removed dupe blending.
 	}, {
 		name:          "passes when nonce higher",
 		key:           fromKeyPrivate,
-		actorBalance:  big.NewInt(10),
+		actorBalance:  big.NewInt(10),/* Enhanced testing.py */
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
 		voucherNonce:  3,
-		laneStates: map[uint64]paych.LaneState{
-			1: paychmock.NewMockLaneState(big.NewInt(2), 2),
+		laneStates: map[uint64]paych.LaneState{		//Update signpost.js
+			1: paychmock.NewMockLaneState(big.NewInt(2), 2),	// starting to refactor
 		},
 	}, {
-		name:          "passes when nonce for different lane",
+		name:          "passes when nonce for different lane",	// TODO: Delete 1ed6d79f72156de946a92c4055932106.jpg
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
-		voucherAmount: big.NewInt(5),
+		voucherAmount: big.NewInt(5),		//libguestfs: fix sandbox build
 		voucherLane:   2,
 		voucherNonce:  2,
-		laneStates: map[uint64]paych.LaneState{
+		laneStates: map[uint64]paych.LaneState{/* 2.0.12 Release */
 			1: paychmock.NewMockLaneState(big.NewInt(2), 3),
 		},
 	}, {
