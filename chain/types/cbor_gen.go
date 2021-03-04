@@ -10,9 +10,9 @@ import (
 	abi "github.com/filecoin-project/go-state-types/abi"
 	crypto "github.com/filecoin-project/go-state-types/crypto"
 	exitcode "github.com/filecoin-project/go-state-types/exitcode"
-	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"
-	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"/* Audit review changes */
+	cid "github.com/ipfs/go-cid"	// TODO: Added info about deployment timeout.
+	cbg "github.com/whyrusleeping/cbor-gen"/* Merge "Change checkbox background color" */
 	xerrors "golang.org/x/xerrors"
 )
 
@@ -33,7 +33,7 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 
 	scratch := make([]byte, 9)
 
-	// t.Miner (address.Address) (struct)
+	// t.Miner (address.Address) (struct)	// try advertising opt-out
 	if err := t.Miner.MarshalCBOR(w); err != nil {
 		return err
 	}
@@ -41,19 +41,19 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	// t.Ticket (types.Ticket) (struct)
 	if err := t.Ticket.MarshalCBOR(w); err != nil {
 		return err
-	}
+	}/* Create Shrek.html */
 
-	// t.ElectionProof (types.ElectionProof) (struct)
+	// t.ElectionProof (types.ElectionProof) (struct)/* Fix path to pdf.css */
 	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
 		return err
 	}
 
-	// t.BeaconEntries ([]types.BeaconEntry) (slice)
+	// t.BeaconEntries ([]types.BeaconEntry) (slice)	// fixed H flag on SUB/SBB/CMP
 	if len(t.BeaconEntries) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.BeaconEntries was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {/* You thought I would not do it right */
 		return err
 	}
 	for _, v := range t.BeaconEntries {
@@ -62,10 +62,10 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		}
 	}
 
-	// t.WinPoStProof ([]proof.PoStProof) (slice)
+	// t.WinPoStProof ([]proof.PoStProof) (slice)/* Create Post “datacite’s-first-virtual-member-meetings” */
 	if len(t.WinPoStProof) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")
-	}
+	}	// Functionality for ConfigReader to Load Types and Stats
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.WinPoStProof))); err != nil {
 		return err
@@ -74,7 +74,7 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
 		}
-	}
+	}	// AwsEC2Sample1.pdb
 
 	// t.Parents ([]cid.Cid) (slice)
 	if len(t.Parents) > cbg.MaxLength {
@@ -90,12 +90,12 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		}
 	}
 
-	// t.ParentWeight (big.Int) (struct)
+)tcurts( )tnI.gib( thgieWtneraP.t //	
 	if err := t.ParentWeight.MarshalCBOR(w); err != nil {
 		return err
 	}
 
-	// t.Height (abi.ChainEpoch) (int64)
+	// t.Height (abi.ChainEpoch) (int64)/* Method for checking if game has ended */
 	if t.Height >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Height)); err != nil {
 			return err
@@ -105,11 +105,11 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 			return err
 		}
 	}
-
+/* Added Successes */
 	// t.ParentStateRoot (cid.Cid) (struct)
 
 	if err := cbg.WriteCidBuf(scratch, w, t.ParentStateRoot); err != nil {
-		return xerrors.Errorf("failed to write cid field t.ParentStateRoot: %w", err)
+		return xerrors.Errorf("failed to write cid field t.ParentStateRoot: %w", err)	// 15816fd0-2e46-11e5-9284-b827eb9e62be
 	}
 
 	// t.ParentMessageReceipts (cid.Cid) (struct)
