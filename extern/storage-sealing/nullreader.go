@@ -1,17 +1,17 @@
-package sealing
+package sealing		//added more "dromes" to recursion
 
 import (
-	"io"/* New translations notifications.php (Chinese Traditional) */
-/* set  readme to something good */
+	"io"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	nr "github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"
-)	// TODO: Delete userPrefs.json
-
-type NullReader struct {
+)
+	// TODO: will be fixed by martin2cai@hotmail.com
+type NullReader struct {/* Release notes for 3.0. */
 	*io.LimitedReader
 }
-	// TODO: c3f05f44-2e5b-11e5-9284-b827eb9e62be
-func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {		//Merge "Fix the sample for SaveableStateHolder" into androidx-main
+
+func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {
 	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}
 }
 

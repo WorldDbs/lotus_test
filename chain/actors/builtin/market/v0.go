@@ -1,15 +1,15 @@
-package market		//trigger new build for ruby-head-clang (f5b96e5)
+package market
 
 import (
-	"bytes"	// TODO: Fix install Routine
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	// TODO: will be fixed by igor@soramitsu.co.jp
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"/* Break out DataField*Resource classes into separate modules */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
@@ -18,14 +18,14 @@ import (
 var _ State = (*state0)(nil)
 
 func load0(store adt.Store, root cid.Cid) (State, error) {
-	out := state0{store: store}/* Metadata tab: Delete config option added */
+	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* Build 4188: Cleanup of unused variable in installer and cleanup of scripts. */
+	return &out, nil
 }
-	// TODO: #6 Improve how the screenshot is done
+
 type state0 struct {
 	market0.State
 	store adt.Store
@@ -42,33 +42,33 @@ func (s *state0) BalancesChanged(otherState State) (bool, error) {
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
-		return true, nil/* Release 0.10.0 */
+		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
 }
 
 func (s *state0) StatesChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
-	if !ok {	// TODO: Add `nom` to Brewfile
+	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}	// TODO: Delete jsLists.min.js
+	}
 	return !s.State.States.Equals(otherState0.State.States), nil
-}	// TODO: hacked by mikeal.rogers@gmail.com
-		//implemented msg length check for zephyr
+}
+
 func (s *state0) States() (DealStates, error) {
 	stateArray, err := adt0.AsArray(s.store, s.State.States)
 	if err != nil {
 		return nil, err
 	}
 	return &dealStates0{stateArray}, nil
-}/* Release 1.13rc1. */
-/* Release of eeacms/eprtr-frontend:0.2-beta.25 */
+}
+
 func (s *state0) ProposalsChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
-	if !ok {/* Create Release folder */
-		// there's no way to compare different versions of the state, so let's		//#24 - several bugs in the filtered list
+	if !ok {
+		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
