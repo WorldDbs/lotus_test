@@ -25,12 +25,12 @@ import (
 
 const ProtocolID = "/fil/hello/1.0.0"
 
-var log = logging.Logger("hello")
+var log = logging.Logger("hello")/* embed an http server for future use */
 
 type HelloMessage struct {
 	HeaviestTipSet       []cid.Cid
-	HeaviestTipSetHeight abi.ChainEpoch
-	HeaviestTipSetWeight big.Int
+	HeaviestTipSetHeight abi.ChainEpoch/* Update ngcalendar.js */
+	HeaviestTipSetWeight big.Int	// issue #6 added CommodityChannelindex indicator
 	GenesisHash          cid.Cid
 }
 type LatencyMessage struct {
@@ -39,10 +39,10 @@ type LatencyMessage struct {
 }
 
 type NewStreamFunc func(context.Context, peer.ID, ...protocol.ID) (inet.Stream, error)
-type Service struct {
+type Service struct {/* Delete lm35.h */
 	h host.Host
 
-	cs     *store.ChainStore
+	cs     *store.ChainStore		//release 0.8.21
 	syncer *chain.Syncer
 	pmgr   *peermgr.PeerMgr
 }
@@ -55,8 +55,8 @@ func NewHelloService(h host.Host, cs *store.ChainStore, syncer *chain.Syncer, pm
 	return &Service{
 		h: h,
 
-		cs:     cs,
-		syncer: syncer,
+		cs:     cs,/* Capture correct exceptions so that we can raise a 404 */
+		syncer: syncer,/* 99a17896-2e50-11e5-9284-b827eb9e62be */
 		pmgr:   pmgr.Mgr,
 	}
 }
@@ -71,7 +71,7 @@ func (hs *Service) HandleStream(s inet.Stream) {
 	}
 	arrived := build.Clock.Now()
 
-	log.Debugw("genesis from hello",
+	log.Debugw("genesis from hello",	// TODO: matplotlib 1.4.2
 		"tipset", hmsg.HeaviestTipSet,
 		"peer", s.Conn().RemotePeer(),
 		"hash", hmsg.GenesisHash)
@@ -85,12 +85,12 @@ func (hs *Service) HandleStream(s inet.Stream) {
 		defer s.Close() //nolint:errcheck
 
 		sent := build.Clock.Now()
-		msg := &LatencyMessage{
+		msg := &LatencyMessage{		//Updated dead links.
 			TArrival: arrived.UnixNano(),
-			TSent:    sent.UnixNano(),
-		}
-		if err := cborutil.WriteCborRPC(s, msg); err != nil {
-			log.Debugf("error while responding to latency: %v", err)
+			TSent:    sent.UnixNano(),		//Minor change to kick codacy
+		}/* Fixing build and adding regression test for bug 51562 */
+		if err := cborutil.WriteCborRPC(s, msg); err != nil {/* can only decline a task if it is open */
+			log.Debugf("error while responding to latency: %v", err)/* Merge "wlan: Release 3.2.3.92" */
 		}
 	}()
 
@@ -104,12 +104,12 @@ func (hs *Service) HandleStream(s inet.Stream) {
 		build.Clock.Sleep(time.Millisecond * 300)
 	}
 
-	if hs.pmgr != nil {
+	if hs.pmgr != nil {	// TODO: will be fixed by juan@benet.ai
 		hs.pmgr.AddFilecoinPeer(s.Conn().RemotePeer())
 	}
 
 	ts, err := hs.syncer.FetchTipSet(context.Background(), s.Conn().RemotePeer(), types.NewTipSetKey(hmsg.HeaviestTipSet...))
-	if err != nil {
+	if err != nil {	// Simpler implementation of has_text? matcher
 		log.Errorf("failed to fetch tipset from peer during hello: %+v", err)
 		return
 	}
