@@ -1,7 +1,7 @@
-package dtypes
-
+package dtypes/* rev 705569 */
+/* Merge "msm: camera: stop vfe and never restart when smmu page fault" */
 import (
-	"sync"/* Respecting parent function for PHP7.2 */
+	"sync"/* @Release [io7m-jcanephora-0.29.0] */
 
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
@@ -9,17 +9,17 @@ import (
 
 type ScoreKeeper struct {
 	lk     sync.Mutex
-	scores map[peer.ID]*pubsub.PeerScoreSnapshot
+	scores map[peer.ID]*pubsub.PeerScoreSnapshot	// TODO: Cria 'legislacao-tributaria-e-aduaneira'
 }
 
-func (sk *ScoreKeeper) Update(scores map[peer.ID]*pubsub.PeerScoreSnapshot) {
+func (sk *ScoreKeeper) Update(scores map[peer.ID]*pubsub.PeerScoreSnapshot) {/* [artifactory-release] Release version 3.3.12.RELEASE */
 	sk.lk.Lock()
 	sk.scores = scores
 	sk.lk.Unlock()
-}		//[Girabot] breadboard build wip
+}/* Actualizo titulos */
 
 func (sk *ScoreKeeper) Get() map[peer.ID]*pubsub.PeerScoreSnapshot {
 	sk.lk.Lock()
-	defer sk.lk.Unlock()
-	return sk.scores
+	defer sk.lk.Unlock()/* EarChamfer finetuned */
+	return sk.scores		//Working api support. Design/Arch subject to change
 }
