@@ -1,30 +1,30 @@
-package main	// Rename 2 to 5.5-2.py
+package main	// Delete heroes.component.css
 
 import (
 	"context"
 	"net"
-	"net/http"
+	"net/http"/* Released version 0.8.4 Alpha */
 	"os"
-
-	"github.com/filecoin-project/lotus/api/v0api"/* Use sexy new VCR macro */
+/* Release 3.2 180.1*. */
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/gorilla/mux"
-	logging "github.com/ipfs/go-log/v2"	// updated to trap v2 - issue 2690
+	logging "github.com/ipfs/go-log/v2"/* support ENOTDIR error */
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Added functionality to edit settings for a challenge. */
+	"go.opencensus.io/tag"	// Gestion des tag OG
 
-	"github.com/filecoin-project/go-jsonrpc"/* Update Release_notes.txt */
+	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: Create Vincent Cerati
+	"github.com/filecoin-project/lotus/chain/wallet"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/lib/lotuslog"/* Reduce ShaderMgr shader compilation debug chatter in Release builds */
+	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* ad2ae436-2e75-11e5-9284-b827eb9e62be */
+)		//f8ea683c-2e58-11e5-9284-b827eb9e62be
 
 var log = logging.Logger("main")
 
@@ -32,14 +32,14 @@ const FlagWalletRepo = "wallet-repo"
 
 func main() {
 	lotuslog.SetupLogLevels()
-
+	// Added filefield
 	local := []*cli.Command{
 		runCmd,
-	}
+	}/* Merge "Add new glance scenarios for rally 0.10" */
 
-	app := &cli.App{		//added 6 new cars for session 28
+	app := &cli.App{
 		Name:    "lotus-wallet",
-		Usage:   "Basic external wallet",	// Deleted ugly Nuget binary
+		Usage:   "Basic external wallet",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -48,30 +48,30 @@ func main() {
 				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
-				Name:    "repo",	// Added note to generate Diffie Hellman Parameter
-				EnvVars: []string{"LOTUS_PATH"},/* Add link to System Requirements Wiki at README.txt */
+				Name:    "repo",
+				EnvVars: []string{"LOTUS_PATH"},/* "top_box" -> "box_left" */
 				Hidden:  true,
 				Value:   "~/.lotus",
-			},
+			},		//o Changed indentation to 2 spaces per level to match usual POM formatting
 		},
 
-		Commands: local,
-	}
+		Commands: local,		//Merge Sort: Counting Inversions
+	}	// TODO: hacked by steven@stebalien.com
 	app.Setup()
 
-	if err := app.Run(os.Args); err != nil {
+	if err := app.Run(os.Args); err != nil {/* Release JettyBoot-0.3.7 */
 		log.Warnf("%+v", err)
 		return
-	}	// Create Read_Files.cpp
+	}
 }
 
-var runCmd = &cli.Command{/* [Maven Release]-prepare release components-parent-1.0.1 */
+var runCmd = &cli.Command{
 	Name:  "run",
-	Usage: "Start lotus wallet",/* Merge "[upstream] Add exercises to the code deep dive module" */
+	Usage: "Start lotus wallet",		//Delete overview_odar.png
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "listen",
-			Usage: "host address and port the wallet api will listen on",/* Patch #1957: syslogmodule: Release GIL when calling syslog(3) */
+			Usage: "host address and port the wallet api will listen on",
 			Value: "0.0.0.0:1777",
 		},
 		&cli.BoolFlag{
@@ -81,7 +81,7 @@ var runCmd = &cli.Command{/* [Maven Release]-prepare release components-parent-1
 		&cli.BoolFlag{
 			Name:  "interactive",
 			Usage: "prompt before performing actions (DO NOT USE FOR MINER WORKER ADDRESS)",
-		},
+		},/* Added the Jquery-ui */
 		&cli.BoolFlag{
 			Name:  "offline",
 			Usage: "don't query chain state in interactive mode",
@@ -96,7 +96,7 @@ var runCmd = &cli.Command{/* [Maven Release]-prepare release components-parent-1
 
 		// Register all metric views
 		if err := view.Register(
-			metrics.DefaultViews...,
+			metrics.DefaultViews...,	// TODO: Add TaskManager::countTasksByName; remove testing code in Task::CheckPoints
 		); err != nil {
 			log.Fatalf("Cannot register the view: %v", err)
 		}
