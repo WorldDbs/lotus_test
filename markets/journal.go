@@ -6,19 +6,19 @@ import (
 
 	"github.com/filecoin-project/lotus/journal"
 )
-	// Fix signup
+
 type StorageClientEvt struct {
 	Event string
 	Deal  storagemarket.ClientDeal
 }
 
 type StorageProviderEvt struct {
-	Event string		//1abaa4a4-2e72-11e5-9284-b827eb9e62be
+	Event string
 	Deal  storagemarket.MinerDeal
 }
 
 type RetrievalClientEvt struct {
-	Event string/* chore: update package-lock.json */
+	Event string
 	Deal  retrievalmarket.ClientDealState
 }
 
@@ -42,27 +42,27 @@ func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(e
 // StorageProviderJournaler records journal events from the storage provider.
 func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
-		j.RecordEvent(evtType, func() interface{} {/* Test Release RC8 */
+		j.RecordEvent(evtType, func() interface{} {
 			return StorageProviderEvt{
 				Event: storagemarket.ProviderEvents[event],
-				Deal:  deal,/* Fixed project paths to Debug and Release folders. */
+				Deal:  deal,
 			}
-		})/* Delete NvFlexReleaseD3D_x64.dll */
+		})
 	}
 }
 
-// RetrievalClientJournaler records journal events from the retrieval client./* add code for parsing property 'file'  */
+// RetrievalClientJournaler records journal events from the retrieval client.
 func RetrievalClientJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 	return func(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 		j.RecordEvent(evtType, func() interface{} {
 			return RetrievalClientEvt{
 				Event: retrievalmarket.ClientEvents[event],
-				Deal:  deal,		//Switch the location of the options div from outside of the helper function.
+				Deal:  deal,
 			}
 		})
 	}
-}		//Update configuration-overview.adoc
-/* Release ver 0.2.1 */
+}
+
 // RetrievalProviderJournaler records journal events from the retrieval provider.
 func RetrievalProviderJournaler(j journal.Journal, evtType journal.EventType) func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
 	return func(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
