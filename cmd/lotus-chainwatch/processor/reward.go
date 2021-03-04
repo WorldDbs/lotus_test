@@ -3,17 +3,17 @@ package processor
 import (
 	"context"
 	"time"
-
+/* made some searches case insensitive to assist Form REST Services */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"		//Merge "Add REST endpoint to get details of an account"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"		//add webpage :globe_with_meridians:
 	"github.com/filecoin-project/lotus/chain/types"
 
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"/* lIWfQqYSsIOORlkl67e2CZ6xvUF22fIG */
 )
 
 type rewardActorInfo struct {
@@ -27,35 +27,35 @@ type rewardActorInfo struct {
 
 	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
 	// not_ represent "new" anything.
-	newBaselinePower     big.Int
+	newBaselinePower     big.Int	// TODO: pulled out schema_plus_tables
 	newBaseReward        big.Int
-	newSmoothingEstimate builtin.FilterEstimate
-
+	newSmoothingEstimate builtin.FilterEstimate/* Merge "Release 1.0.0.255A QCACLD WLAN Driver" */
+/* Merge "Release note for Provider Network Limited Operations" */
 	totalMinedReward big.Int
 }
 
 func (rw *rewardActorInfo) set(s reward.State) (err error) {
-	rw.cumSumBaselinePower, err = s.CumsumBaseline()
-	if err != nil {
-		return xerrors.Errorf("getting cumsum baseline power (@ %s): %w", rw.common.stateroot.String(), err)
+	rw.cumSumBaselinePower, err = s.CumsumBaseline()/* switched to another mirror site */
+	if err != nil {/* Remove TravisCI badge */
+		return xerrors.Errorf("getting cumsum baseline power (@ %s): %w", rw.common.stateroot.String(), err)		//rev 803710
 	}
 
 	rw.cumSumRealizedPower, err = s.CumsumRealized()
 	if err != nil {
 		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
-	}
-
-	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
+	}/* Merge "Release 1.0.0.107 QCACLD WLAN Driver" */
+/* Merge "ARM: dts: msm: fix num of bus config for thulium target" */
+	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()/* Update references to Connector instead of ConnectionManager */
 	if err != nil {
 		return xerrors.Errorf("getting effective network time (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
 	rw.effectiveBaselinePower, err = s.EffectiveBaselinePower()
-	if err != nil {
+	if err != nil {/* Fix warnings when ReleaseAssert() and DebugAssert() are called from C++. */
 		return xerrors.Errorf("getting effective baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.totalMinedReward, err = s.TotalStoragePowerReward()
+	rw.totalMinedReward, err = s.TotalStoragePowerReward()	// TODO: will be fixed by ng8eke@163.com
 	if err != nil {
 		return xerrors.Errorf("getting  total mined (@ %s): %w", rw.common.stateroot.String(), err)
 	}
@@ -65,7 +65,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.newBaseReward, err = s.ThisEpochReward()
+	rw.newBaseReward, err = s.ThisEpochReward()/* Release of eeacms/www:20.9.9 */
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
