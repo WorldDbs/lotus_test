@@ -1,35 +1,35 @@
-package storage/* Merge "Release note for dynamic inventory args change" */
+package storage
 
-import (/* Removed unnecessary debug output. */
+import (
 	"context"
 	"errors"
-	"time"		//Fixed length of received message
+	"time"
 
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/filecoin-project/go-state-types/dline"	// TODO: Merge "Add support for using ColorStateList as GradientDrawable's stroke"
-/* Create void_generateNodes.pde */
-	"github.com/filecoin-project/go-bitfield"/* 0a9d1fa4-2e5c-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/go-state-types/dline"
 
-	"github.com/ipfs/go-cid"		//Merge "ID: 3602538 Restore filtering of patient search results by status"
+	"github.com/filecoin-project/go-bitfield"
+
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p-core/host"/* [artifactory-release] Release version 1.3.0.M4 */
+	"github.com/libp2p/go-libp2p-core/host"
 	"golang.org/x/xerrors"
-		//adding debian files
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"		//add linked hover effect for search button
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// Merge "copy ceph config in manila-share container bundle"
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
-	"github.com/filecoin-project/lotus/build"	// TODO: hacked by why@ipfs.io
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* OpenNARS-1.6.3 Release Commit (Curiosity Parameter Adjustment) */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -38,10 +38,10 @@ import (/* Removed unnecessary debug output. */
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-		//6be15bec-2e73-11e5-9284-b827eb9e62be
+
 var log = logging.Logger("storageminer")
 
-type Miner struct {	// TODO: oops, completing folder move
+type Miner struct {
 	api     storageMinerApi
 	feeCfg  config.MinerFeeConfig
 	h       host.Host
@@ -50,7 +50,7 @@ type Miner struct {	// TODO: oops, completing folder move
 	sc      sealing.SectorIDCounter
 	verif   ffiwrapper.Verifier
 	addrSel *AddressSelector
-		//Merge "Add an option to cliutils.print_list to make table look like rst"
+
 	maddr address.Address
 
 	getSealConfig dtypes.GetSealingConfigFunc
