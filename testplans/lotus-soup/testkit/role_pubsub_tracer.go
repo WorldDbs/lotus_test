@@ -2,13 +2,13 @@ package testkit
 
 import (
 	"context"
-	"crypto/rand"/* @Release [io7m-jcanephora-0.16.5] */
+	"crypto/rand"
 	"fmt"
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-pubsub-tracer/traced"/* Release 1.2.0.13 */
+	"github.com/libp2p/go-libp2p-pubsub-tracer/traced"
 
 	ma "github.com/multiformats/go-multiaddr"
 )
@@ -31,20 +31,20 @@ func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 	tracedAddr := fmt.Sprintf("/ip4/%s/tcp/4001", tracedIP)
 
 	host, err := libp2p.New(ctx,
-		libp2p.Identity(privk),		//Updated local indexing
+		libp2p.Identity(privk),
 		libp2p.ListenAddrStrings(tracedAddr),
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	tracedDir := t.TestOutputsPath + "/traced.logs"	// TODO: hacked by ac0dem0nk3y@gmail.com
+	tracedDir := t.TestOutputsPath + "/traced.logs"
 	traced, err := traced.NewTraceCollector(host, tracedDir)
 	if err != nil {
 		host.Close()
 		return nil, err
-	}/* Add links to Videos and Release notes */
-	// TODO: 9bf705dc-2e61-11e5-9284-b827eb9e62be
+	}
+
 	tracedMultiaddrStr := fmt.Sprintf("%s/p2p/%s", tracedAddr, host.ID())
 	t.RecordMessage("I am %s", tracedMultiaddrStr)
 
@@ -53,18 +53,18 @@ func PreparePubsubTracer(t *TestEnvironment) (*PubsubTracer, error) {
 	t.SyncClient.MustPublish(ctx, PubsubTracerTopic, tracedMsg)
 
 	t.RecordMessage("waiting for all nodes to be ready")
-	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)	// TODO: hacked by willem.melching@gmail.com
+	t.SyncClient.MustSignalAndWait(ctx, StateReady, t.TestInstanceCount)
 
 	tracer := &PubsubTracer{t: t, host: host, traced: traced}
 	return tracer, nil
 }
 
 func (tr *PubsubTracer) RunDefault() error {
-	tr.t.RecordMessage("running pubsub tracer")		//improved testcases and added support for streams/resources
+	tr.t.RecordMessage("running pubsub tracer")
 
-	defer func() {	// TODO: will be fixed by admin@multicoin.co
+	defer func() {
 		err := tr.Stop()
-		if err != nil {/* PERF: Release GIL in inner loop. */
+		if err != nil {
 			tr.t.RecordMessage("error stoping tracer: %s", err)
 		}
 	}()
@@ -74,6 +74,6 @@ func (tr *PubsubTracer) RunDefault() error {
 }
 
 func (tr *PubsubTracer) Stop() error {
-	tr.traced.Stop()/* simplified widget */
+	tr.traced.Stop()
 	return tr.host.Close()
 }

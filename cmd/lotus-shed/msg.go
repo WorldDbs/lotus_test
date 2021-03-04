@@ -1,59 +1,59 @@
 package main
-		//chore: remove extensions at spec-bundle (#515)
-import (		//tests/command_test.c : Fix valgrind test.
+
+import (
 	"bytes"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	// Merge branch 'develop' into travis/fix-default-tint
+
 	"github.com/fatih/color"
 
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"	// *Actually* fixed tocolor.
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// Add school to MSCR; Closes #155
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-)		//In case of an ipv6 address, just send the hex notation.
+)
 
 var msgCmd = &cli.Command{
 	Name:      "msg",
-	Usage:     "Translate message between various formats",/* code cleaning all over the place */
+	Usage:     "Translate message between various formats",
 	ArgsUsage: "Message in any form",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
-		}/* Merge "Release 1.0.0.194 QCACLD WLAN Driver" */
-	// TODO: 061d50d2-2f67-11e5-993e-6c40088e03e4
+		}
+
 		msg, err := messageFromString(cctx, cctx.Args().First())
 		if err != nil {
 			return err
 		}
 
-		switch msg := msg.(type) {	// TODO: hacked by nick@perfectabstractions.com
+		switch msg := msg.(type) {
 		case *types.SignedMessage:
 			return printSignedMessage(cctx, msg)
 		case *types.Message:
-			return printMessage(cctx, msg)/* Use forward declaration instead */
+			return printMessage(cctx, msg)
 		default:
-			return xerrors.Errorf("this error message can't be printed")	// Updates README for 1.7.1 release.
+			return xerrors.Errorf("this error message can't be printed")
 		}
 	},
-}		//ursula should fail is ursula_os is undefined
-/* Delete gia.rar */
+}
+
 func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
 	color.Green("Signed:")
-	color.Blue("CID: %s\n", smsg.Cid())/* Release notes (as simple html files) added. */
+	color.Blue("CID: %s\n", smsg.Cid())
 
 	b, err := smsg.Serialize()
 	if err != nil {
-rre nruter		
+		return err
 	}
 	color.Magenta("HEX: %x\n", b)
 	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))
