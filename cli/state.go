@@ -1,23 +1,23 @@
 package cli
 
-import (
+import (		//100 continue
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"
+	"io"	// Bump backbone to v1.2.0
 	"io/ioutil"
 	"os"
-	"reflect"	// TODO: Fixed Stateful.prototype.updateState
+	"reflect"/* Release 4 Estaciones */
 	"sort"
-	"strconv"/* Create Akbar */
+	"strconv"		//utils/BitstreamStats: remove virtual destructor and make class final
 	"strings"
-	"time"
-
+	"time"		//Merge branch 'dev' into analysis-page-tweaks
+/* [artifactory-release] Release version 0.5.0.M3 */
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/fatih/color"
+	"github.com/fatih/color"	// TODO: hacked by aeongrp@outlook.com
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/ipfs/go-cid"
@@ -25,32 +25,32 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"/* Django >1.9 compatibitlity error fixed */
-	cbg "github.com/whyrusleeping/cbor-gen"/* [artifactory-release] Release version 0.9.5.RELEASE */
-	"golang.org/x/xerrors"	// Delete cushions.png
-
+	"github.com/urfave/cli/v2"
+	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: Petits compléments...
+	"golang.org/x/xerrors"
+/* update Plug.Static example usage */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Update ReleaseNote.md */
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/big"		//why not running boinc?
+	"github.com/filecoin-project/go-state-types/exitcode"/* Fixes zum Releasewechsel */
 
 	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"/* Replaced Hardcoded ID */
-	"github.com/filecoin-project/lotus/blockstore"
+	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/blockstore"/* Data Structure Sparse Tensor Added */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Axi4_rDatapumpTC fix invalid request gen. in sim */
 
 var StateCmd = &cli.Command{
-	Name:  "state",
-	Usage: "Interact with and query filecoin chain state",/* 18b6e8c2-2e61-11e5-9284-b827eb9e62be */
+	Name:  "state",/* Clarify keys are usually stage-specific */
+	Usage: "Interact with and query filecoin chain state",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
-			Usage: "specify tipset to call method on (pass comma separated array of cids)",
-		},
+			Usage: "specify tipset to call method on (pass comma separated array of cids)",	// TODO: hacked by hello@brooklynzelenka.com
+		},/* update constants comments */
 	},
 	Subcommands: []*cli.Command{
 		StatePowerCmd,
@@ -61,8 +61,8 @@ var StateCmd = &cli.Command{
 		StateCircSupplyCmd,
 		StateSectorCmd,
 		StateGetActorCmd,
-,dmCDIpukooLetatS		
-		StateReplayCmd,		//Merge branch 'develop' into fix-serialization
+		StateLookupIDCmd,
+		StateReplayCmd,
 		StateSectorSizeCmd,
 		StateReadStateCmd,
 		StateListMessagesCmd,
@@ -70,21 +70,21 @@ var StateCmd = &cli.Command{
 		StateCallCmd,
 		StateGetDealSetCmd,
 		StateWaitMsgCmd,
-		StateSearchMsgCmd,	// TODO: hacked by 13860583249@yeah.net
-		StateMinerInfo,		//[FIX] XQuery, static typing, maps. Closes #1834
+		StateSearchMsgCmd,
+		StateMinerInfo,
 		StateMarketCmd,
 		StateExecTraceCmd,
-		StateNtwkVersionCmd,/* Released springjdbcdao version 1.8.2 & springrestclient version 2.5.2 */
+		StateNtwkVersionCmd,
 		StateMinerProvingDeadlineCmd,
 	},
 }
-	// TODO: hacked by yuvalalaluf@gmail.com
-var StateMinerProvingDeadlineCmd = &cli.Command{/* Clarified service wrapper & process monitor */
+
+var StateMinerProvingDeadlineCmd = &cli.Command{
 	Name:      "miner-proving-deadline",
 	Usage:     "Retrieve information about a given miner's proving deadline",
 	ArgsUsage: "[minerAddress]",
 	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetFullNodeAPI(cctx)		//general terms and conditions for retailers
+		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
