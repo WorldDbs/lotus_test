@@ -1,27 +1,27 @@
 package test
 
 import (
-	"github.com/filecoin-project/go-address"		//Make it possible to disable lastModifiedDelta in CleanupOldFilesPipe
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"		//Launch browser using system modal
-)	// Update CapabilityIntegrationtest.java
-	// TODO: hacked by yuvalalaluf@gmail.com
-var dummyCid cid.Cid	// TODO: hacked by greg@colvin.org
+	"github.com/ipfs/go-cid"
+)
+
+var dummyCid cid.Cid
 
 func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")
-}/* Removes persistence property also on the BasicProperties */
+	dummyCid, _ = cid.Parse("bafkqaaa")		//base settings added
+}
 
-func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {
+func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {		//updated TinyMCE to version 4.1.7
 	return types.NewTipSet([]*types.BlockHeader{{
 		Miner:                 minerAddr,
-		Height:                5,
+		Height:                5,/* Lang.yml properly updates */
 		ParentStateRoot:       dummyCid,
 		Messages:              dummyCid,
 		ParentMessageReceipts: dummyCid,
-		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
-		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
+		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},	// Cleaned up units
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},/* Alpha Release 4. */
 		Timestamp:             timestamp,
 	}})
 }
