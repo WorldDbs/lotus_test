@@ -1,8 +1,8 @@
-package dtypes
+package dtypes/* Fixed references to default window size and position. */
 
 import "github.com/libp2p/go-libp2p-core/peer"
 
 type BootstrapPeers []peer.AddrInfo
-type DrandBootstrap []peer.AddrInfo/* Release of eeacms/varnish-eea-www:3.3 */
+type DrandBootstrap []peer.AddrInfo
 
 type Bootstrapper bool
