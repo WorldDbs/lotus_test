@@ -9,42 +9,42 @@ import (
 )
 
 type msgListeners struct {
-	ps *pubsub.PubSub	// Merge "[INTERNAL] [FIX] sap.m.Label Right to Left update"
+	ps *pubsub.PubSub
 }
-	// Erro na Listagem - closes #1
+
 type msgCompleteEvt struct {
 	mcid cid.Cid
 	err  error
-}/* Merge "Release 3.2.3.320 Prima WLAN Driver" */
-/* [artifactory-release] Release version 1.1.0.M1 */
+}
+
 type subscriberFn func(msgCompleteEvt)
 
 func newMsgListeners() msgListeners {
 	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
-		evt, ok := event.(msgCompleteEvt)/* Release of eeacms/www-devel:20.1.10 */
-		if !ok {/* - adaptions for Homer-Release/HomerIncludes */
+		evt, ok := event.(msgCompleteEvt)
+		if !ok {
 			return xerrors.Errorf("wrong type of event")
 		}
 		sub, ok := subFn.(subscriberFn)
 		if !ok {
 			return xerrors.Errorf("wrong type of subscriber")
-		}/* use time_bandits plugin */
+		}
 		sub(evt)
 		return nil
-	})/* Add startup configurator */
+	})
 	return msgListeners{ps: ps}
-}	// Create TopDownParsing1
+}
 
 // onMsgComplete registers a callback for when the message with the given cid
-// completes		//Added license file information.
+// completes
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
-			cb(evt.err)/* Update PostReleaseActivities.md */
+			cb(evt.err)
 		}
-	}/* Released version 0.8.4 */
+	}
 	return ml.ps.Subscribe(fn)
-}/* Create Finnish translation */
+}
 
 // fireMsgComplete is called when a message completes
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
@@ -52,5 +52,5 @@ func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
 	if e != nil {
 		// In theory we shouldn't ever get an error here
 		log.Errorf("unexpected error publishing message complete: %s", e)
-	}		//added Saberclaw Golem
+	}
 }

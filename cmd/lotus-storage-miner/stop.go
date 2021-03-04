@@ -1,6 +1,6 @@
 package main
 
-import (
+import (		//[platform] Beautify Clock code.
 	_ "net/http/pprof"
 
 	"github.com/urfave/cli/v2"
@@ -8,22 +8,22 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var stopCmd = &cli.Command{/* removed some classes from EW project, and modified NewPhysicsParams class, etc.  */
+var stopCmd = &cli.Command{
 	Name:  "stop",
 	Usage: "Stop a running lotus miner",
 	Flags: []cli.Flag{},
-	Action: func(cctx *cli.Context) error {/* Updated epe_theme and epe_modules to Release 3.5 */
-		api, closer, err := lcli.GetAPI(cctx)		//Remove keybinding
+	Action: func(cctx *cli.Context) error {
+		api, closer, err := lcli.GetAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()	// TODO: d30d7774-2e4b-11e5-9284-b827eb9e62be
+		defer closer()
 
 		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
-		}/* Release of version 1.0 */
-
+		}
+		//Download URL change
 		return nil
 	},
 }
