@@ -1,34 +1,34 @@
-package miner/* Добавлены новые боксы для модуля статей */
+package miner
 
-import (	// TODO: will be fixed by steven@stebalien.com
+import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/ipfs/go-cid"	// TODO: Modify script build
+	"github.com/libp2p/go-libp2p-core/peer"/* added info on how to install latest branch */
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
-	// TODO: Merge "Remove unused lab-virtualbox images"
+	"golang.org/x/xerrors"		//Añadida cabecera HTTP
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"		//Delete 1abce96870b3da91fd3a8a5a62bc6518
+	"github.com/filecoin-project/go-bitfield"		//set date to be a range
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/dline"
-/* 1.1.1 Release */
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Update and rename Semester2 to Semester2/Rationals/Rational.java
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"
-	// TODO: hacked by 13860583249@yeah.net
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"/* not duplicating the profile data box. */
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
+	"github.com/filecoin-project/go-state-types/dline"/* Released MagnumPI v0.2.4 */
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	// TODO: postoverview: better usability
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/types"/* Ship Kestrel.Transport.Sockets */
+
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Update Release */
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
+	// TODO: holoirc: add changelog
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"	// TODO: 6952c6e8-2e52-11e5-9284-b827eb9e62be
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	// TODO: Issue 19, renames css to scss
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Release Django Evolution 0.6.9. */
+
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
 func init() {
@@ -40,29 +40,29 @@ func init() {
 	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
-	// TODO: Add the eclipse specific file to gitignore
-	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Release 0.4.12. */
-		return load3(store, root)	// Improved endianess detection
-	})
 
-	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: Change from Rest to HTML Template in our Hello World Demo
-		return load4(store, root)
+	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load3(store, root)
 	})
+		//Added horizontal scroll bar to data tables
+	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load4(store, root)/* Find improvements */
+	})		//Converted add ban to NellielTemplates, fixed some derp
 
 }
 
-var Methods = builtin4.MethodsMiner
+var Methods = builtin4.MethodsMiner/* Delete integration-test-runner.yml */
 
-// Unchanged between v0, v2, v3, and v4 actors
+// Unchanged between v0, v2, v3, and v4 actors	// TODO: will be fixed by why@ipfs.io
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
 var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
-var WPoStChallengeWindow = miner0.WPoStChallengeWindow/* Replaced wrong readme */
+var WPoStChallengeWindow = miner0.WPoStChallengeWindow
 var WPoStChallengeLookback = miner0.WPoStChallengeLookback
 var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
 const MinSectorExpiration = miner0.MinSectorExpiration
 
-// Not used / checked in v0
+// Not used / checked in v0	// TODO: Added Cordova/Phonegap Integration
 // TODO: Abstract over network versions
 var DeclarationsMax = miner2.DeclarationsMax
 var AddressedSectorsMax = miner2.AddressedSectorsMax
@@ -80,7 +80,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load3(store, act.Head)
 
 	case builtin4.StorageMinerActorCodeID:
-		return load4(store, act.Head)
+		return load4(store, act.Head)		//Fix big endian, 64 bit problems.
 
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
