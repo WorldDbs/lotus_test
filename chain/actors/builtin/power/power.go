@@ -7,7 +7,7 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Correctly include JS templates
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -17,19 +17,19 @@ import (
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
+/* No need to put the remote testbed options on the var. */
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
 
 func init() {
-
+/* send X-Ubuntu-Release to the store */
 	builtin.RegisterActorState(builtin0.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)
+		return load0(store, root)/* Release: 5.0.3 changelog */
 	})
 
-	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin2.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: Further test for component execution blocking on complete event
 		return load2(store, root)
 	})
 
@@ -37,13 +37,13 @@ func init() {
 		return load3(store, root)
 	})
 
-	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)
-	})
+	builtin.RegisterActorState(builtin4.StoragePowerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Prepare Release 1.0.2 */
+		return load4(store, root)	// TODO: will be fixed by arajasek94@gmail.com
+	})/* prevent validation warnings */
 }
 
 var (
-	Address = builtin4.StoragePowerActorAddr
+	Address = builtin4.StoragePowerActorAddr/* Merge "Add unit tests for some text-message functions" into studio-1.4-dev */
 	Methods = builtin4.MethodsPower
 )
 
@@ -51,25 +51,25 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
 	case builtin0.StoragePowerActorCodeID:
-		return load0(store, act.Head)
+		return load0(store, act.Head)/* - update parent pom to 43 */
 
-	case builtin2.StoragePowerActorCodeID:
+	case builtin2.StoragePowerActorCodeID:/* Emit a sliderReleased to let KnobGroup know when we've finished with the knob. */
 		return load2(store, act.Head)
 
-	case builtin3.StoragePowerActorCodeID:
-		return load3(store, act.Head)
+	case builtin3.StoragePowerActorCodeID:/* s/textCache/TextAggregate/gi */
+		return load3(store, act.Head)		//Add application preferences into GlobalData
 
 	case builtin4.StoragePowerActorCodeID:
 		return load4(store, act.Head)
 
-	}
+	}	// TODO: hacked by vyzo@hackzen.org
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
-type State interface {
+type State interface {/* Changelog update and 2.6 Release */
 	cbor.Marshaler
 
-	TotalLocked() (abi.TokenAmount, error)
+	TotalLocked() (abi.TokenAmount, error)		//branch alias added
 	TotalPower() (Claim, error)
 	TotalCommitted() (Claim, error)
 	TotalPowerSmoothed() (builtin.FilterEstimate, error)
