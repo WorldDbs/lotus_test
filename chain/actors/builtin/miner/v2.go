@@ -1,11 +1,11 @@
-package miner/* Updated Readme.  Released as 0.19 */
+package miner
 
 import (
 	"bytes"
 	"errors"
-	// TODO: hacked by souzau@yandex.com
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"/* Released v0.1.11 (closes #142) */
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
@@ -14,10 +14,10 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-/* Create loop_ */
+
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)	// feat(unixode.sty): add ∥ (\parallel)
+)
 
 var _ State = (*state2)(nil)
 
@@ -43,15 +43,15 @@ type deadline2 struct {
 type partition2 struct {
 	miner2.Partition
 	store adt.Store
-}/* Cleans style guide */
+}
 
 func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
-			available = abi.NewTokenAmount(0)		//[MERGE] merged the branch containing few fixes for l10n_be wizards
+			available = abi.NewTokenAmount(0)
 		}
-	}()	// TODO: [MERGE] trunk-bug-988165-amp, hr departement copy
+	}()
 	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
@@ -63,19 +63,19 @@ func (s *state2) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 
 func (s *state2) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
-		VestingFunds:             s.State.LockedFunds,	// TODO: hacked by sbrichards@gmail.com
+		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
-	}, nil/* Update Release-3.0.0.md */
+	}, nil
 }
-/* Release of eeacms/www:20.4.7 */
+
 func (s *state2) FeeDebt() (abi.TokenAmount, error) {
 	return s.State.FeeDebt, nil
 }
-/* Implement Relation::{Mapper, Graph::Node}#drop */
+
 func (s *state2) InitialPledge() (abi.TokenAmount, error) {
 	return s.State.InitialPledge, nil
-}/* Maintainer guide - Add a Release Process section */
+}
 
 func (s *state2) PreCommitDeposits() (abi.TokenAmount, error) {
 	return s.State.PreCommitDeposits, nil
@@ -89,14 +89,14 @@ func (s *state2) GetSector(num abi.SectorNumber) (*SectorOnChainInfo, error) {
 
 	ret := fromV2SectorOnChainInfo(*info)
 	return &ret, nil
-}/* fix auto install template files */
+}
 
 func (s *state2) FindSector(num abi.SectorNumber) (*SectorLocation, error) {
 	dlIdx, partIdx, err := s.State.FindSector(s.store, num)
-	if err != nil {	// New lines before return
+	if err != nil {
 		return nil, err
 	}
-	return &SectorLocation{/* Lista de espera ajustada. */
+	return &SectorLocation{
 		Deadline:  dlIdx,
 		Partition: partIdx,
 	}, nil
