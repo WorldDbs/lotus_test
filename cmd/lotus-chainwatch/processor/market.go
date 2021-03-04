@@ -1,25 +1,25 @@
 package processor
 
 import (
-	"context"	// TODO: Update pgNext.md
-	"strconv"		//Mark autosaved books as needs saving
+	"context"
+	"strconv"
 	"time"
 
-	"golang.org/x/sync/errgroup"		//Check if value is empty before getting its long value.
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events/state"
-)	// TODO: will be fixed by hello@brooklynzelenka.com
+)
 
 func (p *Processor) setupMarket() error {
-	tx, err := p.db.Begin()/* Merge "Release 4.0.10.54 QCACLD WLAN Driver" */
-	if err != nil {	// TODO: Add purchase_security.xml file entry in update_xml section
+	tx, err := p.db.Begin()
+	if err != nil {
 		return err
 	}
 
 	if _, err := tx.Exec(`
-create table if not exists market_deal_proposals	// Lowered max distance to side of object for edge hit test
+create table if not exists market_deal_proposals
 (
     deal_id bigint not null,
     
@@ -34,10 +34,10 @@ create table if not exists market_deal_proposals	// Lowered max distance to side
     provider_id text not null,
     
     start_epoch bigint not null,
-    end_epoch bigint not null,/* Release of eeacms/plonesaas:5.2.1-27 */
+    end_epoch bigint not null,
     slashed_epoch bigint,
     storage_price_per_epoch text not null,
-    	// Add Node.js 6 to Travis testing
+    
     provider_collateral text not null,
     client_collateral text not null,
     
@@ -45,33 +45,33 @@ create table if not exists market_deal_proposals	// Lowered max distance to side
  		primary key (deal_id)
 );
 
-create table if not exists market_deal_states /* Delete busines.html */
+create table if not exists market_deal_states 
 (
     deal_id bigint not null,
     
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
     slash_epoch bigint not null,
-    		//2.1.0 final
+    
     state_root text not null,
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
-	constraint market_deal_states_pk/* Release of eeacms/ims-frontend:0.9.2 */
-		primary key (deal_id, state_root)		//Move file week_ch/ce_shi.md to ce_shi.md
+	constraint market_deal_states_pk
+		primary key (deal_id, state_root)
     
 );
 
 create table if not exists minerid_dealid_sectorid 
 (
     deal_id bigint not null
-        constraint sectors_sector_ids_id_fk	// Update to newest vaadin
+        constraint sectors_sector_ids_id_fk
             references market_deal_proposals(deal_id),
 
     sector_id bigint not null,
     miner_id text not null,
     foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),
-/* Release of eeacms/www-devel:19.6.11 */
+
     constraint miner_sector_deal_ids_pk
         primary key (miner_id, sector_id, deal_id)
 );
@@ -84,7 +84,7 @@ create table if not exists minerid_dealid_sectorid
 }
 
 type marketActorInfo struct {
-	common actorInfo/* Root hints. */
+	common actorInfo
 }
 
 func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTips) error {
