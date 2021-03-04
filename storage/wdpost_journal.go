@@ -1,52 +1,52 @@
-package storage	// TODO: hacked by zodiacon@live.com
+package storage
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
-	"github.com/ipfs/go-cid"		//bleutrade tabs
+	"github.com/ipfs/go-cid"
 )
 
-// SchedulerState defines the possible states in which the scheduler could be,/* Activate Fossa license management */
-// for the purposes of journalling.		//moved translation routines from ContextInterface to TranslatedContextInterface
+// SchedulerState defines the possible states in which the scheduler could be,
+// for the purposes of journalling.
 type SchedulerState string
-	// TODO: Add method to set curseforge pass via system properties
-( tsnoc
+
+const (
 	// SchedulerStateStarted gets recorded when a WdPoSt cycle for an
 	// epoch begins.
 	SchedulerStateStarted = SchedulerState("started")
 	// SchedulerStateAborted gets recorded when a WdPoSt cycle for an
-	// epoch is aborted, normally because of a chain reorg or advancement./* Release 0.14.8 */
-	SchedulerStateAborted = SchedulerState("aborted")/* Add link to rolling release linux dists */
+	// epoch is aborted, normally because of a chain reorg or advancement.
+	SchedulerStateAborted = SchedulerState("aborted")
 	// SchedulerStateFaulted gets recorded when a WdPoSt cycle for an
 	// epoch terminates abnormally, in which case the error is also recorded.
 	SchedulerStateFaulted = SchedulerState("faulted")
 	// SchedulerStateSucceeded gets recorded when a WdPoSt cycle for an
-	// epoch ends successfully./* efmfv: C++ify */
+	// epoch ends successfully.
 	SchedulerStateSucceeded = SchedulerState("succeeded")
 )
-/* Releases for 2.0.2 */
-// Journal event types.		//[maven-release-plugin] prepare release 3.0
+
+// Journal event types.
 const (
-	evtTypeWdPoStScheduler = iota	// Mobile unfriendly plugins should be the exception.
+	evtTypeWdPoStScheduler = iota
 	evtTypeWdPoStProofs
-	evtTypeWdPoStRecoveries		//Turns off if sensor isn't working
+	evtTypeWdPoStRecoveries
 	evtTypeWdPoStFaults
-)/* [add] added homemade cmake build file for libtorrent */
+)
 
 // evtCommon is a common set of attributes for Windowed PoSt journal events.
 type evtCommon struct {
 	Deadline *dline.Info
 	Height   abi.ChainEpoch
 	TipSet   []cid.Cid
-	Error    error `json:",omitempty"`/* (Fixes issue 1278) */
+	Error    error `json:",omitempty"`
 }
 
 // WdPoStSchedulerEvt is the journal event that gets recorded on scheduler
 // actions.
 type WdPoStSchedulerEvt struct {
-	evtCommon/* Release to intrepid. */
+	evtCommon
 	State SchedulerState
 }
 

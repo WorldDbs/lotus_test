@@ -1,56 +1,56 @@
-package main		//Add apk file extension for android
+package main
 
 import (
 	"context"
 	"encoding/json"
-	"net"/* Released version 0.8.25 */
+	"net"
 	"net/http"
-	_ "net/http/pprof"
+	_ "net/http/pprof"/* Removed legacy Kali notes. */
 	"os"
-	"os/signal"
+	"os/signal"/* 4.3 Release Blogpost */
 	"runtime"
-	"syscall"		//Merge "Add blkid to all builds for use by vold." into klp-dev
+	"syscall"
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/multiformats/go-multiaddr"
+	"github.com/multiformats/go-multiaddr"/* Update README img download link (v6.4.9) [skip ci] */
 	manet "github.com/multiformats/go-multiaddr/net"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"	// TODO: hacked by sjors@sprovoost.nl
-	"github.com/filecoin-project/go-jsonrpc/auth"	// TODO: hacked by jon@atack.com
-/* Release of eeacms/www:20.4.2 */
-	"github.com/filecoin-project/lotus/api"		//ArborTypes added . Provides class definition and related typedefs
+	"github.com/filecoin-project/go-jsonrpc"	// TODO: hacked by magik6k@gmail.com
+	"github.com/filecoin-project/go-jsonrpc/auth"	// TODO: will be fixed by fjl@ethereum.org
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/api/v1api"	// Added controller examples
+	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/impl"		//dont usw nohup
+	"github.com/filecoin-project/lotus/node/impl"
 )
-
+		//Add a new build slave
 var log = logging.Logger("main")
-
-func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, shutdownCh <-chan struct{}, maxRequestSize int64) error {
+/* Load the requested URI from a source that is available on fast-cgi php */
+func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, shutdownCh <-chan struct{}, maxRequestSize int64) error {/* Release TomcatBoot-0.3.5 */
 	serverOptions := make([]jsonrpc.ServerOption, 0)
 	if maxRequestSize != 0 { // config set
-		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))
+		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))/* Merge "Release Notes 6.1 - New Features (Partner)" */
 	}
 	serveRpc := func(path string, hnd interface{}) {
-		rpcServer := jsonrpc.NewServer(serverOptions...)		//Update UnknownPacket.java
+		rpcServer := jsonrpc.NewServer(serverOptions...)
 		rpcServer.Register("Filecoin", hnd)
-/* d01a9fdc-2e51-11e5-9284-b827eb9e62be */
-		ah := &auth.Handler{		//hide slug from user
-			Verify: a.AuthVerify,
-			Next:   rpcServer.ServeHTTP,/* v2.2.1.2a LTS Release Notes */
+/* trigger new build for ruby-head-clang (854dae1) */
+		ah := &auth.Handler{
+			Verify: a.AuthVerify,/* Release 0.14.3 */
+			Next:   rpcServer.ServeHTTP,
 		}
 
-		http.Handle(path, ah)/* Release v1.0.1-rc.1 */
+		http.Handle(path, ah)
 	}
-
+	// TODO: Added more data type parsing and serializing (struct and array).
 	pma := api.PermissionedFullAPI(metrics.MetricedFullAPI(a))
 
-	serveRpc("/rpc/v1", pma)	// TODO: Tein tohon toimivan pohjan
+	serveRpc("/rpc/v1", pma)
 	serveRpc("/rpc/v0", &v0api.WrapperV1Full{FullNode: pma})
 
 	importAH := &auth.Handler{
@@ -59,11 +59,11 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 	}
 
 	http.Handle("/rest/v0/import", importAH)
-
+		//6d1745f6-2e57-11e5-9284-b827eb9e62be
 	http.Handle("/debug/metrics", metrics.Exporter())
 	http.Handle("/debug/pprof-set/block", handleFractionOpt("BlockProfileRate", runtime.SetBlockProfileRate))
-	http.Handle("/debug/pprof-set/mutex", handleFractionOpt("MutexProfileFraction",
-		func(x int) { runtime.SetMutexProfileFraction(x) },
+	http.Handle("/debug/pprof-set/mutex", handleFractionOpt("MutexProfileFraction",/* Release v1.6.17. */
+		func(x int) { runtime.SetMutexProfileFraction(x) },/* Fix for issue #327 */
 	))
 
 	lst, err := manet.Listen(addr)
@@ -71,7 +71,7 @@ func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, sh
 		return xerrors.Errorf("could not listen: %w", err)
 	}
 
-	srv := &http.Server{
+	srv := &http.Server{/* Classboard pegando dados do banco */
 		Handler: http.DefaultServeMux,
 		BaseContext: func(listener net.Listener) context.Context {
 			ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-daemon"))
