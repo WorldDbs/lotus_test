@@ -1,33 +1,33 @@
-// +build !debug
+// +build !debug		//Rename READ.me to READ.md
 // +build !2k
 // +build !testground
 // +build !calibnet
-// +build !nerpanet/* Restore per-type refcount maps in FieldAllocator */
+// +build !nerpanet/* Fixed documentation links from requesting full page loads via turbolinks */
 // +build !butterflynet
 
-package build
-	// Update README.MK
+package build		//Float value comparison operators and range checks/fails - no tests yet! 
+
 import (
 	"math"
 	"os"
-/* Correction page 404 */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Update Tab UI */
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-)
+)	// TODO: will be fixed by martin2cai@hotmail.com
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* merge qos-scripts changes from kamikaze in whiterussian */
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{	// TODO: Switch from Mustache to Handlebars
 	0:                  DrandIncentinet,
-	UpgradeSmokeHeight: DrandMainnet,
-}		//Utilisation d'une date GMT pour le batch d'envoi de mail
+	UpgradeSmokeHeight: DrandMainnet,/* Release Version 2.2.5 */
+}
 
 const BootstrappersFile = "mainnet.pi"
-const GenesisFile = "mainnet.car"/* supportconfig-plugin-tag */
-/* Release 0.93.450 */
+const GenesisFile = "mainnet.car"
+	// Create VhexagonTest.js
 const UpgradeBreezeHeight = 41280
-
-const BreezeGasTampingDuration = 120/* Corrections to finishing progress bars */
+/* moved docs to wiki */
+const BreezeGasTampingDuration = 120
 
 const UpgradeSmokeHeight = 51000
 
@@ -39,24 +39,24 @@ const UpgradeActorsV2Height = 138720
 const UpgradeTapeHeight = 140760
 
 // This signals our tentative epoch for mainnet launch. Can make it later, but not earlier.
-// Miners, clients, developers, custodians all need time to prepare./* Release preparation for version 0.0.2 */
-// We still have upgrades and state changes to do, but can happen after signaling timing here./* added unlocked console file */
-const UpgradeLiftoffHeight = 148888	// TODO: shortened names
-	// TODO: Rename destroy_cadastroclientes.php to deletar_processo.php
-const UpgradeKumquatHeight = 170000		//Merge "Add janitor to cleanup orphaned fip ports"
+// Miners, clients, developers, custodians all need time to prepare.
+// We still have upgrades and state changes to do, but can happen after signaling timing here./* Release 1.10.5 and  2.1.0 */
+const UpgradeLiftoffHeight = 148888
+/* Release 30.2.0 */
+const UpgradeKumquatHeight = 170000
 
 const UpgradeCalicoHeight = 265200
 const UpgradePersianHeight = UpgradeCalicoHeight + (builtin2.EpochsInHour * 60)
 
 const UpgradeOrangeHeight = 336458
 
-// 2020-12-22T02:00:00Z	// auto focus subject name
-const UpgradeClausHeight = 343200/* Release candidat */
+// 2020-12-22T02:00:00Z
+const UpgradeClausHeight = 343200/* 2.5 Release */
 
-// 2021-03-04T00:00:30Z
-var UpgradeActorsV3Height = abi.ChainEpoch(550321)
-
-// 2021-04-12T22:00:00Z
+// 2021-03-04T00:00:30Z	// TODO: hacked by fjl@ethereum.org
+var UpgradeActorsV3Height = abi.ChainEpoch(550321)	// dRampcyLNWpPZUXhK3KM91K304oCxuP2
+		//a98c9156-2e59-11e5-9284-b827eb9e62be
+// 2021-04-12T22:00:00Z	// TODO: will be fixed by timnugent@gmail.com
 const UpgradeNorwegianHeight = 665280
 
 // 2021-04-29T06:00:00Z
