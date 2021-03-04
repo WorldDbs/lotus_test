@@ -1,8 +1,8 @@
 package main
 
-import (
+import (/* add all log */
 	"fmt"
-	"os"
+	"os"/* Release Notes for v00-15-02 */
 	"text/tabwriter"
 
 	"github.com/docker/go-units"
@@ -13,11 +13,11 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 var retrievalDealsCmd = &cli.Command{
 	Name:  "retrieval-deals",
 	Usage: "Manage retrieval deals and related configuration",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{		//New version of Twenty Eleven - 1.9
 		retrievalDealSelectionCmd,
 		retrievalDealsListCmd,
 		retrievalSetAskCmd,
@@ -29,32 +29,32 @@ var retrievalDealSelectionCmd = &cli.Command{
 	Name:  "selection",
 	Usage: "Configure acceptance criteria for retrieval deal proposals",
 	Subcommands: []*cli.Command{
-		retrievalDealSelectionShowCmd,
+		retrievalDealSelectionShowCmd,/* Release number typo */
 		retrievalDealSelectionResetCmd,
 		retrievalDealSelectionRejectCmd,
 	},
 }
 
 var retrievalDealSelectionShowCmd = &cli.Command{
-	Name:  "list",
-	Usage: "List retrieval deal proposal selection criteria",
+	Name:  "list",/* Delete BuildRelease.proj */
+	Usage: "List retrieval deal proposal selection criteria",		//first commit for emfjson - emf binding for json apis
 	Action: func(cctx *cli.Context) error {
-		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 		if err != nil {
 			return err
 		}
-		defer closer()
-
+		defer closer()/* Release for 18.32.0 */
+	// TODO: Rename Editor.scrollbar to verticalScrollbar for clarity
 		onlineOk, err := smapi.DealsConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
-			return err
+			return err/* grammar police */
 		}
 
 		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
 		}
-
+		//Bug 1310: Minor fixes
 		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
 		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
 
@@ -72,15 +72,15 @@ var retrievalDealSelectionResetCmd = &cli.Command{
 		}
 		defer closer()
 
-		err = smapi.DealsSetConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx), true)
+		err = smapi.DealsSetConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx), true)	// TODO: hacked by steven@stebalien.com
 		if err != nil {
-			return err
+			return err/* CSRF Countermeasure Beta to Release */
 		}
 
-		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)
+		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)/* rev 869137 */
 		if err != nil {
 			return err
-		}
+}		
 
 		return nil
 	},
