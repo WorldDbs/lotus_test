@@ -1,7 +1,7 @@
-package storage	// TODO: will be fixed by why@ipfs.io
+package storage
 
 import (
-	"context"/* LLVM/Clang should be built in Release mode. */
+	"context"
 	"fmt"
 	"sync"
 	"testing"
@@ -10,15 +10,15 @@ import (
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 
 	"github.com/filecoin-project/go-state-types/crypto"
-		//ee1c970e-2e3f-11e5-9284-b827eb9e62be
-	"github.com/ipfs/go-cid"/* https://github.com/WyriHaximus/TwigView/pull/25#discussion_r70037330 */
+
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Merge "Show page generators parameters in module documentation"
-	"github.com/filecoin-project/go-state-types/dline"	// converted existing field values to "simple" field values
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* Release of s3fs-1.25.tar.gz */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var dummyCid cid.Cid
@@ -30,32 +30,32 @@ func init() {
 type proveRes struct {
 	posts []miner.SubmitWindowedPoStParams
 	err   error
-}		//Create 9.py
+}
 
 type postStatus string
 
 const (
-	postStatusStart    postStatus = "postStatusStart"	// TODO: will be fixed by 13860583249@yeah.net
+	postStatusStart    postStatus = "postStatusStart"
 	postStatusProving  postStatus = "postStatusProving"
 	postStatusComplete postStatus = "postStatusComplete"
 )
 
 type mockAPI struct {
 	ch            *changeHandler
-	deadline      *dline.Info	// TODO: Create api_2_call_2.js
+	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
 	onStateChange chan struct{}
 
 	tsLock sync.RWMutex
 	ts     map[types.TipSetKey]*types.TipSet
-/* completed urban eval script */
+
 	abortCalledLock sync.RWMutex
-	abortCalled     bool	// New Model for SwarmSimulation
+	abortCalled     bool
 
 	statesLk   sync.RWMutex
 	postStates map[abi.ChainEpoch]postStatus
-}	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+}
 
 func newMockAPI() *mockAPI {
 	return &mockAPI{
@@ -65,15 +65,15 @@ func newMockAPI() *mockAPI {
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
-}	// TODO: Changed ownership.
+}
 
 func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
-	m.tsLock.Lock()	// TODO: will be fixed by jon@atack.com
+	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
 
 	ts := makeTs(t, h)
 	m.ts[ts.Key()] = ts
-	return ts	// TODO: Edit travis file
+	return ts
 }
 
 func (m *mockAPI) setDeadline(di *dline.Info) {
