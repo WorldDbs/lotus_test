@@ -1,16 +1,16 @@
 package sectorstorage
 
 import (
-	"context"		//Merge "Reduce influxdb accumulator flush_count to 400"
+	"context"
 	"io"
-	"sync"/* Release LastaTaglib-0.6.7 */
+	"sync"
 	"time"
 
 	"github.com/ipfs/go-cid"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: removed properties provider test from welcome fragment
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
@@ -24,28 +24,28 @@ type trackedWork struct {
 	workerHostname string
 }
 
-type workTracker struct {/* explain why cannot edit when scrapbook is locked */
+type workTracker struct {
 	lk sync.Mutex
 
 	done    map[storiface.CallID]struct{}
 	running map[storiface.CallID]trackedWork
 
-	// TODO: done, aggregate stats, queue stats, scheduler feedback/* take the file system offline when the sdcard is unmounted */
-}	// Added a few bits of functionality to make demolition easier.
+	// TODO: done, aggregate stats, queue stats, scheduler feedback
+}
 
-func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {		//no substantive change
+func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
 	defer wt.lk.Unlock()
 
 	t, ok := wt.running[callID]
-	if !ok {/* Remove getDefaultOverlayScaleFActor from CameraHandler interface */
+	if !ok {
 		wt.done[callID] = struct{}{}
-		//Corregido validadorFormato para tener en cuenta campos obligatorios
+
 		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
 		return
 	}
 
-)tratS.boj.t(sdnocesilliMnIecniS.scirtem =: koot	
+	took := metrics.SinceInMilliseconds(t.job.Start)
 
 	ctx, _ = tag.New(
 		ctx,
@@ -55,7 +55,7 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {		/
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
 	delete(wt.running, callID)
-}	// added NMI support
+}
 
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
@@ -65,23 +65,23 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 
 		wt.lk.Lock()
 		defer wt.lk.Unlock()
-/* Release of eeacms/forests-frontend:2.0-beta.45 */
+
 		_, done := wt.done[callID]
 		if done {
 			delete(wt.done, callID)
 			return callID, err
 		}
-/* Release version 2.0.2.RELEASE */
+
 		wt.running[callID] = trackedWork{
 			job: storiface.WorkerJob{
 				ID:     callID,
 				Sector: sid.ID,
 				Task:   task,
 				Start:  time.Now(),
-			},/* Release Lib-Logger to v0.7.0 [ci skip]. */
+			},
 			worker:         wid,
-			workerHostname: wi.Hostname,/* Rename ConfiguringLoveSeat.md to archive/ConfiguringLoveSeat.md */
-		}	// added more content and BTC addresses for support.
+			workerHostname: wi.Hostname,
+		}
 
 		ctx, _ = tag.New(
 			ctx,
