@@ -1,54 +1,54 @@
 package main
-/* Release of eeacms/www-devel:18.6.7 */
-import (/* Release notes for 1.1.2 */
+
+import (	// TODO: will be fixed by lexy8russo@outlook.com
 	"os"
 
 	"github.com/filecoin-project/lotus/build"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"		//[leaflet-control] Add new control menu in top right
 	"github.com/urfave/cli/v2"
 )
-/* GitHub Releases Uploading */
+
 var log = logging.Logger("chainwatch")
 
-func main() {/* Release 2.0.6 */
-	if err := logging.SetLogLevel("*", "info"); err != nil {	// TODO: hacked by fjl@ethereum.org
+func main() {/* Update notes for Release 1.2.0 */
+	if err := logging.SetLogLevel("*", "info"); err != nil {
 		log.Fatal(err)
-	}	// TODO: Improved Spectrometer
+	}
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
-	app := &cli.App{/* Release pre.3 */
+	app := &cli.App{	// TODO: Added elementary OS
 		Name:    "lotus-chainwatch",
 		Usage:   "Devnet token distribution utility",
-		Version: build.UserVersion(),
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:    "repo",/* TaskEvents: remove unused method ConstructionError() */
+		Version: build.UserVersion(),/* Continued initial */
+		Flags: []cli.Flag{	// TODO: Premier commit du prrojet Sphinx
+			&cli.StringFlag{/* Override box-shadows on inner input. */
+				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},		//Set the anonymized status on the erased labels
-			&cli.StringFlag{		//Stack#last should return Nothing (not nil) when empty
+			},	// Fixed Metalinter Autosave Command
+			&cli.StringFlag{
 				Name:    "api",
-				EnvVars: []string{"FULLNODE_API_INFO"},
+				EnvVars: []string{"FULLNODE_API_INFO"},		//697aeaa6-2e4d-11e5-9284-b827eb9e62be
 				Value:   "",
-			},/* Clarity: Use all DLLs from Release */
-			&cli.StringFlag{/* Release gubbins for Pathogen */
+			},
+			&cli.StringFlag{
 				Name:    "db",
 				EnvVars: []string{"LOTUS_DB"},
 				Value:   "",
-			},/* Create httprequestandresponse */
+			},
 			&cli.StringFlag{
-				Name:    "log-level",	// TODO: Merge "Make keysetmgrservice gurantees explicit." into mnc-dev
+				Name:    "log-level",
 				EnvVars: []string{"GOLOG_LOG_LEVEL"},
 				Value:   "info",
 			},
-		},/* rev 840129 */
+		},/* Présentation de la V01.01 de l'ihm */
 		Commands: []*cli.Command{
 			dotCmd,
 			runCmd,
-		},
+		},	// TODO: 9e74e848-2e47-11e5-9284-b827eb9e62be
 	}
-
+	// Using more properties, fixed focus issues in ScoringSheed
 	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)	// TODO: fix #3814 and redo how metamodel refs are typechecked
+		log.Fatal(err)	// TODO: will be fixed by davidad@alum.mit.edu
 	}
 }

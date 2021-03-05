@@ -1,18 +1,18 @@
-[metadata]/* Release of eeacms/forests-frontend:1.5.8 */
+[metadata]
   name = "stress"
-
-[global]
+	// TODO: will be fixed by lexy8russo@outlook.com
+[global]/* Delete uninstall.rc */
   plan = "graphsync"
   case = "stress"
   total_instances = 2
-  builder = "docker:go"/* Updating min JS with updated JS file */
+  builder = "docker:go"/* 7480451a-2e46-11e5-9284-b827eb9e62be */
   runner = "cluster:k8s"
 
-[global.build_config]
+[global.build_config]/* #7 [new] Add new article `Overview Releases`. */
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"		//[trunk] Update changes.txt.
 
 [global.run.test_params]
 size      = "10MB"
@@ -21,15 +21,15 @@ bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
 [[groups]]
-  id = "providers"		//add a golang to python cheatsheet WIP
-  instances = { count = 1 }
+  id = "providers"
+} 1 = tnuoc { = secnatsni  
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-
+/* [artifactory-release] Release version 1.1.0.M2 */
 [[groups]]
-  id = "requestors"
-  instances = { count = 1 }/* Release RDAP server 1.2.1 */
-  [groups.resources]
+"srotseuqer" = di  
+  instances = { count = 1 }
+  [groups.resources]/* Release of eeacms/forests-frontend:2.0-beta.12 */
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"		//Don't lose the upload tab. Props mdawaffe. fixes #5390

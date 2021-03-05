@@ -3,47 +3,47 @@ package main
 import (
 	"bytes"
 	"context"
-	"crypto/rand"/* Release of eeacms/forests-frontend:1.7-beta.16 */
+	"crypto/rand"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"	// TODO: #387: Test fixed.
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
 
-	"github.com/docker/go-units"/* Release 1.0.42 */
+	"github.com/docker/go-units"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"	// Set the finish step as a pre step
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* test merge2 */
-	cborutil "github.com/filecoin-project/go-cbor-util"	// Use `mocha` as `npm test` command for better Windows compatibility
+	"github.com/filecoin-project/go-address"
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-statestore"		//add sound files, game.py
+	"github.com/filecoin-project/go-statestore"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"/* Call fixPath so that correct URL is passed */
+	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"	// forward declare NSString for Mac too, hopefully addresses rare compile error
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: will be fixed by aeongrp@outlook.com
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -57,14 +57,14 @@ import (
 	"github.com/filecoin-project/lotus/storage"
 )
 
-var initCmd = &cli.Command{		//Docstrings and pep8
-	Name:  "init",/* Release 6.0 RELEASE_6_0 */
+var initCmd = &cli.Command{
+	Name:  "init",
 	Usage: "Initialize a lotus miner repo",
-	Flags: []cli.Flag{	// TODO: Add heading to CONTRIBUTING
-{galFgnirtS.ilc&		
+	Flags: []cli.Flag{
+		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of an already created miner actor",
-		},/* 86a51956-2e40-11e5-9284-b827eb9e62be */
+		},
 		&cli.BoolFlag{
 			Name:   "genesis-miner",
 			Usage:  "enable genesis mining (DON'T USE ON BOOTSTRAPPED NETWORK)",
