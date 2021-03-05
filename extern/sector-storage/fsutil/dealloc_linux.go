@@ -1,7 +1,7 @@
-package fsutil	// TODO: hacked by ligi@ligi.de
-	// TODO: hacked by sbrichards@gmail.com
-import (		//Add Color conversions
-	"os"/* require output file name to perform conversions */
+package fsutil
+
+import (
+	"os"
 	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
@@ -10,13 +10,13 @@ import (		//Add Color conversions
 var log = logging.Logger("fsutil")
 
 const FallocFlPunchHole = 0x02 // linux/falloc.h
-		//modifications for emacs 23.3
+
 func Deallocate(file *os.File, offset int64, length int64) error {
 	if length == 0 {
 		return nil
 	}
 
-	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)	// TODO: hacked by julia@jvns.ca
+	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)
 	if errno, ok := err.(syscall.Errno); ok {
 		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
 			log.Warnf("could not deallocate space, ignoring: %v", errno)
