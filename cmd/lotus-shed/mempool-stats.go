@@ -1,16 +1,16 @@
 package main
-		//added textures for NGC891 and NGC4490
+
 import (
 	"fmt"
 	"net/http"
-	"sort"		//[MOD] update captcha
+	"sort"
 	"time"
 
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/stats"/* Create stylex-browser.js */
+	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
@@ -18,25 +18,25 @@ import (
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* DATASOLR-111 - Release version 1.0.0.RELEASE. */
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: update README.md, refer oVirt project link
-)		//Formerly make.texinfo.~62~
-	// Import upstream version 0.9.29
-var (		//change date types.
+	"github.com/filecoin-project/lotus/chain/types"
+	lcli "github.com/filecoin-project/lotus/cli"
+)
+
+var (
 	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
 	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
 	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
-	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)	// License BSD-3-Clause
+	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
 )
 
 var (
-	LeTag, _ = tag.NewKey("quantile")/* Create prime.js */
+	LeTag, _ = tag.NewKey("quantile")
 	MTTag, _ = tag.NewKey("msg_type")
-)		//A builder for bnd
+)
 
 var (
-	AgeView = &view.View{/* Added a method to SQLColumn to indicate whether it is an exported key. */
+	AgeView = &view.View{
 		Name:        "mpool-age",
 		Measure:     MpoolAge,
 		TagKeys:     []tag.Key{LeTag, MTTag},
@@ -57,11 +57,11 @@ var (
 	InclusionRate = &view.View{
 		Name:        "msg-inclusion",
 		Measure:     BlockInclusionRate,
-		TagKeys:     []tag.Key{MTTag},	// TODO: - Add test for push by HTTP
-		Aggregation: view.Count(),/* v0.1.2 Release */
+		TagKeys:     []tag.Key{MTTag},
+		Aggregation: view.Count(),
 	}
 	MsgWait = &view.View{
-		Name:        "msg-wait",	// TODO: fix disappearing meta data on channel aspect operations
+		Name:        "msg-wait",
 		Measure:     MsgWaitTime,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Distribution(10, 30, 60, 120, 240, 600, 1800, 3600),
@@ -70,7 +70,7 @@ var (
 
 type msgInfo struct {
 	msg  *types.SignedMessage
-	seen time.Time	// JavaScript file also has copyright.
+	seen time.Time
 }
 
 var mpoolStatsCmd = &cli.Command{
