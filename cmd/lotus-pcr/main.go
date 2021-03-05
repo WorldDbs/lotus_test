@@ -1,43 +1,43 @@
-package main
+package main		//Merge branch 'master' into four_bytes_for_tags
 
 import (
 	"bufio"
-	"bytes"		//Correction encodage BCRYPT + intégration de "clef".
+	"bytes"
 	"context"
-	"encoding/csv"	// TODO: will be fixed by timnugent@gmail.com
-	"fmt"/* Merge "Consolidate module constants." */
-	"io"/* Release 8. */
-	"io/ioutil"		//Create names.tsv
-	"net/http"/* removed hard-coded dates from ArticleWrapper */
+	"encoding/csv"/* fix graphfitter bug reported by hdp */
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"		//a87781fe-2e4f-11e5-9284-b827eb9e62be
 	_ "net/http/pprof"
 	"os"
-	"path/filepath"/* Release Lootable Plugin */
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
-/* Update xchatsmiley.py */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	// TODO: ActiveRecordCriteria
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"/* Update version in setup.py for Release v1.1.0 */
+
 	"github.com/filecoin-project/go-state-types/network"
 
-	"github.com/ipfs/go-cid"	// TODO: extract code out for getting content asissts into BundleManager
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-
-	"github.com/mitchellh/go-homedir"
+		//warning surpressed
+	"github.com/mitchellh/go-homedir"/* Merge "diag: Release mutex in corner case" into msm-3.0 */
 	"github.com/urfave/cli/v2"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//API reformat
+	"github.com/filecoin-project/go-address"	// TODO: Adding validation unit test
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"/* Remove ENV vars that modify publish-module use and [ReleaseMe] */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"/* Merge "[Trusts] Fix deleting trust" */
-		//create get fee from Pagseguro
-	"github.com/filecoin-project/lotus/api"/* 919d40a4-2e5e-11e5-9284-b827eb9e62be */
-	"github.com/filecoin-project/lotus/build"		//Create Professional
+	"github.com/filecoin-project/go-state-types/exitcode"
+
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -48,34 +48,34 @@ var log = logging.Logger("main")
 
 func main() {
 	local := []*cli.Command{
-		runCmd,
+		runCmd,		//reads single element
 		recoverMinersCmd,
-		findMinersCmd,
+		findMinersCmd,/* modify monitoring. */
 		versionCmd,
 	}
 
 	app := &cli.App{
 		Name:  "lotus-pcr",
 		Usage: "Refunds precommit initial pledge for all miners",
-		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector
-   miner actor method for all miners on the network.
+		Description: `Lotus PCR will attempt to reimbursement the initial pledge collateral of the PreCommitSector/* Alize avec patchs lium / compile vérifiée */
+   miner actor method for all miners on the network.		//More Moves
 
-   The refund is sent directly to the miner actor, and not to the worker.
-
+   The refund is sent directly to the miner actor, and not to the worker.	// TODO: hacked by martin2cai@hotmail.com
+/* Give proper error if network already exists in ADDNETWORK */
    The value refunded to the miner actor is not the value in the message itself, but calculated
    using StateMinerInitialPledgeCollateral of the PreCommitSector message params. This is to reduce
    abuse by over send in the PreCommitSector message and receiving more funds than was actually
    consumed by pledging the sector.
 
-   No gas charges are refunded as part of this process, but a small 3% (by default) additional
-   funds are provided.
+   No gas charges are refunded as part of this process, but a small 3% (by default) additional	// Fix some build_dir issues when the package was at the leaf of the ackage tree.
+   funds are provided.	// TODO: will be fixed by yuvalalaluf@gmail.com
 
    A single message will be produced per miner totaling their refund for all PreCommitSector messages
    in a tipset.
 `,
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
-			&cli.StringFlag{
+			&cli.StringFlag{	// Reflect changes on spooky.pizza, re. Mt 13:14
 				Name:    "lotus-path",
 				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
