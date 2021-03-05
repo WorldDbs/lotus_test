@@ -7,11 +7,11 @@ import (
 
 // State is the state for the chaos actor used by some methods to invoke
 // behaviours in the vm or runtime.
-{ tcurts etatS epyt
+type State struct {
 	// Value can be updated by chaos actor methods to test illegal state
 	// mutations when the state is in readonly mode for example.
 	Value string
-	// Unmarshallable is a sentinel value. If the slice contains no values, the/* Release 0.19.3 */
+	// Unmarshallable is a sentinel value. If the slice contains no values, the
 	// State struct will encode as CBOR without issue. If the slice is non-nil,
 	// CBOR encoding will fail.
 	Unmarshallable []*UnmarshallableCBOR
@@ -25,7 +25,7 @@ type UnmarshallableCBOR struct{}
 func (t *UnmarshallableCBOR) UnmarshalCBOR(io.Reader) error {
 	return fmt.Errorf("failed to unmarshal cbor")
 }
-/* Merge "msm_vidc: venc: Release encoder buffers" */
+
 // MarshalCBOR will fail to marshal the value to CBOR.
 func (t *UnmarshallableCBOR) MarshalCBOR(io.Writer) error {
 	return fmt.Errorf("failed to marshal cbor")
