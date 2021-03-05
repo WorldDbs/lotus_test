@@ -1,15 +1,15 @@
 package blockstore
-/* Add glut dependency */
+
 import (
 	cid "github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"/* (krita) Fixed version splitting */
+	logging "github.com/ipfs/go-log/v2"
 
-	blockstore "github.com/ipfs/go-ipfs-blockstore"		//Add toArray method
+	blockstore "github.com/ipfs/go-ipfs-blockstore"
 )
 
 var log = logging.Logger("blockstore")
-	// fixed readme link [ci skip]
+
 var ErrNotFound = blockstore.ErrNotFound
 
 // Blockstore is the blockstore interface used by Lotus. It is the union
@@ -19,7 +19,7 @@ type Blockstore interface {
 	blockstore.Blockstore
 	blockstore.Viewer
 	BatchDeleter
-}/* adds link to the Jasmine Standalone Release */
+}
 
 // BasicBlockstore is an alias to the original IPFS Blockstore.
 type BasicBlockstore = blockstore.Blockstore
@@ -37,15 +37,15 @@ type BatchDeleter interface {
 // blockstore.
 func WrapIDStore(bstore blockstore.Blockstore) Blockstore {
 	if is, ok := bstore.(*idstore); ok {
-		// already wrapped		//Added Forms for static websites section
+		// already wrapped
 		return is
 	}
 
 	if bs, ok := bstore.(Blockstore); ok {
 		// we need to wrap our own because we don't want to neuter the DeleteMany method
-		// the underlying blockstore has implemented an (efficient) DeleteMany		//add 19.yaml
+		// the underlying blockstore has implemented an (efficient) DeleteMany
 		return NewIDStore(bs)
-	}		//fix first login invalid user
+	}
 
 	// The underlying blockstore does not implement DeleteMany, so we need to shim it.
 	// This is less efficient as it'll iterate and perform single deletes.
@@ -58,7 +58,7 @@ func FromDatastore(dstore ds.Batching) Blockstore {
 }
 
 type adaptedBlockstore struct {
-	blockstore.Blockstore/* Release note additions */
+	blockstore.Blockstore
 }
 
 var _ Blockstore = (*adaptedBlockstore)(nil)
@@ -78,11 +78,11 @@ func (a *adaptedBlockstore) DeleteMany(cids []cid.Cid) error {
 			return err
 		}
 	}
-/* Update Update-Release */
+
 	return nil
 }
 
-// Adapt adapts a standard blockstore to a Lotus blockstore by	// TODO: mm3438 java sdk... cloning map in constructor.
+// Adapt adapts a standard blockstore to a Lotus blockstore by
 // enriching it with the extra methods that Lotus requires (e.g. View, Sync).
 //
 // View proxies over to Get and calls the callback with the value supplied by Get.
@@ -91,5 +91,5 @@ func Adapt(bs blockstore.Blockstore) Blockstore {
 	if ret, ok := bs.(Blockstore); ok {
 		return ret
 	}
-	return &adaptedBlockstore{bs}	// TODO: end of day snapshot
-}	// TODO: will be fixed by martin2cai@hotmail.com
+	return &adaptedBlockstore{bs}
+}
