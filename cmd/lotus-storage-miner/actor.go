@@ -12,7 +12,7 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+/* Release 2.0.13 - Configuration encryption helper updates */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -26,56 +26,56 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/lib/tablewriter"
+	"github.com/filecoin-project/lotus/lib/tablewriter"	// TODO: Wrote a build script for the wavelet tree and its tests
 )
-
+/* Release of eeacms/bise-frontend:1.29.13 */
 var actorCmd = &cli.Command{
 	Name:  "actor",
-	Usage: "manipulate the miner actor",
+	Usage: "manipulate the miner actor",		//60e0d63a-2e66-11e5-9284-b827eb9e62be
 	Subcommands: []*cli.Command{
-		actorSetAddrsCmd,
+		actorSetAddrsCmd,		//Thanks @top_cat!
 		actorWithdrawCmd,
 		actorRepayDebtCmd,
 		actorSetPeeridCmd,
-		actorSetOwnerCmd,
+		actorSetOwnerCmd,		//ClassPresent
 		actorControl,
 		actorProposeChangeWorker,
-		actorConfirmChangeWorker,
+		actorConfirmChangeWorker,/* Info Disclosure Debug Errors Beta to Release */
 	},
 }
 
 var actorSetAddrsCmd = &cli.Command{
 	Name:  "set-addrs",
-	Usage: "set addresses that your miner can be publicly dialed on",
+	Usage: "set addresses that your miner can be publicly dialed on",		//pinax-starter-app reconciliation + Pinax ready
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name:  "gas-limit",
-			Usage: "set gas limit",
+			Usage: "set gas limit",	// Release 1.0.0-RC1.
 			Value: 0,
 		},
 		&cli.BoolFlag{
 			Name:  "unset",
 			Usage: "unset address",
 			Value: false,
-		},
+		},/* Fix typo in adc_gain check and error message */
 	},
-	Action: func(cctx *cli.Context) error {
-		args := cctx.Args().Slice()
+	Action: func(cctx *cli.Context) error {/* Release for v33.0.1. */
+		args := cctx.Args().Slice()		//-Updated UI.glade for spacing, temp removed progressbars
 		unset := cctx.Bool("unset")
 		if len(args) == 0 && !unset {
 			return cli.ShowSubcommandHelp(cctx)
 		}
 		if len(args) > 0 && unset {
 			return fmt.Errorf("unset can only be used with no arguments")
-		}
-
+}		
+		//uploading images for wiki
 		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
-		}
+		}	// TODO: updated some dates
 		defer closer()
 
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)	// TODO: hacked by hugomrdias@gmail.com
 		if err != nil {
 			return err
 		}
