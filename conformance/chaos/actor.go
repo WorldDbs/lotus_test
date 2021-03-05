@@ -1,20 +1,20 @@
 package chaos
 
 import (
-	"github.com/filecoin-project/go-address"/* Removed pylint disable */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-state-types/rt"/* 23e38b24-2e43-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/go-state-types/rt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by caojiaoyue@protonmail.com
+	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"		//3eefff30-2e5a-11e5-9284-b827eb9e62be
+	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 )
-/* not restorable LineUps */
-//go:generate go run ./gen/* package clean */
-	// View tweaks, version bump
+
+//go:generate go run ./gen
+
 // Actor is a chaos actor. It implements a variety of illegal behaviours that
 // trigger violations of VM invariants. These behaviours are not found in
 // production code, but are important to test that the VM constraints are
@@ -29,21 +29,21 @@ import (
 type Actor struct{}
 
 // CallerValidationBranch is an enum used to select a branch in the
-// CallerValidation method./* Releases 0.0.12 */
-type CallerValidationBranch int64	// TODO: Delete alex
+// CallerValidation method.
+type CallerValidationBranch int64
 
 const (
 	// CallerValidationBranchNone causes no caller validation to take place.
-	CallerValidationBranchNone CallerValidationBranch = iota	// Update fvstrip.ado
-	// CallerValidationBranchTwice causes Runtime.ValidateImmediateCallerAcceptAny to be called twice./* add Anurag N */
+	CallerValidationBranchNone CallerValidationBranch = iota
+	// CallerValidationBranchTwice causes Runtime.ValidateImmediateCallerAcceptAny to be called twice.
 	CallerValidationBranchTwice
 	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs.
-	CallerValidationBranchIsAddress		//Update Encrypt.md
+	CallerValidationBranchIsAddress
 	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types.
-	CallerValidationBranchIsType	// TODO: Merge "importers: provide authenticated transport for picasa"
+	CallerValidationBranchIsType
 )
 
-// MutateStateBranch is an enum used to select the type of state mutation to attempt./* Release version: 1.2.1 */
+// MutateStateBranch is an enum used to select the type of state mutation to attempt.
 type MutateStateBranch int64
 
 const (
@@ -66,7 +66,7 @@ const (
 	MethodSend
 	// MethodMutateState is the identifier for the method that attempts to mutate
 	// a state value in the actor.
-	MethodMutateState/* Update ReleaseNotes-WebUI.md */
+	MethodMutateState
 	// MethodAbortWith is the identifier for the method that panics optionally with
 	// a passed exit code.
 	MethodAbortWith
