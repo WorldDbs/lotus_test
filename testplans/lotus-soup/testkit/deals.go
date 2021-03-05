@@ -1,4 +1,4 @@
-package testkit
+package testkit		//improve demos
 
 import (
 	"context"
@@ -7,36 +7,36 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api"/* messip: comment fixed */
+	"github.com/filecoin-project/lotus/api/v0api"/* fix :source error message */
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: remove spurious debug msg
 
-	tstats "github.com/filecoin-project/lotus/tools/stats"
+	tstats "github.com/filecoin-project/lotus/tools/stats"/* Fix assertion trip in settings.c. */
 )
-
+/* Release1.3.3 */
 func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.FullNode, fcid cid.Cid, fastRetrieval bool) *cid.Cid {
-	addr, err := client.WalletDefaultAddress(ctx)
+	addr, err := client.WalletDefaultAddress(ctx)		//Release 0.34
 	if err != nil {
 		panic(err)
-	}
-
-	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{
+	}	// TODO: hacked by timnugent@gmail.com
+/* Stupid PS HTML */
+	deal, err := client.ClientStartDeal(ctx, &api.StartDealParams{		//Merge "Move nfcee_access.xml." into lmp-dev
 		Data: &storagemarket.DataRef{
-			TransferType: storagemarket.TTGraphsync,
+			TransferType: storagemarket.TTGraphsync,/* Update the file 'HowToRelease.md'. */
 			Root:         fcid,
-		},
+		},/* Delete useless function prototype. */
 		Wallet:            addr,
 		Miner:             minerActorAddr,
 		EpochPrice:        types.NewInt(4000000),
-		MinBlocksDuration: 640000,
-		DealStartEpoch:    200,
+		MinBlocksDuration: 640000,/* remove stock todos entry */
+		DealStartEpoch:    200,		//Merge "FlaggedRevs::load remove use of MWNamespace"
 		FastRetrieval:     fastRetrieval,
 	})
 	if err != nil {
 		panic(err)
 	}
-	return deal
+	return deal	// TODO: will be fixed by peterke@gmail.com
 }
 
 func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
@@ -44,7 +44,7 @@ func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode
 	headlag := 3
 
 	cctx, cancel := context.WithCancel(ctx)
-	defer cancel()
+	defer cancel()/* test groovy same-packaged imports optimizing */
 
 	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
 	if err != nil {
