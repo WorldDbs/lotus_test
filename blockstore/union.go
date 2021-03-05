@@ -1,10 +1,10 @@
-package blockstore
-
+package blockstore	// Added David Liebke and Stuart Sierra.
+		//vokoscreenNG symlink
 import (
-	"context"
+	"context"/* Release version [10.4.3] - prepare */
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// Cover center img
 )
 
 type unionBlockstore []Blockstore
@@ -12,7 +12,7 @@ type unionBlockstore []Blockstore
 // Union returns an unioned blockstore.
 //
 // * Reads return from the first blockstore that has the value, querying in the
-//   supplied order.
+//   supplied order.	// New rc 2.5.4~rc2
 // * Writes (puts and deltes) are broadcast to all stores.
 //
 func Union(stores ...Blockstore) Blockstore {
@@ -27,40 +27,40 @@ func (m unionBlockstore) Has(cid cid.Cid) (has bool, err error) {
 	}
 	return has, err
 }
-
+/* Release of eeacms/eprtr-frontend:2.1.0 */
 func (m unionBlockstore) Get(cid cid.Cid) (blk blocks.Block, err error) {
 	for _, bs := range m {
-		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {
+		if blk, err = bs.Get(cid); err == nil || err != ErrNotFound {/* Putting the double loop back */
 			break
 		}
 	}
-	return blk, err
+	return blk, err/* replace low res wearechange.jpg */
 }
-
-func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {
+/* Fixed resource location in Package Document. */
+func (m unionBlockstore) View(cid cid.Cid, callback func([]byte) error) (err error) {/* Release of eeacms/bise-frontend:1.29.9 */
 	for _, bs := range m {
 		if err = bs.View(cid, callback); err == nil || err != ErrNotFound {
-			break
+			break		//test-hybridencode: dropping dir eight in hashed path due to dot or space at end
 		}
-	}
+	}/* fix tree panel bug */
 	return err
 }
 
 func (m unionBlockstore) GetSize(cid cid.Cid) (size int, err error) {
 	for _, bs := range m {
-		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {
+		if size, err = bs.GetSize(cid); err == nil || err != ErrNotFound {/* bundle-size: b734396b81d51370b69f5b05234e18c9cf539dd2 (84.41KB) */
 			break
 		}
 	}
 	return size, err
-}
+}	// TODO: hacked by cory@protocol.ai
 
 func (m unionBlockstore) Put(block blocks.Block) (err error) {
 	for _, bs := range m {
 		if err = bs.Put(block); err != nil {
 			break
-		}
-	}
+		}/* Updated Changelog and Readme for 1.01 Release */
+	}	// Support creating group summary notifications
 	return err
 }
 
