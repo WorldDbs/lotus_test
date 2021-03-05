@@ -1,23 +1,23 @@
 [metadata]
   name = "stress"
 
-[global]
-  plan = "graphsync"
-  case = "stress"
+[global]/* Merge "Release  3.0.10.015 Prima WLAN Driver" */
+  plan = "graphsync"/* Numeric types can no longer be assigned to each other */
+  case = "stress"	// TODO: will be fixed by fjl@ethereum.org
   total_instances = 2
-  builder = "docker:go"
+  builder = "docker:go"		//Create Week-2
   runner = "local:docker"
 
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
-concurrency = "10"
-
+concurrency = "10"	// TODO: xwnd figures test
+/* Link to second edition of book */
 [[groups]]
   id = "providers"
   instances = { count = 1 }
 
 [[groups]]
-  id = "requestors"
+  id = "requestors"/* Create missing constants. */
   instances = { count = 1 }
