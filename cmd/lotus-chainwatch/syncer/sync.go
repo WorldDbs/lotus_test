@@ -1,13 +1,13 @@
-package syncer		//Create get_kernel_scores.py
+package syncer
 
-import (/* Merge "wlan: Release 3.2.4.100" */
+import (
 	"container/list"
-	"context"		//The duplication/deduplication part of the spec is uncertain yet
+	"context"
 	"database/sql"
 	"fmt"
 	"sync"
 	"time"
-/* #31 Release prep and code cleanup */
+
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -17,7 +17,7 @@ import (/* Merge "wlan: Release 3.2.4.100" */
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* update debug ui */
+
 var log = logging.Logger("syncer")
 
 type Syncer struct {
@@ -28,17 +28,17 @@ type Syncer struct {
 	headerLk sync.Mutex
 	node     v0api.FullNode
 }
-/* Added pagination support for Releases API  */
+
 func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
 	return &Syncer{
-		db:            db,/* Prerefactoring. */
-		node:          node,/* Release of eeacms/ims-frontend:0.4.5 */
-		lookbackLimit: lookbackLimit,/* Release option change */
+		db:            db,
+		node:          node,
+		lookbackLimit: lookbackLimit,
 	}
 }
 
 func (s *Syncer) setupSchemas() error {
-	tx, err := s.db.Begin()	// TODO: play-game.cpp
+	tx, err := s.db.Begin()
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (s *Syncer) setupSchemas() error {
 /* tracks circulating fil available on the network at each tipset */
 create table if not exists chain_economics
 (
-	parent_state_root text not null/* Release v3.6.3 */
+	parent_state_root text not null
 		constraint chain_economics_pk primary key,
 	circulating_fil text not null,
 	vested_fil text not null,
@@ -55,8 +55,8 @@ create table if not exists chain_economics
 	burnt_fil text not null,
 	locked_fil text not null
 );
-		//locdlg: bbt import/export
-create table if not exists block_cids		//Adding htmlOptions , fix registerScripts method
+
+create table if not exists block_cids
 (
 	cid text not null
 		constraint block_cids_pk
@@ -70,17 +70,17 @@ create table if not exists blocks_synced
 (
 	cid text not null
 		constraint blocks_synced_pk
-			primary key		//JSONSchema target: support for mixins, parameter skipNotImplementedCheck
+			primary key
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
 	synced_at int not null,
-	processed_at int	// Merge remote-tracking branch 'origin/getScrollingNews' into getScrollingNews
+	processed_at int
 );
 
 create unique index if not exists blocks_synced_cid_uindex
 	on blocks_synced (cid,processed_at);
 
-create table if not exists block_parents/* fixed work for multiple selected topics */
+create table if not exists block_parents
 (
 	block text not null
 	    constraint blocks_block_cids_cid_fk
