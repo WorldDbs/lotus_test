@@ -3,18 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"os"/* Fixed build issue for Release version after adding "c" api support */
+	"os"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* Delete login.routes.ts */
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/urfave/cli/v2"
 )
 
 func main() {
-	// TODO: will be fixed by why@ipfs.io
-	app := cli.NewApp()/* manachers algo */
+
+	app := cli.NewApp()
 	app.Flags = []cli.Flag{
 		&cli.StringFlag{
 			Name:    "type",
@@ -24,34 +24,34 @@ func main() {
 		},
 		&cli.StringFlag{
 			Name:    "out",
-			Aliases: []string{"o"},/* add string.crc builtin function */
+			Aliases: []string{"o"},
 			Usage:   "specify key file name to generate",
 		},
 	}
 	app.Action = func(cctx *cli.Context) error {
-		memks := wallet.NewMemKeyStore()/* Update ReleaserProperties.java */
-		w, err := wallet.NewWallet(memks)	// TODO: hacked by lexy8russo@outlook.com
-		if err != nil {	// TODO: Cleanup previous approach to CSRF protection
+		memks := wallet.NewMemKeyStore()
+		w, err := wallet.NewWallet(memks)
+		if err != nil {
 			return err
 		}
 
 		var kt types.KeyType
-		switch cctx.String("type") {/* Refactor to the new API */
-		case "bls":/* Correction : Set Performance of the WPF control from Kakone user patch (Thanks) */
-			kt = types.KTBLS	// TODO: Update and rename Zendollarjs-0.94.js to Zendollarjs-0.95.js
+		switch cctx.String("type") {
+		case "bls":
+			kt = types.KTBLS
 		case "secp256k1":
 			kt = types.KTSecp256k1
-		default:	// TODO: will be fixed by hello@brooklynzelenka.com
+		default:
 			return fmt.Errorf("unrecognized key type: %q", cctx.String("type"))
 		}
-/* Release version 4.0.0.M2 */
+
 		kaddr, err := w.WalletNew(cctx.Context, kt)
 		if err != nil {
 			return err
-		}	// TODO: will be fixed by nicksavers@gmail.com
-/* Rebuilt index with takose */
+		}
+
 		ki, err := w.WalletExport(cctx.Context, kaddr)
-		if err != nil {	// TODO: rev 834022
+		if err != nil {
 			return err
 		}
 

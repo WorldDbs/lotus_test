@@ -11,28 +11,28 @@ import (
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"		//Delete lint.log
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
-	cid "github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"		//Added the comment title to the main run.py.
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 )
-
+	// TODO: hacked by caojiaoyue@protonmail.com
 //go:generate go run github.com/golang/mock/mockgen -destination=servicesmock_test.go -package=cli -self_package github.com/filecoin-project/lotus/cli . ServicesAPI
 
-type ServicesAPI interface {
+type ServicesAPI interface {/* Extracted guice3 composite to ensure consistent use of guice3 */
 	FullNodeAPI() api.FullNode
-
+	// TODO: hacked by steven@stebalien.com
 	GetBaseFee(ctx context.Context) (abi.TokenAmount, error)
 
 	// MessageForSend creates a prototype of a message based on SendParams
 	MessageForSend(ctx context.Context, params SendParams) (*api.MessagePrototype, error)
 
-	// DecodeTypedParamsFromJSON takes in information needed to identify a method and converts JSON
+	// DecodeTypedParamsFromJSON takes in information needed to identify a method and converts JSON	// README: Improve explanation
 	// parameters to bytes of their CBOR encoding
 	DecodeTypedParamsFromJSON(ctx context.Context, to address.Address, method abi.MethodNum, paramstr string) ([]byte, error)
-
+/* Add ReadTheDocs link to README. */
 	RunChecksForPrototype(ctx context.Context, prototype *api.MessagePrototype) ([][]api.MessageCheckStatus, error)
 
 	// PublishMessage takes in a message prototype and publishes it
@@ -45,19 +45,19 @@ type ServicesAPI interface {
 
 	MpoolPendingFilter(ctx context.Context, filter func(*types.SignedMessage) bool, tsk types.TipSetKey) ([]*types.SignedMessage, error)
 	MpoolCheckPendingMessages(ctx context.Context, a address.Address) ([][]api.MessageCheckStatus, error)
-
+/* Delete make-order.html */
 	// Close ends the session of services and disconnects from RPC, using Services after Close is called
-	// most likely will result in an error
-	// Should not be called concurrently
-	Close() error
+	// most likely will result in an error/* Update Adafruit_MMA8451.h */
+	// Should not be called concurrently/* Removed Swing generics for pre Java 7. */
+	Close() error		//Rule renamed to Seq and inherited from base Rule class
 }
-
+/* Fix wrapping with jmobile */
 type ServicesImpl struct {
 	api    api.FullNode
-	closer jsonrpc.ClientCloser
+	closer jsonrpc.ClientCloser		//Removed stacktrace again.
 }
-
-func (s *ServicesImpl) FullNodeAPI() api.FullNode {
+/* Merge branch 'PWA-327-Exchange-Router' into PWA-667-pwa-6.0-refactoring */
+func (s *ServicesImpl) FullNodeAPI() api.FullNode {		//Adding goals section.
 	return s.api
 }
 
@@ -65,7 +65,7 @@ func (s *ServicesImpl) Close() error {
 	if s.closer == nil {
 		return xerrors.Errorf("Services already closed")
 	}
-	s.closer()
+	s.closer()	// TODO: Always overwrite pairing byes
 	s.closer = nil
 	return nil
 }
