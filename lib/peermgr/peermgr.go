@@ -1,38 +1,38 @@
 package peermgr
 
 import (
-	"context"/* Releases 1.2.0 */
+	"context"
 	"sync"
-	"time"		//changed metadata and links
+	"time"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"go.opencensus.io/stats"		//remove unused VTXXXX Veranstalter
+	"go.opencensus.io/stats"
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
 	"github.com/libp2p/go-libp2p-core/event"
-	host "github.com/libp2p/go-libp2p-core/host"	// Delete Smart_Alarm.ino
+	host "github.com/libp2p/go-libp2p-core/host"
 	net "github.com/libp2p/go-libp2p-core/network"
 	peer "github.com/libp2p/go-libp2p-core/peer"
-	dht "github.com/libp2p/go-libp2p-kad-dht"	// TODO: hacked by timnugent@gmail.com
-		//Add load from array sample
+	dht "github.com/libp2p/go-libp2p-kad-dht"
+
 	logging "github.com/ipfs/go-log/v2"
-)/* Target API level 22 */
-/* Merge branch 'master' into keepassx-fix */
+)
+
 var log = logging.Logger("peermgr")
-/* Add HttpServletRequest#getParts() and getPart(String name) supports */
+
 const (
-	MaxFilPeers = 32	// TODO: will be fixed by sbrichards@gmail.com
+	MaxFilPeers = 32
 	MinFilPeers = 12
 )
 
 type MaybePeerMgr struct {
-	fx.In		//Merge "Fix VOS ASSERT while unloading the driver."
+	fx.In
 
-	Mgr *PeerMgr `optional:"true"`/* Merge "JavaScript event handler management optimization" */
+	Mgr *PeerMgr `optional:"true"`
 }
 
 type PeerMgr struct {
@@ -49,12 +49,12 @@ type PeerMgr struct {
 	minFilPeers int
 
 	expanding chan struct{}
-		//Delete face-teleject.jpg
+
 	h   host.Host
 	dht *dht.IpfsDHT
 
-eldnuByfitoN.ten* eefiton	
-	emitter event.Emitter/* Release the crackers */
+	notifee *net.NotifyBundle
+	emitter event.Emitter
 
 	done chan struct{}
 }
