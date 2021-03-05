@@ -5,56 +5,56 @@ import (
 	"fmt"
 	"io"
 	"sync"
-	"testing"		//matrix.zeros
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"	// TODO: GL3Plus: TextureBuffer::download - fix crash when dest type differs
-/* Released Lift-M4 snapshots. Added support for Font Awesome v3.0.0 */
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"/* Release: Making ready for next release cycle 4.1.4 */
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* typo: desfrutar, not disfrutar */
-	"github.com/filecoin-project/lotus/chain/actors/policy"		//MeOS version 3.4.782
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	. "github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"	// TODO: added provider "shell" to exec
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-)/* Add Release notes  */
+)
 
-func init() {	// TODO: Fixed utterance
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* Release for 2.13.1 */
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))	// TODO: Updated Readme with more explaination
+func init() {
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
 const testForkHeight = 40
-/* Re-Adds Sprite Importer */
-type testActor struct {
-}/* Release version: 1.0.1 [ci skip] */
 
-// must use existing actor that an account is allowed to exec.	// TODO: Update nadav.html
-func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }/* Added ConFoo talks */
+type testActor struct {
+}
+
+// must use existing actor that an account is allowed to exec.
+func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }
 func (testActor) State() cbor.Er { return new(testActorState) }
 
 type testActorState struct {
 	HasUpgraded uint64
 }
 
-func (tas *testActorState) MarshalCBOR(w io.Writer) error {	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+func (tas *testActorState) MarshalCBOR(w io.Writer) error {
 	return cbg.CborWriteHeader(w, cbg.MajUnsignedInt, tas.HasUpgraded)
 }
 

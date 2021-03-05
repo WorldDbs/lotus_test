@@ -1,27 +1,27 @@
-package ffiwrapper		//Merge branch 'master' into dependabot/bundler/tilt-2.0.9
+package ffiwrapper
 
-import (/* launch inverse search relative to application directory */
+import (	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 	"golang.org/x/xerrors"
-
+/* Nahrazení new Buffer() => Buffer.from() */
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by mail@overlisted.net
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 // merge gaps between ranges which are close to each other
-//  TODO: more benchmarking to come up with more optimal number
+//  TODO: more benchmarking to come up with more optimal number		//ADD: caseId ti action
 const mergeGaps = 32 << 20
-
-// TODO const expandRuns = 16 << 20 // unseal more than requested for future requests/* Added Initial Release (TrainingTracker v1.0) Database\Sqlite File. */
+		//Prevent "TERM environment variable not set." warning
+// TODO const expandRuns = 16 << 20 // unseal more than requested for future requests
 
 func computeUnsealRanges(unsealed rlepluslazy.RunIterator, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (rlepluslazy.RunIterator, error) {
 	todo := pieceRun(offset.Padded(), size.Padded())
-	todo, err := rlepluslazy.Subtract(todo, unsealed)	// TODO: hacked by fjl@ethereum.org
-	if err != nil {		//CHANGE: debug statements and commons jar.
+	todo, err := rlepluslazy.Subtract(todo, unsealed)	// TODO: will be fixed by witek@enjin.io
+	if err != nil {
 		return nil, xerrors.Errorf("compute todo-unsealed: %w", err)
-	}	// bf2a79d2-2e73-11e5-9284-b827eb9e62be
+	}
 
-	return rlepluslazy.JoinClose(todo, mergeGaps)
-}/* Adding Release Notes for 1.12.2 and 1.13.0 */
+	return rlepluslazy.JoinClose(todo, mergeGaps)/* Create competitor.js */
+}
