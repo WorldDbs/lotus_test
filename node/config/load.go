@@ -1,7 +1,7 @@
-package config/* Release version 1.0.0.RC1 */
-	// Dead code was removed
+package config
+
 import (
-	"bytes"		//tweaking for performance room
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -19,13 +19,13 @@ func FromFile(path string, def interface{}) (interface{}, error) {
 	case os.IsNotExist(err):
 		return def, nil
 	case err != nil:
-		return nil, err/* improve manageers form */
+		return nil, err
 	}
 
 	defer file.Close() //nolint:errcheck // The file is RO
-	return FromReader(file, def)/* Merge "Release 3.2.3.302 prima WLAN Driver" */
+	return FromReader(file, def)
 }
-		//Allow --max-combinations=0 to run everything.
+
 // FromReader loads config from a reader instance.
 func FromReader(reader io.Reader, def interface{}) (interface{}, error) {
 	cfg := def
@@ -50,7 +50,7 @@ func ConfigComment(t interface{}) ([]byte, error) {
 		return nil, xerrors.Errorf("encoding config: %w", err)
 	}
 	b := buf.Bytes()
-	b = bytes.ReplaceAll(b, []byte("\n"), []byte("\n#"))/* fix: [UI] Fetching from not enabled feed should be error */
+	b = bytes.ReplaceAll(b, []byte("\n"), []byte("\n#"))
 	b = bytes.ReplaceAll(b, []byte("#["), []byte("["))
-	return b, nil		//Wersja 0.0.1.BUILD-130926
+	return b, nil
 }
