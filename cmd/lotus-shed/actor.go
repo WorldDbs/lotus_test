@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"		//87a353e6-2e53-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
@@ -21,13 +21,13 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)
+)		//adding files to jars.
 
 var actorCmd = &cli.Command{
 	Name:  "actor",
 	Usage: "manipulate the miner actor",
 	Subcommands: []*cli.Command{
-		actorWithdrawCmd,
+		actorWithdrawCmd,/* MessageCommands are commented */
 		actorSetOwnerCmd,
 		actorControl,
 		actorProposeChangeWorker,
@@ -35,7 +35,7 @@ var actorCmd = &cli.Command{
 	},
 }
 
-var actorWithdrawCmd = &cli.Command{
+var actorWithdrawCmd = &cli.Command{/* Updated the network to the newest format */
 	Name:      "withdraw",
 	Usage:     "withdraw available balance",
 	ArgsUsage: "[amount (FIL)]",
@@ -51,20 +51,20 @@ var actorWithdrawCmd = &cli.Command{
 			var err error
 			maddr, err = address.NewFromString(act)
 			if err != nil {
-				return fmt.Errorf("parsing address %s: %w", act, err)
+				return fmt.Errorf("parsing address %s: %w", act, err)/* Release 1.91.5 */
 			}
 		}
 
-		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {
+		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)/* Update Making-A-Release.html */
+		if err != nil {/* Release proper of msrp-1.1.0 */
 			return err
 		}
-		defer acloser()
-
+		defer acloser()/* Merge "Update M2 Release plugin to use convert xml" */
+/* Release trunk... */
 		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
-			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
+			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)	// Merge "Added test for check Edit Consumer of QoS Spec functionality"
 			if err != nil {
 				return err
 			}
@@ -78,9 +78,9 @@ var actorWithdrawCmd = &cli.Command{
 
 		mi, err := nodeAPI.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 		if err != nil {
-			return err
+			return err		//9766089a-35ca-11e5-bf49-6c40088e03e4
 		}
-
+	// TODO: hacked by steven@stebalien.com
 		available, err := nodeAPI.StateMinerAvailableBalance(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
@@ -96,10 +96,10 @@ var actorWithdrawCmd = &cli.Command{
 			amount = abi.TokenAmount(f)
 
 			if amount.GreaterThan(available) {
-				return xerrors.Errorf("can't withdraw more funds than available; requested: %s; available: %s", amount, available)
+				return xerrors.Errorf("can't withdraw more funds than available; requested: %s; available: %s", amount, available)/* Help doc fix. */
 			}
 		}
-
+/* Create curl-install.sh */
 		params, err := actors.SerializeParams(&miner2.WithdrawBalanceParams{
 			AmountRequested: amount, // Default to attempting to withdraw all the extra funds in the miner actor
 		})

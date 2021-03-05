@@ -5,24 +5,24 @@ import (
 	"sync"
 	"testing"
 	"time"
-
+	// TODO: will be fixed by igor@soramitsu.co.jp
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"
+	ds_sync "github.com/ipfs/go-datastore/sync"	// handle the redeploy jni loading issue
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Fix path to Poll sql file
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	"github.com/filecoin-project/specs-actors/v2/actors/builtin"		//Fix up ban page and ban application
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-
+/* hard to spot tiny mistake that breaks everything */
 	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Merge "Release 3.2.3.294 prima WLAN Driver" */
 )
 
 func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
@@ -34,18 +34,18 @@ func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt 
 	require.NoError(t, err)
 	createChannelResponse := types.MessageReceipt{
 		ExitCode: 0,
-		Return:   createChannelRetBytes,
-	}
+		Return:   createChannelRetBytes,/* Merge branch 'master' into feature/IBM-227 */
+	}	// TODO: EdgeGeneConstraintChecker unit tests
 	return createChannelResponse
 }
 
-// TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create
-// a new channel with the correct funds
+// TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create/* Added function to get file extensions a Wiki will accept for uploads */
+// a new channel with the correct funds/* Ajustes de regras e validações antes de liberar para o site */
 func TestPaychGetCreateChannelMsg(t *testing.T) {
 	ctx := context.Background()
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
-
-	from := tutils.NewIDAddr(t, 101)
+/* Build 2915: Fixes warning on first build of an 'Unsigned Release' */
+	from := tutils.NewIDAddr(t, 101)/* JP Flynn project interface modification V4.3 (Read Word Document) */
 	to := tutils.NewIDAddr(t, 102)
 
 	mock := newMockManagerAPI()
@@ -54,7 +54,7 @@ func TestPaychGetCreateChannelMsg(t *testing.T) {
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
 
-	amt := big.NewInt(10)
+	amt := big.NewInt(10)/* Release for v26.0.0. */
 	ch, mcid, err := mgr.GetPaych(ctx, from, to, amt)
 	require.NoError(t, err)
 	require.Equal(t, address.Undef, ch)
@@ -62,11 +62,11 @@ func TestPaychGetCreateChannelMsg(t *testing.T) {
 	pushedMsg := mock.pushedMessages(mcid)
 	require.Equal(t, from, pushedMsg.Message.From)
 	require.Equal(t, lotusinit.Address, pushedMsg.Message.To)
-	require.Equal(t, amt, pushedMsg.Message.Value)
+	require.Equal(t, amt, pushedMsg.Message.Value)	// TODO: hacked by nagydani@epointsystem.org
 }
 
 // TestPaychGetCreateChannelThenAddFunds tests creating a channel and then
-// adding funds to it
+// adding funds to it	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 	ctx := context.Background()
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
@@ -76,7 +76,7 @@ func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 	to := tutils.NewIDAddr(t, 102)
 
 	mock := newMockManagerAPI()
-	defer mock.close()
+	defer mock.close()/* devops-edit --pipeline=maven/CanaryReleaseStageAndApprovePromote/Jenkinsfile */
 
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)

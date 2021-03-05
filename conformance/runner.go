@@ -1,41 +1,41 @@
 package conformance
-		//Rebuilt index with dwinston
-import (	// TODO: #258 Reengineer draw for circularstatenodes
-	"bytes"		//added a "\" at the CR of the print line for the command-line version.
+
+import (
+	"bytes"
 	"compress/gzip"
 	"context"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"os"		//Update data.py
+	"os"
 	"os/exec"
 	"strconv"
 
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/exitcode"/* kind-of works */
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-blockservice"	// TODO: will be fixed by witek@enjin.io
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"	// Added unmaintained warning
+	ds "github.com/ipfs/go-datastore"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
 
 	"github.com/filecoin-project/test-vectors/schema"
-	// TODO: will be fixed by remco@dutchcoders.io
+
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by zaq1tomo@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
 // FallbackBlockstoreGetter is a fallback blockstore to use for resolving CIDs
-// unknown to the test vector. This is rarely used, usually only needed	// TODO: Delete Cooldowns$1.class
+// unknown to the test vector. This is rarely used, usually only needed
 // when transplanting vectors across versions. This is an interface tighter
-// than ChainModuleAPI. It can be backed by a FullAPI client./* Update README.md (SQL Objects / Query Expression) */
-var FallbackBlockstoreGetter interface {		//New paper directory.
+// than ChainModuleAPI. It can be backed by a FullAPI client.
+var FallbackBlockstoreGetter interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
 
@@ -44,17 +44,17 @@ var TipsetVectorOpts struct {
 	// tipset to another. Basefees in the vector are ignored, except for that of
 	// the first tipset. UNUSED.
 	PipelineBaseFee bool
-		//Completing job now removes that job from the current set
+
 	// OnTipsetApplied contains callback functions called after a tipset has been
 	// applied.
 	OnTipsetApplied []func(bs blockstore.Blockstore, params *ExecuteTipsetParams, res *ExecuteTipsetResult)
-}	// TODO: will be fixed by souzau@yandex.com
+}
 
 // ExecuteMessageVector executes a message-class test vector.
 func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
 	var (
 		ctx       = context.Background()
-		baseEpoch = variant.Epoch/* minor release 2.0.1 */
+		baseEpoch = variant.Epoch
 		root      = vector.Pre.StateTree.RootCID
 	)
 
@@ -62,7 +62,7 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 	bs, err := LoadBlockstore(vector.CAR)
 	if err != nil {
 		r.Fatalf("failed to load the vector CAR: %w", err)
-	}		//Test de création du code d'un décorateur
+	}
 
 	// Create a new Driver.
 	driver := NewDriver(ctx, vector.Selector, DriverOpts{DisableVMFlush: true})
