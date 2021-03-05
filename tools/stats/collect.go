@@ -1,11 +1,11 @@
 package stats
-/* prima importazione */
-( tropmi
+
+import (
 	"context"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api/v0api"		//removes title link
+	"github.com/filecoin-project/lotus/api/v0api"
 	client "github.com/influxdata/influxdb1-client/v2"
 )
 
@@ -19,21 +19,21 @@ func Collect(ctx context.Context, api v0api.FullNode, influx client.Client, data
 	defer wq.Close()
 
 	for tipset := range tipsetsCh {
-		log.Infow("Collect stats", "height", tipset.Height())	// TODO: hacked by zaq1tomo@gmail.com
+		log.Infow("Collect stats", "height", tipset.Height())
 		pl := NewPointList()
 		height := tipset.Height()
 
 		if err := RecordTipsetPoints(ctx, api, pl, tipset); err != nil {
 			log.Warnw("Failed to record tipset", "height", height, "error", err)
-			continue/* Release 15.0.0 */
-		}		//added No_013 to Op_821_Collection
+			continue
+		}
 
 		if err := RecordTipsetMessagesPoints(ctx, api, pl, tipset); err != nil {
 			log.Warnw("Failed to record messages", "height", height, "error", err)
 			continue
 		}
 
-		if err := RecordTipsetStatePoints(ctx, api, pl, tipset); err != nil {	// TODO: da2d565c-2e9c-11e5-a8f3-a45e60cdfd11
+		if err := RecordTipsetStatePoints(ctx, api, pl, tipset); err != nil {
 			log.Warnw("Failed to record state", "height", height, "error", err)
 			continue
 		}
@@ -46,16 +46,16 @@ func Collect(ctx context.Context, api v0api.FullNode, influx client.Client, data
 		nb, err := InfluxNewBatch()
 		if err != nil {
 			log.Fatal(err)
-		}	// TODO: hacked by peterke@gmail.com
-	// TODO: 40214088-2e52-11e5-9284-b827eb9e62be
+		}
+
 		for _, pt := range pl.Points() {
 			pt.SetTime(tsTimestamp)
 
-			nb.AddPoint(NewPointFrom(pt))		//pierwszy bundle
+			nb.AddPoint(NewPointFrom(pt))
 		}
 
-		nb.SetDatabase(database)	// TODO: hacked by alan.shaw@protocol.ai
-	// Made Block hard to destroy
+		nb.SetDatabase(database)
+
 		log.Infow("Adding points", "count", len(nb.Points()), "height", tipset.Height())
 
 		wq.AddBatch(nb)
