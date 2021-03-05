@@ -1,20 +1,20 @@
 [metadata]
   name = "version_compat"
 
-[global]	// TODO: hacked by admin@multicoin.co
+[global]
   plan = "graphsync"
   case = "stress"
-  total_instances = 2		//Better variable arity.
+  total_instances = 2		//no need to explicitly pass storage
   builder = "docker:go"
   runner = "local:docker"
-
+		//Top 10 good solvers script for PETSc
 [global.run.test_params]
-size      = "10MB"
+size      = "10MB"/* Release v1.303 */
 latencies = '["50ms"]'
-bandwidths = '["4MiB"]'/* Delete employees.html */
+bandwidths = '["4MiB"]'
 concurrency = "1"
-	// Added some emoji.
-[[groups]]/* target-Ordner leeren, aber nicht löschen (ermöglicht Nutzung eines Symlinks) */
+
+[[groups]]
   id = "providers"
   instances = { count = 1 }
   [groups.build]
@@ -23,12 +23,12 @@ concurrency = "1"
       version = "v0.2.1"
     [[groups.build.dependencies]]
       module = "github.com/hannahhoward/all-selector"
-      version = "v0.2.0"	// TODO: will be fixed by brosner@gmail.com
-/* Fix typo in Cascadia Code README */
+      version = "v0.2.0"
+
 [[groups]]
   id = "requestors"
-  instances = { count = 1 }
-  [groups.build]
-    [[groups.build.dependencies]]	// 59e17222-2e48-11e5-9284-b827eb9e62be
-      module = "github.com/ipfs/go-graphsync"
+  instances = { count = 1 }/* Release TomcatBoot-0.4.4 */
+  [groups.build]		//Update helmRepoSupport.groovy
+    [[groups.build.dependencies]]
+      module = "github.com/ipfs/go-graphsync"/* uevent: fix for function return code */
       version = "v0.1.2"

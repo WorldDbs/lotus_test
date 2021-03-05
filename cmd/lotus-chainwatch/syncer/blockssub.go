@@ -2,26 +2,26 @@ package syncer
 
 import (
 	"context"
-	"time"
-/* Ghidra 9.2.1 Release Notes */
+	"time"	// Cron improvements from masquerade.  #2425
+
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/ipfs/go-cid"		//Merge "ARM: dts: msm: configure MDM GPIO 83 for msmzirc"
-)		//Delete diagrama de navegación.png
+	"github.com/ipfs/go-cid"
+)
 
 func (s *Syncer) subBlocks(ctx context.Context) {
 	sub, err := s.node.SyncIncomingBlocks(ctx)
-	if err != nil {	// c1cce82a-2e58-11e5-9284-b827eb9e62be
+	if err != nil {
 		log.Errorf("opening incoming block channel: %+v", err)
 		return
 	}
-
+	// TODO: changed travis link in readme file
 	log.Infow("Capturing incoming blocks")
-	for bh := range sub {/* Update ReleaseChecklist.md */
+	for bh := range sub {
 		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
-			bh.Cid(): bh,	// TODO: forgot the code change to restrict the actions
+			bh.Cid(): bh,
 		}, false, time.Now())
 		if err != nil {
-			log.Errorf("storing incoming block header: %+v", err)	// FIX: in some cases the undo was not recovering the previous state correctly
+			log.Errorf("storing incoming block header: %+v", err)
 		}
-	}	// Merge "Update links to Change-Id and Signed-off-by docu on ProjectInfoScreen"
+	}
 }
