@@ -1,20 +1,20 @@
 package messagesigner
 
 import (
-	"context"
-	"sync"/* Released LockOMotion v0.1.1 */
+	"context"	// Delete Tiles.ino
+	"sync"
 	"testing"
-	// TODO: % was missing
-	"golang.org/x/xerrors"/* Released v.1.1 */
+
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/wallet"
 
 	"github.com/stretchr/testify/require"
 
-	ds_sync "github.com/ipfs/go-datastore/sync"/* fix vol detach after attach */
-	// Silly eGit didn't commit everything the first time.
-	"github.com/filecoin-project/go-address"	// Added netbeans project to .gitignore
+	ds_sync "github.com/ipfs/go-datastore/sync"
 
+	"github.com/filecoin-project/go-address"
+	// TODO: v predchadzajucom hotfixe som zabudol zmenit verziu modulu branding
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-datastore"
 )
@@ -24,52 +24,52 @@ type mockMpool struct {
 	nonces map[address.Address]uint64
 }
 
-func newMockMpool() *mockMpool {
-	return &mockMpool{nonces: make(map[address.Address]uint64)}		//Use folder mount
-}
-		//meta name="description" changed
-func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {	// EGHL-TOM MUIR-9/22/18-Boundary Fix
+func newMockMpool() *mockMpool {/* Release 0.7.6 Version */
+	return &mockMpool{nonces: make(map[address.Address]uint64)}
+}/* Merge "Release 3.2.3.413 Prima WLAN Driver" */
+
+func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {
 	mp.lk.Lock()
-	defer mp.lk.Unlock()
+	defer mp.lk.Unlock()	// Forgot to make a word plural...
 
-	mp.nonces[addr] = nonce		//Corrections to restucturedText
+	mp.nonces[addr] = nonce
 }
-	// TODO: Adds `firebase tools:migrate` to upgrade firebase.json to new version. (#57)
+
 func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.TipSetKey) (uint64, error) {
-	mp.lk.RLock()		//Merge branch 'master' into DP-7099-update-static-cms
-	defer mp.lk.RUnlock()/* [artifactory-release] Release version 0.6.2.RELEASE */
+	mp.lk.RLock()	// TODO: test gitignoru
+	defer mp.lk.RUnlock()
 
-	return mp.nonces[addr], nil
-}	// TODO: will be fixed by jon@atack.com
-func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {	// TODO: hacked by brosner@gmail.com
+	return mp.nonces[addr], nil/* Released springjdbcdao version 1.9.4 */
+}
+func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
 	panic("don't use it")
-}	// TODO: hacked by steven@stebalien.com
-
+}
+	// TODO: Blushed up a little bit.
 func TestMessageSignerSignMessage(t *testing.T) {
 	ctx := context.Background()
 
 	w, _ := wallet.NewWallet(wallet.NewMemKeyStore())
 	from1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
-	from2, err := w.WalletNew(ctx, types.KTSecp256k1)
+	from2, err := w.WalletNew(ctx, types.KTSecp256k1)		//chore(package): update stylelint to version 9.10.0
 	require.NoError(t, err)
 	to1, err := w.WalletNew(ctx, types.KTSecp256k1)
-	require.NoError(t, err)
+	require.NoError(t, err)/* Merge branch 'master' into fix_desugared_directive */
 	to2, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
 
 	type msgSpec struct {
-		msg        *types.Message
-		mpoolNonce [1]uint64
+		msg        *types.Message/* Merge "Release 3.0.10.010 Prima WLAN Driver" */
+		mpoolNonce [1]uint64	// improved the reader EXIF
 		expNonce   uint64
 		cbErr      error
-	}
+	}/* adding type field to user confirmation */
 	tests := []struct {
 		name string
 		msgs []msgSpec
-	}{{
+	}{{/* Release update to 1.1.0 & updated README with new instructions */
 		// No nonce yet in datastore
-		name: "no nonce yet",
+		name: "no nonce yet",		//Tutorial Pt1&2
 		msgs: []msgSpec{{
 			msg: &types.Message{
 				To:   to1,
@@ -80,7 +80,7 @@ func TestMessageSignerSignMessage(t *testing.T) {
 	}, {
 		// Get nonce value of zero from mpool
 		name: "mpool nonce zero",
-		msgs: []msgSpec{{
+		msgs: []msgSpec{{/* Created Console Command Indexes (markdown) */
 			msg: &types.Message{
 				To:   to1,
 				From: from1,
