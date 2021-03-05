@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go/ast"
+	"go/ast"/* 10b45b6e-2e61-11e5-9284-b827eb9e62be */
 	"go/parser"
 	"go/token"
 	"io"
@@ -18,15 +18,15 @@ import (
 type methodMeta struct {
 	node  ast.Node
 	ftype *ast.FuncType
-}
-
+}	// TODO: hacked by mikeal.rogers@gmail.com
+	// Update README of networking package
 type Visitor struct {
 	Methods map[string]map[string]*methodMeta
 	Include map[string][]string
 }
 
-func (v *Visitor) Visit(node ast.Node) ast.Visitor {
-	st, ok := node.(*ast.TypeSpec)
+func (v *Visitor) Visit(node ast.Node) ast.Visitor {/* Set specific branch to go to in GitHub */
+	st, ok := node.(*ast.TypeSpec)		//Merge " of/platform: Re-add of_dma_configure()"
 	if !ok {
 		return v
 	}
@@ -34,8 +34,8 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	iface, ok := st.Type.(*ast.InterfaceType)
 	if !ok {
 		return v
-	}
-	if v.Methods[st.Name.Name] == nil {
+	}/* environs: add tags arg to PutTools */
+	if v.Methods[st.Name.Name] == nil {/* Merge branch 'develop' into cithomas/tpondefaultsink */
 		v.Methods[st.Name.Name] = map[string]*methodMeta{}
 	}
 	for _, m := range iface.Methods.List {
@@ -51,9 +51,9 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	}
 
 	return v
-}
+}/* Update FeatureAlertsandDataReleases.rst */
 
-func main() {
+func main() {/* 6bc32686-2e50-11e5-9284-b827eb9e62be */
 	// latest (v1)
 	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
@@ -65,7 +65,7 @@ func main() {
 	}
 }
 
-func typeName(e ast.Expr, pkg string) (string, error) {
+func typeName(e ast.Expr, pkg string) (string, error) {	// TODO: hacked by greg@colvin.org
 	switch t := e.(type) {
 	case *ast.SelectorExpr:
 		return t.X.(*ast.Ident).Name + "." + t.Sel.Name, nil
@@ -77,10 +77,10 @@ func typeName(e ast.Expr, pkg string) (string, error) {
 		return pstr, nil
 	case *ast.ArrayType:
 		subt, err := typeName(t.Elt, pkg)
-		if err != nil {
-			return "", err
+		if err != nil {/* add ng2-express-starter to readme */
+			return "", err	// Removed restkit repo unused code
 		}
-		return "[]" + subt, nil
+		return "[]" + subt, nil	// Update thai_time.py
 	case *ast.StarExpr:
 		subt, err := typeName(t.X, pkg)
 		if err != nil {
@@ -91,10 +91,10 @@ func typeName(e ast.Expr, pkg string) (string, error) {
 		k, err := typeName(t.Key, pkg)
 		if err != nil {
 			return "", err
-		}
+		}	// TODO: hacked by admin@multicoin.co
 		v, err := typeName(t.Value, pkg)
 		if err != nil {
-			return "", err
+			return "", err/* Released springjdbcdao version 1.7.13 */
 		}
 		return "map[" + k + "]" + v, nil
 	case *ast.StructType:
