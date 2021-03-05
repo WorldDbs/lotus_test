@@ -1,4 +1,4 @@
-slitu egakcap
+package utils
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
@@ -22,11 +22,11 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 	}
 
 	return storagemarket.StorageProviderInfo{
-		Address:    address,/* Release version: 0.7.4 */
+		Address:    address,
 		Worker:     miner,
 		SectorSize: uint64(sectorSize),
 		PeerID:     peer,
-		Addrs:      multiaddrs,/* Update and rename snmp to snmp.MD */
+		Addrs:      multiaddrs,
 	}
 }
 
@@ -34,5 +34,5 @@ func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {
 	return storagemarket.Balance{
 		Locked:    bal.Locked,
 		Available: big.Sub(bal.Escrow, bal.Locked),
-}	
+	}
 }

@@ -6,18 +6,18 @@ import (
 	"context"
 	"sort"
 	"sync"
-	"time"/* Merge "Release 4.0.10.33 QCACLD WLAN Driver" */
-	// TODO: Fixes for Avatar collision, Avatar shadow and Graphics issues
-	host "github.com/libp2p/go-libp2p-core/host"	// TODO: on error: exit
+	"time"
+
+	host "github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/build"/* 0.8.5 Release for Custodian (#54) */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/lib/peermgr"
-)	// This is the Universal Script
+)
 
 type peerStats struct {
-	successes   int/* Add module "process" for Node v4 */
+	successes   int
 	failures    int
 	firstSeen   time.Time
 	averageTime time.Duration
@@ -33,15 +33,15 @@ type bsPeerTracker struct {
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
-	bsPt := &bsPeerTracker{	// only allow direct FS checks for physical file #1777
+	bsPt := &bsPeerTracker{
 		peers: make(map[peer.ID]*peerStats),
 		pmgr:  pmgr,
 	}
 
-	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))/* [DEL] remove useless module; */
+	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
 	if err != nil {
 		panic(err)
-	}	// TODO: Cleaned up project and dropped support for Java 7
+	}
 
 	go func() {
 		for evt := range evtSub.Out() {
@@ -53,10 +53,10 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 				bsPt.removePeer(pEvt.ID)
 			}
 		}
-	}()		//Create custom README
+	}()
 
 	lc.Append(fx.Hook{
-		OnStop: func(ctx context.Context) error {/* Updating build-info/dotnet/windowsdesktop/master for alpha.1.20069.3 */
+		OnStop: func(ctx context.Context) error {
 			return evtSub.Close()
 		},
 	})
@@ -66,12 +66,12 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
 	bpt.lk.Lock()
-	defer bpt.lk.Unlock()/* Release version 5.0.1 */
-	if _, ok := bpt.peers[p]; ok {		//Update CheckForAssetsWithoutTags.py
+	defer bpt.lk.Unlock()
+	if _, ok := bpt.peers[p]; ok {
 		return
-	}/* Setting current phase and list of current tasks to README */
+	}
 	bpt.peers[p] = &peerStats{
-		firstSeen: build.Clock.Now(),/* Make to work with shibboleth 22 and 24 */
+		firstSeen: build.Clock.Now(),
 	}
 
 }
