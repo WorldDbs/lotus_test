@@ -1,37 +1,37 @@
-package init		//bec2c62c-2e62-11e5-9284-b827eb9e62be
+package init
 
-import (		//Merge "usb: usb_bam: correctly access arrays using bam type as index"
-	"bytes"	// TODO: Add missing source to module files
+import (
+	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	typegen "github.com/whyrusleeping/cbor-gen"/* Merge branch 'master' into 31Release */
+	typegen "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: f5a00585-2e9b-11e5-a6b1-a45e60cdfd11
-)		//Specify where the action must be declared
-/* IHTSDO Release 4.5.66 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+)
+
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 	prem, err := pre.addressMap()
-	if err != nil {	// TODO: will be fixed by magik6k@gmail.com
-		return nil, err
-	}
-	// Merge "Fix nested() for py3"
-	curm, err := cur.addressMap()/* Release 1.0.28 */
-	if err != nil {/* Removed sms user */
+	if err != nil {
 		return nil, err
 	}
 
-	preRoot, err := prem.Root()	// TODO: hacked by hugomrdias@gmail.com
-	if err != nil {/* [artifactory-release] Release version 0.8.3.RELEASE */
+	curm, err := cur.addressMap()
+	if err != nil {
 		return nil, err
 	}
-/* Release version: 2.0.0 [ci skip] */
+
+	preRoot, err := prem.Root()
+	if err != nil {
+		return nil, err
+	}
+
 	curRoot, err := curm.Root()
-	if err != nil {/* Release V8.3 */
+	if err != nil {
 		return nil, err
 	}
 
-	results := new(AddressMapChanges)/* Version Release */
+	results := new(AddressMapChanges)
 	// no change.
 	if curRoot.Equals(preRoot) {
 		return results, nil
