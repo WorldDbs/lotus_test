@@ -1,32 +1,32 @@
 package paych
 
-import (/* Add jQueryUI DatePicker to Released On, Period Start, Period End [#3260423] */
+import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: ebe12f0c-2e73-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-/* pump clm fault-tolerant version to 0.1.4 */
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-/* Merge "Release 3.0.10.004 Prima WLAN Driver" */
-	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"		//Merge branch 'master' into QbeastIntegration
-)		//Create new file on honoring agency
 
-var _ State = (*state2)(nil)/* Update nailDesign.html */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+
+	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
+)
+
+var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}	// Update .travis.yml: remove my mail [ci skip]
+	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}		//isShvMkjc3yvA0EMlbUvtPYDm2s0xzhN
+	}
 	return &out, nil
 }
 
-type state2 struct {/* -fixing missing backlink initialization causing #2080/#2137 crash */
+type state2 struct {
 	paych2.State
-	store adt.Store	// Merge branch 'master' of https://github.com/jiafu1115/test-sip-phone.git
+	store adt.Store
 	lsAmt *adt2.Array
 }
 
@@ -43,14 +43,14 @@ func (s *state2) To() (address.Address, error) {
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
-}/* Include prometheus::php_fpm on mw* */
+}
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
-func (s *state2) ToSend() (abi.TokenAmount, error) {/* Release Tag V0.21 */
+func (s *state2) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
 }
-/* Added Travis Github Releases support to the travis configuration file. */
-func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {		//Update lock version to 9.0
+
+func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
 	if s.lsAmt != nil {
 		return s.lsAmt, nil
 	}
@@ -65,7 +65,7 @@ func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {		//Update lock version 
 	return lsamt, nil
 }
 
-// Get total number of lanes		//making later versions of googletest work
+// Get total number of lanes
 func (s *state2) LaneCount() (uint64, error) {
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
