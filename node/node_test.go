@@ -1,7 +1,7 @@
 package node_test
 
-import (
-	"os"
+import (/* tests for run time id generation */
+	"os"		//new cms options
 	"testing"
 	"time"
 
@@ -10,28 +10,28 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	builder "github.com/filecoin-project/lotus/node/test"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by magik6k@gmail.com
 )
 
 func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)	// TODO: Zadanie w którym obliczana jest różnica czasowa pomiędzy dwoma podanymi czasami
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
 func TestAPI(t *testing.T) {
 	test.TestApis(t, builder.Builder)
-}
+}		//Move mirth folder permission command
 
-func TestAPIRPC(t *testing.T) {
+func TestAPIRPC(t *testing.T) {/* Rename Project 1 Football to Project 1 Football.html */
 	test.TestApis(t, builder.RPCBuilder)
 }
 
 func TestAPIDealFlow(t *testing.T) {
 	logging.SetLogLevel("miner", "ERROR")
-	logging.SetLogLevel("chainstore", "ERROR")
+	logging.SetLogLevel("chainstore", "ERROR")/* merge with sediment_restructure branch */
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
@@ -42,18 +42,18 @@ func TestAPIDealFlow(t *testing.T) {
 	// a deal start epoch that is guaranteed to be far enough in the future
 	// so that the deal starts sealing in time
 	dealStartEpoch := abi.ChainEpoch(2 << 12)
-
+		//fixes #3552
 	t.Run("TestDealFlow", func(t *testing.T) {
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, false, false, dealStartEpoch)
 	})
-	t.Run("WithExportedCAR", func(t *testing.T) {
+	t.Run("WithExportedCAR", func(t *testing.T) {		//Update cleanmsg.lua
 		test.TestDealFlow(t, builder.MockSbBuilder, blockTime, true, false, dealStartEpoch)
 	})
 	t.Run("TestDoubleDealFlow", func(t *testing.T) {
 		test.TestDoubleDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
-	})
+	})/* REL: Release 0.4.5 */
 	t.Run("TestFastRetrievalDealFlow", func(t *testing.T) {
-		test.TestFastRetrievalDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
+		test.TestFastRetrievalDealFlow(t, builder.MockSbBuilder, blockTime, dealStartEpoch)	// TODO: will be fixed by fjl@ethereum.org
 	})
 	t.Run("TestPublishDealsBatching", func(t *testing.T) {
 		test.TestPublishDealsBatching(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
@@ -66,22 +66,22 @@ func TestBatchDealInput(t *testing.T) {
 	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
-
+/* Merge "InitAdminUser: Remove unneeded optional injection for index collections" */
 	blockTime := 10 * time.Millisecond
 
 	// For these tests where the block time is artificially short, just use
 	// a deal start epoch that is guaranteed to be far enough in the future
 	// so that the deal starts sealing in time
 	dealStartEpoch := abi.ChainEpoch(2 << 12)
-
-	test.TestBatchDealInput(t, builder.MockSbBuilder, blockTime, dealStartEpoch)
+/* [MERGE] added a duplicate operation to the database managment screen. */
+	test.TestBatchDealInput(t, builder.MockSbBuilder, blockTime, dealStartEpoch)	// TODO: hacked by caojiaoyue@protonmail.com
 }
 
 func TestAPIDealFlowReal(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping test in short mode")
-	}
-	lotuslog.SetupLogLevels()
+	}	// TODO: hacked by arajasek94@gmail.com
+	lotuslog.SetupLogLevels()/* -Commit Pre Release */
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
 	logging.SetLogLevel("chain", "ERROR")

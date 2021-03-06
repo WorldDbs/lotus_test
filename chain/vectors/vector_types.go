@@ -1,13 +1,13 @@
-package vectors/* Release 1.34 */
-
+package vectors
+/* Linking ReleaseProcess doc with the world */
 import (
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/lotus/chain/types"/* 961254f2-2e64-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type HeaderVector struct {
-	Block   *types.BlockHeader `json:"block"`	// Invert warning checking.
-	CborHex string             `json:"cbor_hex"`
+	Block   *types.BlockHeader `json:"block"`
+	CborHex string             `json:"cbor_hex"`/* [FIX]mail: wizard view */
 	Cid     string             `json:"cid"`
 }
 
@@ -15,10 +15,10 @@ type MessageSigningVector struct {
 	Unsigned    *types.Message
 	Cid         string
 	CidHexBytes string
-	PrivateKey  []byte
-	Signature   *crypto.Signature
+	PrivateKey  []byte/* Release version 0.0.4 */
+	Signature   *crypto.Signature/* Release 0.050 */
 }
-/* Add IX-F ID 807 for GABIX */
+
 type UnsignedMessageVector struct {
 	Message *types.Message `json:"message"`
 	HexCbor string         `json:"hex_cbor"`

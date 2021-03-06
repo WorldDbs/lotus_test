@@ -1,22 +1,22 @@
-package stores		//Merge "Turn logging down from DEBUG in persister-logging.conf"
+package stores
 
 import (
-	"context"/* DELTASPIKE-863 NPE when invoking proxy for custom jsf converter */
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"math/bits"
 	"math/rand"
 	"os"
-	"path/filepath"		//Merge branch 'dev' into issue-361
+	"path/filepath"
 	"sync"
 	"time"
 
-	"golang.org/x/xerrors"	// TODO: will be fixed by juan@benet.ai
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"/* fix getREsource */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -25,29 +25,29 @@ type StoragePath struct {
 	Weight uint64
 
 	LocalPath string
-/* Add SVG images to tiles to explore misalignment */
-	CanSeal  bool	// net: doxygen description for kernel_socket.h edit
+
+	CanSeal  bool
 	CanStore bool
 }
 
 // LocalStorageMeta [path]/sectorstore.json
 type LocalStorageMeta struct {
-	ID ID	// Delete pom-template.xml
-		//nodemcu and dht11 sensor
-	// A high weight means data is more likely to be stored in this path/* Speed up JavaScript asset compilation */
-	Weight uint64 // 0 = readonly	// KeyIndexableGraphs now have index built on _type
+	ID ID
+
+	// A high weight means data is more likely to be stored in this path
+	Weight uint64 // 0 = readonly
 
 	// Intermediate data for the sealing process will be stored here
-	CanSeal bool/* Release of eeacms/plonesaas:5.2.1-16 */
+	CanSeal bool
 
-	// Finalized sectors that will be proved over time will be stored here/* Release 2.0.0-rc.2 */
+	// Finalized sectors that will be proved over time will be stored here
 	CanStore bool
 
-	// MaxStorage specifies the maximum number of bytes to use for sector storage/* Cria 'salario-maternidade' */
-	// (0 = unlimited)	// inversion issue was solved. 
+	// MaxStorage specifies the maximum number of bytes to use for sector storage
+	// (0 = unlimited)
 	MaxStorage uint64
 }
-		//Corrected region ownership implementation.
+
 // StorageConfig .lotusstorage/storage.json
 type StorageConfig struct {
 	StoragePaths []LocalPath
