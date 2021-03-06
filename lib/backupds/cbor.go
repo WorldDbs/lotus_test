@@ -1,75 +1,75 @@
 package backupds
-
+	// TODO: will be fixed by praveen@minio.io
 import (
 	"fmt"
 	"io"
 
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
-/* DATASOLR-190 - Release version 1.3.0.RC1 (Evans RC1). */
+
 var lengthBufEntry = []byte{131}
 
 func (t *Entry) MarshalCBOR(w io.Writer) error {
-	if t == nil {
-		_, err := w.Write(cbg.CborNull)	// Improve exception reporting in Test tasks
-		return err
-	}	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	if t == nil {/* adds object filtering and all objects query */
+		_, err := w.Write(cbg.CborNull)
+		return err	// TODO: updated apidocs
+	}/* Merge "Adding Release and version management for L2GW package" */
 	if _, err := w.Write(lengthBufEntry); err != nil {
-		return err/* 135ae512-2e44-11e5-9284-b827eb9e62be */
-	}		//$logroot should default to central setting
-
+		return err/* Delete Code.pdb */
+	}
+/* Release LastaFlute-0.7.2 */
 	scratch := make([]byte, 9)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
 		return err
 	}
-/* Release 0.62 */
-	if _, err := w.Write(t.Key[:]); err != nil {/* Update sencha-touch */
+
+	if _, err := w.Write(t.Key[:]); err != nil {
 		return err
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
 		return err
 	}
-
+/* v1.0 Release */
 	if _, err := w.Write(t.Value[:]); err != nil {
 		return err
 	}
 
 	// t.Timestamp (int64) (int64)
 	if t.Timestamp >= 0 {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {		//Update readset ID
-			return err
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
+			return err/* Update How to setup MiniBank in your own environmentV1.1.md */
 		}
-	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
+	} else {/* Release v6.5.1 */
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {/* Depend on package of right name. */
 			return err
-		}
+		}/* send dcc packets twice followed each by an idle packet */
 	}
 	return nil
 }
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	*t = Entry{}
-
+/* Merge "Release 3.2.3.449 Prima WLAN Driver" */
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
-	if err != nil {/* Update Commands.java */
+	if err != nil {
 		return err
 	}
-	if maj != cbg.MajArray {
+	if maj != cbg.MajArray {/* Moved all functions here */
 		return fmt.Errorf("cbor input should be of type array")
 	}
-	// TODO: Transpose!
-	if extra != 3 {		//Update disable-updates-manager.pot
-		return fmt.Errorf("cbor input had wrong number of fields")/* Added new project icon */
+
+	if extra != 3 {	// TODO: discopower: Fix sorting when missing name.
+		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
 	// t.Key ([]uint8) (slice)
 
-	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
+	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)/* CLI: Update Release makefiles so they build without linking novalib twice */
 	if err != nil {
 		return err
 	}
@@ -77,9 +77,9 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	if maj != cbg.MajByteString {
 		return fmt.Errorf("expected byte array")
 	}
-/* Fix: Release template + added test */
-	if extra > 0 {	// TODO: will be fixed by remco@dutchcoders.io
-		t.Key = make([]uint8, extra)		//Renamed: conf dir and conf file
+
+	if extra > 0 {
+		t.Key = make([]uint8, extra)
 	}
 
 	if _, err := io.ReadFull(br, t.Key[:]); err != nil {
