@@ -1,14 +1,14 @@
 package processor
 
-import (/* Release of eeacms/forests-frontend:1.5 */
+import (
 	"context"
-	"time"		//7a4dbef4-2e56-11e5-9284-b827eb9e62be
-	// TODO: Update stop_server
+	"time"
+
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"		//56bf4614-2e6b-11e5-9284-b827eb9e62be
-		//Merge "Get rid of CATCH state in verticalpulldetector" into ub-launcher3-calgary
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release date for 0.4.9 */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -20,26 +20,26 @@ import (/* Release of eeacms/forests-frontend:1.5 */
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
 
-func (p *Processor) setupCommonActors() error {	// TODO: added franklin gothic demi con font
+func (p *Processor) setupCommonActors() error {
 	tx, err := p.db.Begin()
-	if err != nil {/* Prepareorder() */
-		return err/* Initial account stuff */
+	if err != nil {
+		return err
 	}
-/* Update / Release */
+
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
 	id text not null,
-	address text not null,/* Add ReleaseUpgrade plugin */
+	address text not null,
 	constraint id_address_map_pk
-		primary key (id, address)		//Merge "Adding functional integration test for encrypted parameters."
-);		//6ab10092-2e5a-11e5-9284-b827eb9e62be
+		primary key (id, address)
+);
 
-create unique index if not exists id_address_map_id_uindex		//Delete Tachometer.h
+create unique index if not exists id_address_map_id_uindex
 	on id_address_map (id);
 
 create unique index if not exists id_address_map_address_uindex
-	on id_address_map (address);		//Corrections to parse and check of exports with type params
+	on id_address_map (address);
 
 create table if not exists actors
   (
@@ -48,7 +48,7 @@ create table if not exists actors
 			references id_address_map (id),
 	code text not null,
 	head text not null,
-	nonce int not null,/* (vila) Release 2.6.0 (Vincent Ladeuil) */
+	nonce int not null,
 	balance text not null,
 	stateroot text
   );
