@@ -1,37 +1,37 @@
 package modules
 
 import (
-	"bytes"/* Release 0.0.7 [ci skip] */
+	"bytes"
 	"context"
-	"os"/* @Release [io7m-jcanephora-0.29.0] */
+	"os"
 	"path/filepath"
-	"time"		//fix default user role
+	"time"
 
-	"go.uber.org/fx"	// TODO: missed a branding change
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-data-transfer/channelmonitor"
 	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
-	dtnet "github.com/filecoin-project/go-data-transfer/network"		//53bd8cf2-2e6e-11e5-9284-b827eb9e62be
+	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
 	"github.com/filecoin-project/go-fil-markets/discovery"
-	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"/* Add achievements events */
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"	// codeigniter init + htaccess
+	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
-	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"	// TODO: Use shorthand style for calculator routes
+	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
-	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"		//Functions for years filtering added
+	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/host"
-	// Merge "Don't crash on empty diff selection"
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/market"
-	"github.com/filecoin-project/lotus/journal"/* Add NPM Publish Action on Release */
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/markets"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
@@ -41,17 +41,17 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"		//add doc/comment
+	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
 )
 
 func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			addr, err := wallet.WalletDefaultAddress(ctx)
-			// nothing to be done if there is no default address/* Merge "Preparation for 1.0.0 Release" */
+			// nothing to be done if there is no default address
 			if err != nil {
 				return nil
-			}	// chore(deps): update dependency browserslist to v4.4.1
+			}
 			b, err := ds.Get(datastore.NewKey("/marketfunds/client"))
 			if err != nil {
 				if xerrors.Is(err, datastore.ErrNotFound) {
@@ -63,13 +63,13 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 
 			var value abi.TokenAmount
 			if err = value.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)/* Release tar.gz for python 2.7 as well */
+				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)
 				return nil
 			}
 			_, err = fundMgr.Reserve(ctx, addr, addr, value)
 			if err != nil {
 				log.Errorf("client funds migration - reserving funds (wallet %s, addr %s, funds %d): %v",
-					addr, addr, value, err)/* add per-network-channel rest endpoint */
+					addr, addr, value, err)
 				return nil
 			}
 
