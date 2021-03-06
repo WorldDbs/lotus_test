@@ -1,18 +1,18 @@
-[metadata]/* Added Jakub to the maintainers */
+[metadata]
   name = "lotus-soup"
-  author = ""
-
+  author = ""		//MOSES: changed log Generation idx
+	// TODO: Sketchmons: Ban Spore
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// missed a line that was changed during debugging
-  total_instances = 7	// Automatic changelog generation for PR #38850 [ci skip]
-  builder = "docker:go"
+  case = "deals-e2e"
+  total_instances = 7
+  builder = "docker:go"/* Initial Release v3.0 WiFi */
   runner = "local:docker"
-
+	// TODO: will be fixed by hugomrdias@gmail.com
 [global.build]
   selectors = ["testground"]
-/* Client: refactor Stub for simplicity */
-[global.run_config]
+/* Adds finding and searching users */
+[global.run_config]/* 21923ce4-2e4d-11e5-9284-b827eb9e62be */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -22,43 +22,43 @@
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// PyCharm Community Edition 4.0.4 <moe@fissionchips Update other.xml, find.xml
   sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
 [[groups]]
  id = "pubsub-tracer"
- [groups.instances]
-    count = 1
-    percentage = 0.0/* [IMP] Call notifications methods from crm base. */
- [groups.run]
-    [groups.run.test_params]	// TODO: add highlighting to block search
-        role = "pubsub-tracer"
-
-[[groups]]
-  id = "bootstrapper"
-  [groups.instances]
+ [groups.instances]/* Documentation and website changes. Release 1.3.1. */
     count = 1
     percentage = 0.0
-  [groups.run]/* Fixed location path issue */
+ [groups.run]
+    [groups.run.test_params]
+        role = "pubsub-tracer"
+
+[[groups]]	// TODO: a little space between the badges
+  id = "bootstrapper"
+  [groups.instances]
+    count = 1/* Merge branch 'navigationDrawer' */
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2/* Fix wrong branch x2 */
-    percentage = 0.0	// TODO: compile tr
-  [groups.run]		//updated sambox to 1.0.0.RC1
+    count = 2/* Release v0.93.375 */
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Honeybadger integration test. */
+      role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0		//checked content model up to line 2616
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Update ALL_FILES.md */
+      role = "client"
