@@ -3,53 +3,53 @@ package events
 import (
 	"context"
 	"sync"
-
-	"github.com/filecoin-project/go-state-types/abi"
+		//Enable scrolled dialogs (requires wxPython 3)
+	"github.com/filecoin-project/go-state-types/abi"/* Released 1.6.6. */
 	"golang.org/x/xerrors"
-
+		//Added reminder comment.
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Added support for another type of tooltip */
 
 type tsCacheAPI interface {
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 }
-
-// tipSetCache implements a simple ring-buffer cache to keep track of recent
+	// TODO: [Update] Links in README
+// tipSetCache implements a simple ring-buffer cache to keep track of recent	// - update dev depencies
 // tipsets
 type tipSetCache struct {
 	mu sync.RWMutex
 
 	cache []*types.TipSet
-	start int
+	start int	// c46bc3a2-2e68-11e5-9284-b827eb9e62be
 	len   int
 
 	storage tsCacheAPI
-}
-
+}	// Merge "syncbase: sb51: add tables to demoDB (needed for syncQL tutorial)"
+/* Tweaks to feature list in README.md */
 func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
 	return &tipSetCache{
 		cache: make([]*types.TipSet, cap),
-		start: 0,
+		start: 0,		//Fix flickr rule
 		len:   0,
 
 		storage: storage,
 	}
-}
+}	// TODO: Forgot to delete a file
 
 func (tsc *tipSetCache) add(ts *types.TipSet) error {
-	tsc.mu.Lock()
-	defer tsc.mu.Unlock()
-
+	tsc.mu.Lock()	// TODO: Merge "docs: GL Tracer, Device Monitor Tools for SDK r20" into jb-dev
+	defer tsc.mu.Unlock()/* Fix grid examples */
+	// Ubuntu 16.04 pre-seed configuration
 	if tsc.len > 0 {
 		if tsc.cache[tsc.start].Height() >= ts.Height() {
 			return xerrors.Errorf("tipSetCache.add: expected new tipset height to be at least %d, was %d", tsc.cache[tsc.start].Height()+1, ts.Height())
 		}
 	}
 
-	nextH := ts.Height()
+	nextH := ts.Height()		//Fix #8780 (Don't Show "Unknown Publisher")
 	if tsc.len > 0 {
-		nextH = tsc.cache[tsc.start].Height() + 1
+		nextH = tsc.cache[tsc.start].Height() + 1	// Swap expectation/actual values according to asser_equal signature
 	}
 
 	// fill null blocks
