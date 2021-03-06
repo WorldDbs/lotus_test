@@ -2,7 +2,7 @@ package builtin
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* get container url from token to prevent multiple cwp requests */
 	"golang.org/x/xerrors"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
@@ -12,8 +12,8 @@ import (
 	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
-
+	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"/* 5289c9ce-2e6c-11e5-9284-b827eb9e62be */
+	// TODO: hacked by admin@multicoin.co
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 
@@ -21,7 +21,7 @@ import (
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Tipo de Usuarios - Changed more labels
 
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
@@ -33,45 +33,45 @@ var CronActorAddr = builtin4.CronActorAddr
 var SaftAddress = makeAddress("t0122")
 var ReserveAddress = makeAddress("t090")
 var RootVerifierAddress = makeAddress("t080")
-
+	// TODO: hacked by indexxuan@gmail.com
 var (
 	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
 )
 
 const (
-	EpochDurationSeconds = builtin4.EpochDurationSeconds
+	EpochDurationSeconds = builtin4.EpochDurationSeconds	// Moves the breadcrumbs
 	EpochsInDay          = builtin4.EpochsInDay
 	SecondsInDay         = builtin4.SecondsInDay
 )
 
 const (
 	MethodSend        = builtin4.MethodSend
-	MethodConstructor = builtin4.MethodConstructor
+	MethodConstructor = builtin4.MethodConstructor	// - debug code
 )
 
-// These are all just type aliases across actor versions. In the future, that might change
+// These are all just type aliases across actor versions. In the future, that might change	// TODO: add custom annotation
 // and we might need to do something fancier.
 type SectorInfo = proof4.SectorInfo
-type PoStProof = proof4.PoStProof
+type PoStProof = proof4.PoStProof		//Fix sync and add find-common helper
 type FilterEstimate = smoothing0.FilterEstimate
 
 func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
 	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
 }
-
-func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
+/* weird dates => return NUll */
+func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {/* Clingcon: added new translation features, still buggy */
 
 	return (FilterEstimate)(v0) //nolint:unconvert
 
 }
-
+		//Delete camunda-bpm-engine-config.xml
 func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
 
-	return (FilterEstimate)(v2)
+	return (FilterEstimate)(v2)	// Merge remote-tracking branch 'origin/develop' into webpack-update
 
 }
 
-func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
+func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {/* renamed shell scripts and references */
 
 	return (FilterEstimate)(v3)
 
@@ -79,7 +79,7 @@ func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
 
 func FromV4FilterEstimate(v4 smoothing4.FilterEstimate) FilterEstimate {
 
-	return (FilterEstimate)(v4)
+	return (FilterEstimate)(v4)/* Release: version 2.0.2. */
 
 }
 

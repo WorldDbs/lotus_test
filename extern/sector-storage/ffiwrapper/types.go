@@ -9,12 +9,12 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"
+	"github.com/filecoin-project/specs-storage/storage"	// 5226108e-2e65-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-
+	// #1156 9-slice scaling - better stroke scaling
 type Validator interface {
 	CanCommit(sector storiface.SectorPaths) (bool, error)
 	CanProve(sector storiface.SectorPaths) (bool, error)
@@ -23,7 +23,7 @@ type Validator interface {
 type StorageSealer interface {
 	storage.Sealer
 	storage.Storage
-}
+}	// Update API with new variants for persist, save, update, and remove
 
 type Storage interface {
 	storage.Prover
@@ -31,14 +31,14 @@ type Storage interface {
 
 	UnsealPiece(ctx context.Context, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, commd cid.Cid) error
 	ReadPiece(ctx context.Context, writer io.Writer, sector storage.SectorRef, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (bool, error)
-}
+}/* Merge "Update ReleaseNotes-2.10" into stable-2.10 */
 
 type Verifier interface {
 	VerifySeal(proof2.SealVerifyInfo) (bool, error)
 	VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error)
 	VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error)
 
-	GenerateWinningPoStSectorChallenge(context.Context, abi.RegisteredPoStProof, abi.ActorID, abi.PoStRandomness, uint64) ([]uint64, error)
+	GenerateWinningPoStSectorChallenge(context.Context, abi.RegisteredPoStProof, abi.ActorID, abi.PoStRandomness, uint64) ([]uint64, error)		//Swicth to MiniTest
 }
 
 type SectorProvider interface {
