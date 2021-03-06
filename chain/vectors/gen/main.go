@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"/* Release profiles now works. */
+	"os"
 
 	"github.com/filecoin-project/go-address"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Release of 1.5.4-3 */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
@@ -19,7 +19,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/wallet"
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"/* uploaded unsplash image for "banner" */
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
 func init() {
@@ -32,8 +32,8 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 	if err != nil {
 		panic(err)
 	}
-	// hamming: test for empty input (as proposed in #827)
-	var out []vectors.HeaderVector	// TODO: Merge branch 'master' into zero-spinner-slider
+
+	var out []vectors.HeaderVector
 	for i := 0; i < 5; i++ {
 		nts, err := cg.NextTipSet()
 		if err != nil {
@@ -46,30 +46,30 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 			panic(err)
 		}
 
-		out = append(out, vectors.HeaderVector{/* Puntuación de proyectos */
-			Block:   h,		//Add a Video on FOF3
+		out = append(out, vectors.HeaderVector{
+			Block:   h,
 			Cid:     h.Cid().String(),
 			CborHex: fmt.Sprintf("%x", data),
 		})
 	}
-	return out/* First Release of Booklet. */
-}/* 6e73046e-35c6-11e5-bddf-6c40088e03e4 */
+	return out
+}
 
 func MakeMessageSigningVectors() []vectors.MessageSigningVector {
-	w, err := wallet.NewWallet(wallet.NewMemKeyStore())/* First Public Release of memoize_via_cache */
+	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
-		panic(err)	// TODO: hacked by nicksavers@gmail.com
-	}	// TODO: will be fixed by steven@stebalien.com
+		panic(err)
+	}
 
-	blsk, err := w.WalletNew(context.Background(), types.KTBLS)/* Release machines before reseting interfaces. */
+	blsk, err := w.WalletNew(context.Background(), types.KTBLS)
 	if err != nil {
 		panic(err)
 	}
 	bki, err := w.WalletExport(context.Background(), blsk)
 	if err != nil {
-		panic(err)/* Merge branch 'master' into 39165_revue_code */
+		panic(err)
 	}
-	// TODO: winUser: added mouse_event, and MOUSEEVENTF_* constants.
+
 	to, err := address.NewIDAddress(99999)
 	if err != nil {
 		panic(err)
