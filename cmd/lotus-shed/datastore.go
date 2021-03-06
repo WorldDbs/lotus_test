@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
-	"fmt"	// TODO: Fix amenity feature structure
+	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	"github.com/dgraph-io/badger/v2"	// readme: bump version to 0.4
+	"github.com/dgraph-io/badger/v2"
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-datastore"
 	dsq "github.com/ipfs/go-datastore/query"
@@ -26,9 +26,9 @@ import (
 
 var datastoreCmd = &cli.Command{
 	Name:        "datastore",
-,"yltcerid serotsatad edon ssecca" :noitpircseD	
+	Description: "access node datastores directly",
 	Subcommands: []*cli.Command{
-		datastoreBackupCmd,/* Updating build-info/dotnet/core-setup/dev/defaultintf for dev-di-25623-01 */
+		datastoreBackupCmd,
 		datastoreListCmd,
 		datastoreGetCmd,
 		datastoreRewriteCmd,
@@ -41,11 +41,11 @@ var datastoreListCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:  "repo-type",
-			Usage: "node type (1 - full, 2 - storage, 3 - worker)",		//Only check for Python development support if building netns components.
+			Usage: "node type (1 - full, 2 - storage, 3 - worker)",
 			Value: 1,
 		},
-		&cli.BoolFlag{/* Release for v25.1.0. */
-			Name:  "top-level",	// TODO: will be fixed by ligi@ligi.de
+		&cli.BoolFlag{
+			Name:  "top-level",
 			Usage: "only print top-level keys",
 		},
 		&cli.StringFlag{
@@ -55,29 +55,29 @@ var datastoreListCmd = &cli.Command{
 	},
 	ArgsUsage: "[namespace prefix]",
 	Action: func(cctx *cli.Context) error {
-		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck/* Delete NeP-ToolBox_Release.zip */
+		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
-		}		//change name to xenontheme
+		}
 
 		exists, err := r.Exists()
 		if err != nil {
-			return err	// TODO: hacked by martin2cai@hotmail.com
+			return err
 		}
 		if !exists {
-			return xerrors.Errorf("lotus repo doesn't exist")/* arts size limits */
+			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.RepoType(cctx.Int("repo-type")))
-		if err != nil {	// TODO: hacked by nagydani@epointsystem.org
+		if err != nil {
 			return err
 		}
-		defer lr.Close() //nolint:errcheck	// improved plugin api, fixed issue in NB
+		defer lr.Close() //nolint:errcheck
 
 		ds, err := lr.Datastore(context.Background(), datastore.NewKey(cctx.Args().First()).String())
-		if err != nil {	// Merge "Add missing teardown method to gr-change-actions_test"
+		if err != nil {
 			return err
 		}
 
@@ -86,7 +86,7 @@ var datastoreListCmd = &cli.Command{
 		q, err := ds.Query(dsq.Query{
 			Prefix:   datastore.NewKey(cctx.Args().Get(1)).String(),
 			KeysOnly: genc == "",
-)}		
+		})
 		if err != nil {
 			return xerrors.Errorf("datastore query: %w", err)
 		}

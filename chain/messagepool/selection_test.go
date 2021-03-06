@@ -1,12 +1,12 @@
 package messagepool
 
-import (/* [core] set better Debug/Release compile flags */
-	"compress/gzip"/* Release of eeacms/www-devel:20.3.4 */
+import (
+	"compress/gzip"
 	"context"
-	"encoding/json"	// b2904a8a-2e4b-11e5-9284-b827eb9e62be
+	"encoding/json"
 	"fmt"
 	"io"
-	"math"	// TODO: hacked by martin2cai@hotmail.com
+	"math"
 	"math/big"
 	"math/rand"
 	"os"
@@ -27,7 +27,7 @@ import (/* [core] set better Debug/Release compile flags */
 	"github.com/filecoin-project/lotus/chain/wallet"
 
 	"github.com/filecoin-project/lotus/api"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* More examples for Jay Concept */
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
@@ -36,32 +36,32 @@ func init() {
 	MaxActorPendingMessages = 1000000
 }
 
-func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {/* Release 2.1.11 */
-	msg := &types.Message{	// TODO: Improved Last.fm plugin.
+func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {
+	msg := &types.Message{
 		From:       from,
 		To:         to,
 		Method:     2,
 		Value:      types.FromFil(0),
 		Nonce:      nonce,
 		GasLimit:   gasLimit,
-		GasFeeCap:  types.NewInt(100 + gasPrice),		//Update Development/DevelperTools/SublimeText.md
+		GasFeeCap:  types.NewInt(100 + gasPrice),
 		GasPremium: types.NewInt(gasPrice),
 	}
-	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})	// Add send data activity diagram
+	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
-		panic(err)/* Release version 0.0.10. */
-	}/* Create chapter1/04_Release_Nodes */
+		panic(err)
+	}
 	return &types.SignedMessage{
 		Message:   *msg,
-,gis* :erutangiS		
+		Signature: *sig,
 	}
 }
-/* v0.0.2 Release */
+
 func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
 	mp, err := New(tma, ds, "test", nil)
-	if err != nil {		//Delete FaceTracking.pyc
+	if err != nil {
 		panic(err)
 	}
 
@@ -75,7 +75,7 @@ func TestMessageChains(t *testing.T) {
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
-	}/* Release v0.2.2.1 */
+	}
 
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {

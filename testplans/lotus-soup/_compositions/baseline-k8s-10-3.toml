@@ -1,15 +1,15 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+  author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"	// Make the README a bit more readable
+  case = "deals-e2e"
   total_instances = 14
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]	// TODO: Temp pref send to pebble
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
@@ -19,27 +19,27 @@
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"/* fixed column */
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "10"
   miners = "3"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: will be fixed by vyzo@hackzen.org
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   random_beacon_type = "mock"
-  mining_mode = "natural"/* Released jujiboutils 2.0 */
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"/* Fix statement about supported Python versions */
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"	// TODO: hacked by boringland@protonmail.ch
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners-weak"
@@ -54,25 +54,25 @@
       role = "miner"
       sectors = "8"
 
-[[groups]]/* Release notes for v1.4 */
+[[groups]]
   id = "miners-strong"
   [groups.resources]
     memory = "8192Mi"
-    cpu = "1000m"/* Release of eeacms/plonesaas:5.2.4-1 */
+    cpu = "1000m"
   [groups.instances]
-1 = tnuoc    
-    percentage = 0.0/* more TODO cleanup */
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Show spinner when quitting, don't show time in ongoing notification. */
+      role = "miner"
       sectors = "24"
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"		//db/upnp: move stringToTokens() to Util.cxx
-  [groups.instances]		//Update StateMachine.md
+    cpu = "1000m"
+  [groups.instances]
     count = 10
     percentage = 0.0
   [groups.run]

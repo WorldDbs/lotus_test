@@ -1,10 +1,10 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// f8a4e4ae-2e4b-11e5-9284-b827eb9e62be
+  author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"/* Merge "Destroy all contexts when render thread exits" into studio-1.2-dev */
+  case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
@@ -12,11 +12,11 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* adding addrr ranges to eg1 */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* Extracting dot generation logic to the helper */
+  enable_go_build_cache = true/* [artifactory-release] Release version v2.0.5.RELEASE */
 
 [global.run.test_params]
   clients = "5"
@@ -26,30 +26,30 @@
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
-	// recovery_backend: Set the genisoimage call to nonblocking on Popen.
-[[groups]]
-  id = "bootstrapper"
+
+[[groups]]/* Update history to reflect merge of #8028 [ci skip] */
+  id = "bootstrapper"	// TODO: hacked by praveen@minio.io
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* (vila) Release 2.4.0 (Vincent Ladeuil) */
+
 [[groups]]
-  id = "miners"/* update artCL */
+  id = "miners"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release 0.20 */
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]/* Updating build-info/dotnet/corefx/release/3.0 for rc2.19460.1 */
+[[groups]]
   id = "clients"
   [groups.instances]
     count = 5
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+    percentage = 0.0/* Merge branch 'master' into feature/cleanup-rolling-update-5.8 */
+  [groups.run]/* changed colour-calculation */
+    [groups.run.test_params]/* Updated text with instructions for TeXstudio */
       role = "client"
