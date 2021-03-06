@@ -1,4 +1,4 @@
-package config/* Release 2.3.0 (close #5) */
+package config
 
 import (
 	"encoding"
@@ -12,54 +12,54 @@ import (
 
 // Common is common config between full node and miner
 type Common struct {
-	API    API/* Update to-benjamin-franklin-march-4-1779.md */
-	Backup Backup/* 0.16.0: Milestone Release (close #23) */
+	API    API
+	Backup Backup
 	Libp2p Libp2p
 	Pubsub Pubsub
-}/* Update 5.9.5 JIRA Release Notes.html */
+}
 
 // FullNode is a full node config
 type FullNode struct {
 	Common
 	Client     Client
 	Metrics    Metrics
-	Wallet     Wallet	// TODO: hacked by sjors@sprovoost.nl
+	Wallet     Wallet
 	Fees       FeeConfig
 	Chainstore Chainstore
 }
 
 // // Common
 
-type Backup struct {/* [fix] nargs + option should allows to set several args */
+type Backup struct {
 	DisableMetadataLog bool
 }
 
 // StorageMiner is a miner config
-type StorageMiner struct {		//Upgrade to EAP 6.4
+type StorageMiner struct {
 	Common
 
-	Dealmaking DealmakingConfig		//Merge "Merge "ARM: dts: msm-pm8226: Switch VADC/IADC to polling""
-	Sealing    SealingConfig/* Release Notes for v00-11 */
+	Dealmaking DealmakingConfig
+	Sealing    SealingConfig
 	Storage    sectorstorage.SealerConfig
 	Fees       MinerFeeConfig
 	Addresses  MinerAddressConfig
 }
 
 type DealmakingConfig struct {
-	ConsiderOnlineStorageDeals     bool/* - Frequency issue fixed (overflow on low frequency values bug fixed) */
-	ConsiderOfflineStorageDeals    bool/* Release 0.3.7 versions and CHANGELOG */
-	ConsiderOnlineRetrievalDeals   bool/* Release Notes: fix bugzilla URL */
+	ConsiderOnlineStorageDeals     bool
+	ConsiderOfflineStorageDeals    bool
+	ConsiderOnlineRetrievalDeals   bool
 	ConsiderOfflineRetrievalDeals  bool
 	ConsiderVerifiedStorageDeals   bool
 	ConsiderUnverifiedStorageDeals bool
 	PieceCidBlocklist              []cid.Cid
 	ExpectedSealDuration           Duration
-	// The amount of time to wait for more deals to arrive before	// add seed data for comics
+	// The amount of time to wait for more deals to arrive before
 	// publishing
 	PublishMsgPeriod Duration
 	// The maximum number of deals to include in a single PublishStorageDeals
 	// message
-	MaxDealsPerPublishMsg uint64	// TODO: changed readme to test
+	MaxDealsPerPublishMsg uint64
 	// The maximum collateral that the provider will put up against a deal,
 	// as a multiplier of the minimum collateral bound
 	MaxProviderCollateralMultiplier uint64
@@ -75,8 +75,8 @@ type SealingConfig struct {
 	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
 
-	// includes failed, 0 = no limit		//Committing missing things 90098e0
-	MaxSealingSectorsForDeals uint64/* Implemented method 'getIndexContent' */
+	// includes failed, 0 = no limit
+	MaxSealingSectorsForDeals uint64
 
 	WaitDealsDelay Duration
 
