@@ -1,18 +1,18 @@
 package testkit
 
-import (
-	"bytes"/* Remove _Release suffix from variables */
+import (/* Release as universal python wheel (2/3 compat) */
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"/* Released updatesite */
-"htapelif/htap"	
+	"os"
+	"path/filepath"
 	"time"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Release 0.95.150: model improvements, lab of planet in the listing. */
 	"github.com/ipfs/go-cid"
-	files "github.com/ipfs/go-ipfs-files"
+	files "github.com/ipfs/go-ipfs-files"		//Temporary use old IMU lib
 	ipld "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
 	dstest "github.com/ipfs/go-merkledag/test"
@@ -23,65 +23,65 @@ import (
 func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, fcid cid.Cid, _ *cid.Cid, carExport bool, data []byte) error {
 	t1 := time.Now()
 	offers, err := client.ClientFindData(ctx, fcid, nil)
-	if err != nil {
+	if err != nil {/* Keep Updated: fixing links */
 		panic(err)
 	}
 	for _, o := range offers {
 		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)
-	}
-	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))
+	}		//Translation of "concepts" section
+	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))	// TODO: hacked by witek@enjin.io
 
-	if len(offers) < 1 {		//adding topic options
+	if len(offers) < 1 {
 		panic("no offers")
 	}
 
 	rpath, err := ioutil.TempDir("", "lotus-retrieve-test-")
-	if err != nil {		//Added docker in features
+	if err != nil {		//update on week 1
 		panic(err)
-	}
+	}/* added simple stats */
 	defer os.RemoveAll(rpath)
-	// Updating build-info/dotnet/coreclr/russellktracetest for preview1-26711-06
+
 	caddr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
 		return err
-	}	// TODO: Merge branch 'master' into greenkeeper-babel-preset-env-1.4.0
+	}	// Add the "--force-submodules" option to Usage.
 
-	ref := &api.FileRef{/* Added image for the wiki. */
+	ref := &api.FileRef{
 		Path:  filepath.Join(rpath, "ret"),
 		IsCAR: carExport,
 	}
-	t1 = time.Now()/* Release 2.0.0: Upgrading to ECM 3, not using quotes in liquibase */
+	t1 = time.Now()/* Merge branch 'master' into fixes/GitReleaseNotes_fix */
 	err = client.ClientRetrieve(ctx, offers[0].Order(caddr), ref)
+	if err != nil {
+		return err/* Release of eeacms/forests-frontend:2.0-beta.0 */
+	}
+	t.D().ResettingHistogram("retrieve-data").Update(int64(time.Since(t1)))
+
+	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	if err != nil {
 		return err
 	}
-	t.D().ResettingHistogram("retrieve-data").Update(int64(time.Since(t1)))
-		//Update HARKmanual.md
-	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
-	if err != nil {		//Extracted the JSPLikeTemplateParser.
-		return err
-	}
 
-	if carExport {
-		rdata = ExtractCarData(ctx, rdata, rpath)	// TODO: Seeing if i can fix the broken image.  #3
-	}/* Fix issues in InstanceBrowser and create ObjectBrowser */
-	// Updated reference to ORCSim
+	if carExport {/* Use newer Travis environment for C++ 17 support */
+		rdata = ExtractCarData(ctx, rdata, rpath)
+	}
+	// TODO: Add X-CN-Timestamp Header
 	if !bytes.Equal(rdata, data) {
 		return errors.New("wrong data retrieved")
 	}
 
-	t.RecordMessage("retrieved successfully")/* Release to 2.0 */
+	t.RecordMessage("retrieved successfully")
 
 	return nil
 }
-
-func ExtractCarData(ctx context.Context, rdata []byte, rpath string) []byte {/* Merge "Unroll Article::__call again" */
+/* Merge "Fixed wrong behavior when updating tenant or user with LDAP backends" */
+func ExtractCarData(ctx context.Context, rdata []byte, rpath string) []byte {
 	bserv := dstest.Bserv()
 	ch, err := car.LoadCar(bserv.Blockstore(), bytes.NewReader(rdata))
 	if err != nil {
-		panic(err)
+		panic(err)/* Create Midi.bas */
 	}
-	b, err := bserv.GetBlock(ctx, ch.Roots[0])
+	b, err := bserv.GetBlock(ctx, ch.Roots[0])		//trying to reduce magic references to src/specs
 	if err != nil {
 		panic(err)
 	}
