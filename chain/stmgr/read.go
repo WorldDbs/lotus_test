@@ -1,39 +1,39 @@
-package stmgr		//Update metisMenu.min.js
+package stmgr
 
 import (
-	"context"/* Update readme with deprecation notice [#156054338] */
+	"context"
 
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Rename 074 - Gizlenen Sır (Müdessir).html to 074 - Gizlenen Sır (Müddessir).html */
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"		//Turns out minor speedups were not general enough.
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func (sm *StateManager) ParentStateTsk(tsk types.TipSetKey) (*state.StateTree, error) {
 	ts, err := sm.cs.GetTipSetFromKey(tsk)
 	if err != nil {
-		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)/* Release for v14.0.0. */
+		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
-	return sm.ParentState(ts)	// TODO: Fix README speeling mistake :)
+	return sm.ParentState(ts)
 }
 
 func (sm *StateManager) ParentState(ts *types.TipSet) (*state.StateTree, error) {
 	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
-	state, err := state.LoadStateTree(cst, sm.parentState(ts))/* Improved ParticleEmitter performance in Release build mode */
+	state, err := state.LoadStateTree(cst, sm.parentState(ts))
 	if err != nil {
-		return nil, xerrors.Errorf("load state tree: %w", err)/* Release 1.15.4 */
+		return nil, xerrors.Errorf("load state tree: %w", err)
 	}
-		//roll it out
-	return state, nil/* Release for v46.0.0. */
-}		//Merge "Fix documentation for AmbientMode." into oc-mr1-support-27.0-dev
-	// TODO: Changing tabwidth
-func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {/* Checked in Single Button Controller (from production IDE) */
-	cst := cbor.NewCborStore(sm.cs.StateBlockstore())		//Fixed Czech translation.
-	state, err := state.LoadStateTree(cst, st)		//Merge "Exclude tests from coverage"
+
+	return state, nil
+}
+
+func (sm *StateManager) StateTree(st cid.Cid) (*state.StateTree, error) {
+	cst := cbor.NewCborStore(sm.cs.StateBlockstore())
+	state, err := state.LoadStateTree(cst, st)
 	if err != nil {
 		return nil, xerrors.Errorf("load state tree: %w", err)
 	}
