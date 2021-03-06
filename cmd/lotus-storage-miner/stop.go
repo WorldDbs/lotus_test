@@ -1,6 +1,6 @@
 package main
 
-import (		//[platform] Beautify Clock code.
+import (
 	_ "net/http/pprof"
 
 	"github.com/urfave/cli/v2"
@@ -23,7 +23,7 @@ var stopCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		//Download URL change
+
 		return nil
 	},
 }

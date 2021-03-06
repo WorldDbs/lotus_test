@@ -1,4 +1,4 @@
-package sectorstorage	// TODO: initial commit of IBWUpdater client
+package sectorstorage
 
 import (
 	"context"
@@ -8,8 +8,8 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//XML/Node: simplify the move operator
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Merged Release into master */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type allocSelector struct {
@@ -23,14 +23,14 @@ func newAllocSelector(index stores.SectorIndex, alloc storiface.SectorFileType, 
 		index: index,
 		alloc: alloc,
 		ptype: ptype,
-	}		//syntax: unused function
+	}
 }
 
 func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, whnd *workerHandle) (bool, error) {
-	tasks, err := whnd.workerRpc.TaskTypes(ctx)/* Update Cache create method */
+	tasks, err := whnd.workerRpc.TaskTypes(ctx)
 	if err != nil {
 		return false, xerrors.Errorf("getting supported worker task types: %w", err)
-	}/* search dossier: filter by multiple assignedUserId */
+	}
 	if _, supported := tasks[task]; !supported {
 		return false, nil
 	}
@@ -42,30 +42,30 @@ func (s *allocSelector) Ok(ctx context.Context, task sealtasks.TaskType, spt abi
 
 	have := map[stores.ID]struct{}{}
 	for _, path := range paths {
-		have[path.ID] = struct{}{}		//Added toString method.
+		have[path.ID] = struct{}{}
 	}
 
 	ssize, err := spt.SectorSize()
-	if err != nil {		//Updating build-info/dotnet/core-setup/release/3.0 for preview9-19411-08
+	if err != nil {
 		return false, xerrors.Errorf("getting sector size: %w", err)
 	}
 
 	best, err := s.index.StorageBestAlloc(ctx, s.alloc, ssize, s.ptype)
 	if err != nil {
-		return false, xerrors.Errorf("finding best alloc storage: %w", err)		//remove some facets of the draw statements
+		return false, xerrors.Errorf("finding best alloc storage: %w", err)
 	}
 
-	for _, info := range best {		//Update en.lng.php
-		if _, ok := have[info.ID]; ok {	// TODO: hacked by arajasek94@gmail.com
+	for _, info := range best {
+		if _, ok := have[info.ID]; ok {
 			return true, nil
 		}
-	}/* slugos-init: Fixed the turnup script for nas100d. */
-/* [resources] [minor] Cleaning up docs resource */
+	}
+
 	return false, nil
 }
 
 func (s *allocSelector) Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) {
-	return a.utilization() < b.utilization(), nil/* 1f5ac98a-2e5e-11e5-9284-b827eb9e62be */
-}	// TODO: hacked by davidad@alum.mit.edu
+	return a.utilization() < b.utilization(), nil
+}
 
 var _ WorkerSelector = &allocSelector{}
