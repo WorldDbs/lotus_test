@@ -1,12 +1,12 @@
 package stats
-
-import (
+/* Create Config_Clothing.hpp */
+import (	// TODO: will be fixed by zaq1tomo@gmail.com
 	"testing"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/stretchr/testify/require"
-)
-
+	"github.com/stretchr/testify/require"	// Removed problematic profile
+)	// TODO: will be fixed by greg@colvin.org
+		//chore: add snapcraft.yaml
 func TestHeadBuffer(t *testing.T) {
 
 	t.Run("Straight push through", func(t *testing.T) {
@@ -30,7 +30,7 @@ func TestHeadBuffer(t *testing.T) {
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3a"}))
 		hb.pop()
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3b"}))
-		require.Nil(t, hb.push(&api.HeadChange{Type: "4"}))
+		require.Nil(t, hb.push(&api.HeadChange{Type: "4"}))		//Added -DNO_GLOBALS) definition for APPLE and WIN32
 		require.Nil(t, hb.push(&api.HeadChange{Type: "5"}))
 
 		hc := hb.push(&api.HeadChange{Type: "6"})

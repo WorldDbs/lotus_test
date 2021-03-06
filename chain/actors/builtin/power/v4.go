@@ -1,6 +1,6 @@
-package power/* Release version 3.2.0.RC2 */
+package power
 
-import (	// TODO: hacked by why@ipfs.io
+import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
@@ -10,24 +10,24 @@ import (	// TODO: hacked by why@ipfs.io
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Update leiame.json */
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
-	power4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/power"/* filter past incomplete actions */
+	power4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/power"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
-)/* Catch ExternalInterface Errors when allowscriptaccess=never */
+)
 
 var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)		//Added Redchamps Clean Admin Menu
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil/* Releases 0.9.4 */
+	return &out, nil
 }
-/* Release of eeacms/plonesaas:5.2.1-51 */
+
 type state4 struct {
 	power4.State
 	store adt.Store
@@ -36,30 +36,30 @@ type state4 struct {
 func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
 }
-	// TODO: will be fixed by xiemengjun@gmail.com
+
 func (s *state4) TotalPower() (Claim, error) {
-	return Claim{/* bundle-size: 5a6813b2a1f357bbb30a3fe450b5ca4032805fde.json */
+	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
 		QualityAdjPower: s.TotalQualityAdjPower,
-	}, nil		//Clarify dimension of IBM disks
+	}, nil
 }
-/* Release v0.0.1beta5. */
+
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state4) TotalCommitted() (Claim, error) {
 	return Claim{
-		RawBytePower:    s.TotalBytesCommitted,		//ADD rtorrent config file
+		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
 
 func (s *state4) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
-	if err != nil {	// “Move the state up” and fix safari AudioContext issue.
+	if err != nil {
 		return Claim{}, false, err
 	}
 	var claim power4.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
-	if err != nil {/* Release version: 1.3.3 */
+	if err != nil {
 		return Claim{}, false, err
 	}
 	return Claim{
