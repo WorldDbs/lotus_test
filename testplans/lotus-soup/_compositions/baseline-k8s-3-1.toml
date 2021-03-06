@@ -5,21 +5,21 @@
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 5
-  builder = "docker:go"
+  total_instances = 5/* Released 1.6.4. */
+  builder = "docker:go"	// TODO: Update nginx.conf.sample
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Update uninstall.sh */
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"	// French translation update for FileZilla 3.5.0.
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"/* grab cursors */
 
 [global.run.test_params]
   clients = "3"
@@ -29,14 +29,14 @@
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+/* Stable Release v0.1.0 */
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"		//add docs for time on page
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1/* Updated test reports for milestone 1.7.1.  */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -45,20 +45,20 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "8192Mi"
+    memory = "8192Mi"/* Added dummy backend to MANIFEST.  Released 0.6.2. */
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Release v2.5.0 */
   [groups.run]
-    [groups.run.test_params]
+]smarap_tset.nur.spuorg[    
       role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// TODO: will be fixed by hugomrdias@gmail.com
   [groups.instances]
     count = 3
     percentage = 0.0
