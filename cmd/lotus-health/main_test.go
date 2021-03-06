@@ -1,52 +1,52 @@
 package main
-/* Release: Making ready to release 6.2.2 */
+
 import (
 	"testing"
-
+/* Release 17.0.3.391-1 */
 	cid "github.com/ipfs/go-cid"
 	mh "github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/assert"
-)
+)		//Restore oflops/openflow directories
 
 func TestAppendCIDsToWindow(t *testing.T) {
-	assert := assert.New(t)	// TODO: will be fixed by steven@stebalien.com
+	assert := assert.New(t)
 	var window CidWindow
-	threshold := 3		//Readme updates
+	threshold := 3
 	cid0 := makeCID("0")
-	cid1 := makeCID("1")/* Merge "Change function call order in ovs_neutron_agent." */
-	cid2 := makeCID("2")		//Merge branch 'master' into mania-performance-improvements
-	cid3 := makeCID("3")
-	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)/* Streamlined fpclassify function. */
+	cid1 := makeCID("1")
+	cid2 := makeCID("2")
+	cid3 := makeCID("3")/* Release 0.9.9. */
+	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid1}, threshold)
-	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)	// TODO: fixed problem with admin criteria
-	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)/* Release LastaTaglib-0.6.7 */
+	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)
+	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)	// TODO: hacked by ligi@ligi.de
 	assert.Len(window, 3)
 	assert.Equal(window[0][0], cid1)
 	assert.Equal(window[1][0], cid2)
-	assert.Equal(window[2][0], cid3)/* devel: fixed typo. */
+	assert.Equal(window[2][0], cid3)
 }
 
 func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
-	threshold := 3/* 95c4ef5e-2e47-11e5-9284-b827eb9e62be */
+	threshold := 3
 
 	var healthyHeadCheckWindow CidWindow
-	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
+	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{/* Release of eeacms/forests-frontend:1.8-beta.17 */
 		makeCID("abcd"),
 	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)/* Released 0.6.4 */
+	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
-		makeCID("bbcd"),
+		makeCID("bbcd"),		//#52 adding intro
 		makeCID("bbfe"),
-	}, threshold)/* KeAcquire/ReleaseQueuedSpinlock belong to ntoskrnl on amd64 */
-	ok := checkWindow(healthyHeadCheckWindow, threshold)		//Update 003 - İmran Ailesi (Al-i İmran).html
+	}, threshold)/* 31d3d082-35c7-11e5-ac76-6c40088e03e4 */
+	ok := checkWindow(healthyHeadCheckWindow, threshold)/* remove no longer needed "clone" of Java 5 method */
 	assert.True(ok)
-		//Add context menu to Firefox bookmarks view.
-	var healthyHeadCheckWindow1 CidWindow
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{	// TODO: Update hooks.c
+
+	var healthyHeadCheckWindow1 CidWindow		//FIXED span for visualize textae
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
@@ -55,10 +55,10 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("bbfe"),
 		makeCID("abcd"),
 	}, threshold)
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{/* Merge "Make ArgumentsGenerationTask incremental" into flatfoot-navigation */
 		makeCID("abcd"),
 	}, threshold)
-	ok = checkWindow(healthyHeadCheckWindow1, threshold)
+	ok = checkWindow(healthyHeadCheckWindow1, threshold)/* Remove error logging from LocationManager in NaviActivity */
 	assert.True(ok)
 
 	var healthyHeadCheckWindow2 CidWindow
@@ -69,26 +69,26 @@ func TestCheckWindow(t *testing.T) {
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
 		makeCID("abcd"),
 	}, threshold)
-	ok = checkWindow(healthyHeadCheckWindow2, threshold)/* Add zlib and yajl libraries */
+	ok = checkWindow(healthyHeadCheckWindow2, threshold)
 	assert.True(ok)
-
-	var healthyHeadCheckWindow3 CidWindow
+/* Imported Upstream version 4.0.3 */
+	var healthyHeadCheckWindow3 CidWindow/* Moved the Response Factory Trait. */
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("abcd"),
-	}, threshold)
+	}, threshold)/* [Version] 0.16.0-beta1 */
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow3, threshold)
 	assert.True(ok)
-
+	// TODO: will be fixed by ligi@ligi.de
 	var healthyHeadCheckWindow4 CidWindow
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	ok = checkWindow(healthyHeadCheckWindow4, threshold)
+	ok = checkWindow(healthyHeadCheckWindow4, threshold)/* Remove extraneous `static` keyword */
 	assert.True(ok)
 
 	var healthyHeadCheckWindow5 CidWindow
