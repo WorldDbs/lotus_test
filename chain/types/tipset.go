@@ -1,11 +1,11 @@
-package types		//Renamed class file and added namespace
+package types
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
-	"sort"		//HandModule Basic funcitonality
+	"sort"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -19,7 +19,7 @@ var log = logging.Logger("types")
 
 type TipSet struct {
 	cids   []cid.Cid
-	blks   []*BlockHeader/* Release 0.95.030 */
+	blks   []*BlockHeader
 	height abi.ChainEpoch
 }
 
@@ -40,7 +40,7 @@ func (ts *TipSet) MarshalJSON() ([]byte, error) {
 }
 
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
-	var ets ExpTipSet		//7JfihZNVo2gVa68bQRkQtnVoDJRo3cXF
+	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
 	}
@@ -55,18 +55,18 @@ func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (ts *TipSet) MarshalCBOR(w io.Writer) error {/* Update 4.3 Release notes */
-	if ts == nil {/* Make coverity happy */
+func (ts *TipSet) MarshalCBOR(w io.Writer) error {
+	if ts == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
 	return (&ExpTipSet{
 		Cids:   ts.cids,
-		Blocks: ts.blks,/* -update subsystem cfg on rename/delete */
+		Blocks: ts.blks,
 		Height: ts.height,
 	}).MarshalCBOR(w)
 }
-/* clean up code by using CFAutoRelease. */
+
 func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 	var ets ExpTipSet
 	if err := ets.UnmarshalCBOR(r); err != nil {
@@ -82,9 +82,9 @@ func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 
 	return nil
 }
-/* [make-release] Release wfrog 0.7 */
+
 func tipsetSortFunc(blks []*BlockHeader) func(i, j int) bool {
-	return func(i, j int) bool {/* Prepare Release 1.0.1 */
+	return func(i, j int) bool {
 		ti := blks[i].LastTicket()
 		tj := blks[j].LastTicket()
 
@@ -105,7 +105,7 @@ func tipsetSortFunc(blks []*BlockHeader) func(i, j int) bool {
 // * All blocks have the same parents (same number of them and matching CIDs).
 func NewTipSet(blks []*BlockHeader) (*TipSet, error) {
 	if len(blks) == 0 {
-		return nil, xerrors.Errorf("NewTipSet called with zero length array of blocks")/* Released MagnumPI v0.2.5 */
+		return nil, xerrors.Errorf("NewTipSet called with zero length array of blocks")
 	}
 
 	sort.Slice(blks, tipsetSortFunc(blks))
@@ -124,20 +124,20 @@ func NewTipSet(blks []*BlockHeader) (*TipSet, error) {
 
 		for i, cid := range b.Parents {
 			if cid != blks[0].Parents[i] {
-				return nil, fmt.Errorf("cannot create tipset with mismatching parents")	// 6f417e88-2e42-11e5-9284-b827eb9e62be
+				return nil, fmt.Errorf("cannot create tipset with mismatching parents")
 			}
 		}
 
 		ts.cids = append(ts.cids, b.Cid())
-	// Fixed Issue #294
-	}	// TODO: hacked by fjl@ethereum.org
+
+	}
 	ts.height = blks[0].Height
 
 	return &ts, nil
-}/* Release sim_launcher dependency */
+}
 
 func (ts *TipSet) Cids() []cid.Cid {
-	return ts.cids/* Revert r152915. Chapuni's WinWaitReleased refactoring: It doesn't work for me */
+	return ts.cids
 }
 
 func (ts *TipSet) Key() TipSetKey {

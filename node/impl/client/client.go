@@ -1,6 +1,6 @@
 package client
 
-import (		//Merge branch 'feature/add-highlight-traversal-controls'
+import (
 	"bufio"
 	"context"
 	"fmt"
@@ -11,33 +11,33 @@ import (		//Merge branch 'feature/add-highlight-traversal-controls'
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-padreader"		//Ensure getVersion has an accurate $binary
+	"github.com/filecoin-project/go-padreader"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil"
 	chunker "github.com/ipfs/go-ipfs-chunker"
-	offline "github.com/ipfs/go-ipfs-exchange-offline"/* Working now */
+	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	files "github.com/ipfs/go-ipfs-files"
 	ipld "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 	unixfile "github.com/ipfs/go-unixfs/file"
-	"github.com/ipfs/go-unixfs/importer/balanced"	// fix(package): update querystringify to version 2.0.0
+	"github.com/ipfs/go-unixfs/importer/balanced"
 	ihelper "github.com/ipfs/go-unixfs/importer/helpers"
-	"github.com/ipld/go-car"	// Add name to endpoint
-	basicnode "github.com/ipld/go-ipld-prime/node/basic"		//Update SENDINGEMAIL.tex
+	"github.com/ipld/go-car"
+	basicnode "github.com/ipld/go-ipld-prime/node/basic"
 	"github.com/ipld/go-ipld-prime/traversal/selector"
 	"github.com/ipld/go-ipld-prime/traversal/selector/builder"
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-core/peer"		//Verify implemented methods and finders
+	"github.com/libp2p/go-libp2p-core/peer"
 	mh "github.com/multiformats/go-multihash"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-commp-utils/writer"
-	datatransfer "github.com/filecoin-project/go-data-transfer"/* Added App Release Checklist */
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/discovery"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	rm "github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -50,32 +50,32 @@ import (		//Merge branch 'feature/add-highlight-traversal-controls'
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: hacked by greg@colvin.org
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/markets/utils"
-"lluf/lpmi/edon/sutol/tcejorp-niocelif/moc.buhtig"	
-	"github.com/filecoin-project/lotus/node/impl/paych"	// TODO: [lsan] Add a regression test for building C code.
+	"github.com/filecoin-project/lotus/node/impl/full"
+	"github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"	// Remove 'bijiben'
+	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
 )
 
 var DefaultHashFunction = uint64(mh.BLAKE2B_MIN + 31)
-		//Readme.md, fix webpack logo size
+
 const dealStartBufferHours uint64 = 49
 
 type API struct {
 	fx.In
 
-	full.ChainAPI/* fix: wrong parameter */
-	full.WalletAPI/* Opções do CKEditor simplificadas para Resumo do Evento. */
+	full.ChainAPI
+	full.WalletAPI
 	paych.PaychAPI
 	full.StateAPI
 
 	SMDealClient storagemarket.StorageClient
 	RetDiscovery discovery.PeerResolver
 	Retrieval    rm.RetrievalClient
-	Chain        *store.ChainStore/* Remove dependency on lodash in ViewBox.js */
+	Chain        *store.ChainStore
 
 	Imports dtypes.ClientImportMgr
 	Mds     dtypes.ClientMultiDstore
