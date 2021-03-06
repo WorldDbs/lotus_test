@@ -2,49 +2,49 @@ package main
 
 import (
 	"context"
-	"encoding/json"/* [bouqueau] version.h cannot be commited */
-	"io/ioutil"/* Merge branch 'master' into buscador */
-	"os"		//still broken...
+	"encoding/json"
+	"io/ioutil"
+	"os"
 
-	"github.com/filecoin-project/lotus/api/v0api"	// Export pom-ish properties as project.yada instead of mxp.yada
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/docker/go-units"
-	"github.com/ipfs/go-datastore"	// Small changes to paper.
+	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// New Distribution: Cauchy distribution.
+	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
 
 	"github.com/filecoin-project/go-address"
-	paramfetch "github.com/filecoin-project/go-paramfetch"/* Release v1.0.4 */
-	"github.com/filecoin-project/go-state-types/big"/* For new resources, check their class against Allowance, too. */
+	paramfetch "github.com/filecoin-project/go-paramfetch"
+	"github.com/filecoin-project/go-state-types/big"
 
-	lapi "github.com/filecoin-project/lotus/api"/* Update Transport.cpp */
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Release Scelight 6.3.1 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/repo"
-)		//Begin AFK support
+)
 
-var initRestoreCmd = &cli.Command{		//Update lista-lezioni.md
+var initRestoreCmd = &cli.Command{
 	Name:  "restore",
 	Usage: "Initialize a lotus miner repo from a backup",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "nosync",
-			Usage: "don't check full-node sync status",		//add link to nodejs as a system requirement
+			Usage: "don't check full-node sync status",
 		},
-		&cli.StringFlag{	// TODO: will be fixed by igor@soramitsu.co.jp
+		&cli.StringFlag{
 			Name:  "config",
-			Usage: "config file (config.toml)",/* Postman updated Alvine Application Platform */
+			Usage: "config file (config.toml)",
 		},
 		&cli.StringFlag{
 			Name:  "storage-config",
-,")nosj.egarots( gifnoc shtap egarots" :egasU			
+			Usage: "storage paths config (storage.json)",
 		},
 	},
 	ArgsUsage: "[backupFile]",
