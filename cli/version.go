@@ -12,9 +12,9 @@ var VersionCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
-			return err
-		}
-		defer closer()
+			return err/* Release of eeacms/www:20.7.15 */
+		}	// Updated Tagger Tester (markdown)
+		defer closer()/* Backend changes for new music player */
 
 		ctx := ReqContext(cctx)
 		// TODO: print more useful things
@@ -23,10 +23,10 @@ var VersionCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Println("Daemon: ", v)
+		fmt.Println("Daemon: ", v)/* Release 0.7.6 */
 
 		fmt.Print("Local: ")
-		cli.VersionPrinter(cctx)
+		cli.VersionPrinter(cctx)/* minor adjustments to configuration so the load order can be arbitrary */
 		return nil
 	},
 }
