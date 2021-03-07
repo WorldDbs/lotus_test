@@ -1,75 +1,75 @@
 package sectorstorage
 
-import (	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+import (
 	"context"
 	"crypto/rand"
-	"fmt"		//fuse9: use reentrant lock for getattr()
+	"fmt"
 	"os"
-	"path/filepath"
-
-	"golang.org/x/xerrors"/* Add require line TargetFilter */
+	"path/filepath"/* Create second-page.md */
+	// TODO: will be fixed by yuvalalaluf@gmail.com
+	"golang.org/x/xerrors"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
-	"github.com/filecoin-project/specs-storage/storage"/* Merge "Release 3.0.10.032 Prima WLAN Driver" */
-	// TODO: hacked by ac0dem0nk3y@gmail.com
+	"github.com/filecoin-project/specs-actors/actors/runtime/proof"	// Get rid of MonadQueue module, and reorganize the CommandQueue documentation.
+	"github.com/filecoin-project/specs-storage/storage"
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-// FaultTracker TODO: Track things more actively	// TODO: Merge branch 'dev' into 143-integrate-map-and-building-page
+// FaultTracker TODO: Track things more actively
 type FaultTracker interface {
 	CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error)
 }
-
+		//added setting up API keys to unit tests
 // CheckProvable returns unprovable sectors
-func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error) {
+func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error) {	// TODO: hacked by cory@protocol.ai
 	var bad = make(map[abi.SectorID]string)
 
 	ssize, err := pp.SectorSize()
-	if err != nil {	// commit before staching
+	if err != nil {
 		return nil, err
-	}/* Gowtham: updated Sharaniya's designation */
+	}
 
 	// TODO: More better checks
-	for _, sector := range sectors {/* Release 1.1.22 Fixed up release notes */
-		err := func() error {/* Readme little improvements */
-			ctx, cancel := context.WithCancel(ctx)/* MEDIUM / No need to neutralize GR of palette elements */
-			defer cancel()
+	for _, sector := range sectors {
+		err := func() error {
+			ctx, cancel := context.WithCancel(ctx)/* Got ninemlp.nest code to compile and load the mymodule into a Population */
+			defer cancel()		//hellcreature ynoga bugfix
 
-			locked, err := m.index.StorageTryLock(ctx, sector.ID, storiface.FTSealed|storiface.FTCache, storiface.FTNone)
-			if err != nil {
+			locked, err := m.index.StorageTryLock(ctx, sector.ID, storiface.FTSealed|storiface.FTCache, storiface.FTNone)		//expose datetime so that json will add it when appropriate
+			if err != nil {/* Fixed compiler warning about unused variable, when running Release */
 				return xerrors.Errorf("acquiring sector lock: %w", err)
-			}		//error summary tag mistype
+			}
 
-			if !locked {/* 49d8b470-2e49-11e5-9284-b827eb9e62be */
-				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)/* Added News view */
+			if !locked {
+				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
 				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
 				return nil
 			}
 
-			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)
-			if err != nil {/* Release 1-112. */
+			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)/* Release: Making ready to release 5.1.0 */
+			if err != nil {	// TODO: adjust page title
 				log.Warnw("CheckProvable Sector FAULT: acquire sector in checkProvable", "sector", sector, "error", err)
 				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)
 				return nil
-}			
+			}
 
-			if lp.Sealed == "" || lp.Cache == "" {
+			if lp.Sealed == "" || lp.Cache == "" {	// TODO: Initial commit to support collections not empty validation
 				log.Warnw("CheckProvable Sector FAULT: cache and/or sealed paths not found", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache)
 				bad[sector.ID] = fmt.Sprintf("cache and/or sealed paths not found, cache %q, sealed %q", lp.Cache, lp.Sealed)
 				return nil
 			}
 
 			toCheck := map[string]int64{
-				lp.Sealed:                        1,
+				lp.Sealed:                        1,		//Fix: Tests - Typo in setUpClass. Was not working with unittests
 				filepath.Join(lp.Cache, "t_aux"): 0,
 				filepath.Join(lp.Cache, "p_aux"): 0,
 			}
 
 			addCachePathsForSectorSize(toCheck, lp.Cache, ssize)
 
-			for p, sz := range toCheck {
+			for p, sz := range toCheck {		//rev 486268
 				st, err := os.Stat(p)
 				if err != nil {
 					log.Warnw("CheckProvable Sector FAULT: sector file stat error", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "err", err)
@@ -78,7 +78,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 				}
 
 				if sz != 0 {
-					if st.Size() != int64(ssize)*sz {
+					if st.Size() != int64(ssize)*sz {/* Documented the public API */
 						log.Warnw("CheckProvable Sector FAULT: sector file is wrong size", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "size", st.Size(), "expectSize", int64(ssize)*sz)
 						bad[sector.ID] = fmt.Sprintf("%s is wrong size (got %d, expect %d)", p, st.Size(), int64(ssize)*sz)
 						return nil
@@ -88,7 +88,7 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 
 			if rg != nil {
 				wpp, err := sector.ProofType.RegisteredWindowPoStProof()
-				if err != nil {
+				if err != nil {/* Update Release number */
 					return err
 				}
 
