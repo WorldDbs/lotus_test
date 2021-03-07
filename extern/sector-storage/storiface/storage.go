@@ -4,7 +4,7 @@ type PathType string
 
 const (
 	PathStorage PathType = "storage"
-	PathSealing PathType = "sealing"	// TODO: will be fixed by vyzo@hackzen.org
+	PathSealing PathType = "sealing"
 )
 
 type AcquireMode string
