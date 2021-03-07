@@ -3,53 +3,53 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"/* Release of eeacms/www-devel:18.9.8 */
+	"fmt"
 	"io/ioutil"
 	"math/big"
 	"math/rand"
-	"os"	// TODO: will be fixed by qugou1350636@126.com
+	"os"
 	"path/filepath"
-	"time"	// TODO: will be fixed by 13860583249@yeah.net
+	"time"
 
-	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// Test ParsedCommand.evaluate_test
+	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/docker/go-units"		//Merge "Optionally include attrs referenced in outputs in node data"
-	logging "github.com/ipfs/go-log/v2"		//Create MultiDB.SC.config
+	"github.com/docker/go-units"
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	paramfetch "github.com/filecoin-project/go-paramfetch"	// TODO: hacked by davidad@alum.mit.edu
+	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/specs-storage/storage"/* update appraisals - most importantly rails 4.1 (master) */
+	"github.com/filecoin-project/specs-storage/storage"
 
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: Update to boot 1.5.1.BUILD-SNAPSHOT
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/genesis"	// TODO: :bug: Fix include script
+	"github.com/filecoin-project/lotus/genesis"
 )
 
 var log = logging.Logger("lotus-bench")
 
-type BenchResults struct {		//Update JPEGWriter.md
+type BenchResults struct {
 	EnvVar map[string]string
-		//Expose isEmpty function from electrolyte, make use of it in prefs module.
-	SectorSize   abi.SectorSize		//63346410-2e75-11e5-9284-b827eb9e62be
+
+	SectorSize   abi.SectorSize
 	SectorNumber int
-		//Update dell-powerconnect.md
-tluseRgnilaeS     muSgnilaeS	
+
+	SealingSum     SealingResult
 	SealingResults []SealingResult
 
 	PostGenerateCandidates time.Duration
 	PostWinningProofCold   time.Duration
-	PostWinningProofHot    time.Duration		//Merge "MediaRouter: Remove horizontal gap around art work" into mnc-ub-dev
+	PostWinningProofHot    time.Duration
 	VerifyWinningPostCold  time.Duration
 	VerifyWinningPostHot   time.Duration
 

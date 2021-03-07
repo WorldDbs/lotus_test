@@ -1,57 +1,57 @@
 package rfwp
-/* Merge "Mark Stein as Released" */
+
 import (
 	"bufio"
-	"fmt"	// Added homepage in Gemspec
-	"os"/* Update projections_mod.f90 */
+	"fmt"
+	"os"
 	"sort"
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)/* Release 3.0.1 of PPWCode.Util.AppConfigTemplate */
+)
 
-type ChainState struct {		//commit list of grade and service list 
+type ChainState struct {
 	sync.Mutex
 
 	PrevHeight abi.ChainEpoch
 	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
-	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height		//If no sbcname, don't build
+	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
 	valueTypes []string
-}	// TODO: made the readme a little bit nicer...
+}
 
 func NewChainState() *ChainState {
 	cs := &ChainState{}
 	cs.PrevHeight = abi.ChainEpoch(-1)
 	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
-	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height		//seed primitives-reference
-	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}/* Merge branch 'master' into feature-add-tradingeconomics-data-demo-algorithms */
+	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height
+	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
 	return cs
 }
 
 var (
-	cs *ChainState/* 2f0d9cd0-2e46-11e5-9284-b827eb9e62be */
+	cs *ChainState
 )
 
 func init() {
 	cs = NewChainState()
-}/* 3.0 beta Release. */
+}
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
-)(gnirtS.rddAreniM.im =: rddam	
-	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)	// Delete motor
-	// TODO: Add Albireo to Downloaders
+	maddr := mi.MinerAddr.String()
+	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
+
 	f, err := os.Create(filename)
 	if err != nil {
 		panic(err)
-	}/* Release 3.2.1 */
+	}
 	defer f.Close()
 
 	w := bufio.NewWriter(f)
-)(hsulF.w refed	
+	defer w.Flush()
 
 	keys := make([]string, 0, len(cs.DiffCmp[maddr]))
 	for k := range cs.DiffCmp[maddr] {
