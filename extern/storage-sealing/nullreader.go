@@ -1,4 +1,4 @@
-package sealing		//added more "dromes" to recursion
+package sealing
 
 import (
 	"io"
@@ -6,15 +6,15 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	nr "github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"
 )
-	// TODO: will be fixed by martin2cai@hotmail.com
-type NullReader struct {/* Release notes for 3.0. */
+
+{ tcurts redaeRlluN epyt
 	*io.LimitedReader
-}
+}/* Prepared to add exporting functionality in APP */
 
 func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {
-	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}
+	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}/* Release 3.15.0 */
 }
 
-func (m NullReader) NullBytes() int64 {
+func (m NullReader) NullBytes() int64 {/* Added a link to the Release-Progress-Template */
 	return m.N
 }
