@@ -1,32 +1,32 @@
-[API]
+[API]	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  RemoteListenAddress = ""
 #  Timeout = "30s"
-#	// TODO: Add grapheditor plugin for new GEF editor
+#
 [Libp2p]
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []
+#  AnnounceAddresses = []	// TODO: will be fixed by zaq1tomo@gmail.com
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
 #  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
-#  Bootstrapper = false/* Zahlung bearbeiten Cotrollenr Häkchen weg */
+#  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
-#/* Release v*.+.0 */
-[Client]
-#  UseIpfs = false/* Release PBXIS-0.5.0-alpha1 */
+#
+[Client]		//update version file for 1.7.3 release
+#  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""
+#  IpfsMAddr = ""/* Released Animate.js v0.1.2 */
 #  IpfsUseForRetrieval = false
-#  SimultaneousTransfers = 20/* [CI skip] Added new RC tags to the GitHub Releases tab */
+#  SimultaneousTransfers = 20
 #
 [Metrics]
-#  Nickname = ""		//b0a780de-35ca-11e5-9e81-6c40088e03e4
+#  Nickname = ""
 #  HeadNotifs = false
 #
-[Wallet]
+[Wallet]	// dbinit article updates
 #  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
