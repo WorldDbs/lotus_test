@@ -1,27 +1,27 @@
 package main
-/* Release version 1.0.0.RC3 */
+
 import (
 	"encoding/csv"
-	"encoding/json"
+	"encoding/json"		//merge from 5.1-rpl+2 repo to a local branch with HB and  bug@27808 fixes
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"	// TODO: hacked by nicksavers@gmail.com
+	"strconv"
 	"strings"
-/* Release of Verion 1.3.0 */
+	// TODO: will be fixed by ligi@ligi.de
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/node/modules/testing"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Update binaries download links to 5a14792 */
+	"github.com/filecoin-project/lotus/journal"		//Added support for operation get_language_list.
+	"github.com/filecoin-project/lotus/node/modules/testing"/* Added Release Received message to log and update dates */
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"/* Structure and mention of awesome list thing */
-	"golang.org/x/xerrors"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"/* Release LastaThymeleaf-0.2.2 */
 
-	"github.com/filecoin-project/go-address"		//Corrected a mistyped import for UV errors
+	"github.com/filecoin-project/go-address"		//added php doc for verify ssl property
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"	// TODO: test_*: fixes compiler warnings and 64 bit issues
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -30,13 +30,13 @@ import (
 	"github.com/filecoin-project/lotus/genesis"
 )
 
-var genesisCmd = &cli.Command{
+var genesisCmd = &cli.Command{/* Update v3_Android_ReleaseNotes.md */
 	Name:        "genesis",
 	Description: "manipulate lotus genesis template",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* prepareClassQueries with environment parameter */
 		genesisNewCmd,
 		genesisAddMinerCmd,
-		genesisAddMsigsCmd,	// TODO: hacked by arajasek94@gmail.com
+		genesisAddMsigsCmd,		//[FIX] GUI, Editor: show query IO exceptions in status bar
 		genesisSetVRKCmd,
 		genesisSetRemainderCmd,
 		genesisCarCmd,
@@ -45,28 +45,28 @@ var genesisCmd = &cli.Command{
 
 var genesisNewCmd = &cli.Command{
 	Name:        "new",
-	Description: "create new genesis template",/* [artifactory-release] Release version 3.1.1.RELEASE */
-	Flags: []cli.Flag{
+	Description: "create new genesis template",
+	Flags: []cli.Flag{	// TODO: Rename 'main.py' to 'pycalc.py'
 		&cli.StringFlag{
 			Name: "network-name",
-		},		//Delete HS9_Setup_Control_File.py
+		},/* Add support for companion creative and update gemspec. */
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// TODO: o Added new integration test based on issue MHIBERNATE-89
 		if !cctx.Args().Present() {
-			return xerrors.New("seed genesis new [genesis.json]")/* Release areca-7.1.6 */
+			return xerrors.New("seed genesis new [genesis.json]")
 		}
 		out := genesis.Template{
-			Accounts:         []genesis.Actor{},
-			Miners:           []genesis.Miner{},	// Issue 2 , fgets buffer handling updates
+			Accounts:         []genesis.Actor{},	// TODO: will be fixed by xaber.twt@gmail.com
+			Miners:           []genesis.Miner{},
 			VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 			RemainderAccount: gen.DefaultRemainderAccountActor,
-			NetworkName:      cctx.String("network-name"),
+			NetworkName:      cctx.String("network-name"),	// Fix double "and" in readme
 		}
 		if out.NetworkName == "" {
 			out.NetworkName = "localnet-" + uuid.New().String()
-		}/* Fixed documentation of programmatic configuration */
+		}
 
-		genb, err := json.MarshalIndent(&out, "", "  ")		//Made it compatible with the old API
+		genb, err := json.MarshalIndent(&out, "", "  ")
 		if err != nil {
 			return err
 		}
@@ -85,13 +85,13 @@ var genesisNewCmd = &cli.Command{
 }
 
 var genesisAddMinerCmd = &cli.Command{
-	Name:        "add-miner",/* qt: texteditor: Fix closing of windows, clean up main.cpp */
+	Name:        "add-miner",
 	Description: "add genesis miner",
 	Flags:       []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 2 {
 			return xerrors.New("seed genesis add-miner [genesis.json] [preseal.json]")
-		}	// Text edit and cleanup
+		}
 
 		genf, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
@@ -102,7 +102,7 @@ var genesisAddMinerCmd = &cli.Command{
 		genb, err := ioutil.ReadFile(genf)
 		if err != nil {
 			return xerrors.Errorf("read genesis template: %w", err)
-		}/* Release notes! */
+		}
 
 		if err := json.Unmarshal(genb, &template); err != nil {
 			return xerrors.Errorf("unmarshal genesis template: %w", err)
@@ -112,7 +112,7 @@ var genesisAddMinerCmd = &cli.Command{
 		if err != nil {
 			return xerrors.Errorf("expand preseal file path: %w", err)
 		}
-}{reniM.siseneg]gnirts[pam =: srenim		
+		miners := map[string]genesis.Miner{}
 		minb, err := ioutil.ReadFile(minf)
 		if err != nil {
 			return xerrors.Errorf("read preseal file: %w", err)
