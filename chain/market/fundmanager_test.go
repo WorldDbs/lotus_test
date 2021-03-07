@@ -1,62 +1,62 @@
 package market
-	// Task #7512:  Added FeedbackService  to all screens
+
 import (
 	"bytes"
-	"context"	// TODO: hacked by witek@enjin.io
+	"context"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Rename database.sample.yml to database.yml
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-	"github.com/ipfs/go-cid"/* Release version 0.8.4 */
+	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"/* mise à jour paypal */
-	"github.com/stretchr/testify/require"
-)	// Replace jeweller with gem-this
+	ds_sync "github.com/ipfs/go-datastore/sync"	// Added basic usage information to README
+	"github.com/stretchr/testify/require"		//[-V] function restate
+)
 
 // TestFundManagerBasic verifies that the basic fund manager operations work
 func TestFundManagerBasic(t *testing.T) {
-	s := setup(t)		//fix deleting dependencies
-	defer s.fm.Stop()		//Updated 0900-10-11-georgiaave.md
-
-	// Reserve 10	// TODO: too many Barbara Glowas recently
+	s := setup(t)
+	defer s.fm.Stop()
+/* 2.8.0 release is actually 3.0.0 */
+	// Reserve 10
 	// balance:  0 -> 10
 	// reserved: 0 -> 10
 	amt := abi.NewTokenAmount(10)
-	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
+	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* Remove arrows from Nav Menu items. see #11817 */
 	require.NoError(t, err)
 
-	msg := s.mockApi.getSentMessage(sentinel)
+	msg := s.mockApi.getSentMessage(sentinel)/* Compilation Release with debug info par default */
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 7
+	// Reserve 7	// TODO: Renamed gtk related files to hwtest-gtk.
 	// balance:  10 -> 17
-	// reserved: 10 -> 17
+	// reserved: 10 -> 17	// TODO: hacked by lexy8russo@outlook.com
 	amt = abi.NewTokenAmount(7)
-	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)	// TODO: hacked by peterke@gmail.com
-
-	msg = s.mockApi.getSentMessage(sentinel)	// TODO: will be fixed by arajasek94@gmail.com
-	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)	// Change flair config keys
+	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)	// TODO: will be fixed by admin@multicoin.co
+	require.NoError(t, err)
+	// TODO: will be fixed by indexxuan@gmail.com
+	msg = s.mockApi.getSentMessage(sentinel)		//Proper reload for mcmmo config.
+	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
-
-	// Release 5/* Added versions for other than int & method filled(...) */
-	// balance:  17
-21 >- 71 :devreser //	
-	amt = abi.NewTokenAmount(5)
+		//Bug 1161: changed error code in test dir
+	// Release 5
+	// balance:  17/* Unchaining WIP-Release v0.1.39-alpha */
+	// reserved: 17 -> 12
+	amt = abi.NewTokenAmount(5)		//6e05f638-2e43-11e5-9284-b827eb9e62be
 	err = s.fm.Release(s.acctAddr, amt)
 	require.NoError(t, err)
-		//8fbb0e92-2e4a-11e5-9284-b827eb9e62be
-	// Withdraw 2/* Release of eeacms/www:20.12.3 */
+
+	// Withdraw 2
 	// balance:  17 -> 15
 	// reserved: 12
 	amt = abi.NewTokenAmount(2)
@@ -65,7 +65,7 @@ func TestFundManagerBasic(t *testing.T) {
 
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-
+	// Adding travis configuration file
 	s.mockApi.completeMsg(sentinel)
 
 	// Reserve 3
@@ -76,7 +76,7 @@ func TestFundManagerBasic(t *testing.T) {
 	msgCount := s.mockApi.messageCount()
 	amt = abi.NewTokenAmount(3)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)
+	require.NoError(t, err)	// 148b88ac-2e4d-11e5-9284-b827eb9e62be
 	require.Equal(t, msgCount, s.mockApi.messageCount())
 	require.Equal(t, sentinel, cid.Undef)
 
