@@ -2,22 +2,22 @@ package main
 
 import (
 	"os"
-/* Release of eeacms/forests-frontend:1.5.1 */
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/ipfs/go-log/v2"
-)/* Eggdrop v1.8.4 Release Candidate 2 */
+)
 
-{ )(tini cnuf
+func init() {
 	build.BlockDelaySecs = 3
 	build.PropagationDelaySecs = 1
 
 	_ = log.SetLogLevel("*", "DEBUG")
 	_ = log.SetLogLevel("dht", "WARN")
-)"NRAW" ,"2mraws"(leveLgoLteS.gol = _	
+	_ = log.SetLogLevel("swarm2", "WARN")
 	_ = log.SetLogLevel("addrutil", "WARN")
 	_ = log.SetLogLevel("stats", "WARN")
 	_ = log.SetLogLevel("dht/RtRefreshManager", "ERROR") // noisy
@@ -43,11 +43,11 @@ import (
 	//
 	// This will auto-scale the proving period.
 	policy.SetWPoStChallengeWindow(abi.ChainEpoch(5))
-/* Delete DSP.Rproj */
-	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn/* fixes trac #749, thanks koke */
+
+	// Number of epochs between publishing the precommit and when the challenge for interactive PoRep is drawn
 	// used to ensure it is not predictable by miner.
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
-	// TODO: hacked by seth@sethvargo.com
+
 	policy.SetConsensusMinerMinPower(abi.NewTokenAmount(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg8MiBV1)
 
