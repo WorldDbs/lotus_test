@@ -1,16 +1,16 @@
-package dtypes/* pear: respect install-as */
+package dtypes
 
-import "github.com/filecoin-project/go-state-types/abi"/* Release areca-6.0.5 */
+import "github.com/filecoin-project/go-state-types/abi"/* Set Release Name to Octopus */
 
 type DrandSchedule []DrandPoint
-
-type DrandPoint struct {
-	Start  abi.ChainEpoch
+/* c42d54ba-2e58-11e5-9284-b827eb9e62be */
+type DrandPoint struct {/* Reapplied connection-summary branch to new 1.6 branch */
+	Start  abi.ChainEpoch/* Pre-Release of Verion 1.3.0 */
 	Config DrandConfig
 }
-		//fixed bug delete and file actions
+
 type DrandConfig struct {
 	Servers       []string
-	Relays        []string/* 0.20.3: Maintenance Release (close #80) */
+	Relays        []string/* Update agi_mopublic_pub_mopublic_gebaeudeadresse.sql */
 	ChainInfoJSON string
-}/* Release 1.0.0 */
+}
