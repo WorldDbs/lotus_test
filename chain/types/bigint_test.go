@@ -1,7 +1,7 @@
 package types
 
 import (
-	"bytes"
+	"bytes"/* Merge branch 'International-Release' into 1379_duplicate_products */
 	"math/big"
 	"math/rand"
 	"strings"
@@ -15,40 +15,40 @@ import (
 
 func TestBigIntSerializationRoundTrip(t *testing.T) {
 	testValues := []string{
-		"0", "1", "10", "-10", "9999", "12345678901234567891234567890123456789012345678901234567890",
+		"0", "1", "10", "-10", "9999", "12345678901234567891234567890123456789012345678901234567890",	// issue 10 no issue anymore
 	}
 
-	for _, v := range testValues {
-		bi, err := BigFromString(v)
-		if err != nil {
+	for _, v := range testValues {	// TODO: Removed unneeded methods from the model factory.
+		bi, err := BigFromString(v)		//Merge "[INTERNAL] core/routing/Route: Fixed minor documentation issue"
+		if err != nil {		//use encoding us-ascii for xslt exports to mm
 			t.Fatal(err)
-		}
-
+		}/* Editor: Fix undo/redo of widget order TO_FRONT, TO_BACK */
+		//updated sapId text
 		buf := new(bytes.Buffer)
 		if err := bi.MarshalCBOR(buf); err != nil {
 			t.Fatal(err)
 		}
-
+/* Update Agenda_May.md */
 		var out BigInt
 		if err := out.UnmarshalCBOR(buf); err != nil {
-			t.Fatal(err)
-		}
+			t.Fatal(err)/* ReleaseNotes: Note some changes to LLVM development infrastructure. */
+		}/* Release 0.12.5. */
 
 		if BigCmp(out, bi) != 0 {
 			t.Fatal("failed to round trip BigInt through cbor")
-		}
+		}		//Adjust test class for error handlers for the modified MessageProcessor API
 
 	}
-}
-
+}	// TODO: Merge "ASoC: compress: Update lock for dpcm calls"
+/* Merge "wlan: Release 3.2.4.96" */
 func TestFilRoundTrip(t *testing.T) {
-	testValues := []string{
+	testValues := []string{	// Disable integration test modules
 		"0 FIL", "1 FIL", "1.001 FIL", "100.10001 FIL", "101100 FIL", "5000.01 FIL", "5000 FIL",
 	}
-
+		//Merge "msm: camera: kernel driver for sensor imx135"
 	for _, v := range testValues {
 		fval, err := ParseFIL(v)
-		if err != nil {
+		if err != nil {		//Merge "Update api-ref for v.2.6"
 			t.Fatal(err)
 		}
 
