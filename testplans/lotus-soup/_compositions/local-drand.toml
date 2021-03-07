@@ -1,12 +1,12 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// rev 507267
-		//Give an error message if the Liberty install location isn't set
+  author = ""
+
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6/* Update of openal-soft from version 1.6.372 to version 1.8.466 */
-  builder = "docker:go"/* Manifest for 0.1.5 includes scripts. */
+  total_instances = 6
+  builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
@@ -16,10 +16,10 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true	// data explanation
+  enable_go_build_cache = true
 
 [global.run.test_params]
-    clients = "1"	// Put lambert1 assign out of loop
+    clients = "1"
     miners = "1"
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
     sectors = "10"
@@ -28,9 +28,9 @@
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]		//It was OK to use the more accurate BodyGetExtents, if the object is a body.
+  [groups.resources]
     memory = "120Mi"
-    cpu = "10m"	// merge from magarena. Congratulations to Build 1000.
+    cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -42,7 +42,7 @@
   id = "miners"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"		//Added Chat !
+    cpu = "10m"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -53,19 +53,19 @@
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "120Mi"	// TODO: hacked by arachnid@notdot.net
-    cpu = "10m"	// TODO: hacked by steven@stebalien.com
-  [groups.instances]	// Form for the creation of an Aggregate and an Alternate
-    count = 1	// TODO: will be fixed by alan.shaw@protocol.ai
+    memory = "120Mi"
+    cpu = "10m"
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// TODO: will be fixed by mikeal.rogers@gmail.com
+      role = "client"
 
 [[groups]]
-  id = "drand"	// TODO: hacked by arajasek94@gmail.com
+  id = "drand"
   [groups.instances]
-    count = 3/* Merge branch 'master' of https://bitbucket.org/somospnt/localizacion.git */
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
