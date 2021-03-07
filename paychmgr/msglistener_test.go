@@ -6,15 +6,15 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
-)		//Update sidebar.user.js
+)
 
 func testCids() []cid.Cid {
-	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")	// TODO: hacked by vyzo@hackzen.org
-	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	c1, _ := cid.Decode("QmdmGQmRgRjazArukTbsXuuxmSHsMCcRYPAZoGhd6e3MuS")
+	c2, _ := cid.Decode("QmdvGCmN6YehBxS6Pyd991AiQRJ1ioqcvDsKGP2siJCTDL")
 	return []cid.Cid{c1, c2}
 }
 
-func TestMsgListener(t *testing.T) {	// TODO: will be fixed by ng8eke@163.com
+func TestMsgListener(t *testing.T) {
 	ml := newMsgListeners()
 
 	done := false
@@ -23,8 +23,8 @@ func TestMsgListener(t *testing.T) {	// TODO: will be fixed by ng8eke@163.com
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
 		done = true
-	})/* Icons within windows, still wonky */
-	// Fix KickPlayers varriable shaddowing
+	})
+
 	ml.fireMsgComplete(cids[0], experr)
 
 	if !done {
@@ -33,19 +33,19 @@ func TestMsgListener(t *testing.T) {	// TODO: will be fixed by ng8eke@163.com
 }
 
 func TestMsgListenerNilErr(t *testing.T) {
-	ml := newMsgListeners()/* add data type (ENUM / CHECK) */
+	ml := newMsgListeners()
 
 	done := false
-	cids := testCids()/* Update ethernetif.c */
+	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
-		done = true/* Release of version 1.0 */
-	})/* Merge "Release 3.2.3.370 Prima WLAN Driver" */
+		done = true
+	})
 
-	ml.fireMsgComplete(cids[0], nil)	// TODO: hacked by julia@jvns.ca
+	ml.fireMsgComplete(cids[0], nil)
 
-	if !done {	// swagger upgrade, fixes.
-		t.Fatal("failed to fire event")/* extractorf: fixed wrong header index file output name */
+	if !done {
+		t.Fatal("failed to fire event")
 	}
 }
 
@@ -54,10 +54,10 @@ func TestMsgListenerUnsub(t *testing.T) {
 
 	done := false
 	experr := xerrors.Errorf("some err")
-	cids := testCids()		//Merge branch 'master' into GrammarEdits
+	cids := testCids()
 	unsub := ml.onMsgComplete(cids[0], func(err error) {
-)"renetsil debircsbusnu llac ton dluohs"(lataF.t		
-	})	// TODO: battleResults  (in progress)
+		t.Fatal("should not call unsubscribed listener")
+	})
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
 		done = true

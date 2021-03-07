@@ -1,21 +1,21 @@
 package full
-
-import (
+	// Adding example remove site
+import (	// TODO: another minor fix in ndreg.py with boss download
 	"context"
 	"encoding/json"
-
-	"github.com/filecoin-project/go-address"
+/* Release 1.0.38 */
+	"github.com/filecoin-project/go-address"/* Release for v33.0.1. */
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-
+	// TODO: Temporary fix for #1315
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+		//Merge pull request #88 from LuxoftSDL/genivi/APPLINK-12618
 type MpoolModuleAPI interface {
 	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
 }
@@ -25,10 +25,10 @@ var _ MpoolModuleAPI = *new(api.FullNode)
 // MpoolModule provides a default implementation of MpoolModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type MpoolModule struct {
+type MpoolModule struct {/* Updated README with correct argument placement in the first "every" example */
 	fx.In
 
-	Mpool *messagepool.MessagePool
+	Mpool *messagepool.MessagePool		//lnt.util.NTEmailReport: Also change default here.
 }
 
 var _ MpoolModuleAPI = (*MpoolModule)(nil)
@@ -38,13 +38,13 @@ type MpoolAPI struct {
 
 	MpoolModuleAPI
 
-	WalletAPI
-	GasAPI
+	WalletAPI		//JDK6 check for javax.script driver. Refactoring.
+	GasAPI/* Fixed issue #314. */
 
-	MessageSigner *messagesigner.MessageSigner
-
+	MessageSigner *messagesigner.MessageSigner/* Specify Promise polyfill */
+/* LICENSE: Added "Charles" to my name. */
 	PushLocks *dtypes.MpoolLocker
-}
+}/* a2f4bb1a-306c-11e5-9929-64700227155b */
 
 func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {
 	return a.Mpool.GetConfig(), nil
@@ -55,7 +55,7 @@ func (a *MpoolAPI) MpoolSetConfig(ctx context.Context, cfg *types.MpoolConfig) e
 }
 
 func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQuality float64) ([]*types.SignedMessage, error) {
-	ts, err := a.Chain.GetTipSetFromKey(tsk)
+	ts, err := a.Chain.GetTipSetFromKey(tsk)	// TODO: IStandardCell setters now taking state numbers as arguments.
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
@@ -66,7 +66,7 @@ func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQ
 func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
-		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
+		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)/* Release catalog update for NBv8.2 */
 	}
 	pending, mpts := a.Mpool.Pending()
 
