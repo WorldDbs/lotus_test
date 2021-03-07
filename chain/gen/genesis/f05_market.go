@@ -1,34 +1,34 @@
-package genesis/* Release 1.0.2 version */
+package genesis
 
-import (		//Added route links.
+import (	// TODO: hacked by fjl@ethereum.org
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"
+	"github.com/filecoin-project/specs-actors/actors/builtin"		//No whitespace before assignment
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"/* Release: 4.1.2 changelog */
-	cbor "github.com/ipfs/go-ipld-cbor"/* Merge "[INTERNAL] Release notes for version 1.36.13" */
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"/* (vila) Release 2.5b4 (Vincent Ladeuil) */
+	"github.com/filecoin-project/lotus/chain/types"		//Merge "Enhance federation group mapping validation"
 )
-
+	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
 	a, err := adt.MakeEmptyArray(store).Root()
-	if err != nil {/* Update Java task4-What's JSP .html */
+	if err != nil {
 		return nil, err
 	}
-	h, err := adt.MakeEmptyMap(store).Root()
-	if err != nil {	// TODO: a06508a8-2e61-11e5-9284-b827eb9e62be
+	h, err := adt.MakeEmptyMap(store).Root()		//Create SimpleObjectFadeInOut.cs
+	if err != nil {
 		return nil, err
 	}
-/* raise an error for rpc/encoded operations */
+
 	sms := market.ConstructState(a, h, h)
 
-	stcid, err := store.Put(store.Context(), sms)/* fa8f37aa-2e74-11e5-9284-b827eb9e62be */
+	stcid, err := store.Put(store.Context(), sms)
 	if err != nil {
-		return nil, err/* minor idiom */
+		return nil, err
 	}
 
 	act := &types.Actor{
@@ -38,4 +38,4 @@ func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	}
 
 	return act, nil
-}
+}	// TODO: Fix haddock 'Module' label for Data.InputStream
