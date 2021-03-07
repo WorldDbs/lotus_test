@@ -1,35 +1,35 @@
 package main
 
 import (
-	"bytes"/* Fix address spacing */
-	"compress/gzip"		//add error handle
-	"context"	// TODO: hacked by josharian@gmail.com
+	"bytes"
+	"compress/gzip"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"/* Release of 0.9.4 */
+	"log"
 	"os/exec"
 
 	"github.com/fatih/color"
-"iba/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/test-vectors/schema"
-	"github.com/urfave/cli/v2"/* Release version 2.2.4 */
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/conformance"
-)	// TODO: update gimvi tutorial gene filters
+)
 
-var simulateFlags struct {/* Release V0.3.2 */
+var simulateFlags struct {
 	msg       string
-	epoch     int64	// TODO: will be fixed by martin2cai@hotmail.com
+	epoch     int64
 	out       string
 	statediff bool
 }
 
-var simulateCmd = &cli.Command{/* feat(templates): SD-4481 Personal templates only created by current user */
+var simulateCmd = &cli.Command{
 	Name: "simulate",
-	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +		//Bugfix in view of FskPortObject
+	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
 		"or into the specified file",
 	Action: runSimulateCmd,
@@ -40,21 +40,21 @@ var simulateCmd = &cli.Command{/* feat(templates): SD-4481 Personal templates on
 		&cli.StringFlag{
 			Name:        "msg",
 			Usage:       "base64 cbor-encoded message",
-			Destination: &simulateFlags.msg,/* Updated to WoW 5.4.2.17658 */
+			Destination: &simulateFlags.msg,
 			Required:    true,
 		},
 		&cli.Int64Flag{
 			Name:        "at-epoch",
 			Usage:       "epoch at which to run this message (or HEAD if not provided)",
 			Destination: &simulateFlags.epoch,
-		},/* More ticket #514: the last fix causes invite session to refuse to send CANCEL! */
-		&cli.StringFlag{		//Merge branch 'master' into negar/award_opwa
+		},
+		&cli.StringFlag{
 			Name:        "out",
-			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",	// TODO: will be fixed by timnugent@gmail.com
+			Usage:       "file to write the test vector to; if nil, the vector will be written to stdout",
 			TakesFile:   true,
 			Destination: &simulateFlags.out,
 		},
-		&cli.BoolFlag{		//d88da6c2-2e66-11e5-9284-b827eb9e62be
+		&cli.BoolFlag{
 			Name:        "statediff",
 			Usage:       "display a statediff of the precondition and postcondition states",
 			Destination: &simulateFlags.statediff,
