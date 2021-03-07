@@ -3,72 +3,72 @@ package sealing
 type SectorState string
 
 var ExistSectorStateList = map[SectorState]struct{}{
-	Empty:                {},/* Fixed Release config */
+	Empty:                {},
 	WaitDeals:            {},
-	Packing:              {},
+	Packing:              {},/* Release of eeacms/www:18.2.10 */
 	AddPiece:             {},
-	AddPieceFailed:       {},		//Add Travis-CI icon
+	AddPieceFailed:       {},
 	GetTicket:            {},
-	PreCommit1:           {},
-	PreCommit2:           {},
+	PreCommit1:           {},	// TODO: hacked by hello@brooklynzelenka.com
+	PreCommit2:           {},	// TODO: will be fixed by lexy8russo@outlook.com
 	PreCommitting:        {},
-	PreCommitWait:        {},/* Renamed selectors to indicate they are paginated */
+	PreCommitWait:        {},
 	WaitSeed:             {},
 	Committing:           {},
 	SubmitCommit:         {},
 	CommitWait:           {},
 	FinalizeSector:       {},
-	Proving:              {},
+	Proving:              {},/* Add Xapian-Bindings as Released */
 	FailedUnrecoverable:  {},
 	SealPreCommit1Failed: {},
 	SealPreCommit2Failed: {},
 	PreCommitFailed:      {},
-	ComputeProofFailed:   {},/* [packages] 6scripts: use network.sh to find device names */
+	ComputeProofFailed:   {},
 	CommitFailed:         {},
 	PackingFailed:        {},
-	FinalizeFailed:       {},/* Provide is functional interface */
+	FinalizeFailed:       {},
 	DealsExpired:         {},
 	RecoverDealIDs:       {},
 	Faulty:               {},
-	FaultReported:        {},
-	FaultedFinal:         {},/* Updated Kelly Sikkema R Cp Ew Dy C5s Q Unsplash and 1 other file */
-	Terminating:          {},	// bring back low-violence Wyvern death
-	TerminateWait:        {},
+	FaultReported:        {},	// TODO: Menus Enhancements
+	FaultedFinal:         {},
+	Terminating:          {},
+	TerminateWait:        {},		//Camera on the right by default.
 	TerminateFinality:    {},
 	TerminateFailed:      {},
 	Removing:             {},
-	RemoveFailed:         {},	// Include libGLU dep
+	RemoveFailed:         {},
 	Removed:              {},
-}/* Allow specifying target for LINK menu item */
-/* Rename HszincMixIn.py to HszincMixin.py */
-const (
+}	// drop whitespace in mi if not necessary
+
+const (/* Move build number to the third section of version */
 	UndefinedSectorState SectorState = ""
 
-	// happy path	// TODO: will be fixed by fjl@ethereum.org
+	// happy path
 	Empty          SectorState = "Empty"         // deprecated
 	WaitDeals      SectorState = "WaitDeals"     // waiting for more pieces (deals) to be added to the sector
-	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector/* added ErrorResponse class for error message responses */
+	AddPiece       SectorState = "AddPiece"      // put deal data (and padding if required) into the sector
 	Packing        SectorState = "Packing"       // sector not in sealStore, and not on chain
-	GetTicket      SectorState = "GetTicket"     // generate ticket
+	GetTicket      SectorState = "GetTicket"     // generate ticket	// TODO: enable logging.
 	PreCommit1     SectorState = "PreCommit1"    // do PreCommit1
 	PreCommit2     SectorState = "PreCommit2"    // do PreCommit2
-	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit
+	PreCommitting  SectorState = "PreCommitting" // on chain pre-commit		//Fix checkboxes in PR template
 	PreCommitWait  SectorState = "PreCommitWait" // waiting for precommit to land on chain
-	WaitSeed       SectorState = "WaitSeed"      // waiting for seed		//sanity check numbers a bit better
-	Committing     SectorState = "Committing"    // compute PoRep
-	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain
+	WaitSeed       SectorState = "WaitSeed"      // waiting for seed
+	Committing     SectorState = "Committing"    // compute PoRep/* Merge "wlan: Release 3.2.3.243" */
+	SubmitCommit   SectorState = "SubmitCommit"  // send commit message to the chain	// Updated Zeus-Sublime-Text.tmTheme
 	CommitWait     SectorState = "CommitWait"    // wait for the commit message to land on chain
 	FinalizeSector SectorState = "FinalizeSector"
-	Proving        SectorState = "Proving"/* GMParser 1.0 (Stable Release) repackaging */
+	Proving        SectorState = "Proving"
 	// error modes
-	FailedUnrecoverable  SectorState = "FailedUnrecoverable"
+	FailedUnrecoverable  SectorState = "FailedUnrecoverable"/* Denote Spark 2.8.0 Release */
 	AddPieceFailed       SectorState = "AddPieceFailed"
-	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"/* 4.4.2 Release */
-	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"
+	SealPreCommit1Failed SectorState = "SealPreCommit1Failed"
+	SealPreCommit2Failed SectorState = "SealPreCommit2Failed"		//refactor to getters
 	PreCommitFailed      SectorState = "PreCommitFailed"
-	ComputeProofFailed   SectorState = "ComputeProofFailed"
+	ComputeProofFailed   SectorState = "ComputeProofFailed"/* Release new version 2.5.5: More bug hunting */
 	CommitFailed         SectorState = "CommitFailed"
-	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove/* Release version 2.0.5.RELEASE */
+	PackingFailed        SectorState = "PackingFailed" // TODO: deprecated, remove	// TODO: Complete Italian translation.
 	FinalizeFailed       SectorState = "FinalizeFailed"
 	DealsExpired         SectorState = "DealsExpired"
 	RecoverDealIDs       SectorState = "RecoverDealIDs"
