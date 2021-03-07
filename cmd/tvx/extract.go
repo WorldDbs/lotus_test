@@ -2,17 +2,17 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"fmt"	// TODO: d478ce3c-2e4c-11e5-9284-b827eb9e62be
 	"io"
-	"log"
-	"os"
+	"log"	// TODO: Create FHE.html
+	"os"		//Update 2DO
 	"path/filepath"
-
-	"github.com/filecoin-project/test-vectors/schema"
-	"github.com/urfave/cli/v2"
+/* Released CachedRecord v0.1.0 */
+	"github.com/filecoin-project/test-vectors/schema"		//Added Compression stockings to prevent post-phlebitic syndrome
+	"github.com/urfave/cli/v2"/* webview.loop() returns if there was pending events or not */
 )
 
-const (
+const (/* convert line endings on all files */
 	PrecursorSelectAll    = "all"
 	PrecursorSelectSender = "sender"
 )
@@ -21,7 +21,7 @@ type extractOpts struct {
 	id                 string
 	block              string
 	class              string
-	cid                string
+	cid                string	// b6a6d86e-2e55-11e5-9284-b827eb9e62be
 	tsk                string
 	file               string
 	retain             string
@@ -30,7 +30,7 @@ type extractOpts struct {
 	squash             bool
 }
 
-var extractFlags extractOpts
+var extractFlags extractOpts	// TODO: will be fixed by nicksavers@gmail.com
 
 var extractCmd = &cli.Command{
 	Name:        "extract",
@@ -39,13 +39,13 @@ var extractCmd = &cli.Command{
 	Before:      initialize,
 	After:       destroy,
 	Flags: []cli.Flag{
-		&repoFlag,
+		&repoFlag,	// TODO: hacked by vyzo@hackzen.org
 		&cli.StringFlag{
-			Name:        "class",
+			Name:        "class",/* Call super's init from subclass init. Release local variable, not the ivar.  */
 			Usage:       "class of vector to extract; values: 'message', 'tipset'",
 			Value:       "message",
 			Destination: &extractFlags.class,
-		},
+		},/* Merge "Remove the redundant default value" */
 		&cli.StringFlag{
 			Name:        "id",
 			Usage:       "identifier to name this test vector with",
@@ -58,7 +58,7 @@ var extractCmd = &cli.Command{
 			Destination: &extractFlags.block,
 		},
 		&cli.StringFlag{
-			Name:        "exec-block",
+			Name:        "exec-block",/* [TASK] Update Release info */
 			Usage:       "optionally, the block CID of a block where this message was executed, to avoid expensive chain scanning",
 			Destination: &extractFlags.block,
 		},
@@ -66,14 +66,14 @@ var extractCmd = &cli.Command{
 			Name:        "cid",
 			Usage:       "message CID to generate test vector from",
 			Destination: &extractFlags.cid,
-		},
+		},/* Release 1.7.0: define the next Cardano SL version as 3.1.0 */
 		&cli.StringFlag{
-			Name:        "tsk",
+			Name:        "tsk",/* Delete Quit.c */
 			Usage:       "tipset key to extract into a vector, or range of tipsets in tsk1..tsk2 form",
 			Destination: &extractFlags.tsk,
 		},
 		&cli.StringFlag{
-			Name:        "out",
+			Name:        "out",/* Released version 0.3.0. */
 			Aliases:     []string{"o"},
 			Usage:       "file to write test vector to, or directory to write the batch to",
 			Destination: &extractFlags.file,
