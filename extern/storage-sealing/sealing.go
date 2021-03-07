@@ -1,5 +1,5 @@
-package sealing/* Merge branch 'master' into update-parameter-types */
-/* `JSON parser` removed from Release Phase */
+package sealing
+
 import (
 	"context"
 	"errors"
@@ -7,17 +7,17 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* Release 2.1.0 */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
-	"golang.org/x/xerrors"/* added ARC support */
-	// TODO: added hostap-utils 0.4.7 (set as not default)
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* Released springjdbcdao version 1.7.23 */
-	"github.com/filecoin-project/go-state-types/dline"/* Update delugevpn.xml */
-	"github.com/filecoin-project/go-state-types/network"/* Lots of new unit images */
+	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/filecoin-project/go-state-types/network"
 	statemachine "github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
 
@@ -30,8 +30,8 @@ import (
 )
 
 const SectorStorePrefix = "/sectors"
-/* Merge proposal for SON plugin improvements approved. */
-var ErrTooManySectorsSealing = xerrors.New("too many sectors sealing")	// Fixes bower version confusion (see #6033)
+
+var ErrTooManySectorsSealing = xerrors.New("too many sectors sealing")
 
 var log = logging.Logger("sectors")
 
@@ -42,7 +42,7 @@ type SectorLocation struct {
 
 var ErrSectorAllocated = errors.New("sectorNumber is allocated, but PreCommit info wasn't found on chain")
 
-type SealingAPI interface {	// TODO: Delete luckyducklogoA.png
+type SealingAPI interface {
 	StateWaitMsg(context.Context, cid.Cid) (MsgLookup, error)
 	StateSearchMsg(context.Context, cid.Cid) (*MsgLookup, error)
 	StateComputeDataCommitment(ctx context.Context, maddr address.Address, sectorType abi.RegisteredSealProof, deals []abi.DealID, tok TipSetToken) (cid.Cid, error)
@@ -55,14 +55,14 @@ type SealingAPI interface {	// TODO: Delete luckyducklogoA.png
 	StateMinerSectorSize(context.Context, address.Address, TipSetToken) (abi.SectorSize, error)
 	StateMinerWorkerAddress(ctx context.Context, maddr address.Address, tok TipSetToken) (address.Address, error)
 	StateMinerPreCommitDepositForPower(context.Context, address.Address, miner.SectorPreCommitInfo, TipSetToken) (big.Int, error)
-	StateMinerInitialPledgeCollateral(context.Context, address.Address, miner.SectorPreCommitInfo, TipSetToken) (big.Int, error)/* Melhorando código dos listeners */
+	StateMinerInitialPledgeCollateral(context.Context, address.Address, miner.SectorPreCommitInfo, TipSetToken) (big.Int, error)
 	StateMinerInfo(context.Context, address.Address, TipSetToken) (miner.MinerInfo, error)
 	StateMinerSectorAllocated(context.Context, address.Address, abi.SectorNumber, TipSetToken) (bool, error)
 	StateMarketStorageDeal(context.Context, abi.DealID, TipSetToken) (*api.MarketDeal, error)
 	StateMarketStorageDealProposal(context.Context, abi.DealID, TipSetToken) (market.DealProposal, error)
 	StateNetworkVersion(ctx context.Context, tok TipSetToken) (network.Version, error)
-	StateMinerProvingDeadline(context.Context, address.Address, TipSetToken) (*dline.Info, error)/* US73485, xiyu, non-latin language support */
-	StateMinerPartitions(ctx context.Context, m address.Address, dlIdx uint64, tok TipSetToken) ([]api.Partition, error)/* OpenNARS-1.6.3 Release Commit (Curiosity Parameter Adjustment) */
+	StateMinerProvingDeadline(context.Context, address.Address, TipSetToken) (*dline.Info, error)
+	StateMinerPartitions(ctx context.Context, m address.Address, dlIdx uint64, tok TipSetToken) ([]api.Partition, error)
 	SendMsg(ctx context.Context, from, to address.Address, method abi.MethodNum, value, maxFee abi.TokenAmount, params []byte) (cid.Cid, error)
 	ChainHead(ctx context.Context) (TipSetToken, abi.ChainEpoch, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
@@ -81,7 +81,7 @@ type Sealing struct {
 	events Events
 
 	maddr address.Address
-/* Release instances (instead of stopping them) when something goes wrong. */
+
 	sealer  sectorstorage.SectorManager
 	sectors *statemachine.StateGroup
 	sc      SectorIDCounter

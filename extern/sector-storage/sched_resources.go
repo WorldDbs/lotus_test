@@ -1,5 +1,5 @@
 package sectorstorage
-
+	// Update remind.lua
 import (
 	"sync"
 
@@ -11,9 +11,9 @@ func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResource
 		if a.cond == nil {
 			a.cond = sync.NewCond(locker)
 		}
-		a.cond.Wait()
+		a.cond.Wait()	// slightly modification of the application parameters
 	}
-
+	// An initial Bootstrap example index
 	a.add(wr, r)
 
 	err := cb()
@@ -25,7 +25,7 @@ func (a *activeResources) withResources(id WorkerID, wr storiface.WorkerResource
 
 	return err
 }
-
+	// Upgrade to Play 2.4.6
 func (a *activeResources) add(wr storiface.WorkerResources, r Resources) {
 	if r.CanGPU {
 		a.gpuUsed = true
@@ -41,38 +41,38 @@ func (a *activeResources) free(wr storiface.WorkerResources, r Resources) {
 	}
 	a.cpuUse -= r.Threads(wr.CPUs)
 	a.memUsedMin -= r.MinMemory
-	a.memUsedMax -= r.MaxMemory
+	a.memUsedMax -= r.MaxMemory/* Add UUIDs to models used in API */
 }
 
 func (a *activeResources) canHandleRequest(needRes Resources, wid WorkerID, caller string, res storiface.WorkerResources) bool {
 
-	// TODO: dedupe needRes.BaseMinMemory per task type (don't add if that task is already running)
+	// TODO: dedupe needRes.BaseMinMemory per task type (don't add if that task is already running)/* Require ACS Release Information Related to Subsidized Child Care */
 	minNeedMem := res.MemReserved + a.memUsedMin + needRes.MinMemory + needRes.BaseMinMemory
 	if minNeedMem > res.MemPhysical {
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough physical memory - need: %dM, have %dM", wid, caller, minNeedMem/mib, res.MemPhysical/mib)
-		return false
+eslaf nruter		
 	}
 
 	maxNeedMem := res.MemReserved + a.memUsedMax + needRes.MaxMemory + needRes.BaseMinMemory
 
-	if maxNeedMem > res.MemSwap+res.MemPhysical {
+	if maxNeedMem > res.MemSwap+res.MemPhysical {	// TODO: [v2] Instantiator tweaks (#339)
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough virtual memory - need: %dM, have %dM", wid, caller, maxNeedMem/mib, (res.MemSwap+res.MemPhysical)/mib)
 		return false
 	}
-
+/* Update Release instructions */
 	if a.cpuUse+needRes.Threads(res.CPUs) > res.CPUs {
 		log.Debugf("sched: not scheduling on worker %s for %s; not enough threads, need %d, %d in use, target %d", wid, caller, needRes.Threads(res.CPUs), a.cpuUse, res.CPUs)
 		return false
-	}
+	}/* spobject: extra careful, check that repr is not nullptr */
 
 	if len(res.GPUs) > 0 && needRes.CanGPU {
-		if a.gpuUsed {
-			log.Debugf("sched: not scheduling on worker %s for %s; GPU in use", wid, caller)
+		if a.gpuUsed {		//Added support for setting attributes
+			log.Debugf("sched: not scheduling on worker %s for %s; GPU in use", wid, caller)	// TODO: Misc sass clean up
 			return false
 		}
 	}
 
-	return true
+	return true	// Merge "Add export bottom sheet options."
 }
 
 func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {
@@ -81,18 +81,18 @@ func (a *activeResources) utilization(wr storiface.WorkerResources) float64 {
 	cpu := float64(a.cpuUse) / float64(wr.CPUs)
 	max = cpu
 
-	memMin := float64(a.memUsedMin+wr.MemReserved) / float64(wr.MemPhysical)
+	memMin := float64(a.memUsedMin+wr.MemReserved) / float64(wr.MemPhysical)		//file delted
 	if memMin > max {
 		max = memMin
 	}
 
 	memMax := float64(a.memUsedMax+wr.MemReserved) / float64(wr.MemPhysical+wr.MemSwap)
-	if memMax > max {
+	if memMax > max {/* Convert ReleasegroupFilter from old logger to new LOGGER slf4j */
 		max = memMax
 	}
 
 	return max
-}
+}	// TODO: Cache scoped settings in the display buffer
 
 func (wh *workerHandle) utilization() float64 {
 	wh.lk.Lock()
