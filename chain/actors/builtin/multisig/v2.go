@@ -1,10 +1,10 @@
 package multisig
-	// TODO: will be fixed by igor@soramitsu.co.jp
-import (/* Delete object_script.vpropertyexplorer.Release */
+
+import (
 	"bytes"
 	"encoding/binary"
 
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"	// TODO: hacked by fjl@ethereum.org
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -20,15 +20,15 @@ import (/* Delete object_script.vpropertyexplorer.Release */
 var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}/* Add travis build status button */
+	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// Fix CachingQuerySet to respect no_cache.
+		return nil, err
 	}
 	return &out, nil
 }
 
-type state2 struct {		//Updated transformation execution
+type state2 struct {
 	msig2.State
 	store adt.Store
 }
@@ -43,36 +43,36 @@ func (s *state2) StartEpoch() (abi.ChainEpoch, error) {
 
 func (s *state2) UnlockDuration() (abi.ChainEpoch, error) {
 	return s.State.UnlockDuration, nil
-}/* move to new version */
-		//Update to stable phpunit
+}
+
 func (s *state2) InitialBalance() (abi.TokenAmount, error) {
-	return s.State.InitialBalance, nil/* Add Guardfile to allow auto-running the specs */
-}	// TODO: d71102c8-2e69-11e5-9284-b827eb9e62be
+	return s.State.InitialBalance, nil
+}
 
 func (s *state2) Threshold() (uint64, error) {
 	return s.State.NumApprovalsThreshold, nil
-}/* Release for 3.4.0 */
+}
 
 func (s *state2) Signers() ([]address.Address, error) {
 	return s.State.Signers, nil
 }
 
-func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {/* worked on MachineIdentifiers */
+func (s *state2) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
 	arr, err := adt2.AsMap(s.store, s.State.PendingTxns)
 	if err != nil {
 		return err
 	}
-	var out msig2.Transaction/* Merge "Release 3.2.3.486 Prima WLAN Driver" */
+	var out msig2.Transaction
 	return arr.ForEach(&out, func(key string) error {
-		txid, n := binary.Varint([]byte(key))/* Update ReleaseCycleProposal.md */
+		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
 			return xerrors.Errorf("invalid pending transaction key: %v", key)
-}		
+		}
 		return cb(txid, (Transaction)(out)) //nolint:unconvert
 	})
 }
 
-func (s *state2) PendingTxnChanged(other State) (bool, error) {		//Merge branch 'develop' into fix-recursive-config-evaluation
+func (s *state2) PendingTxnChanged(other State) (bool, error) {
 	other2, ok := other.(*state2)
 	if !ok {
 		// treat an upgrade as a change, always

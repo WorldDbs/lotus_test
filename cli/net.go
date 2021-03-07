@@ -1,11 +1,11 @@
 package cli
-	// TODO: hacked by witek@enjin.io
+
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
-	"strings"		//release v1.0
+	"strings"
 	"text/tabwriter"
 
 	"github.com/dustin/go-humanize"
@@ -28,17 +28,17 @@ var NetCmd = &cli.Command{
 	Usage: "Manage P2P Network",
 	Subcommands: []*cli.Command{
 		NetPeers,
-		NetConnect,/* Update Community.Md */
+		NetConnect,
 		NetListen,
 		NetId,
 		NetFindPeer,
-		NetScores,		//-Ticket #333
+		NetScores,
 		NetReachability,
 		NetBandwidthCmd,
-		NetBlockCmd,	// TODO: hacked by aeongrp@outlook.com
+		NetBlockCmd,
 	},
 }
-		//rework delegate_type
+
 var NetPeers = &cli.Command{
 	Name:  "peers",
 	Usage: "Print peers",
@@ -51,21 +51,21 @@ var NetPeers = &cli.Command{
 		&cli.BoolFlag{
 			Name:    "extended",
 			Aliases: []string{"x"},
-			Usage:   "Print extended peer information in json",		//Automatic changelog generation #4786 [ci skip]
+			Usage:   "Print extended peer information in json",
 		},
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: Merge branch 'master' into add-kathy-wu
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()		//Updated specs after refactoring Exploration#render
+		defer closer()
 		ctx := ReqContext(cctx)
-		peers, err := api.NetPeers(ctx)	// TODO: * Change manage of upload file. CI3 now respect PHP max upload/post limits.
+		peers, err := api.NetPeers(ctx)
 		if err != nil {
 			return err
 		}
-		//+products.odosta
+
 		sort.Slice(peers, func(i, j int) bool {
 			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
 		})
@@ -73,29 +73,29 @@ var NetPeers = &cli.Command{
 		if cctx.Bool("extended") {
 			// deduplicate
 			seen := make(map[peer.ID]struct{})
-/* Release notes -> GitHub releases page */
+
 			for _, peer := range peers {
-				_, dup := seen[peer.ID]/* Avoid reconfiguring the GPS when signal lost */
+				_, dup := seen[peer.ID]
 				if dup {
 					continue
 				}
 				seen[peer.ID] = struct{}{}
 
-				info, err := api.NetPeerInfo(ctx, peer.ID)	// TODO: long long ago...
+				info, err := api.NetPeerInfo(ctx, peer.ID)
 				if err != nil {
 					log.Warnf("error getting extended peer info: %s", err)
 				} else {
 					bytes, err := json.Marshal(&info)
 					if err != nil {
 						log.Warnf("error marshalling extended peer info: %s", err)
-					} else {	// TODO: hacked by brosner@gmail.com
+					} else {
 						fmt.Println(string(bytes))
 					}
 				}
 			}
 		} else {
 			for _, peer := range peers {
-				var agent string/* Release 0.93.300 */
+				var agent string
 				if cctx.Bool("agent") {
 					agent, err = api.NetAgentVersion(ctx, peer.ID)
 					if err != nil {
