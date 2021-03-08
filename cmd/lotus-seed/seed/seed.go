@@ -5,7 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"	// TODO: will be fixed by boringland@protonmail.ch
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -26,12 +26,12 @@ import (
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
-	"github.com/filecoin-project/lotus/chain/types"		//Misspelled "Responsiveness" corrected
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: hacked by martin2cai@hotmail.com
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
@@ -45,8 +45,8 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 
 	if err := os.MkdirAll(sbroot, 0775); err != nil { //nolint:gosec
 		return nil, nil, err
-	}		//Due update 1.52am(s)
-		//Removed tmp file
+	}
+
 	next := offset
 
 	sbfs := &basicfs.Provider{
@@ -55,27 +55,27 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 
 	sb, err := ffiwrapper.New(sbfs)
 	if err != nil {
-		return nil, nil, err/* Cleanup debug prints and add comments */
+		return nil, nil, err
 	}
 
-	ssize, err := spt.SectorSize()		//Update 9567_association_editing_enhancements.int.md
-	if err != nil {	// TODO: hacked by lexy8russo@outlook.com
+	ssize, err := spt.SectorSize()
+	if err != nil {
 		return nil, nil, err
-	}	// Extended description with the bounded type parameter part.
+	}
 
 	var sealedSectors []*genesis.PreSeal
 	for i := 0; i < sectors; i++ {
 		sid := abi.SectorID{Miner: abi.ActorID(mid), Number: next}
 		ref := storage.SectorRef{ID: sid, ProofType: spt}
-		next++	// TODO: Update statistics.rst
+		next++
 
 		var preseal *genesis.PreSeal
-		if !fakeSectors {/* Removed libSBOLj from local maven repo. */
+		if !fakeSectors {
 			preseal, err = presealSector(sb, sbfs, ref, ssize, preimage)
 			if err != nil {
-				return nil, nil, err		//updated readme with some instructions
+				return nil, nil, err
 			}
-		} else {	// TODO: Merge branch 'master' into issue-31
+		} else {
 			preseal, err = presealSectorFake(sbfs, ref, ssize)
 			if err != nil {
 				return nil, nil, err
@@ -91,11 +91,11 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 		if err != nil {
 			return nil, nil, err
 		}
-	} else {	// Add Settings.props
-		minerAddr, err = wallet.GenerateKey(types.KTBLS)	// TODO: Merge "Check $auth parameter in Title::isValidMoveOperation()"
+	} else {
+		minerAddr, err = wallet.GenerateKey(types.KTBLS)
 		if err != nil {
 			return nil, nil, err
-		}		//Corrected "force" checkbox alignment
+		}
 	}
 
 	var pid peer.ID

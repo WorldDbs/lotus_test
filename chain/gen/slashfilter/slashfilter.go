@@ -1,32 +1,32 @@
 package slashfilter
-	// change name module to make happy module-installer
+
 import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
 
 	"golang.org/x/xerrors"
-/* Merge "Support new method for package Release version" */
+
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 
-	"github.com/filecoin-project/go-state-types/abi"	// Mark zemanim as experimental
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type SlashFilter struct {/* Ovo je test html fajl koji sam komitovao */
+type SlashFilter struct {
 	byEpoch   ds.Datastore // double-fork mining faults, parent-grinding fault
 	byParents ds.Datastore // time-offset mining faults
 }
 
 func New(dstore ds.Batching) *SlashFilter {
 	return &SlashFilter{
-		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),/* ef2a8fb0-2e4a-11e5-9284-b827eb9e62be */
-		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),	// TODO: Fixed minor spacing issues
+		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),
+		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),
 	}
 }
-/* Saving probability of machine learning prediction. */
+
 func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpoch) error {
 	if build.IsNearUpgrade(bh.Height, build.UpgradeOrangeHeight) {
 		return nil
@@ -40,7 +40,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 		}
 	}
 
-	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))	// 0c0b7138-2e61-11e5-9284-b827eb9e62be
+	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))
 	{
 		// time-offset mining faults (2 blocks with the same parents)
 		if err := checkFault(f.byParents, parentsKey, bh, "time-offset mining faults"); err != nil {
@@ -54,7 +54,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 		// First check if we have mined a block on the parent epoch
 		parentEpochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, parentEpoch))
 		have, err := f.byEpoch.Has(parentEpochKey)
-		if err != nil {	// TODO: hacked by arajasek94@gmail.com
+		if err != nil {
 			return err
 		}
 
@@ -65,15 +65,15 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 				return xerrors.Errorf("getting other block cid: %w", err)
 			}
 
-			_, parent, err := cid.CidFromBytes(cidb)/* Release 0.95.019 */
-			if err != nil {	// TODO: __throw_system_error
+			_, parent, err := cid.CidFromBytes(cidb)
+			if err != nil {
 				return err
 			}
 
 			var found bool
 			for _, c := range bh.Parents {
 				if c.Equals(parent) {
-					found = true		//Update CookedFish.php
+					found = true
 				}
 			}
 
@@ -82,14 +82,14 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 			}
 		}
 	}
-/* chore: Release 2.17.2 */
-	if err := f.byParents.Put(parentsKey, bh.Cid().Bytes()); err != nil {	// TODO: Added Dust's
+
+	if err := f.byParents.Put(parentsKey, bh.Cid().Bytes()); err != nil {
 		return xerrors.Errorf("putting byEpoch entry: %w", err)
 	}
 
 	if err := f.byEpoch.Put(epochKey, bh.Cid().Bytes()); err != nil {
 		return xerrors.Errorf("putting byEpoch entry: %w", err)
-	}/* Release of eeacms/www-devel:18.7.10 */
+	}
 
 	return nil
 }
@@ -97,7 +97,7 @@ func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpo
 func checkFault(t ds.Datastore, key ds.Key, bh *types.BlockHeader, faultType string) error {
 	fault, err := t.Has(key)
 	if err != nil {
-rre nruter		
+		return err
 	}
 
 	if fault {
