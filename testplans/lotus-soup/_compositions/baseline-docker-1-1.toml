@@ -1,18 +1,18 @@
 [metadata]
-  name = "lotus-soup"/* 0b1ebcfc-2e67-11e5-9284-b827eb9e62be */
+  name = "lotus-soup"
   author = ""
-	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 3		//nokia770-init: Correct DEPENDS
+  total_instances = 3
   builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]		//improved MetaContainer code
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -27,20 +27,20 @@
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]	// TODO: added license to top of main program
+[[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1/* Released 0.1.5 version */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"	// TODO: will be fixed by davidad@alum.mit.edu
-	// TODO: Updated Client list implementation 
+      role = "bootstrapper"
+
 [[groups]]
-  id = "miners"/* Merge "Release 4.0.10.010  QCACLD WLAN Driver" */
+  id = "miners"
   [groups.instances]
     count = 1
-    percentage = 0.0		//(refactor) Create => CreateFrom
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
@@ -48,8 +48,8 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 1	// Fixed height issue w/ twitter icon.
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Create Orchard-1-8-1.Release-Notes.markdown */
-      role = "client"/* Attempt to satisfy Release-Asserts build */
+    [groups.run.test_params]
+      role = "client"
