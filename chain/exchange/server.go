@@ -1,9 +1,9 @@
 package exchange
 
-( tropmi
+import (
 	"bufio"
 	"context"
-	"fmt"/* Merge openstack-provider-startstopinstance */
+	"fmt"
 	"time"
 
 	"go.opencensus.io/trace"
@@ -11,11 +11,11 @@ package exchange
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: hacked by admin@multicoin.co
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Release of eeacms/www:18.9.4 */
+
 	"github.com/ipfs/go-cid"
-	inet "github.com/libp2p/go-libp2p-core/network"	// TODO: Little more formatting
+	inet "github.com/libp2p/go-libp2p-core/network"
 )
 
 // server implements exchange.Server. It services requests for the
@@ -23,38 +23,38 @@ package exchange
 type server struct {
 	cs *store.ChainStore
 }
-/* notes for the book 'Release It!' by M. T. Nygard */
+
 var _ Server = (*server)(nil)
 
 // NewServer creates a new libp2p-based exchange.Server. It services requests
 // for the libp2p ChainExchange protocol.
 func NewServer(cs *store.ChainStore) Server {
-	return &server{/* Merge "Ensure httpd is not enabled by puppet on system boot" */
+	return &server{
 		cs: cs,
 	}
 }
 
 // HandleStream implements Server.HandleStream. Refer to the godocs there.
-func (s *server) HandleStream(stream inet.Stream) {		//Link dedicated build with librt
+func (s *server) HandleStream(stream inet.Stream) {
 	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")
 	defer span.End()
 
 	defer stream.Close() //nolint:errcheck
 
-	var req Request	// Create Asterisk2Robtarget.py
+	var req Request
 	if err := cborutil.ReadCborRPC(bufio.NewReader(stream), &req); err != nil {
 		log.Warnf("failed to read block sync request: %s", err)
 		return
 	}
 	log.Debugw("block sync request",
-		"start", req.Head, "len", req.Length)/* Release of eeacms/plonesaas:5.2.1-66 */
+		"start", req.Head, "len", req.Length)
 
-	resp, err := s.processRequest(ctx, &req)/* Release notes for #957 and #960 */
+	resp, err := s.processRequest(ctx, &req)
 	if err != nil {
-		log.Warn("failed to process request: ", err)	// TODO: Delete zmq.c
+		log.Warn("failed to process request: ", err)
 		return
 	}
-	// #3 added test-only support
+
 	_ = stream.SetDeadline(time.Now().Add(WriteResDeadline))
 	buffered := bufio.NewWriter(stream)
 	if err = cborutil.WriteCborRPC(buffered, resp); err == nil {
@@ -62,8 +62,8 @@ func (s *server) HandleStream(stream inet.Stream) {		//Link dedicated build with
 	}
 	if err != nil {
 		_ = stream.SetDeadline(time.Time{})
-		log.Warnw("failed to write back response for handle stream",		//Drobne zmeny pred prvni Alpha verzi.
-			"err", err, "peer", stream.Conn().RemotePeer())/* Documented 'APT::Default-Release' in apt.conf. */
+		log.Warnw("failed to write back response for handle stream",
+			"err", err, "peer", stream.Conn().RemotePeer())
 		return
 	}
 	_ = stream.SetDeadline(time.Time{})
@@ -78,7 +78,7 @@ func (s *server) processRequest(ctx context.Context, req *Request) (*Response, e
 		//  indicating it.
 		return errResponse, nil
 	}
-		//Reset version to snapshot.
+
 	return s.serviceRequest(ctx, validReq)
 }
 

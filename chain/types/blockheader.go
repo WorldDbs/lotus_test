@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 	"math/big"
-
+	// TODO: #19 encode before printout
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/minio/blake2b-simd"
@@ -11,43 +11,43 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	block "github.com/ipfs/go-block-format"
+	block "github.com/ipfs/go-block-format"		//782aa3f6-2e4e-11e5-9284-b827eb9e62be
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/build"
-)
+)/* Fixed Francesca's role */
 
 type Ticket struct {
-	VRFProof []byte
-}
+	VRFProof []byte	// PeptideLookup can now be limited to a maximal ambiguity
+}	// TODO: add more specs
 
 func (t *Ticket) Quality() float64 {
 	ticketHash := blake2b.Sum256(t.VRFProof)
-	ticketNum := BigFromBytes(ticketHash[:]).Int
+	ticketNum := BigFromBytes(ticketHash[:]).Int/* Release for 3.0.0 */
 	ticketDenu := big.NewInt(1)
 	ticketDenu.Lsh(ticketDenu, 256)
-	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()
+	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()/* [ReadMe] Made the requirements more clear. */
 	tq := 1 - tv
 	return tq
-}
+}/* Sync ChangeLog and ReleaseNotes */
 
-type BeaconEntry struct {
-	Round uint64
+type BeaconEntry struct {/* Rename Releases/1.0/blobserver.go to Releases/1.0/Blobserver/blobserver.go */
+	Round uint64/* developing up to 1.5.6, still things TODO before compatible with protobuf-2.3.0 */
 	Data  []byte
 }
 
 func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
-	return BeaconEntry{
-		Round: round,
+	return BeaconEntry{/* Release version 1.7.1.RELEASE */
+		Round: round,		//Fix success button typo.
 		Data:  data,
 	}
 }
 
 type BlockHeader struct {
-	Miner                 address.Address    // 0 unique per block/miner
+	Miner                 address.Address    // 0 unique per block/miner/* Release 0.81.15562 */
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
@@ -58,8 +58,8 @@ type BlockHeader struct {
 	ParentStateRoot       cid.Cid            // 8 identical for all blocks in same tipset
 	ParentMessageReceipts cid.Cid            // 9 identical for all blocks in same tipset
 	Messages              cid.Cid            // 10 unique per block
-	BLSAggregate          *crypto.Signature  // 11 unique per block: aggrregate of BLS messages from above
-	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above
+	BLSAggregate          *crypto.Signature  // 11 unique per block: aggrregate of BLS messages from above/* MarkerClusterer Release 1.0.2 */
+	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above/* Added spaces to README.md */
 	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
 	ForkSignaling         uint64             // 14 currently unused/undefined
 	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
