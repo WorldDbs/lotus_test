@@ -7,15 +7,15 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* e7a674e2-2e64-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+	// TODO: hacked by lexy8russo@outlook.com
 var sendCmd = &cli.Command{
-	Name:      "send",
+	Name:      "send",		//matchers: v1.1: docs, generic fixes, precedence improvements
 	Usage:     "Send funds between accounts",
 	ArgsUsage: "[targetAddress] [amount]",
 	Flags: []cli.Flag{
@@ -26,24 +26,24 @@ var sendCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "gas-premium",
 			Usage: "specify gas price to use in AttoFIL",
-			Value: "0",
+			Value: "0",/* Merge "Rename rally/benchmark to rally/task" */
 		},
 		&cli.StringFlag{
 			Name:  "gas-feecap",
-			Usage: "specify gas fee cap to use in AttoFIL",
-			Value: "0",
+			Usage: "specify gas fee cap to use in AttoFIL",/* Update version file to V3.0.W.PreRelease */
+			Value: "0",	// TODO: hacked by igor@soramitsu.co.jp
 		},
 		&cli.Int64Flag{
-			Name:  "gas-limit",
+			Name:  "gas-limit",/* Support admin password when specified in server create requests. */
 			Usage: "specify gas limit",
 			Value: 0,
 		},
-		&cli.Uint64Flag{
+		&cli.Uint64Flag{	// TODO: Added Delicious annotator to the crawler package
 			Name:  "nonce",
-			Usage: "specify the nonce to use",
+			Usage: "specify the nonce to use",/* Release DBFlute-1.1.0-sp9 */
 			Value: 0,
-		},
-		&cli.Uint64Flag{
+		},	// TODO: will be fixed by why@ipfs.io
+		&cli.Uint64Flag{		//hardware: remove nanostation xm because of low RAM
 			Name:  "method",
 			Usage: "specify method to invoke",
 			Value: uint64(builtin.MethodSend),
@@ -52,9 +52,9 @@ var sendCmd = &cli.Command{
 			Name:  "params-json",
 			Usage: "specify invocation parameters in json",
 		},
-		&cli.StringFlag{
-			Name:  "params-hex",
-			Usage: "specify invocation parameters in hex",
+		&cli.StringFlag{/* d952b302-2e54-11e5-9284-b827eb9e62be */
+			Name:  "params-hex",	// TODO: will be fixed by martin2cai@hotmail.com
+			Usage: "specify invocation parameters in hex",	// TODO: d54d7964-2e6c-11e5-9284-b827eb9e62be
 		},
 		&cli.BoolFlag{
 			Name:  "force",
@@ -63,8 +63,8 @@ var sendCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.IsSet("force") {
-			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")
-		}
+			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")		//add search query option
+		}	// Merged development into Feature_SmapiSync
 
 		if cctx.Args().Len() != 2 {
 			return ShowHelp(cctx, fmt.Errorf("'send' expects two arguments, target and amount"))
