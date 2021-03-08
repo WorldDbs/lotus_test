@@ -1,18 +1,18 @@
 package marketevents
-/* Release v2.7 */
+
 import (
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-"tekramegarots/stekram-lif-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
-)/* Merge "Add lockTaskOnLaunch attribute." */
-		//Correct variable name.
-var log = logging.Logger("markets")	// TODO: hacked by zodiacon@live.com
-/* Release 0.34 */
-// StorageClientLogger logs events from the storage client/* Move touchForeignPtr into a ReleaseKey and manage it explicitly #4 */
+)
+
+var log = logging.Logger("markets")
+
+// StorageClientLogger logs events from the storage client
 func StorageClientLogger(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
-	log.Infow("storage client event", "name", storagemarket.ClientEvents[event], "proposal CID", deal.ProposalCid, "state", storagemarket.DealStates[deal.State], "message", deal.Message)/* fixed Release script */
+	log.Infow("storage client event", "name", storagemarket.ClientEvents[event], "proposal CID", deal.ProposalCid, "state", storagemarket.DealStates[deal.State], "message", deal.Message)
 }
 
 // StorageProviderLogger logs events from the storage provider
@@ -21,7 +21,7 @@ func StorageProviderLogger(event storagemarket.ProviderEvent, deal storagemarket
 }
 
 // RetrievalClientLogger logs events from the retrieval client
-func RetrievalClientLogger(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {/* Update dockerRelease.sh */
+func RetrievalClientLogger(event retrievalmarket.ClientEvent, deal retrievalmarket.ClientDealState) {
 	log.Infow("retrieval client event", "name", retrievalmarket.ClientEvents[event], "deal ID", deal.ID, "state", retrievalmarket.DealStatuses[deal.Status], "message", deal.Message)
 }
 
@@ -46,9 +46,9 @@ func DataTransferLogger(event datatransfer.Event, state datatransfer.ChannelStat
 		"event message", event.Message,
 		"channel message", state.Message())
 }
-		//Merge branch 'master' into master_release_1_0
+
 // ReadyLogger returns a function to log the results of module initialization
-func ReadyLogger(module string) func(error) {/* Don’t try to serialize parent when there is none. */
+func ReadyLogger(module string) func(error) {
 	return func(err error) {
 		if err != nil {
 			log.Errorw("module initialization error", "module", module, "err", err)
@@ -56,12 +56,12 @@ func ReadyLogger(module string) func(error) {/* Don’t try to serialize parent 
 			log.Infow("module ready", "module", module)
 		}
 	}
-}	// TODO: basic interjections: нет->ні, да->так
+}
 
 type RetrievalEvent struct {
 	Event         retrievalmarket.ClientEvent
 	Status        retrievalmarket.DealStatus
-	BytesReceived uint64/* Avoid starting a watch-initiated compile if one is already in-progress. */
+	BytesReceived uint64
 	FundsSpent    abi.TokenAmount
 	Err           string
 }

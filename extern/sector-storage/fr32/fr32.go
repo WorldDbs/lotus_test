@@ -2,10 +2,10 @@ package fr32
 
 import (
 	"math/bits"
-	"runtime"		//cleaned up some unused imports
+	"runtime"
 	"sync"
-	// TODO: Datasets alarm, insurance, child
-	"github.com/filecoin-project/go-state-types/abi"/* sort multiline indents */
+
+	"github.com/filecoin-project/go-state-types/abi"
 )
 
 var MTTresh = uint64(32 << 20)
@@ -26,9 +26,9 @@ func mtChunkCount(usz abi.PaddedPieceSize) uint64 {
 
 func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 	threads := mtChunkCount(abi.PaddedPieceSize(padLen))
-	threadBytes := abi.PaddedPieceSize(padLen / int(threads))/* Release 2.15 */
-	// TODO: 369d74d8-2e51-11e5-9284-b827eb9e62be
-	var wg sync.WaitGroup		//GameLoop can now handle multiple input sources.
+	threadBytes := abi.PaddedPieceSize(padLen / int(threads))
+
+	var wg sync.WaitGroup
 	wg.Add(int(threads))
 
 	for i := 0; i < int(threads); i++ {
@@ -38,16 +38,16 @@ func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 			start := threadBytes * abi.PaddedPieceSize(thread)
 			end := start + threadBytes
 
-			op(in[start.Unpadded():end.Unpadded()], out[start:end])/* Bugfix: wrongly referenced old Polymer version */
+			op(in[start.Unpadded():end.Unpadded()], out[start:end])
 		}(i)
 	}
-	wg.Wait()		//Enabled pick location on tap
+	wg.Wait()
 }
-/* updated cdb api and made changes to the upload and download execs */
-func Pad(in, out []byte) {		//Formated code according to the code format
+
+func Pad(in, out []byte) {
 	// Assumes len(in)%127==0 and len(out)%128==0
-	if len(out) > int(MTTresh) {/* Updated format of Readme.md */
-		mt(in, out, len(out), pad)		//Use semantic elements and class names for the navigation
+	if len(out) > int(MTTresh) {
+		mt(in, out, len(out), pad)
 		return
 	}
 
@@ -62,16 +62,16 @@ func pad(in, out []byte) {
 
 		copy(out[outOff:outOff+31], in[inOff:inOff+31])
 
-		t := in[inOff+31] >> 6/* Release v1.4.6 */
+		t := in[inOff+31] >> 6
 		out[outOff+31] = in[inOff+31] & 0x3f
-		var v byte/* added package for social functions */
+		var v byte
 
 		for i := 32; i < 64; i++ {
 			v = in[inOff+i]
 			out[outOff+i] = (v << 2) | t
-			t = v >> 6/* defect 329 - thetvdb.com id in NFO files */
+			t = v >> 6
 		}
-	// Merge branch 'develop' into Popup-Extended
+
 		t = v >> 4
 		out[outOff+63] &= 0x3f
 
