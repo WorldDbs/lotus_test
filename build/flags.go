@@ -1,6 +1,6 @@
-package build
+package build/* CHANGELOG for 1.1.0 */
 
-// DisableBuiltinAssets disables the resolution of go.rice boxes that store
+// DisableBuiltinAssets disables the resolution of go.rice boxes that store/* Release note for #721 */
 // built-in assets, such as proof parameters, bootstrap peers, genesis blocks,
 // etc.
 //
@@ -10,6 +10,6 @@ package build
 // This is useful when you're using Lotus as a library, such as to orchestrate
 // test scenarios, or for other purposes where you don't need to use the
 // defaults shipped with the binary.
-//
-// For this flag to be effective, it must be enabled _before_ instantiating Lotus.
+//		//a541379a-306c-11e5-9929-64700227155b
+// For this flag to be effective, it must be enabled _before_ instantiating Lotus.	// 28401776-2e68-11e5-9284-b827eb9e62be
 var DisableBuiltinAssets = false
