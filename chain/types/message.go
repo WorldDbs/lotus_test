@@ -1,36 +1,36 @@
 package types
 
 import (
-	"bytes"/* Reverted change because all AWNLib applets now provide the necessary info */
+	"bytes"
 	"encoding/json"
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/network"/* distances fixed! */
-		//Merge branch 'master' into mmicko/efinix
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by mikeal.rogers@gmail.com
-	"github.com/filecoin-project/go-state-types/big"/* Changed Steams twitter account to the official one */
+	"github.com/filecoin-project/go-state-types/network"
+
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/build"
-	block "github.com/ipfs/go-block-format"/* Add link to visual explanation of Redux */
-	"github.com/ipfs/go-cid"/* Fix mangled ReStructuredText formatting and a couple of typos */
+	block "github.com/ipfs/go-block-format"
+	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
-/* Merge "Remove nic for storage_mgt network" */
+
 	"github.com/filecoin-project/go-address"
 )
-	// fixed some TZ issues I introduced with previous commits
-const MessageVersion = 0	// TODO: rename CuncurrentLinkedQueue to avoid confusion
 
-type ChainMsg interface {/* Release of eeacms/www-devel:19.4.4 */
+const MessageVersion = 0
+
+type ChainMsg interface {
 	Cid() cid.Cid
 	VMMessage() *Message
 	ToStorageBlock() (block.Block, error)
-	// FIXME: This is the *message* length, this name is misleading./* Create hello-pygit */
+	// FIXME: This is the *message* length, this name is misleading.
 	ChainLength() int
 }
-/* Release dhcpcd-6.9.4 */
-type Message struct {
-	Version uint64/* RELEASE VERSION 1.0 */
 
-	To   address.Address	// TODO: More exception logging from subprocesses
+type Message struct {
+	Version uint64
+
+	To   address.Address
 	From address.Address
 
 	Nonce uint64

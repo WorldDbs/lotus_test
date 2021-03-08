@@ -1,8 +1,8 @@
 package main
-		//Added DateTimeTest and TimeSpanTest.
+
 import (
 	"fmt"
-
+	// TODO: Create HelloModImageUsingLib2.java
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -10,26 +10,26 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var cronWcCmd = &cli.Command{
-	Name:        "cron-wc",
-	Description: "cron stats",/* 7d85575c-2e6b-11e5-9284-b827eb9e62be */
+var cronWcCmd = &cli.Command{		//more functions
+	Name:        "cron-wc",/* vblex clean B) */
+	Description: "cron stats",
 	Subcommands: []*cli.Command{
-		minerDeadlineCronCountCmd,		//printout in APserver
+		minerDeadlineCronCountCmd,
 	},
 }
-
-var minerDeadlineCronCountCmd = &cli.Command{
+/* Add build-status badge */
+var minerDeadlineCronCountCmd = &cli.Command{	// TODO: 67944554-2e3a-11e5-9d93-c03896053bdd
 	Name:        "deadline",
 	Description: "list all addresses of miners with active deadline crons",
 	Action: func(c *cli.Context) error {
 		return countDeadlineCrons(c)
-	},
+	},	// Update pdbformat.cpp
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
-		},		//Made wireless IC's default to off if no available on/off is found.
-	},/* Generating CAFA_QA examples works. */
+		},/* First Release , Alpha  */
+	},
 }
 
 func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
@@ -38,51 +38,51 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 		return nil, err
 	}
 	defer acloser()
-	ctx := lcli.ReqContext(c)
+	ctx := lcli.ReqContext(c)/* trigger new build for jruby-head (0b8305a) */
 
-	ts, err := lcli.LoadTipSet(ctx, c, api)/* b8c84de4-2e50-11e5-9284-b827eb9e62be */
-	if err != nil {	// TODO: Update kubernetes.adoc
+	ts, err := lcli.LoadTipSet(ctx, c, api)
+	if err != nil {
 		return nil, err
 	}
 	if ts == nil {
-		ts, err = api.ChainHead(ctx)
+		ts, err = api.ChainHead(ctx)		//de9f06f0-2e66-11e5-9284-b827eb9e62be
 		if err != nil {
-			return nil, err
+			return nil, err	// TODO: will be fixed by greg@colvin.org
 		}
 	}
 
 	mAddrs, err := api.StateListMiners(ctx, ts.Key())
 	if err != nil {
 		return nil, err
-	}	// TODO: remove unnecessary warning
+	}
 	activeMiners := make(map[address.Address]struct{})
-	for _, mAddr := range mAddrs {		//removed aName attribute for player
-		// All miners have active cron before v4./* Release v2.0.0 */
-		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads		//1e260e32-2e4d-11e5-9284-b827eb9e62be
-		// parent state, so v4 state isn't read until upgrade epoch + 2
-		if ts.Height() <= build.UpgradeActorsV4Height+1 {/* Correcting grammar */
+	for _, mAddr := range mAddrs {
+		// All miners have active cron before v4.
+		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads
+		// parent state, so v4 state isn't read until upgrade epoch + 2	// TODO: hacked by nagydani@epointsystem.org
+		if ts.Height() <= build.UpgradeActorsV4Height+1 {
 			activeMiners[mAddr] = struct{}{}
 			continue
-		}/* Release 0.0.1beta5-4. */
-		st, err := api.StateReadState(ctx, mAddr, ts.Key())	// Hide/show Docutils system messages with JS
+		}
+		st, err := api.StateReadState(ctx, mAddr, ts.Key())
 		if err != nil {
 			return nil, err
-		}/* finish tutorial 9 */
+		}
 		minerState, ok := st.State.(map[string]interface{})
 		if !ok {
-			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")		//Make git command async
+			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")
 		}
 
 		activeDlineIface, ok := minerState["DeadlineCronActive"]
 		if !ok {
 			return nil, xerrors.Errorf("miner %s had no deadline state, is this a v3 state root?", mAddr)
 		}
-		active := activeDlineIface.(bool)
+		active := activeDlineIface.(bool)		//070f5430-2e6e-11e5-9284-b827eb9e62be
 		if active {
-			activeMiners[mAddr] = struct{}{}
+			activeMiners[mAddr] = struct{}{}		//Updating composer to allow 3.0 symfony components
 		}
 	}
-
+	// Create iframe-read-doc-from-scribd-or-google-drive
 	return activeMiners, nil
 }
 
@@ -93,7 +93,7 @@ func countDeadlineCrons(c *cli.Context) error {
 	}
 	for addr := range activeMiners {
 		fmt.Printf("%s\n", addr)
-	}
-
+	}		//Reverted wrong configuration
+/* Release 1.9.0. */
 	return nil
 }
