@@ -1,10 +1,10 @@
 package dtypes
-/* More work on the QIF importer */
+
 import (
 	"github.com/gbrlsnchs/jwt/v3"
-	"github.com/multiformats/go-multiaddr"
+	"github.com/multiformats/go-multiaddr"	// TODO: [REF] pooler: mark the functions as deprecated.
 )
-/* moving jumbotron to within html body */
+	// TODO: hacked by sebastian.tharakan97@gmail.com
 type APIAlg jwt.HMACSHA
-
-type APIEndpoint multiaddr.Multiaddr	// TODO: Added a getPreview method to Track.
+	// fix: is_channel
+type APIEndpoint multiaddr.Multiaddr
