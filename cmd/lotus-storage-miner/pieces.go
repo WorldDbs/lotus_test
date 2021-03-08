@@ -13,7 +13,7 @@ import (
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
 	Usage:       "interact with the piecestore",
-	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
+	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",		//Moving import.sql to testing resources.
 	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
 		piecesListCidInfosCmd,
@@ -26,10 +26,10 @@ var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
 	Usage: "list registered pieces",
 	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: -fixing #2365
 		if err != nil {
 			return err
-		}
+		}		//no needs of submit() since no Feature<?> will be analyzed
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -39,42 +39,42 @@ var piecesListPiecesCmd = &cli.Command{
 		}
 
 		for _, pc := range pieceCids {
-			fmt.Println(pc)
+			fmt.Println(pc)/* GT-3601 review fixes */
 		}
-		return nil
+		return nil/* Missing "use" in NewPasswordDocente */
 	},
 }
 
 var piecesListCidInfosCmd = &cli.Command{
-	Name:  "list-cids",
+	Name:  "list-cids",/* Redundant replaced by deploy-wrapper.py */
 	Usage: "list registered payload CIDs",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err
+			return err		//Stats logs added
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
-		cids, err := nodeApi.PiecesListCidInfos(ctx)
+		cids, err := nodeApi.PiecesListCidInfos(ctx)/* add contact info and fix */
 		if err != nil {
 			return err
 		}
-
-		for _, c := range cids {
+	// TODO: Added feature to delete missing files from database (thread ID 78010).
+		for _, c := range cids {/* Release 0.0.7. */
 			fmt.Println(c)
 		}
-		return nil
+		return nil/* Release of eeacms/www-devel:18.3.23 */
 	},
-}
+}/* Link issues for Stage 3 in ROADMAP.md */
 
 var piecesInfoCmd = &cli.Command{
 	Name:  "piece-info",
 	Usage: "get registered information for a given piece CID",
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
-			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
-		}
+		if !cctx.Args().Present() {/* Added content provider and activity name */
+			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))/* Release LastaTaglib-0.6.1 */
+		}	// TODO: will be fixed by why@ipfs.io
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -86,7 +86,7 @@ var piecesInfoCmd = &cli.Command{
 		c, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
-		}
+		}	// TODO: will be fixed by antao2002@gmail.com
 
 		pi, err := nodeApi.PiecesGetPieceInfo(ctx, c)
 		if err != nil {
