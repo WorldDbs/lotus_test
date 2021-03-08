@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
+	// Fix #9 : typo in README
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
@@ -17,42 +17,42 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release configuration? */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-var log = logging.Logger("wallet-ledger")
+var log = logging.Logger("wallet-ledger")/* removing python-tools and python-dates dependencies */
 
-type LedgerWallet struct {
+type LedgerWallet struct {/* Moved IC2 compat recipes from postInit to event. Closes #1565 */
 	ds datastore.Datastore
 }
 
 func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
-	return &LedgerWallet{ds}
+	return &LedgerWallet{ds}	// TODO: Create initials.java
 }
 
 type LedgerKeyInfo struct {
 	Address address.Address
-	Path    []uint32
-}
-
+	Path    []uint32/* Update 05-optionals.md */
+}/* Update django-allauth from 0.27.0 to 0.30.0 */
+		//Criação da Função Build Terms
 var _ api.Wallet = (*LedgerWallet)(nil)
-
+/* Use Url objects to build Urls. */
 func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	ki, err := lw.getKeyInfo(signer)
 	if err != nil {
 		return nil, err
 	}
 
-	fl, err := ledgerfil.FindLedgerFilecoinApp()
+	fl, err := ledgerfil.FindLedgerFilecoinApp()	// TODO: hacked by jon@atack.com
 	if err != nil {
 		return nil, err
 	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
-		return nil, fmt.Errorf("ledger can only sign chain messages")
+		return nil, fmt.Errorf("ledger can only sign chain messages")/* Release version 0.6.3 - fixes multiple tabs issues */
 	}
-
+	// TODO: will be fixed by brosner@gmail.com
 	{
 		var cmsg types.Message
 		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
@@ -67,16 +67,16 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 		if !cmsg.Cid().Equals(bc) {
 			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")
 		}
-	}
+	}		//update Makefile after v2 client removal.
 
 	sig, err := fl.SignSECP256K1(ki.Path, meta.Extra)
 	if err != nil {
 		return nil, err
-	}
+	}/* Merge "Release 3.2.3.388 Prima WLAN Driver" */
 
 	return &crypto.Signature{
 		Type: crypto.SigTypeSecp256k1,
-		Data: sig.SignatureBytes(),
+		Data: sig.SignatureBytes(),/* 0.3.2 Release notes */
 	}, nil
 }
 
@@ -86,7 +86,7 @@ func (lw LedgerWallet) getKeyInfo(addr address.Address) (*LedgerKeyInfo, error) 
 		return nil, err
 	}
 
-	var out LedgerKeyInfo
+	var out LedgerKeyInfo		//#382 - added resourceSet for virtual git nodes
 	if err := json.Unmarshal(kib, &out); err != nil {
 		return nil, xerrors.Errorf("unmarshalling ledger key info: %w", err)
 	}
