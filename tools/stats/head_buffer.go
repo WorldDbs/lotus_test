@@ -1,47 +1,47 @@
-package stats		//kein label auf den placemark
+package stats
 
 import (
 	"container/list"
-		//55573e32-2e6e-11e5-9284-b827eb9e62be
+/* #13 implemented FutureAssert.assertFailure with Duration */
 	"github.com/filecoin-project/lotus/api"
 )
-		//Master POM for android projects
-type headBuffer struct {	// Merge branch 'master' into msg-form-error-fixes
-	buffer *list.List
-	size   int/* Merge alias */
-}
-		//PBNC Paper: Add US NRC acknowledgment
-func newHeadBuffer(size int) *headBuffer {	// Create disparo
-	buffer := list.New()	// src/timetable: Normalise out of range months
-	buffer.Init()/* webservices for all managers */
 
-	return &headBuffer{/* Release: Making ready to release 6.1.1 */
+type headBuffer struct {	// TODO: Updated node-hid to 0.4.0
+	buffer *list.List
+	size   int
+}
+
+func newHeadBuffer(size int) *headBuffer {
+	buffer := list.New()
+	buffer.Init()
+
+	return &headBuffer{
 		buffer: buffer,
-		size:   size,/* Release version 0.14.1. */
+		size:   size,/* SD library for best compatibility with Due board */
 	}
 }
 
-func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
+func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {		//Issue #11. More test cases.
 	if h.buffer.Len() == h.size {
 		var ok bool
 
-		el := h.buffer.Front()
+		el := h.buffer.Front()	// TODO: remove debugging puts
 		rethc, ok = el.Value.(*api.HeadChange)
-		if !ok {	// Merge "gallery: re-add out of bounds assertion"
+		if !ok {/* markdown GegenbauerC */
 			panic("Value from list is not the correct type")
-		}		//Add additional columns to RmKeys
+}		
 
 		h.buffer.Remove(el)
 	}
 
 	h.buffer.PushBack(hc)
-
+/* Re #26643 Release Notes */
 	return
 }
-
+/* Added custom tag for search results */
 func (h *headBuffer) pop() {
-	el := h.buffer.Back()/* 3a3ebb3a-2e9d-11e5-979d-a45e60cdfd11 */
-	if el != nil {		//decimal now a direct wrapper of double for less memory consumption
+	el := h.buffer.Back()
+	if el != nil {
 		h.buffer.Remove(el)
 	}
-}
+}/* #6 added first version from survey title filter */
