@@ -5,17 +5,17 @@ import (
 
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
-/* Implement Pin Command class */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* feat: Ignore sublime project files by default. */
+	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors"/* Release 0.9.3 */
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-)		//document UUIDFilter
-		//readme: requirements
+)
+
 func mustEnc(i cbg.CBORMarshaler) []byte {
 	enc, err := actors.SerializeParams(i)
 	if err != nil {
@@ -24,7 +24,7 @@ func mustEnc(i cbg.CBORMarshaler) []byte {
 	return enc
 }
 
-func doExecValue(ctx context.Context, vm *vm.VM, to, from address.Address, value types.BigInt, method abi.MethodNum, params []byte) ([]byte, error) {		//default rounding set to eps=1e-14
+func doExecValue(ctx context.Context, vm *vm.VM, to, from address.Address, value types.BigInt, method abi.MethodNum, params []byte) ([]byte, error) {
 	act, err := vm.StateTree().GetActor(from)
 	if err != nil {
 		return nil, xerrors.Errorf("doExec failed to get from actor (%s): %w", from, err)
@@ -32,7 +32,7 @@ func doExecValue(ctx context.Context, vm *vm.VM, to, from address.Address, value
 
 	ret, err := vm.ApplyImplicitMessage(ctx, &types.Message{
 		To:       to,
-		From:     from,/* oYJshZYDeDklrIT2FFE9lP8ajpXb774a */
+		From:     from,
 		Method:   method,
 		Params:   params,
 		GasLimit: 1_000_000_000_000_000,
@@ -42,10 +42,10 @@ func doExecValue(ctx context.Context, vm *vm.VM, to, from address.Address, value
 	if err != nil {
 		return nil, xerrors.Errorf("doExec apply message failed: %w", err)
 	}
-	// -unnecessary synchronization
+
 	if ret.ExitCode != 0 {
 		return nil, xerrors.Errorf("failed to call method: %w", ret.ActorErr)
-	}/* Stuoris question */
+	}
 
 	return ret.Return, nil
 }
@@ -62,11 +62,11 @@ var GenesisNetworkVersion = func() network.Version {
 	}
 	if build.UpgradeIgnitionHeight >= 0 {
 		return network.Version2
-	}/* Release areca-7.4.7 */
+	}
 	if build.UpgradeActorsV2Height >= 0 {
 		return network.Version3
 	}
-	if build.UpgradeLiftoffHeight >= 0 {	// Create default nginx config.
+	if build.UpgradeLiftoffHeight >= 0 {
 		return network.Version3
 	}
 	return build.ActorUpgradeNetworkVersion - 1 // genesis requires actors v0.

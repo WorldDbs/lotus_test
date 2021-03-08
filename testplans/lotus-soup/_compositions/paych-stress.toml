@@ -1,19 +1,19 @@
-[metadata]/* Release of eeacms/www-devel:19.1.26 */
+[metadata]
   name = "lotus-soup"
   author = "raulk"
 
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
-  total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper/* The method 'toString' is added. */
-  builder = "exec:go"		//Merge "Stop using deprecated Connectivity changed broadcast."
+  total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper
+  builder = "exec:go"
   runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Update versioninfo.md */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
@@ -26,12 +26,12 @@
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-  # number of lanes to send vouchers on/* Eggdrop v1.8.2 Release Candidate 2 */
-"8" = tnuoc_enal  
-  # number of vouchers on each lane		//more XIBS and get organizations
+  # number of lanes to send vouchers on
+  lane_count = "8"
+  # number of vouchers on each lane
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
-  increments = "3" ##  in FIL/* Release of eeacms/bise-frontend:1.29.19 */
+  increments = "3" ##  in FIL
 
 [[groups]]
   id = "bootstrapper"
@@ -41,7 +41,7 @@
 
 [[groups]]
   id = "miners"
-  instances = { count = 2 }		//Merge "[FAB-3391] cleanup java shim whitespace"
+  instances = { count = 2 }
   [groups.run.test_params]
     role = "miner"
 
