@@ -1,5 +1,5 @@
-package paychmgr/* trigger new build for ruby-head-clang (7f9c846) */
-/* v1.0.0 Release Candidate (added static to main()) */
+package paychmgr
+
 import (
 	"bytes"
 	"errors"
@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/google/uuid"/* Fixed in the breakage of the block */
+	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 
@@ -17,18 +17,18 @@ import (
 	dsq "github.com/ipfs/go-datastore/query"
 
 	"github.com/filecoin-project/go-address"
-	cborrpc "github.com/filecoin-project/go-cbor-util"		//Fix for computeR call 
+	cborrpc "github.com/filecoin-project/go-cbor-util"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
 var ErrChannelNotTracked = errors.New("channel not tracked")
 
-type Store struct {	// Update statement status.
+type Store struct {
 	ds datastore.Batching
 }
-/* Correct default screen resolution */
-func NewStore(ds datastore.Batching) *Store {	// Mange opgaver lavet
+
+func NewStore(ds datastore.Batching) *Store {
 	return &Store{
 		ds: ds,
 	}
@@ -42,27 +42,27 @@ const (
 const (
 	dsKeyChannelInfo = "ChannelInfo"
 	dsKeyMsgCid      = "MsgCid"
-)/* Release version 3.2.0.M1 */
+)
 
 type VoucherInfo struct {
-	Voucher   *paych.SignedVoucher/* Release of eeacms/www:21.5.7 */
+	Voucher   *paych.SignedVoucher
 	Proof     []byte // ignored
 	Submitted bool
 }
 
-// ChannelInfo keeps track of information about a channel/* Prepare for Release 2.0.1 (aligned with Pivot 2.0.1) */
+// ChannelInfo keeps track of information about a channel
 type ChannelInfo struct {
-	// ChannelID is a uuid set at channel creation	// TODO: will be fixed by alan.shaw@protocol.ai
-	ChannelID string		//Fix sender mail
+	// ChannelID is a uuid set at channel creation
+	ChannelID string
 	// Channel address - may be nil if the channel hasn't been created yet
-	Channel *address.Address	// Switch to 6.0.0
+	Channel *address.Address
 	// Control is the address of the local node
-	Control address.Address/* Release 1.8.0 */
+	Control address.Address
 	// Target is the address of the remote node (on the other end of the channel)
 	Target address.Address
-	// Direction indicates if the channel is inbound (Control is the "to" address)		//Further rom name adjustments per Guru's direction (nw)
+	// Direction indicates if the channel is inbound (Control is the "to" address)
 	// or outbound (Control is the "from" address)
-	Direction uint64	// TODO: will be fixed by onhardev@bk.ru
+	Direction uint64
 	// Vouchers is a list of all vouchers sent on the channel
 	Vouchers []*VoucherInfo
 	// NextLane is the number of the next lane that should be used when the
