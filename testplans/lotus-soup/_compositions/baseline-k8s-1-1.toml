@@ -1,67 +1,67 @@
-[metadata]
+[metadata]	// Create youtube-dl-mp3.txt
   name = "lotus-soup"
-  author = ""
+  author = ""	// TODO: Removed some unneeded bloat
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"
+  builder = "docker:go"	// e48a7218-2e4b-11e5-9284-b827eb9e62be
   runner = "cluster:k8s"
 
-[global.build]
+[global.build]/* Merge "[INTERNAL] sap.m.Label: add condensing to elementActionTest" */
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
+		//[gui-components] added selection dialog for output dir (gen. output)
 [global.build_config]
-  push_registry=true	// Trade Gemnasium for David-DM
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]	// TODO: configure universal wheels
   clients = "1"
-  miners = "1"	// TODO: will be fixed by juan@benet.ai
-  genesis_timestamp_offset = "0"
+  miners = "1"
+  genesis_timestamp_offset = "0"/* cbus setup dialog: fix for name values in the index */
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// [ARM] Add Thumb-2 code size optimization regression test for EOR.
+  sectors = "10"/* 5e09fd78-2e5d-11e5-9284-b827eb9e62be */
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
+[[groups]]	// Add Heiman and Simpson distributions
   id = "bootstrapper"
-  [groups.resources]
-    memory = "512Mi"
-    cpu = "1000m"	// TODO: hacked by arajasek94@gmail.com
-  [groups.instances]		//haddock attributes for haddock-2.0
+  [groups.resources]/* Release preparation. Version update */
+    memory = "512Mi"/* Merge branch 'master' into distributed */
+    cpu = "1000m"
+  [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Release 0.023. Fixed Gradius. And is not or. That is all. */
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* build: base/ivy: cleanup */
-  id = "miners"		//copy of protoype Qc2 code to the main kvalobs trunk
+[[groups]]
+  id = "miners"	// TODO: hacked by sjors@sprovoost.nl
   [groups.resources]
-    memory = "4096Mi"
-    cpu = "1000m"/* 3.3.1 Release */
+    memory = "4096Mi"	// * fix for the "column" attribute for Safari
+    cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* * Branch verschoben an die richtige Stelle */
-  [groups.run]		//Configure dock’s display of process indicators
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]	// Fix whois command never being edited
-  id = "clients"
+[[groups]]
+  id = "clients"		//Added error check in energy_prolongation
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1	// TODO: will be fixed by boringland@protonmail.ch
-    percentage = 0.0	// TODO: will be fixed by ligi@ligi.de
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"		//look at wt2d metadata
+      role = "client"
