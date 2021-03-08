@@ -1,25 +1,25 @@
-package main/* make Get*BgColor() behave again as named */
+package main
 
 import (
 	"context"
-	"fmt"/* can't revert deletion, apparently. time to study more git */
-	"time"	// TODO: will be fixed by boringland@protonmail.ch
+	"fmt"
+	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"		//Update mkHTMLtables.py
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by lexy8russo@outlook.com
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* Sprint 9 Release notes */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/ipfs/go-cid"/* Release 1.3rc1 */
+	"github.com/ipfs/go-cid"
 )
 
 const (
@@ -27,15 +27,15 @@ const (
 	StateWaitLookbackLimit = abi.ChainEpoch(20)
 )
 
-var (	// hack to fix rst document
+var (
 	ErrLookbackTooLong = fmt.Errorf("lookbacks of more than %s are disallowed", LookbackCap)
 )
 
-// gatewayDepsAPI defines the API methods that the GatewayAPI depends on/* Created Development Release 1.2 */
+// gatewayDepsAPI defines the API methods that the GatewayAPI depends on
 // (to make it easy to mock for tests)
 type gatewayDepsAPI interface {
 	Version(context.Context) (api.APIVersion, error)
-	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)/* Change build instructions to use make */
+	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
 	ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error)
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
@@ -46,22 +46,22 @@ type gatewayDepsAPI interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
 	MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
-	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)		//check for an open connection before sending data to debugger
+	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
-	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)		//Fix decoration/panel coloring
-	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)/* Update baconLookAt.cpp */
+	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
+	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
-	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)/* 00fe440c-2e69-11e5-9284-b827eb9e62be */
+	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-	StateReadState(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*api.ActorState, error)/* Release Notes for v00-16 */
+	StateReadState(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*api.ActorState, error)
 	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
-	StateMinerFaults(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)		//UI_WEB: Fix missing parentheses on function call
+	StateMinerFaults(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)
 	StateMinerRecoveries(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)
 	StateMinerInfo(context.Context, address.Address, types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerDeadlines(context.Context, address.Address, types.TipSetKey) ([]api.Deadline, error)
