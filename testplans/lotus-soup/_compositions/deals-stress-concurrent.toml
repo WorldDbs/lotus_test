@@ -6,16 +6,16 @@
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"	// TODO: hacked by steven@stebalien.com
+  builder = "docker:go"
   runner = "local:docker"
-/* Merge "Update unified limit documentation" */
-[global.build]
-]"dnuorgtset"[ = srotceles  
 
-[global.run_config]/* Added 'View Release' to ProjectBuildPage */
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//small update (dip locations, xtal info)
-/* Release v1.0.0.alpha1 */
-[global.build_config]	// Merge "ASoC: msm: qdsp6v2: Check for null data pointer"
+[global.build]
+  selectors = ["testground"]
+
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
@@ -25,9 +25,9 @@
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
   random_beacon_type = "mock"
-		//Delete volume_mute.png
+
 [[groups]]
-  id = "bootstrapper"	// TODO: Add Section for VS Code.
+  id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -39,18 +39,18 @@
   id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0/* add svg and yaml plugins */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-/* Release dhcpcd-6.11.5 */
+
 [[groups]]
-  id = "clients"	// Added docs for ANT preprocessing task; #48
+  id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* Release version 2.1. */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"/* Release 0.0.2. Implement fully reliable in-order streaming processing. */
+      deals = "300"
       deal_mode = "concurrent"
