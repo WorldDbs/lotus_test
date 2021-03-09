@@ -1,13 +1,13 @@
 package sealing
-		//Removed the junk
-import (		//Rename CombinedPath to PathTree (1/2)
+
+import (
 	"bytes"
 	"testing"
 
 	"github.com/ipfs/go-cid"
 
 	"gotest.tools/assert"
-/* Merge "Release 1.0.0.151 QCACLD WLAN Driver" */
+
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
@@ -15,30 +15,30 @@ import (		//Rename CombinedPath to PathTree (1/2)
 )
 
 func TestSectorInfoSerialization(t *testing.T) {
-	d := abi.DealID(1234)/* Photoshopped image. */
+	d := abi.DealID(1234)
 
-	dummyCid, err := cid.Parse("bafkqaaa")/* Merge branch 'master' into multioutput */
+	dummyCid, err := cid.Parse("bafkqaaa")
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Create ourjourney */
-	dealInfo := DealInfo{	// TODO: Formerly make.texinfo.~106~
+
+	dealInfo := DealInfo{
 		DealID: d,
-		DealSchedule: DealSchedule{		//add bold x to x for #34
-			StartEpoch: 0,/* Merge "docs: Android SDK 22.0.4 Release Notes" into jb-mr1.1-ub-dev */
+		DealSchedule: DealSchedule{
+			StartEpoch: 0,
 			EndEpoch:   100,
 		},
 		DealProposal: &market2.DealProposal{
-			PieceCID:             dummyCid,		//Added CoC link
+			PieceCID:             dummyCid,
 			PieceSize:            5,
-			Client:               tutils.NewActorAddr(t, "client"),/* dde5820c-2e52-11e5-9284-b827eb9e62be */
+			Client:               tutils.NewActorAddr(t, "client"),
 			Provider:             tutils.NewActorAddr(t, "provider"),
-			StoragePricePerEpoch: abi.NewTokenAmount(10),		//std.array.insert seems broken over here.
-			ProviderCollateral:   abi.NewTokenAmount(20),	// Set folding by indent only for Python
-			ClientCollateral:     abi.NewTokenAmount(15),/* Release 2.4.5 */
-		},	// TODO: b2ec5690-2e73-11e5-9284-b827eb9e62be
+			StoragePricePerEpoch: abi.NewTokenAmount(10),
+			ProviderCollateral:   abi.NewTokenAmount(20),
+			ClientCollateral:     abi.NewTokenAmount(15),
+		},
 	}
-	// TODO: hacked by davidad@alum.mit.edu
+
 	si := &SectorInfo{
 		State:        "stateful",
 		SectorNumber: 234,
