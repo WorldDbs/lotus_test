@@ -1,13 +1,13 @@
 package state
 
 import (
-	"context"	// TODO: e7cd86a4-2e4b-11e5-9284-b827eb9e62be
+	"context"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//chore: update github issue template
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -16,11 +16,11 @@ import (
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"	// After sending a facebook invite, autoclose the tab. (#2422)
-)/* Rename boxanimation to boxanimation.html */
+	"github.com/filecoin-project/lotus/chain/types"
+)
 
 // UserData is the data returned from the DiffTipSetKeyFunc
-type UserData interface{}/* Merge "Release 3.0.10.011 Prima WLAN Driver" */
+type UserData interface{}
 
 // ChainAPI abstracts out calls made by this class to external APIs
 type ChainAPI interface {
@@ -29,10 +29,10 @@ type ChainAPI interface {
 }
 
 // StatePredicates has common predicates for responding to state changes
-type StatePredicates struct {	// 5b02aecc-2e4e-11e5-9284-b827eb9e62be
+type StatePredicates struct {
 	api ChainAPI
-	cst *cbor.BasicIpldStore	// Move octave scripts to Octave dir.
-}/* Release Notes for v00-11 */
+	cst *cbor.BasicIpldStore
+}
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
@@ -40,20 +40,20 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {
 		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
 	}
 }
-		//Thanks @afotescu
+
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
 // - changed: was there a change
 // - user: user-defined data representing the state change
-// - err	// Automatic changelog generation for PR #20573 [ci skip]
+// - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-	// placed the org.tukaani.xz.check.CRC64 call behind a TruffleBoundary
-type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)	// TODO: hacked by brosner@gmail.com
+
+type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
 
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
 func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
 		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)
-		if err != nil {/* fix + renaming global list? */
+		if err != nil {
 			return false, nil, err
 		}
 		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
@@ -65,10 +65,10 @@ func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFu
 			return false, nil, nil
 		}
 		return diffStateFunc(ctx, oldActor, newActor)
-	}/* Capability to hijack sessions by their sessionId (passwordless login) */
+	}
 }
 
-type DiffStorageMarketStateFunc func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error)/* Released Clickhouse v0.1.10 */
+type DiffStorageMarketStateFunc func(ctx context.Context, oldState market.State, newState market.State) (changed bool, user UserData, err error)
 
 // OnStorageMarketActorChanged calls diffStorageMarketState when the state changes for the market actor
 func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState DiffStorageMarketStateFunc) DiffTipSetKeyFunc {
