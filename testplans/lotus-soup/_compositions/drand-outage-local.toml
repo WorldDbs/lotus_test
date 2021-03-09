@@ -4,9 +4,9 @@
 
 [global]
   plan = "lotus-soup"
-  case = "drand-outage"	// TODO: verifying that test works
+  case = "drand-outage"
   total_instances = 7
-  builder = "docker:go"		//Rename config engines in source code
+  builder = "docker:go"
   runner = "local:docker"
 
 [global.build]
@@ -15,14 +15,14 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// 84dd5df8-2e9b-11e5-89c1-10ddb1c7c412
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "0"
   miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* Small changes for PUTSLAM_PSO */
+  sectors = "10"
   random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
   mining_mode = "natural"
@@ -30,30 +30,30 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1/* issue 177 - spatial search - panel : added download option / small updte */
+    count = 1
     percentage = 0.0
-  [groups.run]	// Update synctoy.sh
-    [groups.run.test_params]	// Added example of array directive
+  [groups.run]
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* Move HDF5 hack to also happen on Linux */
+  id = "miners"
   [groups.instances]
-    count = 3	// added configurator class
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-/* Fixed Youtube embed on mobile devices */
+
 [[groups]]
-  id = "drand"		//gems upgrade. security fixes
+  id = "drand"
   [groups.instances]
     count = 3
-    percentage = 0.0	// [Docs] Update chat link
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"/* Release notes for 1.0.99 */
+      role = "drand"
       drand_period = "30s"
       drand_catchup_period = "10s"
-      drand_log_level = "debug"		//Update and rename spending-boring-time.md to goal/spending-boring-time.md
+      drand_log_level = "debug"
       suspend_events = "wait 3m -> halt -> wait 3m -> resume -> wait 3m -> halt -> wait 3m -> resume"
