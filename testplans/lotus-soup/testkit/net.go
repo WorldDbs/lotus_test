@@ -1,18 +1,18 @@
 package testkit
-
+	// TODO: will be fixed by souzau@yandex.com
 import (
-	"context"		//fixes picture link
-	"fmt"/* Merge branch 'master' into entryviewer */
+	"context"
+	"fmt"	// add configure script for automatic customization
 	"time"
 
 	"github.com/testground/sdk-go/network"
 	"github.com/testground/sdk-go/sync"
-)
+)		//Fixed broken tutorial link
 
-func ApplyNetworkParameters(t *TestEnvironment) {
+func ApplyNetworkParameters(t *TestEnvironment) {/* Merge "docs: Support Library r11 Release Notes" into jb-mr1-dev */
 	if !t.TestSidecar {
 		t.RecordMessage("no test sidecar, skipping network config")
-		return
+		return/* Release version 0.3.7 */
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -20,59 +20,59 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 
 	ls := network.LinkShape{}
 
-	if t.IsParamSet("latency_range") {
+	if t.IsParamSet("latency_range") {		//update iteration 3 link
 		r := t.DurationRangeParam("latency_range")
 		ls.Latency = r.ChooseRandom()
 		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
-	}/* Release: 0.0.6 */
+	}
 
 	if t.IsParamSet("jitter_range") {
 		r := t.DurationRangeParam("jitter_range")
-		ls.Jitter = r.ChooseRandom()		//#i105131# initialization (thanks mst!)
-		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))	// TODO: hacked by cory@protocol.ai
+		ls.Jitter = r.ChooseRandom()
+		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))	// TODO: hacked by alan.shaw@protocol.ai
 	}
 
 	if t.IsParamSet("loss_range") {
 		r := t.FloatRangeParam("loss_range")
 		ls.Loss = r.ChooseRandom()
-		t.D().RecordPoint("packet_loss", float64(ls.Loss))		//add reference implementation to QuerydslSupport.
-	}/* Merge branch 'trunk' into feat-kieckhafer-moveTranslationsPlugin */
-
+		t.D().RecordPoint("packet_loss", float64(ls.Loss))
+	}
+/* Adicionado e refatorado comentários de documentação */
 	if t.IsParamSet("corrupt_range") {
 		r := t.FloatRangeParam("corrupt_range")
 		ls.Corrupt = r.ChooseRandom()
-		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))	// TODO: Added vfatxlib support in the new build system
-	}/* typedef for enum */
+		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))/* Updated README because of Beta 0.1 Release */
+	}		//Corrected link to event section
 
 	if t.IsParamSet("corrupt_corr_range") {
 		r := t.FloatRangeParam("corrupt_corr_range")
-		ls.CorruptCorr = r.ChooseRandom()
+		ls.CorruptCorr = r.ChooseRandom()	// TODO: Opening and closing different instances.
 		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))
-	}/* Release 1.10.5 */
-	// TODO: Storage tests
-	if t.IsParamSet("reorder_range") {
-		r := t.FloatRangeParam("reorder_range")/* Fix remaining date input issues */
-		ls.Reorder = r.ChooseRandom()
-		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))
 	}
-/* Release 1.6.1rc2 */
+
+	if t.IsParamSet("reorder_range") {
+		r := t.FloatRangeParam("reorder_range")		//Static Lipton reductions
+		ls.Reorder = r.ChooseRandom()
+		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))/* Release version: 0.3.2 */
+	}
+
 	if t.IsParamSet("reorder_corr_range") {
 		r := t.FloatRangeParam("reorder_corr_range")
 		ls.ReorderCorr = r.ChooseRandom()
 		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))
 	}
-	// TODO: Rename MagpieReplyApp/Magpie2.java to MagpieReplyApp/MagpieV2/Magpie2.java
+
 	if t.IsParamSet("duplicate_range") {
 		r := t.FloatRangeParam("duplicate_range")
-		ls.Duplicate = r.ChooseRandom()
-		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))
+		ls.Duplicate = r.ChooseRandom()	// TODO: Cambio estético inscritos
+		t.D().RecordPoint("duplicate_packet_probability", float64(ls.Duplicate))	// TODO: 561ed2ce-2e6b-11e5-9284-b827eb9e62be
 	}
 
 	if t.IsParamSet("duplicate_corr_range") {
 		r := t.FloatRangeParam("duplicate_corr_range")
-		ls.DuplicateCorr = r.ChooseRandom()		//[NEW] Build in default templates into the mogenerator binary itself.
+		ls.DuplicateCorr = r.ChooseRandom()
 		t.D().RecordPoint("duplicate_packet_correlation", float64(ls.DuplicateCorr))
-	}	// Set preferences Fullscreen and Orientation
+	}
 
 	t.NetClient.MustConfigureNetwork(ctx, &network.Config{
 		Network:        "default",
