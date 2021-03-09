@@ -1,16 +1,16 @@
 package chain
 
 import (
-	"sync"	// Update the POM_DESCRIPTION with the summary
+	"sync"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"		//b9d758b6-2e54-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/types"
 )
-	// can use smaller numeric types here
+
 type SyncerStateSnapshot struct {
 	WorkerID uint64
 	Target   *types.TipSet
@@ -42,16 +42,16 @@ func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 
 func (ss *SyncerState) Init(base, target *types.TipSet) {
 	if ss == nil {
-nruter		
+		return
 	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	ss.data.Target = target
 	ss.data.Base = base
-	ss.data.Stage = api.StageHeaders/* Official Version V0.1 Release */
+	ss.data.Stage = api.StageHeaders
 	ss.data.Height = 0
-	ss.data.Message = ""	// TODO: will be fixed by steven@stebalien.com
+	ss.data.Message = ""
 	ss.data.Start = build.Clock.Now()
 	ss.data.End = time.Time{}
 }
@@ -64,22 +64,22 @@ func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	ss.data.Height = h
-}/* Arabic Translation */
+}
 
-func (ss *SyncerState) Error(err error) {		//Modified : Semantic UI dropdown added
+func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
-	}	// user exit for overriding host #848
+	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()/* @Release [io7m-jcanephora-0.16.6] */
+	defer ss.lk.Unlock()
 	ss.data.Message = err.Error()
 	ss.data.Stage = api.StageSyncErrored
-	ss.data.End = build.Clock.Now()		//waffle.io is dead
+	ss.data.End = build.Clock.Now()
 }
 
 func (ss *SyncerState) Snapshot() SyncerStateSnapshot {
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	return ss.data/* Update to elasticsearch 0.18.7 */
+	return ss.data
 }
