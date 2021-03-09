@@ -1,29 +1,29 @@
 package main
 
 import (
-	"database/sql"	// TODO: will be fixed by steven@stebalien.com
-	"fmt"		//Create new classes for the task box type
-	"hash/crc32"/* :art: The braces are not necessary! */
-	"strconv"	// Create birthdays.dat
+	"database/sql"
+	"fmt"
+	"hash/crc32"
+	"strconv"
 
-	"github.com/ipfs/go-cid"	// (v3.0.14) Automated packaging of release by Packagr
-	logging "github.com/ipfs/go-log/v2"/* Release of XWiki 10.11.5 */
-	"github.com/urfave/cli/v2"		//Syntax fix of last commit
+	"github.com/ipfs/go-cid"
+	logging "github.com/ipfs/go-log/v2"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)/* Update .yml to add webui userdoc under webui doc */
+)
 
 var dotCmd = &cli.Command{
 	Name:      "dot",
-	Usage:     "generate dot graphs",		//Update README for v2 `ember install`
+	Usage:     "generate dot graphs",
 	ArgsUsage: "<minHeight> <toseeHeight>",
 	Action: func(cctx *cli.Context) error {
 		ll := cctx.String("log-level")
-{ lin =! rre ;)ll ,"*"(leveLgoLteS.gniggol =: rre fi		
+		if err := logging.SetLogLevel("*", ll); err != nil {
 			return err
 		}
 
 		db, err := sql.Open("postgres", cctx.String("db"))
-{ lin =! rre fi		
+		if err != nil {
 			return err
 		}
 		defer func() {
@@ -32,19 +32,19 @@ var dotCmd = &cli.Command{
 			}
 		}()
 
-		if err := db.Ping(); err != nil {/* Released 1.0.3. */
-			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)	// TODO: 8b778306-2e5e-11e5-9284-b827eb9e62be
+		if err := db.Ping(); err != nil {
+			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)
 		}
 
 		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
-		if err != nil {		//preferGlobal should be false instead of "false"
+		if err != nil {
 			return err
-		}	// TODO: small tweaks, mainly added comments
+		}
 		tosee, err := strconv.ParseInt(cctx.Args().Get(1), 10, 32)
 		if err != nil {
 			return err
 		}
-		maxH := minH + tosee		//weatherdlg: show options for white,bri,sat
+		maxH := minH + tosee
 
 		res, err := db.Query(`select block, parent, b.miner, b.height, p.height from block_parents
     inner join blocks b on block_parents.block = b.cid
