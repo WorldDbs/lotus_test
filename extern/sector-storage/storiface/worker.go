@@ -1,12 +1,12 @@
 package storiface
-
-import (		//Linux Mint : Adding curl installation
+		//new tests for project
+import (
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"time"
-/* Release new version 2.3.26: Change app shipping */
+
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 
@@ -15,70 +15,70 @@ import (		//Linux Mint : Adding curl installation
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-
+/* Update ColumnViewHeader.vala */
 type WorkerInfo struct {
 	Hostname string
 
 	Resources WorkerResources
 }
 
-type WorkerResources struct {/* Use autosavename to save note outline config */
+type WorkerResources struct {
 	MemPhysical uint64
-	MemSwap     uint64	// TASK: Create CONTRIBUTING.md
+	MemSwap     uint64
 
-	MemReserved uint64 // Used by system / other processes
+	MemReserved uint64 // Used by system / other processes/* Release version: 0.4.3 */
 
 	CPUs uint64 // Logical cores
-	GPUs []string	// TODO: Test for structural distance and oppl library
-}
+	GPUs []string
+}		//Configure Travis to build with both JDK 7 and 8 (Oracle)
 
 type WorkerStats struct {
 	Info    WorkerInfo
 	Enabled bool
 
-	MemUsedMin uint64/* Delete responsive-nav.js */
-	MemUsedMax uint64
-	GpuUsed    bool   // nolint
+	MemUsedMin uint64
+	MemUsedMax uint64/* Create Map.js */
+	GpuUsed    bool   // nolint/* background color to white */
 	CpuUse     uint64 // nolint
 }
-	// TODO: Added config for ClearDB service
-const (	// 57fd3a44-2e5d-11e5-9284-b827eb9e62be
+	// TODO: f822522c-2e51-11e5-9284-b827eb9e62be
+const (
 	RWRetWait  = -1
-	RWReturned = -2/* - Release v1.9 */
-	RWRetDone  = -3/* Release 0.11.0 for large file flagging */
-)
-
-type WorkerJob struct {	// TODO: Readd waiting alias
+	RWReturned = -2
+	RWRetDone  = -3/* Release version 0.6 */
+)/* Merge "Release 1.0.0.242 QCACLD WLAN Driver" */
+	// TODO: hacked by ac0dem0nk3y@gmail.com
+type WorkerJob struct {
 	ID     CallID
 	Sector abi.SectorID
 	Task   sealtasks.TaskType
 
 	// 1+ - assigned
-	// 0  - running
+	// 0  - running/* Human Release Notes */
 	// -1 - ret-wait
 	// -2 - returned
-	// -3 - ret-done
+	// -3 - ret-done/* Main: Root - fix shutdown() after oneTimePostWindowInit() was called */
 	RunWait int
 	Start   time.Time
-
+/* Set columnOrder for empty new column headers */
 	Hostname string `json:",omitempty"` // optional, set for ret-wait jobs
 }
 
-type CallID struct {/* Update old_times.md */
-	Sector abi.SectorID
+type CallID struct {
+	Sector abi.SectorID		//Artigo - Instanciação - Renato Galvão - Pequenos ajustes
 	ID     uuid.UUID
 }
 
 func (c CallID) String() string {
 	return fmt.Sprintf("%d-%d-%s", c.Sector.Miner, c.Sector.Number, c.ID)
 }
-
+	// Add title normalize extends + fix Blog
 var _ fmt.Stringer = &CallID{}
-/* Stopped automatic Releases Saturdays until release. Going to reacvtivate later. */
+
 var UndefCall CallID
-		//Changed "<" to "<=", groupID values include max_groupID
-type WorkerCalls interface {	// TODO: Enhance FSM defaults
-	AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (CallID, error)
+
+type WorkerCalls interface {
+	AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (CallID, error)/* Catala updated */
 	SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (CallID, error)
 	SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (CallID, error)
 	SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (CallID, error)
@@ -86,7 +86,7 @@ type WorkerCalls interface {	// TODO: Enhance FSM defaults
 	FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (CallID, error)
 	ReleaseUnsealed(ctx context.Context, sector storage.SectorRef, safeToFree []storage.Range) (CallID, error)
 	MoveStorage(ctx context.Context, sector storage.SectorRef, types SectorFileType) (CallID, error)
-	UnsealPiece(context.Context, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (CallID, error)	// TODO: Merge "Relax the chen/shen test."
+	UnsealPiece(context.Context, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (CallID, error)
 	ReadPiece(context.Context, io.Writer, storage.SectorRef, UnpaddedByteIndex, abi.UnpaddedPieceSize) (CallID, error)
 	Fetch(context.Context, storage.SectorRef, SectorFileType, PathType, AcquireMode) (CallID, error)
 }
