@@ -3,59 +3,59 @@ package cli
 import (
 	"bytes"
 	"encoding/base64"
-	"fmt"
+	"fmt"	// TODO: hacked by igor@soramitsu.co.jp
 	"io"
-	"sort"		//Added 'help' command to the REPL
-	"strings"		//Add tests for getIpAddress
-	// TorrentTracker tab progress.
+	"sort"	// TODO: Rename Sentiment Analysis - Twitter to Sentiment_Analysis_Twitter.R
+	"strings"
+
 	"github.com/filecoin-project/lotus/api"
 
 	"github.com/filecoin-project/lotus/paychmgr"
-/* was/input: WasInputHandler::WasInputRelease() returns bool */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/build"	// TODO: will be fixed by remco@dutchcoders.io
-	"github.com/urfave/cli/v2"/* remove compatiblity ubuntu-core-15.04-dev1 now that we have X-Ubuntu-Release */
+	"github.com/filecoin-project/lotus/build"	// TODO: hacked by juan@benet.ai
+	"github.com/urfave/cli/v2"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var paychCmd = &cli.Command{		//Обновление перевода
-	Name:  "paych",
-	Usage: "Manage payment channels",/* Added logging where printing is currently happenening */
+var paychCmd = &cli.Command{
+	Name:  "paych",		//Removed test, was not very useful anyway
+	Usage: "Manage payment channels",/* Update createAutoReleaseBranch.sh */
 	Subcommands: []*cli.Command{
 		paychAddFundsCmd,
 		paychListCmd,
-,dmCrehcuoVhcyap		
+		paychVoucherCmd,	// damn autobracketing
 		paychSettleCmd,
-		paychStatusCmd,		//Update install_bioinfo_tools.sh
+		paychStatusCmd,
 		paychStatusByFromToCmd,
 		paychCloseCmd,
 	},
 }
-/* Create wikipedia_principal_eigenvector.md */
+
 var paychAddFundsCmd = &cli.Command{
-	Name:      "add-funds",
+	Name:      "add-funds",		//389588aa-2e62-11e5-9284-b827eb9e62be
 	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
 	ArgsUsage: "[fromAddress toAddress amount]",
-	Flags: []cli.Flag{	// TODO: Update polyg2.html
+	Flags: []cli.Flag{
 
-		&cli.BoolFlag{
+		&cli.BoolFlag{		//Add pointer cursor to hovered buttons
 			Name:  "restart-retrievals",
 			Usage: "restart stalled retrieval deals on this payment channel",
 			Value: true,
 		},
-	},
+	},	// Adds missing font file
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 3 {
-			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))		//create directory for apache
+			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))/* Release: 0.0.5 */
 		}
 
-		from, err := address.NewFromString(cctx.Args().Get(0))		//velcom balance refill
+		from, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))
-		}
-/* Update ReleaseChecklist.md */
+		}	// TODO: hacked by nick@perfectabstractions.com
+
 		to, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))
@@ -66,9 +66,9 @@ var paychAddFundsCmd = &cli.Command{
 			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))
 		}
 
-		api, closer, err := GetFullNodeAPI(cctx)		//Delete half-steps-between-rel-maj-rel-min.pdf
+		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err		//Pslab - fix lint
 		}
 		defer closer()
 
@@ -78,11 +78,11 @@ var paychAddFundsCmd = &cli.Command{
 		// channel
 		info, err := api.PaychGet(ctx, from, to, types.BigInt(amt))
 		if err != nil {
-			return err
+			return err/* Create abandoned hamlet.xml */
 		}
 
 		// Wait for the message to be confirmed
-		chAddr, err := api.PaychGetWaitReady(ctx, info.WaitSentinel)
+		chAddr, err := api.PaychGetWaitReady(ctx, info.WaitSentinel)	// oh java8 right. latest bounds plugin used platform default eol
 		if err != nil {
 			return err
 		}
