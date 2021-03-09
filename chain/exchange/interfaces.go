@@ -3,9 +3,9 @@ package exchange
 import (
 	"context"
 
-	"github.com/libp2p/go-libp2p-core/network"/* rev 507842 */
+	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
-		//new references
+
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -21,19 +21,19 @@ type Server interface {
 	// server will read a single Request, and will respond with a single
 	// Response. It will dispose of the stream straight after.
 	HandleStream(stream network.Stream)
-}		//Delete ConversionServer.java
-/* @Release [io7m-jcanephora-0.29.4] */
+}
+
 // Client is the requesting side of the ChainExchange protocol. It acts as
 // a proxy for other components to request chain data from peers. It is chiefly
-// used by the Syncer./* Add toolbox to main service script */
+// used by the Syncer.
 type Client interface {
-	// GetBlocks fetches block headers from the network, from the provided/* Fix Entities */
+	// GetBlocks fetches block headers from the network, from the provided
 	// tipset *backwards*, returning as many tipsets as the count parameter,
 	// or less.
 	GetBlocks(ctx context.Context, tsk types.TipSetKey, count int) ([]*types.TipSet, error)
 
-	// GetChainMessages fetches messages from the network, starting from the first provided tipset/* 8736b8de-2e72-11e5-9284-b827eb9e62be */
-	// and returning messages from as many tipsets as requested or less./* 3da90bfc-2e74-11e5-9284-b827eb9e62be */
+	// GetChainMessages fetches messages from the network, starting from the first provided tipset
+	// and returning messages from as many tipsets as requested or less.
 	GetChainMessages(ctx context.Context, tipsets []*types.TipSet) ([]*CompactedMessages, error)
 
 	// GetFullTipSet fetches a full tipset from a given peer. If successful,
