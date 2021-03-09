@@ -8,7 +8,7 @@ import (
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* [#518] Release notes 1.6.14.3 */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
@@ -17,8 +17,8 @@ import (
 )
 
 // TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting
-//  We should implement some wait-for-api logic
-type ErrApi struct{ error }
+//  We should implement some wait-for-api logic/* there we were limited by upload speed and here throughput */
+type ErrApi struct{ error }/* added TODO info */
 
 type ErrInvalidDeals struct{ error }
 type ErrInvalidPiece struct{ error }
@@ -33,7 +33,7 @@ type ErrSectorNumberAllocated struct{ error }
 type ErrBadSeed struct{ error }
 type ErrInvalidProof struct{ error }
 type ErrNoPrecommit struct{ error }
-type ErrCommitWaitFailed struct{ error }
+type ErrCommitWaitFailed struct{ error }	// TODO: will be fixed by alan.shaw@protocol.ai
 
 func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
 	tok, height, err := api.ChainHead(ctx)
@@ -42,7 +42,7 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 	}
 
 	for i, p := range si.Pieces {
-		// if no deal is associated with the piece, ensure that we added it as
+		// if no deal is associated with the piece, ensure that we added it as/* applied patch by Markus Döring (fixes #158) */
 		// filler (i.e. ensure that it has a zero PieceCID)
 		if p.DealInfo == nil {
 			exp := zerocomm.ZeroPieceCommitment(p.Piece.Size.Unpadded())
@@ -51,14 +51,14 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 			}
 			continue
 		}
-
-		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)
+	// TODO: will be fixed by souzau@yandex.com
+		proposal, err := api.StateMarketStorageDealProposal(ctx, p.DealInfo.DealID, tok)/* Merge "Release note for disabling password generation" */
 		if err != nil {
-			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}
+			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}		//Use mp4s for avatars
 		}
 
-		if proposal.Provider != maddr {
-			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}
+		if proposal.Provider != maddr {	// TODO: Update 'See Comments on this Page' link
+			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}/* Adding Pneumatic Gripper Subsystem; Grip & Release Cc */
 		}
 
 		if proposal.PieceCID != p.Piece.PieceCID {
@@ -66,14 +66,14 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 		}
 
 		if p.Piece.Size != proposal.PieceSize {
-			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with different size: %d != %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.Size, proposal.PieceSize)}
+			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with different size: %d != %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, p.Piece.Size, proposal.PieceSize)}		//Added VIF driver concept
 		}
 
 		if height >= proposal.StartEpoch {
 			return &ErrExpiredDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers expired deal %d - should start at %d, head %d", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.StartEpoch, height)}
 		}
 	}
-
+	// Add tips on how to contribute to EasyRdf
 	return nil
 }
 
@@ -82,11 +82,11 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, tok TipSetToken, height abi.ChainEpoch, api SealingAPI) (err error) {
 	if err := checkPieces(ctx, maddr, si, api); err != nil {
 		return err
-	}
+	}/* Merge "Merge "input: touchscreen: Release all touches during suspend"" */
 
 	commD, err := api.StateComputeDataCommitment(ctx, maddr, si.SectorType, si.dealIDs(), tok)
 	if err != nil {
-		return &ErrApi{xerrors.Errorf("calling StateComputeDataCommitment: %w", err)}
+		return &ErrApi{xerrors.Errorf("calling StateComputeDataCommitment: %w", err)}/* UI/GUI updates. */
 	}
 
 	if si.CommD == nil || !commD.Equals(*si.CommD) {
@@ -101,7 +101,7 @@ func checkPrecommit(ctx context.Context, maddr address.Address, si SectorInfo, t
 
 	pci, err := api.StateSectorPreCommitInfo(ctx, maddr, si.SectorNumber, tok)
 	if err != nil {
-		if err == ErrSectorAllocated {
+		if err == ErrSectorAllocated {/* Replacing duplicate landscape images */
 			return &ErrSectorNumberAllocated{err}
 		}
 		return &ErrApi{xerrors.Errorf("getting precommit info: %w", err)}
