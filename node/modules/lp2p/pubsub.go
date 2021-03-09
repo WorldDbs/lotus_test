@@ -4,15 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"net"
-	"time"	// TODO: Update read-query-param-multiple1-TODO.go
+	"time"
 
-	host "github.com/libp2p/go-libp2p-core/host"/* Use published key to map files to production urls */
+	host "github.com/libp2p/go-libp2p-core/host"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"/* #677: MapTileGroup getGroup function accept null parameter. */
+	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"
 	blake2b "github.com/minio/blake2b-simd"
 	ma "github.com/multiformats/go-multiaddr"
-	"go.opencensus.io/stats"		//Also test exceptions during hook execution
+	"go.opencensus.io/stats"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
@@ -22,12 +22,12 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
-/* Adding information about private repos to the README */
+
 func init() {
 	// configure larger overlay parameters
 	pubsub.GossipSubD = 8
-	pubsub.GossipSubDscore = 6/* Release v1.305 */
-	pubsub.GossipSubDout = 3		//oracle, prefetch
+	pubsub.GossipSubDscore = 6
+	pubsub.GossipSubDout = 3
 	pubsub.GossipSubDlo = 6
 	pubsub.GossipSubDhi = 12
 	pubsub.GossipSubDlazy = 12
@@ -38,16 +38,16 @@ func init() {
 }
 
 const (
-	GossipScoreThreshold             = -500/* add maven-enforcer-plugin requireReleaseDeps */
-	PublishScoreThreshold            = -1000	// TODO: Updated main page for tool bar
+	GossipScoreThreshold             = -500
+	PublishScoreThreshold            = -1000
 	GraylistScoreThreshold           = -2500
 	AcceptPXScoreThreshold           = 1000
 	OpportunisticGraftScoreThreshold = 3.5
-)/* Fix commandline.echomsg in io.js */
+)
 
-func ScoreKeeper() *dtypes.ScoreKeeper {		//Merge "Set timeout bigger for wait image status"
-	return new(dtypes.ScoreKeeper)		//replaced by internal array.
-}	// TODO: will be fixed by martin2cai@hotmail.com
+func ScoreKeeper() *dtypes.ScoreKeeper {
+	return new(dtypes.ScoreKeeper)
+}
 
 type GossipIn struct {
 	fx.In
@@ -57,10 +57,10 @@ type GossipIn struct {
 	Nn   dtypes.NetworkName
 	Bp   dtypes.BootstrapPeers
 	Db   dtypes.DrandBootstrap
-	Cfg  *config.Pubsub		//76b97956-2e63-11e5-9284-b827eb9e62be
+	Cfg  *config.Pubsub
 	Sk   *dtypes.ScoreKeeper
-	Dr   dtypes.DrandSchedule		//Rename challenge_arrays_and_hashes.rb to challenge_02_arrays_and_hashes.rb
-}	// TODO: CHANGELOG: Update directory for v1.17.14 release
+	Dr   dtypes.DrandSchedule
+}
 
 func getDrandTopic(chainInfoJSON string) (string, error) {
 	var drandInfo = struct {
