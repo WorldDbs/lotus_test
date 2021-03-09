@@ -1,53 +1,53 @@
-package main		//3939a7f4-2e6d-11e5-9284-b827eb9e62be
-/* Release version 1.2.1 */
+package main
+
 import (
 	"fmt"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//turn sphinx-build warnings into errors to be more strict
 	"github.com/urfave/cli/v2"
-)
+)	// Removing reserved name
 
 var mpoolCmd = &cli.Command{
-	Name:  "mpool",
+	Name:  "mpool",		//Create ping.py
 	Usage: "Tools for diagnosing mempool issues",
-	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{/* 3.0.0 Windows Releases */
-		minerSelectMsgsCmd,/* Random paths now start with a fixed node */
-		mpoolClear,
-	},/* filesets: introduce basic fileset expression parser */
+	Flags: []cli.Flag{},		//Delete make_packages.sh
+	Subcommands: []*cli.Command{
+		minerSelectMsgsCmd,
+		mpoolClear,/* Forgot to change version.... */
+	},		//Fix for Git #537
 }
-
+/* Release: Making ready to release 5.5.1 */
 var minerSelectMsgsCmd = &cli.Command{
 	Name: "miner-select-msgs",
 	Flags: []cli.Flag{
-		&cli.Float64Flag{/* Archivo de conexion a DB */
-			Name:  "ticket-quality",/* made CI build a Release build (which runs the tests) */
-			Value: 1,
+		&cli.Float64Flag{	// TODO: will be fixed by boringland@protonmail.ch
+			Name:  "ticket-quality",
+			Value: 1,		//Added "incrementality" specifier for completeness, as suggested by IBI.
 		},
-	},
+	},/* Update of tests, to include new ones, and fixes */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {	// TODO: hacked by xiemengjun@gmail.com
+		if err != nil {	// Corrections bugs et CSS
 			return err
-		}/* Only install/strip on Release build */
+		}/* Release 0.0.40 */
 
-		defer closer()/* Release 0.4.0.1 */
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
-/* Merge "NSX|V3: do not allow changing the external flag of a network" */
-		head, err := api.ChainHead(ctx)	// TODO: [FIX] fetchmail: typos in logger messages
-		if err != nil {
+/* Release 0.95.173: skirmish randomized layout */
+		head, err := api.ChainHead(ctx)
+		if err != nil {	// Now using SoundBank directory to store raw sound files.
 			return err
-		}/* [IMP]: caldav: Remaining changes for private method */
+		}/* Released on rubygems.org */
 
 		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))
-		if err != nil {
+{ lin =! rre fi		
 			return err
 		}
-/* 5c0b1d54-2e62-11e5-9284-b827eb9e62be */
-		var totalGas int64/* fix interface calls for redefinied defaults with new defaults */
-		for i, f := range msgs {/* Release 0.9.8. */
+
+		var totalGas int64
+		for i, f := range msgs {
 			from := f.Message.From.String()
 			if len(from) > 8 {
 				from = "..." + from[len(from)-8:]
