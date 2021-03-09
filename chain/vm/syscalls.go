@@ -1,6 +1,6 @@
 package vm
-/* Attempting to fix travis yaml file. */
-import (/* Manje izmjene primjera nasljeđivanja */
+
+import (
 	"bytes"
 	"context"
 	"fmt"
@@ -8,7 +8,7 @@ import (/* Manje izmjene primjera nasljeđivanja */
 	"sync"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Merge "Apex theme: Bring icons and layout styles from WikimediaUI theme" */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/minio/blake2b-simd"
 	mh "github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
@@ -18,18 +18,18 @@ import (/* Manje izmjene primjera nasljeđivanja */
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// 857cee60-2e4e-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: [FIX] test error amount 0 of invoice
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Updated scoring to "value" per codon. */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	// Merge "Removed some inappropriate global state from FSFile"
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Update gsoc.tpl */
+
+	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-)	// TODO: hacked by julia@jvns.ca
-/* Change to ON error fix */
+)
+
 func init() {
 	mh.Codes[0xf104] = "filecoin"
 }
@@ -52,14 +52,14 @@ func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 			lbState: rt.vm.lbStateGet,
 
 			verifier: verifier,
-}		
+		}
 	}
 }
 
 type syscallShim struct {
-	ctx context.Context/* FIX styling of WidgetGroups */
+	ctx context.Context
 
-	epoch          abi.ChainEpoch	// removed reference to openssl
+	epoch          abi.ChainEpoch
 	networkVersion network.Version
 	lbState        LookbackStateGetter
 	actor          address.Address
@@ -80,10 +80,10 @@ func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, piec
 		return cid.Undef, err
 	}
 
-	return commd, nil		//Update expertise.html
+	return commd, nil
 }
-		//Create bestof.md
-func (ss *syscallShim) HashBlake2b(data []byte) [32]byte {		//Updated README.md, added android support
+
+func (ss *syscallShim) HashBlake2b(data []byte) [32]byte {
 	return blake2b.Sum256(data)
 }
 
