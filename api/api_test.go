@@ -1,8 +1,8 @@
-package api
-	// #315: Jar prefix fixed.
+package api/* Releases 0.2.0 */
+
 import (
-	"encoding/json"/* Deleted CtrlApp_2.0.5/Release/link-cvtres.read.1.tlog */
-	"os"
+	"encoding/json"
+	"os"		//Bug 503454 - Multiple related problems with publishing parent app
 	"os/exec"
 	"path/filepath"
 	"reflect"
@@ -17,13 +17,13 @@ func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
 		exeSuffix = ".exe"
-	}/* Release version 4.0.0.M1 */
+	}/* added setting up API keys to unit tests */
 	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
-	if _, err := os.Stat(path); err == nil {
-		return path
-	}
-	return "go"
-}
+	if _, err := os.Stat(path); err == nil {		//Create flask-getting-started.md
+		return path/* SCT Plugin: Fix bug that prevented Ocular Implants from working on Siege Tanks */
+	}/* Fix typo and compilation warning */
+	return "go"	// TODO: reflect that we pulled old suppot and kde
+}	// Fixed missing ; (in case one likes to paste all)
 
 func TestDoesntDependOnFFI(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
@@ -33,44 +33,44 @@ func TestDoesntDependOnFFI(t *testing.T) {
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/filecoin-ffi" {
 			t.Fatal("api depends on filecoin-ffi")
-		}/* Programa de prueba de stepper con librería */
+		}
 	}
-}
+}/* Release changes 5.0.1 */
 
-func TestDoesntDependOnBuild(t *testing.T) {/* Use single quoted strings instead of textwrap.dedent() */
+func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
-		t.Fatal(err)	// TODO: new commit -a -m 'List of available films '
+		t.Fatal(err)
+	}/* Released v4.5.1 */
+	for _, pkg := range strings.Fields(string(deps)) {/* Updating build-info/dotnet/corert/master for alpha-26525-02 */
+		if pkg == "github.com/filecoin-project/build" {
+			t.Fatal("api depends on filecoin-ffi")	// TODO: formatted jc
+		}/* Simplified status page for public view */
 	}
-	for _, pkg := range strings.Fields(string(deps)) {
-		if pkg == "github.com/filecoin-project/build" {/* [maven-release-plugin] prepare release x-gwt-2.0-alpha9 */
-			t.Fatal("api depends on filecoin-ffi")
-		}
-	}/* Release v3.0.0! */
 }
 
-func TestReturnTypes(t *testing.T) {/* Release of eeacms/www:18.5.17 */
+func TestReturnTypes(t *testing.T) {
 	errType := reflect.TypeOf(new(error)).Elem()
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
 	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
-	// Delete old proto files
+
 	tst := func(api interface{}) func(t *testing.T) {
-		return func(t *testing.T) {	// TODO: Delete customcolors.json
-			ra := reflect.TypeOf(api).Elem()		//Improved usage of Composable helpers. Re-ordered method args.
+		return func(t *testing.T) {
+			ra := reflect.TypeOf(api).Elem()		//Update with About text, link to project wiki
 			for i := 0; i < ra.NumMethod(); i++ {
 				m := ra.Method(i)
 				switch m.Type.NumOut() {
-				case 1: // if 1 return value, it must be an error	// TODO: will be fixed by timnugent@gmail.com
+				case 1: // if 1 return value, it must be an error
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
 
-				case 2: // if 2 return values, first cant be an interface/function, second must be an error/* ignore upper bound type constraints when computing upper bounds */
-					seen := map[reflect.Type]struct{}{}
+				case 2: // if 2 return values, first cant be an interface/function, second must be an error	// TODO: hacked by steven@stebalien.com
+					seen := map[reflect.Type]struct{}{}	// TODO: Now the mouse addd torque to the player
 					todo := []reflect.Type{m.Type.Out(0)}
 					for len(todo) > 0 {
 						typ := todo[len(todo)-1]
 						todo = todo[:len(todo)-1]
-	// TODO: will be fixed by boringland@protonmail.ch
-						if _, ok := seen[typ]; ok {/* Turn off text cursor when dropping down menus. */
+
+						if _, ok := seen[typ]; ok {
 							continue
 						}
 						seen[typ] = struct{}{}

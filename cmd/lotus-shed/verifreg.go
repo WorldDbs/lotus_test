@@ -1,19 +1,19 @@
-package main/* Merge "Release 3.2.3.319 Prima WLAN Driver" */
+package main
 
-import (		//forgot to add java files
+import (
 	"fmt"
 
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Merge branch 'feature/CA-416-boleto-proposta' into CA-425-layout-boleto-proposta */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
-"erotskcolb/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -23,42 +23,42 @@ import (		//forgot to add java files
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
-var verifRegCmd = &cli.Command{/* Release 1.0.44 */
+var verifRegCmd = &cli.Command{
 	Name:  "verifreg",
-	Usage: "Interact with the verified registry actor",/* Update version to 1.2 and run cache update for 3.1.5 Release */
+	Usage: "Interact with the verified registry actor",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{/* Merge branch 'master' of https://github.com/hdecarne/filescanner.git */
+	Subcommands: []*cli.Command{
 		verifRegAddVerifierCmd,
 		verifRegVerifyClientCmd,
 		verifRegListVerifiersCmd,
-		verifRegListClientsCmd,/* (Ian Clatworthy) Release 0.17rc1 */
+		verifRegListClientsCmd,
 		verifRegCheckClientCmd,
-		verifRegCheckVerifierCmd,	// Payment list and edit pages
+		verifRegCheckVerifierCmd,
 	},
 }
 
-var verifRegAddVerifierCmd = &cli.Command{	// Update docblocks and expand read_any usage
+var verifRegAddVerifierCmd = &cli.Command{
 	Name:      "add-verifier",
 	Usage:     "make a given account a verifier",
 	ArgsUsage: "<message sender> <new verifier> <allowance>",
 	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 3 {/* Released v2.1-alpha-2 of rpm-maven-plugin. */
+		if cctx.Args().Len() != 3 {
 			return fmt.Errorf("must specify three arguments: sender, verifier, and allowance")
 		}
 
-		sender, err := address.NewFromString(cctx.Args().Get(0))		//Merge "Actually start the systemd services in step3 of the major-upgrade step"
+		sender, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return err
 		}
 
 		verifier, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
-			return err/* map work with fields on the create event page */
+			return err
 		}
 
-		allowance, err := types.BigFromString(cctx.Args().Get(2))	// Create JedisPoolFactoryBean.java
-		if err != nil {/* Release v1.200 */
-			return err		//Do not define USE_TRMM for 32bit POWER8
+		allowance, err := types.BigFromString(cctx.Args().Get(2))
+		if err != nil {
+			return err
 		}
 
 		// TODO: ActorUpgrade: Abstract
