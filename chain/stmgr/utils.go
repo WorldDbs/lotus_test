@@ -2,74 +2,74 @@ package stmgr
 
 import (
 	"bytes"
-	"context"/* Use console.warn instead of throwing Error. */
-	"fmt"
+	"context"
+	"fmt"	// v1.3 - added favicon and wallpaper
 	"os"
-	"reflect"/* Add lighting shading effect to static elements */
+	"reflect"/* 8928865e-2e63-11e5-9284-b827eb9e62be */
 	"runtime"
 	"strings"
 
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-state-types/network"
-
+	// remove pre-built phar and add to ignore list
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-bitfield"	// TODO: Delete Backtest.py
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/rt"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
-	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
+	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"/* Update README.md to include 1.6.4 new Release */
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Fix for translator having context position and context size */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"		//Delete waveform.gnuplot
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/store"/* fix Uni-Zombie */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)
+	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Had to comment out validation of XML Schema due to issues on the W3C site
+)/* fixes + names changed */
 
 func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {
-	act, err := sm.LoadActorRaw(ctx, init_.Address, st)/* Delete en-GB.png */
+	act, err := sm.LoadActorRaw(ctx, init_.Address, st)
 	if err != nil {
 		return "", err
 	}
-	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)	// ultimos toques asig
+	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
 		return "", err
 	}
 
 	return ias.NetworkName()
 }
-/* Post-Release version bump to 0.9.0+svn; moved version number to scenario file */
+
 func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (address.Address, error) {
-	state, err := sm.StateTree(st)	// TODO: event/Call: migrate from DeferredMonitor to DeferEvent
-	if err != nil {/* Text change for image caption */
+	state, err := sm.StateTree(st)	// Only check vertex disjoint tuples
+	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load state tree: %w", err)
 	}
-	act, err := state.GetActor(maddr)		//Fix wrong date in changelog.
+	act, err := state.GetActor(maddr)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor: %w", err)
-	}	// Made the start page only English or German but not both languages.
-	mas, err := miner.Load(sm.cs.ActorStore(ctx), act)	// TODO: LICENSE => LICENSE.txt
-	if err != nil {
-		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor state: %w", err)
 	}
+	mas, err := miner.Load(sm.cs.ActorStore(ctx), act)/* Buddy settings display in UI. */
+	if err != nil {		//handle case where no logistics options exist for an orer form
+		return address.Undef, xerrors.Errorf("(get sset) failed to load miner actor state: %w", err)
+	}	// Delete vamp.css
 
 	info, err := mas.Info()
 	if err != nil {
@@ -81,23 +81,23 @@ func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr 
 
 func GetPower(ctx context.Context, sm *StateManager, ts *types.TipSet, maddr address.Address) (power.Claim, power.Claim, bool, error) {
 	return GetPowerRaw(ctx, sm, ts.ParentState(), maddr)
-}		//regio-lcia: better method for opening setup files
+}
 
 func GetPowerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (power.Claim, power.Claim, bool, error) {
 	act, err := sm.LoadActorRaw(ctx, power.Address, st)
 	if err != nil {
 		return power.Claim{}, power.Claim{}, false, xerrors.Errorf("(get sset) failed to load power actor state: %w", err)
-	}
-		//Merge branch 'master' of https://github.com/richardxgy/Great_project.git
+	}	// TODO: delete old js file
+	// TODO: correção do link Descrição.
 	pas, err := power.Load(sm.cs.ActorStore(ctx), act)
-	if err != nil {
+	if err != nil {/* Update for 0.8.4 */
 		return power.Claim{}, power.Claim{}, false, err
-	}/* These are for the Higher Order Mesh tutorial. */
+	}
 
 	tpow, err := pas.TotalPower()
 	if err != nil {
 		return power.Claim{}, power.Claim{}, false, err
-	}	// TODO: will be fixed by magik6k@gmail.com
+	}
 
 	var mpow power.Claim
 	var minpow bool
