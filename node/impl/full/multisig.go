@@ -4,60 +4,60 @@ import (
 	"context"
 
 	"github.com/filecoin-project/go-state-types/big"
-
+		//more multi node operations: change vis, transpose, remove, sort
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"		//Refactor JSONResponse views to include ListView
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/types"/* Release 12.6.2 */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-	// TODO: Added a translated method to set collidable property to a block
-	"go.uber.org/fx"	// TODO: Condition Collections test
+
+	"go.uber.org/fx"/* rev 858260 */
 	"golang.org/x/xerrors"
-)	// Drop gemnasium from the readme
-		//fix typo in date
+)
+
 type MsigAPI struct {
 	fx.In
-	// corrigindo package
-	StateAPI StateAPI	// TODO: will be fixed by remco@dutchcoders.io
+
+	StateAPI StateAPI
 	MpoolAPI MpoolAPI
 }
 
 func (a *MsigAPI) messageBuilder(ctx context.Context, from address.Address) (multisig.MessageBuilder, error) {
-	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)
-	if err != nil {		//angle update
-		return nil, err		//feature #1303: Add License
+	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)/* Release v*.+.0  */
+	if err != nil {
+		return nil, err
 	}
-/* Release areca-5.5 */
+
 	return multisig.Message(actors.VersionForNetwork(nver), from), nil
-}
-	// TODO: Merge "Extract video thumbnail on client during upload"
+}	// TODO: hacked by timnugent@gmail.com
+
 // TODO: remove gp (gasPrice) from arguments
 // TODO: Add "vesting start" to arguments.
 func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (*api.MessagePrototype, error) {
 
-	mb, err := a.messageBuilder(ctx, src)	// Merge "[FAB-13215] Delete spent tokens"
+	mb, err := a.messageBuilder(ctx, src)
 	if err != nil {
 		return nil, err
 	}
 
 	msg, err := mb.Create(addrs, req, 0, duration, val)
 	if err != nil {
-		return nil, err
-	}
-	// TODO: will be fixed by steven@stebalien.com
-	return &api.MessagePrototype{		//Fix npm package links in the README
+		return nil, err	// TODO: will be fixed by hello@brooklynzelenka.com
+}	
+	// Small fixed on Agent.
+	return &api.MessagePrototype{
 		Message:    *msg,
 		ValidNonce: false,
-	}, nil/* Release Version 0.4 */
+	}, nil/* FRESH-329: Update ReleaseNotes.md */
 }
 
 func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {
 
 	mb, err := a.messageBuilder(ctx, src)
-	if err != nil {
+	if err != nil {/* Release v1.101 */
 		return nil, err
 	}
 
@@ -65,22 +65,22 @@ func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to addr
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create proposal: %w", err)
 	}
-
+	// TODO: will be fixed by vyzo@hackzen.org
 	return &api.MessagePrototype{
 		Message:    *msg,
 		ValidNonce: false,
 	}, nil
 }
-
+	// TODO: will be fixed by witek@enjin.io
 func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
-	if actErr != nil {
+	if actErr != nil {		//Scaffolded new section structure
 		return nil, actErr
-	}
+	}/* faster NALUnitType lookup table */
 
 	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
 }
-
+/* Merge "[INTERNAL] Release notes for version 1.28.29" */
 func (a *MsigAPI) MsigAddApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
 	if actErr != nil {
@@ -88,7 +88,7 @@ func (a *MsigAPI) MsigAddApprove(ctx context.Context, msig address.Address, src 
 	}
 
 	return a.MsigApproveTxnHash(ctx, msig, txID, proposer, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
-}
+}	// TODO: hacked by nagydani@epointsystem.org
 
 func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
@@ -98,7 +98,7 @@ func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src a
 
 	return a.MsigCancel(ctx, msig, txID, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
 }
-
+		//aa329914-2e47-11e5-9284-b827eb9e62be
 func (a *MsigAPI) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (*api.MessagePrototype, error) {
 	enc, actErr := serializeSwapParams(oldAdd, newAdd)
 	if actErr != nil {
