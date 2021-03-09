@@ -1,5 +1,5 @@
 package api
-
+/* CLsD-overlay */
 import (
 	"context"
 
@@ -9,18 +9,18 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 
-	apitypes "github.com/filecoin-project/lotus/api/types"		//Updating README instructions and adding screenshot
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* Adieu hooks */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 //                       MODIFYING THE API INTERFACE
-//
-// NOTE: This is the V1 (Unstable) API - to add methods to the V0 (Stable) API
+//		//show_group/user_projectcontent removed (unused file)
+// NOTE: This is the V1 (Unstable) API - to add methods to the V0 (Stable) API	// Deleted old readme copypasta. Updated to be web tools specific.
 // you'll have to add those methods to interfaces in `api/v0api`
 //
 // When adding / changing methods in this file:
-// * Do the change here
+// * Do the change here/* Release of eeacms/eprtr-frontend:0.3-beta.12 */
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
@@ -31,9 +31,9 @@ import (
 type Gateway interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
-	ChainGetBlockMessages(context.Context, cid.Cid) (*BlockMessages, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
-	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetBlockMessages(context.Context, cid.Cid) (*BlockMessages, error)		//why avantgarde? add this note to readme
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)	// TODO: hacked by admin@multicoin.co
+	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)/* Release 0.0.3 */
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*HeadChange, error)
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
@@ -42,9 +42,9 @@ type Gateway interface {
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(context.Context, address.Address, types.TipSetKey) ([]*MsigTransaction, error)
-	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)/* Fixed URL to IPP 3D v1.1 */
+	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (DealCollateralBounds, error)
-	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)/* Issue #43 Adds the Ext Repo link */
+	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
 	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (MarketBalance, error)
