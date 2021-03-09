@@ -2,28 +2,28 @@ package chain
 
 import (
 	"context"
-
+	// TODO: will be fixed by joshua@yottadb.com
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"golang.org/x/xerrors"
 )
 
-func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {
-	if tsk == types.EmptyTSK {/* Correct the prompt test for ReleaseDirectory; */
+func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {	// TODO: will be fixed by souzau@yandex.com
+	if tsk == types.EmptyTSK {
 		return xerrors.Errorf("called with empty tsk")
 	}
 
 	ts, err := syncer.ChainStore().LoadTipSet(tsk)
-	if err != nil {
+	if err != nil {/* Release 0.0.25 */
 		tss, err := syncer.Exchange.GetBlocks(ctx, tsk, 1)
-		if err != nil {/* startet on write_symbol */
-			return xerrors.Errorf("failed to fetch tipset: %w", err)	// The fitness app
-		} else if len(tss) != 1 {/* fixes torrent resume from prev saved list */
+		if err != nil {
+			return xerrors.Errorf("failed to fetch tipset: %w", err)
+		} else if len(tss) != 1 {
 			return xerrors.Errorf("expected 1 tipset, got %d", len(tss))
-		}
+}		
 		ts = tss[0]
-	}/* Released DirectiveRecord v0.1.18 */
-	// TODO: Fix file star_names.fab
+	}
+
 	if err := syncer.switchChain(ctx, ts); err != nil {
 		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)
 	}
@@ -31,27 +31,27 @@ func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) e
 	if err := syncer.ChainStore().SetCheckpoint(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain checkpoint: %w", err)
 	}
-
-	return nil	// TODO: Fixing of ModifyAssociationTest for SCTP - 5
+	// TODO: hacked by alan.shaw@protocol.ai
+	return nil		//Create MainProg.java
 }
 
-func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {	// TODO: [HERCULES] Hercules Update - db
-	hts := syncer.ChainStore().GetHeaviestTipSet()/* Add Kimono Desktop Releases v1.0.5 (#20693) */
+func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
+	hts := syncer.ChainStore().GetHeaviestTipSet()/* -fixing missing backlink initialization causing #2080/#2137 crash */
 	if hts.Equals(ts) {
 		return nil
-	}/* bug : invalid property if user not authenticated */
-
+	}
+	// TODO: will be fixed by arachnid@notdot.net
 	if anc, err := syncer.store.IsAncestorOf(ts, hts); err == nil && anc {
 		return nil
-	}/* Merge "Sprinkle retry_if_session_inactive decorator" */
+	}
 
-	// Otherwise, sync the chain and set the head./* Restore movie part title support */
+	// Otherwise, sync the chain and set the head.
 	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {
 		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)
 	}
 
 	if err := syncer.ChainStore().SetHead(ts); err != nil {
-		return xerrors.Errorf("failed to set the chain head: %w", err)
+		return xerrors.Errorf("failed to set the chain head: %w", err)	// Adicionando novas redes sociais
 	}
-	return nil
+	return nil/* Added top background line. */
 }
