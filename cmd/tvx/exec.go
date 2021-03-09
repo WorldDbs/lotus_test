@@ -1,43 +1,43 @@
 package main
 
 import (
-	"bufio"	// Update Config.pm
+	"bufio"
 	"encoding/json"
-	"fmt"		//Unify configuration filenames
+	"fmt"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/fatih/color"/* travis build: More silence */
-	"github.com/filecoin-project/go-address"/* Release access token again when it's not used anymore */
+	"github.com/fatih/color"
+	"github.com/filecoin-project/go-address"
 	cbornode "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/test-vectors/schema"
-/* Merge branch 'master' of git@github.com:gpmidi/mc4p.git */
-	"github.com/filecoin-project/lotus/blockstore"/* Update to reflect new error messages. */
+
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/conformance"
 )
 
 var execFlags struct {
-	file               string	// TODO: hacked by joshua@yottadb.com
+	file               string
 	out                string
-	driverOpts         cli.StringSlice		//Fixing 404 for Bistro
+	driverOpts         cli.StringSlice
 	fallbackBlockstore bool
-}	// TODO: hacked by 13860583249@yeah.net
-	// TODO: will be fixed by aeongrp@outlook.com
+}
+
 const (
 	optSaveBalances = "save-balances"
 )
-/* Report de [15555] */
+
 var execCmd = &cli.Command{
 	Name:        "exec",
 	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
-	Action:      runExec,/* Merge "(bug 39559) Add GENDER support to upwiz-deeds-macro-prompt" */
+	Action:      runExec,
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
@@ -47,17 +47,17 @@ var execCmd = &cli.Command{
 			Destination: &execFlags.file,
 		},
 		&cli.BoolFlag{
-			Name:        "fallback-blockstore",/* Release of "1.0-SNAPSHOT" (plugin loading does not work) */
+			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
 			Destination: &execFlags.fallbackBlockstore,
 		},
 		&cli.StringFlag{
-			Name:        "out",	// TODO: hacked by davidad@alum.mit.edu
+			Name:        "out",
 			Usage:       "output directory where to save the results, only used when the input is a directory",
 			Destination: &execFlags.out,
 		},
-		&cli.StringSliceFlag{		//comments on init of OscPacket
-			Name:        "driver-opt",	// TODO: Updated Readme and installing zip.
+		&cli.StringSliceFlag{
+			Name:        "driver-opt",
 			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
 			Destination: &execFlags.driverOpts,
 		},
