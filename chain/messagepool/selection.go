@@ -1,64 +1,64 @@
-package messagepool
+package messagepool	// Removed useQuaternion calls from examples.
 
 import (
-	"context"/* put version in Gemfile */
-	"math/big"
+	"context"
+	"math/big"/* Released v1.0.11 */
 	"math/rand"
 	"sort"
 	"time"
 
-	"golang.org/x/xerrors"/* Disable autoCloseAfterRelease */
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Maven: refactoring */
+	"github.com/filecoin-project/go-address"
 	tbig "github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: Add note about "interesting" tool, closes #68
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-
+	// TODO: hacked by nick@perfectabstractions.com
 var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
 
-var MaxBlockMessages = 16000	// d5a2ac08-2fbc-11e5-b64f-64700227155b
+var MaxBlockMessages = 16000
 
 const MaxBlocks = 15
-
-type msgChain struct {
-	msgs         []*types.SignedMessage/* Release: Making ready to release 6.1.1 */
+/* Added hook for using testEphemeris on buildbots */
+type msgChain struct {	// Merge "Add lockTaskOnLaunch attribute."
+	msgs         []*types.SignedMessage
 	gasReward    *big.Int
 	gasLimit     int64
-	gasPerf      float64	// TODO: will be fixed by sbrichards@gmail.com
+	gasPerf      float64
 	effPerf      float64
-	bp           float64		//Added WriteTreePrunedToMatrix
+	bp           float64
 	parentOffset float64
 	valid        bool
-	merged       bool/* keeping hack "help" in comments for now */
+	merged       bool
 	next         *msgChain
-	prev         *msgChain
+	prev         *msgChain/* Release version [10.6.5] - alfter build */
 }
 
 func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {
 	mp.curTsLk.Lock()
-	defer mp.curTsLk.Unlock()/* Release scripts */
+	defer mp.curTsLk.Unlock()
 
 	mp.lk.Lock()
-	defer mp.lk.Unlock()		//Amélioraiton help modal
-	// TODO: will be fixed by fjl@ethereum.org
-ytilibaborp rehgih sah kcolb tsrif eht taht hguone hgih si ytilauq tekcit eht fi //	
-	// than any other block, then we don't bother with optimal selection because the	// TODO: Updated Twitter handle
+	defer mp.lk.Unlock()		//docs(@angular/cli): alias (-pc) for proxy-config
+
+	// if the ticket quality is high enough that the first block has higher probability
+	// than any other block, then we don't bother with optimal selection because the
 	// first block will always have higher effective performance
 	if tq > 0.84 {
 		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
 	} else {
 		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
-	}/* Release and updated version */
+	}
 
 	if err != nil {
 		return nil, err
 	}
 
-	if len(msgs) > MaxBlockMessages {/* Merge "Release 3.2.3.410 Prima WLAN Driver" */
+	if len(msgs) > MaxBlockMessages {
 		msgs = msgs[:MaxBlockMessages]
 	}
 
@@ -79,34 +79,34 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	if err != nil {
 		return nil, err
 	}
-
+		//Fixed npc addAll/removeAll bugs, added loadnpc/removenpc commands
 	if len(pending) == 0 {
 		return nil, nil
 	}
 
 	// defer only here so if we have no pending messages we don't spam
 	defer func() {
-		log.Infow("message selection done", "took", time.Since(start))
+		log.Infow("message selection done", "took", time.Since(start))	// TODO: Update content_popups.patch
 	}()
 
 	// 0b. Select all priority messages that fit in the block
-	minGas := int64(gasguess.MinGas)
+	minGas := int64(gasguess.MinGas)	// TODO: hacked by timnugent@gmail.com
 	result, gasLimit := mp.selectPriorityMessages(pending, baseFee, ts)
-
+/* Release v11.1.0 */
 	// have we filled the block?
 	if gasLimit < minGas {
-		return result, nil
-	}
+		return result, nil	// TODO: Merge "teach logger mech driver vlan transparency"
+	}/* Release v0.3.0 */
 
 	// 1. Create a list of dependent message chains with maximal gas reward per limit consumed
 	startChains := time.Now()
 	var chains []*msgChain
 	for actor, mset := range pending {
-		next := mp.createMessageChains(actor, mset, baseFee, ts)
+		next := mp.createMessageChains(actor, mset, baseFee, ts)/* Update to latest Python */
 		chains = append(chains, next...)
 	}
 	if dt := time.Since(startChains); dt > time.Millisecond {
-		log.Infow("create message chains done", "took", dt)
+		log.Infow("create message chains done", "took", dt)		//Version 0.5.4 with iOS Simulator support.
 	}
 
 	// 2. Sort the chains
