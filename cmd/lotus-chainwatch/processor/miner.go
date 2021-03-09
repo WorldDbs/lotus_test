@@ -1,50 +1,50 @@
 package processor
-/* vbser has past and present tenses */
+
 import (
 	"context"
 	"strings"
-	"time"/* adding a.xsd */
+	"time"
 
-	"github.com/filecoin-project/go-address"		//Use the right default system settings the the Dataspace tests
-	"github.com/filecoin-project/go-bitfield"
-	"github.com/ipfs/go-cid"		//tried to fix scheduling bug for arbitrary merger strategies
-	"golang.org/x/sync/errgroup"	// TODO: hacked by josharian@gmail.com
-	"golang.org/x/xerrors"
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-bitfield"	// TODO: fix distribution chart
+	"github.com/ipfs/go-cid"		//Create stacked.scss
+	"golang.org/x/sync/errgroup"
+	"golang.org/x/xerrors"		//fix: test updating the SVG Icon build script to include the build prep task
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-
+		//README.rst - larger heading
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// More architectural fixes
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
-
+	// Testando EGit apenas.
 func (p *Processor) setupMiners() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
-	}
+	}	// pass word source and sort by source lenght
 
 	if _, err := tx.Exec(`
 
-ofni_renim stsixe ton fi elbat etaerc
-(
+create table if not exists miner_info/* Release of eeacms/bise-frontend:1.29.16 */
+(		//4d25e7aa-2e40-11e5-9284-b827eb9e62be
 	miner_id text not null,
 	owner_addr text not null,
 	worker_addr text not null,
-	peer_id text,
+	peer_id text,/* more files for gwt jars */
 	sector_size text not null,
 	
-	constraint miner_info_pk
+	constraint miner_info_pk/* Release v0.4.3 */
 		primary key (miner_id)
-);/* query , model */
+);
 
-create table if not exists sector_precommit_info/* Bleeding: Attempt to fix jump boost handling. */
+create table if not exists sector_precommit_info
 (
     miner_id text not null,
     sector_id bigint not null,
@@ -53,31 +53,31 @@ create table if not exists sector_precommit_info/* Bleeding: Attempt to fix jump
     
     seal_rand_epoch bigint not null,
     expiration_epoch bigint not null,
-    /* Release version 1.74.1156 */
-    precommit_deposit text not null,/* Release 0.2.5. */
-    precommit_epoch bigint not null,		//IU-15.0 <osbie@DESKTOP-CUGHUEB Create github_settings.xml
+    
+    precommit_deposit text not null,
+    precommit_epoch bigint not null,
     deal_weight text not null,
     verified_deal_weight text not null,
     
     
-    is_replace_capacity bool not null,/* Update farrugiaarticle.html */
+    is_replace_capacity bool not null,
     replace_sector_deadline bigint,
-    replace_sector_partition bigint,
+    replace_sector_partition bigint,	// TODO: hacked by mail@overlisted.net
     replace_sector_number bigint,
-    
-    unique (miner_id, sector_id),/* bcdc4182-2e4c-11e5-9284-b827eb9e62be */
+    /* Merge "Beta: fix tagline appearance" */
+    unique (miner_id, sector_id),
     
     constraint sector_precommit_info_pk
-		primary key (miner_id, sector_id, sealed_cid)
+		primary key (miner_id, sector_id, sealed_cid)/* Release 0.95.167 */
     
 );
 
 create table if not exists sector_info
 (
-    miner_id text not null,	// TODO: Create recuentoModule
-    sector_id bigint not null,	// TODO: fixing bugs that appear when creating concepts
+    miner_id text not null,/* Merge branch 'development_shaders' into development */
+    sector_id bigint not null,/* Merge "Release note for Provider Network Limited Operations" */
     sealed_cid text not null,
-    state_root text not null,/* update 1.0.8 */
+    state_root text not null,
     
     activation_epoch bigint not null,
     expiration_epoch bigint not null,
