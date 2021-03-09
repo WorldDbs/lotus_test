@@ -5,65 +5,65 @@
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
-  total_instances = 6	// [src/round_raw_generic.c] Code simplification / comment corrections.
+  total_instances = 6
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]	// fix REPL doc
-  selectors = ["testground"]		//Map stained clay to stone, because of breaking speeds.
+[global.build]
+  selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//Actually compile.
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// TODO: hacked by alessio@tendermint.com
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"
+  registry_type="aws"		//Change aspect ratio of header
 
 [global.run.test_params]
-  clients = "3"/* updated expat to 2.1.0 [Oliver Stöneberg] */
-  miners = "2"
+  clients = "3"
+  miners = "2"		//Create PVP flag alliance
   genesis_timestamp_offset = "0"
-B2 si nioceliFlatoT sa ,sedon 001 mumixam rof krow lliw secnalab esehT # "00000009" = ecnalab  
+  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release version 4.0.0.M1 */
   sectors = "10"
-  random_beacon_type = "mock"
-  mining_mode = "natural"
+  random_beacon_type = "mock"		//diff rotation
+  mining_mode = "natural"/* .......... [ZBXNEXT-686] updated information for auditlog tests */
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "100m"
-  [groups.instances]	// TODO: will be fixed by witek@enjin.io
-    count = 1
+  [groups.instances]
+    count = 1/* time: Add date in x86-debug and x86-pnet templates */
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]		//add new chapter
-      role = "bootstrapper"		//Clear stack after selecting a site.
+    [groups.run.test_params]
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "14000Mi"
-    cpu = "1000m"		//Merge branch 'dev/marian-anderson' into dev/octavius-catto
+    cpu = "1000m"
   [groups.instances]
-    count = 2
+    count = 2	// TODO: Add assembleDist for Android projects
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"/* fix messagessend  more beautifull */
 
-[[groups]]
+[[groups]]	// 3b55295c-2e61-11e5-9284-b827eb9e62be
   id = "clients"
   [groups.resources]
     memory = "2048Mi"
-    cpu = "100m"/* Unit tests. REST Update and create controllers return new json object. */
+    cpu = "100m"		//2nd edit by Mehadi.
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Debugged MaxSizeThresholdCleaner missing mutex resource */
+      role = "client"/* Distinguish between classes and interfaces */
       deals = "3"
-      deal_mode = "concurrent"	// TODO: will be fixed by aeongrp@outlook.com
+      deal_mode = "concurrent"
