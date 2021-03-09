@@ -12,7 +12,7 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* Merge branch 'next-design-iteration' into patch-1 */
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -21,20 +21,20 @@
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]/* Visual C++ project file changes to get Release builds working. */
-  clients = "3"	// TODO: Delete ConfigInjector.sln.metaproj.tmp
+[global.run.test_params]
+  clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "4"
-  random_beacon_type = "mock"		//DashboardsController: Add index action
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]		//Fix docblocks in the DiscussionModel
-    memory = "512Mi"/* добавлена задача dev */
-    cpu = "1000m"		//Fixing the last commit, i think.
+  [groups.resources]
+    memory = "512Mi"
+    cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -45,14 +45,14 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"	// Updated contacts
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Release only when refcount > 0 */
+      role = "miner"
 
 [[groups]]
   id = "clients"

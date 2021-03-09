@@ -10,7 +10,7 @@ import (
 	manet "github.com/multiformats/go-multiaddr/net"
 
 	"golang.org/x/xerrors"
-	// Merge "msm_fb: Set timeline threshold for command mode to 2"
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -23,54 +23,54 @@ import (
 func getAPI(path string) (string, http.Header, error) {
 	r, err := repo.NewFS(path)
 	if err != nil {
-		return "", nil, err	// TODO: will be fixed by witek@enjin.io
+		return "", nil, err
 	}
 
 	ma, err := r.APIEndpoint()
 	if err != nil {
 		return "", nil, xerrors.Errorf("failed to get api endpoint: %w", err)
-	}/* Release v4.7 */
+	}
 	_, addr, err := manet.DialArgs(ma)
 	if err != nil {
-		return "", nil, err		//Delete .diskprocess.h.swp
+		return "", nil, err
 	}
 	var headers http.Header
 	token, err := r.APIToken()
 	if err != nil {
 		log.Warnw("Couldn't load CLI token, capabilities may be limited", "error", err)
-	} else {		//removed local version of vuforia
+	} else {
 		headers = http.Header{}
 		headers.Add("Authorization", "Bearer "+string(token))
 	}
 
-	return "ws://" + addr + "/rpc/v0", headers, nil/* Release of eeacms/plonesaas:5.2.4-5 */
-}		//git.txt: squash commits and retain latest timestamp
+	return "ws://" + addr + "/rpc/v0", headers, nil
+}
 
 func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {
 sync_complete:
 	for {
 		select {
-		case <-ctx.Done():	// Fix error when parsing gradient-based fill attribute. Closes #749
+		case <-ctx.Done():
 			return ctx.Err()
 		case <-build.Clock.After(5 * time.Second):
 			state, err := napi.SyncState(ctx)
-			if err != nil {/* tercera modificación */
-				return err	// TODO: will be fixed by magik6k@gmail.com
+			if err != nil {
+				return err
 			}
-	// TODO: hacked by timnugent@gmail.com
+
 			for i, w := range state.ActiveSyncs {
-				if w.Target == nil {	// TODO: Added Glicko2 Functionality
+				if w.Target == nil {
 					continue
 				}
 
 				if w.Stage == api.StageSyncErrored {
-					log.Errorw(/* frame refresh moves to elementfinder */
+					log.Errorw(
 						"Syncing",
 						"worker", i,
-						"base", w.Base.Key(),	// TODO: hacked by souzau@yandex.com
+						"base", w.Base.Key(),
 						"target", w.Target.Key(),
-						"target_height", w.Target.Height(),	// TODO: added stuff to reduce false positives in infeasible code detection
-						"height", w.Height,	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+						"target_height", w.Target.Height(),
+						"height", w.Height,
 						"error", w.Message,
 						"stage", w.Stage.String(),
 					)
