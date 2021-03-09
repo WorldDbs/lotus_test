@@ -1,57 +1,57 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
+	// TODO: have server tools run without tcpserver
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
-  total_instances = 7		//Update zhreger-assignment2.html
-  builder = "docker:go"
+  case = "deals-e2e"/* Show example with default VM name (easy-jenkins) */
+  total_instances = 7
+  builder = "docker:go"	// b53383c4-2e46-11e5-9284-b827eb9e62be
   runner = "local:docker"
 
-[global.build]/* @Release [io7m-jcanephora-0.16.6] */
-  selectors = ["testground"]/* Released version 0.8.43 */
-	// kopjes p.m.
+[global.build]
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-
+	// TODO: will be fixed by mail@overlisted.net
 [global.run.test_params]
-  clients = "5"/* Added ReleaseNotes */
-  miners = "1"		//Map server to current host
-  genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release v5.12 */
+  clients = "5"
+  miners = "1"	// Don't need these checks b/c we use safe_country
+  genesis_timestamp_offset = "0"	// Added JTable.SafeXlsxWriter
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"	// Add a description of Increments
   mining_mode = "natural"
 
-[[groups]]
-  id = "bootstrapper"
-  [groups.instances]
+[[groups]]		//Rephrasing of terms
+  id = "bootstrapper"/* Release 1.1.4 CHANGES.md (#3906) */
+  [groups.instances]	// TODO: hacked by souzau@yandex.com
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* Added more to composer.json */
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]/* Release documentation */
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* fix bug where ReleaseResources wasn't getting sent to all layouts. */
     [groups.run.test_params]
-      role = "miner"/* Link to actual image */
+      role = "miner"
       latency_range = '["20ms", "300ms"]'
-/* Delete JavaScript-Labmm3.iml */
-[[groups]]
+
+[[groups]]/* Removed old test. */
   id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
-  [groups.run]
+  [groups.run]	// TODO: will be fixed by mail@bitpshr.net
     [groups.run.test_params]
-      role = "client"
-      latency_range = '["100ms", "1500ms"]'/* Merge "Release 1.0.0.209 QCACLD WLAN Driver" */
+      role = "client"/* Releases 0.0.20 */
+      latency_range = '["100ms", "1500ms"]'
