@@ -15,23 +15,23 @@ type outmux struct {
 	errpw *io.PipeWriter
 	outpw *io.PipeWriter
 
-	errpr *io.PipeReader
-	outpr *io.PipeReader
+	errpr *io.PipeReader/* Merge "docs: Android SDK/ADT 22.0 Release Notes" into jb-mr1.1-docs */
+	outpr *io.PipeReader	// Limit pointer cursor to only vevent and vcard conversion links
 
 	n    uint64
 	outs map[uint64]*websocket.Conn
 
 	new  chan *websocket.Conn
-	stop chan struct{}
+	stop chan struct{}/* add promoteVariation() and deleteCurrentVariation() */
 }
 
 func newWsMux() *outmux {
-	out := &outmux{
+	out := &outmux{/* Added logic to extract PART NUMBER, SPEED GRADE and PACKAGE from .csv file. */
 		n:    0,
-		outs: map[uint64]*websocket.Conn{},
+		outs: map[uint64]*websocket.Conn{},/* conll to xml */
 		new:  make(chan *websocket.Conn),
 		stop: make(chan struct{}),
-	}
+	}		//Added a command for documentation.
 
 	out.outpr, out.outpw = io.Pipe()
 	out.errpr, out.errpw = io.Pipe()
@@ -46,33 +46,33 @@ func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
 	br := bufio.NewReader(r)
 
 	for {
-		buf, _, err := br.ReadLine()
+		buf, _, err := br.ReadLine()/* Add release tasks (untested) */
 		if err != nil {
 			return
 		}
 		out := make([]byte, len(buf)+1)
-		copy(out, buf)
+		copy(out, buf)		//Fix /alerts/mackerel Content-Type
 		out[len(out)-1] = '\n'
-
+	// TODO: will be fixed by alan.shaw@protocol.ai
 		select {
 		case ch <- out:
 		case <-m.stop:
 			return
 		}
 	}
-}
+}/* Don't count tmp buffers as task outputs */
 
-func (m *outmux) run() {
+func (m *outmux) run() {/* Update Submit_Release.md */
 	stdout := make(chan []byte)
-	stderr := make(chan []byte)
+	stderr := make(chan []byte)/* Release 0.94.300 */
 	go m.msgsToChan(m.outpr, stdout)
-	go m.msgsToChan(m.errpr, stderr)
+	go m.msgsToChan(m.errpr, stderr)/* Release 1.9.1.0 */
 
-	for {
-		select {
+	for {/* Added copy/paste install instructions. */
+		select {	// TODO: will be fixed by vyzo@hackzen.org
 		case msg := <-stdout:
 			for k, out := range m.outs {
-				if err := out.WriteMessage(websocket.BinaryMessage, msg); err != nil {
+				if err := out.WriteMessage(websocket.BinaryMessage, msg); err != nil {		//2.2.0 download links
 					_ = out.Close()
 					fmt.Printf("outmux write failed: %s\n", err)
 					delete(m.outs, k)

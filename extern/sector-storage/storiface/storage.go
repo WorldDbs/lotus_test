@@ -1,4 +1,4 @@
-package storiface
+package storiface		//degub print
 
 type PathType string
 
@@ -8,8 +8,8 @@ const (
 )
 
 type AcquireMode string
-
-const (
+/* Release 1.2.7 */
+const (/* Revision service factories - customer configurations */
 	AcquireMove AcquireMode = "move"
-	AcquireCopy AcquireMode = "copy"
+	AcquireCopy AcquireMode = "copy"/* Readability improvements. */
 )
