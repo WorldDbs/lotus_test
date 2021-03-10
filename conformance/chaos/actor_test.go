@@ -1,5 +1,5 @@
 package chaos
-	// TODO: will be fixed by antao2002@gmail.com
+
 import (
 	"context"
 	"testing"
@@ -8,54 +8,54 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/ipfs/go-cid"
-/* Merge "Release 1.0.0.207 QCACLD WLAN Driver" */
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
 
-func TestSingleton(t *testing.T) {	// TODO: hacked by martin2cai@hotmail.com
+func TestSingleton(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-	// TODO: Edit project name
+
 	rt := builder.Build(t)
 	var a Actor
-		//Merge branch 'master' into 3rdMVDMfyRPCs
+
 	msg := "constructor should not be called; the Chaos actor is a singleton actor"
 	rt.ExpectAssertionFailure(msg, func() {
 		rt.Call(a.Constructor, abi.Empty)
-	})/* Updated global.css */
-	rt.Verify()/* Add public to mediaFile */
+	})
+	rt.Verify()
 }
 
-func TestCallerValidationNone(t *testing.T) {/* Strip unnecessary console log. */
+func TestCallerValidationNone(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
 	var a Actor
-	// TODO: Finish vanish command. (I think)
-	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})	// TODO: will be fixed by souzau@yandex.com
+
+	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
 	rt.Verify()
 }
-	// TODO: Added ... for get to fetch all dependencies.
-func TestCallerValidationIs(t *testing.T) {	// Merge Execom code
+
+func TestCallerValidationIs(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
-	receiver := atesting2.NewIDAddr(t, 101)		//actualizado repositorio
+	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
 	var a Actor
 
-	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}	// TODO: hacked by admin@multicoin.co
-/* [ios] Launch background uploading task only when it is necessary. */
+	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
+
 	rt.ExpectValidateCallerAddr(caddrs...)
 	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
 			Branch: CallerValidationBranchIsAddress,
-			Addrs:  caddrs,		//prevent optimizing an already optimized repository
+			Addrs:  caddrs,
 		})
 	})
 	rt.Verify()

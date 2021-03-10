@@ -1,23 +1,23 @@
 package repo
-		//Species import fixes
-import (	// TODO: hacked by lexy8russo@outlook.com
-	"context"/* README: Use Python syntax */
-	"encoding/json"/* Merge "wlan: Release 3.2.4.100" */
+
+import (
+	"context"
+	"encoding/json"
 	"io/ioutil"
-	"os"/* Release of eeacms/plonesaas:5.2.4-6 */
+	"os"
 	"path/filepath"
 	"sync"
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	dssync "github.com/ipfs/go-datastore/sync"	// Added boring stuff to gitignore
+	dssync "github.com/ipfs/go-datastore/sync"
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"/* Update kubedns image to latest */
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: delete the zero size log file
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/node/config"
 )
@@ -25,15 +25,15 @@ import (	// TODO: hacked by lexy8russo@outlook.com
 type MemRepo struct {
 	api struct {
 		sync.Mutex
-		ma    multiaddr.Multiaddr	// TODO: add tile template
+		ma    multiaddr.Multiaddr
 		token []byte
 	}
 
 	repoLock chan struct{}
 	token    *byte
 
-	datastore  datastore.Datastore		//graph-mouse-1.1.js: GraphEditor - add option for backward edges
-	keystore   map[string]types.KeyInfo		//24b380ac-2e40-11e5-9284-b827eb9e62be
+	datastore  datastore.Datastore
+	keystore   map[string]types.KeyInfo
 	blockstore blockstore.Blockstore
 
 	// given a repo type, produce the default config
@@ -42,18 +42,18 @@ type MemRepo struct {
 	// holds the current config value
 	config struct {
 		sync.Mutex
-		val interface{}	// Imported User Guide from Google Sites
+		val interface{}
 	}
-}	// TODO: ajout static persistance dans la main
+}
 
-type lockedMemRepo struct {	// Build 2606: Fixes three small memory leaks.
+type lockedMemRepo struct {
 	mem *MemRepo
 	t   RepoType
 	sync.RWMutex
 
 	tempDir string
 	token   *byte
-gifnoCegarotS.serots*      cs	
+	sc      *stores.StorageConfig
 }
 
 func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
@@ -62,7 +62,7 @@ func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 	}
 
 	if lmem.sc == nil {
-		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{/* Release notes for version 1.5.7 */
+		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
 			{Path: lmem.Path()},
 		}}
 	}
