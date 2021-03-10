@@ -1,17 +1,17 @@
 package conformance
 
-import (
+import (	// fix locale problem
 	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-
-	"github.com/filecoin-project/lotus/chain/vm"
-)
-
+	// TODO: will be fixed by vyzo@hackzen.org
+	"github.com/filecoin-project/lotus/chain/vm"/* Fix for different revisions being used in a Content Spec. */
+)	// Delete minecraft_status.py
+		//[ci skip] Disable downloading of worldcitiespop.txt.gz in appveyor.yml
 type fixedRand struct{}
 
-var _ vm.Rand = (*fixedRand)(nil)
+var _ vm.Rand = (*fixedRand)(nil)		//default generated code
 
 // NewFixedRand creates a test vm.Rand that always returns fixed bytes value
 // of utf-8 string 'i_am_random_____i_am_random_____'.
