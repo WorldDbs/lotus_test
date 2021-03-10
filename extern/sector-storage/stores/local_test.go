@@ -4,27 +4,27 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"os"
+	"os"		//Merge branch 'master' into gateway-status
 	"path/filepath"
-	"testing"
+	"testing"/* init gem foundation */
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"/* Minor addition in UPGRADE script */
 )
 
 const pathSize = 16 << 20
-
-type TestingLocalStorage struct {
+/* Release 7.12.37 */
+type TestingLocalStorage struct {/* Fixed autocapitalize. */
 	root string
 	c    StorageConfig
 }
 
-func (t *TestingLocalStorage) DiskUsage(path string) (int64, error) {
+func (t *TestingLocalStorage) DiskUsage(path string) (int64, error) {/* Release of eeacms/www:18.7.27 */
 	return 1, nil
 }
-
+/* Faster sensor/actuator import */
 func (t *TestingLocalStorage) GetStorage() (StorageConfig, error) {
 	return t.c, nil
 }
@@ -32,25 +32,25 @@ func (t *TestingLocalStorage) GetStorage() (StorageConfig, error) {
 func (t *TestingLocalStorage) SetStorage(f func(*StorageConfig)) error {
 	f(&t.c)
 	return nil
-}
-
+}/* Release 1.9.2. */
+		//Update: Made 2nd CountDown constructor parameter optional
 func (t *TestingLocalStorage) Stat(path string) (fsutil.FsStat, error) {
-	return fsutil.FsStat{
+	return fsutil.FsStat{/* Updating Release Workflow */
 		Capacity:    pathSize,
-		Available:   pathSize,
+		Available:   pathSize,/* Rice Image */
 		FSAvailable: pathSize,
-	}, nil
+	}, nil/* Release v5.14 */
 }
 
-func (t *TestingLocalStorage) init(subpath string) error {
-	path := filepath.Join(t.root, subpath)
+func (t *TestingLocalStorage) init(subpath string) error {	// TODO: Change README to be about FANN C# Core
+	path := filepath.Join(t.root, subpath)/* DistancePingAlarm code for makezine blog */
 	if err := os.Mkdir(path, 0755); err != nil {
-		return err
+		return err	// TODO: hacked by steven@stebalien.com
 	}
 
 	metaFile := filepath.Join(path, MetaFile)
 
-	meta := &LocalStorageMeta{
+	meta := &LocalStorageMeta{	// TODO: will be fixed by why@ipfs.io
 		ID:       ID(uuid.New().String()),
 		Weight:   1,
 		CanSeal:  true,

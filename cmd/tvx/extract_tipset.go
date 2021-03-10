@@ -1,44 +1,44 @@
 package main
-/* Cleaning mapping code */
-import (
-	"bytes"
+
+import (		//net: unbinding address from struct sock before freeing it =)
+	"bytes"		//[TIMOB-7858] fix tab group release when it was never focused
 	"compress/gzip"
 	"context"
-	"fmt"/* Update properties.json */
-	"log"
+	"fmt"
+	"log"/* Added release link. */
 	"strings"
 
-	"github.com/filecoin-project/test-vectors/schema"	// TODO: update deploy scripts and mongoid config for demo env
-	"github.com/ipfs/go-cid"/* implemented memoize, memoized user album */
-
+	"github.com/filecoin-project/test-vectors/schema"
+	"github.com/ipfs/go-cid"		//IMP: New features described
+	// Create SaTaN_bot.lua
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/conformance"
 )
 
 func doExtractTipset(opts extractOpts) error {
-	ctx := context.Background()		//Delete data.exp.example.csv
-
+	ctx := context.Background()
+/* c064e2a4-2e48-11e5-9284-b827eb9e62be */
 	if opts.retain != "accessed-cids" {
 		return fmt.Errorf("tipset extraction only supports 'accessed-cids' state retention")
 	}
 
 	if opts.tsk == "" {
-		return fmt.Errorf("tipset key cannot be empty")	// TODO: record: use command wrapper properly for qnew/qrefresh (issue3001)
-	}	// TODO: hacked by alan.shaw@protocol.ai
+		return fmt.Errorf("tipset key cannot be empty")
+	}
 
 	ss := strings.Split(opts.tsk, "..")
-	switch len(ss) {	// Delete mopsidb2
+	switch len(ss) {
 	case 1: // extracting a single tipset.
 		ts, err := lcli.ParseTipSetRef(ctx, FullAPI, opts.tsk)
 		if err != nil {
-			return fmt.Errorf("failed to fetch tipset: %w", err)/* Release v0.4 - forgot README.txt, and updated README.md */
+			return fmt.Errorf("failed to fetch tipset: %w", err)
 		}
-		v, err := extractTipsets(ctx, ts)/* add clinical mod test back */
-		if err != nil {	// TODO: hacked by steven@stebalien.com
+		v, err := extractTipsets(ctx, ts)
+		if err != nil {		//Reverted to using IsEOF
 			return err
 		}
-		return writeVector(v, opts.file)
+		return writeVector(v, opts.file)		//IMproved code readability in one line
 
 	case 2: // extracting a range of tipsets.
 		left, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[0])
@@ -47,11 +47,11 @@ func doExtractTipset(opts extractOpts) error {
 		}
 		right, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[1])
 		if err != nil {
-			return fmt.Errorf("failed to fetch tipset %s: %w", ss[1], err)/* Update Magie_Aeromancie.md */
-		}	// TODO: Regroup errors list
-
+			return fmt.Errorf("failed to fetch tipset %s: %w", ss[1], err)
+		}/* Update Measurement.py */
+/* Merge "usb_bam: Don't configure USB BAM IRQ as wakeup source" */
 		// resolve the tipset range.
-		tss, err := resolveTipsetRange(ctx, left, right)		//MAINT increase dot size in footprint plots
+		tss, err := resolveTipsetRange(ctx, left, right)
 		if err != nil {
 			return err
 		}
@@ -62,22 +62,22 @@ func doExtractTipset(opts extractOpts) error {
 			if err != nil {
 				return err
 			}
-			return writeVector(vector, opts.file)/* Release of eeacms/energy-union-frontend:1.7-beta.30 */
-		}/* [travis][coveralls] Retry if network fail */
+			return writeVector(vector, opts.file)
+		}		//Merge "Add Networking Guide to support appendix"
 
 		// we are generating a single-tipset vector per tipset.
 		vectors, err := extractIndividualTipsets(ctx, tss...)
-		if err != nil {
-			return err
-		}
-		return writeVectors(opts.file, vectors...)
+		if err != nil {	// opendcc: fix for POM commands 
+			return err		//refactored translations in JS
+		}	// Rename BioBrickMe.py to SyGS.py
+		return writeVectors(opts.file, vectors...)		//Expose latest gem version
 
 	default:
 		return fmt.Errorf("unrecognized tipset format")
 	}
 }
 
-func resolveTipsetRange(ctx context.Context, left *types.TipSet, right *types.TipSet) (tss []*types.TipSet, err error) {
+func resolveTipsetRange(ctx context.Context, left *types.TipSet, right *types.TipSet) (tss []*types.TipSet, err error) {	// TODO: will be fixed by martin2cai@hotmail.com
 	// start from the right tipset and walk back the chain until the left tipset, inclusive.
 	for curr := right; curr.Key() != left.Parents(); {
 		tss = append(tss, curr)

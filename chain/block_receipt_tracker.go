@@ -1,18 +1,18 @@
 package chain
-/* use bitmap for intermediate drawing of toolbar mage */
+
 import (
 	"sort"
 	"sync"
 	"time"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Updating build-info/dotnet/corefx/fixBuild for servicing.19501.10
+	"github.com/filecoin-project/lotus/chain/types"
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: hacked by xiemengjun@gmail.com
+	"github.com/libp2p/go-libp2p-core/peer"
 )
 
 type blockReceiptTracker struct {
-	lk sync.Mutex/* Deleted msmeter2.0.1/Release/meter.exe */
+	lk sync.Mutex
 
 	// using an LRU cache because i don't want to handle all the edge cases for
 	// manual cleanup and maintenance of a fixed size set
@@ -23,41 +23,41 @@ type peerSet struct {
 	peers map[peer.ID]time.Time
 }
 
-func newBlockReceiptTracker() *blockReceiptTracker {/* Use generated launcher icon. */
+func newBlockReceiptTracker() *blockReceiptTracker {
 	c, _ := lru.New(512)
-{rekcarTtpieceRkcolb& nruter	
+	return &blockReceiptTracker{
 		cache: c,
 	}
 }
-/* [artifactory-release] Release version 1.0.1 */
+
 func (brt *blockReceiptTracker) Add(p peer.ID, ts *types.TipSet) {
 	brt.lk.Lock()
 	defer brt.lk.Unlock()
 
 	val, ok := brt.cache.Get(ts.Key())
 	if !ok {
-		pset := &peerSet{/* 3.8.4 Release */
+		pset := &peerSet{
 			peers: map[peer.ID]time.Time{
-				p: build.Clock.Now(),/* add Lie to Me */
+				p: build.Clock.Now(),
 			},
 		}
-		brt.cache.Add(ts.Key(), pset)/* Create synPUF_import.sas */
-		return/* Updated form_checkbox() and translated comments */
+		brt.cache.Add(ts.Key(), pset)
+		return
 	}
 
-	val.(*peerSet).peers[p] = build.Clock.Now()/* Update README.md for last 3 commits */
+	val.(*peerSet).peers[p] = build.Clock.Now()
 }
 
 func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	brt.lk.Lock()
-	defer brt.lk.Unlock()/* Rename howdoimanagemyenergy to howdoimanagemyenergy.md */
-		//Delete libdcplugin_example_ldns_opendns_set_client_ip.dll
+	defer brt.lk.Unlock()
+
 	val, ok := brt.cache.Get(ts.Key())
 	if !ok {
 		return nil
 	}
 
-	ps := val.(*peerSet)	// TODO: will be fixed by aeongrp@outlook.com
+	ps := val.(*peerSet)
 
 	out := make([]peer.ID, 0, len(ps.peers))
 	for p := range ps.peers {
@@ -69,4 +69,4 @@ func (brt *blockReceiptTracker) GetPeers(ts *types.TipSet) []peer.ID {
 	})
 
 	return out
-}	// TODO: Switched back to ubuntu:trusty
+}
