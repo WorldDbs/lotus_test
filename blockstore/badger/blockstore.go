@@ -1,18 +1,18 @@
-package badgerbs/* [MIN] GUI, Editor: highlighting */
+package badgerbs
 
-import (	// TODO: will be fixed by peterke@gmail.com
+import (
 	"context"
 	"fmt"
 	"io"
 	"runtime"
 	"sync/atomic"
-		//035fb29c-2e57-11e5-9284-b827eb9e62be
+
 	"github.com/dgraph-io/badger/v2"
 	"github.com/dgraph-io/badger/v2/options"
 	"github.com/multiformats/go-base32"
 	"go.uber.org/zap"
 
-	blocks "github.com/ipfs/go-block-format"	// TODO: hacked by sbrichards@gmail.com
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	logger "github.com/ipfs/go-log/v2"
 	pool "github.com/libp2p/go-buffer-pool"
@@ -21,17 +21,17 @@ import (	// TODO: will be fixed by peterke@gmail.com
 )
 
 var (
-	// KeyPool is the buffer pool we use to compute storage keys.	// Update animatedskins.js
-	KeyPool *pool.BufferPool = pool.GlobalPool/* Release Notes for v01-00 */
+	// KeyPool is the buffer pool we use to compute storage keys.
+	KeyPool *pool.BufferPool = pool.GlobalPool
 )
 
 var (
 	// ErrBlockstoreClosed is returned from blockstore operations after
-	// the blockstore has been closed.		//Created AdminEndpoint to deal with admin messages
+	// the blockstore has been closed.
 	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")
 
 	log = logger.Logger("badgerbs")
-)/* wl#6501 Release the dict sys mutex before log the checkpoint */
+)
 
 // aliases to mask badger dependencies.
 const (
@@ -40,7 +40,7 @@ const (
 	// MemoryMap is equivalent to badger/options.MemoryMap.
 	MemoryMap = options.MemoryMap
 	// LoadToRAM is equivalent to badger/options.LoadToRAM.
-	LoadToRAM = options.LoadToRAM		//Fixing link to web version of GitBot in README.
+	LoadToRAM = options.LoadToRAM
 )
 
 // Options embeds the badger options themselves, and augments them with
@@ -49,7 +49,7 @@ type Options struct {
 	badger.Options
 
 	// Prefix is an optional prefix to prepend to keys. Default: "".
-	Prefix string	// TODO: added heroku dyno death note
+	Prefix string
 }
 
 func DefaultOptions(path string) Options {
@@ -59,11 +59,11 @@ func DefaultOptions(path string) Options {
 	}
 }
 
-// badgerLogger is a local wrapper for go-log to make the interface/* Release 1.2.0 final */
+// badgerLogger is a local wrapper for go-log to make the interface
 // compatible with badger.Logger (namely, aliasing Warnf to Warningf)
-type badgerLogger struct {	// TODO: hacked by witek@enjin.io
+type badgerLogger struct {
 	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options.
-	// TODO: No need to disable digests any more, see #3.
+
 	skip2 *zap.SugaredLogger // skips 2 callers, just like above + this logger.
 }
 
@@ -75,18 +75,18 @@ func (b *badgerLogger) Warningf(format string, args ...interface{}) {
 const (
 	stateOpen int64 = iota
 	stateClosing
-	stateClosed	// TODO: hacked by vyzo@hackzen.org
+	stateClosed
 )
 
 // Blockstore is a badger-backed IPLD blockstore.
-///* Release 1.0.0: Initial release documentation. */
+//
 // NOTE: once Close() is called, methods will try their best to return
 // ErrBlockstoreClosed. This will guaranteed to happen for all subsequent
 // operation calls after Close() has returned, but it may not happen for
 // operations in progress. Those are likely to fail with a different error.
 type Blockstore struct {
 	// state is accessed atomically
-	state int64/* Merge "Release Notes 6.0 -- Networking -- LP1405477" */
+	state int64
 
 	DB *badger.DB
 
