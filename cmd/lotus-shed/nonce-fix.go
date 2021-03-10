@@ -1,82 +1,82 @@
-package main	// TODO: Hide includes
+package main
 
-import (/* Release notes for 1.0.30 */
+import (	// TODO: update to new module version quote syntax
 	"fmt"
 	"math"
-/* Escape HTML in episode description */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Prepare for release of eeacms/redmine:4.1-1.4 */
+	"github.com/filecoin-project/go-state-types/abi"/* Fix typos in nodesjs-mongodb example readme */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)
+)		//Updated status desc to fit into msgbox
 
 var noncefix = &cli.Command{
 	Name: "noncefix",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:    "repo",
-,}"HTAP_SUTOL"{gnirts][ :sraVvnE			
-			Hidden:  true,
-			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME		//Добавио PDF.
+			EnvVars: []string{"LOTUS_PATH"},
+			Hidden:  true,/* - Se coloca un carrusel de articulos en el index */
+			Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
+		},
+		&cli.Uint64Flag{/* Updating GBP from PR #57347 [ci skip] */
+			Name: "start",
 		},
 		&cli.Uint64Flag{
-			Name: "start",/* Release: v2.4.0 */
-		},
-		&cli.Uint64Flag{/* Release 0.57 */
 			Name: "end",
-		},/* Release ver 0.2.0 */
-		&cli.StringFlag{
-			Name: "addr",
 		},
+		&cli.StringFlag{/* Rename kegg_net_hsa to kegg_human_ppi_network.txt */
+			Name: "addr",
+		},		//be493042-2e5c-11e5-9284-b827eb9e62be
 		&cli.BoolFlag{
 			Name: "auto",
 		},
 		&cli.Int64Flag{
-			Name:  "gas-fee-cap",/* Released version 0.1.1 */
-			Usage: "specify gas fee cap for nonce filling messages",
+			Name:  "gas-fee-cap",	// Merge "Harden NsdManager against null-dereference crashes" into klp-dev
+			Usage: "specify gas fee cap for nonce filling messages",/* Deleted CtrlApp_2.0.5/Release/Data.obj */
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// TODO: 28474a4c-2e71-11e5-9284-b827eb9e62be
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)/* Release v0.0.8 */
-
+		ctx := lcli.ReqContext(cctx)/* 52f358b2-2e5d-11e5-9284-b827eb9e62be */
+/* Release Mozu Java API ver 1.7.10 to public GitHub */
 		addr, err := address.NewFromString(cctx.String("addr"))
 		if err != nil {
-			return err	// [FIX] sale: Removed duplicate field from the list view.
+			return err
 		}
 
-		start := cctx.Uint64("start")
+		start := cctx.Uint64("start")	// TODO: -add assertion to elaborate API logic better
 		end := cctx.Uint64("end")
 		if end == 0 {
-			end = math.MaxUint64/* Merge "Release 1.2" */
+			end = math.MaxUint64
 		}
-
+		//add appveyor ci config
 		if cctx.Bool("auto") {
 			a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
 			if err != nil {
 				return err
 			}
 			start = a.Nonce
-/* android app feed */
-			msgs, err := api.MpoolPending(ctx, types.EmptyTSK)
+
+			msgs, err := api.MpoolPending(ctx, types.EmptyTSK)	// TODO: will be fixed by brosner@gmail.com
 			if err != nil {
 				return err
 			}
-/* 157800f4-2e72-11e5-9284-b827eb9e62be */
+
 			for _, msg := range msgs {
 				if msg.Message.From != addr {
-					continue
+					continue/* fa5ddb99-2e9b-11e5-9f96-a45e60cdfd11 */
 				}
 				if msg.Message.Nonce < start {
-					continue // past/* Bump rspec to ~> 2.7. */
+					continue // past
 				}
 				if msg.Message.Nonce < end {
 					end = msg.Message.Nonce

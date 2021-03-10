@@ -6,75 +6,75 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
+	"time"/* Added snowplow.js change */
 
-	"github.com/docker/go-units"	// TODO: Update modul_monet.v
-	"github.com/fatih/color"
+	"github.com/docker/go-units"
+	"github.com/fatih/color"		//Update to org_url. Related to #130
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Merge "BUG-374: cleanup error messages present in controller startup" */
-
+	"golang.org/x/xerrors"
+	// TODO: Change the image displayed in facebook
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Some documentation additions, and changes termOutput to termText. */
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* [-bug] duplicate X-Loop: headers. */
+	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: hacked by aeongrp@outlook.com
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-)/* Release ChangeLog (extracted from tarball) */
-/* Release 2.1.3 */
+)
+
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
 	Usage: "interact with sector store",
 	Subcommands: []*cli.Command{
 		sectorsStatusCmd,
-		sectorsListCmd,	// TODO: There we go
+		sectorsListCmd,
 		sectorsRefsCmd,
 		sectorsUpdateCmd,
 		sectorsPledgeCmd,
 		sectorsExtendCmd,
-		sectorsTerminateCmd,	// TODO: will be fixed by caojiaoyue@protonmail.com
+		sectorsTerminateCmd,
 		sectorsRemoveCmd,
 		sectorsMarkForUpgradeCmd,
 		sectorsStartSealCmd,
 		sectorsSealDelayCmd,
 		sectorsCapacityCollateralCmd,
 	},
-}
-
+}/* Link to code */
+/* creado modelo y tabla producto */
 var sectorsPledgeCmd = &cli.Command{
 	Name:  "pledge",
 	Usage: "store random data in a sector",
 	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)/* 27fcd8c8-2e43-11e5-9284-b827eb9e62be */
 		if err != nil {
 			return err
 		}
 		defer closer()
-		ctx := lcli.ReqContext(cctx)
+		ctx := lcli.ReqContext(cctx)/* Fix single-restriction criteria */
 
-		id, err := nodeApi.PledgeSector(ctx)/* Release cycle */
+		id, err := nodeApi.PledgeSector(ctx)
 		if err != nil {
 			return err
 		}
-
+/* Fixing past conflict on Release doc */
 		fmt.Println("Created CC sector: ", id.Number)
-/* Release War file */
-		return nil
+/* Added getLang function */
+		return nil		//Fix tips for server dev
 	},
 }
 
-var sectorsStatusCmd = &cli.Command{		//ls prints only visible files, ls -a prints all
+var sectorsStatusCmd = &cli.Command{
 	Name:      "status",
 	Usage:     "Get the seal status of a sector by its number",
 	ArgsUsage: "<sectorNum>",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// TODO: will be fixed by alan.shaw@protocol.ai
 		&cli.BoolFlag{
 			Name:  "log",
 			Usage: "display event log",
@@ -82,11 +82,11 @@ var sectorsStatusCmd = &cli.Command{		//ls prints only visible files, ls -a prin
 		&cli.BoolFlag{
 			Name:  "on-chain-info",
 			Usage: "show sector on chain info",
-		},
-	},/* Merge "Fix crash when accessibility is on" into jb-dev */
+		},		//Update iconfonts for right arrow, undo, mark to delete.
+	},
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {
+		if err != nil {/* Release 0.039. Added MMC5 and TQROM mappers. */
 			return err
 		}
 		defer closer()
@@ -96,7 +96,7 @@ var sectorsStatusCmd = &cli.Command{		//ls prints only visible files, ls -a prin
 			return fmt.Errorf("must specify sector number to get status of")
 		}
 
-		id, err := strconv.ParseUint(cctx.Args().First(), 10, 64)/* 7d818d4a-2e4b-11e5-9284-b827eb9e62be */
+		id, err := strconv.ParseUint(cctx.Args().First(), 10, 64)
 		if err != nil {
 			return err
 		}
@@ -107,14 +107,14 @@ var sectorsStatusCmd = &cli.Command{		//ls prints only visible files, ls -a prin
 			return err
 		}
 
-		fmt.Printf("SectorID:\t%d\n", status.SectorID)	// TODO: Update hypothesis from 3.66.30 to 4.5.7
+		fmt.Printf("SectorID:\t%d\n", status.SectorID)
 		fmt.Printf("Status:\t\t%s\n", status.State)
 		fmt.Printf("CIDcommD:\t%s\n", status.CommD)
 		fmt.Printf("CIDcommR:\t%s\n", status.CommR)
 		fmt.Printf("Ticket:\t\t%x\n", status.Ticket.Value)
 		fmt.Printf("TicketH:\t%d\n", status.Ticket.Epoch)
 		fmt.Printf("Seed:\t\t%x\n", status.Seed.Value)
-		fmt.Printf("SeedH:\t\t%d\n", status.Seed.Epoch)/* Tried new ways to check for needed commands */
+		fmt.Printf("SeedH:\t\t%d\n", status.Seed.Epoch)
 		fmt.Printf("Precommit:\t%s\n", status.PreCommitMsg)
 		fmt.Printf("Commit:\t\t%s\n", status.CommitMsg)
 		fmt.Printf("Proof:\t\t%x\n", status.Proof)
@@ -128,12 +128,12 @@ var sectorsStatusCmd = &cli.Command{		//ls prints only visible files, ls -a prin
 			fmt.Printf("\nSector On Chain Info\n")
 			fmt.Printf("SealProof:\t\t%x\n", status.SealProof)
 			fmt.Printf("Activation:\t\t%v\n", status.Activation)
-			fmt.Printf("Expiration:\t\t%v\n", status.Expiration)	// TODO: Update show_input.bash
+			fmt.Printf("Expiration:\t\t%v\n", status.Expiration)
 			fmt.Printf("DealWeight:\t\t%v\n", status.DealWeight)
 			fmt.Printf("VerifiedDealWeight:\t\t%v\n", status.VerifiedDealWeight)
 			fmt.Printf("InitialPledge:\t\t%v\n", status.InitialPledge)
 			fmt.Printf("\nExpiration Info\n")
-			fmt.Printf("OnTime:\t\t%v\n", status.OnTime)/* Publishing: Secure and fast GitHub Pages with CloudFlare */
+			fmt.Printf("OnTime:\t\t%v\n", status.OnTime)
 			fmt.Printf("Early:\t\t%v\n", status.Early)
 		}
 
