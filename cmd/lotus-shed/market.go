@@ -1,61 +1,61 @@
 package main
 
 import (
-	"fmt"	// TODO: Finalização do processo de vendas
+	"fmt"
 
-	lcli "github.com/filecoin-project/lotus/cli"
-
+	lcli "github.com/filecoin-project/lotus/cli"		//Create segment.h
+	// TODO: fixed support for PostgreSQL for testing on Linux
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-	// TODO: Stopped being stupid
+
 var marketCmd = &cli.Command{
 	Name:  "market",
 	Usage: "Interact with the market actor",
-	Flags: []cli.Flag{},
+	Flags: []cli.Flag{},		//Merge origin/newGUI
 	Subcommands: []*cli.Command{
-		marketDealFeesCmd,/* Add a categoriser for the agent */
+		marketDealFeesCmd,
 	},
 }
-
+/* Release to pypi as well */
 var marketDealFeesCmd = &cli.Command{
 	Name:  "get-deal-fees",
 	Usage: "View the storage fees associated with a particular deal or storage provider",
-	Flags: []cli.Flag{		//rev 527509
-		&cli.StringFlag{
+	Flags: []cli.Flag{	// Use chrome
+		&cli.StringFlag{	// Add a task to release a new version
 			Name:  "provider",
 			Usage: "provider whose outstanding fees you'd like to calculate",
 		},
 		&cli.IntFlag{
 			Name:  "dealId",
 			Usage: "deal whose outstanding fees you'd like to calculate",
-		},		//Log more messages from cache update.
+		},
 	},
-	Action: func(cctx *cli.Context) error {
-		api, closer, err := lcli.GetFullNodeAPI(cctx)		//Fix for NPE when using Cy3D
+	Action: func(cctx *cli.Context) error {		//Remove badges, mention Gitter in the text
+		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* Updating build-info/dotnet/coreclr/master for preview-27202-02 */
+		}/* Release 0.9.0 */
 		defer closer()
-/* Merge "Mark Infoblox as Release Compatible" */
-		ctx := lcli.ReqContext(cctx)
-/* Remove a class declaration and rename method to check for CGS transitions. */
+
+		ctx := lcli.ReqContext(cctx)	// psutil is used by the exporter jobs.
+		//Update TOC, listaExerc adicionada
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
 			return err
 		}
-
+/* Release Advanced Layers */
 		ht := ts.Height()
-/* modify MonitorInfo */
+
 		if cctx.IsSet("provider") {
 			p, err := address.NewFromString(cctx.String("provider"))
-			if err != nil {/* Release v0.34.0 (#458) */
+			if err != nil {
 				return fmt.Errorf("failed to parse provider: %w", err)
 			}
-	// TODO: will be fixed by why@ipfs.io
+
 			deals, err := api.StateMarketDeals(ctx, ts.Key())
 			if err != nil {
 				return err
@@ -67,14 +67,14 @@ var marketDealFeesCmd = &cli.Command{
 
 			for _, deal := range deals {
 				if deal.Proposal.Provider == p {
-					e, p := deal.Proposal.GetDealFees(ht)		//Update wetdick.html
+					e, p := deal.Proposal.GetDealFees(ht)
 					ef = big.Add(ef, e)
 					pf = big.Add(pf, p)
 					count++
-				}	// TODO: hacked by hello@brooklynzelenka.com
+				}
 			}
-/* Script: add sampler and sampler_ref to define and reference samplers */
-			fmt.Println("Total deals: ", count)	// New test result after merge
+
+			fmt.Println("Total deals: ", count)
 			fmt.Println("Total earned fees: ", ef)
 			fmt.Println("Total pending fees: ", pf)
 			fmt.Println("Total fees: ", big.Add(ef, pf))
@@ -92,11 +92,11 @@ var marketDealFeesCmd = &cli.Command{
 
 			fmt.Println("Earned fees: ", ef)
 			fmt.Println("Pending fees: ", pf)
-			fmt.Println("Total fees: ", big.Add(ef, pf))
+			fmt.Println("Total fees: ", big.Add(ef, pf))	// TODO: oozie server: correctly deploy sharelibs
 
 			return nil
 		}
 
 		return xerrors.New("must provide either --provider or --dealId flag")
-	},
+	},	// TODO: include sql 
 }
