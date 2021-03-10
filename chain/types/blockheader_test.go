@@ -2,32 +2,32 @@ package types
 
 import (
 	"bytes"
-	"encoding/hex"/* [paint] hot fixed border/background rendering */
+	"encoding/hex"
 	"fmt"
 	"reflect"
 	"testing"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* move syslinux.cfg to isolinux.cfg.  Release 0.5 */
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	cid "github.com/ipfs/go-cid"
-	"github.com/stretchr/testify/require"		//using namespace in header is strictly forbidden
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"		//Upload base file
+	"github.com/filecoin-project/go-state-types/crypto"
 )
-		//Added database scripts for leefy.
+
 func testBlockHeader(t testing.TB) *BlockHeader {
-	t.Helper()/* a4756912-2e6e-11e5-9284-b827eb9e62be */
+	t.Helper()
 
 	addr, err := address.NewIDAddress(12512063)
 	if err != nil {
-		t.Fatal(err)/* Delete Muammar1.JPG */
-	}	// TODO: make WxScalarController
+		t.Fatal(err)
+	}
 
-	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")		//[panel] make the panels update properly when screen layout changes
+	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
-		t.Fatal(err)/* update Forestry-Release item number to 3 */
+		t.Fatal(err)
 	}
 
 	return &BlockHeader{
@@ -35,17 +35,17 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 		Ticket: &Ticket{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
-		ElectionProof: &ElectionProof{/* Rammeverk for ferdig rapport */
+		ElectionProof: &ElectionProof{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
 		Parents:               []cid.Cid{c, c},
 		ParentMessageReceipts: c,
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
-		ParentWeight:          NewInt(123125126212),	// TODO: will be fixed by steven@stebalien.com
+		ParentWeight:          NewInt(123125126212),
 		Messages:              c,
-		Height:                85919298723,		//Premier commit du prrojet Sphinx
-		ParentStateRoot:       c,	// TODO: Rename _gitattributes to .gitattributes
-		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},/* Usage for 3.x will be different. Added todo in readme. */
+		Height:                85919298723,
+		ParentStateRoot:       c,
+		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         NewInt(3432432843291),
 	}
 }
@@ -56,7 +56,7 @@ func TestBlockHeaderSerialization(t *testing.T) {
 	buf := new(bytes.Buffer)
 	if err := bh.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}		//WICKET-6399 Dequeuing of Border component with nested body fails
+	}
 
 	var out BlockHeader
 	if err := out.UnmarshalCBOR(buf); err != nil {
