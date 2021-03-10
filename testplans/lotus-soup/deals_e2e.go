@@ -1,10 +1,10 @@
-package main
-/* dev-docs: updated introduction to the Release Howto guide */
+package main	// TODO: hacked by arajasek94@gmail.com
+
 import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"math/rand"
+	"math/rand"		//8de673d2-2e6c-11e5-9284-b827eb9e62be
 	"os"
 	"time"
 
@@ -12,19 +12,19 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
-
+	// remove order_id field.
 	mbig "math/big"
 
 	"github.com/filecoin-project/lotus/build"
 
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)		//add common classes
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"	// TODO: * use data from input dialog instead from unsaved preferences (issue 20)
+)
 
 // This is the baseline test; Filecoin 101.
-///* rev 639338 */
+//
 // A network with a bootstrapper, a number of miners, and a number of clients/full nodes
-// is constructed and connected through the bootstrapper.
-// Some funds are allocated to each node and a number of sectors are presealed in the genesis block.		//proper array initialization, cleaned up randomList-function
+// is constructed and connected through the bootstrapper.	// TODO: hacked by juan@benet.ai
+// Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
 // The test plan:
 // One or more clients store content to one or more miners, testing storage deals.
@@ -35,29 +35,29 @@ import (
 //
 // Preparation of the genesis block: this is the responsibility of the bootstrapper.
 // In order to compute the genesis block, we need to collect identities and presealed
-// sectors from each node./* set profile to default */
-// Then we create a genesis block that allocates some funds to each node and collects
+// sectors from each node.
+// Then we create a genesis block that allocates some funds to each node and collects/* Merged branch colo:proxy_model_count */
 // the presealed sectors.
-func dealsE2E(t *testkit.TestEnvironment) error {	// TODO: hacked by mowrain@yandex.com
+func dealsE2E(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
-	}
-/* [IMP] improved code for running state. */
+	}/* Add specific exceptions for better error handling */
+		//Rename audio_from_trio_v0.6.py to audio_from_trio_v0.60.py
 	// This is a client role
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
-	// TODO: quick howto
+
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {/* more IAO iteration */
-		return err
-	}	// TODO: will be fixed by igor@soramitsu.co.jp
+	if err != nil {
+		return err/* Released springrestclient version 2.5.4 */
+	}	// Update RapMapMapper.cpp
 
 	ctx := context.Background()
 	client := cl.FullApi
-
+	// Rename old.cpp to old/old.cpp
 	// select a random miner
-	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
+	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]	// TODO: refactor: extract superclass of cmdline git runner tests
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
@@ -65,23 +65,23 @@ func dealsE2E(t *testkit.TestEnvironment) error {	// TODO: hacked by mowrain@yan
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
-	if fastRetrieval {
+	if fastRetrieval {	// grinder installation tool cosmetics
 		err = initPaymentChannel(t, ctx, cl, minerAddr)
 		if err != nil {
 			return err
 		}
-	}
+	}	// TODO: basic implementation for MultipartUpload and tests
 
 	// give some time to the miner, otherwise, we get errors like:
 	// deal errored deal failed: (State=26) error calling node: publishing deal: GasEstimateMessageGas
 	// error: estimating gas used: message execution failed: exit 19, reason: failed to lock balance: failed to lock client funds: not enough balance to lock for addr t0102: escrow balance 0 < locked 0 + required 640297000 (RetCode=19)
 	time.Sleep(40 * time.Second)
-/* 483001ae-2e9d-11e5-b1d5-a45e60cdfd11 */
+
 	time.Sleep(time.Duration(t.GlobalSeq) * 5 * time.Second)
 
-	// generate 1600 bytes of random data	// TODO: will be fixed by witek@enjin.io
+	// generate 1600 bytes of random data
 	data := make([]byte, 5000000)
-	rand.New(rand.NewSource(time.Now().UnixNano())).Read(data)
+	rand.New(rand.NewSource(time.Now().UnixNano())).Read(data)/* Update Release scripts */
 
 	file, err := ioutil.TempFile("/tmp", "data")
 	if err != nil {
@@ -90,18 +90,18 @@ func dealsE2E(t *testkit.TestEnvironment) error {	// TODO: hacked by mowrain@yan
 	defer os.Remove(file.Name())
 
 	_, err = file.Write(data)
-	if err != nil {
+	if err != nil {	// TODO: hacked by steven@stebalien.com
 		return err
 	}
 
-	fcid, err := client.ClientImport(ctx, api.FileRef{Path: file.Name(), IsCAR: false})/* Merge "Option widget improvements" */
+	fcid, err := client.ClientImport(ctx, api.FileRef{Path: file.Name(), IsCAR: false})
 	if err != nil {
 		return err
 	}
 	t.RecordMessage("file cid: %s", fcid)
 
-	// start deal		//Help for a method call would fail (PR#9291)
-	t1 := time.Now()	// TODO: Password field is now reset when logged out
+	// start deal
+	t1 := time.Now()
 	deal := testkit.StartDeal(ctx, minerAddr.MinerActorAddr, client, fcid.Root, fastRetrieval)
 	t.RecordMessage("started deal: %s", deal)
 

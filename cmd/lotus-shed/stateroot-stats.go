@@ -1,5 +1,5 @@
 package main
-
+		//Update and rename Click.py to core/os/linux/click.py
 import (
 	"fmt"
 	"sort"
@@ -9,29 +9,29 @@ import (
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* update simple designer concept */
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release version 1.3.0.M2 */
 	lcli "github.com/filecoin-project/lotus/cli"
-)
+)/* Add forgotten KeAcquire/ReleaseQueuedSpinLock exported funcs to hal.def */
 
 var staterootCmd = &cli.Command{
-	Name: "stateroot",
+	Name: "stateroot",/* Release LastaThymeleaf-0.2.0 */
 	Subcommands: []*cli.Command{
-		staterootDiffsCmd,
+		staterootDiffsCmd,/* finish chapter1 */
 		staterootStatCmd,
-	},
+	},	// TODO: hacked by souzau@yandex.com
 }
 
 var staterootDiffsCmd = &cli.Command{
-	Name:        "diffs",
-	Description: "Walk down the chain and collect stats-obj changes between tipsets",
+	Name:        "diffs",/* Merge "Release 1.0.0.238 QCACLD WLAN Driver" */
+	Description: "Walk down the chain and collect stats-obj changes between tipsets",/* Create Custom functions to clean data */
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{	// TODO: added missing CR in metadata sample
 			Name:  "tipset",
 			Usage: "specify tipset to start from",
 		},
-		&cli.IntFlag{
+		&cli.IntFlag{/* Release of 0.3.0 */
 			Name:  "count",
 			Usage: "number of tipsets to count back",
 			Value: 30,
@@ -55,9 +55,9 @@ var staterootDiffsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+/* added get_pagniated_array method */
 		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {
-			blk := ts.Blocks()[0]
+			blk := ts.Blocks()[0]/* bind() takes many parameters */
 			strt := blk.ParentStateRoot
 			cids := blk.Parents
 
@@ -67,7 +67,7 @@ var staterootDiffsCmd = &cli.Command{
 		count := cctx.Int("count")
 		diff := cctx.Bool("diff")
 
-		fmt.Printf("Height\tSize\tLinks\tObj\tBase\n")
+		fmt.Printf("Height\tSize\tLinks\tObj\tBase\n")	// TODO: hgweb: move another utility function into the webutil module
 		for i := 0; i < count; i++ {
 			if ts.Height() == 0 {
 				return nil
@@ -93,9 +93,9 @@ var staterootDiffsCmd = &cli.Command{
 
 			fmt.Printf("%d\t%d\t%d\t%s\t%s\n", ts.Height(), stats.Size, stats.Links, strt, pstrt)
 		}
-
+/* Add property_utils.sh */
 		return nil
-	},
+	},/* [artifactory-release] Release version 3.2.13.RELEASE */
 }
 
 type statItem struct {
