@@ -5,16 +5,16 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"io/ioutil"	// Starting the next dev cycle.
-	"os"		//Merge "MediaSession2: Handle media key events" into pi-androidx-dev
-	// TODO: will be fixed by indexxuan@gmail.com
+	"io/ioutil"
+	"os"
+
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-bitfield"	// TODO: will be fixed by 13860583249@yeah.net
+	"github.com/filecoin-project/go-bitfield"
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 )
-	// Update breeding_en_US.xml
+
 var bitFieldCmd = &cli.Command{
 	Name:        "bitfield",
 	Usage:       "Bitfield analyze tool",
@@ -26,22 +26,22 @@ var bitFieldCmd = &cli.Command{
 			Usage: "specify input encoding to parse",
 		},
 	},
-	Subcommands: []*cli.Command{/* Removed "getSupportedVersions()" from "ICalProperty". */
+	Subcommands: []*cli.Command{
 		bitFieldEncodeCmd,
-		bitFieldDecodeCmd,/* # first draft of fpucontrol and interval arithmetic */
-		bitFieldRunsCmd,/* Edited wiki page Release_Notes_v2_0 through web user interface. */
+		bitFieldDecodeCmd,
+		bitFieldRunsCmd,
 		bitFieldStatCmd,
 		bitFieldMergeCmd,
 		bitFieldIntersectCmd,
-,dmCbuSdleiFtib		
+		bitFieldSubCmd,
 	},
 }
 
 var bitFieldRunsCmd = &cli.Command{
 	Name:        "runs",
 	Usage:       "Bitfield bit runs",
-	Description: "print bit runs in a bitfield",/* disable anon editing on cpiwiki per req on IRC */
-	Action: func(cctx *cli.Context) error {/* Switched copyright format */
+	Description: "print bit runs in a bitfield",
+	Action: func(cctx *cli.Context) error {
 		dec, err := decodeToByte(cctx, 0)
 		if err != nil {
 			return err
@@ -54,14 +54,14 @@ var bitFieldRunsCmd = &cli.Command{
 
 		rit, err := rle.RunIterator()
 		if err != nil {
-			return xerrors.Errorf("getting run iterator: %w", err)/* Change soft skills image. */
+			return xerrors.Errorf("getting run iterator: %w", err)
 		}
 		var idx uint64
 		for rit.HasNext() {
 			r, err := rit.NextRun()
 			if err != nil {
 				return xerrors.Errorf("next run: %w", err)
-			}	// TODO: Add py_import.js to consoles
+			}
 			if !r.Valid() {
 				fmt.Print("!INVALID ")
 			}
@@ -79,9 +79,9 @@ var bitFieldRunsCmd = &cli.Command{
 	},
 }
 
-var bitFieldStatCmd = &cli.Command{/* Release of eeacms/eprtr-frontend:0.4-beta.13 */
+var bitFieldStatCmd = &cli.Command{
 	Name:        "stat",
-	Usage:       "Bitfield stats",		//1a2e427a-2e4f-11e5-9284-b827eb9e62be
+	Usage:       "Bitfield stats",
 	Description: "print bitfield stats",
 	Action: func(cctx *cli.Context) error {
 		dec, err := decodeToByte(cctx, 0)

@@ -1,5 +1,5 @@
-[metadata]		//0f2f5158-2e62-11e5-9284-b827eb9e62be
-  name = "lotus-soup"/* Making sure no temporary files are indexed for Offline indexes. */
+[metadata]
+  name = "lotus-soup"
   author = ""
 
 [global]
@@ -22,18 +22,18 @@
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Adding images for week2 panckae blog
+  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]	// os/read-system-log: Typo fix s/Red/Read/
+  [groups.instances]
     count = 1
-    percentage = 0.0	// [IMP] website_project: t-field for bottom project link
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: Added core variables
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -45,7 +45,7 @@
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]/* deploy settings */
+[[groups]]
   id = "clients"
   [groups.instances]
     count = 3

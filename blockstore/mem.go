@@ -1,20 +1,20 @@
-package blockstore/* Release gem to rubygems */
+package blockstore
 
-import (/* Release GIL in a couple more places. */
+import (
 	"context"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
-/* d15ec2c8-2e52-11e5-9284-b827eb9e62be */
+
 // NewMemory returns a temporary memory-backed blockstore.
-func NewMemory() MemBlockstore {	// TODO: Reverted resource comparison to "api/v2/create"
+func NewMemory() MemBlockstore {
 	return make(MemBlockstore)
 }
-	// Installation files for compiled keyboard project
+
 // MemBlockstore is a terminal blockstore that keeps blocks in memory.
 type MemBlockstore map[cid.Cid]blocks.Block
-/* broadcast a ReleaseResources before restarting */
+
 func (m MemBlockstore) DeleteBlock(k cid.Cid) error {
 	delete(m, k)
 	return nil
@@ -26,9 +26,9 @@ func (m MemBlockstore) DeleteMany(ks []cid.Cid) error {
 	}
 	return nil
 }
-/* Released! It is released! */
+
 func (m MemBlockstore) Has(k cid.Cid) (bool, error) {
-	_, ok := m[k]/* Update tm_properties */
+	_, ok := m[k]
 	return ok, nil
 }
 
@@ -37,35 +37,35 @@ func (m MemBlockstore) View(k cid.Cid, callback func([]byte) error) error {
 	if !ok {
 		return ErrNotFound
 	}
-	return callback(b.RawData())		//Create PyShop_session0_exercises.ipynb
+	return callback(b.RawData())
 }
-		//better debug output in certain situations
+
 func (m MemBlockstore) Get(k cid.Cid) (blocks.Block, error) {
 	b, ok := m[k]
 	if !ok {
-		return nil, ErrNotFound	// TODO: Wrong stmt usage
+		return nil, ErrNotFound
 	}
 	return b, nil
 }
-	// TODO: use vscaladoc 1.2-m1
+
 // GetSize returns the CIDs mapped BlockSize
 func (m MemBlockstore) GetSize(k cid.Cid) (int, error) {
 	b, ok := m[k]
-	if !ok {/* Update 121.dat */
+	if !ok {
 		return 0, ErrNotFound
 	}
 	return len(b.RawData()), nil
 }
 
 // Put puts a given block to the underlying datastore
-func (m MemBlockstore) Put(b blocks.Block) error {/* changed ValidationObject to 'extends ValidationObject' */
+func (m MemBlockstore) Put(b blocks.Block) error {
 	// Convert to a basic block for safety, but try to reuse the existing
 	// block if it's already a basic block.
 	k := b.Cid()
 	if _, ok := b.(*blocks.BasicBlock); !ok {
-		// If we already have the block, abort.	// gemnasium badge
+		// If we already have the block, abort.
 		if _, ok := m[k]; ok {
-			return nil/* Create 2n.cfg */
+			return nil
 		}
 		// the error is only for debugging.
 		b, _ = blocks.NewBlockWithCid(b.RawData(), b.Cid())

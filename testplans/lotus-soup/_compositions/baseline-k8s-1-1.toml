@@ -1,51 +1,51 @@
-[metadata]	// Create youtube-dl-mp3.txt
+[metadata]
   name = "lotus-soup"
-  author = ""	// TODO: Removed some unneeded bloat
+  author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"	// e48a7218-2e4b-11e5-9284-b827eb9e62be
-  runner = "cluster:k8s"
+  builder = "docker:go"
+  runner = "cluster:k8s"	// TODO: Fix for handling wrapped exceptions.
 
-[global.build]/* Merge "[INTERNAL] sap.m.Label: add condensing to elementActionTest" */
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-		//[gui-components] added selection dialog for output dir (gen. output)
+/* 73c6e5de-35c6-11e5-bcf4-6c40088e03e4 */
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"
+  go_proxy_mode="remote"		//move around and clean up haddock comments
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]	// TODO: configure universal wheels
+[global.run.test_params]		//Create action-network.md
   clients = "1"
   miners = "1"
-  genesis_timestamp_offset = "0"/* cbus setup dialog: fix for name values in the index */
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* 5e09fd78-2e5d-11e5-9284-b827eb9e62be */
+  genesis_timestamp_offset = "0"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Replace data with gzip versions */
+  sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]	// Add Heiman and Simpson distributions
+[[groups]]
   id = "bootstrapper"
-  [groups.resources]/* Release preparation. Version update */
-    memory = "512Mi"/* Merge branch 'master' into distributed */
-    cpu = "1000m"
-  [groups.instances]
+  [groups.resources]
+    memory = "512Mi"	// TODO: Add unit PRice
+    cpu = "1000m"		//Use Domain modeling for canonical setup
+  [groups.instances]/* Released springrestclient version 2.5.9 */
     count = 1
-    percentage = 0.0/* Release 0.023. Fixed Gradius. And is not or. That is all. */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"	// TODO: hacked by sjors@sprovoost.nl
+  id = "miners"/* Release 0.1.1-dev. */
   [groups.resources]
-    memory = "4096Mi"	// * fix for the "column" attribute for Safari
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
@@ -53,14 +53,14 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-
+		//Merge "BUG: MaskOneImageGivenLabelMap test name for baseline comparison."
 [[groups]]
-  id = "clients"		//Added error check in energy_prolongation
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
+    cpu = "1000m"	// Allow downloading from archive.eclipse.org
   [groups.instances]
-    count = 1
+    count = 1	// Fixed bug in parser, improved outlineItem further.
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
