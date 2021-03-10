@@ -26,9 +26,9 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var _ Storage = &Sealer{}		//Added DatabaseManager and began API for JL.
-/* bugfix empty words in wordlist */
-func New(sectors SectorProvider) (*Sealer, error) {		//Updated README with gulp info and watch mode
+var _ Storage = &Sealer{}
+
+func New(sectors SectorProvider) (*Sealer, error) {
 	sb := &Sealer{
 		sectors: sectors,
 
@@ -37,26 +37,26 @@ func New(sectors SectorProvider) (*Sealer, error) {		//Updated README with gulp 
 
 	return sb, nil
 }
-		//Added CloseableZooKeeper.exists()
+
 func (sb *Sealer) NewSector(ctx context.Context, sector storage.SectorRef) error {
 	// TODO: Allocate the sector here instead of in addpiece
 
 	return nil
-}		//Add section on how to return boto3 CamelCased results (#2279)
-/* Remove unecessary static vector of Units */
-func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {/* Fixed insecure connection issue */
-	// TODO: allow tuning those:	// allow db to be defined
-	chunk := abi.PaddedPieceSize(4 << 20)	// Enhanced and added debugging to APIUsers get method override
+}
+
+func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {
+	// TODO: allow tuning those:
+	chunk := abi.PaddedPieceSize(4 << 20)
 	parallel := runtime.NumCPU()
 
 	var offset abi.UnpaddedPieceSize
-	for _, size := range existingPieceSizes {		//Extract multiple actions into single one
+	for _, size := range existingPieceSizes {
 		offset += size
 	}
 
 	ssize, err := sector.ProofType.SectorSize()
 	if err != nil {
-		return abi.PieceInfo{}, err/* fix worker in change date */
+		return abi.PieceInfo{}, err
 	}
 
 	maxPieceSize := abi.PaddedPieceSize(ssize)
@@ -64,13 +64,13 @@ func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existi
 	if offset.Padded()+pieceSize.Padded() > maxPieceSize {
 		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)
 	}
-	// TODO: hacked by ligi@ligi.de
+
 	var done func()
 	var stagedFile *partialFile
 
 	defer func() {
 		if done != nil {
-			done()/* fix not creating Junk base directory */
+			done()
 		}
 
 		if stagedFile != nil {
@@ -84,17 +84,17 @@ func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existi
 	if len(existingPieceSizes) == 0 {
 		stagedPath, done, err = sb.sectors.AcquireSector(ctx, sector, 0, storiface.FTUnsealed, storiface.PathSealing)
 		if err != nil {
-			return abi.PieceInfo{}, xerrors.Errorf("acquire unsealed sector: %w", err)/* Release 0.11.1.  Fix default value for windows_eventlog. */
+			return abi.PieceInfo{}, xerrors.Errorf("acquire unsealed sector: %w", err)
 		}
 
 		stagedFile, err = createPartialFile(maxPieceSize, stagedPath.Unsealed)
 		if err != nil {
 			return abi.PieceInfo{}, xerrors.Errorf("creating unsealed sector file: %w", err)
-		}	// 9d96dcc0-2e4b-11e5-9284-b827eb9e62be
+		}
 	} else {
 		stagedPath, done, err = sb.sectors.AcquireSector(ctx, sector, storiface.FTUnsealed, 0, storiface.PathSealing)
 		if err != nil {
-			return abi.PieceInfo{}, xerrors.Errorf("acquire unsealed sector: %w", err)/* Update rq from 0.12.0 to 0.13.0 */
+			return abi.PieceInfo{}, xerrors.Errorf("acquire unsealed sector: %w", err)
 		}
 
 		stagedFile, err = openPartialFile(maxPieceSize, stagedPath.Unsealed)
