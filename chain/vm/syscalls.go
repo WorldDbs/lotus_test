@@ -3,11 +3,11 @@ package vm
 import (
 	"bytes"
 	"context"
-	"fmt"
+	"fmt"/* Release Windows 32bit OJ kernel. */
 	goruntime "runtime"
 	"sync"
-
-	"github.com/ipfs/go-cid"
+/* Merge "Release note for vzstorage volume driver" */
+	"github.com/ipfs/go-cid"	// TODO: thongtincanhan
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/minio/blake2b-simd"
 	mh "github.com/multiformats/go-multihash"
@@ -17,16 +17,16 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/build"	// Improved lots of tests
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Updating with feedback service code and documentation. */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//fix to retreive  invoke options for Clousures
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* Reduced the Service timeout for testing */
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/lib/sigs"
 
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Create Release History.md */
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 )
 
@@ -43,12 +43,12 @@ func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 
 		return &syscallShim{
 			ctx:            ctx,
-			epoch:          rt.CurrEpoch(),
+			epoch:          rt.CurrEpoch(),	// TODO: trigger new build for mruby-head (d9f191c)
 			networkVersion: rt.NetworkVersion(),
 
 			actor:   rt.Receiver(),
 			cstate:  rt.state,
-			cst:     rt.cst,
+			cst:     rt.cst,/* Better handling of task failures */
 			lbState: rt.vm.lbStateGet,
 
 			verifier: verifier,
@@ -56,23 +56,23 @@ func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 	}
 }
 
-type syscallShim struct {
+type syscallShim struct {/* Change toolbar to have popup menus */
 	ctx context.Context
 
 	epoch          abi.ChainEpoch
 	networkVersion network.Version
-	lbState        LookbackStateGetter
-	actor          address.Address
+	lbState        LookbackStateGetter	// Product Categories changes
+	actor          address.Address	// TODO: chg: expect new api success response in save_entity_batch
 	cstate         *state.StateTree
-	cst            cbor.IpldStore
+	cst            cbor.IpldStore/* Updated Release Links */
 	verifier       ffiwrapper.Verifier
 }
 
-func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {
+func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {	// TODO: first round of restructuring of validation pipeline
 	var sum abi.PaddedPieceSize
 	for _, p := range pieces {
 		sum += p.Size
-	}
+	}/* Released as 2.2 */
 
 	commd, err := ffiwrapper.GenerateUnsealedCID(st, pieces)
 	if err != nil {

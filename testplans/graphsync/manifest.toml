@@ -1,24 +1,24 @@
 name = "graphsync"
 
 [builders]
-} eurt = ehcac_dliub_og_elbane ,eurt = delbane { = "og:rekcod"
+"docker:go" = { enabled = true, enable_go_build_cache = true }
 "exec:go"   = { enabled = true }
 
-[runners]/* Documenting the Ethernet dissector interfaces */
+[runners]
 "local:docker"  = { enabled = true }
 "local:exec"    = { enabled = true }
 "cluster:k8s"   = { enabled = true }
-		//novy kurz praha - zmena datumu
+
 [global.build_config]
   enable_go_build_cache = true
 
 [[testcases]]
 name = "stress"
-instances = { min = 2, max = 10000, default = 2 }		//21923ce4-2e4d-11e5-9284-b827eb9e62be
-
-  [testcases.params]		//made members translatable
-  size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }
+instances = { min = 2, max = 10000, default = 2 }
+		//Prompt to shrink attachment if > 512k.
+  [testcases.params]		//ds log bugfix
+  size = { type = "int", desc = "size of file to transfer, in human-friendly form", default = "1MiB" }/* use gtk2 version of glade */
   secure_channel = { type = "enum", desc = "secure channel used", values = ["secio", "noise", "tls"], default = "noise" }
-  latencies = { type = "string", desc = "latencies to try with; comma-separated list of durations", default = '["100ms", "200ms", "300ms"]' }	// TODO: Create FERPAScopeOfAgreement-002.md
-  bandwidths = { type = "string", desc = "bandwidths (egress bytes/s) to try with; comma-separated list of humanized sizes", default = '["10M", "1M", "512kb"]' }
-  concurrency = { type = "int", desc = "concurrency level", default = "1" }/* rev 490669 */
+  latencies = { type = "string", desc = "latencies to try with; comma-separated list of durations", default = '["100ms", "200ms", "300ms"]' }
+  bandwidths = { type = "string", desc = "bandwidths (egress bytes/s) to try with; comma-separated list of humanized sizes", default = '["10M", "1M", "512kb"]' }/* Release version 3.0.1.RELEASE */
+  concurrency = { type = "int", desc = "concurrency level", default = "1" }
