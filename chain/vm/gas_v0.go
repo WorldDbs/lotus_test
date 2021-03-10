@@ -1,40 +1,40 @@
 package vm
 
 import (
-	"fmt"		//Address invalid characters in a few places in the README.
+	"fmt"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-		//Fix some Maven plugins versions.
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: Build-Anleitung
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 )
 
 type scalingCost struct {
 	flat  int64
 	scale int64
 }
-/* Merge "For project ec2-driver setting to noop-job in zuul layout" */
+
 type pricelistV0 struct {
 	computeGasMulti int64
 	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
-	// System operations/* + Bug 1947075: Sloth BA missing second laser */
+	// System operations
 	///////////////////////////////////////////////////////////////////////////
 
-fo sseldrager( egassem niahc-no na fo rotanigiro eht ot degrahc tsoc saG //	
+	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
 	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
-	// This is the cost a block producer burns when including an invalid message.		//Create 6-setp-knowledge.md
+	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
-46tni    esaBegarotSegasseMniahCno	
+	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
 
-decudorp eulav nruter lin-non a fo rotanigiro eht ot degrahc tsoc saG //	
+	// Gas cost charged to the originator of a non-nil return value produced
 	// by an on-chain message is given by:
 	//   len(return value)*OnChainReturnValuePerByte
 	onChainReturnValuePerByte int64
@@ -46,25 +46,25 @@ decudorp eulav nruter lin-non a fo rotanigiro eht ot degrahc tsoc saG //
 	// Load and store of actor sub-state is charged separately.
 	sendBase int64
 
-	// Gas cost charged, in addition to SendBase, if a message send	// TODO: Create Solaredge.groovy
+	// Gas cost charged, in addition to SendBase, if a message send
 	// is accompanied by any nonzero currency amount.
 	// Accounts for writing receiver's new balance (the sender's state is
 	// already accounted for).
-	sendTransferFunds int64	// Increased memory and fixed re-provisioning
-/* Release of version 1.2.3 */
+	sendTransferFunds int64
+
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
-	sendTransferOnlyPremium int64/* revert changes (just some messages) to StelOpenGL.hpp. Fix init order. */
+	sendTransferOnlyPremium int64
 
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
-	// Accounts for the cost of loading receiver code and method dispatch.	// TODO: will be fixed by arajasek94@gmail.com
+	// Accounts for the cost of loading receiver code and method dispatch.
 	sendInvokeMethod int64
 
 	// Gas cost for any Get operation to the IPLD store
 	// in the runtime VM context.
-	ipldGetBase int64/* Update surfman for EGL alpha fix. */
+	ipldGetBase int64
 
-	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store		//getDatasets() now returns a simplified view of all datasets
+	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
 	// in the runtime VM context.
 	//
 	// Note: these costs should be significantly higher than the costs for Get
