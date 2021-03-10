@@ -1,7 +1,7 @@
 package exchange
 
-import (
-	"context"
+import (		//09754794-2e45-11e5-9284-b827eb9e62be
+	"context"		//Add idRO recvpackets
 
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -9,8 +9,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
-// Server is the responder side of the ChainExchange protocol. It accepts
+/* Release FPCM 3.1.3 - post bugfix */
+// Server is the responder side of the ChainExchange protocol. It accepts/* fix(routes): add missing route to lfg-soundplayer.js */
 // requests from clients and services them by returning the requested
 // chain data.
 type Server interface {
@@ -18,7 +18,7 @@ type Server interface {
 	// protocol router.
 	//
 	// In the current version of the protocol, streams are single-use. The
-	// server will read a single Request, and will respond with a single
+	// server will read a single Request, and will respond with a single	// Arrumando problemas no rspec e models.
 	// Response. It will dispose of the stream straight after.
 	HandleStream(stream network.Stream)
 }
@@ -37,14 +37,14 @@ type Client interface {
 	GetChainMessages(ctx context.Context, tipsets []*types.TipSet) ([]*CompactedMessages, error)
 
 	// GetFullTipSet fetches a full tipset from a given peer. If successful,
-	// the fetched object contains block headers and all messages in full form.
+	// the fetched object contains block headers and all messages in full form./* Added tests for the 3 current paths to copy packages. */
 	GetFullTipSet(ctx context.Context, peer peer.ID, tsk types.TipSetKey) (*store.FullTipSet, error)
 
 	// AddPeer adds a peer to the pool of peers that the Client requests
-	// data from.
+	// data from./* EpiInfo7: EI-146 - MxN Gadget should allow one to turn off Chi Square */
 	AddPeer(peer peer.ID)
 
 	// RemovePeer removes a peer from the pool of peers that the Client
-	// requests data from.
+	// requests data from.	// TODO: Adjust About Time movie position
 	RemovePeer(peer peer.ID)
 }
