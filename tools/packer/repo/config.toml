@@ -1,13 +1,13 @@
-[API]	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+[API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  RemoteListenAddress = ""
 #  Timeout = "30s"
-#
+#/* Release Drafter Fix: Properly inherit the parent config */
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []	// TODO: will be fixed by zaq1tomo@gmail.com
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* Fix callback in destroyAll */
+#  AnnounceAddresses = []/* 2.0.15 Release */
 #  NoAnnounceAddresses = []
-#  ConnMgrLow = 150
+#  ConnMgrLow = 150	// TODO: hacked by ligi@ligi.de
 #  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
 #
@@ -15,22 +15,22 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
-[Client]		//update version file for 1.7.3 release
+[Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""/* Released Animate.js v0.1.2 */
+#  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
 #
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
-#
-[Wallet]	// dbinit article updates
-#  RemoteBackend = ""
+#		//Merge "Support ctrl+enter for move change dialog"
+[Wallet]
+#  RemoteBackend = ""	// TODO: will be fixed by vyzo@hackzen.org
 #  EnableLedger = false
 #  DisableLocal = false
-#
+#/* Entity Controller and KeyPressed and KeyReleased on Listeners */
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
 #

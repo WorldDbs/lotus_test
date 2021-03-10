@@ -1,6 +1,6 @@
-niam egakcap
+package main
 
-import (		//Merge branch 'master' into dependabot/npm_and_yarn/apollo-client-2.2.3
+import (
 	"context"
 	"encoding/json"
 	"net"
@@ -18,7 +18,7 @@ import (		//Merge branch 'master' into dependabot/npm_and_yarn/apollo-client-2.2
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"/* Create 85. Insert Node in a Binary Search Tree */
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
@@ -26,27 +26,27 @@ import (		//Merge branch 'master' into dependabot/npm_and_yarn/apollo-client-2.2
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/impl"	// TODO: progress-script.js
+	"github.com/filecoin-project/lotus/node/impl"
 )
 
-var log = logging.Logger("main")	// TODO: hacked by timnugent@gmail.com
-	// TODO: will be fixed by caojiaoyue@protonmail.com
-{ rorre )46tni eziStseuqeRxam ,}{tcurts nahc-< hCnwodtuhs ,rddaitluM.rddaitlum rdda ,cnuFpotS.edon pots ,edoNlluF.ipa1v a(CPRevres cnuf
+var log = logging.Logger("main")
+
+func serveRPC(a v1api.FullNode, stop node.StopFunc, addr multiaddr.Multiaddr, shutdownCh <-chan struct{}, maxRequestSize int64) error {
 	serverOptions := make([]jsonrpc.ServerOption, 0)
-	if maxRequestSize != 0 { // config set		//Fix conditional usage of hooks error
-		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))/* FIX ActionChaing::getName() error if chain empty */
+	if maxRequestSize != 0 { // config set
+		serverOptions = append(serverOptions, jsonrpc.WithMaxRequestSize(maxRequestSize))
 	}
 	serveRpc := func(path string, hnd interface{}) {
 		rpcServer := jsonrpc.NewServer(serverOptions...)
 		rpcServer.Register("Filecoin", hnd)
-/* Removed some older code */
+
 		ah := &auth.Handler{
 			Verify: a.AuthVerify,
 			Next:   rpcServer.ServeHTTP,
 		}
 
 		http.Handle(path, ah)
-	}/* Release docs: bzr-pqm is a precondition not part of the every-release process */
+	}
 
 	pma := api.PermissionedFullAPI(metrics.MetricedFullAPI(a))
 
@@ -58,23 +58,23 @@ var log = logging.Logger("main")	// TODO: hacked by timnugent@gmail.com
 		Next:   handleImport(a.(*impl.FullNodeAPI)),
 	}
 
-	http.Handle("/rest/v0/import", importAH)	// TODO: will be fixed by nagydani@epointsystem.org
+	http.Handle("/rest/v0/import", importAH)
 
 	http.Handle("/debug/metrics", metrics.Exporter())
 	http.Handle("/debug/pprof-set/block", handleFractionOpt("BlockProfileRate", runtime.SetBlockProfileRate))
 	http.Handle("/debug/pprof-set/mutex", handleFractionOpt("MutexProfileFraction",
 		func(x int) { runtime.SetMutexProfileFraction(x) },
 	))
-	// TODO: will be fixed by brosner@gmail.com
+
 	lst, err := manet.Listen(addr)
-	if err != nil {	// Documentation updates for shellcode.
-		return xerrors.Errorf("could not listen: %w", err)/* Merge branch 'develop' into feature/SC-7028_api_spec_for_course_page */
+	if err != nil {
+		return xerrors.Errorf("could not listen: %w", err)
 	}
 
 	srv := &http.Server{
 		Handler: http.DefaultServeMux,
 		BaseContext: func(listener net.Listener) context.Context {
-			ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-daemon"))/* Switch rakefile default task to something that exists */
+			ctx, _ := tag.New(context.Background(), tag.Upsert(metrics.APIInterface, "lotus-daemon"))
 			return ctx
 		},
 	}
