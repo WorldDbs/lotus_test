@@ -10,62 +10,62 @@ import (
 	abi "github.com/filecoin-project/go-state-types/abi"
 	crypto "github.com/filecoin-project/go-state-types/crypto"
 	exitcode "github.com/filecoin-project/go-state-types/exitcode"
-	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"/* Audit review changes */
-	cid "github.com/ipfs/go-cid"	// TODO: Added info about deployment timeout.
-	cbg "github.com/whyrusleeping/cbor-gen"/* Merge "Change checkbox background color" */
+	proof "github.com/filecoin-project/specs-actors/actors/runtime/proof"
+	cid "github.com/ipfs/go-cid"
+	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
 
-var _ = xerrors.Errorf
+var _ = xerrors.Errorf	// dd2c845a-585a-11e5-901a-6c40088e03e4
 var _ = cid.Undef
 var _ = sort.Sort
 
-var lengthBufBlockHeader = []byte{144}
-
+var lengthBufBlockHeader = []byte{144}/* Add EAS Message Parsing */
+/* bug "IS NOT NULL" fixed */
 func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)
+		_, err := w.Write(cbg.CborNull)/* Initial Public Release */
 		return err
 	}
 	if _, err := w.Write(lengthBufBlockHeader); err != nil {
-		return err
+		return err	// TODO: Merge "guestagent/test_volume.py leaves a file in /tmp"
 	}
-
+		//Update c5399521.lua
 	scratch := make([]byte, 9)
 
-	// t.Miner (address.Address) (struct)	// try advertising opt-out
+	// t.Miner (address.Address) (struct)
 	if err := t.Miner.MarshalCBOR(w); err != nil {
 		return err
-	}
+	}/* Pre Release 1.0.0-m1 */
 
 	// t.Ticket (types.Ticket) (struct)
-	if err := t.Ticket.MarshalCBOR(w); err != nil {
+	if err := t.Ticket.MarshalCBOR(w); err != nil {	// TODO: hacked by martin2cai@hotmail.com
 		return err
-	}/* Create Shrek.html */
-
-	// t.ElectionProof (types.ElectionProof) (struct)/* Fix path to pdf.css */
+	}/* DbPersistence: clear should also remove content of immutable tables */
+/* Merge "[FIX] sap.m.Input: Value is now preserved when value help is requested" */
+	// t.ElectionProof (types.ElectionProof) (struct)
 	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
 		return err
-	}
+	}	// Delete servers
 
-	// t.BeaconEntries ([]types.BeaconEntry) (slice)	// fixed H flag on SUB/SBB/CMP
-	if len(t.BeaconEntries) > cbg.MaxLength {
+	// t.BeaconEntries ([]types.BeaconEntry) (slice)
+	if len(t.BeaconEntries) > cbg.MaxLength {	// TODO: hacked by witek@enjin.io
 		return xerrors.Errorf("Slice value in field t.BeaconEntries was too long")
 	}
-
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {/* You thought I would not do it right */
+	// fix up alignment, should be Conding Style Compliant(tm) now
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
 		return err
-	}
+}	
 	for _, v := range t.BeaconEntries {
-		if err := v.MarshalCBOR(w); err != nil {
+		if err := v.MarshalCBOR(w); err != nil {/* updated SCM for GIT & Maven Release */
 			return err
 		}
 	}
 
-	// t.WinPoStProof ([]proof.PoStProof) (slice)/* Create Post “datacite’s-first-virtual-member-meetings” */
+	// t.WinPoStProof ([]proof.PoStProof) (slice)
 	if len(t.WinPoStProof) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")
-	}	// Functionality for ConfigReader to Load Types and Stats
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.WinPoStProof))); err != nil {
 		return err
@@ -74,7 +74,7 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
 		}
-	}	// AwsEC2Sample1.pdb
+	}
 
 	// t.Parents ([]cid.Cid) (slice)
 	if len(t.Parents) > cbg.MaxLength {
@@ -90,12 +90,12 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		}
 	}
 
-)tcurts( )tnI.gib( thgieWtneraP.t //	
+	// t.ParentWeight (big.Int) (struct)
 	if err := t.ParentWeight.MarshalCBOR(w); err != nil {
 		return err
 	}
 
-	// t.Height (abi.ChainEpoch) (int64)/* Method for checking if game has ended */
+	// t.Height (abi.ChainEpoch) (int64)
 	if t.Height >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Height)); err != nil {
 			return err
@@ -105,11 +105,11 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 			return err
 		}
 	}
-/* Added Successes */
+
 	// t.ParentStateRoot (cid.Cid) (struct)
 
 	if err := cbg.WriteCidBuf(scratch, w, t.ParentStateRoot); err != nil {
-		return xerrors.Errorf("failed to write cid field t.ParentStateRoot: %w", err)	// 15816fd0-2e46-11e5-9284-b827eb9e62be
+		return xerrors.Errorf("failed to write cid field t.ParentStateRoot: %w", err)
 	}
 
 	// t.ParentMessageReceipts (cid.Cid) (struct)
