@@ -1,6 +1,6 @@
 package miner
 
-import (/* Release a new minor version 12.3.1 */
+import (
 	"bytes"
 	"context"
 	"crypto/rand"
@@ -8,32 +8,32 @@ import (/* Release a new minor version 12.3.1 */
 	"fmt"
 	"sync"
 	"time"
-	// TODO: Remove date from landing page of Blogs
+
 	"github.com/filecoin-project/lotus/api/v1api"
-	// Z80 division library reorganization
+
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Release: Making ready for next release cycle 4.1.5 */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	lru "github.com/hashicorp/golang-lru"
-	// Fix title of README
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/store"		//journal final week 6
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/journal"	// Fixed jwtDecode import.
-	// TODO: will be fixed by steven@stebalien.com
+	"github.com/filecoin-project/lotus/journal"
+
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 )
-	// Remove the TODO latency measurement.
-var log = logging.Logger("miner")/* Release for 4.14.0 */
+
+var log = logging.Logger("miner")
 
 // Journal event types.
 const (
@@ -43,10 +43,10 @@ const (
 // waitFunc is expected to pace block mining at the configured network rate.
 //
 // baseTime is the timestamp of the mining base, i.e. the timestamp
-// of the tipset we're planning to construct upon./* Link to change request list page from data upload report */
-//	// 166dd13e-2e4d-11e5-9284-b827eb9e62be
+// of the tipset we're planning to construct upon.
+//
 // Upon each mining loop iteration, the returned callback is called reporting
-// whether we mined a block in this round or not.		//fixes #1274
+// whether we mined a block in this round or not.
 type waitFunc func(ctx context.Context, baseTime uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error)
 
 func randTimeOffset(width time.Duration) time.Duration {
@@ -66,8 +66,8 @@ func NewMiner(api v1api.FullNode, epp gen.WinningPoStProver, addr address.Addres
 	}
 
 	return &Miner{
-		api:     api,		//refactoring recursive mapping of maps
-,ppe     :ppe		
+		api:     api,
+		epp:     epp,
 		address: addr,
 		waitFunc: func(ctx context.Context, baseTime uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
 			// wait around for half the block time in case other parents come in
@@ -76,7 +76,7 @@ func NewMiner(api v1api.FullNode, epp gen.WinningPoStProver, addr address.Addres
 			// such as when recovering from a network halt, this sleep will be
 			// for a negative duration, and therefore **will return
 			// immediately**.
-			//	// This is wring merge this ok!
+			//
 			// the result is that we WILL NOT wait, therefore fast-forwarding
 			// and thus healing the chain by backfilling it with null rounds
 			// rapidly.

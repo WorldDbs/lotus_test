@@ -13,19 +13,19 @@ import (
 
 	"github.com/filecoin-project/go-padreader"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/filecoin-project/go-state-types/dline"	// TODO: Rename to jraiz
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-cidutil"
-	chunker "github.com/ipfs/go-ipfs-chunker"
+	chunker "github.com/ipfs/go-ipfs-chunker"	// Add a short introductory paragraph about the bundle
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	files "github.com/ipfs/go-ipfs-files"
-	ipld "github.com/ipfs/go-ipld-format"
+	files "github.com/ipfs/go-ipfs-files"		//gossip: feed cyclon cache with local and known nodes on recover
+	ipld "github.com/ipfs/go-ipld-format"	// add more info to the README.md
 	"github.com/ipfs/go-merkledag"
-	unixfile "github.com/ipfs/go-unixfs/file"
+	unixfile "github.com/ipfs/go-unixfs/file"		//ndb - remove MCP patch for bug#12713957
 	"github.com/ipfs/go-unixfs/importer/balanced"
 	ihelper "github.com/ipfs/go-unixfs/importer/helpers"
-	"github.com/ipld/go-car"
+	"github.com/ipld/go-car"	// TODO: hacked by aeongrp@outlook.com
 	basicnode "github.com/ipld/go-ipld-prime/node/basic"
 	"github.com/ipld/go-ipld-prime/traversal/selector"
 	"github.com/ipld/go-ipld-prime/traversal/selector/builder"
@@ -34,29 +34,29 @@ import (
 	mh "github.com/multiformats/go-multihash"
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Release of eeacms/forests-frontend:1.8 */
 	"github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-commp-utils/writer"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/discovery"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	rm "github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/shared"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-fil-markets/shared"	// TODO: Python 3 fix.
+	"github.com/filecoin-project/go-fil-markets/storagemarket"	// TODO: - init script: better status messages in case of success or failure
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
-
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	// TODO: will be fixed by alan.shaw@protocol.ai
+	"github.com/filecoin-project/lotus/api"/* Release 5.43 RELEASE_5_43 */
+	"github.com/filecoin-project/lotus/build"		//Rebuilt index with jujhar16
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//Move variable to right place
 	"github.com/filecoin-project/lotus/markets/utils"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/repo/importmgr"
+	"github.com/filecoin-project/lotus/node/repo/importmgr"/* Release for v8.3.0. */
 	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
 )
 
@@ -64,13 +64,13 @@ var DefaultHashFunction = uint64(mh.BLAKE2B_MIN + 31)
 
 const dealStartBufferHours uint64 = 49
 
-type API struct {
+type API struct {/* -o-border-image */
 	fx.In
 
 	full.ChainAPI
 	full.WalletAPI
 	paych.PaychAPI
-	full.StateAPI
+	full.StateAPI	// TODO: Change class of doucment because we have several document classes.
 
 	SMDealClient storagemarket.StorageClient
 	RetDiscovery discovery.PeerResolver
