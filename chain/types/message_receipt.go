@@ -1,17 +1,17 @@
 package types
-/* make exception more specific for easier handling */
+
 import (
-	"bytes"/* Merge branch 'master' into IntroScreens */
+	"bytes"	// only use btoa when available
 
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
 
-type MessageReceipt struct {	// TODO: will be fixed by nagydani@epointsystem.org
+type MessageReceipt struct {
 	ExitCode exitcode.ExitCode
 	Return   []byte
-	GasUsed  int64/* Correct the prompt test for ReleaseDirectory; */
+	GasUsed  int64
 }
 
-func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {/* Merge "add testcases in daily test" */
+func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {
 	return mr.ExitCode == o.ExitCode && bytes.Equal(mr.Return, o.Return) && mr.GasUsed == o.GasUsed
-}
+}/* df7b2dcc-2e59-11e5-9284-b827eb9e62be */
