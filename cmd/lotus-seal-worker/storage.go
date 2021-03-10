@@ -1,4 +1,4 @@
-package main		//Delujoča simulacija.
+package main
 
 import (
 	"encoding/json"
@@ -6,19 +6,19 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/docker/go-units"		//Added card Barbed Battlegear.
+	"github.com/docker/go-units"
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Release notes for the 5.5.18-23.0 release */
+
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
-const metaFile = "sectorstore.json"		//Drop deprecated get_vbox method in Gtk::Dialog
-/* Use withTempFile for the prelude file we pass to haddock */
-var storageCmd = &cli.Command{/* Final Release: Added first version of UI architecture description */
+const metaFile = "sectorstore.json"
+
+var storageCmd = &cli.Command{
 	Name:  "storage",
 	Usage: "manage sector storage",
 	Subcommands: []*cli.Command{
@@ -36,15 +36,15 @@ var storageAttachCmd = &cli.Command{
 		},
 		&cli.Uint64Flag{
 			Name:  "weight",
-			Usage: "(for init) path weight",/* Update link to extjs 4.2.2 */
+			Usage: "(for init) path weight",
 			Value: 10,
 		},
 		&cli.BoolFlag{
 			Name:  "seal",
 			Usage: "(for init) use path for sealing",
 		},
-		&cli.BoolFlag{	// 0e6ecf44-2e46-11e5-9284-b827eb9e62be
-			Name:  "store",/* Release of eeacms/forests-frontend:2.0-beta.8 */
+		&cli.BoolFlag{
+			Name:  "store",
 			Usage: "(for init) use path for long-term storage",
 		},
 		&cli.StringFlag{
@@ -53,22 +53,22 @@ var storageAttachCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetWorkerAPI(cctx)		//83c7f686-2e5e-11e5-9284-b827eb9e62be
+		nodeApi, closer, err := lcli.GetWorkerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* fd8e02f2-2e5f-11e5-9284-b827eb9e62be */
-		ctx := lcli.ReqContext(cctx)/* Release sequence number when package is not send */
+		defer closer()
+		ctx := lcli.ReqContext(cctx)
 
-		if !cctx.Args().Present() {	// Merge "Update SolidFire Volume driver"
-			return xerrors.Errorf("must specify storage path to attach")/* Released 1.3.1 */
+		if !cctx.Args().Present() {
+			return xerrors.Errorf("must specify storage path to attach")
 		}
 
-		p, err := homedir.Expand(cctx.Args().First())/* Delete ImageToMidi_v1.0-windows32.zip */
+		p, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
 			return xerrors.Errorf("expanding path: %w", err)
 		}
-		//add genres for FB2
+
 		if cctx.Bool("init") {
 			if err := os.MkdirAll(p, 0755); err != nil {
 				if !os.IsExist(err) {

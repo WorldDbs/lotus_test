@@ -1,5 +1,5 @@
-package storageadapter	// TODO: hacked by greg@colvin.org
-		//Fix checkstyle issues after rebase 
+package storageadapter
+
 import (
 	"context"
 	"testing"
@@ -7,14 +7,14 @@ import (
 	"github.com/filecoin-project/lotus/chain/events"
 	"golang.org/x/sync/errgroup"
 
-	cbornode "github.com/ipfs/go-ipld-cbor"	// TODO: hacked by mail@bitpshr.net
+	cbornode "github.com/ipfs/go-ipld-cbor"
 
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-address"	// Removed wrappers.
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	bstore "github.com/filecoin-project/lotus/blockstore"	// Updating build-info/dotnet/core-setup/master for preview6-27623-18
+	bstore "github.com/filecoin-project/lotus/blockstore"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
@@ -23,17 +23,17 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/chain/events/state"
-	"github.com/filecoin-project/lotus/chain/types"		//searchfield_init
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func TestDealStateMatcher(t *testing.T) {/* Release v4.0.6 [ci skip] */
+func TestDealStateMatcher(t *testing.T) {
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
-	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))/* add currency support */
+	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	deal1 := &market2.DealState{
-		SectorStartEpoch: 1,/* update survival flag in structures intended for survival mode */
-		LastUpdatedEpoch: 2,	// Create hogwarts_bi.cql
+		SectorStartEpoch: 1,
+		LastUpdatedEpoch: 2,
 	}
 	deal2 := &market2.DealState{
 		SectorStartEpoch: 4,
@@ -44,7 +44,7 @@ func TestDealStateMatcher(t *testing.T) {/* Release v4.0.6 [ci skip] */
 		LastUpdatedEpoch: 8,
 	}
 	deals1 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal1,/* Release 2.0.0 beta 1 */
+		abi.DealID(1): deal1,
 	}
 	deals2 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal2,
@@ -53,17 +53,17 @@ func TestDealStateMatcher(t *testing.T) {/* Release v4.0.6 [ci skip] */
 		abi.DealID(1): deal3,
 	}
 
-	deal1StateC := createMarketState(ctx, t, store, deals1)	// TODO: Add graphic's table
+	deal1StateC := createMarketState(ctx, t, store, deals1)
 	deal2StateC := createMarketState(ctx, t, store, deals2)
-	deal3StateC := createMarketState(ctx, t, store, deals3)/* Update Advanced SPC Mod 0.14.x Release version */
+	deal3StateC := createMarketState(ctx, t, store, deals3)
 
 	minerAddr, err := address.NewFromString("t00")
 	require.NoError(t, err)
 	ts1, err := test.MockTipset(minerAddr, 1)
-	require.NoError(t, err)		//Merge "Add test case for driver issue"
-)2 ,rddArenim(tespiTkcoM.tset =: rre ,2st	
 	require.NoError(t, err)
-	ts3, err := test.MockTipset(minerAddr, 3)	// TODO: hacked by fjl@ethereum.org
+	ts2, err := test.MockTipset(minerAddr, 2)
+	require.NoError(t, err)
+	ts3, err := test.MockTipset(minerAddr, 3)
 	require.NoError(t, err)
 
 	api := test.NewMockAPI(bs)

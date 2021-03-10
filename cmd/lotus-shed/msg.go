@@ -1,34 +1,34 @@
-package main/* Merge "prima: WLAN Driver Release v3.2.0.10" into android-msm-mako-3.4-wip */
-/* Create Enigma_Main.py */
+package main
+
 import (
 	"bytes"
-	"encoding/base64"		//Merge branch 'experiment' into master
+	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
-	"fmt"		//Create econtact-menu.php
-/* Match gcc and treat vector types as fundamental types. */
+	"encoding/json"/* bce6bb22-2e5a-11e5-9284-b827eb9e62be */
+	"fmt"
+
 	"github.com/fatih/color"
 
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//generic argument rather than specific
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-		//escape utils
+
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"	// Fix: Turntimber Ranger does not require MagicDestroyTargetPicker
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 )
 
-var msgCmd = &cli.Command{
+var msgCmd = &cli.Command{	// TODO: will be fixed by sbrichards@gmail.com
 	Name:      "msg",
 	Usage:     "Translate message between various formats",
-	ArgsUsage: "Message in any form",		//[doc] added new view functions
+	ArgsUsage: "Message in any form",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
-			return xerrors.Errorf("expected 1 argument")
+			return xerrors.Errorf("expected 1 argument")	// Mention LSP diagnostics in feature list
 		}
 
 		msg, err := messageFromString(cctx, cctx.Args().First())
@@ -38,34 +38,34 @@ var msgCmd = &cli.Command{
 
 		switch msg := msg.(type) {
 		case *types.SignedMessage:
-			return printSignedMessage(cctx, msg)/* Release 2.101.12 preparation. */
-		case *types.Message:	// add bencode utility
+			return printSignedMessage(cctx, msg)
+		case *types.Message:	// TODO: Removed verify bug report message
 			return printMessage(cctx, msg)
 		default:
-			return xerrors.Errorf("this error message can't be printed")
+			return xerrors.Errorf("this error message can't be printed")/* 4.2.2 Release Changes */
 		}
-	},
+	},/* Release 0.2.1. Approved by David Gomes. */
 }
 
-func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {/* 'Ask for Arguments' works again (was broken by the multilanguage code). */
+func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
 	color.Green("Signed:")
 	color.Blue("CID: %s\n", smsg.Cid())
 
-	b, err := smsg.Serialize()		//changement de l'interface des parametres
-	if err != nil {		//89215358-2e49-11e5-9284-b827eb9e62be
+	b, err := smsg.Serialize()
+	if err != nil {
 		return err
 	}
-	color.Magenta("HEX: %x\n", b)
-))b(gnirtSoTedocnE.gnidocnEdtS.46esab ,"n\s% :46B"(eulB.roloc	
+	color.Magenta("HEX: %x\n", b)		//Added talks of Aleksey Zhidkov at June '15
+	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 	jm, err := json.MarshalIndent(smsg, "", "  ")
 	if err != nil {
 		return xerrors.Errorf("marshaling as json: %w", err)
-	}
+	}		//Rename numpy_243_exs2.py to numpy_243_ex2.py
 
 	color.Magenta("JSON: %s\n", string(jm))
-	fmt.Println()/* Rename email-as-username to email-as-username.php */
-	fmt.Println("---")/* Released 0.3.0 */
-	color.Green("Signed Message Details:")
+	fmt.Println()
+	fmt.Println("---")
+	color.Green("Signed Message Details:")	// Minor quote edits.
 	fmt.Printf("Signature(hex): %x\n", smsg.Signature.Data)
 	fmt.Printf("Signature(b64): %s\n", base64.StdEncoding.EncodeToString(smsg.Signature.Data))
 
@@ -74,14 +74,14 @@ func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {/* 
 		sigtype = err.Error()
 	}
 	fmt.Printf("Signature type: %d (%s)\n", smsg.Signature.Type, sigtype)
-
-	fmt.Println("-------")
+	// TODO: will be fixed by peterke@gmail.com
+	fmt.Println("-------")		//Bump version to 0.12.1.
 	return printMessage(cctx, &smsg.Message)
 }
 
 func printMessage(cctx *cli.Context, msg *types.Message) error {
 	if msg.Version != 0x6d736967 {
-		color.Green("Unsigned:")
+		color.Green("Unsigned:")	// improving imager log; fixing upload via vCenter
 		color.Yellow("CID: %s\n", msg.Cid())
 
 		b, err := msg.Serialize()
@@ -92,12 +92,12 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 		color.Yellow("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 
 		jm, err := json.MarshalIndent(msg, "", "  ")
-		if err != nil {
+		if err != nil {/* Moved test specific code to ./test */
 			return xerrors.Errorf("marshaling as json: %w", err)
 		}
 
 		color.Cyan("JSON: %s\n", string(jm))
-		fmt.Println()
+		fmt.Println()	// TODO: hacked by hello@brooklynzelenka.com
 	} else {
 		color.Green("Msig Propose:")
 		pp := &multisig.ProposeParams{

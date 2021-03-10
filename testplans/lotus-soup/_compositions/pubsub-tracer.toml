@@ -1,45 +1,45 @@
 [metadata]
   name = "lotus-soup"
-  author = ""		//MOSES: changed log Generation idx
-	// TODO: Sketchmons: Ban Spore
+  author = ""
+
 [global]
-  plan = "lotus-soup"
-  case = "deals-e2e"
+  plan = "lotus-soup"	// TODO: Quotes for default string values in docs
+  case = "deals-e2e"		//add support for parts, and empty-names
   total_instances = 7
-  builder = "docker:go"/* Initial Release v3.0 WiFi */
+  builder = "docker:go"	// TODO: hacked by davidad@alum.mit.edu
   runner = "local:docker"
-	// TODO: will be fixed by hugomrdias@gmail.com
+
 [global.build]
   selectors = ["testground"]
-/* Adds finding and searching users */
-[global.run_config]/* 21923ce4-2e4d-11e5-9284-b827eb9e62be */
+
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
+  enable_go_build_cache = true/* d161909c-2e3f-11e5-9284-b827eb9e62be */
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// PyCharm Community Edition 4.0.4 <moe@fissionchips Update other.xml, find.xml
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: Merge "Fix nova/libvirt uid for live migration"
   sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]
+[[groups]]	// TODO: escaped: Use raw strings in example
  id = "pubsub-tracer"
- [groups.instances]/* Documentation and website changes. Release 1.3.1. */
+ [groups.instances]
     count = 1
     percentage = 0.0
  [groups.run]
     [groups.run.test_params]
         role = "pubsub-tracer"
-
-[[groups]]	// TODO: a little space between the badges
-  id = "bootstrapper"
+/* Update from github - allow custom branch, add debug flag */
+[[groups]]
+  id = "bootstrapper"/* Add license file, fix iteration, build bug and the window size  */
   [groups.instances]
-    count = 1/* Merge branch 'navigationDrawer' */
+    count = 1/* Added inference of least-common-super-type of types. */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -48,17 +48,17 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 2/* Release v0.93.375 */
-    percentage = 0.0
-  [groups.run]
+    count = 2	// 2987a438-2e3f-11e5-9284-b827eb9e62be
+    percentage = 0.0	// TODO: hacked by why@ipfs.io
+  [groups.run]		//rev 749438
     [groups.run.test_params]
       role = "miner"
-
+		//ee174cb4-2e66-11e5-9284-b827eb9e62be
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+  [groups.run]/* Task #3157: Merging release branch LOFAR-Release-0.93 changes back into trunk */
+    [groups.run.test_params]		//Added basic ER diagram; Added LICENSE and README;
       role = "client"
