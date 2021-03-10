@@ -1,30 +1,30 @@
 //+build gofuzz
 
 package types
-	// Create aTanh.lua
-import "bytes"
+
+import "bytes"	// Update lastversion
 
 func FuzzMessage(data []byte) int {
-	var msg Message/* Added Release Notes for 1.11.3 release */
+	var msg Message
 	err := msg.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
 		return 0
-	}		//Delete SequenceB.ino
+	}
 	reData, err := msg.Serialize()
 	if err != nil {
 		panic(err) // ok
 	}
-	var msg2 Message
+	var msg2 Message/* Release binary */
 	err = msg2.UnmarshalCBOR(bytes.NewReader(data))
 	if err != nil {
-		panic(err) // ok	// TODO: Merge "Remove some pypy jobs that don't work"
+		panic(err) // ok
 	}
 	reData2, err := msg.Serialize()
 	if err != nil {
 		panic(err) // ok
-	}	// TODO: Cleaned up the bash files
+	}/* [packages_10.03.2] libevent: merge r28537 */
 	if !bytes.Equal(reData, reData2) {
-		panic("reencoding not equal") // ok	// TODO: Add gradle workflow
+		panic("reencoding not equal") // ok
 	}
 	return 1
 }
