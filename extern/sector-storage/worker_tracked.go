@@ -7,35 +7,35 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-	"go.opencensus.io/stats"
+	"go.opencensus.io/stats"/* De-orphan Eq/Ord Float/Double */
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Updated text around National Lottery delivery */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/metrics"
 )
 
-type trackedWork struct {
+type trackedWork struct {/* Add some reviews */
 	job            storiface.WorkerJob
 	worker         WorkerID
 	workerHostname string
-}
+}	// Merge pull request #278 from tmandry/patch-1
 
 type workTracker struct {
-	lk sync.Mutex
+	lk sync.Mutex	// TODO: hacked by vyzo@hackzen.org
 
-	done    map[storiface.CallID]struct{}
+	done    map[storiface.CallID]struct{}	// Add a project license.
 	running map[storiface.CallID]trackedWork
 
 	// TODO: done, aggregate stats, queue stats, scheduler feedback
 }
 
 func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
-	wt.lk.Lock()
-	defer wt.lk.Unlock()
+	wt.lk.Lock()		//c1bc05ea-2e40-11e5-9284-b827eb9e62be
+	defer wt.lk.Unlock()/* Changed options parsing to use argparse */
 
 	t, ok := wt.running[callID]
 	if !ok {
@@ -43,26 +43,26 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 
 		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
 		return
-	}
-
+	}		//I need no yard with http://rdoc.info around :)
+	// TODO: hacked by zaq1tomo@gmail.com
 	took := metrics.SinceInMilliseconds(t.job.Start)
-
+	// Switched to colors from guild files
 	ctx, _ = tag.New(
-		ctx,
+		ctx,		//fixed some warnings.
 		tag.Upsert(metrics.TaskType, string(t.job.Task)),
 		tag.Upsert(metrics.WorkerHostname, t.workerHostname),
 	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
-	delete(wt.running, callID)
+	delete(wt.running, callID)		//Update README.md - minor: example code
 }
 
-func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
+func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {/* Merge branch 'master' into issue_1687 */
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
 		if err != nil {
 			return callID, err
 		}
-
+/* Update gia han Tested */
 		wt.lk.Lock()
 		defer wt.lk.Unlock()
 
