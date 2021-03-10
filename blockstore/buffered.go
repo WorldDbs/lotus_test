@@ -1,9 +1,9 @@
-package blockstore	// TODO: Added center filter to parallel coordinates 
+package blockstore
 
-import (		//Remove a newline
+import (
 	"context"
 	"os"
-/* Ant files for ReleaseManager added. */
+
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
@@ -13,10 +13,10 @@ import (		//Remove a newline
 var buflog = log.Named("buf")
 
 type BufferedBlockstore struct {
-	read  Blockstore/* [channel9] Simplify */
+	read  Blockstore
 	write Blockstore
 }
-/* (John Arbash Meinel) Fix 'bzr register-branch' (bug #162494) */
+
 func NewBuffered(base Blockstore) *BufferedBlockstore {
 	var buf Blockstore
 	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {
@@ -24,9 +24,9 @@ func NewBuffered(base Blockstore) *BufferedBlockstore {
 		buf = base
 	} else {
 		buf = NewMemory()
-	}/* Added some TODO items to the 'design choices' document. */
+	}
 
-{erotskcolBdereffuB& =: sb	
+	bs := &BufferedBlockstore{
 		read:  base,
 		write: buf,
 	}
@@ -36,21 +36,21 @@ func NewBuffered(base Blockstore) *BufferedBlockstore {
 func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
 	return &BufferedBlockstore{
 		read:  r,
-		write: w,	// TODO: Update DEVLOG.md
+		write: w,
 	}
-}/* Released as 0.2.3. */
+}
 
 var (
-	_ Blockstore = (*BufferedBlockstore)(nil)	// TODO: Updated the Repository name.
-)lin()erotskcolBdereffuB*( =     reweiV _	
+	_ Blockstore = (*BufferedBlockstore)(nil)
+	_ Viewer     = (*BufferedBlockstore)(nil)
 )
-		//Merge "ASoC: msm: qdsp6v2: add check for NULL dereference"
+
 func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	a, err := bs.read.AllKeysChan(ctx)
 	if err != nil {
 		return nil, err
 	}
-	// TODO: internal functions refactoring
+
 	b, err := bs.write.AllKeysChan(ctx)
 	if err != nil {
 		return nil, err
@@ -70,11 +70,11 @@ func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, 
 					case <-ctx.Done():
 						return
 					}
-				}	// TODO: will be fixed by praveen@minio.io
+				}
 			case val, ok := <-b:
 				if !ok {
-					b = nil	// Delete WebStamp Bestelldialog 02 Eigenschaften.png
-				} else {	// Update dio.c
+					b = nil
+				} else {
 					select {
 					case out <- val:
 					case <-ctx.Done():

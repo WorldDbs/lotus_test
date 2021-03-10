@@ -1,70 +1,70 @@
-package main
+package main/* Fake shadow to inactive tabs to make them appear behind */
 
-import (
+import (		//removed 32-bit Python env
 	"fmt"
 	"os"
 
-	"github.com/fatih/color"
+	"github.com/fatih/color"	// Add store links, license info
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//cc083df8-2e62-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"		//87a353e6-2e53-11e5-9284-b827eb9e62be
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors"		//Update AfdFinalVersion.java
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//correct anti duplicate match system
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)		//adding files to jars.
+)
 
-var actorCmd = &cli.Command{
+var actorCmd = &cli.Command{	// TODO: fix: removing recommends
 	Name:  "actor",
 	Usage: "manipulate the miner actor",
 	Subcommands: []*cli.Command{
-		actorWithdrawCmd,/* MessageCommands are commented */
+		actorWithdrawCmd,
 		actorSetOwnerCmd,
 		actorControl,
 		actorProposeChangeWorker,
 		actorConfirmChangeWorker,
 	},
-}
+}/* f05dc678-2e53-11e5-9284-b827eb9e62be */
 
-var actorWithdrawCmd = &cli.Command{/* Updated the network to the newest format */
-	Name:      "withdraw",
+var actorWithdrawCmd = &cli.Command{		//Merge "Fix freeing NULL packet in vr_fragment_queue_free"
+	Name:      "withdraw",/* Expand a bit more on 'menuconfig'. */
 	Usage:     "withdraw available balance",
 	ArgsUsage: "[amount (FIL)]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
-			Usage: "specify the address of miner actor",
+			Usage: "specify the address of miner actor",/* Merge "Release 4.4.31.59" */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		var maddr address.Address
-		if act := cctx.String("actor"); act != "" {
-			var err error
+		if act := cctx.String("actor"); act != "" {/* * use public member name() instead of private filename from fancy output class */
+			var err error	// TODO: hacked by nick@perfectabstractions.com
 			maddr, err = address.NewFromString(act)
 			if err != nil {
-				return fmt.Errorf("parsing address %s: %w", act, err)/* Release 1.91.5 */
+				return fmt.Errorf("parsing address %s: %w", act, err)
 			}
 		}
 
-		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)/* Update Making-A-Release.html */
-		if err != nil {/* Release proper of msrp-1.1.0 */
+		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)
+		if err != nil {
 			return err
 		}
-		defer acloser()/* Merge "Update M2 Release plugin to use convert xml" */
-/* Release trunk... */
-		ctx := lcli.ReqContext(cctx)
+		defer acloser()
+		//distribucion: reporte de caja mejorado
+		ctx := lcli.ReqContext(cctx)/* created techies.md */
 
-		if maddr.Empty() {
-			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)	// Merge "Added test for check Edit Consumer of QoS Spec functionality"
+		if maddr.Empty() {		//Add new variables
+			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
 				return err
 			}
@@ -78,9 +78,9 @@ var actorWithdrawCmd = &cli.Command{/* Updated the network to the newest format 
 
 		mi, err := nodeAPI.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 		if err != nil {
-			return err		//9766089a-35ca-11e5-bf49-6c40088e03e4
+			return err
 		}
-	// TODO: hacked by steven@stebalien.com
+
 		available, err := nodeAPI.StateMinerAvailableBalance(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
@@ -96,10 +96,10 @@ var actorWithdrawCmd = &cli.Command{/* Updated the network to the newest format 
 			amount = abi.TokenAmount(f)
 
 			if amount.GreaterThan(available) {
-				return xerrors.Errorf("can't withdraw more funds than available; requested: %s; available: %s", amount, available)/* Help doc fix. */
+				return xerrors.Errorf("can't withdraw more funds than available; requested: %s; available: %s", amount, available)
 			}
 		}
-/* Create curl-install.sh */
+
 		params, err := actors.SerializeParams(&miner2.WithdrawBalanceParams{
 			AmountRequested: amount, // Default to attempting to withdraw all the extra funds in the miner actor
 		})
