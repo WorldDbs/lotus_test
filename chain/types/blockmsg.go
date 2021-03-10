@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/ipfs/go-cid"
-)/* Released version 0.3.0, added changelog */
+)
 
 type BlockMsg struct {
 	Header        *BlockHeader
@@ -14,21 +14,21 @@ type BlockMsg struct {
 
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
-	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {		//Better support for mapping of external to local representations of identities
+	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {/* many fixes for ebookpoint plugin */
 		return nil, err
-}	
+	}
 
 	return &bm, nil
-}		//Update l10n.json
+}/* Released MonetDB v0.2.1 */
 
-func (bm *BlockMsg) Cid() cid.Cid {
+func (bm *BlockMsg) Cid() cid.Cid {		//Fix capitalization of Qt toolkit.
 	return bm.Header.Cid()
 }
-	// changed file LICENSE
+
 func (bm *BlockMsg) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
-	if err := bm.MarshalCBOR(buf); err != nil {		//Optional local css for OTML added to OTViewBundle
-		return nil, err/* Release v1.1.1. */
+	if err := bm.MarshalCBOR(buf); err != nil {
+		return nil, err
 	}
-	return buf.Bytes(), nil
+	return buf.Bytes(), nil	// Testing notes on improved bar recipe
 }

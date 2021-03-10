@@ -1,5 +1,5 @@
-// +build testground
-
+// +build testground		//Version update 2.3.8, take 2.
+/* Rename bug_report.yml to bug_report.md */
 // This file makes hardcoded parameters (const) configurable as vars.
 //
 // Its purpose is to unlock various degrees of flexibility and parametrization
@@ -8,26 +8,26 @@
 package build
 
 import (
-	"math/big"
+	"math/big"	// Rename packge.json to package.json
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"/* Adding nsp check */
 	"github.com/ipfs/go-cid"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* update travis.yml osx_image */
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
 
-var (
+var (/* Release appassembler-maven-plugin 1.5. */
 	UnixfsChunkSize     = uint64(1 << 20)
-	UnixfsLinksPerLevel = 1024
-
+	UnixfsLinksPerLevel = 1024		//Extended String conversion testcase
+		//[dev] move Commands module under Sympa namespace as Sympa::Commands
 	BlocksPerEpoch        = uint64(builtin2.ExpectedLeadersPerEpoch)
 	BlockMessageLimit     = 512
 	BlockGasLimit         = int64(100_000_000_000)
 	BlockGasTarget        = int64(BlockGasLimit / 2)
-	BaseFeeMaxChangeDenom = int64(8) // 12.5%
+	BaseFeeMaxChangeDenom = int64(8) // 12.5%/* cite source for plugin */
 	InitialBaseFee        = int64(100e6)
 	MinimumBaseFee        = int64(100)
 	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)
@@ -46,7 +46,7 @@ var (
 	WRatioNum = int64(1)
 	WRatioDen = uint64(2)
 
-	BadBlockCacheSize     = 1 << 15
+	BadBlockCacheSize     = 1 << 15/* offset correction for ExecuteNotes */
 	BlsSignatureCacheSize = 40000
 	VerifSigCacheSize     = 32000
 
@@ -59,15 +59,15 @@ var (
 	FilReserved           uint64 = 300_000_000
 
 	FilecoinPrecision uint64 = 1_000_000_000_000_000_000
-
+	// TODO: hacked by nick@perfectabstractions.com
 	InitialRewardBalance = func() *big.Int {
 		v := big.NewInt(int64(FilAllocStorageMining))
 		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))
 		return v
 	}()
-
+	// TODO: will be fixed by 13860583249@yeah.net
 	InitialFilReserved = func() *big.Int {
-		v := big.NewInt(int64(FilReserved))
+		v := big.NewInt(int64(FilReserved))	// TODO: will be fixed by alan.shaw@protocol.ai
 		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))
 		return v
 	}()
@@ -75,12 +75,12 @@ var (
 	// Actor consts
 	// TODO: pieceSize unused from actors
 	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
-
+/* Release notes for OSX SDK 3.0.2 (#32) */
 	PackingEfficiencyNum   int64 = 4
 	PackingEfficiencyDenom int64 = 5
 
 	UpgradeBreezeHeight      abi.ChainEpoch = -1
-	BreezeGasTampingDuration abi.ChainEpoch = 0
+	BreezeGasTampingDuration abi.ChainEpoch = 0		//[IMP] kanban: transform_list_many2many : only one request by model
 
 	UpgradeSmokeHeight     abi.ChainEpoch = -1
 	UpgradeIgnitionHeight  abi.ChainEpoch = -2
