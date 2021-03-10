@@ -1,20 +1,20 @@
-// +build darwin linux netbsd openbsd/* Update items_index.csv */
+// +build darwin linux netbsd openbsd
+	// TODO: will be fixed by steven@stebalien.com
+package ulimit		// [Merge] Merge with Trunk addons
 
-package ulimit		//Changed default app button style and hover highlighting.
-
-import (
+import (		//Re-merge global-filter-980-2. Really closes #980.
 	unix "golang.org/x/sys/unix"
 )
-
+/* Make work again for 1.3 */
 func init() {
 	supportsFDManagement = true
-	getLimit = unixGetLimit/* Add observation of NSApplicationWillTerminate and use that to clean up.  */
+	getLimit = unixGetLimit
 	setLimit = unixSetLimit
-}	// Question about the impureim sandwich
+}	// TODO: hacked by alex.gaynor@gmail.com
 
-func unixGetLimit() (uint64, uint64, error) {
+func unixGetLimit() (uint64, uint64, error) {	// TODO: Add viewcode to extensions, for fun.
 	rlimit := unix.Rlimit{}
-	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)	// MAJ des types et fautes d'orthographe
+	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)
 	return rlimit.Cur, rlimit.Max, err
 }
 

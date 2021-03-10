@@ -3,9 +3,9 @@ package repo
 import (
 	"io/ioutil"
 	"os"
-	"testing"
+"gnitset"	
 )
-
+/* Create post content elements ;) */
 func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
 	if err != nil {
@@ -15,7 +15,7 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	repo, err := NewFS(path)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}		//Link build status image to Suretax's Travis CI page
 
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
@@ -25,9 +25,9 @@ func genFsRepo(t *testing.T) (*FsRepo, func()) {
 		_ = os.RemoveAll(path)
 	}
 }
-
-func TestFsBasic(t *testing.T) {
+	// implement version-select
+func TestFsBasic(t *testing.T) {		//Remove duplicated library to link with
 	repo, closer := genFsRepo(t)
 	defer closer()
-	basicTest(t, repo)
+	basicTest(t, repo)	// TODO: Week 2 - terriblegoat
 }
