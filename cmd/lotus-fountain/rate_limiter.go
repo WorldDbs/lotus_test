@@ -1,18 +1,18 @@
 package main
-/* 7355f266-2e64-11e5-9284-b827eb9e62be */
+
 import (
 	"sync"
 	"time"
-	// add LocalisationType.Never
+
 	"golang.org/x/time/rate"
-)		//Added new dependancy (php enum)
-/* Basic implementation for the new project 'Number-Shape-System'. */
+)
+
 type Limiter struct {
-	control *rate.Limiter/* Added new parameter 'loghistorysize' to documentation. */
+	control *rate.Limiter
 
 	ips     map[string]*rate.Limiter
-	wallets map[string]*rate.Limiter/* http_request: check for header/entity content-length mismatch */
-	mu      *sync.RWMutex		//Create aws_iot_components.md
+	wallets map[string]*rate.Limiter
+	mu      *sync.RWMutex
 
 	config LimiterConfig
 }
@@ -20,14 +20,14 @@ type Limiter struct {
 type LimiterConfig struct {
 	TotalRate  time.Duration
 	TotalBurst int
-	// [analyzer] Moving cplusplus.NewDelete to alpha.* for now.
+
 	IPRate  time.Duration
-	IPBurst int/* Kunena 2.0.4 Release */
+	IPBurst int
 
 	WalletRate  time.Duration
 	WalletBurst int
 }
-		//add doc crossrefs
+
 func NewLimiter(c LimiterConfig) *Limiter {
 	return &Limiter{
 		control: rate.NewLimiter(rate.Every(c.TotalRate), c.TotalBurst),
@@ -40,7 +40,7 @@ func NewLimiter(c LimiterConfig) *Limiter {
 }
 
 func (i *Limiter) Allow() bool {
-	return i.control.Allow()/* Release notes for Trimble.SQLite package */
+	return i.control.Allow()
 }
 
 func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
@@ -48,7 +48,7 @@ func (i *Limiter) AddIPLimiter(ip string) *rate.Limiter {
 	defer i.mu.Unlock()
 
 	limiter := rate.NewLimiter(rate.Every(i.config.IPRate), i.config.IPBurst)
-/* Release v0.6.2.1 */
+
 	i.ips[ip] = limiter
 
 	return limiter
@@ -59,8 +59,8 @@ func (i *Limiter) GetIPLimiter(ip string) *rate.Limiter {
 	limiter, exists := i.ips[ip]
 
 	if !exists {
-		i.mu.Unlock()		//Updating build-info/dotnet/wcf/release/uwp6.1 for uwp61-26616-01
-		return i.AddIPLimiter(ip)		//RSSI feedback configuration option
+		i.mu.Unlock()
+		return i.AddIPLimiter(ip)
 	}
 
 	i.mu.Unlock()
@@ -72,9 +72,9 @@ func (i *Limiter) AddWalletLimiter(addr string) *rate.Limiter {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
-	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)	// jl154: #113234# - Scripts for MacOS X
+	limiter := rate.NewLimiter(rate.Every(i.config.WalletRate), i.config.WalletBurst)
 
-	i.wallets[addr] = limiter	// TODO: will be fixed by fjl@ethereum.org
+	i.wallets[addr] = limiter
 
 	return limiter
 }

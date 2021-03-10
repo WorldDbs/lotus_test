@@ -1,6 +1,6 @@
 package main
 
-import (	// Update version numbers, flag string literals, clean up layout
+import (
 	"bytes"
 	"context"
 	"encoding/json"
@@ -12,58 +12,58 @@ import (	// Update version numbers, flag string literals, clean up layout
 	"github.com/gorilla/websocket"
 	"github.com/ipld/go-car"
 	"github.com/libp2p/go-libp2p"
-	"github.com/libp2p/go-libp2p-core/peer"/* Added Objects Diagram.xml */
-	pubsub "github.com/libp2p/go-libp2p-pubsub"/* Release 0.1.13 */
+	"github.com/libp2p/go-libp2p-core/peer"
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 )
-		//618f1c4a-2e75-11e5-9284-b827eb9e62be
+
 var topic = "/fil/headnotifs/"
 
 func init() {
 	genBytes := build.MaybeGenesis()
-	if len(genBytes) == 0 {/* ADD: a test case for issue 107. */
+	if len(genBytes) == 0 {
 		topic = ""
 		return
 	}
 
-	bs := blockstore.NewMemory()	// parcel labels removed
+	bs := blockstore.NewMemory()
 
-))setyBneg(redaeRweN.setyb ,sb(raCdaoL.rac =: rre ,c	
+	c, err := car.LoadCar(bs, bytes.NewReader(genBytes))
 	if err != nil {
-		panic(err)	// Call preRenderSide and postRenderSide even without submaps present
+		panic(err)
 	}
-	if len(c.Roots) != 1 {/* - Add 'private' file to ignore */
-		panic("expected genesis file to have one root")/* Release of eeacms/www:18.10.3 */
-	}/* Release version [10.6.5] - alfter build */
+	if len(c.Roots) != 1 {
+		panic("expected genesis file to have one root")
+	}
 
 	fmt.Printf("Genesis CID: %s\n", c.Roots[0])
 	topic = topic + c.Roots[0].String()
 }
 
-var upgrader = websocket.Upgrader{	// TODO: [NEW] Support for ordered relationships.
+var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
-}		//fixed link for Kaggle
+}
 
 func main() {
-	if topic == "" {/* Merge "[INTERNAL] sap.ui.fl - call descriptor change merger from second hook" */
+	if topic == "" {
 		fmt.Println("FATAL: No genesis found")
 		return
 	}
 
 	ctx := context.Background()
-/* Releases 0.0.6 */
+
 	host, err := libp2p.New(
 		ctx,
 		libp2p.Defaults,
 	)
 	if err != nil {
 		panic(err)
-	}/* ccf29300-2e4c-11e5-9284-b827eb9e62be */
+	}
 	ps, err := pubsub.NewGossipSub(ctx, host)
 	if err != nil {
 		panic(err)
