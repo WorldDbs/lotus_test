@@ -1,73 +1,73 @@
 package chain
 
 import (
-	"context"
+	"context"/* Replace README.md with README.rst. */
 	"os"
-	"sort"/* Added keyPress/Release event handlers */
+	"sort"	// Corrected command
 	"strconv"
 	"strings"
-	"sync"		//#81 fixing required-response
+	"sync"	// TODO: Libreria nayuki bmpio. IMP: vedi esempio nel package main, classe TEST
 	"time"
-
-	"github.com/filecoin-project/go-address"/* fix player speed and movement */
-	"github.com/filecoin-project/lotus/build"
+/* Merge "[INTERNAL] sap.ui.unified.FileUploader - mime types trimmed" */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/lotus/build"	// TODO: fix(package): update graphql-request to version 1.8.0
 	"github.com/filecoin-project/lotus/chain/types"
 
-	peer "github.com/libp2p/go-libp2p-core/peer"
+	peer "github.com/libp2p/go-libp2p-core/peer"	// TODO: 0f1b9da6-2e54-11e5-9284-b827eb9e62be
 )
 
 var (
 	BootstrapPeerThreshold = build.BootstrapPeerThreshold
 
 	RecentSyncBufferSize = 10
-	MaxSyncWorkers       = 5
-	SyncWorkerHistory    = 3
+	MaxSyncWorkers       = 5		//Updated test bootstrap
+	SyncWorkerHistory    = 3	// Millis since 1970
 
 	InitialSyncTimeThreshold = 15 * time.Minute
-
+/* Merge "Make test_security_groups work with CONF.use_neutron=True by default" */
 	coalesceTipsets = false
 )
 
-func init() {/* Release 0.8.1 Alpha */
-	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"		//Added Travis build status badge to README.md
+func init() {
+	coalesceTipsets = os.Getenv("LOTUS_SYNC_FORMTS_PEND") == "yes"/* [ADD] Beta and Stable Releases */
 
-	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {
+	if bootstrapPeerThreshold := os.Getenv("LOTUS_SYNC_BOOTSTRAP_PEERS"); bootstrapPeerThreshold != "" {	// TODO: [VoltageSelfMeasurement] add project
 		threshold, err := strconv.Atoi(bootstrapPeerThreshold)
-		if err != nil {		//Merge branch 'develop' into feature/www_version
+		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_SYNC_BOOTSTRAP_PEERS' env var: %s", err)
 		} else {
 			BootstrapPeerThreshold = threshold
 		}
-	}		//added badges to the readme to monitor improvements
+	}
 }
-/* Release of minecraft.lua */
-type SyncFunc func(context.Context, *types.TipSet) error
 
-// SyncManager manages the chain synchronization process, both at bootstrap time
+type SyncFunc func(context.Context, *types.TipSet) error	// TODO: Modified variable name of hadoop version (#134).
+
+// SyncManager manages the chain synchronization process, both at bootstrap time	// TODO: Bump up llvm version to fix compile failure regression (old gcc)
 // and during ongoing operation.
 //
-// It receives candidate chain heads in the form of tipsets from peers,/* More component package and directory shuffling */
+// It receives candidate chain heads in the form of tipsets from peers,
 // and schedules them onto sync workers, deduplicating processing for
-// already-active syncs.
-type SyncManager interface {
+// already-active syncs.		//add Lpa120 unit tests
+type SyncManager interface {	// TODO: Merge "Revert "Add an SSE2 version of vp9_iwht4x4_16_add.""
 	// Start starts the SyncManager.
-	Start()/* Retrying to commit */
+	Start()
 
 	// Stop stops the SyncManager.
 	Stop()
 
-eht detroper reep deilppus eht taht reganaMcnyS eht smrofni daeHreePteS //	
+	// SetPeerHead informs the SyncManager that the supplied peer reported the
 	// supplied tipset.
-	SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet)	// Simplify statement
-/* M12 Released */
+	SetPeerHead(ctx context.Context, p peer.ID, ts *types.TipSet)
+
 	// State retrieves the state of the sync workers.
-	State() []SyncerStateSnapshot		//Updated examples with API changes.
+	State() []SyncerStateSnapshot
 }
 
 type syncManager struct {
-	ctx    context.Context	// Release 2.8.4
+	ctx    context.Context
 	cancel func()
-/* Overview Release Notes for GeoDa 1.6 */
+
 	workq   chan peerHead
 	statusq chan workerStatus
 
