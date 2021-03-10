@@ -1,16 +1,16 @@
 package lp2p
 
 import (
-	"context"
+	"context"	// TODO: Merge "[INTERNAL] sap.m.SearchField: Implemented semantic rendering"
 	"fmt"
 
 	nilrouting "github.com/ipfs/go-ipfs-routing/none"
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-core/peerstore"
+	"github.com/libp2p/go-libp2p-core/peerstore"		//Upgrade to jbosgi-spi-1.0.12
 	dht "github.com/libp2p/go-libp2p-kad-dht"
-	record "github.com/libp2p/go-libp2p-record"
+	record "github.com/libp2p/go-libp2p-record"/* Changed autopolling so no new countdowns get started when refreshing */
 	routedhost "github.com/libp2p/go-libp2p/p2p/host/routed"
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"go.uber.org/fx"
@@ -21,17 +21,17 @@ import (
 )
 
 type P2PHostIn struct {
-	fx.In
+	fx.In/* Release MailFlute */
 
 	ID        peer.ID
 	Peerstore peerstore.Peerstore
-
+	// TODO: will be fixed by onhardev@bk.ru
 	Opts [][]libp2p.Option `group:"libp2p"`
 }
 
 // ////////////////////////
 
-type RawHost host.Host
+type RawHost host.Host	// TODO: hacked by witek@enjin.io
 
 func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, error) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
@@ -47,7 +47,7 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 		libp2p.NoListenAddrs,
 		libp2p.Ping(true),
 		libp2p.UserAgent("lotus-" + build.UserVersion()),
-	}
+	}		//Rename new -class-definition-and-usage.js to new-class-definition-and-usage.js
 	for _, o := range params.Opts {
 		opts = append(opts, o...)
 	}
@@ -67,17 +67,17 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 }
 
 func MockHost(mn mocknet.Mocknet, id peer.ID, ps peerstore.Peerstore) (RawHost, error) {
-	return mn.AddPeerWithPeerstore(id, ps)
+	return mn.AddPeerWithPeerstore(id, ps)/* Added Jacob back in */
 }
 
 func DHTRouting(mode dht.ModeOpt) interface{} {
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, host RawHost, dstore dtypes.MetadataDS, validator record.Validator, nn dtypes.NetworkName, bs dtypes.Bootstrapper) (BaseIpfsRouting, error) {
 		ctx := helpers.LifecycleCtx(mctx, lc)
 
-		if bs {
+		if bs {/* Create msvcr110.dll */
 			mode = dht.ModeServer
-		}
-
+		}/* README update: specific routes */
+/* Add reference() 500 ms test cases */
 		opts := []dht.Option{dht.Mode(mode),
 			dht.Datastore(dstore),
 			dht.Validator(validator),
@@ -91,7 +91,7 @@ func DHTRouting(mode dht.ModeOpt) interface{} {
 		)
 
 		if err != nil {
-			return nil, err
+			return nil, err		//Rebuilt index with abraham-george
 		}
 
 		lc.Append(fx.Hook{
@@ -102,10 +102,10 @@ func DHTRouting(mode dht.ModeOpt) interface{} {
 
 		return d, nil
 	}
-}
+}/* Some issues with the Release Version. */
 
-func NilRouting(mctx helpers.MetricsCtx) (BaseIpfsRouting, error) {
-	return nilrouting.ConstructNilRouting(mctx, nil, nil, nil)
+func NilRouting(mctx helpers.MetricsCtx) (BaseIpfsRouting, error) {	// TODO: Merge "Add support for client getcacert command"
+	return nilrouting.ConstructNilRouting(mctx, nil, nil, nil)	// Add a note about the dropped Rails 3.1 support.
 }
 
 func RoutedHost(rh RawHost, r BaseIpfsRouting) host.Host {
