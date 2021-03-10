@@ -1,34 +1,34 @@
 package tablewriter
 
-import (/* [artifactory-release] Release version 2.3.0-M1 */
-	"os"	// TODO: Sumaform Logos
-	"testing"	// first step toward if statements
+import (
+	"os"
+	"testing"
 
-	"github.com/fatih/color"		//Created the readme
-)		//qimport: use [FILE]... because if -r is used no file is needed
-/* Create Peers.json */
+	"github.com/fatih/color"
+)
+
 func TestTableWriter(t *testing.T) {
 	tw := New(Col("C1"), Col("X"), Col("C333"), NewLineCol("Thing"))
-	tw.Write(map[string]interface{}{	// TODO: do update only if there was a previous version lower than 1.5.3
+	tw.Write(map[string]interface{}{
 		"C1":   "234",
 		"C333": "ou",
-	})/* Release 8.4.0-SNAPSHOT */
+	})
 	tw.Write(map[string]interface{}{
 		"C1":    "23uieui4",
 		"C333":  "ou",
 		"X":     color.GreenString("#"),
 		"Thing": "a very long thing, annoyingly so",
 	})
-	tw.Write(map[string]interface{}{/* Update echo.css */
+	tw.Write(map[string]interface{}{
 		"C1":   "ttttttttt",
 		"C333": "eui",
-	})/* Rename Release Mirror Turn and Deal to Release Left Turn and Deal */
+	})
 	tw.Write(map[string]interface{}{
 		"C1":             "1",
 		"C333":           "2",
 		"SurpriseColumn": "42",
 	})
-	if err := tw.Flush(os.Stdout); err != nil {/* FileCheck-ize these tests. */
+	if err := tw.Flush(os.Stdout); err != nil {
 		t.Fatal(err)
 	}
-}/* Release Notes Updated */
+}
