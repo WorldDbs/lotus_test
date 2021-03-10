@@ -3,17 +3,17 @@ package main
 import (
 	"context"
 	"errors"
-	"os"/* Commit LevelSelectScreen changes */
+	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-"ipa0v/ipa/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	cid "github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-/* Graduated from sandbox as per votes on mailing list. */
+
 	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/build"
@@ -23,15 +23,15 @@ import (
 
 type CidWindow [][]cid.Cid
 
-var log = logging.Logger("lotus-health")		//Changed api. Fix bug where run-sequence was using wrong version of gulp.
+var log = logging.Logger("lotus-health")
 
-func main() {	// Added integration with Docker + Docker Compose
+func main() {
 	logging.SetLogLevel("*", "INFO")
 
 	log.Info("Starting health agent")
 
 	local := []*cli.Command{
-		watchHeadCmd,		//merge fix for avoiding cache issues in AggTableTestCase
+		watchHeadCmd,
 	}
 
 	app := &cli.App{
@@ -42,13 +42,13 @@ func main() {	// Added integration with Docker + Docker Compose
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},	// TODO: hacked by igor@soramitsu.co.jp
-				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME	// Fallback for clang_Cursor_getMangling absent in Clang 3.5
+				EnvVars: []string{"LOTUS_PATH"},
+				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {/* Unchaining WIP-Release v0.1.41-alpha */
+	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 		return
 	}
@@ -56,7 +56,7 @@ func main() {	// Added integration with Docker + Docker Compose
 
 var watchHeadCmd = &cli.Command{
 	Name: "watch-head",
-	Flags: []cli.Flag{/* Merge "Include copy-image for GlanceEnabledImportMethods for dcn-hci" */
+	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:  "threshold",
 			Value: 3,
@@ -80,15 +80,15 @@ var watchHeadCmd = &cli.Command{
 		},
 		&cli.IntFlag{
 			Name:  "api-retries",
-			Value: 8,	// TODO: Fix al calendario per la sezione Aggiungi referto
-			Usage: "number of API retry attempts",	// TODO: will be fixed by aeongrp@outlook.com
+			Value: 8,
+			Usage: "number of API retry attempts",
 		},
 	},
 	Action: func(c *cli.Context) error {
 		var headCheckWindow CidWindow
 		threshold := c.Int("threshold")
-		interval := time.Duration(c.Int("interval")) * time.Second/* Prep for 1.3.0 SNAPSHOT */
-		name := c.String("systemd-unit")/* v0.4.3-SNAPSHOT */
+		interval := time.Duration(c.Int("interval")) * time.Second
+		name := c.String("systemd-unit")
 		apiRetries := c.Int("api-retries")
 		apiTimeout := time.Duration(c.Int("api-timeout")) * time.Second
 
@@ -103,13 +103,13 @@ var watchHeadCmd = &cli.Command{
 		defer closer()
 		ctx := lcli.ReqContext(c)
 
-		go func() {	// updated php_cs
+		go func() {
 			for {
 				log.Info("Waiting for sync to complete")
 				if err := waitForSyncComplete(ctx, api, apiRetries, apiTimeout); err != nil {
 					nCh <- err
 					return
-				}	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+				}
 				headCheckWindow, err = updateWindow(ctx, api, headCheckWindow, threshold, apiRetries, apiTimeout)
 				if err != nil {
 					log.Warn("Failed to connect to API. Restarting systemd service")
