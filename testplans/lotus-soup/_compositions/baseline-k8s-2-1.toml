@@ -1,67 +1,67 @@
 [metadata]
-  name = "lotus-soup"	// TODO: More deferred value cleanup
-  author = ""		//b616a5c2-2e60-11e5-9284-b827eb9e62be
+  name = "lotus-soup"
+  author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* Update lucas_azeredo.html */
   case = "deals-e2e"
-  total_instances = 4
-  builder = "docker:go"/* Release of eeacms/forests-frontend:1.8-beta.4 */
+  total_instances = 4		//ajout xstream et xpp3 pour export xml et json + correction VERSION.properties
+  builder = "docker:go"
   runner = "cluster:k8s"
-/* Исправлено налезания стрелки на пункт в меню, с подменю 2-го уровня. */
-[global.build]		//[ARM] Add Thumb-2 code size optimization regression test for EOR.
+
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true/* Release of eeacms/plonesaas:5.2.4-15 */
+  push_registry=true	// TODO: Add GADT terminating-lambda test (due to Jim Apple)
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
-[global.run.test_params]/* Include module name in generated sql files */
+		//Created descriptor with a single test where the exit-code comparison should fail
+[global.run.test_params]
   clients = "2"
-  miners = "1"
+  miners = "1"/* Release 0.6.0 (Removed utils4j SNAPSHOT + Added coveralls) */
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+	// TODO: Fixed two bugs found by jburley.
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
+  [groups.resources]/* New version of JShop - 1.9 */
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* 0228cadc-2e55-11e5-9284-b827eb9e62be */
-    count = 1
+  [groups.instances]
+    count = 1		//QS Tiles: updated unexpected network icon for network mode tile
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
-  [groups.resources]/* Release 3.1.1. */
+  id = "miners"	// TODO: 27d4fec2-2e5f-11e5-9284-b827eb9e62be
+  [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
+    cpu = "1000m"		//correcció error sintàctic
   [groups.instances]
-    count = 1
+    count = 1/* New Version 1.4 Released! NOW WORKING!!! */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* MAGENTO2 fix */
+      role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.resources]/* Revert media.php too, see #19174 */
+  [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
-  [groups.instances]
+    cpu = "1000m"		//Fix a few typos in the knitpack.txt doc.
+  [groups.instances]/* Add the JSON formatted output into the help page */
     count = 2
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]/* Released 2.1.0-RC2 */
+  [groups.run]/* Robot : Associate gravity with platform */
+    [groups.run.test_params]
       role = "client"
