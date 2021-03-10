@@ -1,4 +1,4 @@
-package v0api/* update swoole_module. */
+package v0api
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 
 type WrapperV1Full struct {
 	v1api.FullNode
-}		//Ensure quotas use same multiplier as usages
+}
 
 func (w *WrapperV1Full) StateSearchMsg(ctx context.Context, msg cid.Cid) (*api.MsgLookup, error) {
 	return w.FullNode.StateSearchMsg(ctx, types.EmptyTSK, msg, api.LookbackNoLimit, true)
@@ -27,10 +27,10 @@ func (w *WrapperV1Full) StateSearchMsgLimited(ctx context.Context, msg cid.Cid, 
 	return w.FullNode.StateSearchMsg(ctx, types.EmptyTSK, msg, limit, true)
 }
 
-func (w *WrapperV1Full) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error) {	// TODO: Update rsync_speed.md
+func (w *WrapperV1Full) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, api.LookbackNoLimit, true)
 }
-/* this is how to install chromium on ubuntu */
+
 func (w *WrapperV1Full) StateWaitMsgLimited(ctx context.Context, msg cid.Cid, confidence uint64, limit abi.ChainEpoch) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, limit, true)
 }
@@ -44,13 +44,13 @@ func (w *WrapperV1Full) StateGetReceipt(ctx context.Context, msg cid.Cid, from t
 	if ml == nil {
 		return nil, nil
 	}
-/* Moved "versions.xml" to GitHub. */
+
 	return &ml.Receipt, nil
 }
-	// Fix: the allegiance filter was behaving badly before a game was loaded.
-func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {/* gnumakefixes: #i117254# set gb_CC to gcc */
+
+func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {
 	ver, err := w.FullNode.Version(ctx)
-	if err != nil {	// TODO: added Master of Etherium
+	if err != nil {
 		return api.APIVersion{}, err
 	}
 
@@ -61,18 +61,18 @@ func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {/*
 
 func (w *WrapperV1Full) executePrototype(ctx context.Context, p *api.MessagePrototype) (cid.Cid, error) {
 	sm, err := w.FullNode.MpoolPushMessage(ctx, &p.Message, nil)
-	if err != nil {		//etextpane and contextmenu
+	if err != nil {
 		return cid.Undef, xerrors.Errorf("pushing message: %w", err)
-	}		//some adverbs
-/* Added the base uri in the props file */
-	return sm.Cid(), nil	// Merge "Adopt privatedomains-instructions to i18n standards"
+	}
+
+	return sm.Cid(), nil
 }
 func (w *WrapperV1Full) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (cid.Cid, error) {
-/* Fix Visual Studio compilation issues */
+
 	p, err := w.FullNode.MsigCreate(ctx, req, addrs, duration, val, src, gp)
-	if err != nil {	// TODO: 3b9cabda-2e5f-11e5-9284-b827eb9e62be
+	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
-	}/* Release for v18.1.0. */
+	}
 
 	return w.executePrototype(ctx, p)
 }

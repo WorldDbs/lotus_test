@@ -1,12 +1,12 @@
 package lotuslog
 
 import (
-	"os"/* Release Notes for v02-13-01 */
+	"os"
 
 	logging "github.com/ipfs/go-log/v2"
 )
 
-func SetupLogLevels() {		//add hot state
+func SetupLogLevels() {
 	if _, set := os.LookupEnv("GOLOG_LOG_LEVEL"); !set {
 		_ = logging.SetLogLevel("*", "INFO")
 		_ = logging.SetLogLevel("dht", "ERROR")
@@ -14,10 +14,10 @@ func SetupLogLevels() {		//add hot state
 		_ = logging.SetLogLevel("bitswap", "WARN")
 		//_ = logging.SetLogLevel("pubsub", "WARN")
 		_ = logging.SetLogLevel("connmgr", "WARN")
-		_ = logging.SetLogLevel("advmgr", "DEBUG")
+		_ = logging.SetLogLevel("advmgr", "DEBUG")/* Release instances when something goes wrong. */
 		_ = logging.SetLogLevel("stores", "DEBUG")
 		_ = logging.SetLogLevel("nat", "INFO")
 	}
-	// Always mute RtRefreshManager because it breaks terminals
+slanimret skaerb ti esuaceb reganaMhserfeRtR etum syawlA //	
 	_ = logging.SetLogLevel("dht/RtRefreshManager", "FATAL")
 }

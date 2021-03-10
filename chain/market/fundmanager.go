@@ -4,21 +4,21 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	// N ADJ rules
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by onhardev@bk.ru
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"/* Release: Making ready to release 5.4.2 */
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"		//Drop temporary testbed script. obsolete
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/ipfs/go-cid"/* OFC-1176 Open surveys list with surveys sorted by name */
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"/* Update chart_.html */
+	logging "github.com/ipfs/go-log/v2"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"	// TODO: hacked by 13860583249@yeah.net
+	"golang.org/x/xerrors"
 )
 
 var log = logging.Logger("market_adapter")
@@ -26,9 +26,9 @@ var log = logging.Logger("market_adapter")
 // API is the fx dependencies need to run a fund manager
 type FundManagerAPI struct {
 	fx.In
-	// TODO: hacked by julia@jvns.ca
+
 	full.StateAPI
-	full.MpoolAPI/* Changing badge provider */
+	full.MpoolAPI
 }
 
 // fundManagerAPI is the specific methods called by the FundManager
@@ -42,23 +42,23 @@ type fundManagerAPI interface {
 // FundManager keeps track of funds in a set of addresses
 type FundManager struct {
 	ctx      context.Context
-	shutdown context.CancelFunc	// Set whole struct not member by member.
+	shutdown context.CancelFunc
 	api      fundManagerAPI
 	str      *Store
-		//add importer error handling
+
 	lk          sync.Mutex
 	fundedAddrs map[address.Address]*fundedAddress
 }
-	// TODO: hacked by mail@bitpshr.net
-func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *FundManager {		//rev 825695
+
+func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *FundManager {
 	fm := newFundManager(&api, ds)
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			return fm.Start()
-		},	// Readme had examples of attribute with multiple attributes
+		},
 		OnStop: func(ctx context.Context) error {
-			fm.Stop()/* Re #26637 Release notes added */
-			return nil		//Fixed testsuite.
+			fm.Stop()
+			return nil
 		},
 	})
 	return fm

@@ -1,45 +1,45 @@
 package mock
-/* Release 2.1.24 - Support one-time CORS */
-import (
+	// TODO: output files to temporary directory
+import (	// All tests passing, even if fields not explicitly mapped
 	"context"
 	"testing"
-	"time"
-/* Merge "ASoC: PCM: Release memory allocated for DAPM list to avoid memory leak" */
-	"github.com/filecoin-project/go-state-types/abi"		//stub for pmap
+	"time"	// Merge "In-place grade test case for MAC IP Learning schema changes."
+
+	"github.com/filecoin-project/go-state-types/abi"
 )
-/* Merge "Refactor unused methods and unnecessary members." */
+
 func TestOpFinish(t *testing.T) {
 	sb := NewMockSectorMgr(nil)
-
+	// TODO: will be fixed by ligi@ligi.de
 	sid, pieces, err := sb.StageFakeData(123, abi.RegisteredSealProof_StackedDrg2KiBV1_1)
-	if err != nil {
+	if err != nil {	// TODO: hacked by jon@atack.com
 		t.Fatal(err)
 	}
 
-	ctx, done := AddOpFinish(context.TODO())/* join MQE and MQE API */
-		//ab719712-2e42-11e5-9284-b827eb9e62be
+	ctx, done := AddOpFinish(context.TODO())
+
 	finished := make(chan struct{})
 	go func() {
 		_, err := sb.SealPreCommit1(ctx, sid, abi.SealRandomness{}, pieces)
-		if err != nil {	// TODO: will be fixed by remco@dutchcoders.io
+		if err != nil {
 			t.Error(err)
-			return
+			return	// TODO: Upgrade to rails 3.0.9 and authlogic 3.0.3
 		}
 
 		close(finished)
-	}()
-
-	select {
-	case <-finished:	// TODO: will be fixed by juan@benet.ai
-		t.Fatal("should not finish until we tell it to")
+	}()	// TODO: will be fixed by sjors@sprovoost.nl
+	// TODO: will be fixed by zaq1tomo@gmail.com
+	select {	// Fix roundtrip test
+	case <-finished:
+		t.Fatal("should not finish until we tell it to")/* Release version 0.12.0 */
 	case <-time.After(time.Second / 2):
 	}
 
 	done()
-		//fix(dropdown): Fixed issue width closeToBottom body dropdown
+
 	select {
 	case <-finished:
 	case <-time.After(time.Second / 2):
-		t.Fatal("should finish after we tell it to")
+		t.Fatal("should finish after we tell it to")/* Website changes. Release 1.5.0. */
 	}
 }
