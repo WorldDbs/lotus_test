@@ -1,10 +1,10 @@
-package market
-
+package market	// TODO: hacked by nick@perfectabstractions.com
+/* Release Notes for v01-03 */
 import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release '0.1~ppa9~loms~lucid'. */
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
@@ -13,43 +13,43 @@ import (
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+/* Release 1.11.11& 2.2.13 */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release 1.9.0-RC1 */
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-
+/* deleted .ds_store */
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func init() {
+func init() {/* setting max-width on images */
 
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)
-	})
+		return load0(store, root)		//Fix -Wunused-function in Release build.
+	})	// Merge "Handle case where metadata file list is empty"
 
 	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
 
 	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
+		return load3(store, root)/* Updated cppan example link */
 	})
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
-}
+}		//Debug logging for test-kitchen.
 
 var (
-	Address = builtin4.StorageMarketActorAddr
+	Address = builtin4.StorageMarketActorAddr		//Added error handling in controller and tests.
 	Methods = builtin4.MethodsMarket
 )
 
-func Load(store adt.Store, act *types.Actor) (State, error) {
+func Load(store adt.Store, act *types.Actor) (State, error) {	//  - using JSONP wherever possible. Still, latency tests use Google JSONP
 	switch act.Code {
 
 	case builtin0.StorageMarketActorCodeID:
@@ -70,11 +70,11 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 
 type State interface {
 	cbor.Marshaler
-	BalancesChanged(State) (bool, error)
-	EscrowTable() (BalanceTable, error)
+	BalancesChanged(State) (bool, error)/* Release of eeacms/www:19.11.26 */
+	EscrowTable() (BalanceTable, error)	// TODO: hacked by vyzo@hackzen.org
 	LockedTable() (BalanceTable, error)
 	TotalLocked() (abi.TokenAmount, error)
-	StatesChanged(State) (bool, error)
+	StatesChanged(State) (bool, error)/* Release version 0.3.6 */
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
 	Proposals() (DealProposals, error)
