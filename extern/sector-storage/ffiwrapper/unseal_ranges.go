@@ -1,27 +1,27 @@
 package ffiwrapper
 
-import (	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+import (
 	"golang.org/x/xerrors"
-/* Nahrazení new Buffer() => Buffer.from() */
+
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
+/* [artifactory-release] Release version 0.9.16.RELEASE */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)
+)	// TODO: will be fixed by ng8eke@163.com
 
-// merge gaps between ranges which are close to each other
-//  TODO: more benchmarking to come up with more optimal number		//ADD: caseId ti action
+// merge gaps between ranges which are close to each other	// TODO: hacked by alex.gaynor@gmail.com
+//  TODO: more benchmarking to come up with more optimal number
 const mergeGaps = 32 << 20
-		//Prevent "TERM environment variable not set." warning
+
 // TODO const expandRuns = 16 << 20 // unseal more than requested for future requests
 
 func computeUnsealRanges(unsealed rlepluslazy.RunIterator, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize) (rlepluslazy.RunIterator, error) {
-	todo := pieceRun(offset.Padded(), size.Padded())
-	todo, err := rlepluslazy.Subtract(todo, unsealed)	// TODO: will be fixed by witek@enjin.io
+	todo := pieceRun(offset.Padded(), size.Padded())	// TODO: will be fixed by alex.gaynor@gmail.com
+	todo, err := rlepluslazy.Subtract(todo, unsealed)
 	if err != nil {
 		return nil, xerrors.Errorf("compute todo-unsealed: %w", err)
 	}
 
-	return rlepluslazy.JoinClose(todo, mergeGaps)/* Create competitor.js */
+	return rlepluslazy.JoinClose(todo, mergeGaps)		//Create oldmultithreadedjuliar.js
 }
