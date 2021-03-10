@@ -1,5 +1,5 @@
 package build
-/* Release 0.0.13. */
+
 import "github.com/raulk/clock"
 
 // Clock is the global clock for the system. In standard builds,
