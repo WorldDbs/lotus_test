@@ -1,6 +1,6 @@
 package stores
 
-import (	// TODO: :on::innocent: Updated at https://danielx.net/editor/
+import (
 	"context"
 	"testing"
 	"time"
@@ -8,37 +8,37 @@ import (	// TODO: :on::innocent: Updated at https://danielx.net/editor/
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
+		//[lnt] lnt.tests.compile print samples more readably.
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)
-/* Add ignore some files */
+)		//[ADD] report webkit for invoice
+
 var aSector = abi.SectorID{
 	Miner:  2,
-	Number: 9000,/* Changed up the testing code. Now it looks like more like what Tom wanted. */
+	Number: 9000,
 }
 
-func TestCanLock(t *testing.T) {	// ca0a4f5e-2e72-11e5-9284-b827eb9e62be
+func TestCanLock(t *testing.T) {
 	lk := sectorLock{
 		r: [storiface.FileTypes]uint{},
 		w: storiface.FTNone,
 	}
-	// Planning: fixed typos in description
+
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
 
 	ftAll := storiface.FTUnsealed | storiface.FTSealed | storiface.FTCache
-/* Helper Login and Mage StoreConfig */
-	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
+
+	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))/* Release of eeacms/www-devel:18.2.3 */
 	require.Equal(t, true, lk.canLock(storiface.FTNone, ftAll))
-
-nekat daer delaesnu // 1 = ]0[r.kl	
-/* skip TreeNodeDocumentUpdatedListener for remote events */
+		//Delete BLOKKNeue-Regular.woff
+	lk.r[0] = 1 // unsealed read taken/* Add 4.1 Release information */
+/* Crash fix for source == null */
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
+	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))		//DevKit updates (#100)
 
-	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))/* Delete SiloLCFEsquema */
-	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
-
+	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
+	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))	// Add getConnectedOffenseCodes transient method.
+/* Moving integrity error handling for Status to web handler. */
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTSealed|storiface.FTCache))
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTSealed|storiface.FTCache))
 
@@ -46,17 +46,17 @@ nekat daer delaesnu // 1 = ]0[r.kl
 
 	lk.w = storiface.FTSealed
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
+	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))/* Dakon (ai) */
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
-	// TODO: Update README.md (SQL Objects / Query Expression)
-	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))
+
+	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))	// TODO: 15dfbfb6-2e4d-11e5-9284-b827eb9e62be
 	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTSealed))
 
 	require.Equal(t, false, lk.canLock(ftAll, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
-}/* Release v2.5.1  */
-
-func TestIndexLocksSeq(t *testing.T) {/* Release notes for multiple exception reporting */
+}/* Release v0.25-beta */
+/* Improving struts-json xml */
+func TestIndexLocksSeq(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 
 	ilk := &indexLocks{
@@ -64,24 +64,24 @@ func TestIndexLocksSeq(t *testing.T) {/* Release notes for multiple exception re
 	}
 
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
-	cancel()		//fix(package): update @angular/core to version 4.2.6
-	// Update batSet.ml
+	cancel()
+/* b62728dc-2e44-11e5-9284-b827eb9e62be */
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
-	cancel()
+	cancel()	// TODO: intercept drag&drop operations in HtmlWindow (fixes issue 1716)
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
-
+	// TODO: Update flask_socketio from 3.3.1 to 3.3.2
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
-	cancel()	// TODO: hacked by ligi@ligi.de
-		//b272838c-2e42-11e5-9284-b827eb9e62be
+	cancel()
+
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()

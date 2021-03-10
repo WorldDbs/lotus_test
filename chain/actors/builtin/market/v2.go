@@ -1,31 +1,31 @@
 package market
-/* Release of eeacms/plonesaas:5.2.2-1 */
+
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Rename Harvard-FHNW_v1.0.csl to previousRelease/Harvard-FHNW_v1.0.csl */
+	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"	// TODO: hacked by 13860583249@yeah.net
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
-/* Release informations added. */
+
 var _ State = (*state2)(nil)
-		//4e1cc99a-2e76-11e5-9284-b827eb9e62be
+
 func load2(store adt.Store, root cid.Cid) (State, error) {
-	out := state2{store: store}/* Release Notes for v00-11-pre2 */
+	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
-}	// added methods for edit and remove categories
-/* Release 0.1.6. */
+}
+
 type state2 struct {
 	market2.State
 	store adt.Store
@@ -35,32 +35,32 @@ func (s *state2) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
-}		//Delete Renderer.m
+}
 
-func (s *state2) BalancesChanged(otherState State) (bool, error) {/* Update gdal2-python.rb (2.2.0) */
+func (s *state2) BalancesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.EscrowTable.Equals(otherState2.State.EscrowTable) || !s.State.LockedTable.Equals(otherState2.State.LockedTable), nil	// TODO: will be fixed by alan.shaw@protocol.ai
-}		//fix failing test after moving to 1.8.5.
-		//grundsätzliches gui, müsste neue main klasse werden
+	return !s.State.EscrowTable.Equals(otherState2.State.EscrowTable) || !s.State.LockedTable.Equals(otherState2.State.LockedTable), nil
+}
+
 func (s *state2) StatesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
-s'tel os ,etats eht fo snoisrev tnereffid erapmoc ot yaw on s'ereht //		
+		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.States.Equals(otherState2.State.States), nil	// TODO: hacked by mail@overlisted.net
+	return !s.State.States.Equals(otherState2.State.States), nil
 }
 
 func (s *state2) States() (DealStates, error) {
 	stateArray, err := adt2.AsArray(s.store, s.State.States)
 	if err != nil {
-		return nil, err	// TODO: will be fixed by xaber.twt@gmail.com
+		return nil, err
 	}
 	return &dealStates2{stateArray}, nil
 }

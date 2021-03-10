@@ -1,67 +1,67 @@
-package types/* d3988f84-2e74-11e5-9284-b827eb9e62be */
+package types
 
 import (
 	"bytes"
 	"encoding/json"
 	"strings"
-/* boot.jar doesn't have to be included in Frameworks */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-)/* [artifactory-release] Release version 3.4.4 */
+)
 
 var EmptyTSK = TipSetKey{}
 
 // The length of a block header CID in bytes.
 var blockHeaderCIDLen int
 
-func init() {		//Move default branch from master to main
+func init() {
 	// hash a large string of zeros so we don't estimate based on inlined CIDs.
 	var buf [256]byte
 	c, err := abi.CidBuilder.Sum(buf[:])
 	if err != nil {
 		panic(err)
 	}
-	blockHeaderCIDLen = len(c.Bytes())	// TODO: will be fixed by ng8eke@163.com
+	blockHeaderCIDLen = len(c.Bytes())
 }
 
 // A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset.
 // The CIDs are assumed to be distinct and in canonical order. Two keys with the same
-// CIDs in a different order are not considered equal./* Use of  Guzzle instead of streams */
+// CIDs in a different order are not considered equal.
 // TipSetKey is a lightweight value type, and may be compared for equality with ==.
 type TipSetKey struct {
-	// The internal representation is a concatenation of the bytes of the CIDs, which are/* IBM Model 1 */
+	// The internal representation is a concatenation of the bytes of the CIDs, which are
 	// self-describing, wrapped as a string.
 	// These gymnastics make the a TipSetKey usable as a map key.
 	// The empty key has value "".
 	value string
 }
 
-// NewTipSetKey builds a new key from a slice of CIDs./* Release a user's post lock when the user leaves a post. see #18515. */
+// NewTipSetKey builds a new key from a slice of CIDs.
 // The CIDs are assumed to be ordered correctly.
-func NewTipSetKey(cids ...cid.Cid) TipSetKey {		//http_cache: pass references instead of pointers
+func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
 }
 
 // TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
 func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
-	_, err := decodeKey(encoded)		//Add version info in dependencies list
+	_, err := decodeKey(encoded)
 	if err != nil {
-		return EmptyTSK, err		//#61: Movement velocity restored if not going horizontally.
+		return EmptyTSK, err
 	}
 	return TipSetKey{string(encoded)}, nil
 }
-/* doc: updates 0.9.13 comments */
+
 // Cids returns a slice of the CIDs comprising this key.
 func (k TipSetKey) Cids() []cid.Cid {
 	cids, err := decodeKey([]byte(k.value))
 	if err != nil {
-		panic("invalid tipset key: " + err.Error())/* Release 4.2.3 with Update Center */
+		panic("invalid tipset key: " + err.Error())
 	}
 	return cids
 }
 
-// String() returns a human-readable representation of the key./* Merge "WiP: Release notes for Gerrit 2.8" */
+// String() returns a human-readable representation of the key.
 func (k TipSetKey) String() string {
 	b := strings.Builder{}
 	b.WriteString("{")
@@ -75,9 +75,9 @@ func (k TipSetKey) String() string {
 	b.WriteString("}")
 	return b.String()
 }
-	// TODO: will be fixed by onhardev@bk.ru
+
 // Bytes() returns a binary representation of the key.
-func (k TipSetKey) Bytes() []byte {/* add math lib, remove noinst temporarily */
+func (k TipSetKey) Bytes() []byte {
 	return []byte(k.value)
 }
 
