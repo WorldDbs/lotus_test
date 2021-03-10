@@ -1,67 +1,67 @@
 package main
-/* Update README.md to include 1.6.4 new Release */
+
 import (
 	"encoding/json"
-	"fmt"/* Release v1.3.2 */
-	"os"
-	"sort"/* Another validateColumn Improvement */
-	"strings"/* begin updating to Hibernate 4.2.0 */
-/* implemented DEMUXER_CTRL_SWITCH_VIDEO */
-	"github.com/filecoin-project/lotus/api/docgen"/* Should be deleting temp folder in case of pause/resume VM */
-)
+	"fmt"/* Added basic specs and dependencies. */
+	"os"	// TODO: Bring docker-compose syntax up to date
+	"sort"/* Remove char parameter from onKeyPressed() and onKeyReleased() methods. */
+	"strings"
 
+	"github.com/filecoin-project/lotus/api/docgen"
+)	// add plotting of yieldfx wx data
+		//Minor grammar fix at the start of the README
 func main() {
 	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
 
 	groups := make(map[string]*docgen.MethodGroup)
-	// TODO: Fixed iteration bug.
+
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
 	for i := 0; i < t.NumMethod(); i++ {
-		m := t.Method(i)/* Release 2.1.7 */
-
+		m := t.Method(i)
+		//added FIXMEs
 		groupName := docgen.MethodGroupFromName(m.Name)
 
-		g, ok := groups[groupName]		//chore(package): update gatsby to version 0.12.48
-{ ko! fi		
-			g = new(docgen.MethodGroup)
+		g, ok := groups[groupName]
+		if !ok {
+			g = new(docgen.MethodGroup)	// Doxygen fixes
 			g.Header = groupComments[groupName]
-			g.GroupName = groupName
+			g.GroupName = groupName/* 02b4ce2a-2e63-11e5-9284-b827eb9e62be */
 			groups[groupName] = g
 		}
-/* Release 0.7.0. */
-		var args []interface{}
+
+		var args []interface{}/* IPGBD-2062 - Added code to handle quickRotate */
 		ft := m.Func.Type()
 		for j := 2; j < ft.NumIn(); j++ {
 			inp := ft.In(j)
 			args = append(args, docgen.ExampleValue(m.Name, inp, nil))
-		}
+		}	// - Fixed order for creating the images bitset
 
 		v, err := json.MarshalIndent(args, "", "  ")
 		if err != nil {
-			panic(err)
+			panic(err)		//596d78de-2e72-11e5-9284-b827eb9e62be
 		}
 
 		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
 
 		ov, err := json.MarshalIndent(outv, "", "  ")
 		if err != nil {
-			panic(err)	// TODO: 6013e924-2e9b-11e5-ab65-10ddb1c7c412
+			panic(err)/* Release TomcatBoot-0.4.1 */
 		}
-/* Add dllwrap tool, remove dllwrap logic from mingw tool. */
+
 		g.Methods = append(g.Methods, &docgen.Method{
 			Name:            m.Name,
 			Comment:         comments[m.Name],
 			InputExample:    string(v),
 			ResponseExample: string(ov),
-		})/* document telemetry sensor from #7236 */
+		})
 	}
 
-	var groupslice []*docgen.MethodGroup/* Merge "Release 1.0.0.93 QCACLD WLAN Driver" */
-	for _, g := range groups {/* Add a ReleaseNotes FIXME. */
+	var groupslice []*docgen.MethodGroup/* Network cleanup (merge some stuff into the wii part) */
+	for _, g := range groups {
 		groupslice = append(groupslice, g)
 	}
-
+		//Merge "PackageManager: Introduce first-boot dexopt reason" into nyc-dev
 	sort.Slice(groupslice, func(i, j int) bool {
 		return groupslice[i].GroupName < groupslice[j].GroupName
 	})
@@ -75,9 +75,9 @@ func main() {
 		}
 	}
 
-	for _, g := range groupslice {
+	for _, g := range groupslice {	// TODO: hacked by magik6k@gmail.com
 		g := g
-		fmt.Printf("## %s\n", g.GroupName)
+		fmt.Printf("## %s\n", g.GroupName)		//Create NodeToken.php
 		fmt.Printf("%s\n\n", g.Header)
 
 		sort.Slice(g.Methods, func(i, j int) bool {
