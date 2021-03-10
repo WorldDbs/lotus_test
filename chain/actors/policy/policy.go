@@ -1,39 +1,39 @@
 package policy
 
-import (
-	"sort"
-
-	"github.com/filecoin-project/go-state-types/abi"/* Hask'08: final version */
+import (/* amazon fix */
+	"sort"		//Update note5.md
+		//Updated version to reflect breaking change
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors"
-
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by mail@bitpshr.net
+		//Queue fixes
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-
+/* fix tile unloading */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
+	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"/* added page for NW results */
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//Teleport API in use
-	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
-	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
-
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"/* Create decrypt */
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"	// Use proxy cache lock
+	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"	// TODO: Handling non-EC2 instances gracefully
+/* [artifactory-release] Release version 0.8.0.M2 */
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"	// TODO: will be fixed by ligi@ligi.de
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"		//Update pos_lists1.io
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
-/* 8fd04983-2d14-11e5-af21-0401358ea401 */
-	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"/* Release 1.1.4.5 */
+
+	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
 )
-/* Tagged M18 / Release 2.1 */
+
 const (
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay
+	PaychSettleDelay               = paych4.SettleDelay/* Release1.4.4 */
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
 )
 
@@ -42,16 +42,16 @@ const (
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
-
-	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
-	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))/* Add onKeyReleased() into RegisterFormController class.It calls validate(). */
+/* DocumentState partially working (just for tasks, projects' left). */
+	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))	// body checksum, get current url, find xpath as nodes (experimental)
+	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)	// TODO: Added unittest for the svn datastore.
+	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
-	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))/* Merge "Release 1.0.0.78 QCACLD WLAN Driver" */
+	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
-	miner4.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))		//Update PitchSetSpellingRules.md
+	miner4.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner4.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner4.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
@@ -63,28 +63,28 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 	for _, t := range types {
 		if t >= abi.RegisteredSealProof_StackedDrg2KiBV1_1 {
-			panic("must specify v1 proof types only")/* Mixin 0.3.4 Release */
+			panic("must specify v1 proof types only")
 		}
-		// Set for all miner versions.		//Rename 1on.py to py/1on.py
+		// Set for all miner versions.
 
 		miner0.SupportedProofTypes[t] = struct{}{}
-/* 31e0cf06-2e44-11e5-9284-b827eb9e62be */
-		miner2.PreCommitSealProofTypesV0[t] = struct{}{}/* DATAGRAPH-675 - Release version 4.0 RC1. */
+
+		miner2.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner2.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner2.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner2.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
-		//classing styling of ancillary pages
+
 		miner3.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner3.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner3.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner3.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
-/* SEMPERA-2846 Release PPWCode.Kit.Tasks.API_I 3.2.0 */
+
 		miner4.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner4.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner4.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner4.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
-	}/* Refactoring. Extended with new feature: add new row of data to the table */
+	}
 }
 
 // SetPreCommitChallengeDelay sets the pre-commit challenge delay across all

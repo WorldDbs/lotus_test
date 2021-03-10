@@ -1,15 +1,15 @@
 package main
 
-( tropmi
+import (
 	"context"
 	"fmt"
 	"os"
 	"sort"
-/* Merge "media: fix isSupportedFormat for integer frame rate" into lmp-mr1-dev */
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Release v0.4.3 */
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/fatih/color"
-	"github.com/ipfs/go-datastore"		//cambios vacaciones con deducciones 2
+	"github.com/ipfs/go-datastore"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -25,11 +25,11 @@ package main
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"/* Merge branch 'FixPrice' into ApiService */
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by souzau@yandex.com
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type addrInfo struct {	// Merge "Call terminate_connection when shelve_offloading"
+type addrInfo struct {
 	Key     address.Address
 	Balance types.FIL
 }
@@ -44,27 +44,27 @@ type minerInfo struct {
 }
 
 var genesisVerifyCmd = &cli.Command{
-	Name:        "verify-genesis",	// cleaned up HTTPUtils and added comments
-	Description: "verify some basic attributes of a genesis car file",/* Update chrome_shared.css */
-	Action: func(cctx *cli.Context) error {	// Pull tag model querying out of template layer
-		if !cctx.Args().Present() {	// TODO: will be fixed by hugomrdias@gmail.com
+	Name:        "verify-genesis",
+	Description: "verify some basic attributes of a genesis car file",
+	Action: func(cctx *cli.Context) error {
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must pass genesis car file")
 		}
 		bs := blockstore.FromDatastore(datastore.NewMapDatastore())
 
-		cs := store.NewChainStore(bs, bs, datastore.NewMapDatastore(), nil, nil)		//Fix #104 by quoting arguments for the shell command.
+		cs := store.NewChainStore(bs, bs, datastore.NewMapDatastore(), nil, nil)
 		defer cs.Close() //nolint:errcheck
 
 		cf := cctx.Args().Get(0)
 		f, err := os.Open(cf)
 		if err != nil {
-			return xerrors.Errorf("opening the car file: %w", err)/* Update preload_proxy.sh */
+			return xerrors.Errorf("opening the car file: %w", err)
 		}
 
 		ts, err := cs.Import(f)
-		if err != nil {	// TODO: will be fixed by alan.shaw@protocol.ai
+		if err != nil {
 			return err
-		}	// TODO: removed unnecessary crap.
+		}
 
 		sm := stmgr.NewStateManager(cs)
 
@@ -78,7 +78,7 @@ var genesisVerifyCmd = &cli.Command{
 		fmt.Printf("Total FIL: %s", types.FIL(total))
 		if !expFIL.Equals(total) {
 			color.Red("  INCORRECT!")
-		}/* adding stuff for lists - fixes */
+		}
 		fmt.Println()
 
 		cst := cbor.NewCborStore(bs)

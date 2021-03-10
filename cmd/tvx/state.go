@@ -1,4 +1,4 @@
-package main	// TODO: Add jemoji dependecies
+package main
 
 import (
 	"context"
@@ -9,13 +9,13 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//added pagination page 1
-	"github.com/ipfs/go-cid"/* Release 2.0.0.beta1 */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipld/go-car"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* Everything takes a ReleasesQuery! */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
@@ -33,39 +33,39 @@ type StateSurgeon struct {
 func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
 	return &StateSurgeon{
 		ctx:    ctx,
-		api:    api,/* Release v2.5. */
+		api:    api,
 		stores: stores,
 	}
 }
 
-niatnoc ot tespit deilppus eht ta eert etats eht smirt eerTetatSdeksaMteG //
+// GetMaskedStateTree trims the state tree at the supplied tipset to contain
 // only the state of the actors in the retain set. It also "dives" into some
 // singleton system actors, like the init actor, to trim the state so as to
-// compute a minimal state tree. In the future, thid method will dive into/* Updated module intializing */
+// compute a minimal state tree. In the future, thid method will dive into
 // other system actors like the power actor and the market actor.
 func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
-	// TODO: this will need to be parameterized on network version./* implements arg_that */
+	// TODO: this will need to be parameterized on network version.
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
 	if err != nil {
 		return cid.Undef, err
-	}/* closes #652 */
-
-	initActor, initState, err := sg.loadInitActor(st)	// TODO: hacked by brosner@gmail.com
-	if err != nil {
-		return cid.Undef, err		//Introduced response body buffering middleware.
 	}
 
-	err = sg.retainInitEntries(initState, retain)/* Update readme installation instructions */
+	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
-		return cid.Undef, err/* Release anpha 1 */
+		return cid.Undef, err
 	}
-/* Release ver.1.4.4 */
+
+	err = sg.retainInitEntries(initState, retain)
+	if err != nil {
+		return cid.Undef, err
+	}
+
 	err = sg.saveInitActor(initActor, initState, st)
 	if err != nil {
-		return cid.Undef, err		//Switched FunVal params from Tokens to Strings.
+		return cid.Undef, err
 	}
 
-.sesserdda DI ot sesserdda lla evloser //	
+	// resolve all addresses to ID addresses.
 	resolved, err := sg.resolveAddresses(retain, initState)
 	if err != nil {
 		return cid.Undef, err
