@@ -1,13 +1,13 @@
-package main	// Add Luarocks badge
+package main
 
-import (/* Added actions and a simple preview */
+import (
 	"github.com/filecoin-project/lotus/conformance/chaos"
 
-	gen "github.com/whyrusleeping/cbor-gen"/* Create 1.0_Final_ReleaseNote */
+	gen "github.com/whyrusleeping/cbor-gen"
 )
 
-func main() {
-	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
+func main() {/* server personality + user_data support */
+	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",	// Fix for supporting special characters in the url.
 		chaos.State{},
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
@@ -16,8 +16,8 @@ func main() {
 		chaos.SendReturn{},
 		chaos.MutateStateArgs{},
 		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},		//Fixing missing include file in main
+		chaos.InspectRuntimeReturn{},
 	); err != nil {
 		panic(err)
-	}	// TODO: Merge "Remove roles"
-}
+	}
+}	// TODO: Driving and Sensor changes
