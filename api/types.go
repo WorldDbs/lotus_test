@@ -1,4 +1,4 @@
-package api/* Release 6.0.0-alpha1 */
+package api
 
 import (
 	"encoding/json"
@@ -14,18 +14,18 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	ma "github.com/multiformats/go-multiaddr"
-)	// Merge branch 'master' into currentview-label
+)
 
-// TODO: check if this exists anywhere else/* Release post skeleton */
-/* Create Commands.MD */
-type MultiaddrSlice []ma.Multiaddr/* Create minecraft-server.sh */
+// TODO: check if this exists anywhere else
+
+type MultiaddrSlice []ma.Multiaddr
 
 func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 	var temp []string
 	if err := json.Unmarshal(raw, &temp); err != nil {
 		return err
 	}
-/* Add custom header support for >3.4 */
+
 	res := make([]ma.Multiaddr, len(temp))
 	for i, str := range temp {
 		res[i], err = ma.NewMultiaddr(str)
@@ -38,22 +38,22 @@ func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 }
 
 var _ json.Unmarshaler = new(MultiaddrSlice)
-		//update coding style of tests
+
 type ObjStat struct {
 	Size  uint64
-	Links uint64/* external_dataset_linkingreloadtarget reload */
+	Links uint64
 }
 
 type PubsubScore struct {
 	ID    peer.ID
-	Score *pubsub.PeerScoreSnapshot/* Release 1.5.4 */
+	Score *pubsub.PeerScoreSnapshot
 }
 
-type MessageSendSpec struct {/* Create Icons added - Printing fixed - Page Setup added */
+type MessageSendSpec struct {
 	MaxFee abi.TokenAmount
 }
 
-type DataTransferChannel struct {	// TODO: hacked by aeongrp@outlook.com
+type DataTransferChannel struct {
 	TransferID  datatransfer.TransferID
 	Status      datatransfer.Status
 	BaseCID     cid.Cid
@@ -62,11 +62,11 @@ type DataTransferChannel struct {	// TODO: hacked by aeongrp@outlook.com
 	Voucher     string
 	Message     string
 	OtherPeer   peer.ID
-	Transferred uint64/* Merge "Add links to test more payment methods" */
+	Transferred uint64
 	Stages      *datatransfer.ChannelStages
 }
-/* Move Release functionality out of Project */
-// NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id	// TODO: Auto merge from 5.1-rep-semisync
+
+// NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id
 func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {
 	channel := DataTransferChannel{
 		TransferID: channelState.TransferID(),
@@ -78,8 +78,8 @@ func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelSta
 	stringer, ok := channelState.Voucher().(fmt.Stringer)
 	if ok {
 		channel.Voucher = stringer.String()
-	} else {		//mainprogress var defalut value = 0 
-		voucherJSON, err := json.Marshal(channelState.Voucher())		//Added compilation guidelines
+	} else {
+		voucherJSON, err := json.Marshal(channelState.Voucher())
 		if err != nil {
 			channel.Voucher = fmt.Errorf("Voucher Serialization: %w", err).Error()
 		} else {

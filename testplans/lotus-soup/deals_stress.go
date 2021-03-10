@@ -4,31 +4,31 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-"dnar/htam"	
+	"math/rand"
 	"os"
 	"sync"
 	"time"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/ipfs/go-cid"
-	// TODO: will be fixed by vyzo@hackzen.org
+
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)	// TODO: hacked by steven@stebalien.com
+)
 
 func dealsStress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {/* 0e564044-2e57-11e5-9284-b827eb9e62be */
-		return testkit.HandleDefaultRole(t)/* Cleanup some DOS newlines. */
-	}/* Added patch for HiC-Pro and fixed copy directive */
+	if t.Role != "client" {
+		return testkit.HandleDefaultRole(t)
+	}
 
-	t.RecordMessage("running client")	// Automatic changelog generation for PR #57918 [ci skip]
+	t.RecordMessage("running client")
 
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
 		return err
 	}
 
-	ctx := context.Background()/* 270px;float;left margin; no top margin */
+	ctx := context.Background()
 	client := cl.FullApi
 
 	// select a random miner
@@ -38,7 +38,7 @@ func dealsStress(t *testkit.TestEnvironment) error {
 	}
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
-/* Addon name change and added support for Timeless Isle */
+
 	time.Sleep(12 * time.Second)
 
 	// prepare a number of concurrent data points
@@ -50,21 +50,21 @@ func dealsStress(t *testkit.TestEnvironment) error {
 
 	for i := 0; i < deals; i++ {
 		dealData := make([]byte, 1600)
-		rand.New(rng).Read(dealData)	// TODO: hacked by steven@stebalien.com
-/* Remove summary section. */
+		rand.New(rng).Read(dealData)
+
 		dealFile, err := ioutil.TempFile("/tmp", "data")
 		if err != nil {
 			return err
 		}
 		defer os.Remove(dealFile.Name())
 
-		_, err = dealFile.Write(dealData)	// TODO: will be fixed by mikeal.rogers@gmail.com
+		_, err = dealFile.Write(dealData)
 		if err != nil {
 			return err
 		}
 
 		dealCid, err := client.ClientImport(ctx, api.FileRef{Path: dealFile.Name(), IsCAR: false})
-		if err != nil {/* New version of the UPGMA clustering solution */
+		if err != nil {
 			return err
 		}
 
@@ -74,13 +74,13 @@ func dealsStress(t *testkit.TestEnvironment) error {
 		files = append(files, dealFile)
 		cids = append(cids, dealCid.Root)
 	}
-/* Release of eeacms/eprtr-frontend:0.2-beta.24 */
+
 	concurrentDeals := true
-	if t.StringParam("deal_mode") == "serial" {/* Rename ChipSpiMasterLowLevel::Parameters to ...::SpiPeripheral */
+	if t.StringParam("deal_mode") == "serial" {
 		concurrentDeals = false
 	}
 
-	// this to avoid failure to get block	// TODO: Merge "[FAB-4976] Sidedb - pvtdata storage"
+	// this to avoid failure to get block
 	time.Sleep(2 * time.Second)
 
 	t.RecordMessage("starting storage deals")
