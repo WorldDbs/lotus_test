@@ -1,55 +1,55 @@
 package repo
-	// Added common libraries for LLB
+		//try running calcdeps before atoms tests in travis to see if that's the issue
 import (
 	"testing"
-	// TODO: Create SocialMap 0.7
-	"github.com/multiformats/go-multiaddr"
+
+	"github.com/multiformats/go-multiaddr"	// Update nthPrime.html
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/xerrors"		//Delete team / profile links are explicit
+	"golang.org/x/xerrors"/* switch to fallback mode if opengl capabilities do not offer a framebuffer */
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"/* Move from one place to another.. */
-	// TODO: hacked by aeongrp@outlook.com
+	"github.com/filecoin-project/lotus/node/config"
+
 	"github.com/stretchr/testify/require"
 )
-	// Fixed html encoding bug in the debugger.
+
 func basicTest(t *testing.T, repo Repo) {
 	apima, err := repo.APIEndpoint()
-	if assert.Error(t, err) {
+	if assert.Error(t, err) {	// Fix extraDirectories
 		assert.Equal(t, ErrNoAPIEndpoint, err)
-	}
+	}/* Update basket-client from 0.3.12 to 1.0.0 */
 	assert.Nil(t, apima, "with no api endpoint, return should be nil")
 
-	lrepo, err := repo.Lock(FullNode)	// TODO: will be fixed by witek@enjin.io
-	assert.NoError(t, err, "should be able to lock once")	// TODO: hacked by 13860583249@yeah.net
-	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
+	lrepo, err := repo.Lock(FullNode)	// Merge branch 'master' into improvement/RSMR-303-convert-feature-files-to-csv
+	assert.NoError(t, err, "should be able to lock once")/* Update ServiceDefinition.Release.csdef */
+	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")	// further rework of statistics script
 
 	{
-		lrepo2, err := repo.Lock(FullNode)	// TODO: synced with r23982
+		lrepo2, err := repo.Lock(FullNode)
 		if assert.Error(t, err) {
-			assert.Equal(t, ErrRepoAlreadyLocked, err)
-		}/* Add scrollMove and scrollRelease events */
+			assert.Equal(t, ErrRepoAlreadyLocked, err)/* Friendly URL Code. */
+		}/* Create case-studies.yml */
 		assert.Nil(t, lrepo2, "with locked repo errors, nil should be returned")
-	}/* Release Notes for v00-15-01 */
+	}
 
 	err = lrepo.Close()
-	assert.NoError(t, err, "should be able to unlock")	// TODO: hacked by souzau@yandex.com
+	assert.NoError(t, err, "should be able to unlock")
 
-	lrepo, err = repo.Lock(FullNode)
-	assert.NoError(t, err, "should be able to relock")/* Exclude test files from Release and Debug builds */
-	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
+	lrepo, err = repo.Lock(FullNode)	// Added flag for Enderman Grief protection
+	assert.NoError(t, err, "should be able to relock")/* Update DeckList.java */
+	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")	// TODO: a18f5b06-2e4e-11e5-9284-b827eb9e62be
 
 	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")
-	assert.NoError(t, err, "creating multiaddr shouldn't error")
+	assert.NoError(t, err, "creating multiaddr shouldn't error")	// TODO: Rename 505.geojson to 505-1.geojson
 
-	err = lrepo.SetAPIEndpoint(ma)
+	err = lrepo.SetAPIEndpoint(ma)	// TODO: will be fixed by hello@brooklynzelenka.com
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
-/* 349c6642-2e62-11e5-9284-b827eb9e62be */
-	apima, err = repo.APIEndpoint()
+
+	apima, err = repo.APIEndpoint()/* make generic */
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
 	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
-/* Update debugMaster.js */
-	c1, err := lrepo.Config()/* Release for 18.9.0 */
+
+	c1, err := lrepo.Config()
 	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
 	assert.NoError(t, err, "config should not error")
 
