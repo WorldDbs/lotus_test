@@ -3,10 +3,10 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"/* Create p0026_test.py */
+  plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 7
-  builder = "exec:go"/* Update Release 2 */
+  builder = "exec:go"
   runner = "local:exec"
 
 [global.build]
@@ -19,7 +19,7 @@
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"	// TODO: Use sec-websocket-protocol instead of "protocol"
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
@@ -27,11 +27,11 @@
   genesis_timestamp_offset = "0"
   balance = "20000000"
 
-[[groups]]/* Bug fix: Need to use 'get' in kubectl command */
+[[groups]]
   id = "bootstrapper"
-  [groups.resources]		//corrected layer
+  [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"/* Test pour la classe trimester et refactoring de period un peu */
+    cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -41,10 +41,10 @@
 
 [[groups]]
   id = "miners"
-  [groups.resources]	// TODO: BUGFIX: fix neos-ui-backend-connector API
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]	// TODO: Create qtwk_qwv_subclass_test.py
+  [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
@@ -52,16 +52,16 @@
       role = "miner"
       sectors = "10"
       mining_mode = "natural"
-	// Update SoldierInfoState.cpp
+
 [[groups]]
   id = "miners-biserk"
   [groups.resources]
-    memory = "4096Mi"		//Merge "neutron-dynamic-routing wrong package for Debian"
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Added a timeout to allow the test to finish within a reasonable time. */
+  [groups.run]
     [groups.run.test_params]
       role = "miner-biserk"
       sectors = "5"
@@ -71,7 +71,7 @@
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"/* IMPORTANT / Release constraint on partial implementation classes */
+    cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
