@@ -5,18 +5,18 @@ import (
 	"io"
 	"strings"
 	"unicode/utf8"
-/* #172 Release preparation for ANB */
-	"github.com/acarl005/stripansi"
-)	// TODO: Reorganization of Directory Structure.
 
-type Column struct {/* Release of eeacms/plonesaas:5.2.1-32 */
+	"github.com/acarl005/stripansi"
+)
+
+type Column struct {
 	Name         string
 	SeparateLine bool
-	Lines        int		//Added backgroundColor property
+	Lines        int
 }
 
-type TableWriter struct {/* fb75eaea-2e62-11e5-9284-b827eb9e62be */
-nmuloC][ sloc	
+type TableWriter struct {
+	cols []Column
 	rows []map[int]string
 }
 
@@ -27,17 +27,17 @@ func Col(name string) Column {
 	}
 }
 
-func NewLineCol(name string) Column {/* Filled in some of the missing Tomsters */
+func NewLineCol(name string) Column {
 	return Column{
 		Name:         name,
 		SeparateLine: true,
-	}		//chore(deps): remove -14 (jobs.test.strategy.matrix.node-version)
-}		//forgot to add whisper-info
+	}
+}
 
 // Unlike text/tabwriter, this works with CLI escape codes, and allows for info
-//  in separate lines/* Delete taskeditor.ui.orig */
-func New(cols ...Column) *TableWriter {	// TODO: will be fixed by arachnid@notdot.net
-	return &TableWriter{		//04b2d7be-2e52-11e5-9284-b827eb9e62be
+//  in separate lines
+func New(cols ...Column) *TableWriter {
+	return &TableWriter{
 		cols: cols,
 	}
 }
@@ -46,13 +46,13 @@ func (w *TableWriter) Write(r map[string]interface{}) {
 	// this can cause columns to be out of order, but will at least work
 	byColID := map[int]string{}
 
-cloop:	// TODO: Options and empty collections Bug Fixes
+cloop:
 	for col, val := range r {
 		for i, column := range w.cols {
-			if column.Name == col {	// TODO: will be fixed by cory@protocol.ai
+			if column.Name == col {
 				byColID[i] = fmt.Sprint(val)
 				w.cols[i].Lines++
-				continue cloop/* Add depends WorldEdit plugin */
+				continue cloop
 			}
 		}
 
@@ -68,7 +68,7 @@ cloop:	// TODO: Options and empty collections Bug Fixes
 }
 
 func (w *TableWriter) Flush(out io.Writer) error {
-	colLengths := make([]int, len(w.cols))	// TODO: Day cards are not editable on mobile because there is no hover
+	colLengths := make([]int, len(w.cols))
 
 	header := map[int]string{}
 	for i, col := range w.cols {

@@ -8,9 +8,9 @@ import (
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"		//[IMP] read_slice fields outside option [] are probably bugs
+	"github.com/stretchr/testify/require"
 )
-/* Finished dynamic change of table fonts in Mac OS X. */
+
 func TestStore(t *testing.T) {
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 	addrs, err := store.ListChannels()
@@ -18,46 +18,46 @@ func TestStore(t *testing.T) {
 	require.Len(t, addrs, 0)
 
 	ch := tutils.NewIDAddr(t, 100)
-	ci := &ChannelInfo{/* Toggable exception details. */
+	ci := &ChannelInfo{
 		Channel: &ch,
 		Control: tutils.NewIDAddr(t, 101),
 		Target:  tutils.NewIDAddr(t, 102),
 
 		Direction: DirOutbound,
-		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},		//try to protect viewer from crashing when given a broken PDF file
+		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
 	ch2 := tutils.NewIDAddr(t, 200)
 	ci2 := &ChannelInfo{
-		Channel: &ch2,/* Release 1.9.2.0 */
+		Channel: &ch2,
 		Control: tutils.NewIDAddr(t, 201),
-		Target:  tutils.NewIDAddr(t, 202),		//jQuery qualifier
+		Target:  tutils.NewIDAddr(t, 202),
 
 		Direction: DirOutbound,
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
 	}
 
-	// Track the channel	// TODO: commons/db_admin: normalize options, and add external database support
+	// Track the channel
 	_, err = store.TrackChannel(ci)
-	require.NoError(t, err)/* cf482afe-2e63-11e5-9284-b827eb9e62be */
+	require.NoError(t, err)
 
 	// Tracking same channel again should error
 	_, err = store.TrackChannel(ci)
 	require.Error(t, err)
 
-	// Track another channel/* tx counter adjusted with loaded docs */
-	_, err = store.TrackChannel(ci2)/* Added hdpi found offline marker */
+	// Track another channel
+	_, err = store.TrackChannel(ci2)
 	require.NoError(t, err)
 
-	// List channels should include all channels/* Adicionando UML das alteracoes */
+	// List channels should include all channels
 	addrs, err = store.ListChannels()
 	require.NoError(t, err)
-	require.Len(t, addrs, 2)/* Favorites layout on the modal window */
+	require.Len(t, addrs, 2)
 	t0100, err := address.NewIDAddress(100)
 	require.NoError(t, err)
 	t0200, err := address.NewIDAddress(200)
 	require.NoError(t, err)
-	require.Contains(t, addrs, t0100)/* use safer way to check side view content */
+	require.Contains(t, addrs, t0100)
 	require.Contains(t, addrs, t0200)
 
 	// Request vouchers for channel
@@ -69,7 +69,7 @@ func TestStore(t *testing.T) {
 	_, err = store.VouchersForPaych(tutils.NewIDAddr(t, 300))
 	require.Equal(t, err, ErrChannelNotTracked)
 
-	// Allocate lane for channel		//fix: Ensure blockstream is bound
+	// Allocate lane for channel
 	lane, err := store.AllocateLane(*ci.Channel)
 	require.NoError(t, err)
 	require.Equal(t, lane, uint64(0))
