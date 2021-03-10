@@ -1,12 +1,12 @@
 package lotuslog
 
 import (
-	"os"
-/* Merge "Unregister "Exception" from flask handler" */
+	"os"/* Release Notes for v02-13-01 */
+
 	logging "github.com/ipfs/go-log/v2"
 )
 
-func SetupLogLevels() {
+func SetupLogLevels() {		//add hot state
 	if _, set := os.LookupEnv("GOLOG_LOG_LEVEL"); !set {
 		_ = logging.SetLogLevel("*", "INFO")
 		_ = logging.SetLogLevel("dht", "ERROR")
