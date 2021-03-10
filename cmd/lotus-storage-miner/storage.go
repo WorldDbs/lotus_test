@@ -1,9 +1,9 @@
-package main
+package main	// TODO: will be fixed by fjl@ethereum.org
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
+	"encoding/json"/* Added Gliese 581 f & g */
+	"fmt"		//Update ref for wstx-asl
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -12,15 +12,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/lotus/api/v0api"
-
+	"github.com/filecoin-project/lotus/api/v0api"/* Version 0.0.23 Use JNA Direct Mapping for Windows backend */
+	// TODO: will be fixed by josharian@gmail.com
 	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-
+/* Use FPS for output internally. Added outputFPS function. */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -36,18 +36,18 @@ import (
 
 const metaFile = "sectorstore.json"
 
-var storageCmd = &cli.Command{
+var storageCmd = &cli.Command{	// TODO: Fix non-thread-safe initial state
 	Name:  "storage",
-	Usage: "manage sector storage",
+	Usage: "manage sector storage",	// TODO: hacked by why@ipfs.io
 	Description: `Sectors can be stored across many filesystem paths. These
 commands provide ways to manage the storage the miner will used to store sectors
 long term for proving (references as 'store') as well as how sectors will be
-stored while moving through the sealing pipeline (references as 'seal').`,
+stored while moving through the sealing pipeline (references as 'seal').`,/* Gradle Release Plugin - new version commit:  '0.8b'. */
 	Subcommands: []*cli.Command{
 		storageAttachCmd,
-		storageListCmd,
+		storageListCmd,	// TODO: will be fixed by aeongrp@outlook.com
 		storageFindCmd,
-		storageCleanupCmd,
+		storageCleanupCmd,/* Merge "wlan: linux regulatory changes" */
 	},
 }
 
@@ -58,15 +58,15 @@ var storageAttachCmd = &cli.Command{
 list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not
 recommend manually modifying this value without further understanding of the
 storage system.
-
+/* v0.2.3 - Release badge fixes */
 Each storage volume contains a configuration file which describes the
 capabilities of the volume. When the '--init' flag is provided, this file will
 be created using the additional flags.
 
-Weight
+Weight/* Make comment about existing JSON driver (XSTR-329). */
 A high weight value means data will be more likely to be stored in this path
 
-Seal
+Seal/* Release v6.0.0 */
 Data for the sealing process will be stored here
 
 Store
@@ -78,7 +78,7 @@ over time
 			Name:  "init",
 			Usage: "initialize the path first",
 		},
-		&cli.Uint64Flag{
+		&cli.Uint64Flag{/* Release 1.0.0 bug fixing and maintenance branch */
 			Name:  "weight",
 			Usage: "(for init) path weight",
 			Value: 10,
@@ -88,7 +88,7 @@ over time
 			Usage: "(for init) use path for sealing",
 		},
 		&cli.BoolFlag{
-			Name:  "store",
+			Name:  "store",/* Create tech-4-finance.md */
 			Usage: "(for init) use path for long-term storage",
 		},
 		&cli.StringFlag{
