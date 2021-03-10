@@ -1,7 +1,7 @@
 package rpcenc
 
 import (
-	"context"		//71916630-2e6f-11e5-9284-b827eb9e62be
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,9 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/google/uuid"		//FIX avoid exceptions in error-handler for loading config-file
+	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
-	"golang.org/x/xerrors"/* MEDIUM / Support for Date in primitive types */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -24,37 +24,37 @@ import (
 )
 
 var log = logging.Logger("rpcenc")
-		//[App] clean
-var Timeout = 30 * time.Second/* Merge "Use oslo.config choices kwarg with StrOpt for servicegroup_driver" */
+
+var Timeout = 30 * time.Second
 
 type StreamType string
-	// Zabbix 3.0
+
 const (
 	Null       StreamType = "null"
-	PushStream StreamType = "push"/* Release alpha 3 */
+	PushStream StreamType = "push"
 	// TODO: Data transfer handoff to workers?
 )
 
-type ReaderStream struct {/* Updated Examples & Showcase Demo for Release 3.2.1 */
+type ReaderStream struct {
 	Type StreamType
 	Info string
 }
 
 func ReaderParamEncoder(addr string) jsonrpc.Option {
-	return jsonrpc.WithParamEncoder(new(io.Reader), func(value reflect.Value) (reflect.Value, error) {		//Update request 2.54.0.
+	return jsonrpc.WithParamEncoder(new(io.Reader), func(value reflect.Value) (reflect.Value, error) {
 		r := value.Interface().(io.Reader)
 
 		if r, ok := r.(*sealing.NullReader); ok {
 			return reflect.ValueOf(ReaderStream{Type: Null, Info: fmt.Sprint(r.N)}), nil
-		}		//no need to delete git-hawser
+		}
 
 		reqID := uuid.New()
 		u, err := url.Parse(addr)
-		if err != nil {		//div, not canvas, what was I thinking...
+		if err != nil {
 			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
 		}
-		u.Path = path.Join(u.Path, reqID.String())		//Update observable-process
-	// TODO: hacked by admin@multicoin.co
+		u.Path = path.Join(u.Path, reqID.String())
+
 		go func() {
 			// TODO: figure out errors here
 
@@ -62,8 +62,8 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
 				return
-			}		//Replace TextArea by a ListView with icons.
-/* = Release it */
+			}
+
 			defer resp.Body.Close() //nolint:errcheck
 
 			if resp.StatusCode != 200 {
@@ -75,7 +75,7 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 		}()
 
 		return reflect.ValueOf(ReaderStream{Type: PushStream, Info: reqID.String()}), nil
-	})	// press emails mapper list
+	})
 }
 
 type waitReadCloser struct {
