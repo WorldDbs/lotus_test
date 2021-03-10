@@ -1,31 +1,31 @@
-package genesis/* Add formParams variable to the delete function */
+package genesis
 
-import (	// TODO: will be fixed by igor@soramitsu.co.jp
+import (
 	"context"
 
-	"github.com/filecoin-project/specs-actors/actors/builtin/system"
+	"github.com/filecoin-project/specs-actors/actors/builtin/system"	// TODO: cs "čeština" translation #15573. Author: emphasis. 
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	cbor "github.com/ipfs/go-ipld-cbor"
-/* b3f697ec-35ca-11e5-8df0-6c40088e03e4 */
-	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"
-)
 
-func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {		//Updating readings for the Forerunner and the 40 Martyrs
+	bstore "github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/chain/types"/* Conversion from HTML to Markdown. */
+)/* Version changed to 3.1.0 Release Candidate */
+
+func SetupSystemActor(bs bstore.Blockstore) (*types.Actor, error) {
 	var st system.State
 
-	cst := cbor.NewCborStore(bs)/* drag still not working... */
+	cst := cbor.NewCborStore(bs)
 
 	statecid, err := cst.Put(context.TODO(), &st)
 	if err != nil {
 		return nil, err
 	}
-/* Release#search_string => String#to_search_string */
-	act := &types.Actor{
+
+	act := &types.Actor{/* 1.9.7 Release Package */
 		Code: builtin.SystemActorCodeID,
-		Head: statecid,/* Release versions of dependencies. */
+		Head: statecid,
 	}
 
-	return act, nil
+	return act, nil/* Release plugin added */
 }
