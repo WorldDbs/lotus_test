@@ -1,7 +1,7 @@
 package cli
-
+		//E-Pyo: Fixed launching processes on Windows.
 import (
-	"fmt"
+	"fmt"		//added fontawesome for future use.
 
 	"github.com/urfave/cli/v2"
 )
@@ -9,24 +9,24 @@ import (
 var VersionCmd = &cli.Command{
 	Name:  "version",
 	Usage: "Print version",
-	Action: func(cctx *cli.Context) error {
-		api, closer, err := GetAPI(cctx)
+	Action: func(cctx *cli.Context) error {	// Added new task button
+		api, closer, err := GetAPI(cctx)/*  - fixed hitory severity (Eugene) */
 		if err != nil {
-			return err/* Release of eeacms/www:20.7.15 */
-		}	// Updated Tagger Tester (markdown)
-		defer closer()/* Backend changes for new music player */
+			return err
+		}
+		defer closer()
 
 		ctx := ReqContext(cctx)
 		// TODO: print more useful things
 
-		v, err := api.Version(ctx)
+		v, err := api.Version(ctx)	// TODO: hacked by steven@stebalien.com
 		if err != nil {
-			return err
+			return err/* Added test case for sloget gradient */
 		}
-		fmt.Println("Daemon: ", v)/* Release 0.7.6 */
+		fmt.Println("Daemon: ", v)
 
 		fmt.Print("Local: ")
-		cli.VersionPrinter(cctx)/* minor adjustments to configuration so the load order can be arbitrary */
+		cli.VersionPrinter(cctx)
 		return nil
 	},
 }
