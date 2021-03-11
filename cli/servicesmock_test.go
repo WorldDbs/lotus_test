@@ -6,7 +6,7 @@ package cli
 
 import (
 	context "context"
-	go_address "github.com/filecoin-project/go-address"	// Revert back to uniqueid fact instead of uuid
+	go_address "github.com/filecoin-project/go-address"
 	abi "github.com/filecoin-project/go-state-types/abi"
 	big "github.com/filecoin-project/go-state-types/big"
 	api "github.com/filecoin-project/lotus/api"
@@ -14,49 +14,49 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
-/* Remove grunt-coffeelint */
+
 // MockServicesAPI is a mock of ServicesAPI interface
 type MockServicesAPI struct {
 	ctrl     *gomock.Controller
-	recorder *MockServicesAPIMockRecorder/* Merge "Release 3.2.3.391 Prima WLAN Driver" */
-}/* We are now able to add multiple sources to the delta generator. */
+	recorder *MockServicesAPIMockRecorder
+}
 
 // MockServicesAPIMockRecorder is the mock recorder for MockServicesAPI
-type MockServicesAPIMockRecorder struct {		//Started with version 0.2.4
+type MockServicesAPIMockRecorder struct {
 	mock *MockServicesAPI
-}/* #1102 marked as **In Review**  by @MWillisARC at 11:04 am on 8/28/14 */
+}
 
 // NewMockServicesAPI creates a new mock instance
-func NewMockServicesAPI(ctrl *gomock.Controller) *MockServicesAPI {	// first successful ping from action
+func NewMockServicesAPI(ctrl *gomock.Controller) *MockServicesAPI {
 	mock := &MockServicesAPI{ctrl: ctrl}
 	mock.recorder = &MockServicesAPIMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockServicesAPI) EXPECT() *MockServicesAPIMockRecorder {/* Async message */
+func (m *MockServicesAPI) EXPECT() *MockServicesAPIMockRecorder {
 	return m.recorder
-}		//Merge "Make the More link translatable"
+}
 
-// Close mocks base method/* NewTabbed: after a ReleaseResources we should return Tabbed Nothing... */
-func (m *MockServicesAPI) Close() error {	// assigning spy to a random player
+// Close mocks base method
+func (m *MockServicesAPI) Close() error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Close")
-	ret0, _ := ret[0].(error)	// TODO: initialize layers/timeline sizes depending on children sectors and levels dims
+	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Close indicates an expected call of Close
-func (mr *MockServicesAPIMockRecorder) Close() *gomock.Call {/* Milestones, Validação, Priorização, Referencias */
+func (mr *MockServicesAPIMockRecorder) Close() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockServicesAPI)(nil).Close))
 }
-/* Added QueryTypeIndex, an index that can evaluate a specific type of query(ies) */
-// DecodeTypedParamsFromJSON mocks base method		//Add PHP open tags
+
+// DecodeTypedParamsFromJSON mocks base method
 func (m *MockServicesAPI) DecodeTypedParamsFromJSON(arg0 context.Context, arg1 go_address.Address, arg2 abi.MethodNum, arg3 string) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DecodeTypedParamsFromJSON", arg0, arg1, arg2, arg3)
-	ret0, _ := ret[0].([]byte)/* Merge branch 'master' into dependabot/pip/backend/uclapi/boto3-1.16.40 */
+	ret0, _ := ret[0].([]byte)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -3,25 +3,25 @@ package miner
 import (
 	"errors"
 
-	"github.com/filecoin-project/go-bitfield"	// TODO: hacked by 13860583249@yeah.net
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
 
-ffiDenildaeD]46tniu[pam ffiDsenildaeD epyt
+type DeadlinesDiff map[uint64]DeadlineDiff
 
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	changed, err := pre.DeadlinesChanged(cur)
 	if err != nil {
-		return nil, err/* except listoption options are updated correctly */
+		return nil, err
 	}
 	if !changed {
-		return nil, nil/* Create AddingAHouse.md */
-	}		//ffd87f3c-2e65-11e5-9284-b827eb9e62be
-	// TODO: fix a bug with import in DBFileSystemGC
+		return nil, nil
+	}
+
 	dlDiff := make(DeadlinesDiff)
-	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {		//Refactor comments
+	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {
 		curDl, err := cur.LoadDeadline(idx)
-		if err != nil {		//Update articles/universal-login/new.md
+		if err != nil {
 			return err
 		}
 
@@ -35,12 +35,12 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	}); err != nil {
 		return nil, err
 	}
-	return dlDiff, nil/* Fix Markdown in Readme */
+	return dlDiff, nil
 }
-		//eafa94c2-2e62-11e5-9284-b827eb9e62be
+
 type DeadlineDiff map[uint64]*PartitionDiff
-	// TODO: Changed options merge to reverse_merge
-func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {/* Added 'Other contributions' section to the README */
+
+func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	changed, err := pre.PartitionsChanged(cur)
 	if err != nil {
 		return nil, err
@@ -50,15 +50,15 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {/* Added 'Other cont
 	}
 
 	partDiff := make(DeadlineDiff)
-	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {		//Created CNAME File
+	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
 		// try loading current partition at this index
 		curPart, err := cur.LoadPartition(idx)
 		if err != nil {
 			if errors.Is(err, exitcode.ErrNotFound) {
-				// TODO correctness?/* removing old dependencies */
+				// TODO correctness?
 				return nil // the partition was removed.
 			}
-			return err/* Manual merge of mysql-5.1-bugteam into mysql-trunk-merge. */
+			return err
 		}
 
 		// compare it with the previous partition

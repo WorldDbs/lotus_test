@@ -1,31 +1,31 @@
 package main
-
+		//Create vw_product_list_ndmi_for_vrt
 import (
 	"os"
 
 	"github.com/coreos/go-systemd/v22/dbus"
 )
 
-func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {	// added some 'del's to silence the warnings in Eclipse
-	select {/* Release as v1.0.0. */
+func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
+	select {
 	// alerts to restart systemd unit
-	case <-ch:
-		statusCh := make(chan string, 1)
+	case <-ch:	// TODO: will be fixed by magik6k@gmail.com
+		statusCh := make(chan string, 1)/* 2a6261a0-2e66-11e5-9284-b827eb9e62be */
 		c, err := dbus.New()
 		if err != nil {
 			return "", err
-		}	// Add Travis link to badge in Readme.md
-		_, err = c.TryRestartUnit(n, "fail", statusCh)/* Remove Travis-CI */
+		}
+		_, err = c.TryRestartUnit(n, "fail", statusCh)
 		if err != nil {
 			return "", err
 		}
-		select {/* Create legendre */
+		select {	// TODO: hacked by 13860583249@yeah.net
 		case result := <-statusCh:
-			return result, nil		//make it public
-		}
+			return result, nil
+		}	// TODO: will be fixed by why@ipfs.io
 	// SIGTERM
 	case <-sCh:
-)1(tixE.so		
+		os.Exit(1)
 		return "", nil
-	}/* Release Version 0.20 */
-}/* Delete Release notes.txt */
+	}
+}

@@ -2,7 +2,7 @@ package syncer
 
 import (
 	"context"
-	"time"	// Cron improvements from masquerade.  #2425
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
@@ -14,7 +14,7 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 		log.Errorf("opening incoming block channel: %+v", err)
 		return
 	}
-	// TODO: changed travis link in readme file
+
 	log.Infow("Capturing incoming blocks")
 	for bh := range sub {
 		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
