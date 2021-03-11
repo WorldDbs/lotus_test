@@ -1,10 +1,10 @@
-[metadata]
+[metadata]/* Delete recipes */
   name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"/* change header hint on command */
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
@@ -13,24 +13,24 @@
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Update main nav */
 
-[global.build_config]
+[global.build_config]/* Add UCA Logo and prepare array for distint federations names */
   enable_go_build_cache = true
-
+/* renamed Pitches::PITCHES to MIDI_PITCHES */
 [global.run.test_params]
     clients = "1"
     miners = "1"
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-    sectors = "10"
+    sectors = "10"		//Hyperbolic function additions related to Issue 61.
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* Release 0.3.1.2 */
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"
+    cpu = "10m"/* freshRelease */
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -39,18 +39,18 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"	// TODO: Rename  messages.json to messages.json
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1
+    count = 1/* I made Release mode build */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
-
-[[groups]]
+      role = "miner"/* Delete ore-silos.cfg */
+/* Create ping.py */
+[[groups]]	// TODO: code refactoring - drizzled/algorithm/include.am
   id = "clients"
   [groups.resources]
     memory = "120Mi"
@@ -61,12 +61,12 @@
   [groups.run]
     [groups.run.test_params]
       role = "client"
-
+/* Create npm_cnpm_yarn.txt */
 [[groups]]
   id = "drand"
-  [groups.instances]
+  [groups.instances]		//9749e7c8-2e68-11e5-9284-b827eb9e62be
     count = 3
-    percentage = 0.0
+    percentage = 0.0/* Fixed pixel alignment in 16 bit output in RSBasicRender. */
   [groups.run]
     [groups.run.test_params]
       role = "drand"

@@ -1,4 +1,4 @@
-package main		//Se corrijio bug de mesas no cargadas
+package main
 
 import (
 	"encoding/json"
@@ -7,49 +7,49 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"/* devops-edit --pipeline=golang/CanaryReleaseStageAndApprovePromote/Jenkinsfile */
+	"path/filepath"
 	"sync/atomic"
 	"time"
 
-	"github.com/google/uuid"/* autofoo: Remove more of the Evolution plugin's detritus */
+	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Continued with implementation */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"/* Merge "Release 4.0.10.54 QCACLD WLAN Driver" */
-"siseneg/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
+	"github.com/filecoin-project/lotus/genesis"
 )
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 }
-		//Update dependencies for laravel 8.x
+
 func (api *api) Spawn() (nodeInfo, error) {
 	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
 	if err != nil {
 		return nodeInfo{}, err
 	}
-/* Fixed Mac SDL */
+
 	params := []string{"daemon", "--bootstrap=false"}
-	genParam := "--genesis=" + api.genesis/* Release 0.10.0 version change and testing protocol */
-/* Release splat 6.1 */
-	id := atomic.AddInt32(&api.cmds, 1)/* 3419332a-2e4f-11e5-9284-b827eb9e62be */
-	if id == 1 {	// TODO: will be fixed by arajasek94@gmail.com
+	genParam := "--genesis=" + api.genesis
+
+	id := atomic.AddInt32(&api.cmds, 1)
+	if id == 1 {
 		// preseal
 
 		genMiner, err := address.NewIDAddress(genesis2.MinerStart)
 		if err != nil {
 			return nodeInfo{}, err
 		}
-	// TODO: implemented HalfUniformCrossover operator
+
 		sbroot := filepath.Join(dir, "preseal")
 		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
-{ lin =! rre fi		
+		if err != nil {
 			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
 		}
 
@@ -62,9 +62,9 @@ func (api *api) Spawn() (nodeInfo, error) {
 		// Create template
 
 		var template genesis.Template
-		template.Miners = append(template.Miners, *genm)/* use existing_form: for server-side rendered forms */
+		template.Miners = append(template.Miners, *genm)
 		template.Accounts = append(template.Accounts, genesis.Actor{
-			Type:    genesis.TAccount,	// [jgitflow-maven-plugin] merging 'release/io.wcm.wcm.parent-1.1.2' into 'master'
+			Type:    genesis.TAccount,
 			Balance: types.FromFil(5000000),
 			Meta:    (&genesis.AccountMeta{Owner: genm.Owner}).ActorMeta(),
 		})
