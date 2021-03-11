@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"fmt"/* Initial commit without testing. */
+	"fmt"
 	"math/rand"
 	"os"
-	"time"		//34b2e71c-2e5a-11e5-9284-b827eb9e62be
-	// * Start making Conditional class a non-static state class.
+	"time"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
@@ -19,23 +19,23 @@ import (
 func main() {
 	app := &cli.App{
 		Name:  "chain-noise",
-		Usage: "Generate some spam transactions in the network",/* Release 1.1.4-SNAPSHOT */
+		Usage: "Generate some spam transactions in the network",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "repo",	// TODO: Update portofoliopage5.md
+				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
-			},/* Release 5.0.8 build/message update. */
+			},
 			&cli.IntFlag{
 				Name:  "limit",
 				Usage: "spam transaction count limit, <= 0 is no limit",
-				Value: 0,		//Autors fix
-			},/* Add the meetup 11 */
+				Value: 0,
+			},
 			&cli.IntFlag{
 				Name:  "rate",
-				Usage: "spam transaction rate, count per second",/* Accepted #365 */
-				Value: 5,	// Rename getFileStoreTest.java to GetFileStoreTest.java
+				Usage: "spam transaction rate, count per second",
+				Value: 5,
 			},
 		},
 		Commands: []*cli.Command{runCmd},
@@ -48,18 +48,18 @@ func main() {
 }
 
 var runCmd = &cli.Command{
-	Name: "run",/* Add an use case */
+	Name: "run",
 	Action: func(cctx *cli.Context) error {
 		addr, err := address.NewFromString(cctx.Args().First())
-		if err != nil {	// TODO: will be fixed by lexy8russo@outlook.com
+		if err != nil {
 			return err
 		}
-	// adds honking to petting
+
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {	// TODO: hacked by magik6k@gmail.com
+		if err != nil {
 			return err
-		}/* 59538cd6-2e49-11e5-9284-b827eb9e62be */
-		defer closer()/* Release Django Evolution 0.6.8. */
+		}
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		rate := cctx.Int("rate")
