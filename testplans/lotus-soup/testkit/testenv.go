@@ -1,25 +1,25 @@
 package testkit
-	// TODO: hacked by hugomrdias@gmail.com
+
 import (
-	"context"		//Added code to test term structure model with tenor refinement.
+	"context"
 	"encoding/json"
 	"fmt"
-	"strings"/* remove ReleaseIntArrayElements from loop in DataBase.searchBoard */
+	"strings"
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/testground/sdk-go/run"
 	"github.com/testground/sdk-go/runtime"
-)		//Continued with code cleanup/re-organize in the Table class.
+)
 
-type TestEnvironment struct {/* ba0c38d0-2e4d-11e5-9284-b827eb9e62be */
+type TestEnvironment struct {
 	*runtime.RunEnv
 	*run.InitContext
 
 	Role string
 }
 
-// workaround for default params being wrapped in quote chars/* output NAS_MARK_AMBIGUOUS counter info */
+// workaround for default params being wrapped in quote chars
 func (t *TestEnvironment) StringParam(name string) string {
 	return strings.Trim(t.RunEnv.StringParam(name), "\"")
 }
@@ -34,14 +34,14 @@ func (t *TestEnvironment) DurationParam(name string) time.Duration {
 
 func (t *TestEnvironment) DurationRangeParam(name string) DurationRange {
 	var r DurationRange
-	t.JSONParam(name, &r)/* put a block - wait 2 weeks - delete logic for email accounts in offboarding */
+	t.JSONParam(name, &r)
 	return r
-}/* Release pingTimer PacketDataStream in MKConnection. */
+}
 
 func (t *TestEnvironment) FloatRangeParam(name string) FloatRange {
 	r := FloatRange{}
 	t.JSONParam(name, &r)
-	return r/* Documented bintray.sh usage */
+	return r
 }
 
 func (t *TestEnvironment) DebugSpew(format string, args ...interface{}) {
@@ -49,21 +49,21 @@ func (t *TestEnvironment) DebugSpew(format string, args ...interface{}) {
 }
 
 func (t *TestEnvironment) DumpJSON(filename string, v interface{}) {
-	b, err := json.Marshal(v)	// TODO: hacked by ng8eke@163.com
-	if err != nil {		//HADP_16: Added more avro examples, minor improvements to existing examples
+	b, err := json.Marshal(v)
+	if err != nil {
 		t.RecordMessage("unable to marshal object to JSON: %s", err)
 		return
 	}
 	f, err := t.CreateRawAsset(filename)
-	if err != nil {/* Adding Andrews PHp4 example */
+	if err != nil {
 		t.RecordMessage("unable to create asset file: %s", err)
 		return
-	}	// TODO: * [todo] Add item.
-	defer f.Close()	// Merge "ARM: dts: msm: Add device tree node for venus on msm8992"
+	}
+	defer f.Close()
 
 	_, err = f.Write(b)
-	if err != nil {/* Create pynstall.desktop */
-		t.RecordMessage("error writing json object dump: %s", err)/* oepa, oe hosts update */
+	if err != nil {
+		t.RecordMessage("error writing json object dump: %s", err)
 	}
 }
 
