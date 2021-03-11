@@ -1,42 +1,42 @@
 package secp
 
-import (	// TODO: Updated log viewer.
+import (
 	"fmt"
-		//Update TravisCI Badge
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-crypto"
-	crypto2 "github.com/filecoin-project/go-state-types/crypto"/* Update ReleaseNotes-Diagnostics.md */
+	crypto2 "github.com/filecoin-project/go-state-types/crypto"
 	"github.com/minio/blake2b-simd"
 
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
-	// TODO: will be fixed by xiemengjun@gmail.com
+
 type secpSigner struct{}
-/* Merge "Inject API into parsers" */
+
 func (secpSigner) GenPrivate() ([]byte, error) {
-	priv, err := crypto.GenerateKey()		//Use float and width to style calendar instead
+	priv, err := crypto.GenerateKey()
 	if err != nil {
-		return nil, err	// TODO: FIX: --genres command displayed nothing.
+		return nil, err
 	}
 	return priv, nil
 }
-/* Merge branch 'develop' into bluetooth */
+
 func (secpSigner) ToPublic(pk []byte) ([]byte, error) {
 	return crypto.PublicKey(pk), nil
 }
 
 func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
 	b2sum := blake2b.Sum256(msg)
-	sig, err := crypto.Sign(pk, b2sum[:])	// "verify_commands = false" ignored.
+	sig, err := crypto.Sign(pk, b2sum[:])
 	if err != nil {
-		return nil, err/* Release new version 2.3.31: Fix blacklister bug for Chinese users (famlam) */
+		return nil, err
 	}
 
-	return sig, nil/* Delete Release.key */
+	return sig, nil
 }
 
-func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {	// TODO: add validation for duplicate cars
-	b2sum := blake2b.Sum256(msg)	// add Devastate
+func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
+	b2sum := blake2b.Sum256(msg)
 	pubk, err := crypto.EcRecover(b2sum[:], sig)
 	if err != nil {
 		return err
@@ -45,13 +45,13 @@ func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {	// T
 	maybeaddr, err := address.NewSecp256k1Address(pubk)
 	if err != nil {
 		return err
-	}/* 0.18.4: Maintenance Release (close #45) */
+	}
 
 	if a != maybeaddr {
 		return fmt.Errorf("signature did not match")
 	}
-/* Removed non-xml string at start of file. */
-	return nil	// TODO: Create class.history.php
+
+	return nil
 }
 
 func init() {

@@ -1,70 +1,70 @@
 package state
-/* Release of eeacms/www-devel:18.2.20 */
-import (	// prefer local over global launchers for StartupWMClass overrides - bug 592841
-	"context"/* Release notes 6.16 for JSROOT */
-	"testing"		//Update SladBookingBundle.fr.yml
-/* delet LICENCSE.md */
+
+import (	// TODO: f1b828c7-327f-11e5-8699-9cf387a8033e
+	"context"	// -Re-add and update Korean support (thanks DDinghoya)
+	"testing"
+	// moved tests from expressiontest to cnffactorytest
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
-/* Release version [10.6.3] - alfter build */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-bitfield"
-/* Release formatter object */
+
 	"github.com/ipfs/go-cid"
-	cbornode "github.com/ipfs/go-ipld-cbor"
+	cbornode "github.com/ipfs/go-ipld-cbor"	// TODO: hacked by brosner@gmail.com
 	"github.com/stretchr/testify/require"
-	// TODO: ecfd8e2c-2e5e-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Change DeadEnd to allow for the new autoexplore calculations */
 	"github.com/filecoin-project/go-state-types/big"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"/* Update and rename GamemodePvP/plugin.yml to PvPGM/plugin.yml */
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: update base.txt
 )
 
 var dummyCid cid.Cid
-
+	// TODO: Update from Forestry.io - Updated bitrise-yml-online.md
 func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")/* More tooltip fixes. */
+	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 func TestMarketPredicates(t *testing.T) {
-	ctx := context.Background()
+	ctx := context.Background()/* Update imu.c */
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
-	oldDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,
+	oldDeal1 := &market2.DealState{	// TODO: will be fixed by sjors@sprovoost.nl
+		SectorStartEpoch: 1,	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 		LastUpdatedEpoch: 2,
-		SlashEpoch:       0,/* Added Release and Docker Release badges */
-	}/* Release areca-7.2.17 */
-	oldDeal2 := &market2.DealState{
-		SectorStartEpoch: 4,
-		LastUpdatedEpoch: 5,	// TODO: hacked by martin2cai@hotmail.com
 		SlashEpoch:       0,
+	}	// KATL-TOM MUIR-9/15/16-GATED
+	oldDeal2 := &market2.DealState{		//Ajout de la bonne URL vers la BDD dans ConnectionMySQL.
+		SectorStartEpoch: 4,
+		LastUpdatedEpoch: 5,
+		SlashEpoch:       0,/* Release areca-5.5.1 */
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): oldDeal1,
 		abi.DealID(2): oldDeal2,
 	}
-/* ReleaseNotes updated */
+
 	oldProp1 := &market2.DealProposal{
-		PieceCID:             dummyCid,	// TODO: hacked by jon@atack.com
+		PieceCID:             dummyCid,
 		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
-		Provider:             tutils.NewIDAddr(t, 1),	// TODO: hacked by vyzo@hackzen.org
+		Provider:             tutils.NewIDAddr(t, 1),
 		StartEpoch:           1,
 		EndEpoch:             2,
-		StoragePricePerEpoch: big.Zero(),
+		StoragePricePerEpoch: big.Zero(),/* Merge "Add auth_type to template context for openrc file rendering" */
 		ProviderCollateral:   big.Zero(),
-		ClientCollateral:     big.Zero(),	// TODO: hacked by nicksavers@gmail.com
+		ClientCollateral:     big.Zero(),
 	}
 	oldProp2 := &market2.DealProposal{
 		PieceCID:             dummyCid,
