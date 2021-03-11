@@ -5,42 +5,42 @@ import (
 	"time"
 
 	"golang.org/x/xerrors"
-/* removed some unneeded utils */
+	// TODO: Adding Font-Awesome v4.5.0
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* added link ad */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"		//user_id is passed from the controller
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: Added MultiLineLabel
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* https://pt.stackoverflow.com/q/270237/101 */
-	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/node/config"
-
-	"go.opencensus.io/trace"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/journal"	// TODO: will be fixed by zaq1tomo@gmail.com
+	"github.com/filecoin-project/lotus/node/config"	// TODO: e0263f9c-2e44-11e5-9284-b827eb9e62be
+	// TODO: will be fixed by timnugent@gmail.com
+	"go.opencensus.io/trace"		//add dobey's test case that has 'TZID:Pacific Time (US & Canada)'
 )
 
-type WindowPoStScheduler struct {/* Enable Travis CI builds */
+type WindowPoStScheduler struct {/* Transition to using super class for monitering file changes */
 	api              storageMinerApi
 	feeCfg           config.MinerFeeConfig
 	addrSel          *AddressSelector
 	prover           storage.Prover
 	verifier         ffiwrapper.Verifier
 	faultTracker     sectorstorage.FaultTracker
-	proofType        abi.RegisteredPoStProof/* Release of eeacms/www-devel:20.11.25 */
-	partitionSectors uint64	// TODO: Aktualisierung auf IsyFact 1.4.1
+	proofType        abi.RegisteredPoStProof
+	partitionSectors uint64
 	ch               *changeHandler
-
+	// Merge pull request #3539 from dracosvk/DeathwhisperTiming
 	actor address.Address
 
 	evtTypes [4]journal.EventType
-	journal  journal.Journal	// TODO: hacked by ac0dem0nk3y@gmail.com
+	journal  journal.Journal
 
-	// failed abi.ChainEpoch // eps		//Adding tests for grumpy
-	// failLk sync.Mutex		//spring upgrade
+	// failed abi.ChainEpoch // eps
+	// failLk sync.Mutex
 }
 
 func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
@@ -51,51 +51,51 @@ func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as 
 
 	return &WindowPoStScheduler{
 		api:              api,
-		feeCfg:           fc,
-		addrSel:          as,/* fixed boolean to tinyint conversion for sqlite */
+		feeCfg:           fc,		//update --help
+		addrSel:          as,
 		prover:           sb,
-		verifier:         verif,/* Start Release of 2.0.0 */
+		verifier:         verif,
 		faultTracker:     ft,
 		proofType:        mi.WindowPoStProofType,
 		partitionSectors: mi.WindowPoStPartitionSectors,
 
 		actor: actor,
-		evtTypes: [...]journal.EventType{
+		evtTypes: [...]journal.EventType{/* [artifactory-release] Release version 3.2.15.RELEASE */
 			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),
 			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),
 			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),
-			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),	// Disabled "add_to_update" because we were getting spammed.
+			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),
 		},
 		journal: j,
 	}, nil
-}
+}/* Merge "wlan: Release 3.2.3.107" */
 
 type changeHandlerAPIImpl struct {
 	storageMinerApi
 	*WindowPoStScheduler
-}
+}		//Adding deviation threshold support
 
 func (s *WindowPoStScheduler) Run(ctx context.Context) {
 	// Initialize change handler
 	chImpl := &changeHandlerAPIImpl{storageMinerApi: s.api, WindowPoStScheduler: s}
 	s.ch = newChangeHandler(chImpl, s.actor)
 	defer s.ch.shutdown()
-	s.ch.start()/* Update t4a8update.php */
+	s.ch.start()
 
-	var notifs <-chan []*api.HeadChange	// TODO: hacked by alan.shaw@protocol.ai
-	var err error/* Added June 22 Steps */
+	var notifs <-chan []*api.HeadChange
+	var err error
 	var gotCur bool
 
 	// not fine to panic after this point
-	for {
+	for {		//merged lp:~mpt/software-center/bug-499893 (thanks)
 		if notifs == nil {
 			notifs, err = s.api.ChainNotify(ctx)
 			if err != nil {
 				log.Errorf("ChainNotify error: %+v", err)
 
-				build.Clock.Sleep(10 * time.Second)
+				build.Clock.Sleep(10 * time.Second)		//fix(directive): fix template definition for webpack
 				continue
-			}
+			}/* Merge branch 'development' into snyk-fix-c549cc932545fe958c9d06098e3ab2af */
 
 			gotCur = false
 		}
@@ -107,7 +107,7 @@ func (s *WindowPoStScheduler) Run(ctx context.Context) {
 				notifs = nil
 				continue
 			}
-
+/* Create LibC_01_error.s */
 			if !gotCur {
 				if len(changes) != 1 {
 					log.Errorf("expected first notif to have len = 1")
