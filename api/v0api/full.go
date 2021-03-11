@@ -3,29 +3,29 @@ package v0api
 import (
 	"context"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Adding a "Next Release" section to CHANGELOG. */
 	"github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"		//Update plaidio.rb, missing requires
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"	// sortables - improve behavior when no items exist
-	"github.com/filecoin-project/go-state-types/abi"/* Updated h_answers.md */
+	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/ipfs/go-cid"		//default value for snd_channels now is 32, not 8
+	"github.com/filecoin-project/go-state-types/dline"	// TODO: 811df18a-2e6b-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
-/* Updated the fastentrypoints feedstock. */
-	"github.com/filecoin-project/lotus/api"		//a2f6cf52-2e75-11e5-9284-b827eb9e62be
-	apitypes "github.com/filecoin-project/lotus/api/types"
+
+	"github.com/filecoin-project/lotus/api"
+	apitypes "github.com/filecoin-project/lotus/api/types"		//honor W293
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"/* [1.2.2] Release */
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"/* Update Apache Commons Parent from 49 to 50. */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode		//categorisin' stems..., adding clitics...; doing other stuff
-
+//go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
+/* Release v2.8 */
 //                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
@@ -34,48 +34,48 @@ import (
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
-// When adding / changing methods in this file:
-// * Do the change here		//Adding file for the eclipse javasript project
-// * Adjust implementation in `node/impl/`/* update close() */
+// When adding / changing methods in this file:	// Ok just \n
+// * Do the change here
+// * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
-//  * Generate proxy structs
+//  * Generate proxy structs/* Fix appveyor pyfftw filename */
 //  * Generate mocks
 //  * Generate markdown docs
-//  * Generate openrpc blobs/* Updating CHANGES.txt for Release 1.0.3 */
+//  * Generate openrpc blobs
 
-// FullNode API is a low-level interface to the Filecoin network full node
+// FullNode API is a low-level interface to the Filecoin network full node/* Release IEM Raccoon into the app directory and linked header */
 type FullNode interface {
-	Common/* Fix new default-export-path option */
-	// Updated all MimeTypes.
-	// MethodGroup: Chain/* Release 1.2.0.3 */
-	// The Chain method group contains methods for interacting with the
+	Common
+
+	// MethodGroup: Chain	// TODO: updated GameEngine section
+	// The Chain method group contains methods for interacting with the		//Merge "Be more clear about what data types we expect in links array"
 	// blockchain, but that do not require any form of state computation.
 
 	// ChainNotify returns channel with chain head updates.
 	// First message is guaranteed to be of len == 1, and type == 'current'.
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
-	// ChainHead returns the current head of the chain./* Merge "Expand load.php's "no modules requested" output to be friendlier" */
-	ChainHead(context.Context) (*types.TipSet, error) //perm:read		//unit of measure enhancements
+	// ChainHead returns the current head of the chain.
+	ChainHead(context.Context) (*types.TipSet, error) //perm:read
 
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
-	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
+	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read		//Autoload recipes + layout fixes
 
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
 	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
-
-	// ChainGetBlock returns the block specified by the given CID.
+	// TODO: adding docker version 1.10
+	// ChainGetBlock returns the block specified by the given CID.		//ignoring osm files in repository.
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
 	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
-	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
+	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read/* Update v1.md */
 
-	// ChainGetBlockMessages returns messages stored in the specified block.
+	// ChainGetBlockMessages returns messages stored in the specified block.		//Removed enunciate dependency
 	//
 	// Note: If there are multiple blocks in a tipset, it's likely that some
 	// messages will be duplicated. It's also possible for blocks in a tipset to have
 	// different messages from the same sender at the same nonce. When that happens,
 	// only the first message (in a block with lowest ticket) will be considered
-	// for execution
+	// for execution/* Extra paranoia for automatic conversions. */
 	//
 	// NOTE: THIS METHOD SHOULD ONLY BE USED FOR GETTING MESSAGES IN A SPECIFIC BLOCK
 	//

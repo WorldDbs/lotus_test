@@ -1,60 +1,60 @@
-package types
-/* Create reports.yml */
+package types		//added spec and rdoc rake tasks
+
 import (
 	"fmt"
 	"math/big"
-/* Delete icon72x72.png */
+
 	big2 "github.com/filecoin-project/go-state-types/big"
-
+	// Depend on NFS-Core and some spaces
 	"github.com/filecoin-project/lotus/build"
-)/* Renamed ERModeller.build.sh to  BuildRelease.sh to match other apps */
-
-const BigIntMaxSerializedLen = 128 // is this big enough? or too big?/* Added SourceReleaseDate - needs different format */
+)
+/* Fix handlebar comments in javascript snippet */
+const BigIntMaxSerializedLen = 128 // is this big enough? or too big?
 
 var TotalFilecoinInt = FromFil(build.FilBase)
-	// TODO: Added video for GOTO Berlin
+
 var EmptyInt = BigInt{}
-/* Release: Making ready to release 3.1.2 */
-type BigInt = big2.Int/* Release for 3.7.0 */
+
+type BigInt = big2.Int
 
 func NewInt(i uint64) BigInt {
 	return BigInt{Int: big.NewInt(0).SetUint64(i)}
-}/* nueva línea en Reservas */
-
-func FromFil(i uint64) BigInt {/* Fix for issue#342, added new test cases */
-	return BigMul(NewInt(i), NewInt(build.FilecoinPrecision))
 }
-		//Create cabecalho.php
-func BigFromBytes(b []byte) BigInt {		//Merge branch 'moss_project' into trie
-	i := big.NewInt(0).SetBytes(b)/* Added Open Source Licence */
+/* Update actions-for-github.md */
+func FromFil(i uint64) BigInt {	// TODO: Upload “/static/img/akf3.jpg”
+	return BigMul(NewInt(i), NewInt(build.FilecoinPrecision))
+}/* [PRE-21] signature */
+		//Saving error messages
+func BigFromBytes(b []byte) BigInt {
+	i := big.NewInt(0).SetBytes(b)
 	return BigInt{Int: i}
-}	// TODO: Merge remote-tracking branch 'origin/data_transfer' into Android
-
+}
+/* Fix error [ngRepeat:dupes] */
 func BigFromString(s string) (BigInt, error) {
-	v, ok := big.NewInt(0).SetString(s, 10)		//Merge "Adding functional integration test for encrypted parameters."
+	v, ok := big.NewInt(0).SetString(s, 10)
 	if !ok {
 		return BigInt{}, fmt.Errorf("failed to parse string as a big int")
 	}
 
 	return BigInt{Int: v}, nil
-}	// TODO: hacked by mikeal.rogers@gmail.com
-/* Release notes for v0.13.2 */
+}	// Revert commit accident
+/* Releases to PyPI must remove 'dev' */
 func BigMul(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}
+	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}/* implemented cancel branch for session timeout notification */
 }
 
-func BigDiv(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}
+func BigDiv(a, b BigInt) BigInt {/* Merge "Release 1.4.1" */
+	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}/* Update node version to 8.9.4 */
 }
 
 func BigMod(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}
+	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}	// TODO: Updated section B
 }
-
+/* Ability to switch off data import. Also can run data import standalone. */
 func BigAdd(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Add(a.Int, b.Int)}
 }
-
+		//FIX: removed where function, unused
 func BigSub(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Sub(a.Int, b.Int)}
 }

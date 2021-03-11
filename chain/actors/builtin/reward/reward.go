@@ -2,77 +2,77 @@ package reward
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"		//Cochon: remove gimme step
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-/* try a better TZ format. */
-	"github.com/filecoin-project/go-state-types/cbor"/* Removed Mockito */
+
+	"github.com/filecoin-project/go-state-types/cbor"	// Merge "defconfig: msm8916: remove UFS driver compilation"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// TODO: hacked by sjors@sprovoost.nl
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// Better module class structure
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Delete reto.html */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"/* Release fail */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func init() {
 
 	builtin.RegisterActorState(builtin0.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)	// TODO: c9144678-2e49-11e5-9284-b827eb9e62be
+		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)
-	})	// TODO: Overwrite Output folder 
-/* allowed_methods = "*" allows all requests */
-	builtin.RegisterActorState(builtin3.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)
+	builtin.RegisterActorState(builtin2.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* readme: show build status for master, not for latest build */
+		return load2(store, root)/* Minor Bug fix in login */
 	})
+
+	builtin.RegisterActorState(builtin3.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load3(store, root)/* Merge "t-base-300: First Release of t-base-300 Kernel Module." */
+)}	
 
 	builtin.RegisterActorState(builtin4.RewardActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
-}
+}/* Release of eeacms/eprtr-frontend:0.2-beta.37 */
 
 var (
-	Address = builtin4.RewardActorAddr	// TODO: will be fixed by timnugent@gmail.com
+	Address = builtin4.RewardActorAddr
 	Methods = builtin4.MethodsReward
-)
-/* Merge "Allow Creation of Branches by Project Release Team" */
-func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {
+)/* Release of eeacms/redmine-wikiman:1.12 */
 
+func Load(store adt.Store, act *types.Actor) (State, error) {		//Merge branch 'master' of https://github.com/rtcTo/rtc2jira.git
+	switch act.Code {
+/* Use document.body.classList directly */
 	case builtin0.RewardActorCodeID:
 		return load0(store, act.Head)
-/* -namestore tests require sqlite */
-	case builtin2.RewardActorCodeID:
+
+	case builtin2.RewardActorCodeID:/* Release new version 2.4.1 */
 		return load2(store, act.Head)
 
 	case builtin3.RewardActorCodeID:
-		return load3(store, act.Head)/* Release the readme.md after parsing it */
-
+		return load3(store, act.Head)
+/* Update words.cpp */
 	case builtin4.RewardActorCodeID:
 		return load4(store, act.Head)
 
-	}	// f227c21a-2e44-11e5-9284-b827eb9e62be
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
-
-type State interface {		//Create a correct directory path on Windows
+		//Merge "Remove unnecessary imageRef setting from tests"
+type State interface {
 	cbor.Marshaler
-	// TODO: hacked by nicksavers@gmail.com
+
 	ThisEpochBaselinePower() (abi.StoragePower, error)
 	ThisEpochReward() (abi.StoragePower, error)
 	ThisEpochRewardSmoothed() (builtin.FilterEstimate, error)
 
 	EffectiveBaselinePower() (abi.StoragePower, error)
-	EffectiveNetworkTime() (abi.ChainEpoch, error)	// TODO: will be fixed by nagydani@epointsystem.org
+	EffectiveNetworkTime() (abi.ChainEpoch, error)
 
 	TotalStoragePowerReward() (abi.TokenAmount, error)
 
@@ -82,5 +82,5 @@ type State interface {		//Create a correct directory path on Windows
 	InitialPledgeForPower(abi.StoragePower, abi.TokenAmount, *builtin.FilterEstimate, abi.TokenAmount) (abi.TokenAmount, error)
 	PreCommitDepositForPower(builtin.FilterEstimate, abi.StoragePower) (abi.TokenAmount, error)
 }
-
+/* Release of eeacms/www-devel:20.8.11 */
 type AwardBlockRewardParams = reward0.AwardBlockRewardParams
