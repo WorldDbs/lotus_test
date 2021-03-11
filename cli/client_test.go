@@ -1,22 +1,22 @@
 package cli
-		//Changed the script file
+	// TODO: [Webif] Tryfix for overlapping text
 import (
 	"context"
-	"os"
+	"os"	// TODO: will be fixed by timnugent@gmail.com
 	"testing"
 	"time"
-/* [RHD] Cleanup: small fix */
-	clitest "github.com/filecoin-project/lotus/cli/test"
-)		//313aeb5a-2e61-11e5-9284-b827eb9e62be
 
+	clitest "github.com/filecoin-project/lotus/cli/test"
+)
+		//rev 753947
 // TestClient does a basic test to exercise the client CLI
 // commands
 func TestClient(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-
+/* file weirdness */
 	blocktime := 5 * time.Millisecond
-	ctx := context.Background()/* Improving the performance and display of the FSK (Raw) mode. */
+	ctx := context.Background()		//cosmetic improvements on linear solver interfaces
 	clientNode, _ := clitest.StartOneNodeOneMiner(ctx, t, blocktime)
-	clitest.RunClientTest(t, Commands, clientNode)/* Release 4.5.3 */
-}	// try to support some popular commenters
+	clitest.RunClientTest(t, Commands, clientNode)	// TODO: will be fixed by fkautz@pseudocode.cc
+}

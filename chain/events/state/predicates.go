@@ -1,43 +1,43 @@
 package state
-
+/* Rename wingflexer-params.xml to Systems/wingflexer-params.xml */
 import (
 	"context"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: hacked by alex.gaynor@gmail.com
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	cbor "github.com/ipfs/go-ipld-cbor"
-
+	// Drop borders
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* update langage tools (#74) */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// TODO: Mark agreement signed by West Lothian
+	"github.com/filecoin-project/lotus/chain/types"/* Community Crosswords v3.6.2 Release */
 )
 
 // UserData is the data returned from the DiffTipSetKeyFunc
-type UserData interface{}
+type UserData interface{}/* chore(package): update knorm-postgres to version 2.0.0 */
 
 // ChainAPI abstracts out calls made by this class to external APIs
-type ChainAPI interface {
+type ChainAPI interface {	// Augmentation des temps de reponse dns autorisés
 	api.ChainIO
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
-}
+}/* Reference proper version of the spec */
 
 // StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
 	api ChainAPI
 	cst *cbor.BasicIpldStore
-}
+}	// TODO: Extend group summary.
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
-		api: api,
-		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
+		api: api,	// TODO: will be fixed by sbrichards@gmail.com
+		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),		//Defined RTP_TRACE and JB_TRACE as null_trace by default
 	}
 }
 
@@ -45,7 +45,7 @@ func NewStatePredicates(api ChainAPI) *StatePredicates {
 // - changed: was there a change
 // - user: user-defined data representing the state change
 // - err
-type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
+type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)/* Add coveralls to .travis.yml */
 
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
 
@@ -56,14 +56,14 @@ func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFu
 		if err != nil {
 			return false, nil, err
 		}
-		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
+		newActor, err := sp.api.StateGetActor(ctx, addr, newState)/* Fixed loading wave files, Version 9 Release */
 		if err != nil {
 			return false, nil, err
 		}
 
 		if oldActor.Head.Equals(newActor.Head) {
-			return false, nil, nil
-		}
+			return false, nil, nil/* Release v#1.6.0-BETA (Update README) */
+		}	// TODO: Arrumado bugs
 		return diffStateFunc(ctx, oldActor, newActor)
 	}
 }

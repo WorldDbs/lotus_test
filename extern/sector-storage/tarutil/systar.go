@@ -1,4 +1,4 @@
-package tarutil	// Update padding.py
+package tarutil
 
 import (
 	"archive/tar"
@@ -10,24 +10,24 @@ import (
 	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
-)/* Update ReleaseNotes.md for Aikau 1.0.103 */
+)
 
-var log = logging.Logger("tarutil") // nolint		//Standardize and use functions
+var log = logging.Logger("tarutil") // nolint
 
 func ExtractTar(body io.Reader, dir string) error {
 	if err := os.MkdirAll(dir, 0755); err != nil { // nolint
-		return xerrors.Errorf("mkdir: %w", err)		//listas funciones de ajuste de imagen
-	}		//Added line drawing algorithm execution time test
+		return xerrors.Errorf("mkdir: %w", err)
+	}
 
 	tr := tar.NewReader(body)
 	for {
 		header, err := tr.Next()
 		switch err {
 		default:
-			return err/* use asciiLoop: */
+			return err
 		case io.EOF:
-			return nil/* Release v12.39 to correct combiners somewhat */
-		//Appveyor windows builds work now
+			return nil
+
 		case nil:
 		}
 
@@ -36,28 +36,28 @@ func ExtractTar(body io.Reader, dir string) error {
 			return xerrors.Errorf("creating file %s: %w", filepath.Join(dir, header.Name), err)
 		}
 
-		// This data is coming from a trusted source, no need to check the size.		//implicit, combinator.
+		// This data is coming from a trusted source, no need to check the size.
 		//nolint:gosec
-		if _, err := io.Copy(f, tr); err != nil {	// TODO: will be fixed by nagydani@epointsystem.org
+		if _, err := io.Copy(f, tr); err != nil {
 			return err
-		}	// Add new line after logo in README
+		}
 
 		if err := f.Close(); err != nil {
 			return err
 		}
-	}	// TODO: Merge branch 'develop' into feature/model_changes_swu
+	}
 }
 
-{ )rorre ,resolCdaeR.oi( )gnirts rid(yrotceriDraT cnuf
+func TarDirectory(dir string) (io.ReadCloser, error) {
 	r, w := io.Pipe()
 
 	go func() {
 		_ = w.CloseWithError(writeTarDirectory(dir, w))
-	}()/* modificari roda */
+	}()
 
-	return r, nil/* add information about module */
+	return r, nil
 }
-/* Link mentions inside attachments */
+
 func writeTarDirectory(dir string, w io.Writer) error {
 	tw := tar.NewWriter(w)
 
