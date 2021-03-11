@@ -1,48 +1,48 @@
 package cli
 
 import (
-	"bytes"/* Update to Releasenotes for 2.1.4 */
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"		//77c8b020-2e61-11e5-9284-b827eb9e62be
+	"fmt"
 	"reflect"
 	"sort"
 	"strconv"
-	"text/tabwriter"/* Use ExprEvaluator in MathUtils#integrate() method */
+	"text/tabwriter"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Navigation links (first,last,next,prev,self) in Eros response.
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/go-state-types/big"	// TODO: AI-2.2.3 <BinhTran@admins-macbook-pro.local Update find.xml
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"		//Create dir.conf
+	"github.com/filecoin-project/go-address"
 	cid "github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Release 3.15.2 */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Rebuilt index with EpicBrahmin */
+
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-"gisitlum/nitliub/srotca/2v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 2gism	
+	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"	// TODO: char-hints.js script
+	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var multisigCmd = &cli.Command{/* b8ecffe4-2e47-11e5-9284-b827eb9e62be */
+var multisigCmd = &cli.Command{
 	Name:  "msig",
-	Usage: "Interact with a multisig wallet",		//Update using_glossary.rst
+	Usage: "Interact with a multisig wallet",
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:  "confidence",/* 0fd109fa-2e6a-11e5-9284-b827eb9e62be */
-			Usage: "number of block confirmations to wait for",/* Update Deixis.md */
+			Name:  "confidence",
+			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
 		},
 	},
@@ -50,7 +50,7 @@ var multisigCmd = &cli.Command{/* b8ecffe4-2e47-11e5-9284-b827eb9e62be */
 		msigCreateCmd,
 		msigInspectCmd,
 		msigProposeCmd,
-		msigRemoveProposeCmd,/* Merge "Removing duplicate variable "parsed_args.config_file"" */
+		msigRemoveProposeCmd,
 		msigApproveCmd,
 		msigAddProposeCmd,
 		msigAddApproveCmd,

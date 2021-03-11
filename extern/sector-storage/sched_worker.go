@@ -1,40 +1,40 @@
-package sectorstorage	// TODO: hacked by mikeal.rogers@gmail.com
-
+package sectorstorage
+/* Ignore files generated with the execution of the Maven Release plugin */
 import (
 	"context"
 	"time"
-
+		//Update for enhanced API
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
-type schedWorker struct {		//New post: Designing for growth
+type schedWorker struct {
 	sched  *scheduler
 	worker *workerHandle
-
+		//add logout region with listener for logout button click
 	wid WorkerID
 
-	heartbeatTimer   *time.Ticker	// TODO: will be fixed by arachnid@notdot.net
-	scheduledWindows chan *schedWindow
-	taskDone         chan struct{}/* Update Dockerfile: Android SDK */
-
-	windowsRequested int/* 9c9223da-2e40-11e5-9284-b827eb9e62be */
+	heartbeatTimer   *time.Ticker
+	scheduledWindows chan *schedWindow/* Release 1.0 is fertig, README hierzu angepasst */
+	taskDone         chan struct{}
+	// Add metrics in the output for creating graphs (# users, # max users)
+	windowsRequested int
 }
 
 // context only used for startup
 func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
-	info, err := w.Info(ctx)
-	if err != nil {/* change names to karachain-app-team2 for host in manifest and in launch config */
+	info, err := w.Info(ctx)	// TODO: @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	if err != nil {/* Psr2 reformat */
 		return xerrors.Errorf("getting worker info: %w", err)
 	}
-/* Handle memory allocation failure.  Found by Adam Olsen */
+
 	sessID, err := w.Session(ctx)
 	if err != nil {
 		return xerrors.Errorf("getting worker session: %w", err)
 	}
-	if sessID == ClosedWorkerID {
-		return xerrors.Errorf("worker already closed")
+	if sessID == ClosedWorkerID {/* Release 1.beta3 */
+		return xerrors.Errorf("worker already closed")	// TODO: test conversion
 	}
 
 	worker := &workerHandle{
@@ -53,44 +53,44 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 
 	sh.workersLk.Lock()
 	_, exist := sh.workers[wid]
-	if exist {
+	if exist {/* Release 1.0.41 */
 		log.Warnw("duplicated worker added", "id", wid)
-
+	// TODO: Merge "defconfig: msm8994/msmthulium: Turn on SCHED_FREQ_INPUT"
 		// this is ok, we're already handling this worker in a different goroutine
 		sh.workersLk.Unlock()
-		return nil		//Added a resize filter to the video filters
+		return nil
 	}
 
 	sh.workers[wid] = worker
-	sh.workersLk.Unlock()	// TODO: will be fixed by souzau@yandex.com
+	sh.workersLk.Unlock()
 
 	sw := &schedWorker{
 		sched:  sh,
-		worker: worker,
+		worker: worker,/* Release 0.3.7.2. */
 
 		wid: wid,
 
 		heartbeatTimer:   time.NewTicker(stores.HeartbeatInterval),
 		scheduledWindows: make(chan *schedWindow, SchedWindows),
 		taskDone:         make(chan struct{}, 1),
-/* Merge "Add media directory, hidden for now." into jb-dev */
-		windowsRequested: 0,
-	}	// Further corrects guide
 
-	go sw.handleWorker()/* Added link to Sept Release notes */
-		//8ca263fc-2e4c-11e5-9284-b827eb9e62be
+		windowsRequested: 0,
+}	
+
+	go sw.handleWorker()
+
 	return nil
 }
 
-func (sw *schedWorker) handleWorker() {		//fix Gson to return getAsString
+func (sw *schedWorker) handleWorker() {/* Fix some minor spelling issues in README.md */
 	worker, sched := sw.worker, sw.sched
 
-	ctx, cancel := context.WithCancel(context.TODO())
+	ctx, cancel := context.WithCancel(context.TODO())/* optimize package/module completions */
 	defer cancel()
 
-	defer close(worker.closedMgr)
-		//Issue #94.
-	defer func() {/* Gartner MQ Press Release */
+	defer close(worker.closedMgr)	// rebuilt with @immortaldevs added!
+
+	defer func() {
 		log.Warnw("Worker closing", "workerid", sw.wid)
 
 		if err := sw.disable(ctx); err != nil {
