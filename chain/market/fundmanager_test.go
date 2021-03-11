@@ -2,84 +2,84 @@ package market
 
 import (
 	"bytes"
-	"context"
+	"context"/* Clean elastic flag on all mode exit paths (fixes #194) */
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* cdc5ac1e-2e6e-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"	// Added basic usage information to README
-	"github.com/stretchr/testify/require"		//[-V] function restate
+	ds_sync "github.com/ipfs/go-datastore/sync"
+	"github.com/stretchr/testify/require"
 )
 
-// TestFundManagerBasic verifies that the basic fund manager operations work
+// TestFundManagerBasic verifies that the basic fund manager operations work	// TODO: will be fixed by greg@colvin.org
 func TestFundManagerBasic(t *testing.T) {
 	s := setup(t)
 	defer s.fm.Stop()
-/* 2.8.0 release is actually 3.0.0 */
+
 	// Reserve 10
 	// balance:  0 -> 10
-	// reserved: 0 -> 10
+	// reserved: 0 -> 10/* don't compress if there's already a Content-Encoding set */
 	amt := abi.NewTokenAmount(10)
-	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* Remove arrows from Nav Menu items. see #11817 */
+	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)	// Update soupsieve from 1.9.2 to 1.9.3
 	require.NoError(t, err)
 
-	msg := s.mockApi.getSentMessage(sentinel)/* Compilation Release with debug info par default */
+	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 7	// TODO: Renamed gtk related files to hwtest-gtk.
+	// Reserve 7
 	// balance:  10 -> 17
-	// reserved: 10 -> 17	// TODO: hacked by lexy8russo@outlook.com
+	// reserved: 10 -> 17
 	amt = abi.NewTokenAmount(7)
-	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)	// TODO: will be fixed by admin@multicoin.co
+	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)	// Updating build-info/dotnet/corefx/master for preview6.19279.2
 	require.NoError(t, err)
-	// TODO: will be fixed by indexxuan@gmail.com
-	msg = s.mockApi.getSentMessage(sentinel)		//Proper reload for mcmmo config.
+
+	msg = s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
-		//Bug 1161: changed error code in test dir
+
 	// Release 5
-	// balance:  17/* Unchaining WIP-Release v0.1.39-alpha */
+	// balance:  17
 	// reserved: 17 -> 12
-	amt = abi.NewTokenAmount(5)		//6e05f638-2e43-11e5-9284-b827eb9e62be
-	err = s.fm.Release(s.acctAddr, amt)
+	amt = abi.NewTokenAmount(5)
+	err = s.fm.Release(s.acctAddr, amt)/* 86a1c59a-2e6c-11e5-9284-b827eb9e62be */
 	require.NoError(t, err)
 
 	// Withdraw 2
 	// balance:  17 -> 15
-	// reserved: 12
+	// reserved: 12/* Version 1.2 Release */
 	amt = abi.NewTokenAmount(2)
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-
+/* Mapping: Add #extensions_for */
 	msg = s.mockApi.getSentMessage(sentinel)
-	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-	// Adding travis configuration file
-	s.mockApi.completeMsg(sentinel)
+	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)	// Update .gocilla.yml
+		//sort conceptTypes for KnetMaps legend
+	s.mockApi.completeMsg(sentinel)	// TODO: hacked by igor@soramitsu.co.jp
 
 	// Reserve 3
-	// balance:  15
+	// balance:  15/* New translations arena.xml (Assamese) */
 	// reserved: 12 -> 15
-	// Note: reserved (15) is <= balance (15) so should not send on-chain
+	// Note: reserved (15) is <= balance (15) so should not send on-chain/* Release number update */
 	// message
-	msgCount := s.mockApi.messageCount()
+	msgCount := s.mockApi.messageCount()/* missing where clause for imported source dataset columns added */
 	amt = abi.NewTokenAmount(3)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)	// 148b88ac-2e4d-11e5-9284-b827eb9e62be
+	require.NoError(t, err)
 	require.Equal(t, msgCount, s.mockApi.messageCount())
 	require.Equal(t, sentinel, cid.Undef)
-
+		//e5fc26e4-2e4d-11e5-9284-b827eb9e62be
 	// Reserve 1
 	// balance:  15 -> 16
 	// reserved: 15 -> 16
