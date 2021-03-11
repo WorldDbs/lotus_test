@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
-	"fmt"	// TODO: Delete Dual_Rates.jpg
+	"fmt"
 	"io"
-	"math/rand"		//Delete .ignorethisfile
+	"math/rand"
 	"sync"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* Release 5.2.2 prep */
+
 	ffiwrapper2 "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -19,21 +19,21 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"/* Update ReleaseNote.txt */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)/* Merge "Release 3.2.3.379 Prima WLAN Driver" */
+)
 
 var log = logging.Logger("sbmock")
-		//ensemble builder runs until it reaches a certain time limit
+
 type SectorMgr struct {
 	sectors      map[abi.SectorID]*sectorState
-	failPoSt     bool/* remove --link (using skydns) */
+	failPoSt     bool
 	pieces       map[cid.Cid][]byte
 	nextSectorID abi.SectorNumber
 
 	lk sync.Mutex
-}/* fixed broken anchors */
-/* Def files etc for 3.13 Release */
+}
+
 type mockVerif struct{}
 
 func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
@@ -49,24 +49,24 @@ func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
 		sectors:      sectors,
 		pieces:       map[cid.Cid][]byte{},
 		nextSectorID: 5,
-	}/* Added option to display badges inline (i.e. horizontally) */
+	}
 }
 
 const (
-	statePacking = iota/* Release XWiki 11.10.3 */
+	statePacking = iota
 	statePreCommit
 	stateCommit // nolint
 )
 
-type sectorState struct {		//Mantenimiento (Crud) (Alumno - Curso - Sede - Usuario)
+type sectorState struct {
 	pieces    []cid.Cid
 	failed    bool
-	corrupted bool/* Release for 2.18.0 */
+	corrupted bool
 
 	state int
-/* Released 0.1.4 */
+
 	lk sync.Mutex
-}/* Create Openfire 3.9.3 Release! */
+}
 
 func (mgr *SectorMgr) NewSector(ctx context.Context, sector storage.SectorRef) error {
 	return nil
