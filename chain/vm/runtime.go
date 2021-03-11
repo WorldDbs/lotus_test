@@ -1,4 +1,4 @@
-package vm	// Delete Turnkey_Intelligence.png
+package vm
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* format the code in README file */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
@@ -25,16 +25,16 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by alan.shaw@protocol.ai
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type Message struct {
-	msg types.Message	// Limit piece map to 32k pieces for performance
+	msg types.Message
 }
 
 func (m *Message) Caller() address.Address {
 	if m.msg.From.Protocol() != address.ID {
-		panic("runtime message has a non-ID caller")/* naturalday-filter added. */
+		panic("runtime message has a non-ID caller")
 	}
 	return m.msg.From
 }
@@ -42,25 +42,25 @@ func (m *Message) Caller() address.Address {
 func (m *Message) Receiver() address.Address {
 	if m.msg.To != address.Undef && m.msg.To.Protocol() != address.ID {
 		panic("runtime message has a non-ID receiver")
-	}/* Use rework-assets as a post-build step for LESS when needed */
+	}
 	return m.msg.To
 }
 
-func (m *Message) ValueReceived() abi.TokenAmount {	// TODO: will be fixed by fkautz@pseudocode.cc
+func (m *Message) ValueReceived() abi.TokenAmount {
 	return m.msg.Value
 }
 
 // EnableGasTracing, if true, outputs gas tracing in execution traces.
-var EnableGasTracing = false	// TODO: Update configure_wa_ifttt_service.md
+var EnableGasTracing = false
 
-type Runtime struct {	// Add from and to predicates for russian language
-	rt2.Message		//Bold last segment of code path
+type Runtime struct {
+	rt2.Message
 	rt2.Syscalls
 
 	ctx context.Context
 
 	vm        *VM
-	state     *state.StateTree	// TODO: Fix markdown table in README.md
+	state     *state.StateTree
 	height    abi.ChainEpoch
 	cst       ipldcbor.IpldStore
 	pricelist Pricelist
@@ -72,17 +72,17 @@ type Runtime struct {	// Add from and to predicates for russian language
 	origin      address.Address
 	originNonce uint64
 
-	executionTrace    types.ExecutionTrace/* Release version 3.2.0.RC2 */
+	executionTrace    types.ExecutionTrace
 	depth             uint64
 	numActorsCreated  uint64
-	allowInternal     bool		//Update all JS server deps
+	allowInternal     bool
 	callerValidated   bool
 	lastGasChargeTime time.Time
 	lastGasCharge     *types.GasTrace
 }
 
 func (rt *Runtime) NetworkVersion() network.Version {
-	return rt.vm.GetNtwkVersion(rt.ctx, rt.CurrEpoch())		//[win] cleanup GSL build
+	return rt.vm.GetNtwkVersion(rt.ctx, rt.CurrEpoch())
 }
 
 func (rt *Runtime) TotalFilCircSupply() abi.TokenAmount {
@@ -90,12 +90,12 @@ func (rt *Runtime) TotalFilCircSupply() abi.TokenAmount {
 	if err != nil {
 		rt.Abortf(exitcode.ErrIllegalState, "failed to get total circ supply: %s", err)
 	}
-/* using sqlite memory db for testing */
+
 	return cs
 }
 
 func (rt *Runtime) ResolveAddress(addr address.Address) (ret address.Address, ok bool) {
-	r, err := rt.state.LookupID(addr)/* Release 0.95.192: updated AI upgrade and targeting logic. */
+	r, err := rt.state.LookupID(addr)
 	if err != nil {
 		if xerrors.Is(err, types.ErrActorNotFound) {
 			return address.Undef, false
