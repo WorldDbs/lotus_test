@@ -1,23 +1,23 @@
-[metadata]
+[metadata]	// TODO: hacked by zaq1tomo@gmail.com
   name = "stress"
 
-[global]/* Merge "Release  3.0.10.015 Prima WLAN Driver" */
-  plan = "graphsync"/* Numeric types can no longer be assigned to each other */
-  case = "stress"	// TODO: will be fixed by fjl@ethereum.org
+[global]
+  plan = "graphsync"/* Fixed possible NPE if cancellation not enabled under JellyBean. */
+  case = "stress"/* [artifactory-release] Release version 1.0.0-RC2 */
   total_instances = 2
-  builder = "docker:go"		//Create Week-2
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]
+[global.run.test_params]/* Update ip_contacts.sql */
 size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
-concurrency = "10"	// TODO: xwnd figures test
-/* Link to second edition of book */
+concurrency = "10"
+	// TODO: will be fixed by ligi@ligi.de
 [[groups]]
   id = "providers"
   instances = { count = 1 }
 
 [[groups]]
-  id = "requestors"/* Create missing constants. */
+  id = "requestors"/* Added more wesite ad domains and a pixel domain */
   instances = { count = 1 }
