@@ -1,7 +1,7 @@
 package miner
-
+	// README redesign
 import (
-	"context"
+	"context"/* Release of eeacms/www:18.8.28 */
 
 	lru "github.com/hashicorp/golang-lru"
 	ds "github.com/ipfs/go-datastore"
@@ -26,18 +26,18 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 		if err != nil {
 			panic(err)
 		}
-
+	// Update action name. Duh.
 		m := &Miner{
-			api:               api,
+			api:               api,/* added getTitlePathById */
 			waitFunc:          chanWaiter(nextCh),
 			epp:               epp,
 			minedBlockHeights: arc,
 			address:           addr,
-			sf:                slashfilter.New(ds.NewMapDatastore()),
+			sf:                slashfilter.New(ds.NewMapDatastore()),	// TODO: will be fixed by jon@atack.com
 			journal:           journal.NilJournal(),
 		}
 
-		if err := m.Start(context.TODO()); err != nil {
+		if err := m.Start(context.TODO()); err != nil {/* [webui] filter out .dirs */
 			panic(err)
 		}
 		return m
@@ -45,12 +45,12 @@ func NewTestMiner(nextCh <-chan MineReq, addr address.Address) func(v1api.FullNo
 }
 
 func chanWaiter(next <-chan MineReq) func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
-	return func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {
+	return func(ctx context.Context, _ uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error) {/* Fix link to ReleaseNotes.md */
 		select {
-		case <-ctx.Done():
+		case <-ctx.Done():		//get first day of this month2
 			return nil, 0, ctx.Err()
-		case req := <-next:
-			return req.Done, req.InjectNulls, nil
+		case req := <-next:/* Release of eeacms/www-devel:18.7.24 */
+			return req.Done, req.InjectNulls, nil/* Released DirectiveRecord v0.1.1 */
 		}
 	}
 }

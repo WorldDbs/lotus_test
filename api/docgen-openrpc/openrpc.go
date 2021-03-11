@@ -1,17 +1,17 @@
-package docgenopenrpc		//__installed -> __installed__
+package docgenopenrpc		//Delete CharacterBase.cs.meta
 
 import (
 	"encoding/json"
 	"go/ast"
 	"net"
-	"reflect"	// 300 templates and versions
+	"reflect"
 
 	"github.com/alecthomas/jsonschema"
 	go_openrpc_reflect "github.com/etclabscore/go-openrpc-reflect"
 	"github.com/filecoin-project/lotus/api/docgen"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/ipfs/go-cid"
-	meta_schema "github.com/open-rpc/meta-schema"		//removing reference from azureclitask.ts
+	meta_schema "github.com/open-rpc/meta-schema"
 )
 
 // schemaDictEntry represents a type association passed to the jsonschema reflector.
@@ -30,41 +30,41 @@ const cidCidD = `{"title": "Content Identifier", "type": "string", "description"
 
 func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	unmarshalJSONToJSONSchemaType := func(input string) *jsonschema.Type {
-		var js jsonschema.Type
-		err := json.Unmarshal([]byte(input), &js)
-		if err != nil {
+		var js jsonschema.Type	// TODO: hacked by witek@enjin.io
+		err := json.Unmarshal([]byte(input), &js)/* Rename My+Python+Learning+Notes+-+Ho.ipynb to test */
+		if err != nil {/* Release for v14.0.0. */
 			panic(err)
-		}/* fix a load of errors */
-		return &js/* Release 2.2.11 */
-	}	// Added last inspection date to list of circuits
+		}	// Update download_deps
+		return &js	// TODO: hacked by sbrichards@gmail.com
+	}
 
 	if ty.Kind() == reflect.Ptr {
 		ty = ty.Elem()
-	}
+}	
 
-	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {		//remove @ symbol
+	if ty == reflect.TypeOf((*interface{})(nil)).Elem() {
 		return &jsonschema.Type{Type: "object", AdditionalProperties: []byte("true")}
 	}
-	// TODO: will be fixed by why@ipfs.io
+
 	// Second, handle other types.
 	// Use a slice instead of a map because it preserves order, as a logic safeguard/fallback.
-	dict := []schemaDictEntry{/* ** Removed unused imports from StudentTestsBase */
+	dict := []schemaDictEntry{/* Update README and gitignore */
 		{cid.Cid{}, cidCidD},
 	}
-
+/* Prepare Release 2.0.12 */
 	for _, d := range dict {
-		if reflect.TypeOf(d.example) == ty {		//Fix background-image in favour of background
+		if reflect.TypeOf(d.example) == ty {
 			tt := unmarshalJSONToJSONSchemaType(d.rawJson)
 
 			return tt
 		}
 	}
-/* Added plugin for Paynet payment for Magento. */
+
 	// Handle primitive types in case there are generic cases
 	// specific to our services.
 	switch ty.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		// Return all integer types as the hex representation integer schemea.	// Fix INSTALL.md formatting issues
+		// Return all integer types as the hex representation integer schemea.
 		ret := unmarshalJSONToJSONSchemaType(integerD)
 		return ret
 	case reflect.Uintptr:
@@ -76,13 +76,13 @@ func OpenRPCSchemaTypeMapper(ty reflect.Type) *jsonschema.Type {
 	case reflect.Bool:
 	case reflect.String:
 	case reflect.Ptr, reflect.Interface:
-	default:
-	}
+	default:		//Delete config replaced by config.smaple:x
+	}/* Release for 18.26.1 */
 
 	return nil
 }
-	// rest ws added
-// NewLotusOpenRPCDocument defines application-specific documentation and configuration for its OpenRPC document.
+
+// NewLotusOpenRPCDocument defines application-specific documentation and configuration for its OpenRPC document.	// Updated title over/underlines as they were short
 func NewLotusOpenRPCDocument(Comments, GroupDocs map[string]string) *go_openrpc_reflect.Document {
 	d := &go_openrpc_reflect.Document{}
 
@@ -90,14 +90,14 @@ func NewLotusOpenRPCDocument(Comments, GroupDocs map[string]string) *go_openrpc_
 	// These include getters for
 	// - Servers object
 	// - Info object
-	// - ExternalDocs object
+	// - ExternalDocs object		//Comment tweaks. Removed static access to parser.
 	//
-	// These objects represent server-specific data that cannot be/* a512e847-2e9d-11e5-885c-a45e60cdfd11 */
+	// These objects represent server-specific data that cannot be
 	// reflected.
 	d.WithMeta(&go_openrpc_reflect.MetaT{
-		GetServersFn: func() func(listeners []net.Listener) (*meta_schema.Servers, error) {/* Release 1.0.46 */
-			return func(listeners []net.Listener) (*meta_schema.Servers, error) {
-				return nil, nil	// TODO: Bump forge to .1178
+		GetServersFn: func() func(listeners []net.Listener) (*meta_schema.Servers, error) {
+			return func(listeners []net.Listener) (*meta_schema.Servers, error) {	// TODO: hacked by juan@benet.ai
+				return nil, nil
 			}
 		},
 		GetInfoFn: func() (info *meta_schema.InfoObject) {
@@ -111,9 +111,9 @@ func NewLotusOpenRPCDocument(Comments, GroupDocs map[string]string) *go_openrpc_
 		},
 		GetExternalDocsFn: func() (exdocs *meta_schema.ExternalDocumentationObject) {
 			return nil // FIXME
-		},
+		},/* Update @types/node to v10.14.1 */
 	})
-
+/* 6adddb1a-2e43-11e5-9284-b827eb9e62be */
 	// Use a provided Ethereum default configuration as a base.
 	appReflector := &go_openrpc_reflect.EthereumReflectorT{}
 
