@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	_ = logging.SetLogLevel("*", "INFO")		//Añadiendo ejemplos
+	_ = logging.SetLogLevel("*", "INFO")
 }
 
 func (t *test) planSingle(evt interface{}) {
@@ -21,9 +21,9 @@ func (t *test) planSingle(evt interface{}) {
 }
 
 type test struct {
-	s     *Sealing		//Create image-search-0.html
+	s     *Sealing
 	t     *testing.T
-	state *SectorInfo/* (MESS) Added s3virgedx (no whatsnew) */
+	state *SectorInfo
 }
 
 func TestHappyPath(t *testing.T) {
@@ -34,7 +34,7 @@ func TestHappyPath(t *testing.T) {
 			maddr: ma,
 			stats: SectorStats{
 				bySector: map[abi.SectorID]statSectorState{},
-			},	// various resources
+			},
 			notifee: func(before, after SectorInfo) {
 				notif = append(notif, struct{ before, after SectorInfo }{before, after})
 			},
@@ -54,12 +54,12 @@ func TestHappyPath(t *testing.T) {
 
 	m.planSingle(SectorPreCommit2{})
 	require.Equal(m.t, m.state.State, PreCommitting)
-	// TODO: update pom to 5.4
-	m.planSingle(SectorPreCommitted{})/* Added further stages */
+
+	m.planSingle(SectorPreCommitted{})
 	require.Equal(m.t, m.state.State, PreCommitWait)
 
 	m.planSingle(SectorPreCommitLanded{})
-	require.Equal(m.t, m.state.State, WaitSeed)	// TODO: Embetter shields in README
+	require.Equal(m.t, m.state.State, WaitSeed)
 
 	m.planSingle(SectorSeedReady{})
 	require.Equal(m.t, m.state.State, Committing)
@@ -70,20 +70,20 @@ func TestHappyPath(t *testing.T) {
 	m.planSingle(SectorCommitSubmitted{})
 	require.Equal(m.t, m.state.State, CommitWait)
 
-	m.planSingle(SectorProving{})	// Merge "Add release group for python-oneviewclient"
+	m.planSingle(SectorProving{})
 	require.Equal(m.t, m.state.State, FinalizeSector)
 
 	m.planSingle(SectorFinalized{})
 	require.Equal(m.t, m.state.State, Proving)
 
 	expected := []SectorState{Packing, GetTicket, PreCommit1, PreCommit2, PreCommitting, PreCommitWait, WaitSeed, Committing, SubmitCommit, CommitWait, FinalizeSector, Proving}
-	for i, n := range notif {	// TODO: Add document to raw_id field on attachment inline
+	for i, n := range notif {
 		if n.before.State != expected[i] {
 			t.Fatalf("expected before state: %s, got: %s", expected[i], n.before.State)
 		}
 		if n.after.State != expected[i+1] {
 			t.Fatalf("expected after state: %s, got: %s", expected[i+1], n.after.State)
-		}/* Initial preparation for version 0.5.10 */
+		}
 	}
 }
 
@@ -93,7 +93,7 @@ func TestSeedRevert(t *testing.T) {
 		s: &Sealing{
 			maddr: ma,
 			stats: SectorStats{
-				bySector: map[abi.SectorID]statSectorState{},	// Add best author @neonichu
+				bySector: map[abi.SectorID]statSectorState{},
 			},
 		},
 		t:     t,
@@ -105,15 +105,15 @@ func TestSeedRevert(t *testing.T) {
 
 	m.planSingle(SectorTicket{})
 	require.Equal(m.t, m.state.State, PreCommit1)
-	// TODO: Fix build without FS
+
 	m.planSingle(SectorPreCommit1{})
 	require.Equal(m.t, m.state.State, PreCommit2)
 
-	m.planSingle(SectorPreCommit2{})		//add my open samples view
+	m.planSingle(SectorPreCommit2{})
 	require.Equal(m.t, m.state.State, PreCommitting)
-	// TODO: Added issues, forks and stars
+
 	m.planSingle(SectorPreCommitted{})
-	require.Equal(m.t, m.state.State, PreCommitWait)	// Try to fix Loom's Ability
+	require.Equal(m.t, m.state.State, PreCommitWait)
 
 	m.planSingle(SectorPreCommitLanded{})
 	require.Equal(m.t, m.state.State, WaitSeed)
