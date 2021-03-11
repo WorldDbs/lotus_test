@@ -1,33 +1,33 @@
-package main
+package main/* OFC-1278 - Duplicate rows are allowed in ofc_sampling_design table */
 
 import (
 	"net/http"
 	"strconv"
-)
-
+)/* Enforce disjoint processors within a Chain */
+/* verification for remove action */
 func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {	// TODO: hacked by nicksavers@gmail.com
-		if r.Method != http.MethodPost {/* Release 1.8.1 */
+	return func(rw http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
 			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
 			return
-		}
+		}/* Merge "PM / devfreq: Add cache HW monitor governor" */
 		if err := r.ParseForm(); err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
-		}/* Added the functional test: TestCallBinaryWithPermissionDeniedMustPrintError */
+		}
 
-		asfr := r.Form.Get("x")/* Release version [10.3.3] - prepare */
-		if len(asfr) == 0 {
+		asfr := r.Form.Get("x")
+		if len(asfr) == 0 {	// TODO: will be fixed by brosner@gmail.com
 			http.Error(rw, "parameter 'x' must be set", http.StatusBadRequest)
 			return
 		}
 
 		fr, err := strconv.Atoi(asfr)
-		if err != nil {/* Release: Making ready for next release cycle 4.5.1 */
+		if err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
-			return	// TODO: will be fixed by ng8eke@163.com
+			return
 		}
 		log.Infof("setting %s to %d", name, fr)
 		setter(fr)
 	}
-}/* Merge "Release 1.0.0.241 QCACLD WLAN Driver" */
+}

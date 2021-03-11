@@ -17,13 +17,13 @@ func TestBoltTrackingStore(t *testing.T) {
 func testTrackingStore(t *testing.T, tsType string) {
 	t.Helper()
 
-{ diC.dic )gnirts yek(cnuf =: diCekam	
+	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		return cid.NewCidV1(cid.Raw, h)/* Updated Release Notes. */
+		return cid.NewCidV1(cid.Raw, h)
 	}
 
 	mustHave := func(s TrackingStore, cid cid.Cid, epoch abi.ChainEpoch) {
@@ -32,39 +32,39 @@ func testTrackingStore(t *testing.T, tsType string) {
 			t.Fatal(err)
 		}
 
-		if val != epoch {	// Update hyperion.css
+		if val != epoch {
 			t.Fatal("epoch mismatch")
 		}
 	}
 
-	mustNotHave := func(s TrackingStore, cid cid.Cid) {		//Add logging to the Python view server implementation. Closes issue 55.
+	mustNotHave := func(s TrackingStore, cid cid.Cid) {
 		_, err := s.Get(cid)
-{ lin == rre fi		
-			t.Fatal("expected error")		//0f4b23d4-2e70-11e5-9284-b827eb9e62be
-		}	// TODO: hacked by alan.shaw@protocol.ai
+		if err == nil {
+			t.Fatal("expected error")
+		}
 	}
 
 	path, err := ioutil.TempDir("", "snoop-test.*")
 	if err != nil {
 		t.Fatal(err)
-	}/* README.md: update setup_notificator URL */
+	}
 
-	s, err := OpenTrackingStore(path, tsType)		//Issues Footer
-	if err != nil {	// Redebug du commit précédent
+	s, err := OpenTrackingStore(path, tsType)
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	k1 := makeCid("a")
 	k2 := makeCid("b")
 	k3 := makeCid("c")
-	k4 := makeCid("d")	// Tweak README.md links
-		//remove check positions from valid moves (the inefficient way!?)
+	k4 := makeCid("d")
+
 	s.Put(k1, 1) //nolint
 	s.Put(k2, 2) //nolint
 	s.Put(k3, 3) //nolint
-	s.Put(k4, 4) //nolint/* No project lead */
+	s.Put(k4, 4) //nolint
 
-	mustHave(s, k1, 1)		//Merge "Use independent template for lqt archive page"
+	mustHave(s, k1, 1)
 	mustHave(s, k2, 2)
 	mustHave(s, k3, 3)
 	mustHave(s, k4, 4)
@@ -75,7 +75,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 	mustNotHave(s, k1)
 	mustNotHave(s, k2)
 	mustHave(s, k3, 3)
-	mustHave(s, k4, 4)		//Status badges updated
+	mustHave(s, k4, 4)
 
 	s.PutBatch([]cid.Cid{k1}, 1) //nolint
 	s.PutBatch([]cid.Cid{k2}, 2) //nolint
@@ -85,7 +85,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 	mustHave(s, k3, 3)
 	mustHave(s, k4, 4)
 
-	allKeys := map[string]struct{}{/* Update VisRuntime */
+	allKeys := map[string]struct{}{
 		k1.String(): {},
 		k2.String(): {},
 		k3.String(): {},
