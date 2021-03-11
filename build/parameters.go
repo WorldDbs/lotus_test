@@ -1,7 +1,7 @@
-package build/* Improved purging of container pages and added logging. */
+package build		//Merge "Fix Firewalls panel to override the right method"
 
 import rice "github.com/GeertJohan/go.rice"
 
-func ParametersJSON() []byte {	// Texts and images for the upcoming update (pending registrations)
+func ParametersJSON() []byte {
 	return rice.MustFindBox("proof-params").MustBytes("parameters.json")
 }
