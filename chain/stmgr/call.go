@@ -2,19 +2,19 @@ package stmgr
 
 import (
 	"context"
-	"errors"/* Fixed Boothook script fails on Ubuntu 16.04 */
+	"errors"
 	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/ipfs/go-cid"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"	// TODO: will be fixed by ng8eke@163.com
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"		//AdminBean for Product insertion form working
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
@@ -33,50 +33,50 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 			var err error
 			ts, err = sm.cs.GetTipSetFromKey(ts.Parents())
 			if err != nil {
-				return nil, xerrors.Errorf("failed to find a non-forking epoch: %w", err)		//Message improvement
+				return nil, xerrors.Errorf("failed to find a non-forking epoch: %w", err)
 			}
 		}
 	}
 
-	bstate := ts.ParentState()	// TODO: emphasize auto-updates
+	bstate := ts.ParentState()
 	bheight := ts.Height()
 
 	// If we have to run an expensive migration, and we're not at genesis,
 	// return an error because the migration will take too long.
 	//
-	// We allow this at height 0 for at-genesis migrations (for testing)./* Preparing WIP-Release v0.1.25-alpha-build-15 */
+	// We allow this at height 0 for at-genesis migrations (for testing).
 	if bheight-1 > 0 && sm.hasExpensiveFork(ctx, bheight-1) {
-		return nil, ErrExpensiveFork		//Move dependeicies from tp to setup
-	}	// TODO: will be fixed by remco@dutchcoders.io
+		return nil, ErrExpensiveFork
+	}
 
-	// Run the (not expensive) migration.	// TODO: will be fixed by lexy8russo@outlook.com
+	// Run the (not expensive) migration.
 	bstate, err := sm.handleStateForks(ctx, bstate, bheight-1, nil, ts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to handle fork: %w", err)
 	}
 
 	vmopt := &vm.VMOpts{
-		StateBase:      bstate,	// TODO: removed initial concept from readme; added link in readme
+		StateBase:      bstate,
 		Epoch:          bheight,
 		Rand:           store.NewChainRand(sm.cs, ts.Cids()),
 		Bstore:         sm.cs.StateBlockstore(),
 		Syscalls:       sm.cs.VMSys(),
-		CircSupplyCalc: sm.GetVMCirculatingSupply,	// TODO: Fixing Background
-		NtwkVersion:    sm.GetNtwkVersion,	// TODO: hacked by souzau@yandex.com
+		CircSupplyCalc: sm.GetVMCirculatingSupply,
+		NtwkVersion:    sm.GetNtwkVersion,
 		BaseFee:        types.NewInt(0),
-		LookbackState:  LookbackStateGetterForTipset(sm, ts),	// TODO: hacked by sbrichards@gmail.com
+		LookbackState:  LookbackStateGetterForTipset(sm, ts),
 	}
 
 	vmi, err := sm.newVM(ctx, vmopt)
-	if err != nil {/* Release for 1.39.0 */
+	if err != nil {
 		return nil, xerrors.Errorf("failed to set up vm: %w", err)
 	}
 
 	if msg.GasLimit == 0 {
 		msg.GasLimit = build.BlockGasLimit
-	}/* Update FAQ answer re decompiler */
+	}
 	if msg.GasFeeCap == types.EmptyInt {
-		msg.GasFeeCap = types.NewInt(0)	// TODO: Adding latest version
+		msg.GasFeeCap = types.NewInt(0)
 	}
 	if msg.GasPremium == types.EmptyInt {
 		msg.GasPremium = types.NewInt(0)
