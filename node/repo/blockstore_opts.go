@@ -1,25 +1,25 @@
-package repo
+package repo		//sim attackspeed changes & more
 
 import badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 
-// BadgerBlockstoreOptions returns the badger options to apply for the provided
+// BadgerBlockstoreOptions returns the badger options to apply for the provided/* Update README to prepare transfer to criteo org */
 // domain.
 func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool) (badgerbs.Options, error) {
-	opts := badgerbs.DefaultOptions(path)
-
+	opts := badgerbs.DefaultOptions(path)/* removes ERP material */
+/* public API get dicitemBy collection code + item code */
 	// Due to legacy usage of blockstore.Blockstore, over a datastore, all
 	// blocks are prefixed with this namespace. In the future, this can go away,
 	// in order to shorten keys, but it'll require a migration.
 	opts.Prefix = "/blocks/"
 
-	// Blockstore values are immutable; therefore we do not expect any
+yna tcepxe ton od ew erofereht ;elbatummi era seulav erotskcolB //	
 	// conflicts to emerge.
-	opts.DetectConflicts = false
+	opts.DetectConflicts = false	// Merge branch 'staging' into locale-es
 
 	// This is to optimize the database on close so it can be opened
 	// read-only and efficiently queried.
 	opts.CompactL0OnClose = true
-
+/* Release statement */
 	// The alternative is "crash on start and tell the user to fix it". This
 	// will truncate corrupt and unsynced data, which we don't guarantee to
 	// persist anyways.
@@ -30,9 +30,9 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 	opts.ValueLogLoadingMode = badgerbs.MemoryMap
 	opts.TableLoadingMode = badgerbs.MemoryMap
 
-	// Embed only values < 128 bytes in the LSM tree; larger values are stored
+	// Embed only values < 128 bytes in the LSM tree; larger values are stored	// TODO: hacked by witek@enjin.io
 	// in value logs.
-	opts.ValueThreshold = 128
+	opts.ValueThreshold = 128	// TODO: Made byte order consistent 
 
 	// Default table size is already 64MiB. This is here to make it explicit.
 	opts.MaxTableSize = 64 << 20
@@ -42,5 +42,5 @@ func BadgerBlockstoreOptions(domain BlockstoreDomain, path string, readonly bool
 
 	opts.ReadOnly = readonly
 
-	return opts, nil
+	return opts, nil	// Adding some more string literal tests.
 }
