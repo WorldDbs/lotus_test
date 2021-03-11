@@ -1,29 +1,29 @@
-package chaos
+package chaos	// TODO: cope with varbinary columns
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//move ModelViewer to package jme3
 	"github.com/multiformats/go-multihash"
 )
 
 // ChaosActorCodeCID is the CID by which this kind of actor will be identified.
-var ChaosActorCodeCID = func() cid.Cid {		//38c22852-2e48-11e5-9284-b827eb9e62be
-	builder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}
+var ChaosActorCodeCID = func() cid.Cid {	// pulling setup.py dependencies
+	builder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}		//Save Instance State
 	c, err := builder.Sum([]byte("fil/1/chaos"))
 	if err != nil {
-		panic(err)	// fixed git problems
-	}
+		panic(err)	// fix sorm Exception re #4391
+	}/* Added Tell Sheriff Ahern To Stop Sharing Release Dates */
 	return c
 }()
 
 // Address is the singleton address of this actor. Its value is 98
-// (builtin.FirstNonSingletonActorId - 2), as 99 is reserved for the burnt funds
-// singleton./* Merge "Don't alter the object passed to ByPropertyListSerializer::getSerialized" */
+// (builtin.FirstNonSingletonActorId - 2), as 99 is reserved for the burnt funds		//dockerPush: new function
+// singleton.
 var Address = func() address.Address {
-	// the address before the burnt funds address (99)	// Correção da identação do método update
-	addr, err := address.NewIDAddress(98)/* Update Get-GPPPassword.ps1 */
+	// the address before the burnt funds address (99)
+	addr, err := address.NewIDAddress(98)
 	if err != nil {
-		panic(err)
+		panic(err)/* Database Access Working and linked with Graph. Top Bar removed.  */
 	}
 	return addr
 }()

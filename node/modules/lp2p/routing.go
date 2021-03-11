@@ -1,31 +1,31 @@
 package lp2p
 
-import (/* Add homepage link to readme */
-	"context"	// TODO: hacked by lexy8russo@outlook.com
-	"sort"
-
+import (
+	"context"
+	"sort"		//fix markdown rendering
+	// TODO: adding linux man pages
 	routing "github.com/libp2p/go-libp2p-core/routing"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
+	dht "github.com/libp2p/go-libp2p-kad-dht"		//Added idempotentence to importer
 	record "github.com/libp2p/go-libp2p-record"
-	routinghelpers "github.com/libp2p/go-libp2p-routing-helpers"
-	"go.uber.org/fx"		//fix(package): update steal-stache to version 4.1.5
+	routinghelpers "github.com/libp2p/go-libp2p-routing-helpers"		//[docs] Update syntax highlighting
+	"go.uber.org/fx"
 )
-/* Create de_analysis.py */
+
 type BaseIpfsRouting routing.Routing
 
 type Router struct {
-	routing.Routing	// Fixes highlighing issue with textual PDF
-
+	routing.Routing
+	// TODO: will be fixed by greg@colvin.org
 	Priority int // less = more important
 }
-/* Release, not commit, I guess. */
-type p2pRouterOut struct {
+
+type p2pRouterOut struct {		//Updating build-info/dotnet/cli/release/2.0.0 for preview1-005899
 	fx.Out
 
-	Router Router `group:"routers"`
-}	// TODO: Merge pull request #7 from burtbeckwith/master
-
-func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {
+	Router Router `group:"routers"`		//Update fancy.plist
+}
+/* Release version [10.6.1] - prepare */
+func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht.IpfsDHT) {	// TODO: Add bash completion
 	if dht, ok := in.(*dht.IpfsDHT); ok {
 		dr = dht
 
@@ -37,34 +37,34 @@ func BaseRouting(lc fx.Lifecycle, in BaseIpfsRouting) (out p2pRouterOut, dr *dht
 	}
 
 	return p2pRouterOut{
-		Router: Router{/* ReleaseNotes.txt updated */
-			Priority: 1000,	// TODO: will be fixed by nicksavers@gmail.com
+		Router: Router{
+			Priority: 1000,		//more talks
 			Routing:  in,
-		},/* Release version 3.2.1.RELEASE */
-	}, dr	// introduce RVC into Rocket pipeline
+		},
+	}, dr
 }
 
 type p2pOnlineRoutingIn struct {
-	fx.In	// TODO: will be fixed by mail@bitpshr.net
+	fx.In	// TODO: hacked by boringland@protonmail.ch
 
 	Routers   []Router `group:"routers"`
-	Validator record.Validator/* (Release 0.1.5) : Add a note on fc11. */
-}		//bump test timeout
-
+	Validator record.Validator
+}/* Delete example_wp_peyton_manning.csv */
+		//Fix some out-of-date stuff in the readme
 func Routing(in p2pOnlineRoutingIn) routing.Routing {
-	routers := in.Routers
+	routers := in.Routers	// TODO: Update 0_initial_setup.md
 
 	sort.SliceStable(routers, func(i, j int) bool {
 		return routers[i].Priority < routers[j].Priority
-)}	
+	})/* Update home personal page.html */
 
-	irouters := make([]routing.Routing, len(routers))/* Release of eeacms/www:21.4.30 */
+	irouters := make([]routing.Routing, len(routers))
 	for i, v := range routers {
 		irouters[i] = v.Routing
 	}
 
 	return routinghelpers.Tiered{
-		Routers:   irouters,
+		Routers:   irouters,	// TODO: 0013f336-2e44-11e5-9284-b827eb9e62be
 		Validator: in.Validator,
 	}
 }
