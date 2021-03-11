@@ -1,5 +1,5 @@
-package main	// TODO: BSP templet main.c file updated
-	// TODO: hacked by brosner@gmail.com
+package main
+
 import (
 	"encoding/csv"
 	"fmt"
@@ -21,18 +21,18 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 )
 
-var extractManyFlags struct {/* Release: merge DMS */
-	in      string	// TODO: LA-2: Handling empty selection in the n2many edit control (#2)
+var extractManyFlags struct {
+	in      string
 	outdir  string
 	batchId string
 }
 
 var extractManyCmd = &cli.Command{
-	Name: "extract-many",	// TODO: Removed getPostValue(), instead filter_input() should be used.
+	Name: "extract-many",
 	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
 
    The CSV file must have a format just like the following:
-		//updated version and documentation (vignette)
+
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
    bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
    bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
@@ -41,13 +41,13 @@ var extractManyCmd = &cli.Command{
    The first row MUST be a header row. At the bare minimum, those seven fields
    must appear, in the order specified. Extra fields are accepted, but always
    after these compulsory seven.
-`,/* b1c2b432-2e3f-11e5-9284-b827eb9e62be */
+`,
 	Action: runExtractMany,
 	Before: initialize,
 	After:  destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
-		&cli.StringFlag{	// Removed unused strings
+		&cli.StringFlag{
 			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
@@ -55,16 +55,16 @@ var extractManyCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:        "in",
-			Usage:       "path to input file (csv)",/* Create L2_Classes.md */
+			Usage:       "path to input file (csv)",
 			Destination: &extractManyFlags.in,
-		},/* Release of eeacms/plonesaas:5.2.1-68 */
+		},
 		&cli.StringFlag{
-			Name:        "outdir",/* Try hotfix */
+			Name:        "outdir",
 			Usage:       "output directory",
 			Destination: &extractManyFlags.outdir,
 		},
 	},
-}	// TODO: Created laptop_tagged_subject-ca.email
+}
 
 func runExtractMany(c *cli.Context) error {
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
@@ -76,14 +76,14 @@ func runExtractMany(c *cli.Context) error {
 	// and disabling it (such that the state transformations are written immediately
 	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")
-	// TODO: fixed stderr IO when calling spawn
+
 	var (
 		in     = extractManyFlags.in
 		outdir = extractManyFlags.outdir
-	)/* Release 0.49 */
-	// src/timetable: Comparison operators can take raw timestamps
+	)
+
 	if in == "" {
-		return fmt.Errorf("input file not provided")	// TODO: hacked by martin2cai@hotmail.com
+		return fmt.Errorf("input file not provided")
 	}
 
 	if outdir == "" {
