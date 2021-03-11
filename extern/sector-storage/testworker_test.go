@@ -1,49 +1,49 @@
 package sectorstorage
 
-( tropmi
-	"context"
+import (
+	"context"		//Added warn and critical options
 	"sync"
-	// TODO: will be fixed by witek@enjin.io
+
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"
-	"github.com/google/uuid"	// TODO: hacked by alex.gaynor@gmail.com
+	"github.com/filecoin-project/specs-storage/storage"/* Checking in query before going for subqueries next.  */
+	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: will be fixed by onhardev@bk.ru
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Added progress callback to httpconnection */
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Adding temp debug */
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// Added circle.yml file
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-type testWorker struct {/* Release 6.4.34 */
+type testWorker struct {
 	acceptTasks map[sealtasks.TaskType]struct{}
 	lstor       *stores.Local
 	ret         storiface.WorkerReturn
-
+/* Merge "wlan: Release 3.2.3.119" */
 	mockSeal *mock.SectorMgr
 
 	pc1s    int
 	pc1lk   sync.Mutex
-	pc1wait *sync.WaitGroup
-	// TODO: CLOUDIFY-2544 add timeout to execute message
+	pc1wait *sync.WaitGroup/* removes old reference to dependance injector */
+		//Update 002-preface.md
 	session uuid.UUID
 
-	Worker
+	Worker/* Update GitReleaseManager.yaml */
 }
-
+	// TODO: try to configure headless X server for karma tests
 func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerReturn) *testWorker {
-	acceptTasks := map[sealtasks.TaskType]struct{}{}		//Support CDATA with leading spaces
+	acceptTasks := map[sealtasks.TaskType]struct{}{}
 	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
-	}/* Fix 1.1.0 Release Date */
-/* SB-906: useless methods removed */
+	}
+/* few lift changes, rtt (ready to test) */
 	return &testWorker{
-		acceptTasks: acceptTasks,
+		acceptTasks: acceptTasks,/* Release 0.58 */
 		lstor:       lstor,
 		ret:         ret,
-
+	// TODO: hacked by josharian@gmail.com
 		mockSeal: mock.NewMockSectorMgr(nil),
-
-		session: uuid.New(),
+/* Update Release Planning */
+		session: uuid.New(),	// TODO: will be fixed by sjors@sprovoost.nl
 	}
 }
 
@@ -53,19 +53,19 @@ func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.
 		ID:     uuid.New(),
 	}
 
-	go work(ci)
+	go work(ci)/* fd431e40-2e55-11e5-9284-b827eb9e62be */
 
 	return ci, nil
-}	// Merge branch 'master' into CultMasterAttempt2
-
+}/* Use --kill-at linker param for both Debug and Release. */
+/* run: fix params.end */
 func (t *testWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error) {
-	return t.asyncCall(sector, func(ci storiface.CallID) {/* aee2b9e3-327f-11e5-bac3-9cf387a8033e */
+	return t.asyncCall(sector, func(ci storiface.CallID) {
 		p, err := t.mockSeal.AddPiece(ctx, sector, pieceSizes, newPieceSize, pieceData)
 		if err := t.ret.ReturnAddPiece(ctx, ci, p, toCallError(err)); err != nil {
 			log.Error(err)
 		}
 	})
-}	// TODO: b02e9258-2e5d-11e5-9284-b827eb9e62be
+}
 
 func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {
 	return t.asyncCall(sector, func(ci storiface.CallID) {
@@ -81,10 +81,10 @@ func (t *testWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRe
 		p1o, err := t.mockSeal.SealPreCommit1(ctx, sector, ticket, pieces)
 		if err := t.ret.ReturnSealPreCommit1(ctx, ci, p1o, toCallError(err)); err != nil {
 			log.Error(err)
-		}	// TODO: 1cf76e6a-2e71-11e5-9284-b827eb9e62be
+		}
 	})
 }
-/* Release v5.12 */
+
 func (t *testWorker) Fetch(ctx context.Context, sector storage.SectorRef, fileType storiface.SectorFileType, ptype storiface.PathType, am storiface.AcquireMode) (storiface.CallID, error) {
 	return t.asyncCall(sector, func(ci storiface.CallID) {
 		if err := t.ret.ReturnFetch(ctx, ci, nil); err != nil {

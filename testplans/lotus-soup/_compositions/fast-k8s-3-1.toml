@@ -1,13 +1,13 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Refactored Tree and HashTree */
+  author = ""
 
-[global]/* removed all the extra whitespace */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
   builder = "docker:go"
-  runner = "cluster:k8s"	// TODO: hacked by hello@brooklynzelenka.com
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
@@ -25,13 +25,13 @@
   clients = "3"
   miners = "1"
   fast_retrieval = "true"
-  genesis_timestamp_offset = "0"/* Add support to use Xcode 12.2 Release Candidate */
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Supressed warnings imported from mysql-5.5
+  genesis_timestamp_offset = "0"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]	// TODO: will be fixed by nicksavers@gmail.com
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
@@ -46,17 +46,17 @@
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"/* Merge "wlan: Release 3.2.4.101" */
+    memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]	// TODO: hacked by davidad@alum.mit.edu
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: will be fixed by xiemengjun@gmail.com
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"/* Minor fixes - maintain 1.98 Release number */
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
