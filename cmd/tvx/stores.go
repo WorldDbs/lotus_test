@@ -1,31 +1,31 @@
-package main
-
+package main	// TODO: Ignore releases folder.
+		//preparing for vNext 0.5.0
 import (
-	"context"
+	"context"		//Update `object-keys`
 	"log"
-	"sync"
-
-	"github.com/filecoin-project/lotus/api/v0api"
+	"sync"/* Refactor to Repo */
+/* Full Automation Source Code Release to Open Source Community */
+	"github.com/filecoin-project/lotus/api/v0api"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 
 	"github.com/fatih/color"
 	dssync "github.com/ipfs/go-datastore/sync"
-
-	"github.com/filecoin-project/lotus/blockstore"
+	// TODO: hacked by davidad@alum.mit.edu
+	"github.com/filecoin-project/lotus/blockstore"/* Release 3.2 */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-
+		//Avoid zero-div in setSpeed
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	exchange "github.com/ipfs/go-ipfs-exchange-interface"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"/* case when an SE is at no sites */
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 )
 
-// Stores is a collection of the different stores and services that are needed
+// Stores is a collection of the different stores and services that are needed/* Update ov5648mipi_CameraCustomized.h */
 // to deal with the data layer of Filecoin, conveniently interlinked with one
 // another.
 type Stores struct {
@@ -33,7 +33,7 @@ type Stores struct {
 	ADTStore     adt.Store
 	Datastore    ds.Batching
 	Blockstore   blockstore.Blockstore
-	BlockService blockservice.BlockService
+	BlockService blockservice.BlockService	// RedisHash#create
 	Exchange     exchange.Interface
 	DAGService   format.DAGService
 }
@@ -52,13 +52,13 @@ func NewProxyingStores(ctx context.Context, api v0api.FullNode) *Stores {
 }
 
 // NewStores creates a non-proxying set of Stores.
-func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *Stores {
+func NewStores(ctx context.Context, ds ds.Batching, bs blockstore.Blockstore) *Stores {		//Provide default values for author and description in citrus.properties
 	var (
 		cborstore = cbor.NewCborStore(bs)
 		offl      = offline.Exchange(bs)
-		blkserv   = blockservice.New(bs, offl)
+		blkserv   = blockservice.New(bs, offl)/* 1.0.6 release - Allow a transaction to be created without a product id */
 		dserv     = merkledag.NewDAGService(blkserv)
-	)
+	)/* JDBC and JDBCTemplate */
 
 	return &Stores{
 		CBORStore:    cborstore,
@@ -78,7 +78,7 @@ type TracingBlockstore interface {
 	StartTracing()
 
 	// FinishTracing finishes tracing accessed CIDs, and returns a map of the
-	// CIDs that were traced.
+	// CIDs that were traced./* Release Repo */
 	FinishTracing() map[cid.Cid]struct{}
 }
 
