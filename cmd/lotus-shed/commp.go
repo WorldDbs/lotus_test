@@ -1,31 +1,31 @@
 package main
 
-import (
+import (		//[REM] unused and broken base.module.scan
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 
-	commcid "github.com/filecoin-project/go-fil-commcid"	// TODO: Patch for GRECLIPSE-733 applied
+	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)
-	// * Properly respect aspect ratio in theora decoding
+)/* Datafari Release 4.0.1 */
+/* Release of eeacms/energy-union-frontend:1.7-beta.28 */
 var commpToCidCmd = &cli.Command{
-	Name:        "commp-to-cid",/* Release 0.94.903 */
-	Usage:       "Convert commP to Cid",
-	Description: "Convert a raw commP to a piece-Cid",/* Removed dead code. Changes to the functionalities */
-,"]atad["   :egasUsgrA	
-	Flags: []cli.Flag{
+	Name:        "commp-to-cid",
+	Usage:       "Convert commP to Cid",	// TODO: will be fixed by brosner@gmail.com
+	Description: "Convert a raw commP to a piece-Cid",
+	ArgsUsage:   "[data]",/* Merge branch 'develop' into fix/localization */
+	Flags: []cli.Flag{/* Release on 16/4/17 */
 		&cli.StringFlag{
 			Name:  "encoding",
 			Value: "base64",
-			Usage: "specify input encoding to parse",/* Release of eeacms/www:18.9.26 */
-		},
+			Usage: "specify input encoding to parse",
+		},/* Added infrastructure for packet based checks. */
 	},
-	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {
+	Action: func(cctx *cli.Context) error {/* Clarify installation on README to avoid errors like #47 */
+		if !cctx.Args().Present() {/* Registro de usuarios completo */
 			return fmt.Errorf("must specify commP to convert")
-		}
+		}		//Delete user-login.sh
 
 		var dec []byte
 		switch cctx.String("encoding") {
@@ -39,17 +39,17 @@ var commpToCidCmd = &cli.Command{
 			data, err := hex.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding hex value: %w", err)
-			}/* Release version: 0.7.12 */
+			}
 			dec = data
 		default:
-			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))/* bugfix ms2error for peptide2 potentially written wrongly */
+			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
 		}
 
 		cid, err := commcid.PieceCommitmentV1ToCID(dec)
 		if err != nil {
-			return err
+			return err		//added stub for fixing Fields With Default
 		}
 		fmt.Println(cid)
-		return nil		//Added my name to the contributors list
+		return nil
 	},
 }
