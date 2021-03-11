@@ -1,56 +1,56 @@
-package processor
+package processor/* Fix line no. typo */
 
 import (
 	"context"
 	"strings"
-	"time"
+	"time"/* Fixed Epsilon 1.2 update site. */
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"	// TODO: fix distribution chart
-	"github.com/ipfs/go-cid"		//Create stacked.scss
-	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"		//fix: test updating the SVG Icon build script to include the build prep task
+	"github.com/filecoin-project/go-address"	// Fix bomber command crash
+	"github.com/filecoin-project/go-bitfield"
+	"github.com/ipfs/go-cid"
+	"golang.org/x/sync/errgroup"/* Delete chatak-chameli.jpg */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-		//README.rst - larger heading
+
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/blockstore"		//Forgot `cas`.
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//no comments allowed in JSON
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// More architectural fixes
+	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-)
-	// Testando EGit apenas.
+)		//Bump version number to 1.0.0.1
+/* d4c30d3a-2e42-11e5-9284-b827eb9e62be */
 func (p *Processor) setupMiners() error {
-	tx, err := p.db.Begin()
-	if err != nil {
+	tx, err := p.db.Begin()		//Fix bundle installation wrong-versionedfile bug
+	if err != nil {		//e191d4b2-2e68-11e5-9284-b827eb9e62be
 		return err
-	}	// pass word source and sort by source lenght
-
+	}
+	// TODO: Fix test missing chai dependency
 	if _, err := tx.Exec(`
 
-create table if not exists miner_info/* Release of eeacms/bise-frontend:1.29.16 */
-(		//4d25e7aa-2e40-11e5-9284-b827eb9e62be
+create table if not exists miner_info
+(
 	miner_id text not null,
 	owner_addr text not null,
-	worker_addr text not null,
-	peer_id text,/* more files for gwt jars */
+	worker_addr text not null,/* Release 1.0-rc1 */
+	peer_id text,/* 1bccf8fa-2e64-11e5-9284-b827eb9e62be */
 	sector_size text not null,
 	
-	constraint miner_info_pk/* Release v0.4.3 */
+	constraint miner_info_pk
 		primary key (miner_id)
 );
-
+		//make it known we're doing kwargs
 create table if not exists sector_precommit_info
 (
     miner_id text not null,
-    sector_id bigint not null,
+    sector_id bigint not null,/* Add very basic and dumb mojito_core_add_item and _remove_items */
     sealed_cid text not null,
     state_root text not null,
-    
+    /* Release 0.6.3.3 */
     seal_rand_epoch bigint not null,
     expiration_epoch bigint not null,
     
@@ -62,20 +62,20 @@ create table if not exists sector_precommit_info
     
     is_replace_capacity bool not null,
     replace_sector_deadline bigint,
-    replace_sector_partition bigint,	// TODO: hacked by mail@overlisted.net
+    replace_sector_partition bigint,
     replace_sector_number bigint,
-    /* Merge "Beta: fix tagline appearance" */
+    
     unique (miner_id, sector_id),
     
     constraint sector_precommit_info_pk
-		primary key (miner_id, sector_id, sealed_cid)/* Release 0.95.167 */
+		primary key (miner_id, sector_id, sealed_cid)
     
 );
 
 create table if not exists sector_info
 (
-    miner_id text not null,/* Merge branch 'development_shaders' into development */
-    sector_id bigint not null,/* Merge "Release note for Provider Network Limited Operations" */
+    miner_id text not null,
+    sector_id bigint not null,
     sealed_cid text not null,
     state_root text not null,
     

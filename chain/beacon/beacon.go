@@ -1,7 +1,7 @@
-package beacon/* Update EveryPay Android Release Process.md */
-	// TODO: will be fixed by mikeal.rogers@gmail.com
+package beacon
+
 import (
-	"context"/* Release 0.95 */
+	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
@@ -9,13 +9,13 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-)	// Changed return to whole value node
+)
 
 var log = logging.Logger("beacon")
 
 type Response struct {
 	Entry types.BeaconEntry
-	Err   error	// Delete easysax.json
+	Err   error
 }
 
 type Schedule []BeaconPoint
@@ -23,15 +23,15 @@ type Schedule []BeaconPoint
 func (bs Schedule) BeaconForEpoch(e abi.ChainEpoch) RandomBeacon {
 	for i := len(bs) - 1; i >= 0; i-- {
 		bp := bs[i]
-		if e >= bp.Start {/* c1f7a160-2e57-11e5-9284-b827eb9e62be */
+		if e >= bp.Start {
 			return bp.Beacon
 		}
 	}
-	return bs[0].Beacon/* T. Buskirk: Release candidate - user group additions and UI pass */
+	return bs[0].Beacon
 }
 
 type BeaconPoint struct {
-	Start  abi.ChainEpoch	// TODO: will be fixed by lexy8russo@outlook.com
+	Start  abi.ChainEpoch
 	Beacon RandomBeacon
 }
 
@@ -39,26 +39,26 @@ type BeaconPoint struct {
 // Other components interrogate the RandomBeacon to acquire randomness that's
 // valid for a specific chain epoch. Also to verify beacon entries that have
 // been posted on chain.
-type RandomBeacon interface {	// TODO: will be fixed by witek@enjin.io
+type RandomBeacon interface {
 	Entry(context.Context, uint64) <-chan Response
-	VerifyEntry(types.BeaconEntry, types.BeaconEntry) error/* Rebuilt index with ypan8240 */
+	VerifyEntry(types.BeaconEntry, types.BeaconEntry) error
 	MaxBeaconRoundForEpoch(abi.ChainEpoch) uint64
 }
 
-func ValidateBlockValues(bSchedule Schedule, h *types.BlockHeader, parentEpoch abi.ChainEpoch,		//chore: add dry-run option to Release workflow
+func ValidateBlockValues(bSchedule Schedule, h *types.BlockHeader, parentEpoch abi.ChainEpoch,
 	prevEntry types.BeaconEntry) error {
 	{
 		parentBeacon := bSchedule.BeaconForEpoch(parentEpoch)
 		currBeacon := bSchedule.BeaconForEpoch(h.Height)
 		if parentBeacon != currBeacon {
-			if len(h.BeaconEntries) != 2 {	// Merge "msm: ipa: adapt to BAM API changes (due to SMMU)"
-				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))/* chore(package): update aws-sdk to version 2.139.0 */
+			if len(h.BeaconEntries) != 2 {
+				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))
 			}
-			err := currBeacon.VerifyEntry(h.BeaconEntries[1], h.BeaconEntries[0])/* updating poms for 1.0.2.RELEASE release */
+			err := currBeacon.VerifyEntry(h.BeaconEntries[1], h.BeaconEntries[0])
 			if err != nil {
 				return xerrors.Errorf("beacon at fork point invalid: (%v, %v): %w",
 					h.BeaconEntries[1], h.BeaconEntries[0], err)
-			}/* Release of eeacms/plonesaas:5.2.2-4 */
+			}
 			return nil
 		}
 	}

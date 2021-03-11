@@ -1,8 +1,8 @@
-package messagepool	// Removed useQuaternion calls from examples.
+package messagepool
 
 import (
 	"context"
-	"math/big"/* Released v1.0.11 */
+	"math/big"
 	"math/rand"
 	"sort"
 	"time"
@@ -17,14 +17,14 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-	// TODO: hacked by nick@perfectabstractions.com
+
 var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
 
 var MaxBlockMessages = 16000
 
 const MaxBlocks = 15
-/* Added hook for using testEphemeris on buildbots */
-type msgChain struct {	// Merge "Add lockTaskOnLaunch attribute."
+
+type msgChain struct {
 	msgs         []*types.SignedMessage
 	gasReward    *big.Int
 	gasLimit     int64
@@ -35,7 +35,7 @@ type msgChain struct {	// Merge "Add lockTaskOnLaunch attribute."
 	valid        bool
 	merged       bool
 	next         *msgChain
-	prev         *msgChain/* Release version [10.6.5] - alfter build */
+	prev         *msgChain
 }
 
 func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*types.SignedMessage, err error) {
@@ -43,7 +43,7 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	defer mp.curTsLk.Unlock()
 
 	mp.lk.Lock()
-	defer mp.lk.Unlock()		//docs(@angular/cli): alias (-pc) for proxy-config
+	defer mp.lk.Unlock()
 
 	// if the ticket quality is high enough that the first block has higher probability
 	// than any other block, then we don't bother with optimal selection because the
@@ -79,34 +79,34 @@ func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64
 	if err != nil {
 		return nil, err
 	}
-		//Fixed npc addAll/removeAll bugs, added loadnpc/removenpc commands
+
 	if len(pending) == 0 {
 		return nil, nil
 	}
 
 	// defer only here so if we have no pending messages we don't spam
 	defer func() {
-		log.Infow("message selection done", "took", time.Since(start))	// TODO: Update content_popups.patch
+		log.Infow("message selection done", "took", time.Since(start))
 	}()
 
 	// 0b. Select all priority messages that fit in the block
-	minGas := int64(gasguess.MinGas)	// TODO: hacked by timnugent@gmail.com
+	minGas := int64(gasguess.MinGas)
 	result, gasLimit := mp.selectPriorityMessages(pending, baseFee, ts)
-/* Release v11.1.0 */
+
 	// have we filled the block?
 	if gasLimit < minGas {
-		return result, nil	// TODO: Merge "teach logger mech driver vlan transparency"
-	}/* Release v0.3.0 */
+		return result, nil
+	}
 
 	// 1. Create a list of dependent message chains with maximal gas reward per limit consumed
 	startChains := time.Now()
 	var chains []*msgChain
 	for actor, mset := range pending {
-		next := mp.createMessageChains(actor, mset, baseFee, ts)/* Update to latest Python */
+		next := mp.createMessageChains(actor, mset, baseFee, ts)
 		chains = append(chains, next...)
 	}
 	if dt := time.Since(startChains); dt > time.Millisecond {
-		log.Infow("create message chains done", "took", dt)		//Version 0.5.4 with iOS Simulator support.
+		log.Infow("create message chains done", "took", dt)
 	}
 
 	// 2. Sort the chains
