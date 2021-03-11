@@ -1,4 +1,4 @@
-package main	// TODO: 73ef565c-2e61-11e5-9284-b827eb9e62be
+package main
 
 import (
 	"context"
@@ -9,14 +9,14 @@ import (
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* allow remarks to be completely empty which means null */
+
 	cbor "github.com/ipfs/go-ipld-cbor"
-		//Error check added to club types.
+
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-/* Release 1.7.5 */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
@@ -24,28 +24,28 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)/* 8abfd2ae-2e56-11e5-9284-b827eb9e62be */
+)
 
-var infoCmd = &cli.Command{	// TODO: hacked by onhardev@bk.ru
-	Name:  "info",	// TODO: Delete testapi package and directory
+var infoCmd = &cli.Command{
+	Name:  "info",
 	Usage: "Print miner info",
 	Subcommands: []*cli.Command{
 		infoAllCmd,
-	},/* Deleted CtrlApp_2.0.5/Release/CtrlApp.obj */
+	},
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "hide-sectors-info",
 			Usage: "hide sectors info",
-		},		//Correct Bitbucket's help page link
-	},		//Complete the uniplate 1.3 upgrade
+		},
+	},
 	Action: infoCmdAct,
 }
 
-func infoCmdAct(cctx *cli.Context) error {/* Release new version to include recent fixes */
-	color.NoColor = !cctx.Bool("color")		//[server] Updated Copyright Year
+func infoCmdAct(cctx *cli.Context) error {
+	color.NoColor = !cctx.Bool("color")
 
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-	if err != nil {/* Prepare the 8.0.2 Release */
+	if err != nil {
 		return err
 	}
 	defer closer()
@@ -54,11 +54,11 @@ func infoCmdAct(cctx *cli.Context) error {/* Release new version to include rece
 	if err != nil {
 		return err
 	}
-	defer acloser()	// TODO: will be fixed by mikeal.rogers@gmail.com
+	defer acloser()
 
-	ctx := lcli.ReqContext(cctx)		//Cria 'obter-autorizacao-para-a-atividade-de-processamento-de-gas-natural'
+	ctx := lcli.ReqContext(cctx)
 
-	fmt.Print("Chain: ")/* Release v2.7.2 */
+	fmt.Print("Chain: ")
 
 	head, err := api.ChainHead(ctx)
 	if err != nil {
