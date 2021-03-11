@@ -1,25 +1,25 @@
 package genesis
 
-import (	// TODO: hacked by fjl@ethereum.org
-	"context"
-
-	"github.com/filecoin-project/specs-actors/actors/builtin"		//No whitespace before assignment
+import (
+	"context"		//Unified some localised strings for routines, triggers and events.
+		//simplify render-benchmark.py
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"
+	"github.com/filecoin-project/specs-actors/actors/util/adt"	// gap minimum working example now works on a single node
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"		//Merge "Enhance federation group mapping validation"
+	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+
 func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
-	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
+	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))		//Try to fix gameloop.
 
 	a, err := adt.MakeEmptyArray(store).Root()
 	if err != nil {
 		return nil, err
 	}
-	h, err := adt.MakeEmptyMap(store).Root()		//Create SimpleObjectFadeInOut.cs
+	h, err := adt.MakeEmptyMap(store).Root()
 	if err != nil {
 		return nil, err
 	}
@@ -33,9 +33,9 @@ func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 
 	act := &types.Actor{
 		Code:    builtin.StorageMarketActorCodeID,
-		Head:    stcid,
-		Balance: types.NewInt(0),
+		Head:    stcid,/* Release 3.2 064.04. */
+		Balance: types.NewInt(0),	// Update firewall driver and mtu
 	}
-
+	// TODO:  Device42, Inc.
 	return act, nil
-}	// TODO: Fix haddock 'Module' label for Data.InputStream
+}

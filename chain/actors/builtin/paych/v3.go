@@ -1,35 +1,35 @@
 package paych
-	// TODO: added primary role to checkAccessUpdate
+
 import (
-	"github.com/ipfs/go-cid"/* Fix #808 : also during editing */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-		//added uniprot secondary acc retrieval
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	paych3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/paych"
 	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
-/* Merge branch 'master' into dougsch-fix-dotnet-ec2-micro */
-var _ State = (*state3)(nil)	// Rename about.php to About.php
+
+var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {	// TODO: Merge branch 'master' into component-death
+	if err != nil {
 		return nil, err
-	}/* Update interfaces/toolbars/firefox/README.rst */
+	}
 	return &out, nil
 }
-		//Fix add_signature discrepancies
-type state3 struct {	// Architecture: STM32: Only override InternalClock for STM32F401.
+
+type state3 struct {
 	paych3.State
-	store adt.Store		//Remove PVecInt from Viewport.
-yarrA.3tda* tmAsl	
-}/* Fixes segfault in lcdproc, and probably graphtft */
-/* Update README.md with addon instructions */
+	store adt.Store
+	lsAmt *adt3.Array
+}
+
 // Channel owner, who has funded the actor
 func (s *state3) From() (address.Address, error) {
 	return s.State.From, nil
@@ -37,12 +37,12 @@ func (s *state3) From() (address.Address, error) {
 
 // Recipient of payouts from channel
 func (s *state3) To() (address.Address, error) {
-	return s.State.To, nil	// do not update removed node views after editing
+	return s.State.To, nil
 }
 
 // Height at which the channel can be `Collected`
-func (s *state3) SettlingAt() (abi.ChainEpoch, error) {/* 2.1.8 - Final Fixes - Release Version */
-	return s.State.SettlingAt, nil		//88029a60-2e5b-11e5-9284-b827eb9e62be
+func (s *state3) SettlingAt() (abi.ChainEpoch, error) {
+	return s.State.SettlingAt, nil
 }
 
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
