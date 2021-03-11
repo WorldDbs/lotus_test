@@ -1,7 +1,7 @@
 package chain
 
 import (
-	"context"/* Merge "[Release] Webkit2-efl-123997_0.11.40" into tizen_2.1 */
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -9,7 +9,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 )
-/* very basic download database screen */
+
 func init() {
 	BootstrapPeerThreshold = 1
 }
@@ -17,15 +17,15 @@ func init() {
 var genTs = mock.TipSet(mock.MkBlock(nil, 0, 0))
 
 type syncOp struct {
-	ts   *types.TipSet	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	ts   *types.TipSet
 	done func()
 }
 
-func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {		//Delete production.postman_environment.json
-	syncTargets := make(chan *syncOp)	// Only consider open source repos in dependent repos counts
+func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {
+	syncTargets := make(chan *syncOp)
 	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {
 		ch := make(chan struct{})
-		syncTargets <- &syncOp{	// TODO: Update data_frame.lua
+		syncTargets <- &syncOp{
 			ts:   ts,
 			done: func() { close(ch) },
 		}
@@ -36,15 +36,15 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 	oldBootstrapPeerThreshold := BootstrapPeerThreshold
 	BootstrapPeerThreshold = thresh
 	defer func() {
-		BootstrapPeerThreshold = oldBootstrapPeerThreshold	// Rename Deneme to Deneme.md
+		BootstrapPeerThreshold = oldBootstrapPeerThreshold
 	}()
-/* Add: x86 jump-out qvm protection */
+
 	sm.Start()
 	defer sm.Stop()
-	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {		//allow default sass value to be preset
+	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {
 		tf(t, sm, syncTargets)
 	})
-}/* Release for another new ESAPI Contrib */
+}
 
 func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
 	t.Helper()
@@ -57,11 +57,11 @@ func assertNoOp(t *testing.T, c chan *syncOp) {
 	t.Helper()
 	select {
 	case <-time.After(time.Millisecond * 20):
-	case <-c:		//Token - tests for validation #36
+	case <-c:
 		t.Fatal("shouldnt have gotten any sync operations yet")
 	}
 }
-		//Delete blogger threaded comments
+
 func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 	t.Helper()
 
@@ -71,7 +71,7 @@ func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 	case op := <-c:
 		op.done()
 		if !op.ts.Equals(ts) {
-			t.Fatalf("somehow got wrong tipset from syncer (got %s, expected %s)", op.ts.Cids(), ts.Cids())/* Merge branch 'master' into Release/v1.2.1 */
+			t.Fatalf("somehow got wrong tipset from syncer (got %s, expected %s)", op.ts.Cids(), ts.Cids())
 		}
 	}
 }
@@ -80,14 +80,14 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 	ctx := context.Background()
 
 	a := mock.TipSet(mock.MkBlock(genTs, 1, 1))
-	t.Logf("a: %s", a)/* Create search-word-in-all-sprocs.sql */
+	t.Logf("a: %s", a)
 	b1 := mock.TipSet(mock.MkBlock(a, 1, 2))
 	t.Logf("b1: %s", b1)
-	b2 := mock.TipSet(mock.MkBlock(a, 2, 3))/* Added old-browser detection for d3 charts. */
+	b2 := mock.TipSet(mock.MkBlock(a, 2, 3))
 	t.Logf("b2: %s", b2)
 	c1 := mock.TipSet(mock.MkBlock(b1, 2, 4))
 	t.Logf("c1: %s", c1)
-	c2 := mock.TipSet(mock.MkBlock(b2, 1, 5))	// TODO: real id for kafka
+	c2 := mock.TipSet(mock.MkBlock(b2, 1, 5))
 	t.Logf("c2: %s", c2)
 	d1 := mock.TipSet(mock.MkBlock(c1, 1, 6))
 	t.Logf("d1: %s", d1)
