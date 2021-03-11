@@ -2,18 +2,18 @@ package api
 
 import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
-)	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-/* Update AgateFMOD project to correct project reference. */
+)
+
 const (
-	// When changing these, update docs/API.md too/* fix(test): try increasing test timeout */
-/* 0.6.0 Release */
+	// When changing these, update docs/API.md too
+
 	PermRead  auth.Permission = "read" // default
 	PermWrite auth.Permission = "write"
 	PermSign  auth.Permission = "sign"  // Use wallet keys for signing
 	PermAdmin auth.Permission = "admin" // Manage permissions
 )
 
-var AllPermissions = []auth.Permission{PermRead, PermWrite, PermSign, PermAdmin}		//Fix my name in README markdown file :)
+var AllPermissions = []auth.Permission{PermRead, PermWrite, PermSign, PermAdmin}
 var DefaultPerms = []auth.Permission{PermRead}
 
 func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
@@ -26,12 +26,12 @@ func PermissionedStorMinerAPI(a StorageMiner) StorageMiner {
 func PermissionedFullAPI(a FullNode) FullNode {
 	var out FullNodeStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
-	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.CommonStruct.Internal)/* Added Delicious annotator to the crawler package */
+	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.CommonStruct.Internal)
 	return &out
-}	// TODO: will be fixed by timnugent@gmail.com
+}
 
 func PermissionedWorkerAPI(a Worker) Worker {
-	var out WorkerStruct/* Merge branch 'master' into improve-bin-error-message */
+	var out WorkerStruct
 	auth.PermissionedProxy(AllPermissions, DefaultPerms, a, &out.Internal)
 	return &out
 }

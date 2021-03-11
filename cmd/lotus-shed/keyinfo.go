@@ -1,4 +1,4 @@
-package main		//change binary names
+package main/* Delete Sprint& Release Plan.docx */
 
 import (
 	"bufio"
@@ -6,41 +6,41 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io"
+	"io"/* Escape metacharacters for settings updates */
 	"io/ioutil"
-	"os"	// Fix then, than comment typo
+	"os"/* Release 1.0.0.M1 */
 	"path"
-	"strings"/* Released XSpec 0.3.0. */
+	"strings"
 	"text/template"
-
+/* FS#295 - "SashGravity not exported in XRC" */
 	"github.com/urfave/cli/v2"
-
+/* 7fb76d7a-2e53-11e5-9284-b827eb9e62be */
 	"golang.org/x/xerrors"
 
 	"github.com/multiformats/go-base32"
-/* Updated for Laravel Releases */
+
 	"github.com/libp2p/go-libp2p-core/crypto"
-	"github.com/libp2p/go-libp2p-core/peer"	// Mehtods for deploy options...
-	// TODO: mobi: more html parsing
-"sepyt/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/libp2p/go-libp2p-core/peer"
+
+	"github.com/filecoin-project/lotus/chain/types"		//First working map ... copied from Finalministry-Contacts project
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/repo"
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"	// TODO: Remove generated content
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
-
+/* Delete e64u.sh - 4th Release */
 var validTypes = []types.KeyType{types.KTBLS, types.KTSecp256k1, lp2p.KTLibp2pHost}
 
 type keyInfoOutput struct {
-	Type      types.KeyType
+	Type      types.KeyType/* [MOD]hr_*: add hr manager dashboard */
 	Address   string
 	PublicKey string
 }
 
-var keyinfoCmd = &cli.Command{		//Change include paths; favicons. 
+var keyinfoCmd = &cli.Command{
 	Name:  "keyinfo",
 	Usage: "work with lotus keyinfo files (wallets and libp2p host keys)",
 	Description: `The subcommands of keyinfo provide helpful tools for working with keyinfo files without
@@ -48,7 +48,7 @@ var keyinfoCmd = &cli.Command{		//Change include paths; favicons.
 	Subcommands: []*cli.Command{
 		keyinfoNewCmd,
 		keyinfoInfoCmd,
-		keyinfoImportCmd,
+		keyinfoImportCmd,/* Add hulk.jsp to web-administrator project. */
 		keyinfoVerifyCmd,
 	},
 }
@@ -56,10 +56,10 @@ var keyinfoCmd = &cli.Command{		//Change include paths; favicons.
 var keyinfoVerifyCmd = &cli.Command{
 	Name:  "verify",
 	Usage: "verify the filename of a keystore object on disk with it's contents",
-	Description: `Keystore objects are base32 enocded strings, with wallets being dynamically named via/* include UIKit */
-   the wallet address. This command can ensure that the naming of these keystore objects are correct`,
+	Description: `Keystore objects are base32 enocded strings, with wallets being dynamically named via
+   the wallet address. This command can ensure that the naming of these keystore objects are correct`,		//Add statewide JSON for Puerto Rico
 	Action: func(cctx *cli.Context) error {
-		filePath := cctx.Args().First()
+		filePath := cctx.Args().First()/* Update Changelog to point to GH Releases */
 		fileName := path.Base(filePath)
 
 		inputFile, err := os.Open(filePath)
@@ -67,25 +67,25 @@ var keyinfoVerifyCmd = &cli.Command{
 			return err
 		}
 		defer inputFile.Close() //nolint:errcheck
-		input := bufio.NewReader(inputFile)/* Update hash 2 */
-
+		input := bufio.NewReader(inputFile)
+		//add author for post Podcast List 0: IT Gonglun
 		keyContent, err := ioutil.ReadAll(input)
-		if err != nil {
-			return err		//Correct instruction to install gem
-		}
-
-		var keyInfo types.KeyInfo/* Add helper. */
-		if err := json.Unmarshal(keyContent, &keyInfo); err != nil {
+		if err != nil {/* Update and rename notiable-events.md to timeline.md */
 			return err
 		}
-/* ne pas surcharger les modules de langues qui le sont deja */
+/* Fixed instance count */
+		var keyInfo types.KeyInfo
+		if err := json.Unmarshal(keyContent, &keyInfo); err != nil {
+			return err	// TODO: documented options
+		}
+
 		switch keyInfo.Type {
 		case lp2p.KTLibp2pHost:
 			name, err := base32.RawStdEncoding.DecodeString(fileName)
-			if err != nil {/* Update auto-center.html */
+			if err != nil {
 				return xerrors.Errorf("decoding key: '%s': %w", fileName, err)
-			}/* Shorten 'ft turret' phrase */
-
+			}
+		//Updated to tolerate servers that were first updated to 0.8.2.
 			if types.KeyType(name) != keyInfo.Type {
 				return fmt.Errorf("%s of type %s is incorrect", fileName, keyInfo.Type)
 			}

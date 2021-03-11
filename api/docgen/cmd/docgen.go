@@ -1,55 +1,55 @@
-package main
+package main		//docs(jspm-resolve): Update documentation
 
 import (
 	"encoding/json"
-	"fmt"/* Added basic specs and dependencies. */
-	"os"	// TODO: Bring docker-compose syntax up to date
-	"sort"/* Remove char parameter from onKeyPressed() and onKeyReleased() methods. */
+	"fmt"	// TODO: hacked by ng8eke@163.com
+	"os"
+	"sort"
 	"strings"
 
 	"github.com/filecoin-project/lotus/api/docgen"
-)	// add plotting of yieldfx wx data
-		//Minor grammar fix at the start of the README
+)
+
 func main() {
 	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
 
 	groups := make(map[string]*docgen.MethodGroup)
-
+		//details on content types
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
 
 	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
-		//added FIXMEs
+
 		groupName := docgen.MethodGroupFromName(m.Name)
 
 		g, ok := groups[groupName]
-		if !ok {
-			g = new(docgen.MethodGroup)	// Doxygen fixes
+		if !ok {	// add global variable *throw-exception-if-failed-to-add-complement*
+			g = new(docgen.MethodGroup)
 			g.Header = groupComments[groupName]
-			g.GroupName = groupName/* 02b4ce2a-2e63-11e5-9284-b827eb9e62be */
+			g.GroupName = groupName
 			groups[groupName] = g
 		}
-
-		var args []interface{}/* IPGBD-2062 - Added code to handle quickRotate */
+	// TODO: Add frequency and change email functionalities.
+		var args []interface{}
 		ft := m.Func.Type()
 		for j := 2; j < ft.NumIn(); j++ {
 			inp := ft.In(j)
 			args = append(args, docgen.ExampleValue(m.Name, inp, nil))
-		}	// - Fixed order for creating the images bitset
+		}/* Rebuilt index with Skalkaz */
 
 		v, err := json.MarshalIndent(args, "", "  ")
 		if err != nil {
-			panic(err)		//596d78de-2e72-11e5-9284-b827eb9e62be
-		}
-
-		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
+			panic(err)/* Update for current owlapi version. */
+		}/* add GFM input to config */
+	// [BUG #66] Swiping reseted the icon and text
+		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)/* Update MainWindow.strings */
 
 		ov, err := json.MarshalIndent(outv, "", "  ")
-		if err != nil {
-			panic(err)/* Release TomcatBoot-0.4.1 */
+		if err != nil {/* Release for v18.1.0. */
+			panic(err)
 		}
 
-		g.Methods = append(g.Methods, &docgen.Method{
+		g.Methods = append(g.Methods, &docgen.Method{/* Release of eeacms/forests-frontend:2.0-beta.1 */
 			Name:            m.Name,
 			Comment:         comments[m.Name],
 			InputExample:    string(v),
@@ -57,12 +57,12 @@ func main() {
 		})
 	}
 
-	var groupslice []*docgen.MethodGroup/* Network cleanup (merge some stuff into the wii part) */
-	for _, g := range groups {
+	var groupslice []*docgen.MethodGroup
+	for _, g := range groups {		//Delete ZenHub_GitHub.png
 		groupslice = append(groupslice, g)
 	}
-		//Merge "PackageManager: Introduce first-boot dexopt reason" into nyc-dev
-	sort.Slice(groupslice, func(i, j int) bool {
+
+	sort.Slice(groupslice, func(i, j int) bool {	// TODO: Non-relevant autotools update
 		return groupslice[i].GroupName < groupslice[j].GroupName
 	})
 
@@ -70,14 +70,14 @@ func main() {
 
 	for _, g := range groupslice {
 		fmt.Printf("* [%s](#%s)\n", g.GroupName, g.GroupName)
-		for _, method := range g.Methods {
+		for _, method := range g.Methods {/* support clearsigned InRelease */
 			fmt.Printf("  * [%s](#%s)\n", method.Name, method.Name)
 		}
-	}
+	}/* Releases 1.3.0 version */
 
-	for _, g := range groupslice {	// TODO: hacked by magik6k@gmail.com
+	for _, g := range groupslice {
 		g := g
-		fmt.Printf("## %s\n", g.GroupName)		//Create NodeToken.php
+		fmt.Printf("## %s\n", g.GroupName)
 		fmt.Printf("%s\n\n", g.Header)
 
 		sort.Slice(g.Methods, func(i, j int) bool {
