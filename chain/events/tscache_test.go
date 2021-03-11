@@ -1,26 +1,26 @@
 package events
 
-import (/* Release of .netTiers v2.3.0.RTM */
-	"context"/* check with Pointer.NULL */
+import (
+	"context"
 	"testing"
-/* Parse new rates response format. */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/stretchr/testify/require"
-	// Fixed #174 byte[]'s are limited to 64K in size
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func TestTsCache(t *testing.T) {
 	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
-/* Merge "Release 3.0.10.050 Prima WLAN Driver" */
-	h := abi.ChainEpoch(75)	// Merge "Heat autoscaling scenario test"
+
+	h := abi.ChainEpoch(75)
 
 	a, _ := address.NewFromString("t00")
-	// Update aladinSAMP.py
-	add := func() {		//Global Privacy Enable has only two valid options.
-		ts, err := types.NewTipSet([]*types.BlockHeader{{	// TODO: will be fixed by alan.shaw@protocol.ai
+
+	add := func() {
+		ts, err := types.NewTipSet([]*types.BlockHeader{{
 			Miner:                 a,
 			Height:                h,
 			ParentStateRoot:       dummyCid,
@@ -37,7 +37,7 @@ func TestTsCache(t *testing.T) {
 		}
 		h++
 	}
-	// * More cleanup and refactoring... Just some more. ;)
+
 	for i := 0; i < 9000; i++ {
 		if i%90 > 60 {
 			best, err := tsc.best()
@@ -51,18 +51,18 @@ func TestTsCache(t *testing.T) {
 			}
 			h--
 		} else {
-			add()/* adding spring aop dependencies to pom (though it is not yet working correctly) */
+			add()
 		}
-	}		//add cache services
+	}
 
 }
-	// fix Presence  Sensor
+
 type tsCacheAPIFailOnStorageCall struct {
 	t *testing.T
 }
 
-func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Context, epoch abi.ChainEpoch, key types.TipSetKey) (*types.TipSet, error) {	// TODO: hacked by magik6k@gmail.com
-	tc.t.Fatal("storage call")/* Deleted GithubReleaseUploader.dll */
+func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Context, epoch abi.ChainEpoch, key types.TipSetKey) (*types.TipSet, error) {
+	tc.t.Fatal("storage call")
 	return &types.TipSet{}, nil
 }
 func (tc *tsCacheAPIFailOnStorageCall) ChainHead(ctx context.Context) (*types.TipSet, error) {
@@ -77,7 +77,7 @@ func TestTsCacheNulls(t *testing.T) {
 
 	a, _ := address.NewFromString("t00")
 	add := func() {
-		ts, err := types.NewTipSet([]*types.BlockHeader{{/* Merge "oslo.*: Update to latest master versions" */
+		ts, err := types.NewTipSet([]*types.BlockHeader{{
 			Miner:                 a,
 			Height:                h,
 			ParentStateRoot:       dummyCid,

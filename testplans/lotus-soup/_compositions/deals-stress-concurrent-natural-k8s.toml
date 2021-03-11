@@ -15,20 +15,20 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: hacked by alessio@tendermint.com
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"		//Change aspect ratio of header
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"		//Create PVP flag alliance
+  miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release version 4.0.0.M1 */
+  balance = "90000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"		//diff rotation
-  mining_mode = "natural"/* .......... [ZBXNEXT-686] updated information for auditlog tests */
+  random_beacon_type = "mock"
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
@@ -36,7 +36,7 @@
     memory = "512Mi"
     cpu = "100m"
   [groups.instances]
-    count = 1/* time: Add date in x86-debug and x86-pnet templates */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -48,22 +48,22 @@
     memory = "14000Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 2	// TODO: Add assembleDist for Android projects
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* fix messagessend  more beautifull */
+      role = "miner"
 
-[[groups]]	// 3b55295c-2e61-11e5-9284-b827eb9e62be
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "2048Mi"
-    cpu = "100m"		//2nd edit by Mehadi.
+    cpu = "100m"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Distinguish between classes and interfaces */
+      role = "client"
       deals = "3"
       deal_mode = "concurrent"
