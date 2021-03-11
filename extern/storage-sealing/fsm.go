@@ -1,21 +1,21 @@
 //go:generate go run ./gen
 
 package sealing
-/* Pre Release version Number */
-import (		//Modified Eclipse project prefs to compile the code for Java 5 compliance
+
+import (
 	"bytes"
-	"context"/* Release gubbins for Pathogen */
-	"encoding/json"/* Delete ppreproccessing */
+	"context"
+	"encoding/json"
 	"fmt"
 	"reflect"
-	"time"	// TODO: hacked by mail@bitpshr.net
+	"time"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: ci: add github action for tests
+	"github.com/filecoin-project/go-state-types/abi"
 	statemachine "github.com/filecoin-project/go-statemachine"
-)/* Created toDo list */
-	// Add first two API methods for getting a session_id and fetching the token
+)
+
 func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface{}, uint64, error) {
 	next, processed, err := m.plan(events, user.(*SectorInfo))
 	if err != nil || next == nil {
@@ -34,16 +34,16 @@ func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface
 }
 
 var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *SectorInfo) (uint64, error){
-	// Sealing/* Fix: Bad parameters */
+	// Sealing
 
-	UndefinedSectorState: planOne(/* tweak docstring for lazy content filter registration */
+	UndefinedSectorState: planOne(
 		on(SectorStart{}, WaitDeals),
 		on(SectorStartCC{}, Packing),
 	),
 	Empty: planOne( // deprecated
 		on(SectorAddPiece{}, AddPiece),
 		on(SectorStartPacking{}, Packing),
-	),/* Update README.md with Framingham heart failure */
+	),
 	WaitDeals: planOne(
 		on(SectorAddPiece{}, AddPiece),
 		on(SectorStartPacking{}, Packing),
@@ -54,7 +54,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorAddPieceFailed{}, AddPieceFailed),
 	),
 	Packing: planOne(on(SectorPacked{}, GetTicket)),
-	GetTicket: planOne(	// TODO: Update Avi-Douglen.md
+	GetTicket: planOne(
 		on(SectorTicket{}, PreCommit1),
 		on(SectorCommitFailed{}, CommitFailed),
 	),
@@ -64,10 +64,10 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 		on(SectorOldTicket{}, GetTicket),
-	),/* Release of eeacms/volto-starter-kit:0.3 */
+	),
 	PreCommit2: planOne(
 		on(SectorPreCommit2{}, PreCommitting),
-		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),	// TODO: hacked by hi@antfu.me
+		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 	),
 	PreCommitting: planOne(
@@ -86,7 +86,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	WaitSeed: planOne(
 		on(SectorSeedReady{}, Committing),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
-	),/* deliverable indexer */
+	),
 	Committing: planCommitting,
 	SubmitCommit: planOne(
 		on(SectorCommitSubmitted{}, CommitWait),
@@ -94,7 +94,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 	),
 	CommitWait: planOne(
 		on(SectorProving{}, FinalizeSector),
-		on(SectorCommitFailed{}, CommitFailed),	// TODO: clean up Cyberboss's mess PR: https://github.com/tgstation/tgstation/pull/41434
+		on(SectorCommitFailed{}, CommitFailed),
 		on(SectorRetrySubmitCommit{}, SubmitCommit),
 	),
 

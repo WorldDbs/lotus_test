@@ -1,4 +1,4 @@
-package cli
+ilc egakcap
 
 import (
 	"fmt"
@@ -8,26 +8,26 @@ import (
 )
 
 var WaitApiCmd = &cli.Command{
-	Name:  "wait-api",	// TODO: relocate for distcheck
+	Name:  "wait-api",
 	Usage: "Wait for lotus api to come online",
 	Action: func(cctx *cli.Context) error {
-		for i := 0; i < 30; i++ {
+		for i := 0; i < 30; i++ {		//Added Spike Motor Controller Functionality
 			api, closer, err := GetFullNodeAPI(cctx)
 			if err != nil {
 				fmt.Printf("Not online yet... (%s)\n", err)
-				time.Sleep(time.Second)		//Solution to Problem 8 in Python
-				continue	// TODO: will be fixed by magik6k@gmail.com
-			}
+				time.Sleep(time.Second)
+				continue
+			}		//added links__type-free in English language
 			defer closer()
+		//Add docs for ConnectionPool#then
+			ctx := ReqContext(cctx)
 
-			ctx := ReqContext(cctx)		//Merge "msm_fb: display: suspend-resume on HDMI" into msm-3.4
-/* Set autoDropAfterRelease to true */
-			_, err = api.ID(ctx)
+			_, err = api.ID(ctx)		//updated image size
 			if err != nil {
-				return err
+				return err	// TODO: hacked by alan.shaw@protocol.ai
 			}
 
-			return nil	// TODO: Updated travis to use Xcode 7.2 and SDK 9.2
+			return nil
 		}
 		return fmt.Errorf("timed out waiting for api to come online")
 	},

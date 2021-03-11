@@ -2,76 +2,76 @@ package market
 
 import (
 	"bytes"
-/* start on HW_IInternetProtocol; harmonize IUnknown::Release() implementations */
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// e555ee76-2e63-11e5-9284-b827eb9e62be
-	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
 
-"tda/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"
+	cbg "github.com/whyrusleeping/cbor-gen"/* Preparations to add incrementSnapshotVersionAfterRelease functionality */
+
+	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: hacked by sjors@sprovoost.nl
 	"github.com/filecoin-project/lotus/chain/types"
 
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"/* Set version as 0.6.6 */
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 )
-	// Removed some trails of merge conflict
+
 var _ State = (*state4)(nil)
 
-func load4(store adt.Store, root cid.Cid) (State, error) {		//update for three rulesets and no validate button
+func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil		//Infraestructura para que objetas desaparezcan 
+	return &out, nil/* Merge "Release notes for Swift 1.11.0" */
 }
 
 type state4 struct {
-	market4.State
-	store adt.Store
+	market4.State	// TODO: Create Microservices
+	store adt.Store	// Alterações no cardápio
 }
 
-func (s *state4) TotalLocked() (abi.TokenAmount, error) {
+func (s *state4) TotalLocked() (abi.TokenAmount, error) {	// TODO: will be fixed by steven@stebalien.com
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
 	fml = types.BigAdd(fml, s.TotalClientStorageFee)
-	return fml, nil
-}
+	return fml, nil	// fill_in_the_gaps: add test folder
+}		//Add matrix data csv import
 
 func (s *state4) BalancesChanged(otherState State) (bool, error) {
-	otherState4, ok := otherState.(*state4)
-	if !ok {	// Rename Ironic.txt to ironic.txt
-		// there's no way to compare different versions of the state, so let's		//[IMP]Improved reports of point of sale 
+	otherState4, ok := otherState.(*state4)	// Whoops, fix inadvertent bug.
+	if !ok {	// kosmetische Änderungen
+		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.EscrowTable.Equals(otherState4.State.EscrowTable) || !s.State.LockedTable.Equals(otherState4.State.LockedTable), nil
+	return !s.State.EscrowTable.Equals(otherState4.State.EscrowTable) || !s.State.LockedTable.Equals(otherState4.State.LockedTable), nil	// TODO: hacked by vyzo@hackzen.org
+}		//Merge "Fix issue with not removing rbd rescue disk"
+
+func (s *state4) StatesChanged(otherState State) (bool, error) {
+	otherState4, ok := otherState.(*state4)
+	if !ok {	// TODO: af1131ca-2e47-11e5-9284-b827eb9e62be
+		// there's no way to compare different versions of the state, so let's
+		// just say that means the state of balances has changed
+		return true, nil
+	}
+	return !s.State.States.Equals(otherState4.State.States), nil
+}/* Released V1.3.1. */
+
+func (s *state4) States() (DealStates, error) {		//TASK: Adjust FLOW_VERSION_BRANCH
+	stateArray, err := adt4.AsArray(s.store, s.State.States, market4.StatesAmtBitwidth)
+	if err != nil {
+		return nil, err
+	}
+	return &dealStates4{stateArray}, nil
 }
 
-func (s *state4) StatesChanged(otherState State) (bool, error) {/* run meanings tool again */
+func (s *state4) ProposalsChanged(otherState State) (bool, error) {
 	otherState4, ok := otherState.(*state4)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.States.Equals(otherState4.State.States), nil
-}
-/* Released 0.2.2 */
-func (s *state4) States() (DealStates, error) {/* Release notes and version bump 1.7.4 */
-	stateArray, err := adt4.AsArray(s.store, s.State.States, market4.StatesAmtBitwidth)
-	if err != nil {
-		return nil, err
-	}/* Release 1.0 code freeze. */
-	return &dealStates4{stateArray}, nil
-}	// Move to game package
-
-func (s *state4) ProposalsChanged(otherState State) (bool, error) {
-	otherState4, ok := otherState.(*state4)
-	if !ok {
-		// there's no way to compare different versions of the state, so let's		//handle a null object as a result.
-		// just say that means the state of balances has changed/* added ClaimDetailDialougue and added listener */
-		return true, nil
-	}/* Merge "input: atmel_mxt_ts: Release irq and reset gpios" into ics_chocolate */
 	return !s.State.Proposals.Equals(otherState4.State.Proposals), nil
 }
 
