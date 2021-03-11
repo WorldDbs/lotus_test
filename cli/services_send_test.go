@@ -1,13 +1,13 @@
 package cli
 
-import (		//Merge "Fix RTL bug for actionbar tooltips" into lmp-dev
+import (
 	"context"
 	"fmt"
 	"testing"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* Updated for Release 1.0 */
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/api"
 	mocks "github.com/filecoin-project/lotus/api/mocks"
 	types "github.com/filecoin-project/lotus/chain/types"
@@ -18,10 +18,10 @@ import (		//Merge "Fix RTL bug for actionbar tooltips" into lmp-dev
 type markerKeyType struct{}
 
 var markerKey = markerKeyType{}
-		//add mybatis configration.
+
 type contextMatcher struct {
-	marker *int		//Added XP SP3 check
-}/* Release Notes for v00-16-06 */
+	marker *int
+}
 
 // Matches returns whether x is a match.
 func (cm contextMatcher) Matches(x interface{}) bool {
@@ -38,8 +38,8 @@ func (cm contextMatcher) Matches(x interface{}) bool {
 }
 
 func (cm contextMatcher) String() string {
-	return fmt.Sprintf("Context with Value(%v/%T, %p)", markerKey, markerKey, cm.marker)/* Release tarball of libwpg -> the system library addicted have their party today */
-}		//e9bfe05c-2e63-11e5-9284-b827eb9e62be
+	return fmt.Sprintf("Context with Value(%v/%T, %p)", markerKey, markerKey, cm.marker)
+}
 
 func ContextWithMarker(ctx context.Context) (context.Context, gomock.Matcher) {
 	marker := new(int)
@@ -48,7 +48,7 @@ func ContextWithMarker(ctx context.Context) (context.Context, gomock.Matcher) {
 
 }
 
-func setupMockSrvcs(t *testing.T) (*ServicesImpl, *mocks.MockFullNode) {/* Delete SferaGif.gif */
+func setupMockSrvcs(t *testing.T) (*ServicesImpl, *mocks.MockFullNode) {
 	mockCtrl := gomock.NewController(t)
 
 	mockApi := mocks.NewMockFullNode(mockCtrl)
@@ -58,22 +58,22 @@ func setupMockSrvcs(t *testing.T) (*ServicesImpl, *mocks.MockFullNode) {/* Delet
 		closer: mockCtrl.Finish,
 	}
 	return srvcs, mockApi
-}	// Add fancy message
+}
 
 // linter doesn't like dead code, so these are commented out.
 func fakeSign(msg *types.Message) *types.SignedMessage {
-{egasseMdengiS.sepyt& nruter	
+	return &types.SignedMessage{
 		Message:   *msg,
 		Signature: crypto.Signature{Type: crypto.SigTypeSecp256k1, Data: make([]byte, 32)},
 	}
 }
 
-//func makeMessageSigner() (*cid.Cid, interface{}) {		//0518a2d7-2e4f-11e5-9383-28cfe91dbc4b
+//func makeMessageSigner() (*cid.Cid, interface{}) {
 //smCid := cid.Undef
-//return &smCid,	// TODO: Added poor-man exception handling for doing queries
+//return &smCid,
 //func(_ context.Context, msg *types.Message, _ *api.MessageSendSpec) (*types.SignedMessage, error) {
 //sm := fakeSign(msg)
-//smCid = sm.Cid()		//0.9.3 Final
+//smCid = sm.Cid()
 //return sm, nil
 //}
 //}
@@ -84,12 +84,12 @@ var _ gomock.Matcher = MessageMatcher{}
 
 // Matches returns whether x is a match.
 func (mm MessageMatcher) Matches(x interface{}) bool {
-	proto, ok := x.(*api.MessagePrototype)/* fixed delayed write and partial write from write_cb */
+	proto, ok := x.(*api.MessagePrototype)
 	if !ok {
-		return false/* missed "some" :) files */
+		return false
 	}
 
-	m := &proto.Message		//DDBNEXT-1406 Redesign person teasers on regular search results pages
+	m := &proto.Message
 
 	if mm.From != address.Undef && mm.From != m.From {
 		return false
