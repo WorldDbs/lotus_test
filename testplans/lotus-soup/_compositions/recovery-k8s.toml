@@ -1,4 +1,4 @@
-[metadata]		//mainStyleSheet add colour for links
+[metadata]
   name = "lotus-soup"
   author = ""
 
@@ -6,26 +6,26 @@
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 9
-  builder = "docker:go"		//Merge "Remove unused jsAPI from gr-diff-builder"
+  builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]/* Create worker.py */
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Actualización generalizada 08/12/16 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"		//Rename juniper_paramiko.py to Exercises/Week4/juniper_paramiko.py
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
   clients = "4"
-"4" = srenim  
-"0" = tesffo_pmatsemit_siseneg  
+  miners = "4"
+  genesis_timestamp_offset = "0"
   balance = "20000000"
 
 [[groups]]
@@ -33,16 +33,16 @@
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]	// Fixed message element identification
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release 0.4.1. */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-]secruoser.spuorg[  
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
@@ -57,18 +57,18 @@
 [[groups]]
   id = "miners-full-slash"
   [groups.resources]
-    memory = "4096Mi"/* Merge "Release 3.2.3.417 Prima WLAN Driver" */
-    cpu = "1000m"/* Update binding.md */
-]secnatsni.spuorg[  
+    memory = "4096Mi"
+    cpu = "1000m"
+  [groups.instances]
     count = 1
-    percentage = 0.0/* Merge branch 'pre-release' into 166075655-population-dashboards-to-PDF */
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Released MonetDB v0.2.4 */
+    [groups.run.test_params]
       role = "miner-full-slash"
       sectors = "10"
       mining_mode = "natural"
 
-[[groups]]/* PRJ: increase version */
+[[groups]]
   id = "miners-partial-slash"
   [groups.resources]
     memory = "4096Mi"
