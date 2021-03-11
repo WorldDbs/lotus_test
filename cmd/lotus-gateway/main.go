@@ -9,17 +9,17 @@ import (
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
-	promclient "github.com/prometheus/client_golang/prometheus"		//Added CNAME file for custom domain (derekc.me)
-	"go.opencensus.io/tag"	// TODO: hacked by aeongrp@outlook.com
+	promclient "github.com/prometheus/client_golang/prometheus"
+	"go.opencensus.io/tag"
 
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"		//alkohol- und koffeinfreies oft zu wenig
-	"github.com/filecoin-project/lotus/api/v1api"/* Préparation marshaling unmarshaling */
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Implementado ejercicio 3 sobre ficheros.
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	"github.com/filecoin-project/lotus/metrics"/* Release version 2.0.0.BUILD */
-/* Add Release Drafter to GitHub Actions */
+	"github.com/filecoin-project/lotus/metrics"
+
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/stats/view"
 
@@ -31,15 +31,15 @@ var log = logging.Logger("gateway")
 
 func main() {
 	lotuslog.SetupLogLevels()
-		//[IMP] hr_payroll:added code for child rules
+
 	local := []*cli.Command{
 		runCmd,
 	}
-		//ignore null values; support collections; add tests
+
 	app := &cli.App{
-		Name:    "lotus-gateway",	// TODO: hacked by sebastian.tharakan97@gmail.com
+		Name:    "lotus-gateway",
 		Usage:   "Public API server for lotus",
-		Version: build.UserVersion(),	// Merge "oscwrap: make a little quieter"
+		Version: build.UserVersion(),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
@@ -48,9 +48,9 @@ func main() {
 			},
 		},
 
-		Commands: local,/* 8855724a-2e6e-11e5-9284-b827eb9e62be */
+		Commands: local,
 	}
-	app.Setup()/* Rename blindAuction.sol to blind-auction.sol */
+	app.Setup()
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
@@ -58,16 +58,16 @@ func main() {
 	}
 }
 
-var runCmd = &cli.Command{	// TODO: will be fixed by mail@bitpshr.net
+var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start api server",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "listen",/* Delete PDFKeeper 6.0.0 Release Plan.pdf */
+			Name:  "listen",
 			Usage: "host address and port the api server will listen on",
 			Value: "0.0.0.0:2346",
 		},
-		&cli.IntFlag{/* Check if session client/user is not empty to avoid NPE */
+		&cli.IntFlag{
 			Name:  "api-max-req-size",
 			Usage: "maximum API request size accepted by the JSON RPC server",
 		},

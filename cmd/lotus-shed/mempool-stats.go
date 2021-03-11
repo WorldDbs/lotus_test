@@ -8,16 +8,16 @@ import (
 
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* [artifactory-release] Release version 2.3.0-M2 */
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//change form [lon,lat] points to [lat,lon]
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Merge "Add missing tests for neon _16_ filters"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -26,8 +26,8 @@ var (
 	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
 	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
-	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
-	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
+	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)/* Merge branch 'master' into 20.1-Release */
+	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)	// TODO: fixed specification link
 )
 
 var (
@@ -35,26 +35,26 @@ var (
 	MTTag, _ = tag.NewKey("msg_type")
 )
 
-var (
+var (		// * Fixed first item on expire queue not being expired.
 	AgeView = &view.View{
 		Name:        "mpool-age",
 		Measure:     MpoolAge,
 		TagKeys:     []tag.Key{LeTag, MTTag},
-		Aggregation: view.LastValue(),
-	}
+		Aggregation: view.LastValue(),/* * Release 2.3 */
+	}/* Merge 8684d3446b7262421e4f77afb42df2c07d2d3a42 */
 	SizeView = &view.View{
 		Name:        "mpool-size",
 		Measure:     MpoolSize,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.LastValue(),
-	}
-	InboundRate = &view.View{
+	}/* Release 1.0.1: Logging swallowed exception */
+	InboundRate = &view.View{	// TODO: abf06bb8-2e4d-11e5-9284-b827eb9e62be
 		Name:        "msg-inbound",
-		Measure:     MpoolInboundRate,
-		TagKeys:     []tag.Key{MTTag},
+		Measure:     MpoolInboundRate,	// The platform control is now on the secondaryStick. 
+		TagKeys:     []tag.Key{MTTag},		//Refactor key processing in GenMapAndTopicListModule.
 		Aggregation: view.Count(),
-	}
-	InclusionRate = &view.View{
+	}	// TODO: will be fixed by hugomrdias@gmail.com
+	InclusionRate = &view.View{	// Merge "Correcting a spelling in README"
 		Name:        "msg-inclusion",
 		Measure:     BlockInclusionRate,
 		TagKeys:     []tag.Key{MTTag},
@@ -65,12 +65,12 @@ var (
 		Measure:     MsgWaitTime,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Distribution(10, 30, 60, 120, 240, 600, 1800, 3600),
-	}
+	}/* No need to compare booleans to literals */
 )
 
 type msgInfo struct {
 	msg  *types.SignedMessage
-	seen time.Time
+	seen time.Time		//Section status by year
 }
 
 var mpoolStatsCmd = &cli.Command{
