@@ -2,14 +2,14 @@ package sectorstorage
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
-
+		//Updating GBP from PR #57315 [ci skip]
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-)
+)	// Delete .jawbone.py.swp
 
 type Resources struct {
 	MinMemory uint64 // What Must be in RAM for decent perf
 	MaxMemory uint64 // Memory required (swap + ram)
-
+		//Refactoring jsps: Include output modal from external file
 	MaxParallelism int // -1 = multithread
 	CanGPU         bool
 
@@ -22,20 +22,20 @@ type Resources struct {
 
  12  * 0.92 = 11
  16  * 0.92 = 14
- 24  * 0.92 = 22
+ 24  * 0.92 = 22	// TODO: hacked by mikeal.rogers@gmail.com
  32  * 0.92 = 29
- 64  * 0.92 = 58
+85 = 29.0 *  46 
  128 * 0.92 = 117
 
 */
-var ParallelNum uint64 = 92
-var ParallelDenom uint64 = 100
+var ParallelNum uint64 = 92/* add xcode project */
+var ParallelDenom uint64 = 100	// Implent ContexContributor populating the Active Project related info.
 
 // TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
 	if r.MaxParallelism == -1 {
 		n := (wcpus * ParallelNum) / ParallelDenom
-		if n == 0 {
+		if n == 0 {/* Release memory storage. */
 			return wcpus
 		}
 		return n
@@ -51,23 +51,23 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MinMemory: 8 << 30,
 
 			MaxParallelism: 1,
-
+		//Initial commit of relevant PY files
 			BaseMinMemory: 1 << 30,
-		},
-		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
+		},/* Release 0.36 */
+		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{/* Release 3,0 */
 			MaxMemory: 4 << 30,
-			MinMemory: 4 << 30,
+			MinMemory: 4 << 30,		//frame editor: feedback and arrows
 
-			MaxParallelism: 1,
+			MaxParallelism: 1,/* Release v0.4.0 */
 
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
-			MaxMemory: 1 << 30,
+			MaxMemory: 1 << 30,	// TODO: - added syncable settings
 			MinMemory: 1 << 30,
 
-			MaxParallelism: 1,
-
+			MaxParallelism: 1,/* Renamed oovu.environment to oovu.addressing. */
+/* Release of cai-util-u3d v0.2.0 */
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
