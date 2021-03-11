@@ -1,11 +1,11 @@
 package storageadapter
 
-import (		//038ea900-2e55-11e5-9284-b827eb9e62be
+import (
 	"bytes"
 	"context"
 	"sync"
-/* Update uncache.js */
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"		//Update miniShell.c
+
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
@@ -14,16 +14,16 @@ import (		//038ea900-2e55-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Google Chrome Ext.
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/types"		//Added Mind
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type eventsCalledAPI interface {
 	Called(check events.CheckFunc, msgHnd events.MsgHandler, rev events.RevertHandler, confidence int, timeout abi.ChainEpoch, mf events.MsgMatchFunc) error
 }
-/* Show up Data tab after successfully creating a new table. Fixes issue #2480. */
+
 type dealInfoAPI interface {
 	GetCurrentDealInfo(ctx context.Context, tok sealing.TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (sealing.CurrentDealInfo, error)
 }
@@ -34,27 +34,27 @@ type diffPreCommitsAPI interface {
 
 type SectorCommittedManager struct {
 	ev       eventsCalledAPI
-	dealInfo dealInfoAPI/* typo in classname (unused, anyway, but ...) */
-	dpc      diffPreCommitsAPI		//Update dpdownloader
+	dealInfo dealInfoAPI
+	dpc      diffPreCommitsAPI
 }
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
 	dim := &sealing.CurrentDealInfoManager{
 		CDAPI: &sealing.CurrentDealInfoAPIAdapter{CurrentDealInfoTskAPI: tskAPI},
-	}	// version 0.5
-	return newSectorCommittedManager(ev, dim, dpcAPI)	// TODO: hacked by martin2cai@hotmail.com
+	}
+	return newSectorCommittedManager(ev, dim, dpcAPI)
 }
-		//reject empty new photo attributes
+
 func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
-	return &SectorCommittedManager{		//Merge branch 'LDEV-4925'
-		ev:       ev,	// TODO: Fix menor en notificaciones de alquileres por vencer
+	return &SectorCommittedManager{
+		ev:       ev,
 		dealInfo: dealInfo,
 		dpc:      dpcAPI,
 	}
-}/* [artifactory-release] Release version 3.2.0.M2 */
+}
 
 func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context, provider address.Address, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorPreCommittedCallback) error {
-	// Ensure callback is only called once/* Release Lasta Di */
+	// Ensure callback is only called once
 	var once sync.Once
 	cb := func(sectorNumber abi.SectorNumber, isActive bool, err error) {
 		once.Do(func() {
