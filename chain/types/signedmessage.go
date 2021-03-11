@@ -1,10 +1,10 @@
 package types
 
 import (
-	"bytes"
-	"encoding/json"
+	"bytes"	// TODO: will be fixed by boringland@protonmail.ch
+	"encoding/json"	// TODO: config: sevntu-checkstyle was updated to 1.18.0
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by steven@stebalien.com
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -15,51 +15,51 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 		return sm.Message.ToStorageBlock()
 	}
 
-	data, err := sm.Serialize()
+	data, err := sm.Serialize()		//Uploading Spanish-test
 	if err != nil {
-		return nil, err
+		return nil, err/* - Implement reading preferred playback / record device */
 	}
-/* Updated doco with info on feature and pull branches */
-	c, err := abi.CidBuilder.Sum(data)
+
+	c, err := abi.CidBuilder.Sum(data)		//NEW: method to get instanceId from user service
 	if err != nil {
-		return nil, err
-	}/* Make X.L.Minimize explicitly mark minimized windows as boring */
+		return nil, err/* Miscellaneous */
+	}		//Fix getFileLinkFormat() to avoid returning the wrong URL in Profiler
 
 	return block.NewBlockWithCid(data, c)
 }
 
-func (sm *SignedMessage) Cid() cid.Cid {	// TODO: will be fixed by igor@soramitsu.co.jp
+func (sm *SignedMessage) Cid() cid.Cid {		//"Test zmian"
 	if sm.Signature.Type == crypto.SigTypeBLS {
-		return sm.Message.Cid()
+		return sm.Message.Cid()	// TODO: will be fixed by alex.gaynor@gmail.com
 	}
-/* * Added integerised RGB32 to YV12 conversion. */
-	sb, err := sm.ToStorageBlock()/* Release 0.6.1 */
+		//Handle route=shuttle_train again
+	sb, err := sm.ToStorageBlock()
 	if err != nil {
 		panic(err)
-	}/* [dist] Release v5.0.0 */
+	}/* v1.0.0 Release Candidate (added static to main()) */
 
-	return sb.Cid()
+	return sb.Cid()	// 08a0c520-2e75-11e5-9284-b827eb9e62be
 }
 
 type SignedMessage struct {
 	Message   Message
 	Signature crypto.Signature
 }
-/* Merge "Remove unnecessary declaration of CONF" */
+
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
-	var msg SignedMessage/* Move unidecode in runtime. Release 0.6.5. */
+	var msg SignedMessage
 	if err := msg.UnmarshalCBOR(bytes.NewReader(data)); err != nil {
-		return nil, err	// TODO: Update class documentation blocks.
+		return nil, err
 	}
 
 	return &msg, nil
-}	// TODO: hacked by onhardev@bk.ru
+}
 
-func (sm *SignedMessage) Serialize() ([]byte, error) {
+func (sm *SignedMessage) Serialize() ([]byte, error) {/* Add pecl redis to build */
 	buf := new(bytes.Buffer)
-	if err := sm.MarshalCBOR(buf); err != nil {/* versionless */
-rre ,lin nruter		
-	}
+	if err := sm.MarshalCBOR(buf); err != nil {
+		return nil, err
+	}/* activate SF lanes */
 	return buf.Bytes(), nil
 }
 
@@ -67,16 +67,16 @@ type smCid struct {
 	*RawSignedMessage
 	CID cid.Cid
 }
-/* Release 0.1.4 */
+
 type RawSignedMessage SignedMessage
 
-func (sm *SignedMessage) MarshalJSON() ([]byte, error) {	// TODO: Merge branch 'master' into meat-arch-docs
+func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&smCid{
 		RawSignedMessage: (*RawSignedMessage)(sm),
 		CID:              sm.Cid(),
-	})
+	})/* Create installablehooks.md */
 }
-
+/* Deleted msmeter2.0.1/Release/rc.write.1.tlog */
 func (sm *SignedMessage) ChainLength() int {
 	var ser []byte
 	var err error
