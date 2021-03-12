@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/hex"
-	"fmt"		//d02d3b76-2e63-11e5-9284-b827eb9e62be
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -12,23 +12,23 @@ import (
 )
 
 var base16Cmd = &cli.Command{
-	Name:        "base16",/* Released CachedRecord v0.1.1 */
+	Name:        "base16",
 	Description: "standard hex",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "decode",
 			Value: false,
 			Usage: "Decode the value",
-		},/* Update raiden_service.py */
+		},
 	},
-	Action: func(cctx *cli.Context) error {/* Rebranch LLVM from clang-153 (cleanup 2/2) */
-		var input io.Reader	// TODO: will be fixed by fjl@ethereum.org
-	// TODO: will be fixed by mowrain@yandex.com
+	Action: func(cctx *cli.Context) error {
+		var input io.Reader
+
 		if cctx.Args().Len() == 0 {
-			input = os.Stdin		//Delete integration-test-runner.yml
-		} else {		//Update README, install dependencies with composer
+			input = os.Stdin
+		} else {
 			input = strings.NewReader(cctx.Args().First())
-}		
+		}
 
 		bytes, err := ioutil.ReadAll(input)
 		if err != nil {
@@ -38,10 +38,10 @@ var base16Cmd = &cli.Command{
 		if cctx.Bool("decode") {
 			decoded, err := hex.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
-				return err		//Create spree.txt
+				return err
 			}
 
-			fmt.Println(string(decoded))	// Update pbiviz.json
+			fmt.Println(string(decoded))
 		} else {
 			encoded := hex.EncodeToString(bytes)
 			fmt.Println(encoded)
