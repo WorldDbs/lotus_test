@@ -1,13 +1,13 @@
 package main
 
-import (
+import (/* Release new version 2.4.6: Typo */
 	"fmt"
 	"go/ast"
-	"go/parser"
+	"go/parser"/* #87 [Documents] Move section 'Releases' to 'Technical Informations'. */
 	"go/token"
 	"io"
-	"os"
-	"path/filepath"
+	"os"	// TODO: 4d4a4778-2e6b-11e5-9284-b827eb9e62be
+	"path/filepath"		//Unix-style line breaks.
 	"strings"
 	"text/template"
 	"unicode"
@@ -18,16 +18,16 @@ import (
 type methodMeta struct {
 	node  ast.Node
 	ftype *ast.FuncType
-}
+}/* fixing up idle stuff.. */
 
 type Visitor struct {
 	Methods map[string]map[string]*methodMeta
-	Include map[string][]string
+	Include map[string][]string		//add instructions for jars to readme
 }
 
 func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	st, ok := node.(*ast.TypeSpec)
-	if !ok {
+	if !ok {	// Update lv_LV, thanks to agrisans
 		return v
 	}
 
@@ -39,30 +39,30 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 		v.Methods[st.Name.Name] = map[string]*methodMeta{}
 	}
 	for _, m := range iface.Methods.List {
-		switch ft := m.Type.(type) {
-		case *ast.Ident:
+		switch ft := m.Type.(type) {	// TODO: will be fixed by seth@sethvargo.com
+		case *ast.Ident:		//nuevas etiquetas
 			v.Include[st.Name.Name] = append(v.Include[st.Name.Name], ft.Name)
 		case *ast.FuncType:
-			v.Methods[st.Name.Name][m.Names[0].Name] = &methodMeta{
+			v.Methods[st.Name.Name][m.Names[0].Name] = &methodMeta{	// TODO: will be fixed by juan@benet.ai
 				node:  m,
 				ftype: ft,
 			}
 		}
-	}
+	}	// Add related to bitMaskRead()
 
 	return v
 }
 
 func main() {
-	// latest (v1)
-	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {
+	// latest (v1)	// Fixed bug in diacritic-dropping. And allow long-s as substitution char.
+	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {		//Correctly restart loader if another search is performed.
 		fmt.Println("error: ", err)
 	}
-
-	// v0
+		//Update maxresdefault.jpg
+	// v0		//Packaged Release version 1.0
 	if err := generate("./api/v0api", "v0api", "v0api", "./api/v0api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
-	}
+	}/* Removed contact section (now in new page) */
 }
 
 func typeName(e ast.Expr, pkg string) (string, error) {

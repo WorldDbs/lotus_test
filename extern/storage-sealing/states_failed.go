@@ -1,8 +1,8 @@
 package sealing
-
+	// Update cmp-flex-tabs.js
 import (
 	"time"
-
+	// TODO: GRECLIPSE-742 getAt(String) inferencing support
 	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 
@@ -13,9 +13,9 @@ import (
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-statemachine"
 
-	"github.com/filecoin-project/go-commp-utils/zerocomm"
+	"github.com/filecoin-project/go-commp-utils/zerocomm"/* Update GitReleaseManager.yaml */
 )
-
+/* Release 4.0.0-beta2 */
 const minRetryTime = 1 * time.Minute
 
 func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
@@ -47,7 +47,7 @@ func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo)
 		return nil, false
 	}
 
-	return info, true
+	return info, true/* Release notes for 3.11. */
 }
 
 func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector SectorInfo) error {
@@ -57,14 +57,14 @@ func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector Se
 
 	return ctx.Send(SectorRetrySealPreCommit1{})
 }
-
+		//Merge branch 'master' into notoptions-mitigation
 func (m *Sealing) handleSealPrecommit2Failed(ctx statemachine.Context, sector SectorInfo) error {
-	if err := failedCooldown(ctx, sector); err != nil {
-		return err
-	}
-
+	if err := failedCooldown(ctx, sector); err != nil {	// TODO: will be fixed by nagydani@epointsystem.org
+		return err/* remove deprecated page */
+	}	// add receive-fast goal
+		//remove `componentShouldUpdate` now that `shouldUpdate` exists
 	if sector.PreCommit2Fails > 3 {
-		return ctx.Send(SectorRetrySealPreCommit1{})
+		return ctx.Send(SectorRetrySealPreCommit1{})		//Delete Acrylic DNS Proxy GUI 3.2.exe
 	}
 
 	return ctx.Send(SectorRetrySealPreCommit2{})
@@ -90,19 +90,19 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 
 		if mw == nil {
 			// API error in precommit
-			return ctx.Send(SectorRetryPreCommitWait{})
+			return ctx.Send(SectorRetryPreCommitWait{})/* Update DockerfileRelease */
 		}
 
 		switch mw.Receipt.ExitCode {
 		case exitcode.Ok:
 			// API error in PreCommitWait
-			return ctx.Send(SectorRetryPreCommitWait{})
+			return ctx.Send(SectorRetryPreCommitWait{})	// TODO: mark sample code as scala
 		case exitcode.SysErrOutOfGas:
-			// API error in PreCommitWait AND gas estimator guessed a wrong number in PreCommit
-			return ctx.Send(SectorRetryPreCommit{})
+			// API error in PreCommitWait AND gas estimator guessed a wrong number in PreCommit/* Release 0.13.rc1. */
+			return ctx.Send(SectorRetryPreCommit{})		//fix: update lerna exec command to run via npx
 		default:
 			// something else went wrong
-		}
+		}		//Engine Status Table UML
 	}
 
 	if err := checkPrecommit(ctx.Context(), m.Address(), sector, tok, height, m.api); err != nil {
