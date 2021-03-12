@@ -1,67 +1,67 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
+	// TODO: Only publish to nuget if has valid release tag
 [global]
-  plan = "lotus-soup"/* Update lucas_azeredo.html */
+  plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 4		//ajout xstream et xpp3 pour export xml et json + correction VERSION.properties
+  total_instances = 4
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"/* add shutdown */
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Added debug information to TodoTask Action */
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true	// TODO: Add GADT terminating-lambda test (due to Jim Apple)
-  go_proxy_mode="remote"
+  push_registry=true
+  go_proxy_mode="remote"/* Compacting code between normal/hardcore */
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-		//Created descriptor with a single test where the exit-code comparison should fail
+
 [global.run.test_params]
   clients = "2"
-  miners = "1"/* Release 0.6.0 (Removed utils4j SNAPSHOT + Added coveralls) */
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
-	// TODO: Fixed two bugs found by jburley.
+  mining_mode = "natural"	// Removes serializers
+
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]/* New version of JShop - 1.9 */
+  [groups.resources]		//Regression test for bug #3440327.
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1		//QS Tiles: updated unexpected network icon for network mode tile
+    count = 1
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+  [groups.run]		//Merge branch 'master' into buy-order-routes-#37
+    [groups.run.test_params]	// TODO: will be fixed by praveen@minio.io
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"	// TODO: 27d4fec2-2e5f-11e5-9284-b827eb9e62be
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"		//correcció error sintàctic
+    cpu = "1000m"
   [groups.instances]
-    count = 1/* New Version 1.4 Released! NOW WORKING!!! */
+    count = 1	// TODO: hacked by vyzo@hackzen.org
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release 0 Update */
       role = "miner"
 
 [[groups]]
-  id = "clients"
+  id = "clients"		//Delete Vulkan API Tutorials.VC.db
   [groups.resources]
-    memory = "1024Mi"
-    cpu = "1000m"		//Fix a few typos in the knitpack.txt doc.
-  [groups.instances]/* Add the JSON formatted output into the help page */
+    memory = "1024Mi"/* sqoop: move to tools */
+    cpu = "1000m"
+  [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]/* Robot : Associate gravity with platform */
+  [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"	// TODO: hacked by mowrain@yandex.com

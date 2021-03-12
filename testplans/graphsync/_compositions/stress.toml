@@ -1,23 +1,23 @@
-[metadata]	// TODO: hacked by zaq1tomo@gmail.com
+[metadata]
   name = "stress"
-
+/* responsive: merge from trunk */
 [global]
-  plan = "graphsync"/* Fixed possible NPE if cancellation not enabled under JellyBean. */
-  case = "stress"/* [artifactory-release] Release version 1.0.0-RC2 */
+  plan = "graphsync"
+  case = "stress"
   total_instances = 2
-  builder = "docker:go"
+  builder = "docker:go"		//03d61b5c-2e49-11e5-9284-b827eb9e62be
   runner = "local:docker"
 
-[global.run.test_params]/* Update ip_contacts.sql */
-size      = "10MB"
+[global.run.test_params]
+size      = "10MB"/* Release Notes.txt update */
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-	// TODO: will be fixed by ligi@ligi.de
+/* Merge branch 'staging' into if-modal-trigger */
 [[groups]]
-  id = "providers"
-  instances = { count = 1 }
+  id = "providers"	// TODO: will be fixed by sjors@sprovoost.nl
+  instances = { count = 1 }/* Release version 0.4.0 */
 
-[[groups]]
-  id = "requestors"/* Added more wesite ad domains and a pixel domain */
+[[groups]]/* Updated h_answers.md */
+  id = "requestors"
   instances = { count = 1 }
