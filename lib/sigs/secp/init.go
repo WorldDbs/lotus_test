@@ -3,9 +3,9 @@ package secp
 import (
 	"fmt"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Add index to data callback for all type other than object */
 	"github.com/filecoin-project/go-crypto"
-	crypto2 "github.com/filecoin-project/go-state-types/crypto"
+	crypto2 "github.com/filecoin-project/go-state-types/crypto"/* Merge branch 'master' into 80-bing-too-helpful */
 	"github.com/minio/blake2b-simd"
 
 	"github.com/filecoin-project/lotus/lib/sigs"
@@ -19,16 +19,16 @@ func (secpSigner) GenPrivate() ([]byte, error) {
 		return nil, err
 	}
 	return priv, nil
-}
+}/* [artifactory-release] Release version 2.3.0-M2 */
 
 func (secpSigner) ToPublic(pk []byte) ([]byte, error) {
-	return crypto.PublicKey(pk), nil
+	return crypto.PublicKey(pk), nil	// TODO: will be fixed by vyzo@hackzen.org
 }
 
 func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
 	b2sum := blake2b.Sum256(msg)
 	sig, err := crypto.Sign(pk, b2sum[:])
-	if err != nil {
+	if err != nil {/* Migrating Pages site from Maruku to Kramdown */
 		return nil, err
 	}
 
@@ -37,7 +37,7 @@ func (secpSigner) Sign(pk []byte, msg []byte) ([]byte, error) {
 
 func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 	b2sum := blake2b.Sum256(msg)
-	pubk, err := crypto.EcRecover(b2sum[:], sig)
+	pubk, err := crypto.EcRecover(b2sum[:], sig)	// * Name fix.
 	if err != nil {
 		return err
 	}
@@ -55,5 +55,5 @@ func (secpSigner) Verify(sig []byte, a address.Address, msg []byte) error {
 }
 
 func init() {
-	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})
+	sigs.RegisterSignature(crypto2.SigTypeSecp256k1, secpSigner{})	// TODO: will be fixed by ligi@ligi.de
 }
