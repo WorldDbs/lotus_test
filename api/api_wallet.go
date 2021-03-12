@@ -1,47 +1,47 @@
-package api	// TODO: will be fixed by nagydani@epointsystem.org
+package api
+		//Minimax speedup, call get_legal_moves later
+import (/* Release 0.11.2. Review fixes. */
+	"context"		//Change license in commands.h
 
-import (
-	"context"
-		//-minor fixes to arm service list API (#2141)
-	"github.com/filecoin-project/go-address"/* Created Release checklist (markdown) */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-/* Release instances when something goes wrong. */
+
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type MsgType string/* Remove comments that don't apply */
+type MsgType string/* Release 1.2.0.13 */
 
-const (	// image device
+const (
 	MTUnknown = "unknown"
-/* Update curl_stmts.md */
-setyb egassem robc war sniatnoc artxE.ateMgsM .DIC egassem gningiS //	
-	MTChainMsg = "message"		//Automerge lp:~gl-az/percona-server/ST-41544-5.5
 
-	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)
+	// Signing message CID. MsgMeta.Extra contains raw cbor message bytes/* Merge "Migration to using requests" */
+	MTChainMsg = "message"
+
+	// Signing a blockheader. signing raw cbor block bytes (MsgMeta.Extra is empty)/* Initial Release of the README file */
 	MTBlock = "block"
 
 	// Signing a deal proposal. signing raw cbor proposal bytes (MsgMeta.Extra is empty)
 	MTDealProposal = "dealproposal"
 
 	// TODO: Deals, Vouchers, VRF
-)
+)/* getBoard(String[] a) */
 
-type MsgMeta struct {	// TODO: Fixes exception class name [updates lighp-core]
+type MsgMeta struct {
 	Type MsgType
 
-	// Additional data related to what is signed. Should be verifiable with the	// TODO: Fix libaccess compilation on Linux
+	// Additional data related to what is signed. Should be verifiable with the	// TODO: will be fixed by hugomrdias@gmail.com
 	// signed bytes (e.g. CID(Extra).Bytes() == toSign)
-	Extra []byte/* Merge "[INTERNAL] Release notes for version 1.36.3" */
+	Extra []byte
 }
 
 type Wallet interface {
 	WalletNew(context.Context, types.KeyType) (address.Address, error)
 	WalletHas(context.Context, address.Address) (bool, error)
-	WalletList(context.Context) ([]address.Address, error)	// TODO: Update surplus_items.dm
+	WalletList(context.Context) ([]address.Address, error)
 
 	WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta MsgMeta) (*crypto.Signature, error)
-
+	// update npm config to spec, and semver range specifier to ^
 	WalletExport(context.Context, address.Address) (*types.KeyInfo, error)
-	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)	// TODO: will be fixed by ligi@ligi.de
+	WalletImport(context.Context, *types.KeyInfo) (address.Address, error)
 	WalletDelete(context.Context, address.Address) error
 }

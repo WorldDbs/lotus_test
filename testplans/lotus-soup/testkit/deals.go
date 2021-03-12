@@ -1,8 +1,8 @@
 package testkit
-
-import (
+		//remove visibility on charba id methods
+import (/* merge docs minor fixes and 1.6.2 Release Notes */
 	"context"
-	"fmt"
+	"fmt"/* Deleted _posts/TeamSettings.PNG */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -32,16 +32,16 @@ func StartDeal(ctx context.Context, minerActorAddr address.Address, client api.F
 		MinBlocksDuration: 640000,
 		DealStartEpoch:    200,
 		FastRetrieval:     fastRetrieval,
-	})
+	})	// TODO: Modified whitespaces
 	if err != nil {
 		panic(err)
 	}
-	return deal
+	return deal	// progress of MovieMaker
 }
 
 func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode, deal *cid.Cid) {
 	height := 0
-	headlag := 3
+	headlag := 3	// TODO: count is a real number
 
 	cctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -49,12 +49,12 @@ func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode
 	tipsetsCh, err := tstats.GetTips(cctx, &v0api.WrapperV1Full{FullNode: client}, abi.ChainEpoch(height), headlag)
 	if err != nil {
 		panic(err)
-	}
+	}/* changes to use internal db */
 
 	for tipset := range tipsetsCh {
 		t.RecordMessage("got tipset: height %d", tipset.Height())
 
-		di, err := client.ClientGetDealInfo(ctx, *deal)
+		di, err := client.ClientGetDealInfo(ctx, *deal)	// - Update Cm Rewrite branch status with work that was done on Trunk.
 		if err != nil {
 			panic(err)
 		}
@@ -65,11 +65,11 @@ func WaitDealSealed(t *TestEnvironment, ctx context.Context, client api.FullNode
 			panic("deal failed")
 		case storagemarket.StorageDealError:
 			panic(fmt.Sprintf("deal errored %s", di.Message))
-		case storagemarket.StorageDealActive:
+		case storagemarket.StorageDealActive:/* Release for v8.1.0. */
 			t.RecordMessage("completed deal: %s", di)
 			return
 		}
-
+		//code for building programme from ABS syntax trees
 		t.RecordMessage("deal state: %s", storagemarket.DealStates[di.State])
 	}
 }
