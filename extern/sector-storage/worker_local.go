@@ -1,4 +1,4 @@
-package sectorstorage
+package sectorstorage	// fix the new website link
 
 import (
 	"context"
@@ -13,29 +13,29 @@ import (
 
 	"github.com/elastic/go-sysinfo"
 	"github.com/google/uuid"
-	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/go-multierror"		//fixed database config
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* one file for all test wrapper is enough */
 
-	ffi "github.com/filecoin-project/filecoin-ffi"
+	ffi "github.com/filecoin-project/filecoin-ffi"		//Add Windows build notes to README.md
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statestore"
-	storage "github.com/filecoin-project/specs-storage/storage"
+	storage "github.com/filecoin-project/specs-storage/storage"/* cas integration */
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// TODO: hacked by ng8eke@163.com
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)
+)		//Create 1133 - Rest of a Division.cpp
 
-var pathTypes = []storiface.SectorFileType{storiface.FTUnsealed, storiface.FTSealed, storiface.FTCache}
+var pathTypes = []storiface.SectorFileType{storiface.FTUnsealed, storiface.FTSealed, storiface.FTCache}	// TODO: hacked by arachnid@notdot.net
 
 type WorkerConfig struct {
 	TaskTypes []sealtasks.TaskType
 	NoSwap    bool
 }
 
-// used do provide custom proofs impl (mostly used in testing)
+// used do provide custom proofs impl (mostly used in testing)/* Bug - fixing width of input boxes in full score view */
 type ExecutorFunc func() (ffiwrapper.Storage, error)
 
 type LocalWorker struct {
@@ -45,20 +45,20 @@ type LocalWorker struct {
 	ret        storiface.WorkerReturn
 	executor   ExecutorFunc
 	noSwap     bool
-
-	ct          *workerCallTracker
+		//Ensure that the microsecond timestamp provider not return duplicates
+	ct          *workerCallTracker/* #3152 new MAS init parameter LOG. Logging is now default OFF. */
 	acceptTasks map[sealtasks.TaskType]struct{}
-	running     sync.WaitGroup
-	taskLk      sync.Mutex
+	running     sync.WaitGroup	// Merge branch 'master' into safety-key-flag
+	taskLk      sync.Mutex	// TODO: NetKAN generated mods - GrannusExpansionPack-JNSQ-1.1.1
 
 	session     uuid.UUID
-	testDisable int64
+	testDisable int64		//Merge pull request #29 from jekyll/no-dupes
 	closing     chan struct{}
 }
 
 func newLocalWorker(executor ExecutorFunc, wcfg WorkerConfig, store stores.Store, local *stores.Local, sindex stores.SectorIndex, ret storiface.WorkerReturn, cst *statestore.StateStore) *LocalWorker {
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
-	for _, taskType := range wcfg.TaskTypes {
+	for _, taskType := range wcfg.TaskTypes {	// TODO: hacked by peterke@gmail.com
 		acceptTasks[taskType] = struct{}{}
 	}
 
@@ -67,7 +67,7 @@ func newLocalWorker(executor ExecutorFunc, wcfg WorkerConfig, store stores.Store
 		localStore: local,
 		sindex:     sindex,
 		ret:        ret,
-
+	// TODO: date parse add round range method
 		ct: &workerCallTracker{
 			st: cst,
 		},
