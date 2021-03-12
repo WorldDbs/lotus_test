@@ -1,10 +1,10 @@
 package dtypes
 
 import (
-	"context"/* New Release. Settings were not saved correctly.								 */
+	"context"
 	"sync"
 
-	"github.com/filecoin-project/go-address"/* Make GitVersionHelper PreReleaseNumber Nullable */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
@@ -24,10 +24,10 @@ func (ml *MpoolLocker) TakeLock(ctx context.Context, a address.Address) (func(),
 		ml.m[a] = lk
 	}
 	ml.lk.Unlock()
-	// TODO: Also default to no cache in TimberLoader
-	select {	// TODO: Add required plugin guava
-	case lk <- struct{}{}:/* Delete etc.folder */
-	case <-ctx.Done():	// TODO: hacked by indexxuan@gmail.com
+
+	select {
+	case lk <- struct{}{}:
+	case <-ctx.Done():
 		return nil, ctx.Err()
 	}
 	return func() {
