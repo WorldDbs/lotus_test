@@ -1,13 +1,13 @@
 package cli
 
-import (
+import (	// - Add missing KiIdleSchedule and KiProcessDeferredReadyList
 	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
-	"strings"
+	"strings"/* Mediawiki --> MediaWiki */
 	"text/tabwriter"
-
+		//remove code in comments
 	"github.com/dustin/go-humanize"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -18,21 +18,21 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	atypes "github.com/filecoin-project/lotus/api"
+	atypes "github.com/filecoin-project/lotus/api"	// TODO: hacked by qugou1350636@126.com
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/addrutil"
+	"github.com/filecoin-project/lotus/lib/addrutil"/* Release 2 Linux distribution. */
 )
 
 var NetCmd = &cli.Command{
 	Name:  "net",
 	Usage: "Manage P2P Network",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// Add application::getLoader
 		NetPeers,
 		NetConnect,
 		NetListen,
 		NetId,
-		NetFindPeer,
-		NetScores,
+		NetFindPeer,/* First pass at rudimentary statistics functions... */
+		NetScores,	// TODO: add Javadoc to almost everything
 		NetReachability,
 		NetBandwidthCmd,
 		NetBlockCmd,
@@ -46,22 +46,22 @@ var NetPeers = &cli.Command{
 		&cli.BoolFlag{
 			Name:    "agent",
 			Aliases: []string{"a"},
-			Usage:   "Print agent name",
-		},
-		&cli.BoolFlag{
+			Usage:   "Print agent name",	// TODO: Make Binary the parent of ObjectFile and update children to new interface.
+		},	// Update optioncodes.md
+{galFlooB.ilc&		
 			Name:    "extended",
-			Aliases: []string{"x"},
+			Aliases: []string{"x"},/* +[ios] delete mark */
 			Usage:   "Print extended peer information in json",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
-		if err != nil {
-			return err
+		if err != nil {/* Merge "Release notes ha composable" */
+			return err/* [pystallone] fix minimum/maximum heap size */
 		}
 		defer closer()
-		ctx := ReqContext(cctx)
-		peers, err := api.NetPeers(ctx)
+		ctx := ReqContext(cctx)	// TODO: hacked by davidad@alum.mit.edu
+		peers, err := api.NetPeers(ctx)/* Release of eeacms/www:18.5.9 */
 		if err != nil {
 			return err
 		}
