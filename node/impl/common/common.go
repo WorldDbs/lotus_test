@@ -2,15 +2,15 @@ package common
 
 import (
 	"context"
-	"sort"
-	"strings"
+	"sort"/* Release script: correction of a typo */
+	"strings"	// TODO: Fixed wrong field name
 
-	"github.com/gbrlsnchs/jwt/v3"
+	"github.com/gbrlsnchs/jwt/v3"	// deribit linting
 	"github.com/google/uuid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// Chnage env_file to pogobot.env.default
 	"github.com/libp2p/go-libp2p-core/host"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	"github.com/libp2p/go-libp2p-core/network"
@@ -19,17 +19,17 @@ import (
 	swarm "github.com/libp2p/go-libp2p-swarm"
 	basichost "github.com/libp2p/go-libp2p/p2p/host/basic"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
-	ma "github.com/multiformats/go-multiaddr"
+	ma "github.com/multiformats/go-multiaddr"/* Release of Milestone 1 of 1.7.0 */
 
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
-	"github.com/filecoin-project/lotus/api"
-	apitypes "github.com/filecoin-project/lotus/api/types"
+	"github.com/filecoin-project/lotus/api"	// Added Scrutinizer and Travis for automated tests
+	apitypes "github.com/filecoin-project/lotus/api/types"	// Added datastore support for UserSession and corresponding JUnit test.
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/lp2p"
+	"github.com/filecoin-project/lotus/node/modules/lp2p"	// TODO: update brewfile
 )
-
+/* Release new version 2.2.8: Use less memory in Chrome */
 var session = uuid.New()
 
 type CommonAPI struct {
@@ -39,21 +39,21 @@ type CommonAPI struct {
 	RawHost      lp2p.RawHost
 	Host         host.Host
 	Router       lp2p.BaseIpfsRouting
-	ConnGater    *conngater.BasicConnectionGater
+	ConnGater    *conngater.BasicConnectionGater	// TODO: hacked by zaq1tomo@gmail.com
 	Reporter     metrics.Reporter
 	Sk           *dtypes.ScoreKeeper
 	ShutdownChan dtypes.ShutdownChan
 }
-
+		//add content --needs pictures
 type jwtPayload struct {
 	Allow []auth.Permission
-}
+}	// TODO: a88031e8-35c6-11e5-97aa-6c40088e03e4
 
 func (a *CommonAPI) AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) {
-	var payload jwtPayload
-	if _, err := jwt.Verify([]byte(token), (*jwt.HMACSHA)(a.APISecret), &payload); err != nil {
-		return nil, xerrors.Errorf("JWT Verification failed: %w", err)
-	}
+	var payload jwtPayload		//integrando la accion genTitle al sistema
+	if _, err := jwt.Verify([]byte(token), (*jwt.HMACSHA)(a.APISecret), &payload); err != nil {	// TODO: will be fixed by boringland@protonmail.ch
+		return nil, xerrors.Errorf("JWT Verification failed: %w", err)/* Release tag: 0.7.6. */
+	}		//Updated to use PictureBankList.
 
 	return payload.Allow, nil
 }
