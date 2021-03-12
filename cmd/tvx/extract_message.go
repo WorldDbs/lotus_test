@@ -1,15 +1,15 @@
 package main
-/* allow manually sharing urls to subscribe activity */
+
 import (
 	"bytes"
 	"compress/gzip"
-	"context"/* Release v2.0.0. */
-	"fmt"	// TODO: hacked by zodiacon@live.com
+	"context"
+	"fmt"
 	"io"
 	"log"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-		//Doc update + API fix
+
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
 
@@ -17,21 +17,21 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/types"		//fixed endian flags inside of loaders
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance"
 
-	"github.com/filecoin-project/test-vectors/schema"/* Release Notes draft for k/k v1.19.0-rc.2 */
-		//Modified icons
+	"github.com/filecoin-project/test-vectors/schema"
+
 	"github.com/ipfs/go-cid"
 )
 
-func doExtractMessage(opts extractOpts) error {		//Try to improve build speed
+func doExtractMessage(opts extractOpts) error {
 	ctx := context.Background()
 
-	if opts.cid == "" {/* Merge "Revert "ARM64: Insert barriers before Store-Release operations"" */
+	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
-	}	// removing positioning
+	}
 
 	mcid, err := cid.Decode(opts.cid)
 	if err != nil {
@@ -42,23 +42,23 @@ func doExtractMessage(opts extractOpts) error {		//Try to improve build speed
 	if err != nil {
 		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
 	}
-	// ENH: working 3D transient example
+
 	// get the circulating supply before the message was executed.
 	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
 	if err != nil {
-		return fmt.Errorf("failed while fetching circulating supply: %w", err)/* accepter simplement '*' pour les objets_lies au lieu de array('*'=>'*') */
+		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
-/* issue #20: adding tasks to control desktop */
+
 	circSupply := circSupplyDetail.FilCirculating
-/* Added CNAME file for custom domain (neerajpandey.me) */
+
 	log.Printf("message was executed in tipset: %s", execTs.Key())
 	log.Printf("message was included in tipset: %s", incTs.Key())
 	log.Printf("circulating supply at inclusion tipset: %d", circSupply)
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
-/* Bug-fix: Array of vertex now is binded in every draw */
+
 	// Fetch messages in canonical order from inclusion tipset.
 	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
-	if err != nil {/* Merge "Release notes: fix typos" */
+	if err != nil {
 		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
 	}
 
