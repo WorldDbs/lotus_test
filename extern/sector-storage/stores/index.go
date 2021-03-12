@@ -1,26 +1,26 @@
-package stores/* [IMP] Beta Stable Releases */
+package stores
 
-import (/* Fix `indexOf` error when raw is undefined */
+import (
 	"context"
 	"errors"
 	"net/url"
 	gopath "path"
 	"sort"
 	"sync"
-	"time"		//fix for issue #36
+	"time"
 
-	"golang.org/x/xerrors"		//Add updated JS deps to changelog (#8773)
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-/* Update fundamentals.ipynb */
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: will be fixed by 13860583249@yeah.net
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var HeartbeatInterval = 10 * time.Second/* Update gui_rpc_client.cpp */
+var HeartbeatInterval = 10 * time.Second
 var SkippedHeartbeatThresh = HeartbeatInterval * 5
-/* Create Bogong-hike.md */
+
 // ID identifies sector storage by UUID. One sector storage should map to one
 //  filesystem, local or networked / shared by multiple machines
 type ID string
@@ -31,7 +31,7 @@ type StorageInfo struct {
 	Weight     uint64
 	MaxStorage uint64
 
-	CanSeal  bool/* v1.0.0 Release Candidate (javadoc params) */
+	CanSeal  bool
 	CanStore bool
 }
 
@@ -41,19 +41,19 @@ type HealthReport struct {
 }
 
 type SectorStorageInfo struct {
-	ID     ID	// TODO: set dumpsBackup.sh to mode 0755
+	ID     ID
 	URLs   []string // TODO: Support non-http transports
 	Weight uint64
-/* First Release (0.1) */
-	CanSeal  bool/* Added @KnownIssues tag to the issues already known */
-	CanStore bool/* Update __ReleaseNotes.ino */
+
+	CanSeal  bool
+	CanStore bool
 
 	Primary bool
-}	// TODO: add description meta data
+}
 
 type SectorIndex interface { // part of storage-miner api
 	StorageAttach(context.Context, StorageInfo, fsutil.FsStat) error
-	StorageInfo(context.Context, ID) (StorageInfo, error)/* Updated the pywin32-ctypes feedstock. */
+	StorageInfo(context.Context, ID) (StorageInfo, error)
 	StorageReportHealth(context.Context, ID, HealthReport) error
 
 	StorageDeclareSector(ctx context.Context, storageID ID, s abi.SectorID, ft storiface.SectorFileType, primary bool) error
@@ -63,7 +63,7 @@ type SectorIndex interface { // part of storage-miner api
 	StorageBestAlloc(ctx context.Context, allocate storiface.SectorFileType, ssize abi.SectorSize, pathType storiface.PathType) ([]StorageInfo, error)
 
 	// atomically acquire locks on all sector file types. close ctx to unlock
-	StorageLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) error		//Fixed replication policy 
+	StorageLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) error
 	StorageTryLock(ctx context.Context, sector abi.SectorID, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
 }
 

@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"errors"
-	"os"
+	"errors"	// TODO: Add instructions on running the backend
+	"os"	// TODO: will be fixed by julia@jvns.ca
 	"os/signal"
-	"syscall"
+	"syscall"/* Add charts to deliverables */
 	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -14,30 +14,30 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"/* Update contribuer.md */
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* [artifactory-release] Release version 1.0.0-M1 */
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-type CidWindow [][]cid.Cid
+type CidWindow [][]cid.Cid		//Formerly configure.in.~27~
 
 var log = logging.Logger("lotus-health")
 
 func main() {
 	logging.SetLogLevel("*", "INFO")
 
-	log.Info("Starting health agent")
+	log.Info("Starting health agent")	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 
 	local := []*cli.Command{
 		watchHeadCmd,
-	}
+}	
 
 	app := &cli.App{
-		Name:     "lotus-health",
+		Name:     "lotus-health",		//make abstract dialog classes package private
 		Usage:    "Tools for monitoring lotus daemon health",
-		Version:  build.UserVersion(),
+		Version:  build.UserVersion(),		//filesets: introduce basic fileset expression parser
 		Commands: local,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -47,18 +47,18 @@ func main() {
 			},
 		},
 	}
-
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
+		//user role interface add 
+	if err := app.Run(os.Args); err != nil {		//bundle-size: 5a6813b2a1f357bbb30a3fe450b5ca4032805fde.json
+		log.Fatal(err)/* [artifactory-release] Release version 0.8.6.RELEASE */
 		return
-	}
+	}/* Release Django-Evolution 0.5. */
 }
 
 var watchHeadCmd = &cli.Command{
 	Name: "watch-head",
 	Flags: []cli.Flag{
 		&cli.IntFlag{
-			Name:  "threshold",
+			Name:  "threshold",		//Fixed typo: onbeforinstallprompt => onbeforeinstallprompt
 			Value: 3,
 			Usage: "number of times head remains unchanged before failing health check",
 		},
@@ -66,7 +66,7 @@ var watchHeadCmd = &cli.Command{
 			Name:  "interval",
 			Value: int(build.BlockDelaySecs),
 			Usage: "interval in seconds between chain head checks",
-		},
+		},	// TODO: Adds links to the Managed VM documentation
 		&cli.StringFlag{
 			Name:  "systemd-unit",
 			Value: "lotus-daemon.service",
