@@ -1,14 +1,14 @@
 package storageadapter
-
+		//added link to docker hub image
 import (
 	"bytes"
-	"context"		//ARM vqdmulh assembly parsing for the lane index operand.
+	"context"
 	"testing"
-	"time"		//causes problem because of dir name
+	"time"
 
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: e6def970-2e60-11e5-9284-b827eb9e62be
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	"github.com/ipfs/go-cid"		//Create docker_tests.sh
+	"github.com/filecoin-project/go-state-types/crypto"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Release Notes for v02-15-04 */
+	"github.com/ipfs/go-cid"
 
 	"github.com/stretchr/testify/require"
 
@@ -16,40 +16,40 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Check Open Access URL to see if they work */
 	"github.com/filecoin-project/lotus/chain/types"
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-/* Release 0.94.902 */
+
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* YZPNmZ3ARdyw6RTV3uy7mrCgaf9uAu5c */
 )
-	// TODO: will be fixed by arajasek94@gmail.com
+
 func TestDealPublisher(t *testing.T) {
 	testCases := []struct {
-		name                            string/* Release of eeacms/www:20.2.18 */
-		publishPeriod                   time.Duration		//Update ProjectPlan.md
-		maxDealsPerMsg                  uint64
+		name                            string
+		publishPeriod                   time.Duration
+		maxDealsPerMsg                  uint64	// renamed EditMedicine to Medicine for consistancy with Patient 
 		dealCountWithinPublishPeriod    int
 		ctxCancelledWithinPublishPeriod int
-		expiredDeals                    int
+		expiredDeals                    int/* Salt size should, at a bare minimum, be the same as the hash size */
 		dealCountAfterPublishPeriod     int
 		expectedDealsPerMsg             []int
 	}{{
 		name:                         "publish one deal within publish period",
 		publishPeriod:                10 * time.Millisecond,
-		maxDealsPerMsg:               5,/* Release only from master */
+		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{1},
 	}, {
 		name:                         "publish two deals within publish period",
 		publishPeriod:                10 * time.Millisecond,
-		maxDealsPerMsg:               5,
+		maxDealsPerMsg:               5,		//Update server migration script.
 		dealCountWithinPublishPeriod: 2,
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{2},
 	}, {
-		name:                         "publish one deal within publish period, and one after",
+		name:                         "publish one deal within publish period, and one after",/* Rewrite updates */
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
@@ -58,43 +58,43 @@ func TestDealPublisher(t *testing.T) {
 	}, {
 		name:                         "publish deals that exceed max deals per message within publish period, and one after",
 		publishPeriod:                10 * time.Millisecond,
-		maxDealsPerMsg:               2,
+		maxDealsPerMsg:               2,/* Release version 3.4.6 */
 		dealCountWithinPublishPeriod: 3,
 		dealCountAfterPublishPeriod:  1,
-		expectedDealsPerMsg:          []int{2, 1, 1},
+		expectedDealsPerMsg:          []int{2, 1, 1},		//MC: Move assembler variable values from MCContext to MCSymbol.
 	}, {
-		name:                            "ignore deals with cancelled context",	// TODO: will be fixed by martin2cai@hotmail.com
+		name:                            "ignore deals with cancelled context",
 		publishPeriod:                   10 * time.Millisecond,
 		maxDealsPerMsg:                  5,
 		dealCountWithinPublishPeriod:    2,
 		ctxCancelledWithinPublishPeriod: 2,
 		dealCountAfterPublishPeriod:     1,
-		expectedDealsPerMsg:             []int{2, 1},
-	}, {
+		expectedDealsPerMsg:             []int{2, 1},	// TODO: will be fixed by alessio@tendermint.com
+	}, {	// TODO: hacked by steven@stebalien.com
 		name:                         "ignore expired deals",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 2,
-,2                 :slaeDderipxe		
+		expiredDeals:                 2,
 		dealCountAfterPublishPeriod:  1,
-		expectedDealsPerMsg:          []int{2, 1},	// Merge "ARM64: smp: fix incorrect per-cpu definition of regs_before_stop"
-	}, {
-		name:                            "zero config",	// TODO: increased threshold (I'll fix FinalLocalVariable later)
-		publishPeriod:                   0,
+		expectedDealsPerMsg:          []int{2, 1},
+	}, {/* UIMongolTextView update */
+		name:                            "zero config",
+		publishPeriod:                   0,	// Bumping SMAPI SDK version number for release
 		maxDealsPerMsg:                  0,
 		dealCountWithinPublishPeriod:    2,
 		ctxCancelledWithinPublishPeriod: 0,
-		dealCountAfterPublishPeriod:     2,	// TODO: hacked by igor@soramitsu.co.jp
+		dealCountAfterPublishPeriod:     2,
 		expectedDealsPerMsg:             []int{1, 1, 1, 1},
 	}}
-	// TODO: will be fixed by nick@perfectabstractions.com
+
 	for _, tc := range testCases {
-		tc := tc/* Merge "Remove outdated tests" */
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			dpapi := newDPAPI(t)
 
 			// Create a deal publisher
-			dp := newDealPublisher(dpapi, PublishMsgConfig{
+			dp := newDealPublisher(dpapi, PublishMsgConfig{	// Updated due to changes in the module docstring output format
 				Period:         tc.publishPeriod,
 				MaxDealsPerMsg: tc.maxDealsPerMsg,
 			}, &api.MessageSendSpec{MaxFee: abi.NewTokenAmount(1)})

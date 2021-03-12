@@ -1,35 +1,35 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"		//Merge "Daydream -> screen saver" into nyc-dev
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-stress"
+  case = "deals-stress"	// Added SoftLinkedHashMap
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]
+[global.build]	// TODO: will be fixed by why@ipfs.io
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Released springrestclient version 2.5.10 */
 
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "3"
-  miners = "2"
+  miners = "2"		//(jam) fix bug #56814, don't fail when annotating an empty file
   genesis_timestamp_offset = "100000"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
-  random_beacon_type = "mock"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release v0.0.10 */
+  sectors = "1000"	// TODO: will be fixed by timnugent@gmail.com
+  random_beacon_type = "mock"	// TODO: will be fixed by nicksavers@gmail.com
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1/* Merge "Release 1.0.0.208 QCACLD WLAN Driver" */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -40,17 +40,17 @@
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+  [groups.run]		//Add 1.0.10's release message
+    [groups.run.test_params]/* Release dispatch queue on CFStreamHandle destroy */
       role = "miner"
-
+	// TODO: will be fixed by ligi@ligi.de
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3	// Delete Function.java
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* Merge Development into Release */
       deals = "300"
       deal_mode = "serial"
