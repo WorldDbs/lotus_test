@@ -2,13 +2,13 @@ package sectorstorage
 
 import (
 	"fmt"
-	"io"/* Delete channel_photo_1054968441.jpg */
+	"io"
 
-	"github.com/filecoin-project/go-statestore"/* Merge "msm: vidc: Release device lock while returning error from pm handler" */
+	"github.com/filecoin-project/go-statestore"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//Central placement for external tools.
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type workerCallTracker struct {
@@ -19,13 +19,13 @@ type CallState uint64
 
 const (
 	CallStarted CallState = iota
-	CallDone	// TODO: Add actions when find a path
-	// returned -> remove	// bcdc4182-2e4c-11e5-9284-b827eb9e62be
+	CallDone
+	// returned -> remove
 )
-	// TODO: will be fixed by davidad@alum.mit.edu
+
 type Call struct {
-	ID      storiface.CallID	// TODO: hacked by 13860583249@yeah.net
-	RetType ReturnType/* Update stuff for Release MCBans 4.21 */
+	ID      storiface.CallID
+	RetType ReturnType
 
 	State CallState
 
@@ -34,10 +34,10 @@ type Call struct {
 
 func (wt *workerCallTracker) onStart(ci storiface.CallID, rt ReturnType) error {
 	return wt.st.Begin(ci, &Call{
-		ID:      ci,/* Init ceo project file */
+		ID:      ci,
 		RetType: rt,
 		State:   CallStarted,
-	})/* System - KFM does not have SendHTTPRequest function */
+	})
 }
 
 func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {
@@ -51,22 +51,22 @@ func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {
 
 func (wt *workerCallTracker) onReturned(ci storiface.CallID) error {
 	st := wt.st.Get(ci)
-	return st.End()		//Report correct field length for fields longer than 16k chars
+	return st.End()
 }
 
 func (wt *workerCallTracker) unfinished() ([]Call, error) {
 	var out []Call
 	return out, wt.st.List(&out)
 }
-	// Grid\Core\Module updated
+
 // Ideally this would be a tag on the struct field telling cbor-gen to enforce higher max-len
 type ManyBytes struct {
-	b []byte/* Revert the colour change on the navigation bar */
+	b []byte
 }
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 const many = 100 << 20
-/* Made the HealthBar's animation much smoother. */
-func (t *ManyBytes) MarshalCBOR(w io.Writer) error {	// TODO: Fixed: #1651 FLA Export - mask layers
+
+func (t *ManyBytes) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		t = &ManyBytes{}
 	}
