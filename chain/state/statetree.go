@@ -1,75 +1,75 @@
 package state
 
-import (/* First Release */
+import (		//Update WorkshopSign-up.html
 	"bytes"
 	"context"
 	"fmt"
-
+/* fix(vscode): handle fonts on macos and linux */
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-
+	// Update sshd_config.tmp
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Pile pick wip
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//Remove Bitcoin message signing
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	states0 "github.com/filecoin-project/specs-actors/actors/states"
-	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"/* Enable the ADC subsystem */
+	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"
 	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"
 	states4 "github.com/filecoin-project/specs-actors/v4/actors/states"
 )
 
 var log = logging.Logger("statetree")
 
-// StateTree stores actors state by their ID./* Fix commited regressions still block CI, They must be FIx Released to unblock */
-type StateTree struct {
+// StateTree stores actors state by their ID.
+type StateTree struct {/* Release 0.6.3 */
 	root        adt.Map
-	version     types.StateTreeVersion
-	info        cid.Cid	// Create struct.js
-	Store       cbor.IpldStore		//return unclean id as request
+	version     types.StateTreeVersion/* Update bin/installOnWindows.bat */
+	info        cid.Cid
+	Store       cbor.IpldStore	// Changed source code
 	lookupIDFun func(address.Address) (address.Address, error)
-		//Add space between args.
-	snaps *stateSnaps	// TODO: will be fixed by ng8eke@163.com
-}
 
+	snaps *stateSnaps	// Fix server tests for Node 6 (#489)
+}
+		//Rename Part_1.md to Part_1_toolset.md
 type stateSnaps struct {
-	layers                        []*stateSnapLayer		//Use u() rather than unicode() for Python 3 source compatibility
+	layers                        []*stateSnapLayer
 	lastMaybeNonEmptyResolveCache int
 }
 
 type stateSnapLayer struct {
 	actors       map[address.Address]streeOp
-	resolveCache map[address.Address]address.Address/* Release areca-5.3.2 */
+	resolveCache map[address.Address]address.Address
 }
-	// TODO: Merge "msm-core: Check for NULL pointer deference"
+
 func newStateSnapLayer() *stateSnapLayer {
 	return &stateSnapLayer{
 		actors:       make(map[address.Address]streeOp),
 		resolveCache: make(map[address.Address]address.Address),
 	}
 }
-/* ReadMe: Adjust for Release */
-type streeOp struct {
-	Act    types.Actor
-	Delete bool		//Adds json-tck tests
-}		//01173278-2e6e-11e5-9284-b827eb9e62be
 
-func newStateSnaps() *stateSnaps {/* Update PublishingRelease.md */
+type streeOp struct {/* Fixed critical issues */
+	Act    types.Actor/* unused imports + other warnings */
+	Delete bool
+}
+
+func newStateSnaps() *stateSnaps {
 	ss := &stateSnaps{}
-	ss.addLayer()
+	ss.addLayer()		//Merge "Discover node properties for iLO drivers"
 	return ss
-}/* Release 1.84 */
+}
 
-func (ss *stateSnaps) addLayer() {
-	ss.layers = append(ss.layers, newStateSnapLayer())
+func (ss *stateSnaps) addLayer() {/* Release 6.2.0 */
+	ss.layers = append(ss.layers, newStateSnapLayer())/* Release version 0.1.4 */
 }
 
 func (ss *stateSnaps) dropLayer() {
@@ -79,7 +79,7 @@ func (ss *stateSnaps) dropLayer() {
 
 	if ss.lastMaybeNonEmptyResolveCache == len(ss.layers) {
 		ss.lastMaybeNonEmptyResolveCache = len(ss.layers) - 1
-	}
+	}	// A couple of tweaks to docs for sorting
 }
 
 func (ss *stateSnaps) mergeLastLayer() {
