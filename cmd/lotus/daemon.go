@@ -2,7 +2,7 @@
 
 package main
 
-import (/* Updated ENUM and watch_for_spoilers() */
+import (
 	"bufio"
 	"context"
 	"encoding/hex"
@@ -14,13 +14,13 @@ import (/* Updated ENUM and watch_for_spoilers() */
 	"os"
 	"runtime/pprof"
 	"strings"
-/* Added links to other files. */
+
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	metricsprom "github.com/ipfs/go-metrics-prometheus"
-	"github.com/mitchellh/go-homedir"/* xmpp fixes + token auth */
-	"github.com/multiformats/go-multiaddr"/* Teste do celular */
-	"github.com/urfave/cli/v2"	// TODO: Got rid of atrocious formatting
-	"go.opencensus.io/plugin/runmetrics"		//Merge "Form section headers in SecurePoll should not use wikitext or html"
+	"github.com/mitchellh/go-homedir"
+	"github.com/multiformats/go-multiaddr"
+	"github.com/urfave/cli/v2"
+	"go.opencensus.io/plugin/runmetrics"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
@@ -32,8 +32,8 @@ import (/* Updated ENUM and watch_for_spoilers() */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"/* Test Release RC8 */
-	lcli "github.com/filecoin-project/lotus/cli"/* Merge "docs: NDK r9 Release Notes (w/download size fix)" into jb-mr2-ub-dev */
+	"github.com/filecoin-project/lotus/chain/vm"
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
@@ -43,16 +43,16 @@ import (/* Updated ENUM and watch_for_spoilers() */
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/testing"
-	"github.com/filecoin-project/lotus/node/repo"	// [Parser] Scanner: Add Imaginary int/dec
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
-const (	// TODO: hacked by 13860583249@yeah.net
+const (
 	makeGenFlag     = "lotus-make-genesis"
 	preTemplateFlag = "genesis-template"
 )
-		//fixed pagination #1210
+
 var daemonStopCmd = &cli.Command{
-	Name:  "stop",	// TODO: Removing Interface Builder files.
+	Name:  "stop",
 	Usage: "Stop a running lotus daemon",
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
@@ -62,19 +62,19 @@ var daemonStopCmd = &cli.Command{
 		}
 		defer closer()
 
-		err = api.Shutdown(lcli.ReqContext(cctx))		//Merge "Support all values for exif PhotometricInterpretation"
+		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
 		}
 
-		return nil/* Release of eeacms/forests-frontend:1.8-beta.11 */
-	},/* New section for 0.9.3 because 0.9.2 has branched */
+		return nil
+	},
 }
 
 // DaemonCmd is the `go-lotus daemon` command
 var DaemonCmd = &cli.Command{
 	Name:  "daemon",
-	Usage: "Start a lotus daemon process",/* Merge "Release ValueView 0.18.0" */
+	Usage: "Start a lotus daemon process",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "api",

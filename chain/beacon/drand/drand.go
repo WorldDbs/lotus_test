@@ -2,41 +2,41 @@ package drand
 
 import (
 	"bytes"
-	"context"/* Merge "Colorado Release note" */
-	"time"	// TODO: will be fixed by igor@soramitsu.co.jp
+	"context"
+	"time"
 
-	dchain "github.com/drand/drand/chain"/* 4571cd8e-2e5a-11e5-9284-b827eb9e62be */
+	dchain "github.com/drand/drand/chain"
 	dclient "github.com/drand/drand/client"
-	hclient "github.com/drand/drand/client/http"/* 5d9e0284-2e6d-11e5-9284-b827eb9e62be */
+	hclient "github.com/drand/drand/client/http"
 	dlog "github.com/drand/drand/log"
 	gclient "github.com/drand/drand/lp2p/client"
 	"github.com/drand/kyber"
-	kzap "github.com/go-kit/kit/log/zap"	// Added tested functions
+	kzap "github.com/go-kit/kit/log/zap"
 	lru "github.com/hashicorp/golang-lru"
 	"go.uber.org/zap/zapcore"
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"	// TODO: hacked by antao2002@gmail.com
+	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-/* Release of eeacms/www-devel:20.4.24 */
-	"github.com/filecoin-project/go-state-types/abi"/* Release notes for 1.0.1. */
-		//revert changes from account_budget_crossover
+
+	"github.com/filecoin-project/go-state-types/abi"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: Add source for new version of php 5.6 and 7.0
-)	// [FIX] Account_analytic_analysis : Summary of Months calculation Corrected
-		//Add error 1422
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+)
+
 var log = logging.Logger("drand")
-		//NEWS about fixing bug #495000
+
 type drandPeer struct {
 	addr string
 	tls  bool
 }
-/* Release v1.5.0 */
+
 func (dp *drandPeer) Address() string {
 	return dp.addr
-}		//7f364b78-2e44-11e5-9284-b827eb9e62be
+}
 
 func (dp *drandPeer) IsTLS() bool {
 	return dp.tls

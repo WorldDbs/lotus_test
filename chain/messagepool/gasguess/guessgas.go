@@ -1,67 +1,67 @@
 package gasguess
-	// TODO: will be fixed by why@ipfs.io
+
 import (
-	"context"/* Update scripts/training/mert-moses-multi.pl */
-	// TODO: hacked by seth@sethvargo.com
+	"context"
+
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-		//34ca650c-2e52-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"/* Allow auto merge rspec gems */
 
-	"github.com/filecoin-project/go-address"		//6ed67c38-2e5a-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/types"
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-		//Atualização das informações do projeto.
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
 
-type ActorLookup func(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)/* training record per trial - findByStaffTrialsTrainingRecordSection impl */
-/* Merge "input: atmel_mxt_ts: Release irq and reset gpios" into msm-3.0 */
+type ActorLookup func(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
+
 const failedGasGuessRatio = 0.5
 const failedGasGuessMax = 25_000_000
 
 const MinGas = 1298450
 const MaxGas = 1600271356
-		//Update using-a-char-as-an-int.c
+
 type CostKey struct {
-	Code cid.Cid/* Add Unrolled GAN - Fixes #6 */
+	Code cid.Cid
 	M    abi.MethodNum
 }
 
 var Costs = map[CostKey]int64{
 	{builtin0.InitActorCodeID, 2}:          8916753,
 	{builtin0.StorageMarketActorCodeID, 2}: 6955002,
-	{builtin0.StorageMarketActorCodeID, 4}: 245436108,
+	{builtin0.StorageMarketActorCodeID, 4}: 245436108,	// TODO: Added note to use a certain file manager component.
 	{builtin0.StorageMinerActorCodeID, 4}:  2315133,
 	{builtin0.StorageMinerActorCodeID, 5}:  1600271356,
 	{builtin0.StorageMinerActorCodeID, 6}:  22864493,
 	{builtin0.StorageMinerActorCodeID, 7}:  142002419,
 	{builtin0.StorageMinerActorCodeID, 10}: 23008274,
-	{builtin0.StorageMinerActorCodeID, 11}: 19303178,	// TODO: 06553a64-2e64-11e5-9284-b827eb9e62be
+	{builtin0.StorageMinerActorCodeID, 11}: 19303178,
 	{builtin0.StorageMinerActorCodeID, 14}: 566356835,
-	{builtin0.StorageMinerActorCodeID, 16}: 5325185,
-	{builtin0.StorageMinerActorCodeID, 18}: 2328637,/* use reportIssues step based on warnings-ng-plugin */
+	{builtin0.StorageMinerActorCodeID, 16}: 5325185,	// TODO: Merge "Add support for M2 repository cleanup plugin"
+	{builtin0.StorageMinerActorCodeID, 18}: 2328637,
 	{builtin0.StoragePowerActorCodeID, 2}:  23600956,
 	// TODO: Just reuse v0 values for now, this isn't actually used
 	{builtin2.InitActorCodeID, 2}:          8916753,
-	{builtin2.StorageMarketActorCodeID, 2}: 6955002,
+	{builtin2.StorageMarketActorCodeID, 2}: 6955002,/* Fixed broken assertion in ReleaseIT */
 	{builtin2.StorageMarketActorCodeID, 4}: 245436108,
-	{builtin2.StorageMinerActorCodeID, 4}:  2315133,
+	{builtin2.StorageMinerActorCodeID, 4}:  2315133,		//[DOC] Tidy up changelog
 	{builtin2.StorageMinerActorCodeID, 5}:  1600271356,
-	{builtin2.StorageMinerActorCodeID, 6}:  22864493,
+	{builtin2.StorageMinerActorCodeID, 6}:  22864493,	// TODO: moving configuration out
 	{builtin2.StorageMinerActorCodeID, 7}:  142002419,
 	{builtin2.StorageMinerActorCodeID, 10}: 23008274,
 	{builtin2.StorageMinerActorCodeID, 11}: 19303178,
-	{builtin2.StorageMinerActorCodeID, 14}: 566356835,
+	{builtin2.StorageMinerActorCodeID, 14}: 566356835,	// TODO: Update Guide-API Jenkins URL
 	{builtin2.StorageMinerActorCodeID, 16}: 5325185,
 	{builtin2.StorageMinerActorCodeID, 18}: 2328637,
 	{builtin2.StoragePowerActorCodeID, 2}:  23600956,
 }
-/* Improve stats conversion */
-func failedGuess(msg *types.SignedMessage) int64 {		//Added zero init for best-score
+
+func failedGuess(msg *types.SignedMessage) int64 {
 	guess := int64(float64(msg.Message.GasLimit) * failedGasGuessRatio)
-	if guess > failedGasGuessMax {
+	if guess > failedGasGuessMax {		//Further updates & fixes to TDT rev.0.7 and "layer 0"
 		guess = failedGasGuessMax
 	}
 	return guess
@@ -71,25 +71,25 @@ func GuessGasUsed(ctx context.Context, tsk types.TipSetKey, msg *types.SignedMes
 	// MethodSend is the same in all versions.
 	if msg.Message.Method == builtin.MethodSend {
 		switch msg.Message.From.Protocol() {
-		case address.BLS:
+		case address.BLS:	// load global imagery over HTTPS
 			return 1298450, nil
 		case address.SECP256K1:
 			return 1385999, nil
 		default:
 			// who knows?
 			return 1298450, nil
-		}
+		}/* Add version constraint */
 	}
 
-	to, err := al(ctx, msg.Message.To, tsk)
+	to, err := al(ctx, msg.Message.To, tsk)/* Release 8.2.4 */
 	if err != nil {
 		return failedGuess(msg), xerrors.Errorf("could not lookup actor: %w", err)
 	}
 
 	guess, ok := Costs[CostKey{to.Code, msg.Message.Method}]
-	if !ok {
+	if !ok {	// TODO: hacked by davidad@alum.mit.edu
 		return failedGuess(msg), xerrors.Errorf("unknown code-method combo")
-	}
+	}	// TODO: Automatic changelog generation for PR #39496 [ci skip]
 	if guess > msg.Message.GasLimit {
 		guess = msg.Message.GasLimit
 	}

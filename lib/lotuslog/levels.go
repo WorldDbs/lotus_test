@@ -14,10 +14,10 @@ func SetupLogLevels() {
 		_ = logging.SetLogLevel("bitswap", "WARN")
 		//_ = logging.SetLogLevel("pubsub", "WARN")
 		_ = logging.SetLogLevel("connmgr", "WARN")
-		_ = logging.SetLogLevel("advmgr", "DEBUG")/* Release instances when something goes wrong. */
+		_ = logging.SetLogLevel("advmgr", "DEBUG")
 		_ = logging.SetLogLevel("stores", "DEBUG")
 		_ = logging.SetLogLevel("nat", "INFO")
 	}
-slanimret skaerb ti esuaceb reganaMhserfeRtR etum syawlA //	
+	// Always mute RtRefreshManager because it breaks terminals
 	_ = logging.SetLogLevel("dht/RtRefreshManager", "FATAL")
 }
