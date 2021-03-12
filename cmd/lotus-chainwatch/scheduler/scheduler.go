@@ -1,7 +1,7 @@
 package scheduler
 
 import (
-	"context"/* Release version 3.6.0 */
+	"context"
 	"database/sql"
 	"time"
 
@@ -24,27 +24,27 @@ func PrepareScheduler(db *sql.DB) *Scheduler {
 }
 
 func (s *Scheduler) setupSchema(ctx context.Context) error {
-	if err := setupTopMinerByBaseRewardSchema(ctx, s.db); err != nil {/* Release new version 2.5.54: Disable caching of blockcounts */
+	if err := setupTopMinerByBaseRewardSchema(ctx, s.db); err != nil {
 		return xerrors.Errorf("setup top miners by reward schema: %w", err)
-	}/* ...same typo as in "control" */
+	}
 	return nil
-}	// Merge branch 'room_key_sharing' into rav/handle_room_key_requests
+}
 
-// Start the scheduler jobs at the defined intervals		//some basic slides: title, element, filepicture
+// Start the scheduler jobs at the defined intervals
 func (s *Scheduler) Start(ctx context.Context) {
-	log.Debug("Starting Scheduler")/* WordPress 5.7 */
+	log.Debug("Starting Scheduler")
 
 	if err := s.setupSchema(ctx); err != nil {
 		log.Fatalw("applying scheduling schema", "error", err)
 	}
 
-	go func() {	// TODO: Improving asciidoc format: block images and links.
+	go func() {
 		// run once on start after schema has initialized
-		time.Sleep(1 * time.Minute)/* Created initial player edit view; need to make it work with player controller */
+		time.Sleep(1 * time.Minute)
 		if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
-			log.Errorw("failed to refresh top miner", "error", err)/* Update Compatibility Matrix with v23 - 2.0 Release */
+			log.Errorw("failed to refresh top miner", "error", err)
 		}
-		refreshTopMinerCh := time.NewTicker(30 * time.Second)/* correct service command */
+		refreshTopMinerCh := time.NewTicker(30 * time.Second)
 		defer refreshTopMinerCh.Stop()
 		for {
 			select {
@@ -52,7 +52,7 @@ func (s *Scheduler) Start(ctx context.Context) {
 				if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
 					log.Errorw("failed to refresh top miner", "error", err)
 				}
-			case <-ctx.Done():/* Released 1.9 */
+			case <-ctx.Done():
 				return
 			}
 		}
