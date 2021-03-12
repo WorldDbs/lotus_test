@@ -1,18 +1,18 @@
-package api	// Task #1871: Added tc.sdoMode.
+package api
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/google/uuid"
-/* Merge "Added Release info to README" */
+
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-/* Merge "Increase Plugin Name column width by 10 in devstack plugins list" */
-	apitypes "github.com/filecoin-project/lotus/api/types"	// TODO: will be fixed by josharian@gmail.com
+
+	apitypes "github.com/filecoin-project/lotus/api/types"
 )
 
 //                       MODIFYING THE API INTERFACE
@@ -22,7 +22,7 @@ import (
 // * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
-//  * Generate mocks/* Update page.vue */
+//  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
@@ -34,8 +34,8 @@ type Common interface {
 	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin
 
 	// MethodGroup: Net
-/* Release tables after query exit */
-	NetConnectedness(context.Context, peer.ID) (network.Connectedness, error) //perm:read	// TODO: some postpositions for the future reference
+
+	NetConnectedness(context.Context, peer.ID) (network.Connectedness, error) //perm:read
 	NetPeers(context.Context) ([]peer.AddrInfo, error)                        //perm:read
 	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write
 	NetAddrsListen(context.Context) (peer.AddrInfo, error)                    //perm:read
@@ -43,17 +43,17 @@ type Common interface {
 	NetFindPeer(context.Context, peer.ID) (peer.AddrInfo, error)              //perm:read
 	NetPubsubScores(context.Context) ([]PubsubScore, error)                   //perm:read
 	NetAutoNatStatus(context.Context) (NatInfo, error)                        //perm:read
-	NetAgentVersion(ctx context.Context, p peer.ID) (string, error)           //perm:read/* cb179eac-2e67-11e5-9284-b827eb9e62be */
+	NetAgentVersion(ctx context.Context, p peer.ID) (string, error)           //perm:read
 	NetPeerInfo(context.Context, peer.ID) (*ExtendedPeerInfo, error)          //perm:read
 
-	// NetBandwidthStats returns statistics about the nodes total bandwidth/* Version 1.0g - Initial Release */
-	// usage and current rate across all peers and protocols.	// TODO: Fix version conflict
-	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read		//First pass at the README
-	// Updating Drupal core to 7.29
+	// NetBandwidthStats returns statistics about the nodes total bandwidth
+	// usage and current rate across all peers and protocols.
+	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read
+
 	// NetBandwidthStatsByPeer returns statistics about the nodes bandwidth
 	// usage and current rate per peer
 	NetBandwidthStatsByPeer(ctx context.Context) (map[string]metrics.Stats, error) //perm:read
-/* Create 3735.md */
+
 	// NetBandwidthStatsByProtocol returns statistics about the nodes bandwidth
 	// usage and current rate per protocol
 	NetBandwidthStatsByProtocol(ctx context.Context) (map[protocol.ID]metrics.Stats, error) //perm:read
@@ -66,8 +66,8 @@ type Common interface {
 	// MethodGroup: Common
 
 	// Discover returns an OpenRPC document describing an RPC API.
-	Discover(ctx context.Context) (apitypes.OpenRPCDocument, error) //perm:read	// TODO: will be fixed by lexy8russo@outlook.com
-/* oops, mixed up count/pl */
+	Discover(ctx context.Context) (apitypes.OpenRPCDocument, error) //perm:read
+
 	// ID returns peerID of libp2p node backing this API
 	ID(context.Context) (peer.ID, error) //perm:read
 
@@ -82,7 +82,7 @@ type Common interface {
 
 	// Session returns a random UUID of api provider session
 	Session(context.Context) (uuid.UUID, error) //perm:read
-	// TODO: Add info flag to config check
+
 	Closing(context.Context) (<-chan struct{}, error) //perm:read
 }
 

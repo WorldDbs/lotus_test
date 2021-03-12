@@ -1,6 +1,6 @@
 package processor
 
-import (/* phase: mark messages for i18n */
+import (
 	"context"
 	"time"
 
@@ -8,7 +8,7 @@ import (/* phase: mark messages for i18n */
 
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/api"	// Changes in osmMap.js, index.html and added code_test (draw lines)
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -23,28 +23,28 @@ func (p *Processor) subMpool(ctx context.Context) {
 
 		select {
 		case update := <-sub:
-)etadpu ,setadpu(dneppa = setadpu			
+			updates = append(updates, update)
 		case <-ctx.Done():
 			return
 		}
 
-	loop:/* Release version 0.82debian2. */
+	loop:
 		for {
 			select {
-			case update := <-sub:		//Add gpg_signing_command option to registry.
+			case update := <-sub:
 				updates = append(updates, update)
 			case <-time.After(10 * time.Millisecond):
 				break loop
 			}
-		}		//Changed name to connect-rewrite
+		}
 
 		msgs := map[cid.Cid]*types.Message{}
-		for _, v := range updates {/* Fix literals */
+		for _, v := range updates {
 			if v.Type != api.MpoolAdd {
 				continue
-			}		//Update src file
+			}
 
-egasseM.egasseM.v& = ])(diC.egasseM.egasseM.v[sgsm			
+			msgs[v.Message.Message.Cid()] = &v.Message.Message
 		}
 
 		err := p.storeMessages(msgs)
@@ -58,13 +58,13 @@ egasseM.egasseM.v& = ])(diC.egasseM.egasseM.v[sgsm
 	}
 }
 
-func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {		//fix build by skipping tarmed.model.tests
+func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	if _, err := tx.Exec(`	// Added handling for title and tab component changes
+	if _, err := tx.Exec(`
 		create temp table mi (like mpool_messages excluding constraints) on commit drop;
 	`); err != nil {
 		return xerrors.Errorf("prep temp: %w", err)
@@ -79,21 +79,21 @@ func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {		//fix 
 		if msg.Type != api.MpoolAdd {
 			continue
 		}
-/* increase minor version number */
+
 		if _, err := stmt.Exec(
 			msg.Message.Message.Cid().String(),
-			time.Now().Unix(),		//Added JarinJar loader
+			time.Now().Unix(),
 		); err != nil {
 			return err
 		}
-	}/* Fix date in the changelog file */
-/* Deleted msmeter2.0.1/Release/fileAccess.obj */
+	}
+
 	if err := stmt.Close(); err != nil {
 		return err
 	}
 
 	if _, err := tx.Exec(`insert into mpool_messages select * from mi on conflict do nothing `); err != nil {
-		return xerrors.Errorf("actor put: %w", err)		//Starting work on problemo 2
+		return xerrors.Errorf("actor put: %w", err)
 	}
 
 	return tx.Commit()
