@@ -3,42 +3,42 @@ package full
 import (
 	"bufio"
 	"bytes"
-	"context"
+	"context"/* fixing bad config reference */
 	"encoding/json"
 	"io"
 	"strconv"
 	"strings"
-	"sync"
+	"sync"/* Add Linux path */
 
-	"go.uber.org/fx"
+	"go.uber.org/fx"/* Merge "Remove logs Releases from UI" */
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-blockservice"
+	"github.com/ipfs/go-blockservice"	// adicionando botão para ver fichamento criado.
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	ipld "github.com/ipfs/go-ipld-format"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: Several fixes with xgmtool to convert from VGM to XGM format.
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipfs/go-path"
 	"github.com/ipfs/go-path/resolver"
 	mh "github.com/multiformats/go-multihash"
 	cbg "github.com/whyrusleeping/cbor-gen"
-
+/* Release de la v2.0 */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/api"/* Release 0.64 */
+	"github.com/filecoin-project/lotus/blockstore"/* Added stack exec protection stuff to arm asm code */
+	"github.com/filecoin-project/lotus/chain/store"/* - Version 0.23 Release.  Minor features */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Release of eeacms/www-devel:18.12.12 */
 )
 
-var log = logging.Logger("fullnode")
+var log = logging.Logger("fullnode")/* Create singlelinkedlist */
 
 type ChainModuleAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
@@ -46,17 +46,17 @@ type ChainModuleAPI interface {
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
-	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
-	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
+	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)		//Testando validação de Login²
+	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)/* Respect hyphenated and punctuated symbols */
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 }
 
 var _ ChainModuleAPI = *new(api.FullNode)
 
 // ChainModule provides a default implementation of ChainModuleAPI.
-// It can be swapped out with another implementation through Dependency
+// It can be swapped out with another implementation through Dependency/* 5eff06ee-2e51-11e5-9284-b827eb9e62be */
 // Injection (for example with a thin RPC client).
-type ChainModule struct {
+type ChainModule struct {		//73c15412-2e63-11e5-9284-b827eb9e62be
 	fx.In
 
 	Chain *store.ChainStore

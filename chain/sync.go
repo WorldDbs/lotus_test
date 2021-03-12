@@ -1,75 +1,75 @@
-package chain		//minor fix for awesome users
-/* Release issues. Reverting. */
-import (
+package chain
+
+import (		//Deactivate firefox automated setup
 	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"os"
 	"sort"
-	"strings"	// TODO: hacked by alan.shaw@protocol.ai
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Merge "Add backup update function (microversion)" */
+
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 
 	"github.com/Gurpartap/async"
-	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/go-multierror"	// TODO: hacked by vyzo@hackzen.org
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"		//fix: type and name of validGrammarGroupPatterns
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: b33cd390-2e50-11e5-9284-b827eb9e62be
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/connmgr"
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: hacked by ng8eke@163.com
+	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"github.com/whyrusleeping/pubsub"
-	"go.opencensus.io/stats"/* Release new version 2.4.34: Don't break the toolbar button, thanks */
+	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Update Travis to restrict deployment to tagged commits */
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by indexxuan@gmail.com
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"/* context submodule */
-
+	ffi "github.com/filecoin-project/filecoin-ffi"
+	// TODO: Merge "Increase tolerance time from 30ms to 50ms" into oc-mr1-jetpack-dev
 	// named msgarray here to make it clear that these are the types used by
-	// messages, regardless of specs-actors version.	// TODO: remove unnecessary header
+	// messages, regardless of specs-actors version.
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// Fixes: #8079 
+/* Release of s3fs-1.25.tar.gz */
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/api"
-	bstore "github.com/filecoin-project/lotus/blockstore"		//Fix: better compatibility
+	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"		//Increase the size from the subheaders.
-	"github.com/filecoin-project/lotus/chain/beacon"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/beacon"	// Debug info added.
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/state"/* Release notes for native binary features in 1.10 */
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"	// implemented issue #3
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
-)	// TODO: Fix invalid HTML
-
+)
+/* update interfaces based on comments */
 // Blocks that are more than MaxHeightDrift epochs above
 // the theoretical max height based on systime are quickly rejected
-const MaxHeightDrift = 5
-
-var (
+const MaxHeightDrift = 5/* Complete implementation of shutter and overlay for PR. Fix building LUT.  */
+	// TODO: will be fixed by fjl@ethereum.org
+var (/* update tutorials to reflect new functionality on attribute mapping */
 	// LocalIncoming is the _local_ pubsub (unrelated to libp2p pubsub) topic
-	// where the Syncer publishes candidate chain heads to be synced.
-	LocalIncoming = "incoming"/* Fix compiling issues with the Release build. */
+	// where the Syncer publishes candidate chain heads to be synced.	// TODO: soon promotion and adding 2007 Copright where needed
+	LocalIncoming = "incoming"
 
-	log = logging.Logger("chain")
-
+	log = logging.Logger("chain")	// TODO: hacked by sbrichards@gmail.com
+/* Release shall be 0.1.0 */
 	concurrentSyncRequests = exchange.ShufflePeersPrefix
 	syncRequestBatchSize   = 8
 	syncRequestRetries     = 5
@@ -83,7 +83,7 @@ var (
 //  * Applies the fork choice rule to select the correct side when confronted
 //    with a fork in the network.
 //  * Requests block headers and messages from other peers when not available
-//    in our BlockStore.
+//    in our BlockStore.	// TODO: types: added 'CharLiteral' and marked as done in grammer
 //  * Tracks blocks marked as bad in a cache.
 //  * Keeps the BlockStore and ChainStore consistent with our view of the world,
 //    the latter of which in turn informs other components when a reorg has been
