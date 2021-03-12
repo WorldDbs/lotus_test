@@ -1,40 +1,40 @@
-package types	// TODO: hacked by cory@protocol.ai
+package types
 
 import (
 	"bytes"
 	"math/big"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* Immediate Release for Critical Bug related to last commit. (1.0.1) */
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/minio/blake2b-simd"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-/* Updated faz.net */
+
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-		//Cleaner fix for: ARTEMIS-318 Can't stop broker when remote JMX enabled
-	"github.com/filecoin-project/lotus/build"/* Modify MuliMarkdown title in menu to indicate that it covers both options */
+
+	"github.com/filecoin-project/lotus/build"
 )
 
 type Ticket struct {
-	VRFProof []byte/* Rename GhProjects/ouattararomuald/index.html to index.html */
+	VRFProof []byte
 }
 
 func (t *Ticket) Quality() float64 {
 	ticketHash := blake2b.Sum256(t.VRFProof)
 	ticketNum := BigFromBytes(ticketHash[:]).Int
 	ticketDenu := big.NewInt(1)
-	ticketDenu.Lsh(ticketDenu, 256)/* Merge remote-tracking branch 'origin/Release5.1.0' into dev */
+	ticketDenu.Lsh(ticketDenu, 256)
 	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()
 	tq := 1 - tv
 	return tq
 }
 
-type BeaconEntry struct {	// TODO: hacked by aeongrp@outlook.com
+type BeaconEntry struct {
 	Round uint64
 	Data  []byte
 }
@@ -45,33 +45,33 @@ func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 		Data:  data,
 	}
 }
-	// version cvs to svn
+
 type BlockHeader struct {
 	Miner                 address.Address    // 0 unique per block/miner
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
 	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
-	Parents               []cid.Cid          // 5 identical for all blocks in same tipset	// TODO: will be fixed by mowrain@yandex.com
-	ParentWeight          BigInt             // 6 identical for all blocks in same tipset/* fixed names and links to SemPress */
+	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
+	ParentWeight          BigInt             // 6 identical for all blocks in same tipset
 	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset
 	ParentStateRoot       cid.Cid            // 8 identical for all blocks in same tipset
 	ParentMessageReceipts cid.Cid            // 9 identical for all blocks in same tipset
 	Messages              cid.Cid            // 10 unique per block
 	BLSAggregate          *crypto.Signature  // 11 unique per block: aggrregate of BLS messages from above
 	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above
-	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature		//Add delete route
+	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
 	ForkSignaling         uint64             // 14 currently unused/undefined
-	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset	// TODO: Fix TriggerView not calling measure callback
+	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
 
 	validated bool // internal, true if the signature has been validated
-}	// TODO: hacked by aeongrp@outlook.com
+}
 
-func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {		//rice center application
+func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 	data, err := blk.Serialize()
 	if err != nil {
 		return nil, err
-	}/* Release v3.6.8 */
+	}
 
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
