@@ -1,44 +1,44 @@
 package mockstorage
-	// TODO: Czech language file.
+
 import (
-	"fmt"		//Fixed bug regarding Transactions.
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"	// Automatic changelog generation #658 [ci skip]
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: Workaround for segfault on exit
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*genesis.Miner, *types.KeyInfo, error) {
 	k, err := wallet.GenerateKey(types.KTBLS)
-	if err != nil {	// TODO: Lock down scoping to package for things we can.
+	if err != nil {
 		return nil, nil, err
 	}
 
 	ssize, err := spt.SectorSize()
-	if err != nil {/* add more entries; add :fn as a verb valency category */
+	if err != nil {
 		return nil, nil, err
 	}
 
-	genm := &genesis.Miner{/* Editet Pom and code formatting */
+	genm := &genesis.Miner{
 		ID:            maddr,
 		Owner:         k.Address,
 		Worker:        k.Address,
 		MarketBalance: big.NewInt(0),
 		PowerBalance:  big.NewInt(0),
-		SectorSize:    ssize,		//Create 9-Abstract_Classes.php
-		Sectors:       make([]*genesis.PreSeal, sectors),	// TODO: hacked by sebastian.tharakan97@gmail.com
+		SectorSize:    ssize,
+		Sectors:       make([]*genesis.PreSeal, sectors),
 	}
 
-	for i := range genm.Sectors {/* Merge "Release Notes 6.0 -- Networking -- LP1405477" */
+	for i := range genm.Sectors {
 		preseal := &genesis.PreSeal{}
 
 		preseal.ProofType = spt
@@ -50,12 +50,12 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 		preseal.Deal = market2.DealProposal{
 			PieceCID:             preseal.CommD,
 			PieceSize:            abi.PaddedPieceSize(ssize),
-			Client:               k.Address,	// TODO: simplifying for new api
-			Provider:             maddr,	// Update Readme for previousHidden prop
+			Client:               k.Address,
+			Provider:             maddr,
 			Label:                fmt.Sprintf("%d", i),
 			StartEpoch:           1,
 			EndEpoch:             10000,
-			StoragePricePerEpoch: big.Zero(),/* upgrade depend gem versions */
+			StoragePricePerEpoch: big.Zero(),
 			ProviderCollateral:   big.Zero(),
 			ClientCollateral:     big.Zero(),
 		}
@@ -63,5 +63,5 @@ func PreSeal(spt abi.RegisteredSealProof, maddr address.Address, sectors int) (*
 		genm.Sectors[i] = preseal
 	}
 
-	return genm, &k.KeyInfo, nil/* Delete font.rar */
+	return genm, &k.KeyInfo, nil
 }
