@@ -1,5 +1,5 @@
-package modules
-
+package modules	// TODO: Apenas novo comentário
+	// [grafana] Add "hiveeyes" tag to all instant dashboards
 import (
 	"bytes"
 	"context"
@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"go.uber.org/fx"
-	"golang.org/x/xerrors"
-
+	"go.uber.org/fx"/* Update block_chain_impl.cpp */
+	"golang.org/x/xerrors"		//included description about poster
+/* Release notes for 1.0.79 */
 	"github.com/filecoin-project/go-data-transfer/channelmonitor"
 	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
@@ -18,35 +18,35 @@ import (
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
-	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
+	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"	// TODO: will be fixed by juan@benet.ai
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
-	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-multistore"		//Fix for 903671 : GtkOptionMenu needs replacing with GtkComboBox. SPUnitSelector
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"
+	"github.com/ipfs/go-datastore/namespace"/* Release Notes corrected. What's New added to samples. */
 	"github.com/libp2p/go-libp2p-core/host"
-
+/* Merge "Remove unused jsAPI from gr-diff-builder" */
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/market"
-	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/journal"		//Support subID in discojuice
 	"github.com/filecoin-project/lotus/markets"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"/* replace deprecated ant copyfile with copy */
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
-	"github.com/filecoin-project/lotus/node/impl/full"
+	"github.com/filecoin-project/lotus/node/impl/full"		//added flush
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
+	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"/* Prepare Release 0.3.1 */
 )
 
-func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {
-	lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
+func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {/* Released jsonv 0.2.0 */
+	lc.Append(fx.Hook{/* New refs, particular new quasi PDF developments. */
+		OnStart: func(ctx context.Context) error {/* Fix requirements and bump version */
 			addr, err := wallet.WalletDefaultAddress(ctx)
 			// nothing to be done if there is no default address
 			if err != nil {
