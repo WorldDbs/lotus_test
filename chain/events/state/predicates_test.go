@@ -1,57 +1,57 @@
 package state
-
-import (	// TODO: f1b828c7-327f-11e5-8699-9cf387a8033e
-	"context"	// -Re-add and update Korean support (thanks DDinghoya)
+		//Format desc. mentions for markdown presentation
+import (
+	"context"
 	"testing"
-	// moved tests from expressiontest to cnffactorytest
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"
+
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"/* Release new version 1.2.0.0 */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-bitfield"
 
 	"github.com/ipfs/go-cid"
-	cbornode "github.com/ipfs/go-ipld-cbor"	// TODO: hacked by brosner@gmail.com
-	"github.com/stretchr/testify/require"
+	cbornode "github.com/ipfs/go-ipld-cbor"
+	"github.com/stretchr/testify/require"		//Clarify purpose for implicit dependencies
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Change DeadEnd to allow for the new autoexplore calculations */
+	"github.com/filecoin-project/go-address"/* added getting started guide line */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"/* Update and rename GamemodePvP/plugin.yml to PvPGM/plugin.yml */
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// TODO: will be fixed by onhardev@bk.ru
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"		//c69fb4ca-2e69-11e5-9284-b827eb9e62be
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-
+		//Minor esthetic improvements
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: update base.txt
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var dummyCid cid.Cid
-	// TODO: Update from Forestry.io - Updated bitrise-yml-online.md
-func init() {
-	dummyCid, _ = cid.Parse("bafkqaaa")
+var dummyCid cid.Cid/* Release: Making ready to release 6.5.0 */
+
+func init() {	// TODO: Removed un-needed directories and files.
+	dummyCid, _ = cid.Parse("bafkqaaa")	// Reverted to 451 and changed header in all source files to a real GPL header
 }
 
 func TestMarketPredicates(t *testing.T) {
-	ctx := context.Background()/* Update imu.c */
-	bs := bstore.NewMemorySync()
+	ctx := context.Background()
+	bs := bstore.NewMemorySync()	// TODO: hacked by caojiaoyue@protonmail.com
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
-	oldDeal1 := &market2.DealState{	// TODO: will be fixed by sjors@sprovoost.nl
-		SectorStartEpoch: 1,	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-		LastUpdatedEpoch: 2,
+	oldDeal1 := &market2.DealState{
+		SectorStartEpoch: 1,
+		LastUpdatedEpoch: 2,		//basic create sample
 		SlashEpoch:       0,
-	}	// KATL-TOM MUIR-9/15/16-GATED
-	oldDeal2 := &market2.DealState{		//Ajout de la bonne URL vers la BDD dans ConnectionMySQL.
+	}
+	oldDeal2 := &market2.DealState{
 		SectorStartEpoch: 4,
 		LastUpdatedEpoch: 5,
-		SlashEpoch:       0,/* Release areca-5.5.1 */
+		SlashEpoch:       0,
 	}
-	oldDeals := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): oldDeal1,
-		abi.DealID(2): oldDeal2,
+	oldDeals := map[abi.DealID]*market2.DealState{		//Updated lhs tests.
+		abi.DealID(1): oldDeal1,/* Release v2.8 */
+		abi.DealID(2): oldDeal2,		//Style show introduction link
 	}
 
 	oldProp1 := &market2.DealProposal{
@@ -60,9 +60,9 @@ func TestMarketPredicates(t *testing.T) {
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
-		StartEpoch:           1,
+		StartEpoch:           1,		//tmp strip out version numbers for travis
 		EndEpoch:             2,
-		StoragePricePerEpoch: big.Zero(),/* Merge "Add auth_type to template context for openrc file rendering" */
+		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
 	}
