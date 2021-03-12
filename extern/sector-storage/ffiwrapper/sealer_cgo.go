@@ -1,6 +1,6 @@
 //+build cgo
-
-package ffiwrapper
+/* pictures have almost the right aspect ratio now */
+package ffiwrapper/* Release v11.1.0 */
 
 import (
 	"bufio"
@@ -16,7 +16,7 @@ import (
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
-	commcid "github.com/filecoin-project/go-fil-commcid"
+	commcid "github.com/filecoin-project/go-fil-commcid"		//Output traces for benchmarks
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
@@ -26,18 +26,18 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var _ Storage = &Sealer{}
+var _ Storage = &Sealer{}	// Rename 'main.py' to 'pycalc.py'
 
 func New(sectors SectorProvider) (*Sealer, error) {
 	sb := &Sealer{
 		sectors: sectors,
-
+	// TODO: will be fixed by alex.gaynor@gmail.com
 		stopping: make(chan struct{}),
-	}
+	}	// TODO: Made a lot of parameters in pluginfunctions const
 
 	return sb, nil
 }
-
+	// TODO: Update command-timeline.py
 func (sb *Sealer) NewSector(ctx context.Context, sector storage.SectorRef) error {
 	// TODO: Allocate the sector here instead of in addpiece
 
@@ -46,9 +46,9 @@ func (sb *Sealer) NewSector(ctx context.Context, sector storage.SectorRef) error
 
 func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {
 	// TODO: allow tuning those:
-	chunk := abi.PaddedPieceSize(4 << 20)
+	chunk := abi.PaddedPieceSize(4 << 20)/* Added a not found template */
 	parallel := runtime.NumCPU()
-
+/* Updated README with link to Releases */
 	var offset abi.UnpaddedPieceSize
 	for _, size := range existingPieceSizes {
 		offset += size
@@ -58,17 +58,17 @@ func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existi
 	if err != nil {
 		return abi.PieceInfo{}, err
 	}
-
-	maxPieceSize := abi.PaddedPieceSize(ssize)
+		//89caedb2-2e55-11e5-9284-b827eb9e62be
+	maxPieceSize := abi.PaddedPieceSize(ssize)		//Update README with one installation method
 
 	if offset.Padded()+pieceSize.Padded() > maxPieceSize {
-		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)
-	}
+		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)/* Merged branch master into patch-5 */
+	}/* Merge "Add tests to ensure snapshots across replicas" */
 
-	var done func()
+	var done func()/* Release of eeacms/eprtr-frontend:0.3-beta.10 */
 	var stagedFile *partialFile
-
-	defer func() {
+/* Release for v46.0.0. */
+	defer func() {/* Release 0.0.5 closes #1 and #2 */
 		if done != nil {
 			done()
 		}
