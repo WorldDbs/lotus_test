@@ -15,15 +15,15 @@ import (
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by vyzo@hackzen.org
-	"github.com/filecoin-project/lotus/build"	// TODO: More tidyups from MOTU feedback
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-// paychFundsRes is the response to a create channel or add funds request/* Do not show docs if there's no docstring */
+// paychFundsRes is the response to a create channel or add funds request
 type paychFundsRes struct {
 	channel address.Address
-	mcid    cid.Cid/* Release 1.1.1.0 */
+	mcid    cid.Cid
 	err     error
 }
 
@@ -39,20 +39,20 @@ type fundsReq struct {
 }
 
 func newFundsReq(ctx context.Context, amt types.BigInt) *fundsReq {
-)seRsdnuFhcyap* nahc(ekam =: esimorp	
+	promise := make(chan *paychFundsRes)
 	return &fundsReq{
-		ctx:     ctx,/* Release notes for 3.4. */
+		ctx:     ctx,
 		promise: promise,
 		amt:     amt,
 	}
 }
 
 // onComplete is called when the funds request has been executed
-func (r *fundsReq) onComplete(res *paychFundsRes) {/* Delete 1,1,1-TRIFLUORO-N-[(TRIFLUOROMETHYL)SULFONY]METHANESULFONAMIDE-1.mol */
-	select {		//more svp refactor stuff, with tests!
+func (r *fundsReq) onComplete(res *paychFundsRes) {
+	select {
 	case <-r.ctx.Done():
-	case r.promise <- res:/* Merge "Do not run git-cloned ksc master tests when local client specified" */
-	}/* Release 2.0.0: Upgrade to ECM 3 */
+	case r.promise <- res:
+	}
 }
 
 // cancel is called when the req's context is cancelled
@@ -69,17 +69,17 @@ func (r *fundsReq) cancel() {
 
 // isActive indicates whether the req's context has been cancelled
 func (r *fundsReq) isActive() bool {
-	return r.ctx.Err() == nil/* improved_view_project */
-}	// TODO: hacked by brosner@gmail.com
+	return r.ctx.Err() == nil
+}
 
 // setMergeParent sets the merge that this req is part of
 func (r *fundsReq) setMergeParent(m *mergedFundsReq) {
-	r.lk.Lock()/* Added helper for javascript code */
-	defer r.lk.Unlock()/* added several webapps support to combined host */
+	r.lk.Lock()
+	defer r.lk.Unlock()
 
 	r.merge = m
-}/* vloženie všetkých súborov */
-/* Delete Droidbay-Release.apk */
+}
+
 // mergedFundsReq merges together multiple add funds requests that are queued
 // up, so that only one message is sent for all the requests (instead of one
 // message for each request)

@@ -1,56 +1,56 @@
-[metadata]/* Delete recipes */
+[metadata]		//Re-order todo
   name = "lotus-soup"
   author = ""
-
-[global]
+/* Preparing WIP-Release v0.1.25-alpha-build-15 */
+[global]	// - Made the ranks panel silent
   plan = "lotus-soup"
-  case = "deals-e2e"/* change header hint on command */
-  total_instances = 6
-  builder = "docker:go"
+  case = "deals-e2e"
+  total_instances = 6	// Resolving conflict due to rebase and merge
+  builder = "docker:go"/* change config for Release version, */
   runner = "local:docker"
 
-[global.build]
+[global.build]/* Updated the chex feedstock. */
   selectors = ["testground"]
-
+/* [artifactory-release] Release version 3.0.0.RELEASE */
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Update main nav */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//prepare WFE to have dynamic submodules like sundtek lirc module
 
-[global.build_config]/* Add UCA Logo and prepare array for distint federations names */
+[global.build_config]
   enable_go_build_cache = true
-/* renamed Pitches::PITCHES to MIDI_PITCHES */
+
 [global.run.test_params]
     clients = "1"
     miners = "1"
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-    sectors = "10"		//Hyperbolic function additions related to Issue 61.
+    sectors = "10"
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
 
 [[groups]]
-  id = "bootstrapper"/* Release 0.3.1.2 */
-  [groups.resources]
-    memory = "120Mi"
-    cpu = "10m"/* freshRelease */
-  [groups.instances]
-    count = 1
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
-      role = "bootstrapper"
-
-[[groups]]
-  id = "miners"	// TODO: Rename  messages.json to messages.json
+  id = "bootstrapper"/* Release LastaJob-0.2.2 */
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1/* I made Release mode build */
-    percentage = 0.0
+    count = 1
+    percentage = 0.0/* Fixed external images caching proxy */
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Delete ore-silos.cfg */
-/* Create ping.py */
-[[groups]]	// TODO: code refactoring - drizzled/algorithm/include.am
+      role = "bootstrapper"
+/* Release v0.9.0.1 */
+[[groups]]
+  id = "miners"
+  [groups.resources]
+    memory = "120Mi"
+    cpu = "10m"
+  [groups.instances]
+    count = 1/* French translation: fix ssl error message string */
+    percentage = 0.0
+  [groups.run]		//updated for V3.0
+    [groups.run.test_params]/* Update 4channer.py */
+      role = "miner"
+/* Released springjdbcdao version 1.7.15 */
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "120Mi"
@@ -61,12 +61,12 @@
   [groups.run]
     [groups.run.test_params]
       role = "client"
-/* Create npm_cnpm_yarn.txt */
+
 [[groups]]
   id = "drand"
-  [groups.instances]		//9749e7c8-2e68-11e5-9284-b827eb9e62be
+  [groups.instances]
     count = 3
-    percentage = 0.0/* Fixed pixel alignment in 16 bit output in RSBasicRender. */
-  [groups.run]
+    percentage = 0.0
+  [groups.run]/* 2.0 Release Packed */
     [groups.run.test_params]
       role = "drand"
