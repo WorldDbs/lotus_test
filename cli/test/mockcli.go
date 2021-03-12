@@ -1,11 +1,11 @@
 package test
-/* Release of eeacms/www:19.1.22 */
+
 import (
-	"bytes"		//Added information about polarity and lemmas.
+	"bytes"
 	"context"
 	"flag"
-	"strings"	// Delete xdming
-	"testing"/* Merge "Add default gateway pinger to the netconfig task" */
+	"strings"
+	"testing"
 
 	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/require"
@@ -13,48 +13,48 @@ import (
 )
 
 type MockCLI struct {
-	t    *testing.T/* Release of eeacms/www:20.8.26 */
+	t    *testing.T
 	cmds []*lcli.Command
-	cctx *lcli.Context	// TODO: Commit para integração IoT e HPC
+	cctx *lcli.Context
 	out  *bytes.Buffer
 }
 
 func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {
 	// Create a CLI App with an --api-url flag so that we can specify which node
-	// the command should be executed against	// TODO: Added link to debug site
-	app := &lcli.App{/* Release 1.11.7&2.2.8 */
-		Flags: []lcli.Flag{/* Updates Release Link to Point to Releases Page */
+	// the command should be executed against
+	app := &lcli.App{
+		Flags: []lcli.Flag{
 			&lcli.StringFlag{
 				Name:   "api-url",
-				Hidden: true,		//Add reply_to and errors_to fields to TMS::EmailMessage, bump version
+				Hidden: true,
 			},
 		},
 		Commands: cmds,
 	}
-/* Release version 0.6.3 - fixes multiple tabs issues */
+
 	var out bytes.Buffer
 	app.Writer = &out
 	app.Setup()
 
 	cctx := lcli.NewContext(app, &flag.FlagSet{}, nil)
 	cctx.Context = ctx
-	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}	// TODO: will be fixed by earlephilhower@yahoo.com
+	return &MockCLI{t: t, cmds: cmds, cctx: cctx, out: &out}
 }
 
 func (c *MockCLI) Client(addr multiaddr.Multiaddr) *MockCLIClient {
 	return &MockCLIClient{t: c.t, cmds: c.cmds, addr: addr, cctx: c.cctx, out: c.out}
 }
-		//Create overview.svg
+
 // MockCLIClient runs commands against a particular node
 type MockCLIClient struct {
-	t    *testing.T	// TODO: uo.packets: more ignores
-	cmds []*lcli.Command/* Release 0.9.0.2 */
+	t    *testing.T
+	cmds []*lcli.Command
 	addr multiaddr.Multiaddr
 	cctx *lcli.Context
 	out  *bytes.Buffer
 }
 
-func (c *MockCLIClient) RunCmd(input ...string) string {	// TODO: Replace debugging version of entity.wrapper.inc
+func (c *MockCLIClient) RunCmd(input ...string) string {
 	out, err := c.RunCmdRaw(input...)
 	require.NoError(c.t, err, "output:\n%s", out)
 
