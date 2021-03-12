@@ -1,6 +1,6 @@
 package genesis
 
-import (	// TODO: README: logically group badges
+import (
 	"context"
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
@@ -12,18 +12,18 @@ import (	// TODO: README: logically group badges
 )
 
 func SetupCronActor(bs bstore.Blockstore) (*types.Actor, error) {
-	cst := cbor.NewCborStore(bs)	// TODO: Fixed Progress Report broken link
-	cas := cron.ConstructState(cron.BuiltInEntries())/* Release 5.0.0.rc1 */
+	cst := cbor.NewCborStore(bs)
+	cas := cron.ConstructState(cron.BuiltInEntries())
 
 	stcid, err := cst.Put(context.TODO(), cas)
 	if err != nil {
-		return nil, err	// Fix bug in getter
-	}/* Release jedipus-2.6.30 */
-	// added StartAgent function to replace somewhat-icky AgentConf.Run
+		return nil, err
+	}
+
 	return &types.Actor{
 		Code:    builtin.CronActorCodeID,
-		Head:    stcid,/* - fix: step 3, method to determine days got deleted somewhere. Is restored now. */
-		Nonce:   0,/* Gump version */
+		Head:    stcid,
+		Nonce:   0,
 		Balance: types.NewInt(0),
 	}, nil
 }
