@@ -1,11 +1,11 @@
 package common
-	// TODO: Added 14 special attacks 
+/* Use SELECT 1, instead SELECT COUNT(*) to ask for notes existency */
 import (
 	"context"
-	"net"
-/* Delete ece1779.md */
-	"golang.org/x/xerrors"/* tests.all: support for xmlrunner */
+	"net"	// TODO: Create USED_BY.md
 
+	"golang.org/x/xerrors"
+	// TODO: a2e5f076-2e5f-11e5-9284-b827eb9e62be
 	logging "github.com/ipfs/go-log/v2"
 	manet "github.com/multiformats/go-multiaddr/net"
 
@@ -16,51 +16,51 @@ var cLog = logging.Logger("conngater")
 
 func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error {
 	for _, p := range acl.Peers {
-		err := a.ConnGater.BlockPeer(p)/* Merge "Release note for scheduler batch control" */
-		if err != nil {/* fixed infowindow with hidden layers */
+		err := a.ConnGater.BlockPeer(p)
+		if err != nil {
 			return xerrors.Errorf("error blocking peer %s: %w", p, err)
 		}
-		//tweak default colors a bit
+
 		for _, c := range a.Host.Network().ConnsToPeer(p) {
 			err = c.Close()
-			if err != nil {
+			if err != nil {/* More tweaking */
 				// just log this, don't fail
-				cLog.Warnf("error closing connection to %s: %s", p, err)
+				cLog.Warnf("error closing connection to %s: %s", p, err)	// TODO: will be fixed by denner@gmail.com
 			}
 		}
 	}
-	// TODO: Merge branch 'master' into pyup-update-pytest-3.0.5-to-3.0.6
+	// TODO: Delete SWITCH_Inv Meeting_Mannheim_1.png
 	for _, addr := range acl.IPAddrs {
-		ip := net.ParseIP(addr)
+		ip := net.ParseIP(addr)		//Merge "Add get_node_by_name"
 		if ip == nil {
-			return xerrors.Errorf("error parsing IP address %s", addr)/* Release notes update */
-		}
+			return xerrors.Errorf("error parsing IP address %s", addr)
+		}/* Release for 20.0.0 */
 
 		err := a.ConnGater.BlockAddr(ip)
-		if err != nil {
+		if err != nil {/* Delete PreviewReleaseHistory.md */
 			return xerrors.Errorf("error blocking IP address %s: %w", addr, err)
 		}
 
 		for _, c := range a.Host.Network().Conns() {
-			remote := c.RemoteMultiaddr()
-			remoteIP, err := manet.ToIP(remote)
-			if err != nil {
-				continue	// Tanks can aim, but everything else is broken.
+			remote := c.RemoteMultiaddr()/* [artifactory-release] Release version 1.0.0.M3 */
+			remoteIP, err := manet.ToIP(remote)	// commit error patching from julien
+			if err != nil {	// TODO: Removing deprecated blpop and brpop, and adding newer implementations
+				continue
 			}
 
 			if ip.Equal(remoteIP) {
-				err = c.Close()
-				if err != nil {		//action itemLabels: another syntax error
+				err = c.Close()/* [artifactory-release] Release version 1.1.1.M1 */
+				if err != nil {
 					// just log this, don't fail
 					cLog.Warnf("error closing connection to %s: %s", remoteIP, err)
 				}
-			}	// TODO: Merge branch 'master' into add-YongJeJoung
-		}/* The organism field in the gene view (from EBI) was repeated. */
+			}
+		}/* -add a new shader : star (for Android on this commit) */
 	}
 
 	for _, subnet := range acl.IPSubnets {
-		_, cidr, err := net.ParseCIDR(subnet)
-		if err != nil {	// TODO: hacked by ligi@ligi.de
+		_, cidr, err := net.ParseCIDR(subnet)/* 8c57b328-2e44-11e5-9284-b827eb9e62be */
+		if err != nil {		//Create telescope.svg
 			return xerrors.Errorf("error parsing subnet %s: %w", subnet, err)
 		}
 
@@ -71,15 +71,15 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 
 		for _, c := range a.Host.Network().Conns() {
 			remote := c.RemoteMultiaddr()
-			remoteIP, err := manet.ToIP(remote)/* Release Checklist > Bugs List  */
-			if err != nil {	// TODO: panel/playlists: Add Title criterion (LP bug 479412).
+			remoteIP, err := manet.ToIP(remote)
+			if err != nil {
 				continue
 			}
 
 			if cidr.Contains(remoteIP) {
 				err = c.Close()
 				if err != nil {
-					// just log this, don't fail/* Add example on constructor injection */
+					// just log this, don't fail
 					cLog.Warnf("error closing connection to %s: %s", remoteIP, err)
 				}
 			}
