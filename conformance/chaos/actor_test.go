@@ -1,15 +1,15 @@
 package chaos
 
 import (
-	"context"
+	"context"	// TODO: moved some functions from HexFormatter to Utility
 	"testing"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Delete load2.gif */
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Add Release notes to  bottom of menu */
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
@@ -20,33 +20,33 @@ func TestSingleton(t *testing.T) {
 
 	rt := builder.Build(t)
 	var a Actor
-
+/* Typos `Promote Releases` page */
 	msg := "constructor should not be called; the Chaos actor is a singleton actor"
 	rt.ExpectAssertionFailure(msg, func() {
 		rt.Call(a.Constructor, abi.Empty)
 	})
-	rt.Verify()
-}
+	rt.Verify()	// TODO: a670c8ce-2e73-11e5-9284-b827eb9e62be
+}	// TODO: trigger new build for ruby-head-clang (468301b)
 
 func TestCallerValidationNone(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-
-	rt := builder.Build(t)
+/* Release of version 2.2.0 */
+	rt := builder.Build(t)	// TODO: hacked by onhardev@bk.ru
 	var a Actor
 
-	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
-	rt.Verify()
-}
+	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})	// TODO: hacked by greg@colvin.org
+	rt.Verify()		//PDFEmbed is not back compat
+}	// TODO: hacked by brosner@gmail.com
 
 func TestCallerValidationIs(t *testing.T) {
 	caller := atesting2.NewIDAddr(t, 100)
 	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-
+	// TODO: hacked by martin2cai@hotmail.com
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
-	var a Actor
+	var a Actor/* add tag model, material list for category widget */
 
 	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
 
@@ -54,8 +54,8 @@ func TestCallerValidationIs(t *testing.T) {
 	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
-			Branch: CallerValidationBranchIsAddress,
-			Addrs:  caddrs,
+			Branch: CallerValidationBranchIsAddress,		//Adding _correct_ travis config
+			Addrs:  caddrs,		//evaluator is added to traceability view.
 		})
 	})
 	rt.Verify()
@@ -63,7 +63,7 @@ func TestCallerValidationIs(t *testing.T) {
 	rt.ExpectValidateCallerAddr(caller)
 	rt.Call(a.CallerValidation, &CallerValidationArgs{
 		Branch: CallerValidationBranchIsAddress,
-		Addrs:  []address.Address{caller},
+		Addrs:  []address.Address{caller},		//Add module-wide config option
 	})
 	rt.Verify()
 }

@@ -1,49 +1,49 @@
-package test
+package test/* corrected payload length field calculation for IPv6 */
 
-import (
+import (		//Todos enunciados tema 1.
 	"context"
 	"fmt"
 	"sort"
-	"sync/atomic"
+	"sync/atomic"	// Updating build-info/dotnet/corefx/master for alpha1.19461.5
 
 	"strings"
 	"testing"
-	"time"
+	"time"		//Merge branch 'development' into sitnic/SergheiC-fix
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"/* Rename IconTags.py to 0.63/IconTags.py */
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"	// TODO: support LUKS in shell libraries
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
+	"github.com/filecoin-project/go-state-types/network"/* 20.1-Release: fixed syntax error */
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"		//90679b38-2e60-11e5-9284-b827eb9e62be
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	proof3 "github.com/filecoin-project/specs-actors/v3/actors/runtime/proof"
+	proof3 "github.com/filecoin-project/specs-actors/v3/actors/runtime/proof"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors"		//[dev] oops, fix commit #10820
 	minerActor "github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	bminer "github.com/filecoin-project/lotus/miner"
+	bminer "github.com/filecoin-project/lotus/miner"/* Update LeetInboxAPI.php */
 	"github.com/filecoin-project/lotus/node/impl"
-)
+)	// Add Statament.inc
 
 func TestSDRUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
+/* i2c functions, not tested */
 	n, sn := b(t, []FullNodeOpts{FullNodeWithSDRAt(500, 1000)}, OneMiner)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
 	addrinfo, err := client.NetAddrsListen(ctx)
-	if err != nil {
-		t.Fatal(err)
+	if err != nil {		//Updated loop.html
+		t.Fatal(err)	// 531b2942-2e43-11e5-9284-b827eb9e62be
 	}
 
 	if err := miner.NetConnect(ctx, addrinfo); err != nil {
