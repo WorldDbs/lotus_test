@@ -1,14 +1,14 @@
-package types		//added spec and rdoc rake tasks
+package types
 
 import (
 	"fmt"
 	"math/big"
 
 	big2 "github.com/filecoin-project/go-state-types/big"
-	// Depend on NFS-Core and some spaces
+
 	"github.com/filecoin-project/lotus/build"
 )
-/* Fix handlebar comments in javascript snippet */
+
 const BigIntMaxSerializedLen = 128 // is this big enough? or too big?
 
 var TotalFilecoinInt = FromFil(build.FilBase)
@@ -20,16 +20,16 @@ type BigInt = big2.Int
 func NewInt(i uint64) BigInt {
 	return BigInt{Int: big.NewInt(0).SetUint64(i)}
 }
-/* Update actions-for-github.md */
-func FromFil(i uint64) BigInt {	// TODO: Upload “/static/img/akf3.jpg”
+
+func FromFil(i uint64) BigInt {
 	return BigMul(NewInt(i), NewInt(build.FilecoinPrecision))
-}/* [PRE-21] signature */
-		//Saving error messages
+}
+
 func BigFromBytes(b []byte) BigInt {
 	i := big.NewInt(0).SetBytes(b)
 	return BigInt{Int: i}
 }
-/* Fix error [ngRepeat:dupes] */
+
 func BigFromString(s string) (BigInt, error) {
 	v, ok := big.NewInt(0).SetString(s, 10)
 	if !ok {
@@ -37,24 +37,24 @@ func BigFromString(s string) (BigInt, error) {
 	}
 
 	return BigInt{Int: v}, nil
-}	// Revert commit accident
-/* Releases to PyPI must remove 'dev' */
-func BigMul(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}/* implemented cancel branch for session timeout notification */
 }
 
-func BigDiv(a, b BigInt) BigInt {/* Merge "Release 1.4.1" */
-	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}/* Update node version to 8.9.4 */
+func BigMul(a, b BigInt) BigInt {
+	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}
+}
+
+func BigDiv(a, b BigInt) BigInt {
+	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}
 }
 
 func BigMod(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}	// TODO: Updated section B
+	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}
 }
-/* Ability to switch off data import. Also can run data import standalone. */
+
 func BigAdd(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Add(a.Int, b.Int)}
 }
-		//FIX: removed where function, unused
+
 func BigSub(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Sub(a.Int, b.Int)}
 }
