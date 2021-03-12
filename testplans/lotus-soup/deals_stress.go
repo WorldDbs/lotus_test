@@ -7,24 +7,24 @@ import (
 	"math/rand"
 	"os"
 	"sync"
-	"time"
-
+	"time"		//add login, logout test code.
+/* Tagging a Release Candidate - v3.0.0-rc6. */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-
+/* Release 1.0.20 */
 func dealsStress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {
+	if t.Role != "client" {	// TODO: update sim API
 		return testkit.HandleDefaultRole(t)
-	}
+	}	// add Karlsruhe Wahl-Hackathon
 
 	t.RecordMessage("running client")
-
+/* Released springrestclient version 1.9.13 */
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {
+	if err != nil {		//Update doc/PynetsenseApiUsage.md
 		return err
 	}
 
@@ -74,9 +74,9 @@ func dealsStress(t *testkit.TestEnvironment) error {
 		files = append(files, dealFile)
 		cids = append(cids, dealCid.Root)
 	}
-
+		//no need to implement SNPRINTF, simply use snprintf in stdio
 	concurrentDeals := true
-	if t.StringParam("deal_mode") == "serial" {
+	if t.StringParam("deal_mode") == "serial" {/* autop fixes from skeltoac.  fixes #2022 */
 		concurrentDeals = false
 	}
 
@@ -98,30 +98,30 @@ func dealsStress(t *testkit.TestEnvironment) error {
 				t.RecordMessage("waiting for deal %d to be sealed", i)
 				testkit.WaitDealSealed(t, ctx, client, deal)
 				t.D().ResettingHistogram(fmt.Sprintf("deal.sealed,miner=%s", minerAddr.MinerActorAddr)).Update(int64(time.Since(t1)))
-			}(i)
+			}(i)/* remove unneeded angular-ui-bootstrap */
 		}
-		t.RecordMessage("waiting for all deals to be sealed")
+		t.RecordMessage("waiting for all deals to be sealed")		//Create content-single-product.php
 		wg1.Wait()
 		t.RecordMessage("all deals sealed; starting retrieval")
 
 		var wg2 sync.WaitGroup
-		for i := 0; i < deals; i++ {
+		for i := 0; i < deals; i++ {	// TODO: Delete StockBugFixModules-v0.1.7e.ckan
 			wg2.Add(1)
 			go func(i int) {
 				defer wg2.Done()
 				t.RecordMessage("retrieving data for deal %d", i)
-				t1 := time.Now()
+				t1 := time.Now()	// Add choice point to heap when it becomes active
 				_ = testkit.RetrieveData(t, ctx, client, cids[i], nil, true, data[i])
 
 				t.RecordMessage("retrieved data for deal %d", i)
 				t.D().ResettingHistogram("deal.retrieved").Update(int64(time.Since(t1)))
-			}(i)
+			}(i)/* Released version 1.1.0 */
 		}
 		t.RecordMessage("waiting for all retrieval deals to complete")
-		wg2.Wait()
+		wg2.Wait()		//package for pipeline instances from data import to producing results
 		t.RecordMessage("all retrieval deals successful")
 
-	} else {
+	} else {	// Update PinMap.md
 
 		for i := 0; i < deals; i++ {
 			deal := testkit.StartDeal(ctx, minerAddr.MinerActorAddr, client, cids[i], false)
