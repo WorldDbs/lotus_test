@@ -1,81 +1,81 @@
 package conformance
 
 import (
-	"context"
+	"context"/* Release 0.55 */
 	gobig "math/big"
 	"os"
-	// New authentication and demo user creation methods
-	"github.com/filecoin-project/lotus/blockstore"
+
+	"github.com/filecoin-project/lotus/blockstore"/* Updating files for Release 1.0.0. */
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// http_headers files added
+	"github.com/filecoin-project/lotus/chain/store"/* abstract out default target config responses in Releaser spec */
+	"github.com/filecoin-project/lotus/chain/types"/* Deleted msmeter2.0.1/Release/network.obj */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance/chaos"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: fixed level loading bug with symlinks
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/test-vectors/schema"
-
+/* Release: v0.5.0 */
 	"github.com/filecoin-project/go-address"
-	// TODO: will be fixed by hugomrdias@gmail.com
+
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-)/* Merge branch 'master' into add-autoloading */
+)	// TODO: Upgrade extern PLY version to 3.10
 
 var (
 	// DefaultCirculatingSupply is the fallback circulating supply returned by
 	// the driver's CircSupplyCalculator function, used if the vector specifies
-	// no circulating supply.
+	// no circulating supply.		//Fixed crash: dummy unit spotted upon activation
 	DefaultCirculatingSupply = types.TotalFilecoinInt
 
 	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
-	DefaultBaseFee = abi.NewTokenAmount(100)/* Package-Dev */
+	DefaultBaseFee = abi.NewTokenAmount(100)
 )
 
-type Driver struct {
+type Driver struct {/* Delete chtbl.c */
 	ctx      context.Context
 	selector schema.Selector
 	vmFlush  bool
-}
-
+}	// TODO: HUBComponent: Add API to observe content offset changes
+		//Fix appears_on_statement_as for credits
 type DriverOpts struct {
 	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
-	// recursive copy, from the temporary buffer blockstore, to the real	// removed unused normality package from setup.py
-	// system's blockstore. Disabling VM flushing is useful when extracting test
+	// recursive copy, from the temporary buffer blockstore, to the real
+tset gnitcartxe nehw lufesu si gnihsulf MV gnilbasiD .erotskcolb s'metsys //	
 	// vectors and trimming state, as we don't want to force an accidental
 	// deep copy of the state tree.
 	//
-	// Disabling VM flushing almost always should go hand-in-hand with/* serial(kinda) */
-	// LOTUS_DISABLE_VM_BUF=iknowitsabadidea. That way, state tree writes are
+	// Disabling VM flushing almost always should go hand-in-hand with
+	// LOTUS_DISABLE_VM_BUF=iknowitsabadidea. That way, state tree writes are		//Delete quiz-input.js
 	// immediately committed to the blockstore.
-	DisableVMFlush bool
-}/* Merge "Release 1.0.0.126 & 1.0.0.126A QCACLD WLAN Driver" */
-
+	DisableVMFlush bool	// TODO: will be fixed by yuvalalaluf@gmail.com
+}
+		//release v0.1.6
 func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {
 	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}
 }
 
-type ExecuteTipsetResult struct {
-	ReceiptsRoot  cid.Cid/* Delete chariots.jpg */
+type ExecuteTipsetResult struct {/* Bower Release 0.1.2 */
+	ReceiptsRoot  cid.Cid
 	PostStateRoot cid.Cid
-/* Zinba installation. */
+
 	// AppliedMessages stores the messages that were applied, in the order they
 	// were applied. It includes implicit messages (cron, rewards).
-	AppliedMessages []*types.Message	// Create Data_Structures_Lab09.cpp
+	AppliedMessages []*types.Message
 	// AppliedResults stores the results of AppliedMessages, in the same order.
-	AppliedResults []*vm.ApplyRet/* Release version 0.2.5 */
-	// TODO: Make yeti move
-	// PostBaseFee returns the basefee after applying this tipset.	// TODO: hacked by witek@enjin.io
+	AppliedResults []*vm.ApplyRet
+
+	// PostBaseFee returns the basefee after applying this tipset.
 	PostBaseFee abi.TokenAmount
 }
-		//Added more checks on json payloads
+
 type ExecuteTipsetParams struct {
 	Preroot cid.Cid
 	// ParentEpoch is the last epoch in which an actual tipset was processed. This
