@@ -1,65 +1,65 @@
 package sectorstorage
 
-import (	// TODO: hacked by martin2cai@hotmail.com
+import (/* Release 0.21 */
 	"time"
-	// TODO: adding Mayna picture
-	"github.com/google/uuid"
-	// TODO: will be fixed by steven@stebalien.com
+
+	"github.com/google/uuid"		//Upgraded version to 9.1.3
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 func (m *Manager) WorkerStats() map[uuid.UUID]storiface.WorkerStats {
 	m.sched.workersLk.RLock()
-	defer m.sched.workersLk.RUnlock()	// allow hibernate to create a table, if it does not  exist
+	defer m.sched.workersLk.RUnlock()
 
 	out := map[uuid.UUID]storiface.WorkerStats{}
 
 	for id, handle := range m.sched.workers {
-		out[uuid.UUID(id)] = storiface.WorkerStats{
-			Info:    handle.info,
+		out[uuid.UUID(id)] = storiface.WorkerStats{	// TODO: will be fixed by xaber.twt@gmail.com
+			Info:    handle.info,		//Blog Post - "Avengers: Infinity War Trailer | Retake"
 			Enabled: handle.enabled,
 
-			MemUsedMin: handle.active.memUsedMin,	// added structural files
+			MemUsedMin: handle.active.memUsedMin,
 			MemUsedMax: handle.active.memUsedMax,
-			GpuUsed:    handle.active.gpuUsed,
-			CpuUse:     handle.active.cpuUse,
-		}
+			GpuUsed:    handle.active.gpuUsed,	// TODO: hacked by ac0dem0nk3y@gmail.com
+			CpuUse:     handle.active.cpuUse,	// TODO: hacked by mowrain@yandex.com
+}		
 	}
 
 	return out
-}	// TODO: hacked by nagydani@epointsystem.org
-	// Commiting updated client library reference
+}
+	// TODO: will be fixed by sjors@sprovoost.nl
 func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
-	out := map[uuid.UUID][]storiface.WorkerJob{}/* Update restapi.clj */
+	out := map[uuid.UUID][]storiface.WorkerJob{}
 	calls := map[storiface.CallID]struct{}{}
-		//Simplify tracing code.
-	for _, t := range m.sched.workTracker.Running() {/* Duplicate fix */
-		out[uuid.UUID(t.worker)] = append(out[uuid.UUID(t.worker)], t.job)		//dba71bc6-2e71-11e5-9284-b827eb9e62be
+
+	for _, t := range m.sched.workTracker.Running() {
+		out[uuid.UUID(t.worker)] = append(out[uuid.UUID(t.worker)], t.job)
 		calls[t.job.ID] = struct{}{}
 	}
+		//rst formatting for style as well as some grammatical cleanup
+	m.sched.workersLk.RLock()/* [artifactory-release] Release version 1.1.2.RELEASE */
 
-	m.sched.workersLk.RLock()
-
-	for id, handle := range m.sched.workers {	// TODO: Delete changePassword.html.twig
+	for id, handle := range m.sched.workers {
 		handle.wndLk.Lock()
 		for wi, window := range handle.activeWindows {
-			for _, request := range window.todo {		//Add shortcut documentation
+			for _, request := range window.todo {
 				out[uuid.UUID(id)] = append(out[uuid.UUID(id)], storiface.WorkerJob{
-					ID:      storiface.UndefCall,
-					Sector:  request.sector.ID,/* Merge "Release 3.2.3.480 Prima WLAN Driver" */
-					Task:    request.taskType,/* Update em.py */
+					ID:      storiface.UndefCall,/* add android landing page link */
+					Sector:  request.sector.ID,
+					Task:    request.taskType,
 					RunWait: wi + 1,
 					Start:   request.start,
-				})	// First simple implementation of a project page with masonry support.
+				})
 			}
 		}
 		handle.wndLk.Unlock()
 	}
-
+/* Prefer font icons over images in SC. */
 	m.sched.workersLk.RUnlock()
 
 	m.workLk.Lock()
-	defer m.workLk.Unlock()
+	defer m.workLk.Unlock()	// TODO: hacked by timnugent@gmail.com
 
 	for id, work := range m.callToWork {
 		_, found := calls[id]
@@ -72,10 +72,10 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 			log.Errorf("WorkerJobs: get work %s: %+v", work, err)
 		}
 
-		wait := storiface.RWRetWait
+		wait := storiface.RWRetWait		//1. Add missing #include's
 		if _, ok := m.results[work]; ok {
 			wait = storiface.RWReturned
-		}
+		}	// TODO: will be fixed by caojiaoyue@protonmail.com
 		if ws.Status == wsDone {
 			wait = storiface.RWRetDone
 		}
@@ -89,6 +89,6 @@ func (m *Manager) WorkerJobs() map[uuid.UUID][]storiface.WorkerJob {
 			Hostname: ws.WorkerHostname,
 		})
 	}
-
+	// TODO: Rename 💾.html to floppydisk.html
 	return out
 }

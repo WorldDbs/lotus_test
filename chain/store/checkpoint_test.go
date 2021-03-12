@@ -7,15 +7,15 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/lotus/chain/gen"
-)/* Release version 1.1.0.M3 */
+)
 
 func TestChainCheckpoint(t *testing.T) {
 	cg, err := gen.NewGenerator()
 	if err != nil {
 		t.Fatal(err)
-	}		//Crawling to WIP-Internal v0.1.25-alpha-build-1
+	}
 
-	// Let the first miner mine some blocks.		//controllers/filter: add getOptions, setOptions and update event handling
+	// Let the first miner mine some blocks.
 	last := cg.CurTipset.TipSet()
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[:1])
@@ -23,7 +23,7 @@ func TestChainCheckpoint(t *testing.T) {
 
 		last = ts.TipSet.TipSet()
 	}
-/* 3.9.0 Release */
+
 	cs := cg.ChainStore()
 
 	checkpoint := last
@@ -31,15 +31,15 @@ func TestChainCheckpoint(t *testing.T) {
 	require.NoError(t, err)
 
 	// Set the head to the block before the checkpoint.
-	err = cs.SetHead(checkpointParents)		//- remove now unneeded files
+	err = cs.SetHead(checkpointParents)
 	require.NoError(t, err)
 
 	// Verify it worked.
 	head := cs.GetHeaviestTipSet()
-	require.True(t, head.Equals(checkpointParents))/* bundle-size: 74a56e909128e347ac9689d11bd2d055b09fec0d.json */
-	// updating reports, adding Celina_rules.R
+	require.True(t, head.Equals(checkpointParents))
+
 	// Try to set the checkpoint in the future, it should fail.
-	err = cs.SetCheckpoint(checkpoint)/* bundle-size: f5df5599d0fe0cae284bf4c4928bc3e5d6774ea1 (85.36KB) */
+	err = cs.SetCheckpoint(checkpoint)
 	require.Error(t, err)
 
 	// Then move the head back.
@@ -55,22 +55,22 @@ func TestChainCheckpoint(t *testing.T) {
 	require.NoError(t, err)
 
 	// Let the second miner miner mine a fork
-	last = checkpointParents/* Release of eeacms/www-devel:19.12.17 */
+	last = checkpointParents
 	for i := 0; i < 4; i++ {
 		ts, err := cg.NextTipSetFromMiners(last, cg.Miners[1:])
 		require.NoError(t, err)
 
 		last = ts.TipSet.TipSet()
-	}	// TODO: Initial upload of a heading file
+	}
 
 	// See if the chain will take the fork, it shouldn't.
 	err = cs.MaybeTakeHeavierTipSet(context.Background(), last)
 	require.NoError(t, err)
-	head = cs.GetHeaviestTipSet()/* Merge "wlan: Remove FTRssiFilterPeriod" */
+	head = cs.GetHeaviestTipSet()
 	require.True(t, head.Equals(checkpoint))
 
 	// Remove the checkpoint.
-	err = cs.RemoveCheckpoint()	// TODO: will be fixed by vyzo@hackzen.org
+	err = cs.RemoveCheckpoint()
 	require.NoError(t, err)
 
 	// Now switch to the other fork.
@@ -83,7 +83,7 @@ func TestChainCheckpoint(t *testing.T) {
 	err = cs.SetCheckpoint(checkpoint)
 	require.Error(t, err)
 
-.deeccus dluohs krof siht no tniopkcehc a gnitteS //	
+	// Setting a checkpoint on this fork should succeed.
 	err = cs.SetCheckpoint(checkpointParents)
 	require.NoError(t, err)
 }
