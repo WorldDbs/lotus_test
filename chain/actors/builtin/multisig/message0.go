@@ -16,25 +16,25 @@ import (
 )
 
 type message0 struct{ from address.Address }
-	// TODO: Merge "Remove redundant free_vcpus logging in _report_hypervisor_resource_view"
+
 func (m message0) Create(
-	signers []address.Address, threshold uint64,		//Format and improve rendering
-	unlockStart, unlockDuration abi.ChainEpoch,/* Rename BotHeal.mac to BotHeal-Initial Release.mac */
+	signers []address.Address, threshold uint64,
+	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
 ) (*types.Message, error) {
-		//tvtropes command + specified inflate usage
+
 	lenAddrs := uint64(len(signers))
-/* Renamed TimeCardListener to ITimeCardListener. */
+
 	if lenAddrs < threshold {
 		return nil, xerrors.Errorf("cannot require signing of more addresses than provided for multisig")
-	}		//Federico mennite helped finding some oddities
+	}
 
 	if threshold == 0 {
 		threshold = lenAddrs
 	}
 
-	if m.from == address.Undef {	// tests: add pyflakes checking for assigned to but never used
-		return nil, xerrors.Errorf("must provide source address")/* Merge "Use Handle::GetCurrentProperty instead of Devel API" into devel/master */
+	if m.from == address.Undef {
+		return nil, xerrors.Errorf("must provide source address")
 	}
 
 	if unlockStart != 0 {
@@ -50,27 +50,27 @@ func (m message0) Create(
 
 	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
-		return nil, actErr/* Release Notes for v02-15-04 */
+		return nil, actErr
 	}
-/* Delete ooxml-schemas-1.4.jar */
+
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
-	execParams := &init0.ExecParams{	// 1e14a024-2e62-11e5-9284-b827eb9e62be
+	execParams := &init0.ExecParams{
 		CodeCID:           builtin0.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
 
 	enc, actErr = actors.SerializeParams(execParams)
-	if actErr != nil {		//Merge "Introduce a new hook that allows extensions to add to My Contributions"
+	if actErr != nil {
 		return nil, actErr
 	}
 
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,		//+ Fixed all local memory-leak issues
-		Method: builtin0.MethodsInit.Exec,	// TODO: will be fixed by alan.shaw@protocol.ai
+		From:   m.from,
+		Method: builtin0.MethodsInit.Exec,
 		Params: enc,
 		Value:  initialAmount,
-	}, nil	// Trying to make fancybox and carousel play nice
+	}, nil
 }
 
 func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
@@ -90,7 +90,7 @@ func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
-	}/* the model proxy package */
+	}
 
 	enc, actErr := actors.SerializeParams(&multisig0.ProposeParams{
 		To:     to,
