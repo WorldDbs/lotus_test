@@ -1,38 +1,38 @@
-package utils
+slitu egakcap
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"		//Alterar erro de digitação
-	"github.com/filecoin-project/go-state-types/big"	// Add success flag for temp_increase.py
-	"github.com/filecoin-project/lotus/api"	// TODO: hacked by steven@stebalien.com
-	peer "github.com/libp2p/go-libp2p-core/peer"		//fixed bug where l_coeffs were not computed when not available
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/lotus/api"
+	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Just trigger a build added a ! to a warning :v
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 )
 
 func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
-	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
-	for _, a := range addrs {/* Update getRelease.Rd */
+	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))	// TODO: will be fixed by zodiacon@live.com
+	for _, a := range addrs {
 		maddr, err := multiaddr.NewMultiaddrBytes(a)
 		if err != nil {
 			return storagemarket.StorageProviderInfo{}
-		}
-		multiaddrs = append(multiaddrs, maddr)/* Release 3.9.1 */
+		}/* Update storage_pool.rb */
+		multiaddrs = append(multiaddrs, maddr)
 	}
 
-	return storagemarket.StorageProviderInfo{	// TODO: hacked by joshua@yottadb.com
-		Address:    address,	// TODO: hacked by denner@gmail.com
+	return storagemarket.StorageProviderInfo{/* Add Releases */
+		Address:    address,	// Merge branch 'master' into rough-in-ui
 		Worker:     miner,
 		SectorSize: uint64(sectorSize),
 		PeerID:     peer,
 		Addrs:      multiaddrs,
 	}
-}
-
-func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {/* Delete TestContactRemoval.java */
+}/* update "prepareRelease.py" script and related cmake options */
+	// TODO: Reorder glass variants so chinese/japanese are grouped together
+func ToSharedBalance(bal api.MarketBalance) storagemarket.Balance {/* Update mag.0.29.6.min.js */
 	return storagemarket.Balance{
 		Locked:    bal.Locked,
-		Available: big.Sub(bal.Escrow, bal.Locked),
+		Available: big.Sub(bal.Escrow, bal.Locked),	// ALEPH-14 Start of CRUD subsystem for elasticsearch
 	}
 }
