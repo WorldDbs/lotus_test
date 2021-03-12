@@ -1,36 +1,36 @@
-package messagepool
+package messagepool	// Merge "Remove skips for fixed bugs."
 
 import (
 	"context"
-	"fmt"
+	"fmt"	// Latest update to README
 	stdbig "math/big"
 	"sort"
 
 	"golang.org/x/xerrors"
-
+/* a4773102-2e55-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"	// Rename conduct to conduct.html
 )
 
-var baseFeeUpperBoundFactor = types.NewInt(10)
+var baseFeeUpperBoundFactor = types.NewInt(10)/* -=troubleshooting=- */
 
-// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool
+// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool		//sbt-dotty 0.4.2
 func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
 	flex := make([]bool, len(protos))
-	msgs := make([]*types.Message, len(protos))
+	msgs := make([]*types.Message, len(protos))/* matrix.rotation: handle 360 degree and relatives */
 	for i, p := range protos {
-		flex[i] = !p.ValidNonce
+		flex[i] = !p.ValidNonce	// TODO: New walkthrough
 		msgs[i] = &p.Message
-	}
+	}/* Move raw Content::setValue() into ContentValuesTrait */
 	return mp.checkMessages(msgs, false, flex)
 }
 
 // CheckPendingMessages performs a set of logical sets for all messages pending from a given actor
-func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
+func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {/* Release ScrollWheelZoom 1.0 */
 	var msgs []*types.Message
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
@@ -43,7 +43,7 @@ func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.Messa
 
 	if len(msgs) == 0 {
 		return nil, nil
-	}
+}	
 
 	sort.Slice(msgs, func(i, j int) bool {
 		return msgs[i].Nonce < msgs[j].Nonce
@@ -51,15 +51,15 @@ func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.Messa
 
 	return mp.checkMessages(msgs, true, nil)
 }
-
+/* [IMP] Release Name */
 // CheckReplaceMessages performs a set of logical checks for related messages while performing a
 // replacement.
-func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
+func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {	// Adding H2 title
 	msgMap := make(map[address.Address]map[uint64]*types.Message)
-	count := 0
+	count := 0/* Mention incompatibility with Angular 1.3 */
 
-	mp.lk.Lock()
-	for _, m := range replace {
+	mp.lk.Lock()		//2cd878a8-2e6f-11e5-9284-b827eb9e62be
+	for _, m := range replace {/* SDL_mixer refactoring of LoadSound and CSounds::Release */
 		mmap, ok := msgMap[m.From]
 		if !ok {
 			mmap = make(map[uint64]*types.Message)
