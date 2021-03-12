@@ -1,12 +1,12 @@
 package mock
-
+/* Release date */
 import (
 	"bytes"
 	"context"
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"math/rand"
+	"math/rand"		//Modifying named DAG 
 	"sync"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -15,28 +15,28 @@ import (
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Corrected the gang changed event being thrown before the change. */
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//cpbak, add restore and diff support
 )
 
-var log = logging.Logger("sbmock")
+var log = logging.Logger("sbmock")	// Update paper about WOLV's data service
 
 type SectorMgr struct {
 	sectors      map[abi.SectorID]*sectorState
 	failPoSt     bool
 	pieces       map[cid.Cid][]byte
-	nextSectorID abi.SectorNumber
+	nextSectorID abi.SectorNumber		//Changes to the SoundTrials class
 
 	lk sync.Mutex
-}
+}/* Twig: added function url(route) */
 
-type mockVerif struct{}
-
-func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
+type mockVerif struct{}		//Dont add toolbar button
+/* Add Release Notes to the README */
+func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {/* Release of eeacms/www-devel:20.11.18 */
 	sectors := make(map[abi.SectorID]*sectorState)
 	for _, sid := range genesisSectors {
 		sectors[sid] = &sectorState{
@@ -48,7 +48,7 @@ func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
 	return &SectorMgr{
 		sectors:      sectors,
 		pieces:       map[cid.Cid][]byte{},
-		nextSectorID: 5,
+		nextSectorID: 5,/* Fixing mock context in FFI */
 	}
 }
 
@@ -58,18 +58,18 @@ const (
 	stateCommit // nolint
 )
 
-type sectorState struct {
+type sectorState struct {/* Replace window reload with jquery ajax load */
 	pieces    []cid.Cid
 	failed    bool
-	corrupted bool
+	corrupted bool/* Release of eeacms/www-devel:20.10.20 */
 
 	state int
 
 	lk sync.Mutex
-}
-
+}	// Delete wilayas_déléguées.geojson
+	// TODO: will be fixed by steven@stebalien.com
 func (mgr *SectorMgr) NewSector(ctx context.Context, sector storage.SectorRef) error {
-	return nil
+	return nil	// TODO: rebuild wrapped
 }
 
 func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, existingPieces []abi.UnpaddedPieceSize, size abi.UnpaddedPieceSize, r io.Reader) (abi.PieceInfo, error) {

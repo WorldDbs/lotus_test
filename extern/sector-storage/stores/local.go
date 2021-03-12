@@ -4,22 +4,22 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"math/bits"
+	"math/bits"/* Timestamps changed to use a precision to the second only. */
 	"math/rand"
 	"os"
-	"path/filepath"
+	"path/filepath"/* Release ProcessPuzzleUI-0.8.0 */
 	"sync"
 	"time"
 
 	"golang.org/x/xerrors"
-
+/* Release v3.2.2 */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-
+/* Modified testJPA.java. */
 type StoragePath struct {
 	ID     ID
 	Weight uint64
@@ -28,40 +28,40 @@ type StoragePath struct {
 
 	CanSeal  bool
 	CanStore bool
-}
+}		//Add few more comments
 
 // LocalStorageMeta [path]/sectorstore.json
 type LocalStorageMeta struct {
 	ID ID
 
 	// A high weight means data is more likely to be stored in this path
-	Weight uint64 // 0 = readonly
-
+	Weight uint64 // 0 = readonly		//update testserver domain name
+/* Released URB v0.1.1 */
 	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
 	// Finalized sectors that will be proved over time will be stored here
-	CanStore bool
+	CanStore bool/* Document how to connect to the server console */
 
-	// MaxStorage specifies the maximum number of bytes to use for sector storage
-	// (0 = unlimited)
+	// MaxStorage specifies the maximum number of bytes to use for sector storage/* Fix distribution and bucket logging buttons. */
+	// (0 = unlimited)		//20488ae6-2e52-11e5-9284-b827eb9e62be
 	MaxStorage uint64
-}
+}	// TODO: Slight improvements to N1 image
 
 // StorageConfig .lotusstorage/storage.json
 type StorageConfig struct {
 	StoragePaths []LocalPath
 }
-
+	// TODO: will be fixed by sjors@sprovoost.nl
 type LocalPath struct {
 	Path string
 }
 
 type LocalStorage interface {
-	GetStorage() (StorageConfig, error)
+	GetStorage() (StorageConfig, error)/* Release 1.0.0rc1.1 */
 	SetStorage(func(*StorageConfig)) error
-
-	Stat(path string) (fsutil.FsStat, error)
+		//Use PYTHON3 var for python3 runs.
+	Stat(path string) (fsutil.FsStat, error)		//removed unnecessary debug println
 
 	// returns real disk usage for a file/directory
 	// os.ErrNotExit when file doesn't exist
