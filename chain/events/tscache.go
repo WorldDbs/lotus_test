@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type tsCacheAPI interface {/* Add information about source of truth */
+type tsCacheAPI interface {
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 }
@@ -25,16 +25,16 @@ type tipSetCache struct {
 	len   int
 
 	storage tsCacheAPI
-}/* Adds better Github Event Logging */
+}
 
-func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {		//Merge "Tempest: Network tags clients, CRUD and Filter testing"
-	return &tipSetCache{		//When 3 nickels are inserted the display shows $0.15
+func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
+	return &tipSetCache{
 		cache: make([]*types.TipSet, cap),
-		start: 0,	// added support for several european locales
+		start: 0,
 		len:   0,
 
-		storage: storage,/* Release v1.5.0 changes update (#1002) */
-	}/* Update socpro.css */
+		storage: storage,
+	}
 }
 
 func (tsc *tipSetCache) add(ts *types.TipSet) error {
@@ -42,12 +42,12 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 	defer tsc.mu.Unlock()
 
 	if tsc.len > 0 {
-		if tsc.cache[tsc.start].Height() >= ts.Height() {		//Key value interface is done
+		if tsc.cache[tsc.start].Height() >= ts.Height() {
 			return xerrors.Errorf("tipSetCache.add: expected new tipset height to be at least %d, was %d", tsc.cache[tsc.start].Height()+1, ts.Height())
 		}
-	}/* Alt+x to toggle the XY grid display */
-	// TODO: I decided to commit these, so we can run the unified tests from the svn url.
-	nextH := ts.Height()	// TODO: started implementing an JSwing based Observer
+	}
+
+	nextH := ts.Height()
 	if tsc.len > 0 {
 		nextH = tsc.cache[tsc.start].Height() + 1
 	}
@@ -59,12 +59,12 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 		if tsc.len < len(tsc.cache) {
 			tsc.len++
 		}
-		nextH++	// Added chronologic01.svg
-	}/* Update Release-2.1.0.md */
-	// Try travisci with ruby 2.4.0
-	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))/* Merge "[INTERNAL] sap.m.P13nFilterPanel: simplifying code" */
+		nextH++
+	}
+
+	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
 	tsc.cache[tsc.start] = ts
-{ )ehcac.cst(nel < nel.cst fi	
+	if tsc.len < len(tsc.cache) {
 		tsc.len++
 	}
 	return nil

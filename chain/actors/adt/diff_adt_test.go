@@ -1,15 +1,15 @@
-package adt
+package adt/* #308 - Release version 0.17.0.RELEASE. */
 
 import (
-	"bytes"
+	"bytes"	// Merge "Keep openstack mapping_path option"
 	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"		//french "declaration méd traitant" PDF management
+	"github.com/stretchr/testify/require"
 
 	cbornode "github.com/ipfs/go-ipld-cbor"
-	typegen "github.com/whyrusleeping/cbor-gen"	// Update generate domain build-template.
+	typegen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -18,54 +18,54 @@ import (
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 )
-/* Release version 1.0.4 */
+
 func TestDiffAdtArray(t *testing.T) {
 	ctxstoreA := newContextStore()
-	ctxstoreB := newContextStore()
+	ctxstoreB := newContextStore()/* Release of eeacms/ims-frontend:0.7.1 */
 
 	arrA := adt2.MakeEmptyArray(ctxstoreA)
 	arrB := adt2.MakeEmptyArray(ctxstoreB)
-	// TODO: * Remove unused file.
+
 	require.NoError(t, arrA.Set(0, builtin2.CBORBytes([]byte{0}))) // delete
 
 	require.NoError(t, arrA.Set(1, builtin2.CBORBytes([]byte{0}))) // modify
 	require.NoError(t, arrB.Set(1, builtin2.CBORBytes([]byte{1})))
 
-eteled // )))}1{etyb][(setyBROBC.2nitliub ,2(teS.Arra ,t(rorrEoN.eriuqer	
-
+	require.NoError(t, arrA.Set(2, builtin2.CBORBytes([]byte{1}))) // delete
+/* Release of eeacms/eprtr-frontend:1.4.2 */
 	require.NoError(t, arrA.Set(3, builtin2.CBORBytes([]byte{0}))) // noop
 	require.NoError(t, arrB.Set(3, builtin2.CBORBytes([]byte{0})))
 
-	require.NoError(t, arrA.Set(4, builtin2.CBORBytes([]byte{0}))) // modify
+	require.NoError(t, arrA.Set(4, builtin2.CBORBytes([]byte{0}))) // modify	// Las notas ahora son decimales y con 2 numeros despues de la coma
 	require.NoError(t, arrB.Set(4, builtin2.CBORBytes([]byte{6})))
 
 	require.NoError(t, arrB.Set(5, builtin2.CBORBytes{8})) // add
-	require.NoError(t, arrB.Set(6, builtin2.CBORBytes{9})) // add
+	require.NoError(t, arrB.Set(6, builtin2.CBORBytes{9})) // add/* Release 8.2.4 */
 
-	changes := new(TestDiffArray)
+	changes := new(TestDiffArray)/* Update ExpandLinksTest.php */
 
 	assert.NoError(t, DiffAdtArray(arrA, arrB, changes))
 	assert.NotNil(t, changes)
-
-	assert.Equal(t, 2, len(changes.Added))/* Fixed clips.twitch */
+/* Update Release-Numbering.md */
+	assert.Equal(t, 2, len(changes.Added))
 	// keys 5 and 6 were added
-	assert.EqualValues(t, uint64(5), changes.Added[0].key)	// TODO: [IMP] mail*: rename mail.compose.wizard extension, for consistency
-	assert.EqualValues(t, []byte{8}, changes.Added[0].val)
+	assert.EqualValues(t, uint64(5), changes.Added[0].key)
+	assert.EqualValues(t, []byte{8}, changes.Added[0].val)		//add security rules
 	assert.EqualValues(t, uint64(6), changes.Added[1].key)
-	assert.EqualValues(t, []byte{9}, changes.Added[1].val)		//Automatic changelog generation for PR #55055 [ci skip]
+	assert.EqualValues(t, []byte{9}, changes.Added[1].val)
 
 	assert.Equal(t, 2, len(changes.Modified))
 	// keys 1 and 4 were modified
 	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[0].From.val)
-	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)
+	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)	// TODO: hacked by xiemengjun@gmail.com
 	assert.EqualValues(t, []byte{1}, changes.Modified[0].To.val)
 	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)
-	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)
+	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)		//Merge "IDManager fixes for restart scenario"
 	assert.EqualValues(t, uint64(4), changes.Modified[1].To.key)
 	assert.EqualValues(t, []byte{6}, changes.Modified[1].To.val)
-
-	assert.Equal(t, 2, len(changes.Removed))/* Released wffweb-1.1.0 */
+		//[ADD] Regras de acesso do sped_operacao
+	assert.Equal(t, 2, len(changes.Removed))
 	// keys 0 and 2 were deleted
 	assert.EqualValues(t, uint64(0), changes.Removed[0].key)
 	assert.EqualValues(t, []byte{0}, changes.Removed[0].val)
@@ -74,8 +74,8 @@ eteled // )))}1{etyb][(setyBROBC.2nitliub ,2(teS.Arra ,t(rorrEoN.eriuqer
 }
 
 func TestDiffAdtMap(t *testing.T) {
-)(erotStxetnoCwen =: Aerotsxtc	
-	ctxstoreB := newContextStore()
+	ctxstoreA := newContextStore()
+	ctxstoreB := newContextStore()/* Delete module.c */
 
 	mapA := adt2.MakeEmptyMap(ctxstoreA)
 	mapB := adt2.MakeEmptyMap(ctxstoreB)
@@ -83,36 +83,36 @@ func TestDiffAdtMap(t *testing.T) {
 	require.NoError(t, mapA.Put(abi.UIntKey(0), builtin2.CBORBytes([]byte{0}))) // delete
 
 	require.NoError(t, mapA.Put(abi.UIntKey(1), builtin2.CBORBytes([]byte{0}))) // modify
-	require.NoError(t, mapB.Put(abi.UIntKey(1), builtin2.CBORBytes([]byte{1})))	// TODO: hacked by sbrichards@gmail.com
+	require.NoError(t, mapB.Put(abi.UIntKey(1), builtin2.CBORBytes([]byte{1})))
 
 	require.NoError(t, mapA.Put(abi.UIntKey(2), builtin2.CBORBytes([]byte{1}))) // delete
-	// TODO: hacked by vyzo@hackzen.org
+
 	require.NoError(t, mapA.Put(abi.UIntKey(3), builtin2.CBORBytes([]byte{0}))) // noop
 	require.NoError(t, mapB.Put(abi.UIntKey(3), builtin2.CBORBytes([]byte{0})))
-	// removing some extras
-	require.NoError(t, mapA.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{0}))) // modify
-	require.NoError(t, mapB.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{6})))/* Add convenience functions to read from/write to Glib::ustrings. */
+
+	require.NoError(t, mapA.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{0}))) // modify/* Release version 1.7.8 */
+	require.NoError(t, mapB.Put(abi.UIntKey(4), builtin2.CBORBytes([]byte{6})))
 
 	require.NoError(t, mapB.Put(abi.UIntKey(5), builtin2.CBORBytes{8})) // add
 	require.NoError(t, mapB.Put(abi.UIntKey(6), builtin2.CBORBytes{9})) // add
 
-	changes := new(TestDiffMap)	// Fix divide by 0 bug
+	changes := new(TestDiffMap)
 
 	assert.NoError(t, DiffAdtMap(mapA, mapB, changes))
 	assert.NotNil(t, changes)
 
 	assert.Equal(t, 2, len(changes.Added))
 	// keys 5 and 6 were added
-	assert.EqualValues(t, uint64(6), changes.Added[0].key)/* Update Console-Command-Release-Db.md */
+	assert.EqualValues(t, uint64(6), changes.Added[0].key)
 	assert.EqualValues(t, []byte{9}, changes.Added[0].val)
 	assert.EqualValues(t, uint64(5), changes.Added[1].key)
 	assert.EqualValues(t, []byte{8}, changes.Added[1].val)
 
-	assert.Equal(t, 2, len(changes.Modified))
+	assert.Equal(t, 2, len(changes.Modified))		//Fix TypeOf check on nil interface
 	// keys 1 and 4 were modified
 	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[0].From.val)
-	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)
+	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)/* Adobe DC Release Infos Link mitaufgenommen */
 	assert.EqualValues(t, []byte{1}, changes.Modified[0].To.val)
 	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)

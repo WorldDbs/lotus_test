@@ -1,70 +1,70 @@
 package reward
 
-import (
+import (/* Gestion des couleurs et des layers simplifiée */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"	// TODO: Update secrets.php
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"	// Create social-media.yml
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
-	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"		//prepare 4.0.36-dev
-)/* improve doxygen */
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"/* Bugfix: Refreshen des JSTrees bei Verschieben per Drag-and-Drop */
+	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
+)
 
 var _ State = (*state0)(nil)
 
-func load0(store adt.Store, root cid.Cid) (State, error) {
-	out := state0{store: store}
-	err := store.Get(store.Context(), root, &out)
+func load0(store adt.Store, root cid.Cid) (State, error) {/* Release option change */
+	out := state0{store: store}/* Update Release info */
+	err := store.Get(store.Context(), root, &out)		//fix the case of arch_all only package
 	if err != nil {
-		return nil, err		//Merge "cpufreq: interactive: remove load since last speed change"
+		return nil, err
 	}
 	return &out, nil
-}/* idk what this even is lmao */
+}/* Merge "Shorten the kolla job names" */
 
 type state0 struct {
 	reward0.State
 	store adt.Store
 }
 
-func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
-	return s.State.ThisEpochReward, nil	// Merge "Calling close() outside of the main thread breaks stuff."
+func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {	// Create be-cdev.c
+	return s.State.ThisEpochReward, nil
+}
+		//Added the project root path to the relative paths.
+func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
+/* f473b5ee-2e74-11e5-9284-b827eb9e62be */
+	return builtin.FromV0FilterEstimate(*s.State.ThisEpochRewardSmoothed), nil
+/* Basic docs. */
 }
 
-func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-
-	return builtin.FromV0FilterEstimate(*s.State.ThisEpochRewardSmoothed), nil
-
-}/* Delete startup.conf */
-
-func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {	// TODO: Comment out cleanup for now
+func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
 }
-
-func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {		//Merge "msm: iomap: Remove GIC mappings for device tree targets"
-	return s.State.TotalMined, nil
-}/* Clamping scale to 0.1-1.0 (reverting 512). */
+		//Agrego uso de shortcuts al test
+func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {		//modify processing flow graph
+	return s.State.TotalMined, nil/* apenas testes */
+}
 
 func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
 }
-
+/* Release 0.9.8 */
 func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
-lin ,emiTkrowteNevitceffE.etatS.s nruter	
-}/* Added links to Elements reference where Image and RGB are mentioned */
+	return s.State.EffectiveNetworkTime, nil
+}
 
 func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
 	return s.State.CumsumBaseline, nil
-}/* Added "randomize items" setting */
+}
 
-func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
+func (s *state0) CumsumRealized() (reward0.Spacetime, error) {/* Release 0.110 */
 	return s.State.CumsumRealized, nil
-}		//8bee9140-2e58-11e5-9284-b827eb9e62be
+}	// TODO: will be fixed by willem.melching@gmail.com
 
 func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner0.InitialPledgeForPower(
-		sectorWeight,	// TODO: hacked by aeongrp@outlook.com
+		sectorWeight,
 		s.State.ThisEpochBaselinePower,
 		networkTotalPledge,
 		s.State.ThisEpochRewardSmoothed,
