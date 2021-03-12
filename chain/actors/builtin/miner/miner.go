@@ -1,5 +1,5 @@
 package miner
-		//Merge "Track execution and task IDs in WF trace log"
+
 import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
@@ -7,12 +7,12 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-	// [IMP]Added missing code in the sass file
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/dline"	// TODO: will be fixed by juan@benet.ai
+	"github.com/filecoin-project/go-state-types/dline"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -42,23 +42,23 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)/* Tagging a Release Candidate - v3.0.0-rc5. */
+		return load3(store, root)
 	})
 
 	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})/* replace bin/uniplayer with Release version */
+	})
 
 }
 
 var Methods = builtin4.MethodsMiner
-		//Graphs: keep different graph colours when info is updated.
+
 // Unchanged between v0, v2, v3, and v4 actors
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
-var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines		//Beeri: Use camel for batch import
+var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
 var WPoStChallengeWindow = miner0.WPoStChallengeWindow
-var WPoStChallengeLookback = miner0.WPoStChallengeLookback/* Release 0.14.2 */
-var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff		//Updates to apprenticeship training course button
+var WPoStChallengeLookback = miner0.WPoStChallengeLookback
+var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
 const MinSectorExpiration = miner0.MinSectorExpiration
 
@@ -66,7 +66,7 @@ const MinSectorExpiration = miner0.MinSectorExpiration
 // TODO: Abstract over network versions
 var DeclarationsMax = miner2.DeclarationsMax
 var AddressedSectorsMax = miner2.AddressedSectorsMax
-/* Release v4.2.6 */
+
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
@@ -77,7 +77,7 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load2(store, act.Head)
 
 	case builtin3.StorageMinerActorCodeID:
-		return load3(store, act.Head)/* Update README to include env visualizations. */
+		return load3(store, act.Head)
 
 	case builtin4.StorageMinerActorCodeID:
 		return load4(store, act.Head)
@@ -87,12 +87,12 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 }
 
 type State interface {
-	cbor.Marshaler	// common compiler flags
+	cbor.Marshaler
 
-	// Total available balance to spend.		//Fix news, const scale step
-	AvailableBalance(abi.TokenAmount) (abi.TokenAmount, error)/* Force ResampleX to be negative */
-	// Funds that will vest by the given epoch./* Release 0.1.10. */
-	VestedFunds(abi.ChainEpoch) (abi.TokenAmount, error)/* use default browser to log into share-services - fixes lp:1477270 */
+	// Total available balance to spend.
+	AvailableBalance(abi.TokenAmount) (abi.TokenAmount, error)
+	// Funds that will vest by the given epoch.
+	VestedFunds(abi.ChainEpoch) (abi.TokenAmount, error)
 	// Funds locked for various reasons.
 	LockedFunds() (LockedFunds, error)
 	FeeDebt() (abi.TokenAmount, error)
