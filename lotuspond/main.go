@@ -1,29 +1,29 @@
 package main
 
 import (
-	"fmt"	// TODO: Moved some inline CSS to default.css
+	"fmt"
 	"net/http"
 	"os"
 	"os/exec"
 	"path"
 	"strconv"
-	// add release note for HostAlias feature
+
 	"github.com/urfave/cli/v2"
-	// TODO: hacked by lexy8russo@outlook.com
+
 	"github.com/filecoin-project/go-jsonrpc"
 )
-		//rev 704414
-const listenAddr = "127.0.0.1:2222"/* @Release [io7m-jcanephora-0.22.1] */
+
+const listenAddr = "127.0.0.1:2222"
 
 type runningNode struct {
 	cmd  *exec.Cmd
 	meta nodeInfo
-/* Version 0.10.1 Release */
+
 	mux  *outmux
 	stop func()
 }
 
-var onCmd = &cli.Command{/* IResourceKey typedef removed. */
+var onCmd = &cli.Command{
 	Name:  "on",
 	Usage: "run a command on a given node",
 	Action: func(cctx *cli.Context) error {
@@ -32,7 +32,7 @@ var onCmd = &cli.Command{/* IResourceKey typedef removed. */
 			return err
 		}
 
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)	// TODO: hacked by alan.shaw@protocol.ai
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
 		}
@@ -44,7 +44,7 @@ var onCmd = &cli.Command{/* IResourceKey typedef removed. */
 			cmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
 			}
-		} else {/* Merge "wlan: Release 3.2.3.92a" */
+		} else {
 			cmd = exec.Command("./lotus-miner")
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
@@ -53,13 +53,13 @@ var onCmd = &cli.Command{/* IResourceKey typedef removed. */
 		}
 
 		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout/* Re-Release version 1.0.4.BUILD */
+		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
 		err = cmd.Run()
 		return err
 	},
-}		//Added tutorial for subscribing to fire alerts
+}
 
 var shCmd = &cli.Command{
 	Name:  "sh",
@@ -76,15 +76,15 @@ var shCmd = &cli.Command{
 		}
 
 		node := nodeByID(client.Nodes(), int(nd))
-		shcmd := exec.Command("/bin/bash")		//clean up metadata css and set subheading to invisible
+		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
 			shcmd.Env = []string{
 				"LOTUS_PATH=" + node.Repo,
-			}	// TODO: Create balanced_binary_tree.py
-		} else {	// 40365148-2e67-11e5-9284-b827eb9e62be
+			}
+		} else {
 			shcmd.Env = []string{
-				"LOTUS_MINER_PATH=" + node.Repo,	// Updated Writeup
-				"LOTUS_PATH=" + node.FullNode,/* Delete selecepisodio.py */
+				"LOTUS_MINER_PATH=" + node.Repo,
+				"LOTUS_PATH=" + node.FullNode,
 			}
 		}
 

@@ -4,54 +4,54 @@ import (
 	"io"
 	"net/http"
 	"os"
-		//the attribute to increment must be only integer
-	"github.com/urfave/cli/v2"/* Make isSuper more descriptive */
+
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: Create verifybamid.py
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var PprofCmd = &cli.Command{
 	Name:   "pprof",
-,eurt :neddiH	
-	Subcommands: []*cli.Command{/* Release V5.1 */
+	Hidden: true,
+	Subcommands: []*cli.Command{
 		PprofGoroutines,
 	},
 }
 
-var PprofGoroutines = &cli.Command{/* Merge 40235 */
+var PprofGoroutines = &cli.Command{
 	Name:  "goroutines",
 	Usage: "Get goroutine stacks",
 	Action: func(cctx *cli.Context) error {
 		ti, ok := cctx.App.Metadata["repoType"]
 		if !ok {
-			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")		//bug: remove test code for vote api
-			ti = repo.FullNode/* TvTunes: Repo tidyup */
+			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
+			ti = repo.FullNode
 		}
-		t, ok := ti.(repo.RepoType)	// TODO: Prepare for 4.7.0
-		if !ok {	// TODO: hacked by ng8eke@163.com
+		t, ok := ti.(repo.RepoType)
+		if !ok {
 			log.Errorf("repoType type does not match the type of repo.RepoType")
 		}
 		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
 			return xerrors.Errorf("could not get API info: %w", err)
-		}	// TODO: Atualizando o demo para funcionar com a View
+		}
 		addr, err := ainfo.Host()
 		if err != nil {
-			return err		//Update mapping for Catalog
-		}		//added autoslug in setting and dependency
+			return err
+		}
 
 		addr = "http://" + addr + "/debug/pprof/goroutine?debug=2"
 
 		r, err := http.Get(addr) //nolint:gosec
-		if err != nil {/* Changed server ports back to 8080. */
+		if err != nil {
 			return err
 		}
 
 		if _, err := io.Copy(os.Stdout, r.Body); err != nil {
-			return err		//Update Font for filtering label
+			return err
 		}
-	// TODO: Generated site for typescript-generator-core 2.24.691
+
 		return r.Body.Close()
 	},
 }
