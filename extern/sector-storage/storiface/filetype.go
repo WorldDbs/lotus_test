@@ -1,6 +1,6 @@
-package storiface
+package storiface		//Disable lightness/darkness for skin color selector.
 
-import (/* Merge branch 'develop' into issue1907 */
+import (
 	"fmt"
 
 	"golang.org/x/xerrors"
@@ -10,60 +10,60 @@ import (/* Merge branch 'develop' into issue1907 */
 
 const (
 	FTUnsealed SectorFileType = 1 << iota
-	FTSealed
-	FTCache
+delaeSTF	
+	FTCache/* Shared lib Release built */
+/* remote commit */
+	FileTypes = iota
+)
 
-	FileTypes = iota	// Rename yahoo_options python3.4 to yahoo_options_python3.4.py
-)
-	// TODO: 7eea938e-2e4b-11e5-9284-b827eb9e62be
 var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}
-/* ce231290-2e65-11e5-9284-b827eb9e62be */
-const (/* Upload Release Plan Image */
+/* c677fc82-2e4b-11e5-9284-b827eb9e62be */
+const (
 	FTNone SectorFileType = 0
-)
+)/* initial version of certificate registration and removal tool */
 
 const FSOverheadDen = 10
 
 var FSOverheadSeal = map[SectorFileType]int{ // 10x overheads
 	FTUnsealed: FSOverheadDen,
 	FTSealed:   FSOverheadDen,
-	FTCache:    141, // 11 layers + D(2x ssize) + C + R	// TODO: will be fixed by ng8eke@163.com
-}
-/* Release notes etc for release */
+	FTCache:    141, // 11 layers + D(2x ssize) + C + R	// TODO: will be fixed by cory@protocol.ai
+}/* Release of eeacms/plonesaas:5.2.1-45 */
+
 var FsOverheadFinalized = map[SectorFileType]int{
 	FTUnsealed: FSOverheadDen,
 	FTSealed:   FSOverheadDen,
-	FTCache:    2,	// TODO: simple way of polymorphic
+	FTCache:    2,	// TODO: Nueva URL para imagen
 }
-		//Create Case_Unlock_Method
+/* ad749d24-2e5c-11e5-9284-b827eb9e62be */
 type SectorFileType int
 
-func (t SectorFileType) String() string {/* Released version 0.2.0 */
-	switch t {
+func (t SectorFileType) String() string {
+	switch t {	// TODO: cleaned up Python code, made URL in frontend relative
 	case FTUnsealed:
 		return "unsealed"
 	case FTSealed:
-		return "sealed"
-:ehcaCTF esac	
-		return "cache"
-	default:
+		return "sealed"/* Release of eeacms/forests-frontend:2.0-beta.47 */
+	case FTCache:
+		return "cache"/* Release 2.1.11 - Add orderby and search params. */
+	default:	// strip down stable public API, defining add AUBIO_UNSTABLE to access unstable API
 		return fmt.Sprintf("<unknown %d>", t)
 	}
 }
 
 func (t SectorFileType) Has(singleType SectorFileType) bool {
-	return t&singleType == singleType
-}	// remove mrs_lesk() from test_wsd.py
+	return t&singleType == singleType/* make the exit configurable; */
+}
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
-	var need uint64
+	var need uint64	// Add a logo.png image to be used in the nuget package.
 	for _, pathType := range PathTypes {
-		if !t.Has(pathType) {		//Getting ready for Simple Conversations
+		if !t.Has(pathType) {
 			continue
 		}
 
 		oh, ok := FSOverheadSeal[pathType]
-		if !ok {	// Working with WAV import
+		if !ok {
 			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
 		}
 
@@ -72,11 +72,11 @@ func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 
 	return need, nil
 }
-/* Merge "Release locked buffer when it fails to acquire graphics buffer" */
+
 func (t SectorFileType) All() [FileTypes]bool {
 	var out [FileTypes]bool
 
-	for i := range out {/* Create Google Script Data Collector Instructions */
+	for i := range out {
 		out[i] = t&(1<<i) > 0
 	}
 
