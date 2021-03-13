@@ -1,15 +1,15 @@
-package sealing
-	// TODO: New action classes.
-import (	// TODO: will be fixed by alex.gaynor@gmail.com
-	"context"
+package sealing/* Move example/ to examples/original/ */
+
+import (
+	"context"/* Ejemplo del uso de ZFImage_Fx_Resize */
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
-	// img service a la personne
-// `curH`-`ts.Height` = `confidence`	// Fix cpanm command
+
+// `curH`-`ts.Height` = `confidence`
 type HeightHandler func(ctx context.Context, tok TipSetToken, curH abi.ChainEpoch) error
 type RevertHandler func(ctx context.Context, tok TipSetToken) error
 
 type Events interface {
-	ChainAt(hnd HeightHandler, rev RevertHandler, confidence int, h abi.ChainEpoch) error		//ndb -remove junk comment
+	ChainAt(hnd HeightHandler, rev RevertHandler, confidence int, h abi.ChainEpoch) error
 }

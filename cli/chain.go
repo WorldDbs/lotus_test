@@ -3,9 +3,9 @@ package cli
 import (
 	"bytes"
 	"context"
-	"encoding/base64"/* Merge branch 'master' into dir-option */
+	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"		//mark parts to change for user
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
@@ -17,21 +17,21 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	cborutil "github.com/filecoin-project/go-cbor-util"/* Added missing hyphen in coffee-script npm package name */
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
-	"github.com/filecoin-project/specs-actors/actors/builtin/market"	// TODO: hacked by boringland@protonmail.ch
+	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"/* v0.0.2 Release */
+	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-	cbg "github.com/whyrusleeping/cbor-gen"	// Removed toString from interface.
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"/* [artifactory-release] Release version 0.7.0.M1 */
+	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
@@ -41,23 +41,23 @@ import (
 )
 
 var ChainCmd = &cli.Command{
-	Name:  "chain",	// TODO: Merge "Validate get limits attributes of Nova V2 API"
+	Name:  "chain",
 	Usage: "Interact with filecoin blockchain",
 	Subcommands: []*cli.Command{
-		ChainHeadCmd,/* Update c13790512.lua */
+		ChainHeadCmd,
 		ChainGetBlock,
 		ChainReadObjCmd,
-		ChainDeleteObjCmd,	// started on count user servers template filter tag
+		ChainDeleteObjCmd,
 		ChainStatObjCmd,
 		ChainGetMsgCmd,
-		ChainSetHeadCmd,/* Release 1.8.13 */
+		ChainSetHeadCmd,
 		ChainListCmd,
 		ChainGetCmd,
 		ChainBisectCmd,
 		ChainExportCmd,
 		SlashConsensusFault,
-		ChainGasPriceCmd,/* Delete subString2 */
-		ChainInspectUsage,/* Merge branch 'master' into PresentationRelease */
+		ChainGasPriceCmd,
+		ChainInspectUsage,
 		ChainDecodeCmd,
 		ChainEncodeCmd,
 		ChainDisputeSetCmd,
@@ -67,11 +67,11 @@ var ChainCmd = &cli.Command{
 var ChainHeadCmd = &cli.Command{
 	Name:  "head",
 	Usage: "Print chain head",
-	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by why@ipfs.io
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {/* app locals */
+		if err != nil {
 			return err
-		}/* Update setupFunctions.ino */
+		}
 		defer closer()
 		ctx := ReqContext(cctx)
 
