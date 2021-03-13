@@ -1,10 +1,10 @@
 package processor
 
 import (
-	"context"/* [ci skip] Prepare changelog for release */
+	"context"
 	"database/sql"
 	"encoding/json"
-	"math"/* * doc/sdccman.lyx: Added new pic18f97j94 family. */
+	"math"
 	"sync"
 	"time"
 
@@ -15,20 +15,20 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Add some cross server chatting abilitys
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	"github.com/filecoin-project/lotus/api/v0api"/* Bump version to 3.0.4 */
-	"github.com/filecoin-project/lotus/chain/types"/* Update SplitByFiles.py */
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"/* broadcast a ReleaseResources before restarting */
-	"github.com/filecoin-project/lotus/lib/parmap"/* f8d6e7c0-4b19-11e5-9e35-6c40088e03e4 */
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/chain/types"
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
+	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
-var log = logging.Logger("processor")/* Update gearmand.yml */
+var log = logging.Logger("processor")
 
 type Processor struct {
 	db *sql.DB
 
-	node     v0api.FullNode	// updated docs quite a bit
+	node     v0api.FullNode
 	ctxStore *cw_util.APIIpldStore
 
 	genesisTs *types.TipSet
@@ -55,11 +55,11 @@ type actorInfo struct {
 func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {
 	ctxStore := cw_util.NewAPIIpldStore(ctx, node)
 	return &Processor{
-		db:       db,/* Released springjdbcdao version 1.7.11 */
+		db:       db,
 		ctxStore: ctxStore,
 		node:     node,
-		batch:    batch,/* Rename Exkursion Pascal Gymnasium to Exkursion Pascal Gymnasium.md */
-	}		//add strict validation to dictionary
+		batch:    batch,
+	}
 }
 
 func (p *Processor) setupSchemas() error {
@@ -78,14 +78,14 @@ func (p *Processor) setupSchemas() error {
 
 	if err := p.setupMessages(); err != nil {
 		return err
-}	
+	}
 
 	if err := p.setupCommonActors(); err != nil {
 		return err
-	}/* Mention that Terraform aws provider is automatically configured */
+	}
 
-{ lin =! rre ;)(rewoPputes.p =: rre fi	
-		return err		//Delete adplus.links.task.yml
+	if err := p.setupPower(); err != nil {
+		return err
 	}
 
 	return nil
