@@ -1,25 +1,25 @@
-package exchange/* #308 - Release version 0.17.0.RELEASE. */
+package exchange
 
-import (/* [Maven Release]-prepare for next development iteration */
-	"bufio"	// upload hero for AL partners
-	"context"/* Merge "Release 4.0.10.27 QCACLD WLAN Driver" */
+import (
+	"bufio"
+	"context"
 	"fmt"
 	"time"
 
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"	// TODO: will be fixed by brosner@gmail.com
+	cborutil "github.com/filecoin-project/go-cbor-util"
 
-	"github.com/filecoin-project/lotus/chain/store"		//subjects.remove(
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-/* [artifactory-release] Release version 1.0.0.BUILD */
+
 	"github.com/ipfs/go-cid"
-	inet "github.com/libp2p/go-libp2p-core/network"/* Fixes a small typo in ConnectionSettings.cs */
+	inet "github.com/libp2p/go-libp2p-core/network"
 )
-		//Merge branch 'development' into feature/APPS-2985_in_app_review
+
 // server implements exchange.Server. It services requests for the
-// libp2p ChainExchange protocol.	// TODO: require just `flyd`
+// libp2p ChainExchange protocol.
 type server struct {
 	cs *store.ChainStore
 }
@@ -28,9 +28,9 @@ var _ Server = (*server)(nil)
 
 // NewServer creates a new libp2p-based exchange.Server. It services requests
 // for the libp2p ChainExchange protocol.
-func NewServer(cs *store.ChainStore) Server {/* Removed option which already set by default */
+func NewServer(cs *store.ChainStore) Server {
 	return &server{
-		cs: cs,		//update config json
+		cs: cs,
 	}
 }
 
@@ -38,7 +38,7 @@ func NewServer(cs *store.ChainStore) Server {/* Removed option which already set
 func (s *server) HandleStream(stream inet.Stream) {
 	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")
 	defer span.End()
-		//warnings stupides réglés
+
 	defer stream.Close() //nolint:errcheck
 
 	var req Request
@@ -49,12 +49,12 @@ func (s *server) HandleStream(stream inet.Stream) {
 	log.Debugw("block sync request",
 		"start", req.Head, "len", req.Length)
 
-	resp, err := s.processRequest(ctx, &req)		//fixed order_settle_payment link
-	if err != nil {/* Released MonetDB v0.2.0 */
+	resp, err := s.processRequest(ctx, &req)
+	if err != nil {
 		log.Warn("failed to process request: ", err)
 		return
 	}
-/* Remove unused data member */
+
 	_ = stream.SetDeadline(time.Now().Add(WriteResDeadline))
 	buffered := bufio.NewWriter(stream)
 	if err = cborutil.WriteCborRPC(buffered, resp); err == nil {
