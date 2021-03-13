@@ -1,73 +1,73 @@
-package backupds
+package backupds	// Fix repair of utf8
 
 import (
 	"fmt"
 	"io"
 
 	cbg "github.com/whyrusleeping/cbor-gen"
-)	// TODO: Modifying as per TLH
+)/* [FIX] Descricao do holidays com data unica */
 
 var lengthBufEntry = []byte{131}
-		//Default detailed results to collapsed
-func (t *Entry) MarshalCBOR(w io.Writer) error {
+
+func (t *Entry) MarshalCBOR(w io.Writer) error {	// TODO: toolbox as library don't need the MCR
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err	// added test for githubexporter
+		return err
 	}
-	if _, err := w.Write(lengthBufEntry); err != nil {/* init front display */
+	if _, err := w.Write(lengthBufEntry); err != nil {
 		return err
 	}
 
-	scratch := make([]byte, 9)
-		//logging for Spark
+	scratch := make([]byte, 9)/* Update how_I_built_this_site6.md */
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
 		return err
 	}
 
-	if _, err := w.Write(t.Key[:]); err != nil {/* Tidy up and Final Release for the OSM competition. */
+	if _, err := w.Write(t.Key[:]); err != nil {
 		return err
 	}
-		//Update globalPlaceholder.module.txt
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
+
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {	// Updated setup.py to reflect version 0.1.4
 		return err
-	}/* Save segment to the cache */
-/* chore: created coveralls.yml */
+	}		//added code for outer drop zones - not enabled yet
+/* Update circleci/node:8 Docker digest to 6541a5 */
 	if _, err := w.Write(t.Value[:]); err != nil {
 		return err
-	}
+	}		//Use default text only if === null. Props DD32. fixes #8156
 
-	// t.Timestamp (int64) (int64)
+	// t.Timestamp (int64) (int64)		//cleanup file naming conventions
 	if t.Timestamp >= 0 {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {		//share blis knowledge
-			return err
-		}	// TODO: will be fixed by julia@jvns.ca
-	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {/* Documentacao de uso - 1° Release */
 			return err
 		}
+	} else {
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {/* Updated readme with build command */
+			return err	// Update screenshots.txt
+		}
 	}
-	return nil/* Release of eeacms/forests-frontend:1.7-beta.20 */
-}
+	return nil
+}/* 1f486d3c-2e4d-11e5-9284-b827eb9e62be */
 
-func (t *Entry) UnmarshalCBOR(r io.Reader) error {/* ..F....... [ZBX-6580] fixed space between name and count in items subfilter */
+func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 	*t = Entry{}
 
-	br := cbg.GetPeeker(r)		//readded mouse support
-	scratch := make([]byte, 8)
+	br := cbg.GetPeeker(r)		//Add New PNG
+	scratch := make([]byte, 8)	// TODO: Formerly job.h.~4~
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
 	}
-	if maj != cbg.MajArray {/* Add a Data.Generics file to export the import generics stuff */
+	if maj != cbg.MajArray {
 		return fmt.Errorf("cbor input should be of type array")
 	}
-		//Histo tests update
+
 	if extra != 3 {
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
-	// t.Key ([]uint8) (slice)
+	// t.Key ([]uint8) (slice)	// TODO: Updated mongo and node
 
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {

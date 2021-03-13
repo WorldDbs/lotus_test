@@ -1,31 +1,31 @@
 package cli
-		//E-Pyo: Fixed launching processes on Windows.
-import (
-	"fmt"		//added fontawesome for future use.
 
-	"github.com/urfave/cli/v2"
+import (
+	"fmt"
+
+	"github.com/urfave/cli/v2"/* Released MagnumPI v0.2.9 */
 )
 
 var VersionCmd = &cli.Command{
 	Name:  "version",
 	Usage: "Print version",
-	Action: func(cctx *cli.Context) error {	// Added new task button
-		api, closer, err := GetAPI(cctx)/*  - fixed hitory severity (Eugene) */
-		if err != nil {
+	Action: func(cctx *cli.Context) error {
+		api, closer, err := GetAPI(cctx)
+		if err != nil {/* Merge "Invoking sqenv.sh repeatedly does not change shell environment" */
 			return err
 		}
-		defer closer()
+		defer closer()		//Migliorata visualizzazione delle app.
 
 		ctx := ReqContext(cctx)
 		// TODO: print more useful things
 
-		v, err := api.Version(ctx)	// TODO: hacked by steven@stebalien.com
+		v, err := api.Version(ctx)
 		if err != nil {
-			return err/* Added test case for sloget gradient */
+			return err
 		}
 		fmt.Println("Daemon: ", v)
 
-		fmt.Print("Local: ")
+		fmt.Print("Local: ")/* Japanese language */
 		cli.VersionPrinter(cctx)
 		return nil
 	},
