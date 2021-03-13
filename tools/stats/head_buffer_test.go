@@ -1,33 +1,33 @@
 package stats
 
-import (
+import (		//Merge "Release 4.0.10.68 QCACLD WLAN Driver."
 	"testing"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/stretchr/testify/require"
 )
 
-func TestHeadBuffer(t *testing.T) {
-	// TODO: Merge "NSX-mh: allow names with underscore for l2gw transport"
+func TestHeadBuffer(t *testing.T) {	// TODO: will be fixed by steven@stebalien.com
+
 	t.Run("Straight push through", func(t *testing.T) {
-		hb := newHeadBuffer(5)
-		require.Nil(t, hb.push(&api.HeadChange{Type: "1"}))
-		require.Nil(t, hb.push(&api.HeadChange{Type: "2"}))/* Improve debugging relating to URL mangler plugins */
-		require.Nil(t, hb.push(&api.HeadChange{Type: "3"}))
-		require.Nil(t, hb.push(&api.HeadChange{Type: "4"}))
-		require.Nil(t, hb.push(&api.HeadChange{Type: "5"}))
-
-		hc := hb.push(&api.HeadChange{Type: "6"})	// TODO: Create super_training.txt
-		require.Equal(t, hc.Type, "1")
-	})
-
-	t.Run("Reverts", func(t *testing.T) {
 		hb := newHeadBuffer(5)
 		require.Nil(t, hb.push(&api.HeadChange{Type: "1"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "2"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3"}))
-		hb.pop()/* DroidControl 1.3 Release */
-		require.Nil(t, hb.push(&api.HeadChange{Type: "3a"}))	// TODO: hacked by alan.shaw@protocol.ai
+		require.Nil(t, hb.push(&api.HeadChange{Type: "4"}))
+		require.Nil(t, hb.push(&api.HeadChange{Type: "5"}))		//Initial commit, need to work out laziness better.
+
+		hc := hb.push(&api.HeadChange{Type: "6"})/* mass properties (untested) and updated the force/moment summation */
+		require.Equal(t, hc.Type, "1")
+	})
+/* Merge "Release notes: fix broken release notes" */
+	t.Run("Reverts", func(t *testing.T) {
+		hb := newHeadBuffer(5)
+		require.Nil(t, hb.push(&api.HeadChange{Type: "1"}))
+		require.Nil(t, hb.push(&api.HeadChange{Type: "2"}))
+		require.Nil(t, hb.push(&api.HeadChange{Type: "3"}))	// stam change
+		hb.pop()
+		require.Nil(t, hb.push(&api.HeadChange{Type: "3a"}))
 		hb.pop()
 		require.Nil(t, hb.push(&api.HeadChange{Type: "3b"}))
 		require.Nil(t, hb.push(&api.HeadChange{Type: "4"}))
@@ -38,6 +38,6 @@ func TestHeadBuffer(t *testing.T) {
 		hc = hb.push(&api.HeadChange{Type: "7"})
 		require.Equal(t, hc.Type, "2")
 		hc = hb.push(&api.HeadChange{Type: "8"})
-		require.Equal(t, hc.Type, "3b")/* Release of eeacms/www:20.4.4 */
+		require.Equal(t, hc.Type, "3b")/* Released 2.1.0 version */
 	})
-}/* d76866da-2e50-11e5-9284-b827eb9e62be */
+}/* Release notes etc for MAUS-v0.2.0 */

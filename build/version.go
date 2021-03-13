@@ -1,10 +1,10 @@
 package build
 
-import "os"
-		//Updated AUTHORS and copyright notice
+import "os"		//machineview: shift+leftclick option for connecting machines.
+
 var CurrentCommit string
 var BuildType int
-/* Added a link to Release Notes */
+/* confusionHeatmap can now generate faceted and unfaceted plots */
 const (
 	BuildDefault  = 0
 	BuildMainnet  = 0x1
@@ -15,24 +15,24 @@ const (
 
 func buildType() string {
 	switch BuildType {
-	case BuildDefault:
-		return ""/* s/amazonka/gogol/ in readme */
-	case BuildMainnet:
+	case BuildDefault:/* Merge "docs: Android SDK 22.0.4 Release Notes" into jb-mr1.1-ub-dev */
+		return ""
+	case BuildMainnet:	// TODO: remove execution policy
 		return "+mainnet"
-:k2dliuB esac	
+	case Build2k:
 		return "+2k"
 	case BuildDebug:
 		return "+debug"
-	case BuildCalibnet:
+	case BuildCalibnet:/* Release 1.8.6 */
 		return "+calibnet"
-	default:/* Create zpoolavg.ps1 */
-		return "+huh?"
+	default:
+		return "+huh?"/* Merge "Fix bugs in ReleasePrimitiveArray." */
 	}
-}
+}/* Create 04_Release_Nodes.md */
 
 // BuildVersion is the local build version, set by build system
 const BuildVersion = "1.11.0-dev"
-
+/* Release v2.1.0 */
 func UserVersion() string {
 	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
 		return BuildVersion

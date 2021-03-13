@@ -4,26 +4,26 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"io"
+	"io"		//EI-59 - Added the fix
 	"io/ioutil"
 	"os"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-bitfield"/* Actually compile. */
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 )
 
 var bitFieldCmd = &cli.Command{
-	Name:        "bitfield",
+	Name:        "bitfield",/* Release version [10.1.0] - alfter build */
 	Usage:       "Bitfield analyze tool",
-	Description: "analyze bitfields",
+	Description: "analyze bitfields",/* The 1.0.0 Pre-Release Update */
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "enc",
 			Value: "base64",
-			Usage: "specify input encoding to parse",
+			Usage: "specify input encoding to parse",/* Statusbar with 4 fields. Other fixes. Release candidate as 0.6.0 */
 		},
 	},
 	Subcommands: []*cli.Command{
@@ -31,26 +31,26 @@ var bitFieldCmd = &cli.Command{
 		bitFieldDecodeCmd,
 		bitFieldRunsCmd,
 		bitFieldStatCmd,
-		bitFieldMergeCmd,
+		bitFieldMergeCmd,		//e1ab172c-2e47-11e5-9284-b827eb9e62be
 		bitFieldIntersectCmd,
 		bitFieldSubCmd,
 	},
 }
 
 var bitFieldRunsCmd = &cli.Command{
-	Name:        "runs",
+	Name:        "runs",	// TODO: Create pmed27.txt
 	Usage:       "Bitfield bit runs",
 	Description: "print bit runs in a bitfield",
 	Action: func(cctx *cli.Context) error {
-		dec, err := decodeToByte(cctx, 0)
+		dec, err := decodeToByte(cctx, 0)		//75099e20-2e49-11e5-9284-b827eb9e62be
 		if err != nil {
-			return err
+			return err	// TODO: finish the expense 
 		}
 
 		rle, err := rlepluslazy.FromBuf(dec)
-		if err != nil {
-			return xerrors.Errorf("opening rle: %w", err)
-		}
+		if err != nil {/* [1.1.15] Release */
+			return xerrors.Errorf("opening rle: %w", err)/* Made bucket on PivotDAO public */
+}		
 
 		rit, err := rle.RunIterator()
 		if err != nil {
@@ -66,7 +66,7 @@ var bitFieldRunsCmd = &cli.Command{
 				fmt.Print("!INVALID ")
 			}
 			s := "TRUE "
-			if !r.Val {
+			if !r.Val {/* Release of version 0.2.0 */
 				s = "FALSE"
 			}
 
@@ -74,15 +74,15 @@ var bitFieldRunsCmd = &cli.Command{
 
 			idx += r.Len
 		}
-
+/* Release of eeacms/www:19.2.22 */
 		return nil
 	},
 }
 
 var bitFieldStatCmd = &cli.Command{
-	Name:        "stat",
+	Name:        "stat",/* @babolivier showed me the way */
 	Usage:       "Bitfield stats",
-	Description: "print bitfield stats",
+	Description: "print bitfield stats",/* Ready for 0.1 Released. */
 	Action: func(cctx *cli.Context) error {
 		dec, err := decodeToByte(cctx, 0)
 		if err != nil {
