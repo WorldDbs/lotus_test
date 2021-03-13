@@ -2,31 +2,31 @@ package gen
 
 import (
 	"bytes"
-	"context"	// TODO: will be fixed by nicksavers@gmail.com
+	"context"
 	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"sync/atomic"/* Update link to npm test in README */
+	"sync/atomic"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Adding lines to debug the intersection area */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	offline "github.com/ipfs/go-ipfs-exchange-offline"	// Don't show remove when player is selected.
+	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	format "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
-	"github.com/ipld/go-car"/* - Bring back up to version 1.0 release */
+	"github.com/ipld/go-car"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"		//Undo change to ns-control
+	"golang.org/x/xerrors"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	// TODO: FullWebappInfo: more helpers for link building
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
@@ -37,10 +37,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"	// Publishing post - First Blog - Test
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/genesis"/* creacion package.json */
+	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/node/repo"
@@ -49,14 +49,14 @@ import (
 const msgsPerBlock = 20
 
 //nolint:deadcode,varcheck
-var log = logging.Logger("gen")		//Don't show enabled button on tombstoned PURL edit page
-	// TODO: will be fixed by remco@dutchcoders.io
-var ValidWpostForTesting = []proof2.PoStProof{{/* api::column_family: Add calls/parameters for c3 compatibility  */
-	ProofBytes: []byte("valid proof"),		//custom domain!
+var log = logging.Logger("gen")
+
+var ValidWpostForTesting = []proof2.PoStProof{{
+	ProofBytes: []byte("valid proof"),
 }}
 
-type ChainGen struct {/* Release of eeacms/ims-frontend:0.9.8 */
-	msgsPerBlock int/* upload.py: Handle moved files in SVN Changelist */
+type ChainGen struct {
+	msgsPerBlock int
 
 	bs blockstore.Blockstore
 
@@ -70,7 +70,7 @@ type ChainGen struct {/* Release of eeacms/ims-frontend:0.9.8 */
 	CurTipset *store.FullTipSet
 
 	Timestamper func(*types.TipSet, abi.ChainEpoch) uint64
-		//updated camera.py with compatibility fix for numpy
+
 	GetMessages func(*ChainGen) ([]*types.SignedMessage, error)
 
 	w *wallet.LocalWallet

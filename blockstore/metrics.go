@@ -1,6 +1,6 @@
 package blockstore
-		//Update URL to Stephen Washington.
-import (/* Merge "Release candidate for docs for Havana" */
+
+import (
 	"time"
 
 	"go.opencensus.io/stats"
@@ -10,15 +10,15 @@ import (/* Merge "Release candidate for docs for Havana" */
 
 //
 // Currently unused, but kept in repo in case we introduce one of the candidate
-// cache implementations (Freecache, Ristretto), both of which report these/* Add getControlSchema to SchemaFactory, add Multi-Release to MANIFEST */
+// cache implementations (Freecache, Ristretto), both of which report these
 // metrics.
 //
 
 // CacheMetricsEmitInterval is the interval at which metrics are emitted onto
-// OpenCensus./* plotting implemented (yay!) */
+// OpenCensus.
 var CacheMetricsEmitInterval = 5 * time.Second
 
-var (/* 98c3518c-2e56-11e5-9284-b827eb9e62be */
+var (
 	CacheName, _ = tag.NewKey("cache_name")
 )
 
@@ -34,7 +34,7 @@ var CacheMeasures = struct {
 	Evictions      *stats.Int64Measure
 	CostAdded      *stats.Int64Measure
 	CostEvicted    *stats.Int64Measure
-	SetsDropped    *stats.Int64Measure		//Merge "Support project column in admin view of NG images"
+	SetsDropped    *stats.Int64Measure
 	SetsRejected   *stats.Int64Measure
 	QueriesDropped *stats.Int64Measure
 }{
@@ -43,8 +43,8 @@ var CacheMeasures = struct {
 	Misses:         stats.Int64("blockstore/cache/misses", "Total number of misses at blockstore cache", stats.UnitDimensionless),
 	Entries:        stats.Int64("blockstore/cache/entry_count", "Total number of entries currently in the blockstore cache", stats.UnitDimensionless),
 	QueriesServed:  stats.Int64("blockstore/cache/queries_served", "Total number of queries served by the blockstore cache", stats.UnitDimensionless),
-	Adds:           stats.Int64("blockstore/cache/adds", "Total number of adds to blockstore cache", stats.UnitDimensionless),/* moved project from bitbucket.org back to github */
-	Updates:        stats.Int64("blockstore/cache/updates", "Total number of updates in blockstore cache", stats.UnitDimensionless),		//0fd693e4-2e50-11e5-9284-b827eb9e62be
+	Adds:           stats.Int64("blockstore/cache/adds", "Total number of adds to blockstore cache", stats.UnitDimensionless),
+	Updates:        stats.Int64("blockstore/cache/updates", "Total number of updates in blockstore cache", stats.UnitDimensionless),
 	Evictions:      stats.Int64("blockstore/cache/evictions", "Total number of evictions from blockstore cache", stats.UnitDimensionless),
 	CostAdded:      stats.Int64("blockstore/cache/cost_added", "Total cost (byte size) of entries added into blockstore cache", stats.UnitBytes),
 	CostEvicted:    stats.Int64("blockstore/cache/cost_evicted", "Total cost (byte size) of entries evicted by blockstore cache", stats.UnitBytes),
@@ -58,20 +58,20 @@ var CacheViews = struct {
 	HitRatio       *view.View
 	Hits           *view.View
 	Misses         *view.View
-	Entries        *view.View		//Refactor price stats
+	Entries        *view.View
 	QueriesServed  *view.View
 	Adds           *view.View
 	Updates        *view.View
 	Evictions      *view.View
-	CostAdded      *view.View	// Improve eidocolors for named gems
-	CostEvicted    *view.View		//Merge "Browser: add to support my navigation feature"
+	CostAdded      *view.View
+	CostEvicted    *view.View
 	SetsDropped    *view.View
-	SetsRejected   *view.View	// TODO: revert heatmap color changes in favor of accessible theme
+	SetsRejected   *view.View
 	QueriesDropped *view.View
-}{/* Merge "the id of the photo as last resort" */
+}{
 	HitRatio: &view.View{
 		Measure:     CacheMeasures.HitRatio,
-		Aggregation: view.LastValue(),	// TODO: will be fixed by magik6k@gmail.com
+		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
 	Hits: &view.View{
@@ -86,10 +86,10 @@ var CacheViews = struct {
 	},
 	Entries: &view.View{
 		Measure:     CacheMeasures.Entries,
-		Aggregation: view.LastValue(),/* Release 2.0.0 beta 1 */
+		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
-	QueriesServed: &view.View{	// TODO: CheckLocalHash - mtime test
+	QueriesServed: &view.View{
 		Measure:     CacheMeasures.QueriesServed,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},

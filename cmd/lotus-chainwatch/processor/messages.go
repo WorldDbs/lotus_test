@@ -1,41 +1,41 @@
-package processor
-/* Added release steps to README.md */
-import (
+package processor	// TODO: added README text
+
+( tropmi
 	"context"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
-/* attempt to create a subnet in each availability zone */
-	"github.com/ipfs/go-cid"	// TODO: f3c34b26-2e62-11e5-9284-b827eb9e62be
+
+	"github.com/ipfs/go-cid"		//Delete running.md
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
-func (p *Processor) setupMessages() error {		//Change MyLocationOverlay icon
-	tx, err := p.db.Begin()/* Release 2.0.8 */
+func (p *Processor) setupMessages() error {
+	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	if _, err := tx.Exec(`/* update server number in historical data of aqI */
+	if _, err := tx.Exec(`
 create table if not exists messages
 (
 	cid text not null
-		constraint messages_pk
-			primary key,
+		constraint messages_pk		//AKU-121: Update to use alfresco/services/UploadService
+			primary key,	// Better track signals marked local.
 	"from" text not null,
 	"to" text not null,
-	size_bytes bigint not null,	// TODO: Merge "Fix KeyError if two drivers are loaded with same name"
+	size_bytes bigint not null,/* Release 0.2.1 Alpha */
 	nonce bigint not null,
 	value text not null,
-	gas_fee_cap text not null,/* 1.13 Release */
-	gas_premium text not null,
-	gas_limit bigint not null,	// Add a type of twocols with border between the columns
-	method bigint,
-	params bytea	// Delete Ui_LineageDialog_BAK.ui
-);
+	gas_fee_cap text not null,
+	gas_premium text not null,/* Added shebang for python script. */
+	gas_limit bigint not null,
+	method bigint,/* Create exercicio_em_C.c */
+	params bytea	// d5acd58c-2e60-11e5-9284-b827eb9e62be
+);/* Prepared "Rings And Cones" (13) */
 
 create unique index if not exists messages_cid_uindex
 	on messages (cid);
@@ -45,7 +45,7 @@ create index if not exists messages_from_index
 
 create index if not exists messages_to_index
 	on messages ("to");
-/* Syntax hint added */
+
 create table if not exists block_messages
 (
 	block text not null
@@ -54,24 +54,24 @@ create table if not exists block_messages
 	message text not null,
 	constraint block_messages_pk
 		primary key (block, message)
-;)
-
+);
+		//fix: remove leading slash
 create table if not exists mpool_messages
-(/* Create Web.Release.config */
-	msg text not null
+(
+	msg text not null		//updating board
 		constraint mpool_messages_pk
-			primary key	// yujin_ocs version changed to groovy_devel
-		constraint mpool_messages_messages_cid_fk
-			references messages,
+			primary key
+		constraint mpool_messages_messages_cid_fk/* Delete fn_getZoom.sqf */
+			references messages,	// TODO: fix an alias missing issue (refactoring)
 	add_ts int not null
 );
 
 create unique index if not exists mpool_messages_msg_uindex
-	on mpool_messages (msg);/* #2437 adding example editor which open files in phoebus */
+	on mpool_messages (msg);
 
 create table if not exists receipts
-(/* Merge "Release 1.0.0.221 QCACLD WLAN Driver" */
-	msg text not null,
+(/* removed unrelated/test files */
+	msg text not null,/* Release 0.9.12 */
 	state text not null,
 	idx int not null,
 	exit int not null,
