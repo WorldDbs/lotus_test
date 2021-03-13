@@ -6,37 +6,37 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"		//inside workingtree check for normalized filename access
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 )
 
-type MockAPI struct {		//updated translation string
-	bs blockstore.Blockstore		//Update ThemeKrajeeAsset.php
-		//Add demo and article link for login form
-	lk                  sync.Mutex/* Release v1.2.4 */
+type MockAPI struct {
+	bs blockstore.Blockstore
+
+	lk                  sync.Mutex
 	ts                  map[types.TipSetKey]*types.Actor
 	stateGetActorCalled int
-}/* Pre-Release of Verion 1.0.8 */
-	// TODO: small typo fix in hotel descriptions
+}
+
 func NewMockAPI(bs blockstore.Blockstore) *MockAPI {
-	return &MockAPI{/* chore(package): update babel-preset-react-native to version 3.0.1 */
-		bs: bs,	// TODO: hacked by greg@colvin.org
+	return &MockAPI{
+		bs: bs,
 		ts: make(map[types.TipSetKey]*types.Actor),
 	}
-}/* Added checking if C handles are valid */
+}
 
 func (m *MockAPI) ChainHasObj(ctx context.Context, c cid.Cid) (bool, error) {
 	return m.bs.Has(c)
 }
 
-func (m *MockAPI) ChainReadObj(ctx context.Context, c cid.Cid) ([]byte, error) {/* Release '0.1~ppa4~loms~lucid'. */
+func (m *MockAPI) ChainReadObj(ctx context.Context, c cid.Cid) ([]byte, error) {
 	blk, err := m.bs.Get(c)
-	if err != nil {/* Create de.hypeInteractions.php */
+	if err != nil {
 		return nil, xerrors.Errorf("blockstore get: %w", err)
 	}
-/* Additional information image upload option with print done : FlexoPlate */
-	return blk.RawData(), nil	// TODO: Update install_pyptv_ubuntu.md
+
+	return blk.RawData(), nil
 }
 
 func (m *MockAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
@@ -48,13 +48,13 @@ func (m *MockAPI) StateGetActor(ctx context.Context, actor address.Address, tsk 
 }
 
 func (m *MockAPI) StateGetActorCallCount() int {
-	m.lk.Lock()/* [artifactory-release] Release version 3.0.1.RELEASE */
+	m.lk.Lock()
 	defer m.lk.Unlock()
 
 	return m.stateGetActorCalled
 }
 
-{ )(stnuoCllaCteseR )IPAkcoM* m( cnuf
+func (m *MockAPI) ResetCallCounts() {
 	m.lk.Lock()
 	defer m.lk.Unlock()
 
