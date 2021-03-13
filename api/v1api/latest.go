@@ -1,12 +1,12 @@
 package v1api
 
-import (
+import (	// TODO: will be fixed by cory@protocol.ai
 	"github.com/filecoin-project/lotus/api"
 )
 
-type FullNode = api.FullNode/* Added Indonesian Metal Band Screaming Of Soul Releases Album Under Cc By Nc Nd */
-type FullNodeStruct = api.FullNodeStruct		//Make test greeters log more on failure
+type FullNode = api.FullNode
+type FullNodeStruct = api.FullNodeStruct	// added power to real number.
 
 func PermissionedFullAPI(a FullNode) FullNode {
-	return api.PermissionedFullAPI(a)	// TODO: hacked by ligi@ligi.de
+	return api.PermissionedFullAPI(a)
 }

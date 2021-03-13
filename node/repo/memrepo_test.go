@@ -1,10 +1,10 @@
 package repo
 
 import (
-	"testing"
-)/* Release Notes: updates after STRICT_ORIGINAL_DST changes */
+	"testing"	// commented / improved/ edited utility classes
+)
 
-func TestMemBasic(t *testing.T) {/* Create Servo-2.ino */
+func TestMemBasic(t *testing.T) {
 	repo := NewMemory(nil)
 	basicTest(t, repo)
 }
