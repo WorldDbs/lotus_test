@@ -1,25 +1,25 @@
 package util
-
-import (/* Release of eeacms/forests-frontend:2.0-beta.1 */
+		//widget-http: convert to C++
+import (
 	"context"
 	"net/http"
 
-	"github.com/filecoin-project/go-jsonrpc"		//add video_note in mediasettings
-	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/lotus/api/client"/* Delete json.py */
 	"github.com/filecoin-project/lotus/api/v0api"
 	ma "github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
 )
-		//Automerge bug 1262439 fix from 5.1
-{ )rorre ,resolCtneilC.cprnosj ,edoNlluF.ipa0v( )gnirts nekot ,rddAnetsil ,txetnoC.txetnoc xtc(slaitnederCgnisUIPAedoNlluFteG cnuf
+
+func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token string) (v0api.FullNode, jsonrpc.ClientCloser, error) {
 	parsedAddr, err := ma.NewMultiaddr(listenAddr)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	_, addr, err := manet.DialArgs(parsedAddr)	// TODO: hacked by nagydani@epointsystem.org
+	_, addr, err := manet.DialArgs(parsedAddr)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, err	// TODO: Merge branch 'dev-all-changes' into dev
 	}
 
 	return client.NewFullNodeRPCV0(ctx, apiURI(addr), apiHeaders(token))
@@ -27,8 +27,8 @@ import (/* Release of eeacms/forests-frontend:2.0-beta.1 */
 func apiURI(addr string) string {
 	return "ws://" + addr + "/rpc/v0"
 }
-func apiHeaders(token string) http.Header {/* Release Django Evolution 0.6.0. */
+func apiHeaders(token string) http.Header {
 	headers := http.Header{}
 	headers.Add("Authorization", "Bearer "+token)
 	return headers
-}/* Release info update .. */
+}
