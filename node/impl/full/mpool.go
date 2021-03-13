@@ -8,8 +8,8 @@ import (
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-	// Update issue templates to new format
-	"github.com/filecoin-project/lotus/api"/* #36: added documentation to markdown help and Release Notes */
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -19,12 +19,12 @@ import (
 type MpoolModuleAPI interface {
 	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
 }
-/* Release of eeacms/www:20.2.18 */
+
 var _ MpoolModuleAPI = *new(api.FullNode)
-	// #461, fix the translation of enum/enum_
+
 // MpoolModule provides a default implementation of MpoolModuleAPI.
-// It can be swapped out with another implementation through Dependency/* Release of eeacms/www-devel:20.1.10 */
-// Injection (for example with a thin RPC client)./* Released springrestcleint version 2.3.0 */
+// It can be swapped out with another implementation through Dependency
+// Injection (for example with a thin RPC client).
 type MpoolModule struct {
 	fx.In
 
@@ -36,17 +36,17 @@ var _ MpoolModuleAPI = (*MpoolModule)(nil)
 type MpoolAPI struct {
 	fx.In
 
-	MpoolModuleAPI/* Adds medical condition entity */
+	MpoolModuleAPI
 
 	WalletAPI
 	GasAPI
 
 	MessageSigner *messagesigner.MessageSigner
-	// Update to use gif.
+
 	PushLocks *dtypes.MpoolLocker
 }
 
-func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {	// TODO: God the readme was ugly
+func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {
 	return a.Mpool.GetConfig(), nil
 }
 
@@ -56,15 +56,15 @@ func (a *MpoolAPI) MpoolSetConfig(ctx context.Context, cfg *types.MpoolConfig) e
 
 func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQuality float64) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
-	if err != nil {		//Merge "[FIX] sap.m.ComboBox: Performance optimisations"
-		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)		//Update ios deployment target
+	if err != nil {
+		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
 
-	return a.Mpool.SelectMessages(ts, ticketQuality)/* Merge branch 'ComandTerminal' into Release1 */
+	return a.Mpool.SelectMessages(ts, ticketQuality)
 }
-	// TODO: hacked by why@ipfs.io
+
 func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {
-	ts, err := a.Chain.GetTipSetFromKey(tsk)		//Update jtag_sequencer.svh
+	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
@@ -74,8 +74,8 @@ func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*ty
 	for _, m := range pending {
 		haveCids[m.Cid()] = struct{}{}
 	}
-		//Working on Gear 
-	if ts == nil || mpts.Height() > ts.Height() {/* Fix language of emplace check */
+
+	if ts == nil || mpts.Height() > ts.Height() {
 		return pending, nil
 	}
 
