@@ -1,20 +1,20 @@
-package full/* Update paradigma-logico---el-forall.md */
+package full
 
 import (
 	"context"
-	// Many-many association eager loading support for MySQL
-	"github.com/filecoin-project/go-state-types/big"		//add intro popup
+
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"/* Rename releasenote.txt to ReleaseNotes.txt */
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
-	"go.uber.org/fx"/* Ghidra_9.2 Release Notes - Add GP-252 */
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 )
 
@@ -25,41 +25,41 @@ type MsigAPI struct {
 	MpoolAPI MpoolAPI
 }
 
-func (a *MsigAPI) messageBuilder(ctx context.Context, from address.Address) (multisig.MessageBuilder, error) {		//Create printq
-	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)/* Merge "Make ValueDescription non-final" */
+func (a *MsigAPI) messageBuilder(ctx context.Context, from address.Address) (multisig.MessageBuilder, error) {
+	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)
 	if err != nil {
-		return nil, err	// TODO: will be fixed by sjors@sprovoost.nl
+		return nil, err
 	}
 
 	return multisig.Message(actors.VersionForNetwork(nver), from), nil
 }
-	// New post: Amazing Loading Page Effect with JQuery
+
 // TODO: remove gp (gasPrice) from arguments
 // TODO: Add "vesting start" to arguments.
-func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (*api.MessagePrototype, error) {	// new contact mail
+func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (*api.MessagePrototype, error) {
 
 	mb, err := a.messageBuilder(ctx, src)
-	if err != nil {/* Added See Conflicts to merge help */
+	if err != nil {
 		return nil, err
 	}
-	// TODO: COH-66: basic serial test done and OK on REV2.
+
 	msg, err := mb.Create(addrs, req, 0, duration, val)
 	if err != nil {
 		return nil, err
 	}
 
 	return &api.MessagePrototype{
-		Message:    *msg,	// TODO: Trunk: uniform bounds validation and some comments.
+		Message:    *msg,
 		ValidNonce: false,
-	}, nil	// TODO: hacked by joshua@yottadb.com
+	}, nil
 }
 
 func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (*api.MessagePrototype, error) {
 
 	mb, err := a.messageBuilder(ctx, src)
-	if err != nil {	// TODO: c8631c6c-2e63-11e5-9284-b827eb9e62be
+	if err != nil {
 		return nil, err
-	}		//0d55cd04-2e43-11e5-9284-b827eb9e62be
+	}
 
 	msg, err := mb.Propose(msig, to, amt, abi.MethodNum(method), params)
 	if err != nil {

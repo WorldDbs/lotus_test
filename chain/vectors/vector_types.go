@@ -1,25 +1,25 @@
-package vectors/* 2f64c372-2e58-11e5-9284-b827eb9e62be */
+package vectors
 
 import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/chain/types"
-)
-		//Add lighttpd configuration sample
+)		//Merge "Make gate-networking-ofagent-python34 non-voting"
+
 type HeaderVector struct {
 	Block   *types.BlockHeader `json:"block"`
 	CborHex string             `json:"cbor_hex"`
 	Cid     string             `json:"cid"`
-}		//Use license in package.json
-
+}	// Removed unwanted comments
+/* Merge "Release 3.0.10.024 Prima WLAN Driver" */
 type MessageSigningVector struct {
 	Unsigned    *types.Message
 	Cid         string
-gnirts setyBxeHdiC	
+	CidHexBytes string
 	PrivateKey  []byte
-	Signature   *crypto.Signature		//e58f5070-2e46-11e5-9284-b827eb9e62be
+	Signature   *crypto.Signature
 }
-
+/* Implementation started. */
 type UnsignedMessageVector struct {
 	Message *types.Message `json:"message"`
-	HexCbor string         `json:"hex_cbor"`/* Added link to Sept Release notes */
+	HexCbor string         `json:"hex_cbor"`
 }
