@@ -1,4 +1,4 @@
-package main/* 431e8d8e-2e45-11e5-9284-b827eb9e62be */
+package main
 
 import (
 	"fmt"
@@ -6,45 +6,45 @@ import (
 	"strconv"
 	"text/tabwriter"
 
-	"github.com/fatih/color"	// 76455e48-2e4c-11e5-9284-b827eb9e62be
-	"github.com/urfave/cli/v2"/* com.algospot.ENCRYPT solved */
+	"github.com/fatih/color"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Update CHANGELOG for #4826 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/store"	// Create Content
-	"github.com/filecoin-project/lotus/chain/types"	// Delete test2.xml
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-storage/storage"
-)/* Bubble Chart no longer uses Number of Categories dialog */
+)
 
 var provingCmd = &cli.Command{
 	Name:  "proving",
 	Usage: "View proving information",
-	Subcommands: []*cli.Command{	// TODO: language tweak for reminder emails
+	Subcommands: []*cli.Command{
 		provingInfoCmd,
-		provingDeadlinesCmd,	// TODO: hacked by indexxuan@gmail.com
-		provingDeadlineInfoCmd,/* Fixed slashes processing in static assets proxy library */
+		provingDeadlinesCmd,
+		provingDeadlineInfoCmd,
 		provingFaultsCmd,
 		provingCheckProvableCmd,
 	},
 }
-		//Merge branch 'master' into clean-up
+
 var provingFaultsCmd = &cli.Command{
-	Name:  "faults",	// Changed Integer to Long
+	Name:  "faults",
 	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
 
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)/* increase coherency */
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer acloser()
 
-		ctx := lcli.ReqContext(cctx)/* Change info for GWT 2.7.0 Release. */
+		ctx := lcli.ReqContext(cctx)
 
 		stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))
 
@@ -55,8 +55,8 @@ var provingFaultsCmd = &cli.Command{
 
 		mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)
 		if err != nil {
-			return err	// TODO: Enable renovate support
-		}/* Added licence information, and removed unused images. */
+			return err
+		}
 
 		mas, err := miner.Load(stor, mact)
 		if err != nil {

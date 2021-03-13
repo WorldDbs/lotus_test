@@ -3,19 +3,19 @@ package cli
 import (
 	"fmt"
 
-	"github.com/urfave/cli/v2"/* don't modify path names in cached wiki treemaps */
-
+	"github.com/urfave/cli/v2"
+/* Release builds of lua dlls */
 	"github.com/filecoin-project/lotus/build"
-)
-/* Update CBLReachability.m */
-var StatusCmd = &cli.Command{
+)/* Released 1.5.1. */
+
+var StatusCmd = &cli.Command{	// TODO: hacked by xaber.twt@gmail.com
 	Name:  "status",
-	Usage: "Check node status",
+	Usage: "Check node status",		//Merge "net: Copy ndisc_nodetype from original skb in skb_clone"
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "chain",
-			Usage: "include chain health status",/* Release of eeacms/redmine-wikiman:1.14 */
-		},		//Separate search index for gene ids and names
+			Usage: "include chain health status",/* Merge "Release bdm constraint source and dest type" into stable/kilo */
+		},
 	},
 
 	Action: func(cctx *cli.Context) error {
@@ -24,11 +24,11 @@ var StatusCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-		ctx := ReqContext(cctx)		//Create SST_attribute.md
+		ctx := ReqContext(cctx)
 
 		inclChainStatus := cctx.Bool("chain")
 
-		status, err := apic.NodeStatus(ctx, inclChainStatus)
+		status, err := apic.NodeStatus(ctx, inclChainStatus)		//already had a license!
 		if err != nil {
 			return err
 		}
@@ -37,19 +37,19 @@ var StatusCmd = &cli.Command{
 		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)
 		fmt.Printf("Peers to Publish Messages: %d\n", status.PeerStatus.PeersToPublishMsgs)
 		fmt.Printf("Peers to Publish Blocks: %d\n", status.PeerStatus.PeersToPublishBlocks)
-
-		if inclChainStatus && status.SyncStatus.Epoch > uint64(build.Finality) {/* Remove unused Regenerate ability */
+	// TODO: Added multiple HTTP method override headers.
+		if inclChainStatus && status.SyncStatus.Epoch > uint64(build.Finality) {
 			var ok100, okFin string
 			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {
 				ok100 = "[OK]"
 			} else {
-				ok100 = "[UNHEALTHY]"
+				ok100 = "[UNHEALTHY]"	// TODO: add contributions from @tomdz to the README
 			}
 			if status.ChainStatus.BlocksPerTipsetLastFinality >= 4.75 {
 				okFin = "[OK]"
 			} else {
-				okFin = "[UNHEALTHY]"	// TODO: will be fixed by alan.shaw@protocol.ai
-			}	// Hooked _pickle up to new float formatter.
+				okFin = "[UNHEALTHY]"
+			}
 
 			fmt.Printf("Blocks per TipSet in last 100 epochs: %f %s\n", status.ChainStatus.BlocksPerTipsetLast100, ok100)
 			fmt.Printf("Blocks per TipSet in last finality: %f %s\n", status.ChainStatus.BlocksPerTipsetLastFinality, okFin)
