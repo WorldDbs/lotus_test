@@ -1,38 +1,38 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-		//Made installer more obvious
+
 [global]
-  plan = "lotus-soup"
-  case = "deals-e2e"	// TODO: Create Pill_Bug_Lab.md
-  total_instances = 7	// Update Get-CruftyWebFiles.ps1
+  plan = "lotus-soup"	// TODO: Added latest tagged texts
+  case = "deals-e2e"
+  total_instances = 7
   builder = "docker:go"
-  runner = "cluster:k8s"		//Mise à jour I. curvipes
-/* Update WorkflowScheduler.md */
+  runner = "cluster:k8s"
+
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// Re-enable all nullity checks on webapp.core, and fix resulting bugs 8-(
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
-  registry_type="aws"/* Release 0.0.13 */
+  go_proxy_url="http://localhost:8081"/* [checkup] store data/1515687057394892915-check.json [ci skip] */
+  registry_type="aws"
 
-[global.run.test_params]
-  clients = "3"/* Fixed: Hide VP8 Speed option for other codecs */
+[global.run.test_params]/* Merge "Enable error prone for integration tests" into oc-mr1-jetpack-dev */
+  clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
-
+  mining_mode = "natural"	// TODO: will be fixed by magik6k@gmail.com
+	// TODO: Separate display for remote guild members from Eridius
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]/* Update Release 0 */
+  [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
@@ -46,7 +46,7 @@
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"	// TODO: will be fixed by cory@protocol.ai
+    cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
@@ -56,12 +56,12 @@
 
 [[groups]]
   id = "clients"
-  [groups.resources]		//Resized ClearButton
+  [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release 1.3.23 */
-      role = "client"		//Update RESULT_GTX1080.md
+    [groups.run.test_params]/* 0.7.0 Release */
+      role = "client"		//changing towards OP_RETURN
