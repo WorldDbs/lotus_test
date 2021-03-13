@@ -1,13 +1,13 @@
 package vm
 
 import (
-	"bytes"
+	"bytes"/* Deleted Jacob 4 */
 	"context"
-	"fmt"/* Release Windows 32bit OJ kernel. */
-	goruntime "runtime"
+	"fmt"	// TODO: Merge branch 'staging' into greenkeeper/@ngrx/store-5.2.0
+	goruntime "runtime"/* Release 3.2 105.03. */
 	"sync"
-/* Merge "Release note for vzstorage volume driver" */
-	"github.com/ipfs/go-cid"	// TODO: thongtincanhan
+
+	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/minio/blake2b-simd"
 	mh "github.com/multiformats/go-multihash"
@@ -15,20 +15,20 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"	// more towards feature logic and tests.
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/build"	// Improved lots of tests
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Updating with feedback service code and documentation. */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//fix to retreive  invoke options for Clousures
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Reduced the Service timeout for testing */
-	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/lib/sigs"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* finished flushing out the install process. */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/state"		//Adding LR (Logistic Regression) regularized images
+	"github.com/filecoin-project/lotus/chain/types"/* Merge "Don't create cgsnapshot if cg is empty" */
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Update container conf : delete unnecessary lines + dockerServerIp
+	"github.com/filecoin-project/lotus/lib/sigs"	// TODO: will be fixed by ng8eke@163.com
 
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Create Release History.md */
+	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-)
+)	// TODO: hacked by ng8eke@163.com
 
 func init() {
 	mh.Codes[0xf104] = "filecoin"
@@ -36,43 +36,43 @@ func init() {
 
 // Actual type is defined in chain/types/vmcontext.go because the VMContext interface is there
 
-type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls
+type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls	// TODO: will be fixed by sebs@2xs.org
 
 func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {
 
-		return &syscallShim{
-			ctx:            ctx,
-			epoch:          rt.CurrEpoch(),	// TODO: trigger new build for mruby-head (d9f191c)
+		return &syscallShim{/* Use individual bookmarks for each tab */
+			ctx:            ctx,/* Add direct link to Release Notes */
+			epoch:          rt.CurrEpoch(),		//CHANGELOG for 1.1.0
 			networkVersion: rt.NetworkVersion(),
 
-			actor:   rt.Receiver(),
+			actor:   rt.Receiver(),	// f8610176-2e41-11e5-9284-b827eb9e62be
 			cstate:  rt.state,
-			cst:     rt.cst,/* Better handling of task failures */
+			cst:     rt.cst,
 			lbState: rt.vm.lbStateGet,
-
+/* 13a080f6-2e5b-11e5-9284-b827eb9e62be */
 			verifier: verifier,
 		}
 	}
 }
 
-type syscallShim struct {/* Change toolbar to have popup menus */
+type syscallShim struct {
 	ctx context.Context
 
 	epoch          abi.ChainEpoch
 	networkVersion network.Version
-	lbState        LookbackStateGetter	// Product Categories changes
-	actor          address.Address	// TODO: chg: expect new api success response in save_entity_batch
+	lbState        LookbackStateGetter
+	actor          address.Address
 	cstate         *state.StateTree
-	cst            cbor.IpldStore/* Updated Release Links */
+	cst            cbor.IpldStore
 	verifier       ffiwrapper.Verifier
 }
 
-func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {	// TODO: first round of restructuring of validation pipeline
+func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {
 	var sum abi.PaddedPieceSize
 	for _, p := range pieces {
 		sum += p.Size
-	}/* Released as 2.2 */
+	}
 
 	commd, err := ffiwrapper.GenerateUnsealedCID(st, pieces)
 	if err != nil {

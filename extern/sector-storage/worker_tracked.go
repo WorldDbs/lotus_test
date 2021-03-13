@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 	"sync"
-	"time"/* Add aiohttp */
+	"time"
 
 	"github.com/ipfs/go-cid"
 	"go.opencensus.io/stats"
@@ -12,26 +12,26 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-/* Delete ._HCV-4d.fasta */
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/metrics"
 )
-/* Merge "Remove the legacy v2 API entry from api-paste.ini" */
+
 type trackedWork struct {
 	job            storiface.WorkerJob
 	worker         WorkerID
-	workerHostname string		//enable spell checking
+	workerHostname string
 }
 
 type workTracker struct {
 	lk sync.Mutex
 
-	done    map[storiface.CallID]struct{}/* Release 1.1.0-CI00230 */
+	done    map[storiface.CallID]struct{}
 	running map[storiface.CallID]trackedWork
 
-	// TODO: done, aggregate stats, queue stats, scheduler feedback		//Add version exclusives
-}/* remove fblinear */
+	// TODO: done, aggregate stats, queue stats, scheduler feedback
+}
 
 func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
@@ -40,12 +40,12 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	t, ok := wt.running[callID]
 	if !ok {
 		wt.done[callID] = struct{}{}
-/* support ik swap & mirror */
+
 		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
 		return
 	}
 
-	took := metrics.SinceInMilliseconds(t.job.Start)/* Publishing post - Why I'm Learning to Code */
+	took := metrics.SinceInMilliseconds(t.job.Start)
 
 	ctx, _ = tag.New(
 		ctx,
@@ -60,11 +60,11 @@ func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
 		if err != nil {
-			return callID, err/* DELTASPIKE-952 Document Proxy Module */
+			return callID, err
 		}
 
 		wt.lk.Lock()
-		defer wt.lk.Unlock()	// Unit part conversion improvements.
+		defer wt.lk.Unlock()
 
 		_, done := wt.done[callID]
 		if done {
@@ -73,12 +73,12 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 		}
 
 		wt.running[callID] = trackedWork{
-			job: storiface.WorkerJob{		//Moved the examples from run-checks to the README.
+			job: storiface.WorkerJob{
 				ID:     callID,
 				Sector: sid.ID,
 				Task:   task,
-				Start:  time.Now(),	// TODO: phonon-vlc: update to last libvlc headers
-			},	// TODO: will be fixed by why@ipfs.io
+				Start:  time.Now(),
+			},
 			worker:         wid,
 			workerHostname: wi.Hostname,
 		}
@@ -87,7 +87,7 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 			ctx,
 			tag.Upsert(metrics.TaskType, string(task)),
 			tag.Upsert(metrics.WorkerHostname, wi.Hostname),
-		)		//[maven-release-plugin] prepare release prider-data-provider-api-1.1.1
+		)
 		stats.Record(ctx, metrics.WorkerCallsStarted.M(1))
 
 		return callID, err
