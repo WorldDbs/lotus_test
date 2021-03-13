@@ -1,29 +1,29 @@
 package policy
 
-import (/* amazon fix */
-	"sort"		//Update note5.md
-		//Updated version to reflect breaking change
+import (
+	"sort"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors"	// TODO: will be fixed by mail@bitpshr.net
-		//Queue fixes
+	"github.com/filecoin-project/lotus/chain/actors"
+
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-/* fix tile unloading */
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"/* added page for NW results */
+	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"/* Create decrypt */
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"	// Use proxy cache lock
-	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"	// TODO: Handling non-EC2 instances gracefully
-/* [artifactory-release] Release version 0.8.0.M2 */
+	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
+	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"		//Update pos_lists1.io
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
 
@@ -33,7 +33,7 @@ import (/* amazon fix */
 const (
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay/* Release1.4.4 */
+	PaychSettleDelay               = paych4.SettleDelay
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
 )
 
@@ -42,9 +42,9 @@ const (
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
-/* DocumentState partially working (just for tasks, projects' left). */
-	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))	// body checksum, get current url, find xpath as nodes (experimental)
-	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)	// TODO: Added unittest for the svn datastore.
+
+	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 
 	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))

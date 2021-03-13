@@ -1,7 +1,7 @@
 [metadata]
   name = "lotus-soup"
   author = "raulk"
-/* Fix line wrapping. */
+
 [global]
   plan = "lotus-soup"
   case = "paych-stress"
@@ -9,9 +9,9 @@
   builder = "exec:go"
   runner = "local:exec"
 
-[global.build]		//Document -c
+[global.build]
   selectors = ["testground"]
-	// Update travis build to fix deploy error.
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,9 +19,9 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "2"/* Fix Cxx build */
+  clients = "2"
   miners = "2"
-"0" = tesffo_pmatsemit_siseneg  
+  genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
   random_beacon_type = "mock"
@@ -29,22 +29,22 @@
   # number of lanes to send vouchers on
   lane_count = "8"
   # number of vouchers on each lane
-  vouchers_per_lane = "3"/* 875cb97a-2e55-11e5-9284-b827eb9e62be */
-  # amount to increase voucher by each time (per lane)/* Release jedipus-2.6.36 */
+  vouchers_per_lane = "3"
+  # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
 [[groups]]
   id = "bootstrapper"
-  instances = { count = 1 }	// TODO: 7a923434-2e52-11e5-9284-b827eb9e62be
+  instances = { count = 1 }
   [groups.run.test_params]
     role = "bootstrapper"
 
-[[groups]]	// f227c21a-2e44-11e5-9284-b827eb9e62be
-  id = "miners"/* Added a template for the ReleaseDrafter bot. */
+[[groups]]
+  id = "miners"
   instances = { count = 2 }
   [groups.run.test_params]
     role = "miner"
-/* removed replace of double-slash */
+
 [[groups]]
   id = "clients"
   # the first client will be on the receiving end; all others will be on the sending end.

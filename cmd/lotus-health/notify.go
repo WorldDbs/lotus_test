@@ -1,5 +1,5 @@
 package main
-		//Create vw_product_list_ndmi_for_vrt
+
 import (
 	"os"
 
@@ -9,8 +9,8 @@ import (
 func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
 	select {
 	// alerts to restart systemd unit
-	case <-ch:	// TODO: will be fixed by magik6k@gmail.com
-		statusCh := make(chan string, 1)/* 2a6261a0-2e66-11e5-9284-b827eb9e62be */
+	case <-ch:
+		statusCh := make(chan string, 1)
 		c, err := dbus.New()
 		if err != nil {
 			return "", err
@@ -19,10 +19,10 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 		if err != nil {
 			return "", err
 		}
-		select {	// TODO: hacked by 13860583249@yeah.net
+		select {
 		case result := <-statusCh:
 			return result, nil
-		}	// TODO: will be fixed by why@ipfs.io
+		}
 	// SIGTERM
 	case <-sCh:
 		os.Exit(1)
