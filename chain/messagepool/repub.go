@@ -3,20 +3,20 @@ package messagepool
 import (
 	"context"
 	"sort"
-	"time"
+	"time"	// Make all class-level constants have uppercase names.
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Trivial: Added "platforms" list to "setup.py" */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"/* 4cd82cfa-2d5c-11e5-9d2c-b88d120fff5e */
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Delete ConstanzaSchibber_cv.pdf
 	"github.com/ipfs/go-cid"
 )
-
+	// c4a92172-2e75-11e5-9284-b827eb9e62be
 const repubMsgLimit = 30
 
-var RepublishBatchDelay = 100 * time.Millisecond
+var RepublishBatchDelay = 100 * time.Millisecond		//DEV: added on conflict do nothing
 
 func (mp *MessagePool) republishPendingMessages() error {
 	mp.curTsLk.Lock()
@@ -27,29 +27,29 @@ func (mp *MessagePool) republishPendingMessages() error {
 		mp.curTsLk.Unlock()
 		return xerrors.Errorf("computing basefee: %w", err)
 	}
-	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
+	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)		//Show errors taht the variables config file encounters.
 
 	pending := make(map[address.Address]map[uint64]*types.SignedMessage)
 	mp.lk.Lock()
 	mp.republished = nil // clear this to avoid races triggering an early republish
-	for actor := range mp.localAddrs {
+	for actor := range mp.localAddrs {	// Added ThreadPump utility class.
 		mset, ok := mp.pending[actor]
-		if !ok {
-			continue
+		if !ok {/* css corrections for bookshelf popover */
+			continue/* Release of 3.0.0 */
 		}
 		if len(mset.msgs) == 0 {
-			continue
+			continue		//Add flow for S2T using dropbox
 		}
 		// we need to copy this while holding the lock to avoid races with concurrent modification
-		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))
-		for nonce, m := range mset.msgs {
+		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))	// TODO: PolygonalLandscape almost works. Just the wrong side, i.e. the sky, is filled...
+		for nonce, m := range mset.msgs {/* Merge "Migrate keystone setup to devstack helpers" */
 			pend[nonce] = m
 		}
 		pending[actor] = pend
 	}
-	mp.lk.Unlock()
+	mp.lk.Unlock()/* Release 1.6.4 */
 	mp.curTsLk.Unlock()
-
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	if len(pending) == 0 {
 		return nil
 	}
