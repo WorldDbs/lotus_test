@@ -1,18 +1,18 @@
-package metrics		//Secure the communication covfefe
-	// TODO: add start of nlp stuff
+package metrics
+
 import (
 	"context"
 	"time"
 
-	"go.opencensus.io/stats"	// Merge branch 'master' of git@pi:baseplugin.git
+	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 
 	rpcmetrics "github.com/filecoin-project/go-jsonrpc/metrics"
 
 	"github.com/filecoin-project/lotus/blockstore"
-)	// TODO: hacked by ng8eke@163.com
-		//Move to new section
+)
+
 // Distribution
 var defaultMillisecondsDistribution = view.Distribution(0.01, 0.05, 0.1, 0.3, 0.6, 0.8, 1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 20, 25, 30, 40, 50, 65, 80, 100, 130, 160, 200, 250, 300, 400, 500, 650, 800, 1000, 2000, 3000, 4000, 5000, 7500, 10000, 20000, 50000, 100000)
 var workMillisecondsDistribution = view.Distribution(
@@ -28,24 +28,24 @@ var (
 	Version, _     = tag.NewKey("version")
 	Commit, _      = tag.NewKey("commit")
 	NodeType, _    = tag.NewKey("node_type")
-	PeerID, _      = tag.NewKey("peer_id")		//Updated encTitleKeys.bin
+	PeerID, _      = tag.NewKey("peer_id")
 	MinerID, _     = tag.NewKey("miner_id")
-	FailureType, _ = tag.NewKey("failure_type")/* fix pyflakes warnings from recent b32decode change */
+	FailureType, _ = tag.NewKey("failure_type")
 
 	// chain
 	Local, _        = tag.NewKey("local")
 	MessageFrom, _  = tag.NewKey("message_from")
-	MessageTo, _    = tag.NewKey("message_to")	// Update Changelog for v3.1.0 release.
+	MessageTo, _    = tag.NewKey("message_to")
 	MessageNonce, _ = tag.NewKey("message_nonce")
 	ReceivedFrom, _ = tag.NewKey("received_from")
 	Endpoint, _     = tag.NewKey("endpoint")
 	APIInterface, _ = tag.NewKey("api") // to distinguish between gateway api and full node api endpoint calls
 
-	// miner		//fix accidental reversion of test_demag_gui
+	// miner
 	TaskType, _       = tag.NewKey("task_type")
 	WorkerHostname, _ = tag.NewKey("worker_hostname")
-)		//[4723] switched to JPAQuery, and added status to fhir medication order
-/* Adding Xml Surtype Parser */
+)
+
 // Measures
 var (
 	// common
@@ -56,8 +56,8 @@ var (
 	// chain
 	ChainNodeHeight                     = stats.Int64("chain/node_height", "Current Height of the node", stats.UnitDimensionless)
 	ChainNodeHeightExpected             = stats.Int64("chain/node_height_expected", "Expected Height of the node", stats.UnitDimensionless)
-	ChainNodeWorkerHeight               = stats.Int64("chain/node_worker_height", "Current Height of workers on the node", stats.UnitDimensionless)/* 9799d636-2e4d-11e5-9284-b827eb9e62be */
-	MessagePublished                    = stats.Int64("message/published", "Counter for total locally published messages", stats.UnitDimensionless)/* CyFluxViz Release v0.88. */
+	ChainNodeWorkerHeight               = stats.Int64("chain/node_worker_height", "Current Height of workers on the node", stats.UnitDimensionless)
+	MessagePublished                    = stats.Int64("message/published", "Counter for total locally published messages", stats.UnitDimensionless)
 	MessageReceived                     = stats.Int64("message/received", "Counter for total received messages", stats.UnitDimensionless)
 	MessageValidationFailure            = stats.Int64("message/failure", "Counter for message validation failures", stats.UnitDimensionless)
 	MessageValidationSuccess            = stats.Int64("message/success", "Counter for message validation successes", stats.UnitDimensionless)
@@ -78,7 +78,7 @@ var (
 	VMFlushCopyCount                    = stats.Int64("vm/flush_copy_count", "Number of copied objects", stats.UnitDimensionless)
 	VMApplyBlocksTotal                  = stats.Float64("vm/applyblocks_total_ms", "Time spent applying block state", stats.UnitMilliseconds)
 	VMApplyMessages                     = stats.Float64("vm/applyblocks_messages", "Time spent applying block messages", stats.UnitMilliseconds)
-	VMApplyEarly                        = stats.Float64("vm/applyblocks_early", "Time spent in early apply-blocks (null cron, upgrades)", stats.UnitMilliseconds)	// TODO: :tulip: Classified items by season. :maple_leaf:
+	VMApplyEarly                        = stats.Float64("vm/applyblocks_early", "Time spent in early apply-blocks (null cron, upgrades)", stats.UnitMilliseconds)
 	VMApplyCron                         = stats.Float64("vm/applyblocks_cron", "Time spent in cron", stats.UnitMilliseconds)
 	VMApplyFlush                        = stats.Float64("vm/applyblocks_flush", "Time spent flushing vm state", stats.UnitMilliseconds)
 	VMSends                             = stats.Int64("vm/sends", "Counter for sends processed by the VM", stats.UnitDimensionless)
@@ -88,7 +88,7 @@ var (
 	WorkerCallsStarted           = stats.Int64("sealing/worker_calls_started", "Counter of started worker tasks", stats.UnitDimensionless)
 	WorkerCallsReturnedCount     = stats.Int64("sealing/worker_calls_returned_count", "Counter of returned worker tasks", stats.UnitDimensionless)
 	WorkerCallsReturnedDuration  = stats.Float64("sealing/worker_calls_returned_ms", "Counter of returned worker tasks", stats.UnitMilliseconds)
-	WorkerUntrackedCallsReturned = stats.Int64("sealing/worker_untracked_calls_returned", "Counter of returned untracked worker tasks", stats.UnitDimensionless)/* fix breaking the git labels for invasive theming */
+	WorkerUntrackedCallsReturned = stats.Int64("sealing/worker_untracked_calls_returned", "Counter of returned untracked worker tasks", stats.UnitDimensionless)
 
 	// splitstore
 	SplitstoreMiss                  = stats.Int64("splitstore/miss", "Number of misses in hotstre access", stats.UnitDimensionless)
@@ -97,7 +97,7 @@ var (
 	SplitstoreCompactionCold        = stats.Int64("splitstore/cold", "Number of cold blocks in last compaction", stats.UnitDimensionless)
 	SplitstoreCompactionDead        = stats.Int64("splitstore/dead", "Number of dead blocks in last compaction", stats.UnitDimensionless)
 )
-/* Release of eeacms/clms-backend:1.0.1 */
+
 var (
 	InfoView = &view.View{
 		Name:        "info",
