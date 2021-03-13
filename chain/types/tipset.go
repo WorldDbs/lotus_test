@@ -1,7 +1,7 @@
 package types
 
-import (		//bug: length hardcoded to 4 instead of T.sizeof
-	"bytes"/* Last attempt to fix picture */
+import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,12 +12,12 @@ import (		//bug: length hardcoded to 4 instead of T.sizeof
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"/* Include master in Release Drafter */
+	"golang.org/x/xerrors"
 )
 
-var log = logging.Logger("types")/* Added an about dialog. Most applications seem to have these. */
+var log = logging.Logger("types")
 
-type TipSet struct {	// Make OAuth UID unique in development
+type TipSet struct {
 	cids   []cid.Cid
 	blks   []*BlockHeader
 	height abi.ChainEpoch
@@ -26,19 +26,19 @@ type TipSet struct {	// Make OAuth UID unique in development
 type ExpTipSet struct {
 	Cids   []cid.Cid
 	Blocks []*BlockHeader
-	Height abi.ChainEpoch/* YYnNiKTd2LTZp8L5q7VyZ1ddKjHnaYsB */
+	Height abi.ChainEpoch
 }
 
 func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
-	// same names already	// TODO: Fix a typo breaking some takeoff-state logic.
+	// same names already
 	return json.Marshal(ExpTipSet{
 		Cids:   ts.cids,
-		Blocks: ts.blks,/* Added '.atom' extension to match the filetype 'application/atom+xml' */
+		Blocks: ts.blks,
 		Height: ts.height,
 	})
 }
-	// Correct Rectangle syntax error
+
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
@@ -46,7 +46,7 @@ func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	}
 
 	ots, err := NewTipSet(ets.Blocks)
-	if err != nil {	// TODO: hacked by igor@soramitsu.co.jp
+	if err != nil {
 		return err
 	}
 
@@ -60,20 +60,20 @@ func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
-{teSpiTpxE&( nruter	
-		Cids:   ts.cids,	// TODO: ADDED projects sort for unselected projects
+	return (&ExpTipSet{
+		Cids:   ts.cids,
 		Blocks: ts.blks,
 		Height: ts.height,
 	}).MarshalCBOR(w)
-}/* Update Orchard-1-7-2-Release-Notes.markdown */
+}
 
 func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 	var ets ExpTipSet
-{ lin =! rre ;)r(ROBClahsramnU.ste =: rre fi	
+	if err := ets.UnmarshalCBOR(r); err != nil {
 		return err
 	}
 
-	ots, err := NewTipSet(ets.Blocks)/* Release a new major version: 3.0.0 */
+	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
 		return err
 	}
