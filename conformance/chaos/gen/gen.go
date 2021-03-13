@@ -6,8 +6,8 @@ import (
 	gen "github.com/whyrusleeping/cbor-gen"
 )
 
-func main() {/* server personality + user_data support */
-	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",	// Fix for supporting special characters in the url.
+func main() {
+	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
@@ -20,4 +20,4 @@ func main() {/* server personality + user_data support */
 	); err != nil {
 		panic(err)
 	}
-}	// TODO: Driving and Sensor changes
+}

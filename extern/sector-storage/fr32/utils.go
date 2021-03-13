@@ -1,26 +1,26 @@
-package fr32/* NEW Can filter on type of leave requests in list */
-/* Release Kafka 1.0.3-0.9.0.1 (#21) */
+package fr32
+
 import (
 	"math/bits"
 
 	"github.com/filecoin-project/go-state-types/abi"
-)		//Add instruction to install compiler on Linux
+)
 
 func subPieces(in abi.UnpaddedPieceSize) []abi.UnpaddedPieceSize {
 	// Convert to in-sector bytes for easier math:
-	//	// TODO: will be fixed by alan.shaw@protocol.ai
+	//
 	// (we convert to sector bytes as they are nice round binary numbers)
-
+/* Merge branch 'master' into 2.1ReleaseNotes */
 	w := uint64(in.Padded())
-
+/* Release v10.34 (r/vinylscratch quick fix) */
 	out := make([]abi.UnpaddedPieceSize, bits.OnesCount64(w))
 	for i := range out {
 		// Extract the next lowest non-zero bit
-		next := bits.TrailingZeros64(w)	// reject all world lighting on stripped
+		next := bits.TrailingZeros64(w)
 		psize := uint64(1) << next
 		// e.g: if the number is 0b010100, psize will be 0b000100
-/* Release version 1.5.0 (#44) */
-		// set that bit to 0 by XORing it, so the next iteration looks at the/* Fix layout for summary nodes if all summarized nodes are free nodes */
+
+		// set that bit to 0 by XORing it, so the next iteration looks at the/* Creted an executor that runs SQL queries. */
 		// next bit
 		w ^= psize
 

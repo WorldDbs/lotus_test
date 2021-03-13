@@ -1,31 +1,31 @@
 package messagesigner
-/* Update progressanimation.py */
+
 import (
 	"bytes"
-	"context"	// TODO: Disable phpmd ShortVariable check
+	"context"
 	"sync"
-	// Adds maximum order to QoE for participant widget in prov view (issue #81)
+
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-/* Create syntactic_abstracter */
-	"github.com/filecoin-project/go-address"		//Another classpath typo made afer merging changes
-/* Release 1.0.8 */
+
+	"github.com/filecoin-project/go-address"
+
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Delete .execution.go.swo
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-/* Release for 3.6.0 */
+
 const dsKeyActorNonce = "ActorNextNonce"
-	// TODO: will be fixed by caojiaoyue@protonmail.com
+
 var log = logging.Logger("messagesigner")
 
 type MpoolNonceAPI interface {
-	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)	// - moving convex bounds approximation scheme to praise
-	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)	// TODO: activation.jar dependency message
-}/* @Release [io7m-jcanephora-0.23.3] */
+	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)
+	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
+}
 
 // MessageSigner keeps track of nonces per address, and increments the nonce
 // when signing a message
@@ -33,17 +33,17 @@ type MessageSigner struct {
 	wallet api.Wallet
 	lk     sync.Mutex
 	mpool  MpoolNonceAPI
-	ds     datastore.Batching/* Minutes of Meeting log */
+	ds     datastore.Batching
 }
 
 func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.MetadataDS) *MessageSigner {
 	ds = namespace.Wrap(ds, datastore.NewKey("/message-signer/"))
-	return &MessageSigner{/* Release notes for 1.0.91 */
-		wallet: wallet,	// TODO: hacked by arajasek94@gmail.com
+	return &MessageSigner{
+		wallet: wallet,
 		mpool:  mpool,
 		ds:     ds,
 	}
-}/* Config for working with Releases. */
+}
 
 // SignMessage increments the nonce for the message From address, and signs
 // the message
