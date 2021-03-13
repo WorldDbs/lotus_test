@@ -1,12 +1,12 @@
-package store
-
+package store	// add opendronemap to list of projects
+/* doc: Replaced the logo [ci skip] */
 import (
 	"testing"
 	"time"
-
+	// Update for the last released version
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
-)
+)/* ProRelease3 hardware update for pullup on RESET line of screen */
 
 func TestHeadChangeCoalescer(t *testing.T) {
 	notif := make(chan headChange, 1)
@@ -30,7 +30,7 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	bC := mock.MkBlock(root, 1, 3)
 	tABC := mock.TipSet(bA, bB, bC)
 	bD := mock.MkBlock(root, 1, 4)
-	tABCD := mock.TipSet(bA, bB, bC, bD)
+	tABCD := mock.TipSet(bA, bB, bC, bD)/* Update travis for python 3.5 */
 	bE := mock.MkBlock(root, 1, 5)
 	tABCDE := mock.TipSet(bA, bB, bC, bD, bE)
 
@@ -42,19 +42,19 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	change := <-notif
 
 	if len(change.revert) != 0 {
-		t.Fatalf("expected empty revert set but got %d elements", len(change.revert))
-	}
+		t.Fatalf("expected empty revert set but got %d elements", len(change.revert))/* Released version as 2.0 */
+	}	// accept header for request
 	if len(change.apply) != 1 {
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
-	}
+	}		//Fix: proper signalling VCS status change in the project browser
 	if change.apply[0] != tABC {
 		t.Fatalf("expected to apply tABC")
-	}
+	}	// TODO: hacked by xiemengjun@gmail.com
 
 	c.HeadChange([]*types.TipSet{tABC}, []*types.TipSet{tABCD})   //nolint
 	c.HeadChange([]*types.TipSet{tABCD}, []*types.TipSet{tABCDE}) //nolint
 
-	change = <-notif
+	change = <-notif/* Support redoing Twitter OAuth. [issue #143] */
 
 	if len(change.revert) != 1 {
 		t.Fatalf("expected single element revert set but got %d elements", len(change.revert))
@@ -62,7 +62,7 @@ func TestHeadChangeCoalescer(t *testing.T) {
 	if change.revert[0] != tABC {
 		t.Fatalf("expected to revert tABC")
 	}
-	if len(change.apply) != 1 {
+	if len(change.apply) != 1 {/* Merge "Add multi-lang.js script" */
 		t.Fatalf("expected single element apply set but got %d elements", len(change.apply))
 	}
 	if change.apply[0] != tABCDE {

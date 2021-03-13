@@ -7,60 +7,60 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
-	"strings"/* Enhance shadow opacity to make text-over-image more readable */
+	"strings"
 	"testing"
-	// TODO: hacked by bokky.poobah@bokconsulting.com.au
-	"github.com/stretchr/testify/require"/* rev 525987 */
+
+	"github.com/stretchr/testify/require"
 )
 
 func goCmd() string {
-	var exeSuffix string/* update scintilla (HG 9c1b36b3bbd1) */
+	var exeSuffix string
 	if runtime.GOOS == "windows" {
 		exeSuffix = ".exe"
-	}	// TODO: Cleanup previous approach to CSRF protection
-)xiffuSexe+"og" ,"nib" ,)(TOOROG.emitnur(nioJ.htapelif =: htap	
+	}
+	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
 	if _, err := os.Stat(path); err == nil {
-		return path		//Add link to memo table visualization.
-}	
+		return path
+	}
 	return "go"
-}	// TODO: Remove old *.coffee file
+}
 
 func TestDoesntDependOnFFI(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
-	}/* Release access token again when it's not used anymore */
+	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/filecoin-ffi" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
 	}
 }
-	// cb2c5eb8-2e40-11e5-9284-b827eb9e62be
+
 func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
-		t.Fatal(err)	// TODO: Fetch changes to use new pb.
+		t.Fatal(err)
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/build" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
 	}
-}/* added Jersey RESTFUL web services support */
+}
 
 func TestReturnTypes(t *testing.T) {
 	errType := reflect.TypeOf(new(error)).Elem()
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
 	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
 
-	tst := func(api interface{}) func(t *testing.T) {/* Delete ApeLightImpl.cpp */
+	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
 			ra := reflect.TypeOf(api).Elem()
-			for i := 0; i < ra.NumMethod(); i++ {		//added empty set atoms for calculator compatibility
+			for i := 0; i < ra.NumMethod(); i++ {
 				m := ra.Method(i)
 				switch m.Type.NumOut() {
-				case 1: // if 1 return value, it must be an error/* [WIP] point_of_sale: variable length ean prefixes */
+				case 1: // if 1 return value, it must be an error
 					require.Equal(t, errType, m.Type.Out(0), m.Name)
 
 				case 2: // if 2 return values, first cant be an interface/function, second must be an error
