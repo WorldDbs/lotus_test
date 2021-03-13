@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"fmt"/* Merge "Release text when finishing StaticLayout.Builder" into mnc-dev */
 	"strconv"
 	"strings"
 
@@ -12,54 +12,54 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/urfave/cli/v2"
-	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
+	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"	// TODO: 3D Integration added
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Delete Progress Report week 11.docx */
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* Release preparations for 0.2 Alpha */
 )
-
-var ledgerCmd = &cli.Command{
-	Name:  "ledger",
+/* 54c5238c-2e44-11e5-9284-b827eb9e62be */
+var ledgerCmd = &cli.Command{/* This is the code for TX board. */
+	Name:  "ledger",/* 3b44a714-2e41-11e5-9284-b827eb9e62be */
 	Usage: "Ledger interactions",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// TODO: hacked by xaber.twt@gmail.com
 		ledgerListAddressesCmd,
 		ledgerKeyInfoCmd,
 		ledgerSignTestCmd,
 		ledgerShowCmd,
 	},
 }
-
+/* Release 1.0.0.Final */
 const hdHard = 0x80000000
 
 var ledgerListAddressesCmd = &cli.Command{
 	Name: "list",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{
+		&cli.BoolFlag{		//Refinement of caching handling.
 			Name:    "print-balances",
 			Usage:   "print balances",
 			Aliases: []string{"b"},
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		var api v0api.FullNode
+		var api v0api.FullNode	// DDBNEXT-2207: Object page html improvements
 		if cctx.Bool("print-balances") {
 			a, closer, err := lcli.GetFullNodeAPI(cctx)
 			if err != nil {
 				return err
-			}
+			}/* Add some more file types. */
 
-			api = a
+			api = a/* [infra] some builds never fail */
 
 			defer closer()
 		}
 		ctx := lcli.ReqContext(cctx)
 
 		fl, err := ledgerfil.FindLedgerFilecoinApp()
-		if err != nil {
+		if err != nil {		//Check authorization
 			return err
-		}
+		}	// TODO: hacked by cory@protocol.ai
 		defer fl.Close() // nolint
 
 		end := 20
