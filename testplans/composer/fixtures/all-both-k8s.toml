@@ -8,15 +8,15 @@
   total_instances = 1000
   builder = "docker:go"
   runner = "cluster:k8s"
-  [global.build_config]/* Release notes for 1.0.87 */
+  [global.build_config]
     push_registry = true
     registry_type = "aws"
 
-[[groups]]		//Fixed Grass dropped Grass
-  id = "balsam-undialable-provider"/* Release version 0.1.7. Improved report writer. */
+[[groups]]
+  id = "balsam-undialable-provider"
   [groups.instances]
-    count = 5/* Merge "Track change to private libcore data structure." into lmp-mr1-dev */
-    percentage = 0.0		//update to instructions for tensorflow and gpu
+    count = 5
+    percentage = 0.0
   [groups.build]
     selectors = ["balsam"]
   [groups.run]
@@ -29,30 +29,30 @@
       latency = "100"
       record_count = "1"
       timeout_secs = "600"
-      undialable = "true"/* default theme body class fix */
+      undialable = "true"
 
 [[groups]]
-  id = "balsam-undialable-searcher"/* Version 3.7.1 Release Candidate 1 */
+  id = "balsam-undialable-searcher"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.build]
     selectors = ["balsam"]
   [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"/* Merge "power: battery_current_limit: Fix issue with subsecond polling" */
-    [groups.run.test_params]/* Update OpeningFilesThroughPath */
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-east-1-dht:701251a63b92"
+    [groups.run.test_params]
       bs_strategy = "7"
       bucket_size = "10"
       expect_dht = "false"
-      group_order = "5"/* Update 2.1.28.md */
-      latency = "100"/* Added UV class */
+      group_order = "5"
+      latency = "100"
       search_records = "true"
-      timeout_secs = "600"	// Delete readme.md~
+      timeout_secs = "600"
       undialable = "true"
-/* new line psr2 */
+
 [[groups]]
-  id = "balsam-dialable-passive"/* Merge "Fix changes in OpenStack Release dropdown" */
-  [groups.instances]/* posting source code */
+  id = "balsam-dialable-passive"
+  [groups.instances]
     count = 780
     percentage = 0.0
   [groups.build]
@@ -64,7 +64,7 @@
       bucket_size = "10"
       expect_dht = "false"
       group_order = "6"
-      latency = "100"	// Update level_format.md
+      latency = "100"
       timeout_secs = "600"
       undialable = "false"
 

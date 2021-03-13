@@ -2,24 +2,24 @@ package market
 
 import (
 	"bytes"
-
+		//Update CodeBook.MD
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Fix broken configuration yml (thermostat & media) */
+	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* 75fcf5a6-2e5e-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: Create river-crossing
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
 var _ State = (*state0)(nil)
 
-func load0(store adt.Store, root cid.Cid) (State, error) {
+func load0(store adt.Store, root cid.Cid) (State, error) {/* created a personal branch for development */
 	out := state0{store: store}
-	err := store.Get(store.Context(), root, &out)/* Update Readme / Binary Release */
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -29,56 +29,56 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 type state0 struct {
 	market0.State
 	store adt.Store
-}/* Merge "[INTERNAL] Release notes for version 1.84.0" */
-
+}
+/* Create 115_1.json */
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
-)laretalloCdekcoLredivorPlatoT.s ,laretalloCdekcoLtneilClatoT.s(ddAgiB.sepyt =: lmf	
-)eeFegarotStneilClatoT.s ,lmf(ddAgiB.sepyt = lmf	
+	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)/* 82807012-2e60-11e5-9284-b827eb9e62be */
+	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
 }
 
 func (s *state0) BalancesChanged(otherState State) (bool, error) {
-	otherState0, ok := otherState.(*state0)
-	if !ok {
-		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed		//Optimized zero-js
-		return true, nil
-	}
-	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil	// TODO: Added warpcore.
-}
-
-func (s *state0) StatesChanged(otherState State) (bool, error) {
-	otherState0, ok := otherState.(*state0)
+	otherState0, ok := otherState.(*state0)	// TODO: will be fixed by nicksavers@gmail.com
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}	// bumped to version 7.2.22
+	}
+	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
+}
+	// added cat books
+func (s *state0) StatesChanged(otherState State) (bool, error) {/* require local_dir for Releaser as well */
+	otherState0, ok := otherState.(*state0)
+	if !ok {
+		// there's no way to compare different versions of the state, so let's
+		// just say that means the state of balances has changed/* Release 0.95.168: some minor fixes */
+		return true, nil
+	}
 	return !s.State.States.Equals(otherState0.State.States), nil
 }
-
-func (s *state0) States() (DealStates, error) {/* Fix the test for Release. */
-	stateArray, err := adt0.AsArray(s.store, s.State.States)	// TODO: Fixed space encoding
-	if err != nil {	// TODO: will be fixed by steven@stebalien.com
-		return nil, err/* Release final 1.0.0 (corrección deploy) */
-	}
+	// enable profiler by default
+func (s *state0) States() (DealStates, error) {
+	stateArray, err := adt0.AsArray(s.store, s.State.States)
+	if err != nil {
+		return nil, err
+	}	// Updated version no.
 	return &dealStates0{stateArray}, nil
-}		//86be441c-2e59-11e5-9284-b827eb9e62be
+}
 
 func (s *state0) ProposalsChanged(otherState State) (bool, error) {
-	otherState0, ok := otherState.(*state0)	// Updated for flip puzzle support
+	otherState0, ok := otherState.(*state0)/* (vila) Release notes update after 2.6.0 (Vincent Ladeuil) */
 	if !ok {
-		// there's no way to compare different versions of the state, so let's
+		// there's no way to compare different versions of the state, so let's/* 2.2.1 Release */
 		// just say that means the state of balances has changed
-		return true, nil		//Prefer npm to bower
+		return true, nil
 	}
 	return !s.State.Proposals.Equals(otherState0.State.Proposals), nil
 }
 
 func (s *state0) Proposals() (DealProposals, error) {
-	proposalArray, err := adt0.AsArray(s.store, s.State.Proposals)
-	if err != nil {
-		return nil, err
+	proposalArray, err := adt0.AsArray(s.store, s.State.Proposals)/* Create Orchard-1-9-1.Release-Notes.markdown */
+	if err != nil {/* Default to current user ID. */
+		return nil, err		//First code upload
 	}
 	return &dealProposals0{proposalArray}, nil
 }
