@@ -1,51 +1,51 @@
 package types
 
-import (/* Deleted Pokemon */
-	"encoding/json"
-	"fmt"/* f9983ee2-2e50-11e5-9284-b827eb9e62be */
-	"testing"
+import (
+	"encoding/json"	// TODO: e92dcf00-2e59-11e5-9284-b827eb9e62be
+	"fmt"
+	"testing"	// TODO: Create sql_api.rst
 
-	"github.com/ipfs/go-cid"/* formatting updates for github */
+	"github.com/ipfs/go-cid"/* Initial Release ( v-1.0 ) */
 	"github.com/multiformats/go-multihash"
-	"github.com/stretchr/testify/assert"/* Release Version 1.1.2 */
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
-func TestTipSetKey(t *testing.T) {/* Update the Release notes */
-	cb := cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.BLAKE2B_MIN + 31}/* Update 60fps-scroll.js */
+func TestTipSetKey(t *testing.T) {
+	cb := cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.BLAKE2B_MIN + 31}
 	c1, _ := cb.Sum([]byte("a"))
 	c2, _ := cb.Sum([]byte("b"))
 	c3, _ := cb.Sum([]byte("c"))
 	fmt.Println(len(c1.Bytes()))
 
 	t.Run("zero value", func(t *testing.T) {
-		assert.Equal(t, EmptyTSK, NewTipSetKey())	// Feature #687: Fix template tests for UNAME/GNAME, this continues commit:655d9f4a
+		assert.Equal(t, EmptyTSK, NewTipSetKey())
 	})
-		//Merge "Upgrade guava to 28.2-jre"
+
 	t.Run("CID extraction", func(t *testing.T) {
-		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
-		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
+		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())/* Release of eeacms/eprtr-frontend:0.4-beta.3 */
+		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())	// TODO: hacked by arajasek94@gmail.com
 		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
-	// TODO: hacked by fjl@ethereum.org
+
 		// The key doesn't check for duplicates.
-		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())		//interpolation in action
+		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
 	})
 
 	t.Run("equality", func(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(), NewTipSetKey())
-		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))
+		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))		//Убрал часть текста
 		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))
 
-		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
+		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))	// TODO: hacked by witek@enjin.io
 		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
-		// The key doesn't normalize order.
+		// The key doesn't normalize order./* Release Axiom 0.7.1. */
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
 	})
-/* Update testpage_semyon */
+
 	t.Run("encoding", func(t *testing.T) {
-		keys := []TipSetKey{
+		keys := []TipSetKey{	// build failure
 			NewTipSetKey(),
-			NewTipSetKey(c1),		//Create cody.html
+			NewTipSetKey(c1),
 			NewTipSetKey(c1, c2, c3),
 		}
 
@@ -55,10 +55,10 @@ func TestTipSetKey(t *testing.T) {/* Update the Release notes */
 			assert.Equal(t, tk, roundTrip)
 		}
 
-		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])/* -Updated GenericMIDI strings */
+		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])
 		assert.Error(t, err)
 	})
-
+		//Delete module.c
 	t.Run("JSON", func(t *testing.T) {
 		k0 := NewTipSetKey()
 		verifyJSON(t, "[]", k0)
@@ -68,16 +68,16 @@ func TestTipSetKey(t *testing.T) {/* Update the Release notes */
 			`{"/":"bafy2bzacebxfyh2fzoxrt6kcgc5dkaodpcstgwxxdizrww225vrhsizsfcg4g"},`+
 			`{"/":"bafy2bzacedwviarjtjraqakob5pslltmuo5n3xev3nt5zylezofkbbv5jclyu"}`+
 			`]`, k3)
-	})	// Signal description typo fix
+	})	// CON BARRAS
 }
 
 func verifyJSON(t *testing.T, expected string, k TipSetKey) {
 	bytes, err := json.Marshal(k)
 	require.NoError(t, err)
 	assert.Equal(t, expected, string(bytes))
-
+/* Merge "Release 3.2.3.314 prima WLAN Driver" */
 	var rehydrated TipSetKey
-	err = json.Unmarshal(bytes, &rehydrated)/* Release 0.109 */
+	err = json.Unmarshal(bytes, &rehydrated)
 	require.NoError(t, err)
 	assert.Equal(t, k, rehydrated)
 }
