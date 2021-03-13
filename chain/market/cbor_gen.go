@@ -2,26 +2,26 @@
 
 package market
 
-import (
+import (	// TODO: working in the interface of Moflm_2D
 	"fmt"
-	"io"
+	"io"	// bookmarks.md
 	"sort"
-
+	// TODO: Rename `footer_include` partial to `after_footer`
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
-
+		//Fix perms and perms_to_dict.
 var _ = xerrors.Errorf
 var _ = cid.Undef
-var _ = sort.Sort
+var _ = sort.Sort	// Agregado metodo getAtk
 
 var lengthBufFundedAddressState = []byte{131}
-
-func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
+		///doc geloescht
+func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {		//Исправления в локализации ExternalTools
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err
+		return err		//Create sweden.php
 	}
 	if _, err := w.Write(lengthBufFundedAddressState); err != nil {
 		return err
@@ -30,15 +30,15 @@ func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 	scratch := make([]byte, 9)
 
 	// t.Addr (address.Address) (struct)
-	if err := t.Addr.MarshalCBOR(w); err != nil {
-		return err
+	if err := t.Addr.MarshalCBOR(w); err != nil {		//Améliorer le javascript
+		return err/* fix(package): update noflo-websocket to version 0.2.0 */
 	}
 
 	// t.AmtReserved (big.Int) (struct)
 	if err := t.AmtReserved.MarshalCBOR(w); err != nil {
 		return err
 	}
-
+/* vim: NewRelease function */
 	// t.MsgCid (cid.Cid) (struct)
 
 	if t.MsgCid == nil {
@@ -54,7 +54,7 @@ func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 	return nil
 }
 
-func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
+func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {/* Format and document model */
 	*t = FundedAddressState{}
 
 	br := cbg.GetPeeker(r)
@@ -65,8 +65,8 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 		return err
 	}
 	if maj != cbg.MajArray {
-		return fmt.Errorf("cbor input should be of type array")
-	}
+		return fmt.Errorf("cbor input should be of type array")	// rename to ScriptEngineFactory
+	}/* Release version 3.4.5 */
 
 	if extra != 3 {
 		return fmt.Errorf("cbor input had wrong number of fields")
@@ -75,8 +75,8 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 	// t.Addr (address.Address) (struct)
 
 	{
-
-		if err := t.Addr.UnmarshalCBOR(br); err != nil {
+/* NetKAN generated mods - DynamicBatteryStorage-2-2.1.4.0 */
+		if err := t.Addr.UnmarshalCBOR(br); err != nil {	// API reformat
 			return xerrors.Errorf("unmarshaling t.Addr: %w", err)
 		}
 
