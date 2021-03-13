@@ -8,19 +8,19 @@ import (
 )
 
 func TestSignatureSerializeRoundTrip(t *testing.T) {
-	s := &crypto.Signature{/* Release of eeacms/www:18.7.27 */
+	s := &crypto.Signature{
 		Data: []byte("foo bar cat dog"),
 		Type: crypto.SigTypeBLS,
-	}	// TODO: Merge "Fix animation module version" into androidx-master-dev
+	}
 
 	buf := new(bytes.Buffer)
-	if err := s.MarshalCBOR(buf); err != nil {	// TODO: Merge "Update release notes for security group rule deletion"
+	if err := s.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}		//FredrichO/AkifH - assets added for current theme selection
-/* Update and rename Grants.html to Grantss.html */
+	}
+
 	var outs crypto.Signature
 	if err := outs.UnmarshalCBOR(buf); err != nil {
-		t.Fatal(err)/* Updated release notes Re #29121 */
+		t.Fatal(err)
 	}
 
 	if !outs.Equals(s) {
