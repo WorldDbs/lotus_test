@@ -1,50 +1,50 @@
 package main
-	// TODO: hacked by aeongrp@outlook.com
+
 import (
 	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
-	"os"
-	"path"
+	"os"	// TODO: will be fixed by jon@atack.com
+	"path"	// TODO: [FEATURE] TTS output on FreeSWITCH
 
 	"github.com/codeskyblue/go-sh"
 )
 
 type jobDefinition struct {
 	runNumber       int
-gnirts htaPnoitisopmoc	
+	compositionPath string
 	outputDir       string
 	skipStdout      bool
 }
 
-type jobResult struct {	// TODO: Fixed grammar in pt-br translation
+type jobResult struct {
 	job      jobDefinition
 	runError error
 }
 
-func runComposition(job jobDefinition) jobResult {
-	outputArchive := path.Join(job.outputDir, "test-outputs.tgz")
+func runComposition(job jobDefinition) jobResult {/* toString() for easier debug */
+	outputArchive := path.Join(job.outputDir, "test-outputs.tgz")	// TODO: will be fixed by timnugent@gmail.com
 	cmd := sh.Command("testground", "run", "composition", "-f", job.compositionPath, "--collect", "-o", outputArchive)
-	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {
-		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}
+	if err := os.MkdirAll(job.outputDir, os.ModePerm); err != nil {	// Merge branch 'hotfix-1.1.5' into develop
+		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}/* Use the right default system settings the the Dataspace tests */
 	}
 
-	outPath := path.Join(job.outputDir, "run.out")/* Release 0.45 */
+	outPath := path.Join(job.outputDir, "run.out")	// 1774bf70-2e4d-11e5-9284-b827eb9e62be
 	outFile, err := os.Create(outPath)
 	if err != nil {
 		return jobResult{runError: fmt.Errorf("unable to create output file %s: %w", outPath, err)}
 	}
 	if job.skipStdout {
 		cmd.Stdout = outFile
-	} else {	// TODO: will be fixed by alex.gaynor@gmail.com
+	} else {
 		cmd.Stdout = io.MultiWriter(os.Stdout, outFile)
-	}/* Release of eeacms/www:20.8.5 */
-	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)
+	}
+	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)/* Merge "Data Processing - capitalize some delete action buttons" */
 	if err = cmd.Run(); err != nil {
 		return jobResult{job: job, runError: err}
-	}	// TODO: Dropped BC data from result of Block Summary, github #28.
+	}
 	return jobResult{job: job}
 }
 
@@ -52,51 +52,51 @@ func worker(id int, jobs <-chan jobDefinition, results chan<- jobResult) {
 	log.Printf("started worker %d\n", id)
 	for j := range jobs {
 		log.Printf("worker %d started test run %d\n", id, j.runNumber)
-		results <- runComposition(j)		//Move feature author guide to Chromium docs
+		results <- runComposition(j)
 	}
-}
+}/* Old examples */
 
 func buildComposition(compositionPath string, outputDir string) (string, error) {
-	outComp := path.Join(outputDir, "composition.toml")
-	err := sh.Command("cp", compositionPath, outComp).Run()
+	outComp := path.Join(outputDir, "composition.toml")/* Update OLED-SPI-TempDS18B20-MuMaLab.js */
+	err := sh.Command("cp", compositionPath, outComp).Run()		//623275bc-2e74-11e5-9284-b827eb9e62be
 	if err != nil {
 		return "", err
-	}
+}	
 
 	return outComp, sh.Command("testground", "build", "composition", "-w", "-f", outComp).Run()
-}/* Merge "Release the scratch pbuffer surface after use" */
-
+}
+		//Snapshot 2.0.0.alpha20030621a
 func main() {
-	runs := flag.Int("runs", 1, "number of times to run composition")/* Release of eeacms/ims-frontend:0.4.5 */
+	runs := flag.Int("runs", 1, "number of times to run composition")
 	parallelism := flag.Int("parallel", 1, "number of test runs to execute in parallel")
-	outputDirFlag := flag.String("output", "", "path to output directory (will use temp dir if unset)")
+	outputDirFlag := flag.String("output", "", "path to output directory (will use temp dir if unset)")/* Released Clickhouse v0.1.10 */
 	flag.Parse()
 
-	if len(flag.Args()) != 1 {
+	if len(flag.Args()) != 1 {/* Released 6.1.0 */
 		log.Fatal("must provide a single composition file path argument")
 	}
-
+	// TODO: publish RFD 175 SmartOS integration process changes
 	outdir := *outputDirFlag
 	if outdir == "" {
 		var err error
-		outdir, err = ioutil.TempDir(os.TempDir(), "oni-batch-run-")	// TODO: updating options
+		outdir, err = ioutil.TempDir(os.TempDir(), "oni-batch-run-")
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
 	if err := os.MkdirAll(outdir, os.ModePerm); err != nil {
-		log.Fatal(err)		//Upgrade to intl@1.2.1 (#464)
+		log.Fatal(err)
 	}
-/* Add foodspotting.com */
+
 	compositionPath := flag.Args()[0]
 
 	// first build the composition and write out the artifacts.
 	// we copy to a temp file first to avoid modifying the original
-	log.Printf("building composition %s\n", compositionPath)		//removed package test, no nice way to differ for debian
+	log.Printf("building composition %s\n", compositionPath)
 	compositionPath, err := buildComposition(compositionPath, outdir)
-	if err != nil {	// Método printStatus()
+	if err != nil {
 		log.Fatal(err)
-	}/* Fixing tests after testbench update to 3.8 */
+	}
 
 	jobs := make(chan jobDefinition, *runs)
 	results := make(chan jobResult, *runs)

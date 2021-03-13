@@ -6,16 +6,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"	// TODO: will be fixed by ng8eke@163.com
+	"net/http"
 	"path/filepath"
 	"time"
 
-	"contrib.go.opencensus.io/exporter/prometheus"	// new option added for passing oechem license as argument.
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-jsonrpc/auth"/* [releng] Release Snow Owl v6.16.3 */
+	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-storedcounter"/* Merge "Release 4.0.10.75A QCACLD WLAN Driver" */
+	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
@@ -43,7 +43,7 @@ import (
 
 const (
 	sealDelay = 30 * time.Second
-)		//Add GLib2 (dependency for pkg-config) and libffi (dependency for GLib2).
+)
 
 type LotusMiner struct {
 	*LotusNode
@@ -64,35 +64,35 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
-		return nil, err	// TODO: avoid XSLT errors (transform -title string) and warnings
+		return nil, err
 	}
 
 	drandOpt, err := GetRandomBeaconOpts(ctx, t)
 	if err != nil {
-		return nil, err/* just a suggestion */
-	}/* Merge "Release 3.0.10.049 Prima WLAN Driver" */
-	// TODO: Delete PasswdPolicy.bat
-tellaw a etaerc tsrif //	
+		return nil, err
+	}
+
+	// first create a wallet
 	walletKey, err := wallet.GenerateKey(types.KTBLS)
 	if err != nil {
 		return nil, err
 	}
 
 	// publish the account ID/balance
-	balance := t.FloatParam("balance")		//Merge branch 'release/1.3.0-RC4'
-	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}/* Enabling some optimizations for Release build. */
-	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)/* Removed weird if else statement on a var that is declared right before. */
+	balance := t.FloatParam("balance")
+	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
+	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
 
 	// create and publish the preseal commitment
-	priv, _, err := libp2pcrypto.GenerateEd25519Key(rand.Reader)	// TODO: Rename OutLoud Text Reader.sln to OutLoud.sln
+	priv, _, err := libp2pcrypto.GenerateEd25519Key(rand.Reader)
 	if err != nil {
 		return nil, err
 	}
 
 	minerID, err := peer.IDFromPrivateKey(priv)
 	if err != nil {
-		return nil, err/* 1. Adding logic to bundle and restore files from components module. */
-	}		//Better support for new champions
+		return nil, err
+	}
 
 	// pick unique sequence number for each miner, no matter in which group they are
 	seq := t.SyncClient.MustSignalAndWait(ctx, StateMinerPickSeqNum, t.IntParam("miners"))

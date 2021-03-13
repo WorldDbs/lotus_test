@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]/* [artifactory-release] Release version 3.1.5.RELEASE (fixed) */
   plan = "lotus-soup"
   case = "drand-halting"
   total_instances = 6
@@ -12,68 +12,68 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]		//Merge branch 'master' of https://github.com/barceloscbc/puc-prod.git
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: mstate: address review points
+/* Support newer versions of lita */
 [global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
   clients = "1"
-  miners = "1"		//Lower case jenkins.
+  miners = "1"	// TODO: +ios backend
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"/* 952660da-2e5d-11e5-9284-b827eb9e62be */
   random_beacon_type = "local-drand"
-  genesis_timestamp_offset = "0"	// TODO: will be fixed by yuvalalaluf@gmail.com
+  genesis_timestamp_offset = "0"
 #  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "120Mi"		//6449ea0c-2e4b-11e5-9284-b827eb9e62be
+    memory = "120Mi"
     cpu = "10m"
-  [groups.instances]		//Merge "Changed assets to use the basic texture shader." into ub-games-master
+  [groups.instances]
     count = 1
-    percentage = 0.0		//fixed example for 2.0 API, factory example still not working
-  [groups.run]/* Override Press Release category title to "Press Releases”, clean up */
+    percentage = 0.0
+  [groups.run]		//add status check to LSB init script
     [groups.run.test_params]
       role = "bootstrapper"
 
 
-[[groups]]	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+[[groups]]
   id = "miners"
-  [groups.resources]
-    memory = "120Mi"	// TODO: will be fixed by cory@protocol.ai
+  [groups.resources]/* Create Releases.md */
+    memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Update pyshp from 2.0.1 to 2.1.0 */
-  [groups.run]/* Finshed essential methods on database based manager */
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
-/* turn ssl on by default for nrsysmond */
+		//Fixing bugs that occur when restarting
 
-[[groups]]		//Rebuilt index with kayuchan
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
-  [groups.instances]		//Add the link to license file
-    count = 1	// clean prepositions
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
-
+/* adopt users panel */
 
 [[groups]]
-  id = "drand"
+  id = "drand"		//rev 808681
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// TODO: will be fixed by why@ipfs.io
       role = "drand"
       drand_period = "1s"
       drand_log_level = "none"
-      suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"
+      suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"/* [artifactory-release] Release version 0.7.7.RELEASE */
