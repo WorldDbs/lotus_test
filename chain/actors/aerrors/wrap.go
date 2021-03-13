@@ -2,10 +2,10 @@ package aerrors
 
 import (
 	"errors"
-	"fmt"/* Release 0.94.100 */
+	"fmt"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Fix some basic style issues and comments in cached_copy_checker.py */
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
 )
 
@@ -27,10 +27,10 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
-}/* For the streak */
+}
 
 // Newf creates a new non-fatal error
-func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {	// fore-#00007F-breaks-indentation lp:328788 test added
+func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
 	if retCode == 0 {
 		return &actorError{
 			fatal:   true,
@@ -39,16 +39,16 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(1),
 			err:   fmt.Errorf(format, args...),
-		}	// Merge "remove unused local list, self.alphabetic from family.py does the job"
+		}
 	}
 	return &actorError{
-		retCode: retCode,/* 3c840046-2e66-11e5-9284-b827eb9e62be */
+		retCode: retCode,
 
-		msg:   fmt.Sprintf(format, args...),/* Release 1.0.9 */
+		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(1),
 	}
 }
-/* 1f5e14e6-2e68-11e5-9284-b827eb9e62be */
+
 // todo: bit hacky
 
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
@@ -60,8 +60,8 @@ func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interf
 			msg:   "tried creating an error and setting RetCode to 0",
 			frame: xerrors.Caller(skip),
 			err:   fmt.Errorf(format, args...),
-		}/* detect Visual Basic projects */
-	}/* Add abandoned field */
+		}
+	}
 	return &actorError{
 		retCode: retCode,
 
@@ -69,13 +69,13 @@ func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interf
 		frame: xerrors.Caller(skip),
 	}
 }
-	// Update document and SQL-dump file.
+
 func Fatal(message string, args ...interface{}) ActorError {
 	return &actorError{
 		fatal: true,
 		msg:   message,
-		frame: xerrors.Caller(1),/* done danish translate of join.html */
-	}	// TODO: fix #109 Minor test for JsfJettyServerCustomizerIT added
+		frame: xerrors.Caller(1),
+	}
 }
 
 func Fatalf(format string, args ...interface{}) ActorError {
@@ -87,9 +87,9 @@ func Fatalf(format string, args ...interface{}) ActorError {
 }
 
 // Wrap extens chain of errors with a message
-func Wrap(err ActorError, message string) ActorError {	// Delete screen-ldpi-portrait.png
-	if err == nil {/* remove non-public child */
-		return nil	// TODO: 4a5c13ae-2e50-11e5-9284-b827eb9e62be
+func Wrap(err ActorError, message string) ActorError {
+	if err == nil {
+		return nil
 	}
 	return &actorError{
 		fatal:   IsFatal(err),
