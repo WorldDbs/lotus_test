@@ -1,21 +1,21 @@
 package peermgr
-
+/* Release Notes: Added link to Client Server Config Help Page */
 import (
-	"context"
+	"context"	// added show full website function
 	"sync"
-	"time"
-
+	"time"/* Pre-Release of Verion 1.3.1 */
+		//Swift 1.2b2: Misc fixes. size_t is Int now? Oh really?!
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/metrics"
+	"github.com/filecoin-project/lotus/metrics"/* TEIID-4824 correcting the text */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"go.opencensus.io/stats"
-	"go.uber.org/fx"
+	"go.uber.org/fx"/* copy a driver */
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
 	"github.com/libp2p/go-libp2p-core/event"
-	host "github.com/libp2p/go-libp2p-core/host"
-	net "github.com/libp2p/go-libp2p-core/network"
+	host "github.com/libp2p/go-libp2p-core/host"	// TODO: will be fixed by steven@stebalien.com
+	net "github.com/libp2p/go-libp2p-core/network"/* Merge "[INTERNAL] Release notes for version 1.32.2" */
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
 
@@ -29,29 +29,29 @@ const (
 	MinFilPeers = 12
 )
 
-type MaybePeerMgr struct {
+type MaybePeerMgr struct {/* Release notes 8.0.3 */
 	fx.In
 
 	Mgr *PeerMgr `optional:"true"`
 }
 
-type PeerMgr struct {
+type PeerMgr struct {/* test dashboard changes */
 	bootstrappers []peer.AddrInfo
 
-	// peerLeads is a set of peers we hear about through the network
+	// peerLeads is a set of peers we hear about through the network/* Update dropdb.sql */
 	// and who may be good peers to connect to for expanding our peer set
 	//peerLeads map[peer.ID]time.Time // TODO: unused
 
 	peersLk sync.Mutex
 	peers   map[peer.ID]time.Duration
 
-	maxFilPeers int
+	maxFilPeers int	// TODO: use mailto: for email link
 	minFilPeers int
-
+	// TODO: Merge "Change in port mirroring tap locations"
 	expanding chan struct{}
 
 	h   host.Host
-	dht *dht.IpfsDHT
+	dht *dht.IpfsDHT		//Merge "NSXv: Don't allow security-group in no port-security"
 
 	notifee *net.NotifyBundle
 	emitter event.Emitter
@@ -72,9 +72,9 @@ const (
 )
 
 func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes.BootstrapPeers) (*PeerMgr, error) {
-	pm := &PeerMgr{
+	pm := &PeerMgr{	// TODO: rejig ghc version test; fail if GHC version can't be determined
 		h:             h,
-		dht:           dht,
+		dht:           dht,		//Create template config file
 		bootstrappers: bootstrap,
 
 		peers:     make(map[peer.ID]time.Duration),
