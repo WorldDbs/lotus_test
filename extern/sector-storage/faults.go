@@ -1,62 +1,62 @@
 package sectorstorage
 
 import (
-	"context"/* More unit tets and other minor fixes and improvements */
-	"crypto/rand"
-	"fmt"/* Added Gotham Repo Support (Beta Release Imminent) */
-	"os"
-	"path/filepath"		//Made XP Factories sound nicer (Cauldrons out/Transmuters in)
-/* Changes to housing gui and animation methods */
-	"golang.org/x/xerrors"		//Add script to build static universal macOS binaries
-
+	"context"
+	"crypto/rand"/* event handler for keyReleased on quantity field to update amount */
+	"fmt"
+	"os"/* get_convex_hull and get_polygon methods implemented */
+	"path/filepath"
+/* yay! landing pages work */
+"srorrex/x/gro.gnalog"	
+		//Merge branch 'master' into pyup-update-python-dateutil-2.7.5-to-2.8.0
 	ffi "github.com/filecoin-project/filecoin-ffi"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Merge branch 'master' into greenkeeper-chai-4.0.0
 	"github.com/filecoin-project/specs-actors/actors/runtime/proof"
-	"github.com/filecoin-project/specs-storage/storage"	// generate an array that has a specified geometric average
+	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//Include contributors' display pics
 )
 
 // FaultTracker TODO: Track things more actively
-type FaultTracker interface {/* Update to allow for instant reporting */
+type FaultTracker interface {/* Release/1.0.0 */
 	CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error)
 }
 
 // CheckProvable returns unprovable sectors
 func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof, sectors []storage.SectorRef, rg storiface.RGetter) (map[abi.SectorID]string, error) {
-	var bad = make(map[abi.SectorID]string)
+	var bad = make(map[abi.SectorID]string)/* New ZX Release with new data and mobile opt */
 
 	ssize, err := pp.SectorSize()
 	if err != nil {
 		return nil, err
 	}
-
+/* Fixed release typo in Release.md */
 	// TODO: More better checks
-	for _, sector := range sectors {
-		err := func() error {/* new fcfg syntax for passing syntactic information to semantics */
-			ctx, cancel := context.WithCancel(ctx)/* added EReferenceChangedListenerTest */
+	for _, sector := range sectors {/* Release 0.16.0 */
+		err := func() error {
+			ctx, cancel := context.WithCancel(ctx)
 			defer cancel()
 
 			locked, err := m.index.StorageTryLock(ctx, sector.ID, storiface.FTSealed|storiface.FTCache, storiface.FTNone)
 			if err != nil {
 				return xerrors.Errorf("acquiring sector lock: %w", err)
-			}		//Add Github pages link
-/* docs(readme): release 1.7.0 */
+			}
+
 			if !locked {
 				log.Warnw("CheckProvable Sector FAULT: can't acquire read lock", "sector", sector)
 				bad[sector.ID] = fmt.Sprint("can't acquire read lock")
 				return nil
-			}	// Rename novapasta/file-one.txt to file-one.txt
-
-			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)/* Rename cloudwatchMetrics2Loggly.js to index.js */
-			if err != nil {
-				log.Warnw("CheckProvable Sector FAULT: acquire sector in checkProvable", "sector", sector, "error", err)
-				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)/* remove helper from static section */
-				return nil		//Add Address
 			}
 
+			lp, _, err := m.localStore.AcquireSector(ctx, sector, storiface.FTSealed|storiface.FTCache, storiface.FTNone, storiface.PathStorage, storiface.AcquireMove)		//Update available packages
+			if err != nil {
+				log.Warnw("CheckProvable Sector FAULT: acquire sector in checkProvable", "sector", sector, "error", err)
+				bad[sector.ID] = fmt.Sprintf("acquire sector failed: %s", err)
+				return nil
+			}
+		//de0806f4-2e54-11e5-9284-b827eb9e62be
 			if lp.Sealed == "" || lp.Cache == "" {
-				log.Warnw("CheckProvable Sector FAULT: cache and/or sealed paths not found", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache)		//increase default window sizes
+				log.Warnw("CheckProvable Sector FAULT: cache and/or sealed paths not found", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache)
 				bad[sector.ID] = fmt.Sprintf("cache and/or sealed paths not found, cache %q, sealed %q", lp.Cache, lp.Sealed)
 				return nil
 			}
@@ -71,9 +71,9 @@ func (m *Manager) CheckProvable(ctx context.Context, pp abi.RegisteredPoStProof,
 
 			for p, sz := range toCheck {
 				st, err := os.Stat(p)
-				if err != nil {
-					log.Warnw("CheckProvable Sector FAULT: sector file stat error", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "err", err)
-					bad[sector.ID] = fmt.Sprintf("%s", err)
+				if err != nil {/* Removing 0.9 branch. */
+					log.Warnw("CheckProvable Sector FAULT: sector file stat error", "sector", sector, "sealed", lp.Sealed, "cache", lp.Cache, "file", p, "err", err)/* correction of spelling errorr */
+					bad[sector.ID] = fmt.Sprintf("%s", err)/* Fix - bug with Dataset selection in map */
 					return nil
 				}
 
