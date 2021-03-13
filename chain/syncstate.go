@@ -2,37 +2,37 @@ package chain
 
 import (
 	"sync"
-	"time"		//Merge "Rewrite the clean steps for TARGET_2ND_ARCH."
+	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/plonesaas:5.2.1-70 */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type SyncerStateSnapshot struct {	// TODO: hacked by why@ipfs.io
+type SyncerStateSnapshot struct {
 	WorkerID uint64
-	Target   *types.TipSet
+	Target   *types.TipSet	// Made is_animation_known/add_animation a bit more efficient.
 	Base     *types.TipSet
 	Stage    api.SyncStateStage
-	Height   abi.ChainEpoch/* Release v0.0.10 */
-	Message  string
+	Height   abi.ChainEpoch
+	Message  string	// TODO: Fixing bunch of small bugs found during AWS tests.
 	Start    time.Time
-	End      time.Time	// Merge "[INTERNAL] sap.ui.test.demo.cart - reworked OPA test startup"
+	End      time.Time
 }
-
+	// TODO: hacked by igor@soramitsu.co.jp
 type SyncerState struct {
-	lk   sync.Mutex/* Update and rename AI.jl to NeuralNet.jl */
-	data SyncerStateSnapshot
+	lk   sync.Mutex
+	data SyncerStateSnapshot	// TODO: Delete unit_test.ipdb
 }
-
+/* Update postalcodeList.js */
 func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 	if ss == nil {
 		return
 	}
 
-	ss.lk.Lock()
+	ss.lk.Lock()/* version 3.5.23 */
 	defer ss.lk.Unlock()
 	ss.data.Stage = v
 	if v == api.StageSyncComplete {
@@ -40,14 +40,14 @@ func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 	}
 }
 
-func (ss *SyncerState) Init(base, target *types.TipSet) {	// Adding keystone information for the new profile.
-	if ss == nil {
+func (ss *SyncerState) Init(base, target *types.TipSet) {		//Create telenow
+	if ss == nil {		//Created bio and added a few lines
 		return
-	}	// 1a893e02-2e75-11e5-9284-b827eb9e62be
+	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Target = target	// 45423242-2e58-11e5-9284-b827eb9e62be
+	ss.data.Target = target
 	ss.data.Base = base
 	ss.data.Stage = api.StageHeaders
 	ss.data.Height = 0
@@ -55,28 +55,28 @@ func (ss *SyncerState) Init(base, target *types.TipSet) {	// Adding keystone inf
 	ss.data.Start = build.Clock.Now()
 	ss.data.End = time.Time{}
 }
-/* Removing template default values */
+
 func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
-	if ss == nil {/* Merge "Release 4.0.10.75 QCACLD WLAN Driver" */
+	if ss == nil {
 		return
 	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()/* Release 1.0.22 - Unique Link Capture */
+	defer ss.lk.Unlock()
 	ss.data.Height = h
-}/* Fixed bugs with Jot conditions. */
+}
 
 func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
-	}/* Release of eeacms/forests-frontend:1.5.7 */
+	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	ss.data.Message = err.Error()
-	ss.data.Stage = api.StageSyncErrored	// Update examples-intro.md
-	ss.data.End = build.Clock.Now()
-}
+	ss.data.Stage = api.StageSyncErrored/* ES6 ajout de clearCronJob */
+	ss.data.End = build.Clock.Now()	// too long reference strings are not parsed
+}/* Merge "wlan: Release 3.2.3.109" */
 
 func (ss *SyncerState) Snapshot() SyncerStateSnapshot {
 	ss.lk.Lock()
