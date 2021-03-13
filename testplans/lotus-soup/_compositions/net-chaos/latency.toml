@@ -1,57 +1,57 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"	// "Instructions" added to index.html
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"
+  case = "deals-e2e"		//arquivo do zamps
   total_instances = 7
-  builder = "docker:go"	// Fixed the requires method
-  runner = "local:docker"	// TODO: Fix data logging causing IRQ delay and IMU desync
-		//Log level updated.  
-[global.build]		//Adding imagery
+  builder = "docker:go"
+  runner = "local:docker"
+
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: Adding hundreds of commas
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]	// loading owner form
   clients = "5"
-  miners = "1"/* Refactor console */
+  miners = "1"/* Delete arch.svg */
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Added option to migrate client settings
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]	// add Pharo8 badge and MIT License badge to the README.md
     count = 1
-    percentage = 0.0		//Merge branch 'master' into improve-runtime-logs
-  [groups.run]
+    percentage = 0.0/* Release v1.0.0-beta2 */
+  [groups.run]/* changed narrow bin width */
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]
+  [groups.instances]/* Update measurement_operation.F95 */
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
-      latency_range = '["20ms", "300ms"]'/* change the order of footer links */
-
-]]spuorg[[
+      role = "miner"/* Update certbot installation/run instructions */
+      latency_range = '["20ms", "300ms"]'
+/* Release Notes updated */
+[[groups]]		//GrandmaSettings.render_to now accept list as file_name
   id = "clients"
-  [groups.instances]
+  [groups.instances]/* Fix another DBListGenerator fail */
     count = 5
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// TODO: will be fixed by arajasek94@gmail.com
+      role = "client"
       latency_range = '["100ms", "1500ms"]'
