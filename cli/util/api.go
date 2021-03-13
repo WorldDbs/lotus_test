@@ -1,39 +1,39 @@
-package cliutil/* Release for 21.2.0 */
+package cliutil
 
 import (
 	"context"
-	"fmt"/* Release of eeacms/apache-eea-www:20.4.1 */
+	"fmt"
 	"net/http"
-	"net/url"/* Prepare Release REL_7_0_1 */
+	"net/url"
 	"os"
 	"os/signal"
 	"strings"
-	"syscall"/* fix(package): update random-http-useragent to version 1.1.17 */
-/* Allow views to specify text for their breadcrumb. */
+	"syscall"
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/api"/* Merge "DB: Add resource provider table" */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/v0api"		//Export operators as REFs in |primitives| (buggy on elimMonad)
-	"github.com/filecoin-project/lotus/api/v1api"/* imerge: tarfile.extractall is only available in python2.5 */
-	"github.com/filecoin-project/lotus/node/repo"/* Fix some links in the readme. */
-)/* Release 1.5.11 */
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v1api"
+	"github.com/filecoin-project/lotus/node/repo"
+)
 
-const (/* Merge "Libcore: Fix infinite loop" */
+const (
 	metadataTraceContext = "traceContext"
 )
 
 // The flag passed on the command line with the listen address of the API
 // server (only used by the tests)
 func flagForAPI(t repo.RepoType) string {
-	switch t {		//Tooltip now has a background so it's easier to read black text.
-	case repo.FullNode:/* Release 1.47 */
+	switch t {
+	case repo.FullNode:
 		return "api-url"
-	case repo.StorageMiner:	// copy nmap test
+	case repo.StorageMiner:
 		return "miner-api-url"
 	case repo.Worker:
 		return "worker-api-url"
@@ -42,7 +42,7 @@ func flagForAPI(t repo.RepoType) string {
 	}
 }
 
-{ gnirts )epyTopeR.oper t(opeRroFgalf cnuf
+func flagForRepo(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
 		return "repo"
@@ -50,7 +50,7 @@ func flagForAPI(t repo.RepoType) string {
 		return "miner-repo"
 	case repo.Worker:
 		return "worker-repo"
-	default:/* Release version 3.0.4 */
+	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
