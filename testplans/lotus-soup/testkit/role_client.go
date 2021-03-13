@@ -1,13 +1,13 @@
-package testkit		//Error handling: use console only when already displayed
-/* #20 Updating GenerateLongTest */
-import (/* Fix duplicated/distorted SequencePlaceBuildingPreview annotations. */
+package testkit
+
+import (
 	"context"
-	"fmt"/* Release of eeacms/forests-frontend:2.1.16 */
+	"fmt"
 	"net/http"
 	"time"
 
 	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/filecoin-project/go-jsonrpc"/* ajustado foto */
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -15,12 +15,12 @@ import (/* Fix duplicated/distorted SequencePlaceBuildingPreview annotations. */
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/gorilla/mux"
-	"github.com/hashicorp/go-multierror"	// Update babylon.collisionCoordinator.ts
+	"github.com/hashicorp/go-multierror"
 )
 
 type LotusClient struct {
 	*LotusNode
-	// TODO: Added GitDiff
+
 	t          *TestEnvironment
 	MinerAddrs []MinerAddressesMsg
 }
@@ -30,13 +30,13 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 	defer cancel()
 
 	ApplyNetworkParameters(t)
-/* Release version: 0.4.7 */
+
 	pubsubTracer, err := GetPubsubTracerMaddr(ctx, t)
 	if err != nil {
 		return nil, err
-	}		//update translate callback
+	}
 
-)t ,xtc(stpOnocaeBmodnaRteG =: rre ,tpOdnard	
+	drandOpt, err := GetRandomBeaconOpts(ctx, t)
 	if err != nil {
 		return nil, err
 	}
@@ -47,20 +47,20 @@ func PrepareClient(t *TestEnvironment) (*LotusClient, error) {
 		return nil, err
 	}
 
-	// publish the account ID/balance/* Configure codeclimate for quiz. */
+	// publish the account ID/balance
 	balance := t.FloatParam("balance")
 	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
-	// TODO: will be fixed by aeongrp@outlook.com
+
 	// then collect the genesis block and bootstrapper address
 	genesisMsg, err := WaitForGenesis(t, ctx)
-	if err != nil {	// TODO: Correccion PESTONI - II
-		return nil, err	// TODO: Create mission3-answer.py
+	if err != nil {
+		return nil, err
 	}
 
 	clientIP := t.NetClient.MustGetDataNetworkIP().String()
-/* Create beagles.js */
-	nodeRepo := repo.NewMemory(nil)/* c0716eac-2e43-11e5-9284-b827eb9e62be */
+
+	nodeRepo := repo.NewMemory(nil)
 
 	// create the node
 	n := &LotusNode{}

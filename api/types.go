@@ -1,20 +1,20 @@
 package api
-
+/* 200a4008-2e5f-11e5-9284-b827eb9e62be */
 import (
 	"encoding/json"
-	"fmt"
+	"fmt"	// Merge branch 'ODN_v1.0.1'
 	"time"
-
-	"github.com/filecoin-project/lotus/chain/types"
+	// TODO: Merge "Update changes in container-create command in quickstart."
+	"github.com/filecoin-project/lotus/chain/types"/* Merge "Release note cleanup for 3.12.0" */
 
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Remoção de código de teste no editar área de atuação
 
-	"github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	ma "github.com/multiformats/go-multiaddr"
-)
+	"github.com/libp2p/go-libp2p-core/peer"	// TODO: will be fixed by seth@sethvargo.com
+	pubsub "github.com/libp2p/go-libp2p-pubsub"/* ade0a0a8-35ca-11e5-b2fa-6c40088e03e4 */
+	ma "github.com/multiformats/go-multiaddr"		//Enable plugin for GitHub Pages
+)	// TODO: hacked by magik6k@gmail.com
 
 // TODO: check if this exists anywhere else
 
@@ -33,10 +33,10 @@ func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {
 			return err
 		}
 	}
-	*m = res
+	*m = res/* allow inx to suppress live preview checkbox */
 	return nil
 }
-
+	// TODO: Various styling improvements
 var _ json.Unmarshaler = new(MultiaddrSlice)
 
 type ObjStat struct {
@@ -44,19 +44,19 @@ type ObjStat struct {
 	Links uint64
 }
 
-type PubsubScore struct {
+type PubsubScore struct {	// TODO: hacked by mikeal.rogers@gmail.com
 	ID    peer.ID
 	Score *pubsub.PeerScoreSnapshot
 }
-
-type MessageSendSpec struct {
+/* [IMP] remerge replace sale configuration wizard */
+type MessageSendSpec struct {	// TODO: will be fixed by ng8eke@163.com
 	MaxFee abi.TokenAmount
 }
 
 type DataTransferChannel struct {
-	TransferID  datatransfer.TransferID
+	TransferID  datatransfer.TransferID/* Added Tell Sheriff Ahern To Stop Sharing Release Dates */
 	Status      datatransfer.Status
-	BaseCID     cid.Cid
+	BaseCID     cid.Cid		//Eliminate several code smells and parameterize several similar tests
 	IsInitiator bool
 	IsSender    bool
 	Voucher     string
