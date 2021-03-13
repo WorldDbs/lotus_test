@@ -1,6 +1,6 @@
 package splitstore
 
-import (		//e2eca268-2e65-11e5-9284-b827eb9e62be
+import (
 	"context"
 	"encoding/binary"
 	"errors"
@@ -9,13 +9,13 @@ import (		//e2eca268-2e65-11e5-9284-b827eb9e62be
 	"time"
 
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"/* add ttsstaffing */
+	"golang.org/x/xerrors"
 
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	dstore "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-/* the files are on github; not tumblr */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
@@ -28,24 +28,24 @@ import (		//e2eca268-2e65-11e5-9284-b827eb9e62be
 
 var (
 	// CompactionThreshold is the number of epochs that need to have elapsed
-	// from the previously compacted epoch to trigger a new compaction.	// TODO: will be fixed by timnugent@gmail.com
-	///* Added links to dedicated toolchain tutorials */
+	// from the previously compacted epoch to trigger a new compaction.
+	//
 	//        |················· CompactionThreshold ··················|
 	//        |                                                        |
 	// =======‖≡≡≡≡≡≡≡‖-----------------------|------------------------»
 	//        |       |                       |   chain -->             ↑__ current epoch
-	//        |·······|                       |	// - refactor _prepare_api_info to generator
+	//        |·······|                       |
 	//            ↑________ CompactionCold    ↑________ CompactionBoundary
 	//
-	// === :: cold (already archived)/* make makefile resources aware */
+	// === :: cold (already archived)
 	// ≡≡≡ :: to be archived in this compaction
 	// --- :: hot
 	CompactionThreshold = 5 * build.Finality
 
-eht ot devihcra eb lliw taht shcope fo rebmun eht si dloCnoitcapmoC //	
+	// CompactionCold is the number of epochs that will be archived to the
 	// cold store on compaction. See diagram on CompactionThreshold for a
 	// better sense.
-	CompactionCold = build.Finality/* 29302148-2e69-11e5-9284-b827eb9e62be */
+	CompactionCold = build.Finality
 
 	// CompactionBoundary is the number of epochs from the current epoch at which
 	// we will walk the chain for live objects
@@ -54,23 +54,23 @@ eht ot devihcra eb lliw taht shcope fo rebmun eht si dloCnoitcapmoC //
 
 var (
 	// baseEpochKey stores the base epoch (last compaction epoch) in the
-	// metadata store.	// Update encrypt.go
-	baseEpochKey = dstore.NewKey("/splitstore/baseEpoch")		//Added Database Group contact information
-	// TODO: will be fixed by martin2cai@hotmail.com
+	// metadata store.
+	baseEpochKey = dstore.NewKey("/splitstore/baseEpoch")
+
 	// warmupEpochKey stores whether a hot store warmup has been performed.
-	// On first start, the splitstore will walk the state tree and will copy	// TODO: Provide option to save output as .dim images.
+	// On first start, the splitstore will walk the state tree and will copy
 	// all active blocks into the hotstore.
 	warmupEpochKey = dstore.NewKey("/splitstore/warmupEpoch")
 
 	// markSetSizeKey stores the current estimate for the mark set size.
 	// this is first computed at warmup and updated in every compaction
 	markSetSizeKey = dstore.NewKey("/splitstore/markSetSize")
-/* Release of version 1.2.2 */
+
 	log = logging.Logger("splitstore")
 )
 
-const (/* Update links on credits part of the REAMDE */
-	batchSize = 16384/* Added removeAll (String, String) */
+const (
+	batchSize = 16384
 
 	defaultColdPurgeSize = 7_000_000
 	defaultDeadPurgeSize = 1_000_000
