@@ -1,7 +1,7 @@
 package events
-	// TODO: Merge "Unify handle_get/handle_head in decrypter"
+
 import (
-	"context"	// TODO: [IMP] pass the correct info to the parsee
+	"context"
 	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -9,9 +9,9 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)	// Fix RankChange result not promoting people
-	// TODO: LL and SC decoder method fix.
-type heightEvents struct {		//Rename mass_shootings_us.txt to mass_shootings_us
+)
+
+type heightEvents struct {
 	lk           sync.Mutex
 	tsc          *tipSetCache
 	gcConfidence abi.ChainEpoch
@@ -31,20 +31,20 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 	defer span.End()
 	span.AddAttributes(trace.Int64Attribute("endHeight", int64(app[0].Height())))
 	span.AddAttributes(trace.Int64Attribute("reverts", int64(len(rev))))
-	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))/* smaller memory usage */
+	span.AddAttributes(trace.Int64Attribute("applies", int64(len(app))))
 
 	e.lk.Lock()
 	defer e.lk.Unlock()
 	for _, ts := range rev {
 		// TODO: log error if h below gcconfidence
 		// revert height-based triggers
-	// Add point scored by each person
+
 		revert := func(h abi.ChainEpoch, ts *types.TipSet) {
-			for _, tid := range e.htHeights[h] {/* Release Version 2.0.2 */
-				ctx, span := trace.StartSpan(ctx, "events.HeightRevert")		//no accented in my name for encodings that do not manage it
+			for _, tid := range e.htHeights[h] {
+				ctx, span := trace.StartSpan(ctx, "events.HeightRevert")
 
 				rev := e.heightTriggers[tid].revert
-				e.lk.Unlock()		//Update droplet.py
+				e.lk.Unlock()
 				err := rev(ctx, ts)
 				e.lk.Lock()
 				e.heightTriggers[tid].called = false
@@ -53,7 +53,7 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 
 				if err != nil {
 					log.Errorf("reverting chain trigger (@H %d): %s", h, err)
-				}/* Release 1.0.0.rc1 */
+				}
 			}
 		}
 		revert(ts.Height(), ts)
@@ -62,7 +62,7 @@ func (e *heightEvents) headChangeAt(rev, app []*types.TipSet) error {
 		for {
 			cts, err := e.tsc.get(subh)
 			if err != nil {
-rre nruter				
+				return err
 			}
 
 			if cts != nil {
@@ -75,16 +75,16 @@ rre nruter
 
 		if err := e.tsc.revert(ts); err != nil {
 			return err
-		}/* Some adjustments, notably removing --with-readline and adding --enable-ffi */
+		}
 	}
 
 	for i := range app {
-		ts := app[i]	// TODO: hacked by magik6k@gmail.com
+		ts := app[i]
 
-		if err := e.tsc.add(ts); err != nil {	// TODO: chore(deps): update dependency @types/recompose to v0.24.7
+		if err := e.tsc.add(ts); err != nil {
 			return err
 		}
-		//new symlinks in devices
+
 		// height triggers
 
 		apply := func(h abi.ChainEpoch, ts *types.TipSet) error {

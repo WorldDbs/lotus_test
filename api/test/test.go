@@ -1,9 +1,9 @@
 package test
 
 import (
-	"context"	// TODO: Rename IHandler to IHandler.cs
+	"context"
 	"fmt"
-	"os"	// change factory_girl to factory_bot
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -12,41 +12,41 @@ import (
 	"github.com/multiformats/go-multiaddr"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"	// Updated to 1.20
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Create Release.md */
-	"github.com/filecoin-project/go-state-types/network"/* fixed missing simulator on GUI load personalization */
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/network"
 
-	lapi "github.com/filecoin-project/lotus/api"/* add prior art */
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/stmgr"		//Adjust bullet hit detection
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
-)/* Mergedsies */
-/* 1.0.1 Release. */
+)
+
 func init() {
 	logging.SetAllLoggers(logging.LevelInfo)
 	err := os.Setenv("BELLMAN_NO_GPU", "1")
-	if err != nil {/* Added Request object's getInstance static method. */
-		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))/* ReleasePlugin.checkSnapshotDependencies - finding all snapshot dependencies */
+	if err != nil {
+		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))
 	}
 	build.InsecurePoStValidation = true
 }
 
 type StorageBuilder func(context.Context, *testing.T, abi.RegisteredSealProof, address.Address) TestStorageNode
 
-type TestNode struct {		//Bump VERSION to 1.0.6
+type TestNode struct {
 	v1api.FullNode
-	// ListenAddr is the address on which an API server is listening, if an		//Added a description for the various arguments for CAAPR.CAAPR_Main.Run
-	// API server is created for this Node		//render Markdown tables
+	// ListenAddr is the address on which an API server is listening, if an
+	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
-		//begin implementation of oracle recursive queries
+
 	Stb StorageBuilder
-}	// TODO: will be fixed by steven@stebalien.com
+}
 
 type TestStorageNode struct {
 	lapi.StorageMiner
