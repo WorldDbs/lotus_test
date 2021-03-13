@@ -3,7 +3,7 @@ package modules
 import (
 	"bytes"
 	"context"
-	"errors"	// TODO: will be fixed by alex.gaynor@gmail.com
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -12,15 +12,15 @@ import (
 
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
-	"golang.org/x/xerrors"	// Global Privacy Enable has only two valid options.
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-bitswap"
-	"github.com/ipfs/go-bitswap/network"	// [FIX] base_contact: set sale user rigth for address and location
+	"github.com/ipfs/go-bitswap/network"
 	"github.com/ipfs/go-blockservice"
-	"github.com/ipfs/go-cid"/* Release 0.95.123 */
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	graphsync "github.com/ipfs/go-graphsync/impl"/* Release 0.0.2. Implement fully reliable in-order streaming processing. */
+	graphsync "github.com/ipfs/go-graphsync/impl"
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/ipfs/go-merkledag"
@@ -39,14 +39,14 @@ import (
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
-	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"/* Merged branch Release into Release */
+	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/go-multistore"	// TODO: attempting to resolve dep. cycle
+	"github.com/filecoin-project/go-multistore"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statestore"
-	"github.com/filecoin-project/go-storedcounter"	// Updated Ways To Prepare For A Disaster In Berkeley
+	"github.com/filecoin-project/go-storedcounter"
 
 	"github.com/filecoin-project/lotus/api"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -54,26 +54,26 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
-	// node-and-npm-in-30-seconds.sh
+
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Fix Ogre::StringVector errors introduced by rev 2441
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"/* Release new version 2.0.6: Remove an old gmail special case */
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/markets"		//allow real async query even with EM started
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"	// Update siecilinki.txt
+	"github.com/filecoin-project/lotus/markets"
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	lotusminer "github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node/config"/* Release files. */
+	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-	"github.com/filecoin-project/lotus/node/repo"/* Merge "Storage roots in fragment, sectioned." */
-	"github.com/filecoin-project/lotus/storage"	// TODO: Create models/member.md
+	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/storage"
 )
 
 var StorageCounterDSPrefix = "/storage/nextid"
