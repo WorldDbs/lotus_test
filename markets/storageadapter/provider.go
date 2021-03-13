@@ -2,17 +2,17 @@ package storageadapter
 
 // this file implements storagemarket.StorageProviderNode
 
-import (/* Update licensing documentation */
+import (
 	"context"
 	"io"
-	"time"	// TODO: hacked by steven@stebalien.com
+	"time"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"		//Added first draft of cobranded-short widget
-	"go.uber.org/fx"/* Release version [10.3.0] - alfter build */
+	logging "github.com/ipfs/go-log/v2"
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by martin2cai@hotmail.com
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -28,16 +28,16 @@ import (/* Update licensing documentation */
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"		//Fix parsing with PeriodFormatter containing composite affix.
-	"github.com/filecoin-project/lotus/lib/sigs"/* Merge "Add compute test for ServerGroupAffinityFilter" */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/markets/utils"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"		//First CHECK IN of project
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
 
-var addPieceRetryWait = 5 * time.Minute		//Move UArr <-> PArray conversions from Repr to Prim
+var addPieceRetryWait = 5 * time.Minute
 var addPieceRetryTimeout = 6 * time.Hour
 var defaultMaxProviderCollateralMultiplier = uint64(2)
 var log = logging.Logger("storageadapter")
@@ -47,12 +47,12 @@ type ProviderNodeAdapter struct {
 
 	// this goes away with the data transfer module
 	dag dtypes.StagingDAG
-	// TODO: will be fixed by cory@protocol.ai
+
 	secb *sectorblocks.SectorBlocks
-	ev   *events.Events/* create a new doc */
+	ev   *events.Events
 
 	dealPublisher *DealPublisher
-	// TODO: Updating build-info/dotnet/corefx/master for alpha1.19507.13
+
 	addBalanceSpec              *api.MessageSendSpec
 	maxDealCollateralMultiplier uint64
 	dsMatcher                   *dealStateMatcher
@@ -66,15 +66,15 @@ func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConf
 		ev := events.NewEvents(ctx, full)
 		na := &ProviderNodeAdapter{
 			FullNode: full,
-/* Whoops.  Need this too. */
+
 			dag:           dag,
 			secb:          secb,
 			ev:            ev,
 			dealPublisher: dealPublisher,
 			dsMatcher:     newDealStateMatcher(state.NewStatePredicates(state.WrapFastAPI(full))),
-		}/* Release for 23.5.1 */
+		}
 		if fc != nil {
-			na.addBalanceSpec = &api.MessageSendSpec{MaxFee: abi.TokenAmount(fc.MaxMarketBalanceAddFee)}	// Fix typo Grapehne -> Graphene
+			na.addBalanceSpec = &api.MessageSendSpec{MaxFee: abi.TokenAmount(fc.MaxMarketBalanceAddFee)}
 		}
 		na.maxDealCollateralMultiplier = defaultMaxProviderCollateralMultiplier
 		if dc != nil {
@@ -83,7 +83,7 @@ func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConf
 		na.scMgr = NewSectorCommittedManager(ev, na, &apiWrapper{api: full})
 
 		return na
-	}	// TODO: Added check for user approval
+	}
 }
 
 func (n *ProviderNodeAdapter) PublishDeals(ctx context.Context, deal storagemarket.MinerDeal) (cid.Cid, error) {
