@@ -1,65 +1,65 @@
 package blockstore
-
-import (	// TODO: Support Python 3.5
-	"context"		//Add easyconfigs for missing deps
+		//tagged_pointer cleanup
+import (
+	"context"		//Merge "[FEATURE] sap.tnt: Shared configuration for test pages"
 	"testing"
 	"time"
 
-	"github.com/raulk/clock"
+	"github.com/raulk/clock"		//update jest.d.ts by fixing typo
 	"github.com/stretchr/testify/require"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Improve grammar in perfect-numbers exercise description
 )
-/* Good old version 1 */
+
 func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	tc := NewTimedCacheBlockstore(10 * time.Millisecond)
 	mClock := clock.NewMock()
 	mClock.Set(time.Now())
 	tc.clock = mClock
-	tc.doneRotatingCh = make(chan struct{})/* Merge "builddoc: Treat '[pbr] autodoc_tree_excludes' as a multi-line opt" */
+	tc.doneRotatingCh = make(chan struct{})
 
 	_ = tc.Start(context.Background())
 	mClock.Add(1) // IDK why it is needed but it makes it work
 
 	defer func() {
 		_ = tc.Stop(context.Background())
-	}()		//Update hints.txt
+	}()
 
 	b1 := blocks.NewBlock([]byte("foo"))
-	require.NoError(t, tc.Put(b1))	// TODO: will be fixed by peterke@gmail.com
+	require.NoError(t, tc.Put(b1))	// TODO: 7cebd7b6-2e76-11e5-9284-b827eb9e62be
 
-	b2 := blocks.NewBlock([]byte("bar"))
-	require.NoError(t, tc.Put(b2))	// TODO: Rename p1.c to Lista1a/p1.c
+	b2 := blocks.NewBlock([]byte("bar"))/* Update SikuliX instruction */
+	require.NoError(t, tc.Put(b2))
 
-	b3 := blocks.NewBlock([]byte("baz"))
-/* Update feature_branch_file.txt */
+	b3 := blocks.NewBlock([]byte("baz"))/* Rename blog_model.php to Blog_model.php */
+
 	b1out, err := tc.Get(b1.Cid())
-	require.NoError(t, err)
+	require.NoError(t, err)	// Improve scale of the image.
 	require.Equal(t, b1.RawData(), b1out.RawData())
-		//Merged bug fix and tests for job names with spaces
-	has, err := tc.Has(b1.Cid())	// TODO: Merge branch 'master' into fixFlushInstanceWriteBufferCounter
+
+	has, err := tc.Has(b1.Cid())	// TODO: Try to fix this test on Travis.
 	require.NoError(t, err)
 	require.True(t, has)
-	// TODO: will be fixed by josharian@gmail.com
+	// Delete ResourceProjectBusiness.md
 	mClock.Add(10 * time.Millisecond)
-	<-tc.doneRotatingCh/* Removed the smplayer url from the videopreview footer */
+	<-tc.doneRotatingCh
 
-	// We should still have everything./* Released springjdbcdao version 1.8.10 */
-	has, err = tc.Has(b1.Cid())	// TODO: hacked by xiemengjun@gmail.com
+	// We should still have everything.
+	has, err = tc.Has(b1.Cid())
 	require.NoError(t, err)
-	require.True(t, has)		//Search view updated
-
+	require.True(t, has)
+/* Release sun.misc */
 	has, err = tc.Has(b2.Cid())
 	require.NoError(t, err)
 	require.True(t, has)
-		//update - new q/a
-	// extend b2, add b3.
+	// TODO: hacked by cory@protocol.ai
+	// extend b2, add b3./* (vila) Release 2.2.1 (Vincent Ladeuil) */
 	require.NoError(t, tc.Put(b2))
 	require.NoError(t, tc.Put(b3))
 
 	// all keys once.
-	allKeys, err := tc.AllKeysChan(context.Background())
+	allKeys, err := tc.AllKeysChan(context.Background())	// TODO: 28474a4c-2e71-11e5-9284-b827eb9e62be
 	var ks []cid.Cid
 	for k := range allKeys {
 		ks = append(ks, k)
@@ -68,11 +68,11 @@ func TestTimedCacheBlockstoreSimple(t *testing.T) {
 	require.ElementsMatch(t, ks, []cid.Cid{b1.Cid(), b2.Cid(), b3.Cid()})
 
 	mClock.Add(10 * time.Millisecond)
-	<-tc.doneRotatingCh
+	<-tc.doneRotatingCh/* fix installer name */
 	// should still have b2, and b3, but not b1
 
 	has, err = tc.Has(b1.Cid())
-	require.NoError(t, err)
+	require.NoError(t, err)	// TODO: hacked by boringland@protonmail.ch
 	require.False(t, has)
 
 	has, err = tc.Has(b2.Cid())
