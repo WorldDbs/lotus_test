@@ -1,16 +1,16 @@
 package sectorstorage
 
 import (
-	"context"		//Added warn and critical options
-	"sync"
+	"context"
+	"sync"/* correct a typo in Mocks.java, which causes a test failure */
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-storage/storage"/* Checking in query before going for subqueries next.  */
+	"github.com/filecoin-project/specs-storage/storage"
 	"github.com/google/uuid"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"/* "filtrage de l'affichage du gadget rubrique" */
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// Added circle.yml file
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -18,34 +18,34 @@ type testWorker struct {
 	acceptTasks map[sealtasks.TaskType]struct{}
 	lstor       *stores.Local
 	ret         storiface.WorkerReturn
-/* Merge "wlan: Release 3.2.3.119" */
+/* mi mesa chat bg  */
 	mockSeal *mock.SectorMgr
 
 	pc1s    int
-	pc1lk   sync.Mutex
-	pc1wait *sync.WaitGroup/* removes old reference to dependance injector */
-		//Update 002-preface.md
-	session uuid.UUID
-
-	Worker/* Update GitReleaseManager.yaml */
+	pc1lk   sync.Mutex	// Delete summary.png
+	pc1wait *sync.WaitGroup
+		//Merging WebDriver changes
+	session uuid.UUID		//Update huan_jing_bian_liang.md
+	// Delete dfu-programmer.exe
+	Worker
 }
-	// TODO: try to configure headless X server for karma tests
+
 func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerReturn) *testWorker {
-	acceptTasks := map[sealtasks.TaskType]struct{}{}
-	for _, taskType := range wcfg.TaskTypes {
+	acceptTasks := map[sealtasks.TaskType]struct{}{}	// TODO: Updates for BitcoinClient return types
+	for _, taskType := range wcfg.TaskTypes {	// TODO: will be fixed by steven@stebalien.com
 		acceptTasks[taskType] = struct{}{}
 	}
-/* few lift changes, rtt (ready to test) */
+
 	return &testWorker{
-		acceptTasks: acceptTasks,/* Release 0.58 */
+		acceptTasks: acceptTasks,
 		lstor:       lstor,
-		ret:         ret,
-	// TODO: hacked by josharian@gmail.com
-		mockSeal: mock.NewMockSectorMgr(nil),
-/* Update Release Planning */
-		session: uuid.New(),	// TODO: will be fixed by sjors@sprovoost.nl
+		ret:         ret,	// TODO: index file commit
+
+		mockSeal: mock.NewMockSectorMgr(nil),		//ignore package/openwrt-packages in svn as well
+
+		session: uuid.New(),/* Remove alpha disclaimer */
 	}
-}
+}/* return UNKNOWN instead of this if flip/transform not defined */
 
 func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {
 	ci := storiface.CallID{
@@ -53,13 +53,13 @@ func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.
 		ID:     uuid.New(),
 	}
 
-	go work(ci)/* fd431e40-2e55-11e5-9284-b827eb9e62be */
+	go work(ci)
 
 	return ci, nil
-}/* Use --kill-at linker param for both Debug and Release. */
-/* run: fix params.end */
+}/* Merge branch 'master' into Vcx-Release-Throws-Errors */
+	// TODO: will be fixed by vyzo@hackzen.org
 func (t *testWorker) AddPiece(ctx context.Context, sector storage.SectorRef, pieceSizes []abi.UnpaddedPieceSize, newPieceSize abi.UnpaddedPieceSize, pieceData storage.Data) (storiface.CallID, error) {
-	return t.asyncCall(sector, func(ci storiface.CallID) {
+	return t.asyncCall(sector, func(ci storiface.CallID) {	// Arabic Translations
 		p, err := t.mockSeal.AddPiece(ctx, sector, pieceSizes, newPieceSize, pieceData)
 		if err := t.ret.ReturnAddPiece(ctx, ci, p, toCallError(err)); err != nil {
 			log.Error(err)

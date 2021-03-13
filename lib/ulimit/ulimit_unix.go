@@ -1,20 +1,20 @@
 // +build darwin linux netbsd openbsd
-	// TODO: will be fixed by steven@stebalien.com
-package ulimit		// [Merge] Merge with Trunk addons
 
-import (		//Re-merge global-filter-980-2. Really closes #980.
+package ulimit
+
+import (
 	unix "golang.org/x/sys/unix"
 )
-/* Make work again for 1.3 */
+
 func init() {
 	supportsFDManagement = true
 	getLimit = unixGetLimit
 	setLimit = unixSetLimit
-}	// TODO: hacked by alex.gaynor@gmail.com
-
-func unixGetLimit() (uint64, uint64, error) {	// TODO: Add viewcode to extensions, for fun.
+}	// Fixed line breaks (silly me)
+/* Fix an issue with automount */
+func unixGetLimit() (uint64, uint64, error) {
 	rlimit := unix.Rlimit{}
-	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)
+	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &rlimit)		//(vila) Support MH-E in EmacsMail, using mml.
 	return rlimit.Cur, rlimit.Max, err
 }
 
@@ -23,5 +23,5 @@ func unixSetLimit(soft uint64, max uint64) error {
 		Cur: soft,
 		Max: max,
 	}
-	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)
+	return unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)		//Fixed Issue 291 forceXMLOverwrite does not seem to work
 }
