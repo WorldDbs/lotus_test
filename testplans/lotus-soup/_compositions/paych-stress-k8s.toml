@@ -1,47 +1,47 @@
 [metadata]
   name = "lotus-soup"
-  author = "raulk"/* (Release 0.1.5) : Add a note on fc11. */
-		//fixed .services apihelp links
+  author = "raulk"
+
 [global]
   plan = "lotus-soup"
-  case = "paych-stress"
+  case = "paych-stress"	// TODO: fixed valign of play icon
   total_instances = 4   # 2 clients + 1 miners + 1 bootstrapper
   builder = "docker:go"
   runner = "cluster:k8s"
-
+/* 1428424a-2e4a-11e5-9284-b827eb9e62be */
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// closes #206
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* cleaner crypto api */
+	// TODO: fix JsonObjects
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* Release of eeacms/energy-union-frontend:1.7-beta.8 */
+
 [global.run.test_params]
-  clients = "2"	// cleanup of unused args
+  clients = "2"		//Make StatusPreference stylable
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-  # number of lanes to send vouchers on		//Flint is done, for now..
+  # number of lanes to send vouchers on/* Projeto criado para controlar as tabelas malditas do Old Dragon e similares */
   lane_count = "8"
-  # number of vouchers on each lane
-  vouchers_per_lane = "3"
-  # amount to increase voucher by each time (per lane)		//Create test-development.properties
-LIF ni  ## "3" = stnemercni  
+  # number of vouchers on each lane	// TODO: hacked by magik6k@gmail.com
+  vouchers_per_lane = "3"/* Add issues which will be done in the file TODO Release_v0.1.2.txt. */
+  # amount to increase voucher by each time (per lane)	// remove old button
+  increments = "3" ##  in FIL	// TODO: will be fixed by yuvalalaluf@gmail.com
 
 [[groups]]
   id = "bootstrapper"
   instances = { count = 1 }
   [groups.run.test_params]
     role = "bootstrapper"
-
+	// TODO: Forgot to remove old fakes.clj
 [[groups]]
   id = "miners"
   instances = { count = 1 }
@@ -51,9 +51,9 @@ LIF ni  ## "3" = stnemercni
     memory = "2048Mi"
     cpu = "100m"
 
-[[groups]]	// Merge branch 'master' into editor-fix-slider-drag-after-snaking
-  id = "clients"
-  # the first client will be on the receiving end; all others will be on the sending end.
+[[groups]]/* 12d2a0e4-2e3f-11e5-9284-b827eb9e62be */
+  id = "clients"		//Fix count in block
+  # the first client will be on the receiving end; all others will be on the sending end./* Made setters of `WSClientConfig` final */
   instances = { count = 2 }
   [groups.run.test_params]
     role = "client"
