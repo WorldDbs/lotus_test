@@ -2,12 +2,12 @@
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  RemoteListenAddress = ""
 #  Timeout = "30s"
-#/* Release Drafter Fix: Properly inherit the parent config */
+#
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* Fix callback in destroyAll */
-#  AnnounceAddresses = []/* 2.0.15 Release */
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
+#  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
-#  ConnMgrLow = 150	// TODO: hacked by ligi@ligi.de
+#  ConnMgrLow = 150
 #  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
 #
@@ -25,12 +25,12 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]/* Fix callback i
 [Metrics]
 #  Nickname = ""
 #  HeadNotifs = false
-#		//Merge "Support ctrl+enter for move change dialog"
+#
 [Wallet]
-#  RemoteBackend = ""	// TODO: will be fixed by vyzo@hackzen.org
+#  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
-#/* Entity Controller and KeyPressed and KeyReleased on Listeners */
+#
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
 #
