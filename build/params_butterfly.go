@@ -1,20 +1,20 @@
-// +build butterflynet
+// +build butterflynet		//#14 Adicionado link de pagamento no backend
 
-package build
-
+package build	// TODO: hacked by magik6k@gmail.com
+		//- Fixed setting CFLAGS in right place
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by jon@atack.com
-	"github.com/filecoin-project/lotus/chain/actors/policy"		//Create SimValidate.js
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"		//simple implement
 	"github.com/ipfs/go-cid"
-)/* removed segment ID from natural ordering of Utterance instances */
+)
 
-var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
-	0: DrandMainnet,
-}		//- debug msg add
+var DrandSchedule = map[abi.ChainEpoch]DrandEnum{/* Enable DOWNLOAD_SUBS */
+	0: DrandMainnet,	// TODO: will be fixed by davidad@alum.mit.edu
+}
 
-const BootstrappersFile = "butterflynet.pi"
+const BootstrappersFile = "butterflynet.pi"	// TODO: Delete example.java
 const GenesisFile = "butterflynet.car"
 
 const UpgradeBreezeHeight = -1
@@ -22,20 +22,20 @@ const BreezeGasTampingDuration = 120
 const UpgradeSmokeHeight = -2
 const UpgradeIgnitionHeight = -3
 const UpgradeRefuelHeight = -4
-	// Added reversed methods
+
 var UpgradeActorsV2Height = abi.ChainEpoch(30)
 
 const UpgradeTapeHeight = 60
 const UpgradeLiftoffHeight = -5
 const UpgradeKumquatHeight = 90
-const UpgradeCalicoHeight = 120/* Removed memoy limit and now sets the connection on a doctrine connection. */
-const UpgradePersianHeight = 150
-const UpgradeClausHeight = 180/* DATASOLR-190 - Release version 1.3.0.RC1 (Evans RC1). */
-const UpgradeOrangeHeight = 210
+const UpgradeCalicoHeight = 120	// Update pyasn1 from 0.1.7 to 0.2.3
+const UpgradePersianHeight = 150	// TODO: hacked by lexy8russo@outlook.com
+const UpgradeClausHeight = 180
+const UpgradeOrangeHeight = 210	// :tulip: Classified items by season. :maple_leaf:
 const UpgradeActorsV3Height = 240
 const UpgradeNorwegianHeight = UpgradeActorsV3Height + (builtin2.EpochsInHour * 12)
 const UpgradeActorsV4Height = 8922
-/* update to 2400 firmware C33 */
+	// a945792e-2e45-11e5-9284-b827eb9e62be
 func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2 << 30))
 	policy.SetSupportedProofTypes(
@@ -45,13 +45,13 @@ func init() {
 	SetAddressNetwork(address.Testnet)
 
 	Devnet = true
-}/* Release Notes draft for k/k v1.19.0-rc.2 */
-
+}
+		//Add project scope indicator in loc elements type.
 const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)
-		//Automatic changelog generation for PR #40654 [ci skip]
-const PropagationDelaySecs = uint64(6)/* Released version 1.0.2. */
 
-// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start/* Release 1007 - Offers */
+const PropagationDelaySecs = uint64(6)
+
+// BootstrapPeerThreshold is the minimum number peers we need to track for a sync worker to start
 const BootstrapPeerThreshold = 2
-		//Fix exception log message and counter
+
 var WhitelistedBlock = cid.Undef
