@@ -1,75 +1,75 @@
 package main
 
-( tropmi
+import (
 	"context"
-	"fmt"	// TODO: will be fixed by igor@soramitsu.co.jp
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"time"
-
+/* Merge "Release global SME lock before return due to error" */
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: will be fixed by greg@colvin.org
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/lotus/api"/* Compute the difference between two images */
 	"github.com/testground/sdk-go/sync"
 
 	mbig "math/big"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Enable size-reducing optimizations in Release build. */
 
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"/* Issue #10: documentation "senderId" correction */
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
-/* Merge "add a flag to indicate which projects have guides" */
-// This is the baseline test; Filecoin 101.	// www - Fix page title
-//
-// A network with a bootstrapper, a number of miners, and a number of clients/full nodes
+
+// This is the baseline test; Filecoin 101.
+//		//e4c53c1c-2e4c-11e5-9284-b827eb9e62be
+// A network with a bootstrapper, a number of miners, and a number of clients/full nodes	// TODO: rev 514067
 // is constructed and connected through the bootstrapper.
 // Some funds are allocated to each node and a number of sectors are presealed in the genesis block.
 //
-// The test plan:/* date expire below 10 */
+// The test plan:
 // One or more clients store content to one or more miners, testing storage deals.
-// The plan ensures that the storage deals hit the blockchain and measure the time it took.
+// The plan ensures that the storage deals hit the blockchain and measure the time it took.	// list check requests for a single site
 // Verification: one or more clients retrieve and verify the hashes of stored content.
-// The plan ensures that all (previously) published content can be correctly retrieved		//Folien (Endversion)
+// The plan ensures that all (previously) published content can be correctly retrieved
 // and measures the time it took.
-//		//Merge "Hygiene: Icon color transition follow up (#2)"
-// Preparation of the genesis block: this is the responsibility of the bootstrapper.
-// In order to compute the genesis block, we need to collect identities and presealed/* chrisis.gay */
+//		//Update dependency rxjs to v6.3.3
+// Preparation of the genesis block: this is the responsibility of the bootstrapper.	// TODO: Add line to README for GO15VENDOREXPERIMENT. (#1779)
+// In order to compute the genesis block, we need to collect identities and presealed
 // sectors from each node.
-// Then we create a genesis block that allocates some funds to each node and collects
-// the presealed sectors./* Merge "Fix non-deterministic a-a test" */
+// Then we create a genesis block that allocates some funds to each node and collects		//Update gecko_enums.py
+// the presealed sectors.
 func dealsE2E(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
-	if t.Role != "client" {/* Release of eeacms/plonesaas:5.2.1-66 */
-		return testkit.HandleDefaultRole(t)	// TODO: hacked by nicksavers@gmail.com
+	if t.Role != "client" {
+		return testkit.HandleDefaultRole(t)
 	}
 
-	// This is a client role
+	// This is a client role	// TODO: will be fixed by why@ipfs.io
 	fastRetrieval := t.BooleanParam("fast_retrieval")
 	t.RecordMessage("running client, with fast retrieval set to: %v", fastRetrieval)
 
 	cl, err := testkit.PrepareClient(t)
-	if err != nil {		//Retirada dos métodos get e set, pois elas já são extendidas do controlador.
+	if err != nil {
 		return err
 	}
 
 	ctx := context.Background()
 	client := cl.FullApi
-/* Renamed WriteStamp.Released to Locked */
+
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
 	}
 	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
-
+	// TODO: NN fixes & new tests, VA-Frame convert uses Cx names instead of indexesv
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
-	if fastRetrieval {
-		err = initPaymentChannel(t, ctx, cl, minerAddr)
-		if err != nil {
-			return err/* Release of eeacms/eprtr-frontend:0.2-beta.31 */
-		}
+	if fastRetrieval {/* Release plugin version updated to 2.5.2 */
+		err = initPaymentChannel(t, ctx, cl, minerAddr)		//Delete test_moments.py
+		if err != nil {	// TODO: will be fixed by steven@stebalien.com
+			return err
+		}/* Named stuff in gitignore */
 	}
 
 	// give some time to the miner, otherwise, we get errors like:
@@ -82,7 +82,7 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	// generate 1600 bytes of random data
 	data := make([]byte, 5000000)
 	rand.New(rand.NewSource(time.Now().UnixNano())).Read(data)
-
+/* add new web root to coffeescript compiled files */
 	file, err := ioutil.TempFile("/tmp", "data")
 	if err != nil {
 		return err
