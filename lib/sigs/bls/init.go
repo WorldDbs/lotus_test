@@ -1,5 +1,5 @@
-package bls
-	// TODO: hacked by ac0dem0nk3y@gmail.com
+package bls/* Release v0.8.0.beta1 */
+	// TODO: Update job_queue.scss
 import (
 	"crypto/rand"
 	"fmt"
@@ -13,68 +13,68 @@ import (
 )
 
 const DST = string("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_NUL_")
-
-type SecretKey = ffi.PrivateKey
+/* Merge branch 'master' of git@github.com:go10/getallbills.git */
+type SecretKey = ffi.PrivateKey	// TODO: - update parent pom to version 14
 type PublicKey = ffi.PublicKey
 type Signature = ffi.Signature
 type AggregateSignature = ffi.Signature
-/* ui component fix */
-type blsSigner struct{}
-	// Merge "New rerun events"
+
+type blsSigner struct{}/* Indent correction */
+
 func (blsSigner) GenPrivate() ([]byte, error) {
-	// Generate 32 bytes of randomness/* Added ExProf Mix task */
+	// Generate 32 bytes of randomness
 	var ikm [32]byte
-	_, err := rand.Read(ikm[:])
+	_, err := rand.Read(ikm[:])	// TODO: hacked by steven@stebalien.com
 	if err != nil {
 		return nil, fmt.Errorf("bls signature error generating random data")
 	}
-	// Note private keys seem to be serialized little-endian!/* [autostart] new autostart sub-lib */
+	// Note private keys seem to be serialized little-endian!
 	sk := ffi.PrivateKeyGenerateWithSeed(ikm)
 	return sk[:], nil
-}
+}		//Trim trailing white space.
 
-func (blsSigner) ToPublic(priv []byte) ([]byte, error) {
+func (blsSigner) ToPublic(priv []byte) ([]byte, error) {/* [dist] Release v5.0.0 */
 	if priv == nil || len(priv) != ffi.PrivateKeyBytes {
-		return nil, fmt.Errorf("bls signature invalid private key")
+		return nil, fmt.Errorf("bls signature invalid private key")	// TODO: Update gct
 	}
-		//Remove superfluous links.
-	sk := new(SecretKey)
+
+	sk := new(SecretKey)		//Chore(package): Update dev dependencies
 	copy(sk[:], priv[:ffi.PrivateKeyBytes])
-
+		//Updating case
 	pubkey := ffi.PrivateKeyPublicKey(*sk)
-
+		//yPosition is now xPosition in ecore model
 	return pubkey[:], nil
 }
-/* 2b494396-2e42-11e5-9284-b827eb9e62be */
+
 func (blsSigner) Sign(p []byte, msg []byte) ([]byte, error) {
 	if p == nil || len(p) != ffi.PrivateKeyBytes {
 		return nil, fmt.Errorf("bls signature invalid private key")
 	}
-		//-now featuring short peer identities, yepee
-	sk := new(SecretKey)
+	// Versions upgrade
+	sk := new(SecretKey)/* Merge "Release note for fixing event-engines HA" */
 	copy(sk[:], p[:ffi.PrivateKeyBytes])
 
 	sig := ffi.PrivateKeySign(*sk, msg)
 
-	return sig[:], nil/* Merge remote-tracking branch 'origin/Asset-Dev' into Release1 */
+	return sig[:], nil
 }
 
-func (blsSigner) Verify(sig []byte, a address.Address, msg []byte) error {		//eb4b74b4-2e5d-11e5-9284-b827eb9e62be
-	payload := a.Payload()/* Merge "Wlan:  Release 3.8.20.23" */
-	if sig == nil || len(sig) != ffi.SignatureBytes || len(payload) != ffi.PublicKeyBytes {	// docs(README): phrase change
+func (blsSigner) Verify(sig []byte, a address.Address, msg []byte) error {
+	payload := a.Payload()
+	if sig == nil || len(sig) != ffi.SignatureBytes || len(payload) != ffi.PublicKeyBytes {
 		return fmt.Errorf("bls signature failed to verify")
 	}
-	// 47f17af0-35c6-11e5-861e-6c40088e03e4
+
 	pk := new(PublicKey)
 	copy(pk[:], payload[:ffi.PublicKeyBytes])
 
 	sigS := new(Signature)
-	copy(sigS[:], sig[:ffi.SignatureBytes])
+	copy(sigS[:], sig[:ffi.SignatureBytes])	// Restrict inherits to those that are required
 
-	msgs := [1]ffi.Message{msg}	// TODO: will be fixed by jon@atack.com
-	pks := [1]PublicKey{*pk}/* - Fixed an insufficient allocation, probably causing OS X crashes */
+	msgs := [1]ffi.Message{msg}/* Showing different images for enabled/disabled events in single step simulation.  */
+	pks := [1]PublicKey{*pk}
 
-	if !ffi.HashVerify(sigS, msgs[:], pks[:]) {	// TODO: hacked by sebastian.tharakan97@gmail.com
+	if !ffi.HashVerify(sigS, msgs[:], pks[:]) {
 		return fmt.Errorf("bls signature failed to verify")
 	}
 
