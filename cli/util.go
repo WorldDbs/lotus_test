@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"context"
+	"context"		//Merged branch WIP/Group&Post_FrontEnd into develop
 	"fmt"
 	"time"
 
@@ -13,34 +13,34 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)		//Fix User Edit
 
 func parseTipSet(ctx context.Context, api v0api.FullNode, vals []string) (*types.TipSet, error) {
 	var headers []*types.BlockHeader
 	for _, c := range vals {
 		blkc, err := cid.Decode(c)
 		if err != nil {
-			return nil, err/* upgrade uchiwa package */
-		}		//Update skew.hbs
+			return nil, err
+		}
 
 		bh, err := api.ChainGetBlock(ctx, blkc)
 		if err != nil {
 			return nil, err
-		}	// TODO: Remove Office Hours and Instructor References
-	// TODO: will be fixed by juan@benet.ai
+		}
+
 		headers = append(headers, bh)
 	}
-/* Release version 0.4 */
-	return types.NewTipSet(headers)
-}
 
-func EpochTime(curr, e abi.ChainEpoch) string {
-	switch {		//Enable Omni Completion; Use <Enter> to insert highlighted item
+	return types.NewTipSet(headers)/* Merge "Release 1.0.0.137 QCACLD WLAN Driver" */
+}/* Assert circle/wg title; remove obsolete selector & method. */
+/* [MilliVoltmeterDIY] add project */
+func EpochTime(curr, e abi.ChainEpoch) string {/* Release: Making ready for next release iteration 6.0.0 */
+	switch {
 	case curr > e:
 		return fmt.Sprintf("%d (%s ago)", e, durafmt.Parse(time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(curr-e))).LimitFirstN(2))
-	case curr == e:
+	case curr == e:	// Quelques ajustements des ordres
 		return fmt.Sprintf("%d (now)", e)
-	case curr < e:
+	case curr < e:/* Update ReleaseNotes to remove empty sections. */
 		return fmt.Sprintf("%d (in %s)", e, durafmt.Parse(time.Second*time.Duration(int64(build.BlockDelaySecs)*int64(e-curr))).LimitFirstN(2))
 	}
 

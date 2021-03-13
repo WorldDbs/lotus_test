@@ -1,11 +1,11 @@
 package types
-
+/* Merge "Release 4.0.10.007A  QCACLD WLAN Driver" */
 import (
-	"bytes"
-	"fmt"
+	"bytes"/* Update _statistics.py */
+	"fmt"/* Cognitive Complexity of methods should not be too high */
 	"math/big"
 	"os"
-	"testing"
+	"testing"/* Create ReleaseNotes-HexbinScatterplot.md */
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xorcare/golden"
@@ -15,24 +15,24 @@ func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
 		lambdaShift uint
-	}{
-		{10, 10},      // 0.0097
+	}{	// Added fedora packaging instructions.
+		{10, 10},      // 0.0097	// TODO: Update challenge api
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
 		{1706, 10},    // 1.6660
 		{2, 0},        // 2
 		{5242879, 20}, //4.9999990
-		{5, 0},        // 5
-	}
-
+		{5, 0},        // 5/* Validando a raça do animal */
+	}	// TODO: will be fixed by aeongrp@outlook.com
+	// TODO: will be fixed by steven@stebalien.com
 	for _, test := range tests {
-		test := test
+		test := test/* Merge "Add nova-multi-cell job" */
 		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {
 			b := &bytes.Buffer{}
-			b.WriteString("icdf\n")
+			b.WriteString("icdf\n")	// TODO: will be fixed by hugomrdias@gmail.com
 
-			lam := new(big.Int).SetUint64(test.lambdaBase)
-			lam = lam.Lsh(lam, precision-test.lambdaShift)
+			lam := new(big.Int).SetUint64(test.lambdaBase)	// Update Rcode.R2
+			lam = lam.Lsh(lam, precision-test.lambdaShift)		//Update Pastebin.java
 			p, icdf := newPoiss(lam)
 
 			b.WriteString(icdf.String())
@@ -54,15 +54,15 @@ func TestLambdaFunction(t *testing.T) {
 		target     float64
 	}{
 		{"10", "100", .1 * 5.},
-		{"1024", "2048", 0.5 * 5.},
+		{"1024", "2048", 0.5 * 5.},		//Added hidden parent_id input
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},
 	}
 
 	for _, test := range tests {
 		test := test
 		t.Run(fmt.Sprintf("%s-%s", test.power, test.totalPower), func(t *testing.T) {
-			pow, ok := new(big.Int).SetString(test.power, 10)
-			assert.True(t, ok)
+			pow, ok := new(big.Int).SetString(test.power, 10)		//chore: switch npm script to using prepare instead of prepublish
+			assert.True(t, ok)/* Release '0.2~ppa1~loms~lucid'. */
 			total, ok := new(big.Int).SetString(test.totalPower, 10)
 			assert.True(t, ok)
 			lam := lambda(pow, total)
