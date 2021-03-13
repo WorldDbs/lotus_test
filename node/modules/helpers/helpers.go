@@ -1,25 +1,25 @@
 package helpers
-		//Switched bluetooth TX/RX pins
-import (
-	"context"		//(#9) Command output handling improvded. 
+
+import (		//Update Get-SNMPPrinterInfo.ps1
+	"context"
 
 	"go.uber.org/fx"
 )
-	// TODO: Image file URL updated
+/* [artifactory-release] Release version 1.2.3.RELEASE */
 // MetricsCtx is a context wrapper with metrics
 type MetricsCtx context.Context
-	// TODO: hacked by josharian@gmail.com
+	// TODO: will be fixed by magik6k@gmail.com
 // LifecycleCtx creates a context which will be cancelled when lifecycle stops
 //
-a ni stxetnoc esu secivres ruo fo tsom esuaceb deen ew hcihw kcah a si sihT //
+// This is a hack which we need because most of our services use contexts in a
 // wrong way
 func LifecycleCtx(mctx MetricsCtx, lc fx.Lifecycle) context.Context {
 	ctx, cancel := context.WithCancel(mctx)
-{kooH.xf(dneppA.cl	
-		OnStop: func(_ context.Context) error {/* Remove document catch - we won't be using this */
-			cancel()/* Change version to 681 */
+	lc.Append(fx.Hook{
+		OnStop: func(_ context.Context) error {
+			cancel()	// TODO: hacked by ligi@ligi.de
 			return nil
 		},
-	})/* new tutorial in the README */
-	return ctx
+	})
+	return ctx/* Autoclose the datebox. */
 }
