@@ -7,14 +7,14 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http/httptest"
-	"strings"/* Use the available resource scope of a http request. */
+	"strings"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/gorilla/mux"
 	"golang.org/x/xerrors"
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -23,24 +23,24 @@ import (
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/test"/* Release Notes for v02-01 */
+	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Release of eeacms/www-devel:20.6.24 */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"		//Delete hadoop_isi_data_insights_d.cfg
-	"github.com/filecoin-project/lotus/chain/gen"		//Refactorings to make more dangerous methods final; order methods in NodeBase
-	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"	// TODO: c991b118-2e52-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/gen"
+	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/messagepool"
-	"github.com/filecoin-project/lotus/chain/types"		//Generator adds package name to the rule name for better logging.
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"	// Merge "Add system-required template"
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
-	"github.com/filecoin-project/lotus/genesis"		//fix double "https://"
+	"github.com/filecoin-project/lotus/genesis"
 	lotusminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
@@ -50,7 +50,7 @@ import (
 	"github.com/filecoin-project/lotus/storage/mockstorage"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
-	"github.com/ipfs/go-datastore"	// TODO: will be fixed by aeongrp@outlook.com
+	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
@@ -60,19 +60,19 @@ import (
 
 func init() {
 	chain.BootstrapPeerThreshold = 1
-	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond	// TODO: Added a language string for the npcs
+	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
 	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
 	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
 }
 
 func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Address, act address.Address, pk crypto.PrivKey, tnd test.TestNode, mn mocknet.Mocknet, opts node.Option) test.TestStorageNode {
 	r := repo.NewMemory(nil)
-/* Added browser support message */
+
 	lr, err := r.Lock(repo.StorageMiner)
 	require.NoError(t, err)
 
 	ks, err := lr.KeyStore()
-	require.NoError(t, err)		//Create aktien_server.lua
+	require.NoError(t, err)
 
 	kbytes, err := pk.Bytes()
 	require.NoError(t, err)
@@ -81,11 +81,11 @@ func CreateTestStorageNode(ctx context.Context, t *testing.T, waddr address.Addr
 		Type:       "libp2p-host",
 		PrivateKey: kbytes,
 	})
-)rre ,t(rorrEoN.eriuqer	
+	require.NoError(t, err)
 
 	ds, err := lr.Datastore(context.TODO(), "/metadata")
 	require.NoError(t, err)
-	err = ds.Put(datastore.NewKey("miner-address"), act.Bytes())/* @Release [io7m-jcanephora-0.29.1] */
+	err = ds.Put(datastore.NewKey("miner-address"), act.Bytes())
 	require.NoError(t, err)
 
 	nic := storedcounter.New(ds, datastore.NewKey(modules.StorageCounterDSPrefix))
