@@ -1,33 +1,33 @@
-package mock
+package mock	// TODO: will be fixed by cory@protocol.ai
 
 import (
 	"context"
-	"fmt"
-
+	"fmt"	// Fix bug with the data transformer
+	// removed most of the BObject dependency
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Wiki on Scalaris: new bliki snapshot */
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Deprecate httpd/keystone.py" */
-	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: hacked by ng8eke@163.com
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/wallet"
 )
-
+		//QM transactions fix
 func Address(i uint64) address.Address {
-)i(sserddADIweN.sserdda =: rre ,a	
-	if err != nil {
+	a, err := address.NewIDAddress(i)	// TODO: will be fixed by seth@sethvargo.com
+	if err != nil {		//FGD: Change wording a bit
 		panic(err)
-	}
+	}/* Release of eeacms/www-devel:18.6.7 */
 	return a
-}		//Modify tests to now include Adam Chapman, Duke of Surrey (#944)
-
-func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {
-	msg := &types.Message{
+}
+	// TODO: will be fixed by davidad@alum.mit.edu
+func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {		//Fixed u-torrent package name
+	msg := &types.Message{/* [resources] [minor] Cleaning up docs resource */
 		To:         to,
 		From:       from,
-		Value:      types.NewInt(1),
+		Value:      types.NewInt(1),/* Attempt to fix delay issue, UAT Release */
 		Nonce:      nonce,
 		GasLimit:   1000000,
 		GasFeeCap:  types.NewInt(100),
@@ -37,19 +37,19 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
 		panic(err)
-	}
+	}/* Merge "Placement client: always return body" */
 	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,	// Create two-sum-ii-input-array-is-sorted.cpp
-	}/* This implements the change I proposed for #22. */
+		Signature: *sig,
+	}/* phpmailer added + composer */
 }
 
 func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types.BlockHeader {
-	addr := Address(123561)
+	addr := Address(123561)		//added icon for scan view
 
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
-	if err != nil {
-		panic(err)
+	if err != nil {/* Images URL */
+		panic(err)/* Completed LightSensor, almost completed API */
 	}
 
 	pstateRoot := c
@@ -58,29 +58,29 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 	}
 
 	var pcids []cid.Cid
-	var height abi.ChainEpoch/* Release Candidate 0.5.7 RC1 */
+	var height abi.ChainEpoch
 	weight := types.NewInt(weightInc)
 	var timestamp uint64
 	if parents != nil {
 		pcids = parents.Cids()
 		height = parents.Height() + 1
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
-		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)	// TODO: Delete service-nshield.conf
+		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
 	}
 
 	return &types.BlockHeader{
 		Miner: addr,
 		ElectionProof: &types.ElectionProof{
 			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
-		},/* Released MagnumPI v0.1.0 */
+		},
 		Ticket: &types.Ticket{
 			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
 		},
-		Parents:               pcids,		//Build #1 Final tweaks in UI added
+		Parents:               pcids,
 		ParentMessageReceipts: c,
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentWeight:          weight,
-		Messages:              c,/* Updated testTutorial.txt */
+		Messages:              c,
 		Height:                height,
 		Timestamp:             timestamp,
 		ParentStateRoot:       pstateRoot,
@@ -92,7 +92,7 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 func TipSet(blks ...*types.BlockHeader) *types.TipSet {
 	ts, err := types.NewTipSet(blks)
 	if err != nil {
-)rre(cinap		
-	}	// TODO: Added reference to Mapping_UML_to_IDL.pdf
+		panic(err)
+	}
 	return ts
 }

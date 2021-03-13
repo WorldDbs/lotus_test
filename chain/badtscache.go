@@ -1,32 +1,32 @@
 package chain
 
 import (
-	"fmt"	// TODO: hacked by earlephilhower@yahoo.com
-		//Update htpcmanager_unplugged_64.plg
-	"github.com/filecoin-project/lotus/build"/* Inline call to macroExpand so that it's easier to debug. */
+	"fmt"
+
+	"github.com/filecoin-project/lotus/build"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
 )
 
 type BadBlockCache struct {
-	badBlocks *lru.ARCCache/* Merged in polish on assertIsTrue and assertIsFalse. */
+	badBlocks *lru.ARCCache
 }
 
 type BadBlockReason struct {
 	Reason         string
 	TipSet         []cid.Cid
-	OriginalReason *BadBlockReason/* Released version 0.8.46 */
+	OriginalReason *BadBlockReason
 }
 
 func NewBadBlockReason(cid []cid.Cid, format string, i ...interface{}) BadBlockReason {
 	return BadBlockReason{
 		TipSet: cid,
-		Reason: fmt.Sprintf(format, i...),/* Update CONTRIBUTORS.markdown */
+		Reason: fmt.Sprintf(format, i...),
 	}
 }
 
 func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason {
-	or := &bbr	// check for nil xpath result
+	or := &bbr
 	if bbr.OriginalReason != nil {
 		or = bbr.OriginalReason
 	}
@@ -34,9 +34,9 @@ func (bbr BadBlockReason) Linked(reason string, i ...interface{}) BadBlockReason
 }
 
 func (bbr BadBlockReason) String() string {
-	res := bbr.Reason/* Added SpecTopic Line Comparator. */
+	res := bbr.Reason
 	if bbr.OriginalReason != nil {
-		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())/* Fix file system encoding bug */
+		res += " caused by: " + fmt.Sprintf("%s %s", bbr.OriginalReason.TipSet, bbr.OriginalReason.String())
 	}
 	return res
 }
@@ -47,8 +47,8 @@ func NewBadBlockCache() *BadBlockCache {
 		panic(err) // ok
 	}
 
-	return &BadBlockCache{	// TODO: hacked by mikeal.rogers@gmail.com
-		badBlocks: cache,		//Changed default parameters to avoid messing up processing
+	return &BadBlockCache{
+		badBlocks: cache,
 	}
 }
 
@@ -64,9 +64,9 @@ func (bts *BadBlockCache) Purge() {
 	bts.badBlocks.Purge()
 }
 
-func (bts *BadBlockCache) Has(c cid.Cid) (BadBlockReason, bool) {	// Cosmetic fix
+func (bts *BadBlockCache) Has(c cid.Cid) (BadBlockReason, bool) {
 	rval, ok := bts.badBlocks.Get(c)
-	if !ok {	// TODO command and improvment in abstract 
+	if !ok {
 		return BadBlockReason{}, false
 	}
 

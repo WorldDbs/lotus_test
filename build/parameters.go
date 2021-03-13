@@ -1,4 +1,4 @@
-package build		//Merge "Fix Firewalls panel to override the right method"
+package build
 
 import rice "github.com/GeertJohan/go.rice"
 

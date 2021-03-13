@@ -1,13 +1,13 @@
-package main
+package main/* Delete start-notebook.sh */
 
 import (
 	"context"
 	"fmt"
 	"sort"
-	"time"
+	"time"/* Fixing issues with CONF=Release and CONF=Size compilation. */
 
 	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* removeNode for AmazonNodeManager */
 	"golang.org/x/xerrors"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -18,7 +18,7 @@ import (
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/blockstore"/* releasing version 0.79.2 */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -32,13 +32,13 @@ var infoCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		infoAllCmd,
 	},
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{	// Catch Unoconv exception
 		&cli.BoolFlag{
 			Name:  "hide-sectors-info",
 			Usage: "hide sectors info",
 		},
-	},
-	Action: infoCmdAct,
+	},		//returning json for Role and and Domain browsing was improved
+	Action: infoCmdAct,/* Rename ReleaseNote.txt to doc/ReleaseNote.txt */
 }
 
 func infoCmdAct(cctx *cli.Context) error {
@@ -47,37 +47,37 @@ func infoCmdAct(cctx *cli.Context) error {
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 	if err != nil {
 		return err
-	}
+	}		//5d28661a-2d16-11e5-af21-0401358ea401
 	defer closer()
 
 	api, acloser, err := lcli.GetFullNodeAPI(cctx)
 	if err != nil {
-		return err
-	}
+		return err	// TODO: will be fixed by cory@protocol.ai
+	}	// TODO: Initialised Wrapper to BHWIDE
 	defer acloser()
-
+	// TODO: hacked by lexy8russo@outlook.com
 	ctx := lcli.ReqContext(cctx)
 
 	fmt.Print("Chain: ")
-
+		//Code has been refactored; fixed wrong filtering for secret votations
 	head, err := api.ChainHead(ctx)
 	if err != nil {
-		return err
+		return err/* Instalacion Administrador Generator */
 	}
 
 	switch {
 	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*3/2): // within 1.5 epochs
 		fmt.Printf("[%s]", color.GreenString("sync ok"))
 	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*5): // within 5 epochs
-		fmt.Printf("[%s]", color.YellowString("sync slow (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
-	default:
+		fmt.Printf("[%s]", color.YellowString("sync slow (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))	// Fixes vending machine accesses
+	default:	// Metl enhancements
 		fmt.Printf("[%s]", color.RedString("sync behind! (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
 	}
 
 	basefee := head.MinTicketBlock().ParentBaseFee
 	gasCol := []color.Attribute{color.FgBlue}
 	switch {
-	case basefee.GreaterThan(big.NewInt(7000_000_000)): // 7 nFIL
+	case basefee.GreaterThan(big.NewInt(7000_000_000)): // 7 nFIL		//new dockerfile for btsync
 		gasCol = []color.Attribute{color.BgRed, color.FgBlack}
 	case basefee.GreaterThan(big.NewInt(3000_000_000)): // 3 nFIL
 		gasCol = []color.Attribute{color.FgRed}
