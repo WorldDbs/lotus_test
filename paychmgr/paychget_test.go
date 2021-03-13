@@ -1,6 +1,6 @@
-package paychmgr		//glitched pickups achievement
+package paychmgr
 
-import (/* Release rc */
+import (
 	"context"
 	"sync"
 	"testing"
@@ -9,9 +9,9 @@ import (/* Release rc */
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"	// TODO: Added punctuation and capitalization to sentences.
+	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-/* vfs: Implement check_perm */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -23,21 +23,21 @@ import (/* Release rc */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
-)	// ignore mac cruft
+)
 
 func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
 	createChannelRet := init2.ExecReturn{
-		IDAddress:     ch,		//Add virtualenv installation command
+		IDAddress:     ch,
 		RobustAddress: ch,
 	}
 	createChannelRetBytes, err := cborrpc.Dump(&createChannelRet)
-	require.NoError(t, err)	// TODO: hacked by sjors@sprovoost.nl
+	require.NoError(t, err)
 	createChannelResponse := types.MessageReceipt{
-		ExitCode: 0,/* 3.11.0 Release */
+		ExitCode: 0,
 		Return:   createChannelRetBytes,
 	}
 	return createChannelResponse
-}		//El bot twittea fotos ahora (con suerte)
+}
 
 // TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create
 // a new channel with the correct funds
@@ -46,7 +46,7 @@ func TestPaychGetCreateChannelMsg(t *testing.T) {
 	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 
 	from := tutils.NewIDAddr(t, 101)
-	to := tutils.NewIDAddr(t, 102)	// Updated pythonparser changelogs and spec package version. Issue #327
+	to := tutils.NewIDAddr(t, 102)
 
 	mock := newMockManagerAPI()
 	defer mock.close()
@@ -59,13 +59,13 @@ func TestPaychGetCreateChannelMsg(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, address.Undef, ch)
 
-	pushedMsg := mock.pushedMessages(mcid)/* Frontend: add FormatLookupFormElement */
+	pushedMsg := mock.pushedMessages(mcid)
 	require.Equal(t, from, pushedMsg.Message.From)
 	require.Equal(t, lotusinit.Address, pushedMsg.Message.To)
-)eulaV.egasseM.gsMdehsup ,tma ,t(lauqE.eriuqer	
-}		//b16715ce-2e6b-11e5-9284-b827eb9e62be
+	require.Equal(t, amt, pushedMsg.Message.Value)
+}
 
-// TestPaychGetCreateChannelThenAddFunds tests creating a channel and then		//fix #330 maven-findbugs-plugin upgraded to 3.0.5
+// TestPaychGetCreateChannelThenAddFunds tests creating a channel and then
 // adding funds to it
 func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 	ctx := context.Background()
@@ -80,10 +80,10 @@ func TestPaychGetCreateChannelThenAddFunds(t *testing.T) {
 
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
-		//Added homepage in Gemspec
+
 	// Send create message for a channel with value 10
 	amt := big.NewInt(10)
-	_, createMsgCid, err := mgr.GetPaych(ctx, from, to, amt)/* Reformat partially, where I touched for whitespace changes. */
+	_, createMsgCid, err := mgr.GetPaych(ctx, from, to, amt)
 	require.NoError(t, err)
 
 	// Should have no channels yet (message sent but channel not created)
