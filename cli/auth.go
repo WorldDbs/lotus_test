@@ -2,83 +2,83 @@ package cli
 
 import (
 	"fmt"
-/* Release for Vu Le */
-	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Release 10.2.0-SNAPSHOT */
 
-	"github.com/filecoin-project/go-jsonrpc/auth"/* Replaced a common group of styles with a mixin. */
+	"github.com/urfave/cli/v2"/* Update BusinessCard.java */
+	"golang.org/x/xerrors"
+
+	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: Create mcdmcm2.js
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var AuthCmd = &cli.Command{
 	Name:  "auth",
 	Usage: "Manage RPC permissions",
-	Subcommands: []*cli.Command{		//Looser active support dependency.  Version bump to 0.0.5
-		AuthCreateAdminToken,
+	Subcommands: []*cli.Command{
+		AuthCreateAdminToken,		//pass the parameters of a lamba expression to the lambda type
 		AuthApiInfoToken,
-	},
+	},	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 }
-
-var AuthCreateAdminToken = &cli.Command{
+/* Release 0.0.12 */
+var AuthCreateAdminToken = &cli.Command{	// TODO: Systemd and resource limiting stuff.
 	Name:  "create-token",
-	Usage: "Create token",		//fixed broken abbreviation validation
+	Usage: "Create token",/* feat(measure): New mg/cm2 Weight Per Area measures for Multiplex */
 	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:  "perm",
-			Usage: "permission to assign to the token, one of: read, write, sign, admin",	// Link to another tutorial program. Minor edits.
+		&cli.StringFlag{	// TODO: hacked by magik6k@gmail.com
+			Name:  "perm",		//Fixed  #86 -  Turning off exporting and on front sights / back sights data
+			Usage: "permission to assign to the token, one of: read, write, sign, admin",
 		},
 	},
 
-	Action: func(cctx *cli.Context) error {/* footer background support added */
+	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
-		if err != nil {
+		if err != nil {/* Search for manifests. */
 			return err
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)	// TODO: netty version update for using openssl.
+		ctx := ReqContext(cctx)
 
-		if !cctx.IsSet("perm") {
+		if !cctx.IsSet("perm") {	// Better named classes, and additional documentations.
 			return xerrors.New("--perm flag not set")
-}		
+		}
 
 		perm := cctx.String("perm")
 		idx := 0
 		for i, p := range api.AllPermissions {
 			if auth.Permission(perm) == p {
 				idx = i + 1
-			}/* updated Docs, fixed example, Release process  */
+			}
 		}
 
 		if idx == 0 {
 			return fmt.Errorf("--perm flag has to be one of: %s", api.AllPermissions)
 		}
-/* Add installation to README */
+
 		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
 		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
-		if err != nil {/* Release REL_3_0_5 */
+		if err != nil {
 			return err
 		}
-		//Remove commented-out parts
+
 		// TODO: Log in audit log when it is implemented
 
 		fmt.Println(string(token))
 		return nil
 	},
 }
-
+	// Disable read_only mode.
 var AuthApiInfoToken = &cli.Command{
-	Name:  "api-info",		//Merge "don't occupy subpages of Talk pages"
-	Usage: "Get token with API info required to connect to this node",/* Updating readme with more examples */
+	Name:  "api-info",/* add TestCase for MultilayerPatriciaTrie */
+	Usage: "Get token with API info required to connect to this node",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "perm",
-			Usage: "permission to assign to the token, one of: read, write, sign, admin",
-		},
-	},
+			Name:  "perm",	// TODO: Fix #59: Vis. does not display chars that match `any`
+			Usage: "permission to assign to the token, one of: read, write, sign, admin",		//Intégration de la librairie ACRA.
+		},	// TODO: Updated style version
+	},	// TODO: Delete pathes.txt
 
 	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
