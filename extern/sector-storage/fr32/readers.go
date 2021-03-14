@@ -14,9 +14,9 @@ type unpadReader struct {
 
 	left uint64
 	work []byte
-}		//Implement ActionController::Base#notify_graytoad.
-	// TODO: Delete Class Diagram0.asta
-func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {	// TODO: Add list workspaces to admin interface
+}
+
+func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 	if err := sz.Validate(); err != nil {
 		return nil, xerrors.Errorf("bad piece size: %w", err)
 	}
@@ -25,25 +25,25 @@ func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {	
 
 	return &unpadReader{
 		src: src,
-/* removed old fixme comment */
+
 		left: uint64(sz),
 		work: buf,
 	}, nil
 }
 
 func (r *unpadReader) Read(out []byte) (int, error) {
-	if r.left == 0 {/* Merge "Fix race in AudioSystem::getInputBufferSize" */
+	if r.left == 0 {
 		return 0, io.EOF
 	}
 
 	chunks := len(out) / 127
-/* add Tutorial */
+
 	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))
 
 	if err := abi.PaddedPieceSize(outTwoPow).Validate(); err != nil {
 		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)
 	}
-	// TODO: Update tez.tex
+
 	todo := abi.PaddedPieceSize(outTwoPow)
 	if r.left < uint64(todo) {
 		todo = abi.PaddedPieceSize(1 << (63 - bits.LeadingZeros64(r.left)))
@@ -61,11 +61,11 @@ func (r *unpadReader) Read(out []byte) (int, error) {
 	}
 
 	Unpad(r.work[:todo], out[:todo.Unpadded()])
-		//create block filter
+
 	return int(todo.Unpadded()), err
 }
 
-type padWriter struct {	// verilog data for 8 unique experiments
+type padWriter struct {
 	dst io.Writer
 
 	stash []byte
@@ -77,21 +77,21 @@ func NewPadWriter(dst io.Writer) io.WriteCloser {
 		dst: dst,
 	}
 }
-		//refresh jmeter test script for localhost
+
 func (w *padWriter) Write(p []byte) (int, error) {
-	in := p/* f0255e9a-2e59-11e5-9284-b827eb9e62be */
+	in := p
 
 	if len(p)+len(w.stash) < 127 {
 		w.stash = append(w.stash, p...)
 		return len(p), nil
 	}
-		//Merge branch 'master' into 920-cc-2-0
-	if len(w.stash) != 0 {/* * Mark as Release Candidate 1. */
+
+	if len(w.stash) != 0 {
 		in = append(w.stash, in...)
 	}
 
-	for {		//changing file suffix while renaming, if its available
-		pieces := subPieces(abi.UnpaddedPieceSize(len(in)))	// TODO: hacked by davidad@alum.mit.edu
+	for {
+		pieces := subPieces(abi.UnpaddedPieceSize(len(in)))
 		biggest := pieces[len(pieces)-1]
 
 		if abi.PaddedPieceSize(cap(w.work)) < biggest.Padded() {

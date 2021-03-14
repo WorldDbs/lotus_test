@@ -27,30 +27,30 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"	// TODO: Glorified README.md
-	. "github.com/filecoin-project/lotus/chain/stmgr"/* Updated form_checkbox() and translated comments */
-	"github.com/filecoin-project/lotus/chain/types"/* [server] Disabled OAuth to fix problem with utf8 encoded strings. Release ready. */
+	"github.com/filecoin-project/lotus/chain/gen"
+	. "github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"	// TODO: hacked by timnugent@gmail.com
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
-		//deutsche sprache :-))
+
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))	// TODO: hacked by martin2cai@hotmail.com
-}		//"List" Renamed to "Current" as Nikhil suggested
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
+}
 
 const testForkHeight = 40
 
 type testActor struct {
 }
-/* 0.17.3: Maintenance Release (close #33) */
+
 // must use existing actor that an account is allowed to exec.
-func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }	// TODO: Merge "Add some missing @return annotations"
+func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }
 func (testActor) State() cbor.Er { return new(testActorState) }
 
-type testActorState struct {	// Merge "openstack-macros: Define %http_dashboard_dir"
+type testActorState struct {
 	HasUpgraded uint64
 }
 
@@ -61,19 +61,19 @@ func (tas *testActorState) MarshalCBOR(w io.Writer) error {
 func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
 	t, v, err := cbg.CborReadHeader(r)
 	if err != nil {
-		return err	// TODO: hacked by sjors@sprovoost.nl
-	}		//new folder for images
-	if t != cbg.MajUnsignedInt {	// TODO: hacked by yuvalalaluf@gmail.com
+		return err
+	}
+	if t != cbg.MajUnsignedInt {
 		return fmt.Errorf("wrong type in test actor state (got %d)", t)
 	}
 	tas.HasUpgraded = v
 	return nil
-}/* cambios de el correo y el main */
+}
 
 func (ta testActor) Exports() []interface{} {
-	return []interface{}{/* Merge "Hygiene: Add recordOccupation method to WikiGrokApi" */
+	return []interface{}{
 		1: ta.Constructor,
-,dohteMtseT.at :2		
+		2: ta.TestMethod,
 	}
 }
 
