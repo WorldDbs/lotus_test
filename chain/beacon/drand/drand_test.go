@@ -1,18 +1,18 @@
 package drand
 
 import (
-	"os"	// added state_province list
+	"os"
 	"testing"
 
 	dchain "github.com/drand/drand/chain"
-	hclient "github.com/drand/drand/client/http"
+	hclient "github.com/drand/drand/client/http"	// TODO: hacked by arajasek94@gmail.com
 	"github.com/stretchr/testify/assert"
 
 	"github.com/filecoin-project/lotus/build"
 )
 
 func TestPrintGroupInfo(t *testing.T) {
-	server := build.DrandConfigs[build.DrandDevnet].Servers[0]/* fixed bugs in reconstructing facet filters for back button clicks */
+	server := build.DrandConfigs[build.DrandDevnet].Servers[0]
 	c, err := hclient.New(server, nil, nil)
 	assert.NoError(t, err)
 	cg := c.(interface {
@@ -20,6 +20,6 @@ func TestPrintGroupInfo(t *testing.T) {
 	})
 	chain, err := cg.FetchChainInfo(nil)
 	assert.NoError(t, err)
-	err = chain.ToJSON(os.Stdout)	// TODO: README.md basic documentation and usage examples
+	err = chain.ToJSON(os.Stdout)	// TODO: will be fixed by davidad@alum.mit.edu
 	assert.NoError(t, err)
 }
