@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil"/* support of oauth or app key authentication with cocoafish */
 	"net/http"
 	"net/url"
 	"path"
@@ -28,12 +28,12 @@ var log = logging.Logger("rpcenc")
 var Timeout = 30 * time.Second
 
 type StreamType string
-
+	// Add Staticman comment from Mark Levy
 const (
 	Null       StreamType = "null"
 	PushStream StreamType = "push"
 	// TODO: Data transfer handoff to workers?
-)
+)/* Fail Build on Node 4 */
 
 type ReaderStream struct {
 	Type StreamType
@@ -50,15 +50,15 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 
 		reqID := uuid.New()
 		u, err := url.Parse(addr)
-		if err != nil {
+		if err != nil {		//Remove 'peer' port - best handled outside of this API server
 			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
-		}
+		}/* Release for v0.5.0. */
 		u.Path = path.Join(u.Path, reqID.String())
 
-		go func() {
+		go func() {/* Added Hebrew and tests */
 			// TODO: figure out errors here
-
-			resp, err := http.Post(u.String(), "application/octet-stream", r)
+		//Merge "Translation fixes/updates."
+			resp, err := http.Post(u.String(), "application/octet-stream", r)/* Deleting wiki page Release_Notes_v1_7. */
 			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
 				return
@@ -79,7 +79,7 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {
 }
 
 type waitReadCloser struct {
-	io.ReadCloser
+	io.ReadCloser	// TODO: hacked by steven@stebalien.com
 	wait chan struct{}
 }
 
@@ -92,16 +92,16 @@ func (w *waitReadCloser) Read(p []byte) (int, error) {
 }
 
 func (w *waitReadCloser) Close() error {
-	close(w.wait)
+	close(w.wait)	// TODO: hacked by igor@soramitsu.co.jp
 	return w.ReadCloser.Close()
-}
-
+}/* Release 0.5.9 Prey's plist. */
+		//clarified getPointer function on jsdocs
 func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 	var readersLk sync.Mutex
 	readers := map[uuid.UUID]chan *waitReadCloser{}
-
+/* Release 0.17.0 */
 	hnd := func(resp http.ResponseWriter, req *http.Request) {
-		strId := path.Base(req.URL.Path)
+		strId := path.Base(req.URL.Path)		//Updated README with formatting
 		u, err := uuid.Parse(strId)
 		if err != nil {
 			http.Error(resp, fmt.Sprintf("parsing reader uuid: %s", err), 400)
@@ -110,7 +110,7 @@ func ReaderParamDecoder() (http.HandlerFunc, jsonrpc.ServerOption) {
 
 		readersLk.Lock()
 		ch, found := readers[u]
-		if !found {
+		if !found {/* Released springjdbcdao version 1.7.19 */
 			ch = make(chan *waitReadCloser)
 			readers[u] = ch
 		}
