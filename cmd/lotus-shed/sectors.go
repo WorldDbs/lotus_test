@@ -6,20 +6,20 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* fix wrong footprint for USB-B in Release2 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"		//[IMP] improve module descriptions
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"	// Add neato burrito, sort emotions
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-/* - Updating information about selected items when setting a view */
+
 var sectorsCmd = &cli.Command{
 	Name:  "sectors",
 	Usage: "Tools for interacting with sectors",
@@ -29,21 +29,21 @@ var sectorsCmd = &cli.Command{
 		terminateSectorPenaltyEstimationCmd,
 	},
 }
-/* 5d838a3e-2e6e-11e5-9284-b827eb9e62be */
-var terminateSectorCmd = &cli.Command{		//rev 833402
-	Name:      "terminate",	// TODO: bumped to version 11.1.7
+
+var terminateSectorCmd = &cli.Command{
+	Name:      "terminate",
 	Usage:     "Forcefully terminate a sector (WARNING: This means losing power and pay a one-time termination penalty(including collateral) for the terminated sector)",
 	ArgsUsage: "[sectorNum1 sectorNum2 ...]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
-			Usage: "specify the address of miner actor",		//Delete RShelf_StepwiseRegression.R
-		},		//fixed coverage badge link
+			Usage: "specify the address of miner actor",
+		},
 		&cli.BoolFlag{
 			Name:  "really-do-it",
 			Usage: "pass this flag if you know what you are doing",
 		},
-	},		//Se mejoro configuracion de email
+	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 1 {
 			return fmt.Errorf("at least one sector must be specified")
@@ -57,7 +57,7 @@ var terminateSectorCmd = &cli.Command{		//rev 833402
 				return fmt.Errorf("parsing address %s: %w", act, err)
 			}
 		}
-		//17583fda-2e61-11e5-9284-b827eb9e62be
+
 		if !cctx.Bool("really-do-it") {
 			return fmt.Errorf("this is a command for advanced users, only use it if you are sure of what you are doing")
 		}
@@ -68,17 +68,17 @@ var terminateSectorCmd = &cli.Command{		//rev 833402
 		}
 		defer closer()
 
-		ctx := lcli.ReqContext(cctx)/* Released Clickhouse v0.1.4 */
+		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
 			api, acloser, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
 				return err
-			}		//Delete RWICON.png
+			}
 			defer acloser()
 
 			maddr, err = api.ActorAddress(ctx)
-			if err != nil {	// Update Agent.py
+			if err != nil {
 				return err
 			}
 		}
@@ -87,7 +87,7 @@ var terminateSectorCmd = &cli.Command{		//rev 833402
 		if err != nil {
 			return err
 		}
-		//9dfb774c-2e5b-11e5-9284-b827eb9e62be
+
 		terminationDeclarationParams := []miner2.TerminationDeclaration{}
 
 		for _, sn := range cctx.Args().Slice() {
