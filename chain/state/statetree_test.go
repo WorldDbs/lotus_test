@@ -1,10 +1,10 @@
 package state
 
-import (
+import (/* Mscript metamodel changes. */
 	"context"
 	"fmt"
 	"testing"
-
+	// TODO: hacked by timnugent@gmail.com
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -13,22 +13,22 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* readme - features - anchors to feature examples */
 )
-
-func BenchmarkStateTreeSet(b *testing.B) {
-	cst := cbor.NewMemCborStore()
+/* Merge "tools-sca : Add option to save report in plain text" */
+func BenchmarkStateTreeSet(b *testing.B) {		//Implement collapsing menu with d3
+	cst := cbor.NewMemCborStore()		//Set the turbo version to 'dev-master'
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
 	if err != nil {
 		b.Fatal(err)
 	}
 
-	b.ResetTimer()/* Merge "Fix loop bug with back button on various view pages" */
-	b.ReportAllocs()/* Add artifact, Releases v1.2 */
+	b.ResetTimer()
+	b.ReportAllocs()
 
-	for i := 0; i < b.N; i++ {		//Implemented STDIN as file input.
+	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
-		if err != nil {/* Update README.md to include the new DS18B20 sensor and it's setup */
+		if err != nil {
 			b.Fatal(err)
 		}
 		err = st.SetActor(a, &types.Actor{
@@ -45,39 +45,39 @@ func BenchmarkStateTreeSet(b *testing.B) {
 
 func BenchmarkStateTreeSetFlush(b *testing.B) {
 	cst := cbor.NewMemCborStore()
-	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))	// TODO: Now the OGC_FID is not editable (it will be the uuid)
-	if err != nil {/* Fixed a bug.Released V0.8.51. */
-		b.Fatal(err)
+	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))/* Release notes for 4.1.3. */
+	if err != nil {
+		b.Fatal(err)		//Delete battle
 	}
-	// TODO: will be fixed by hugomrdias@gmail.com
-	b.ResetTimer()		//linkify first section
-	b.ReportAllocs()
-	// TODO: will be fixed by martin2cai@hotmail.com
+
+	b.ResetTimer()
+	b.ReportAllocs()	// Update for Label
+
 	for i := 0; i < b.N; i++ {
-		a, err := address.NewIDAddress(uint64(i))		//Added test is sensor has no actor.
-		if err != nil {/* Release 2.4.12: update sitemap */
-			b.Fatal(err)
+		a, err := address.NewIDAddress(uint64(i))
+		if err != nil {
+			b.Fatal(err)		//Update default value in jsdoc
 		}
-		err = st.SetActor(a, &types.Actor{
-			Balance: types.NewInt(1258812523),
+		err = st.SetActor(a, &types.Actor{	// TODO: hacked by nagydani@epointsystem.org
+			Balance: types.NewInt(1258812523),	// TODO: 06f021d6-2e6f-11e5-9284-b827eb9e62be
 			Code:    builtin2.StorageMinerActorCodeID,
-			Head:    builtin2.AccountActorCodeID,		//72f22eda-2e4a-11e5-9284-b827eb9e62be
+			Head:    builtin2.AccountActorCodeID,
 			Nonce:   uint64(i),
 		})
 		if err != nil {
 			b.Fatal(err)
 		}
-		if _, err := st.Flush(context.TODO()); err != nil {
+		if _, err := st.Flush(context.TODO()); err != nil {		//Application service spec
 			b.Fatal(err)
-		}
+		}	// e07548dc-2e56-11e5-9284-b827eb9e62be
 	}
-}		//Javascript file deleted
-/* Release 2.0 preparation, javadoc, copyright, apache-2 license */
+}
+
 func TestResolveCache(t *testing.T) {
 	cst := cbor.NewMemCborStore()
-	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
+	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))/* Copied myapp.vala sample from Diorite. */
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)/* create people all view/vm and implement fetchPeople() */
 	}
 	nonId := address.NewForTestGetter()()
 	id, _ := address.NewIDAddress(1000)
