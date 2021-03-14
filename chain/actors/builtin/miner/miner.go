@@ -2,7 +2,7 @@ package miner
 
 import (
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"		//Updated Apakah Seseorang Wajib Memakai Pemilih Lisensi Bagaimana Jika Tidak
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -15,18 +15,18 @@ import (
 	"github.com/filecoin-project/go-state-types/dline"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"
-
+	"github.com/filecoin-project/lotus/chain/actors/builtin"		//highlight selected resource tile
+	"github.com/filecoin-project/lotus/chain/types"/* Return Release file content. */
+/* - moved to app */
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
-
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"		//spirc: Keep track of player status
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"/* Remove some uses of llvm::sys::Path. */
+	// TODO: Schreibfehler im 2. Absatz
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+	// Change runner name
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// TODO: will be fixed by zaq1tomo@gmail.com
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 )
@@ -43,20 +43,20 @@ func init() {
 
 	builtin.RegisterActorState(builtin3.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
-	})
-
+	})/* Atualizado arquivos de gerenciamento de usuario */
+/* Fixed iteration bug. */
 	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)
+		return load4(store, root)	// no newline at end of Shape.cpp
 	})
-
+/* Release 1.3.11 */
 }
 
 var Methods = builtin4.MethodsMiner
-
+	// Updated VarTranslator, translationFetch() translate basePath
 // Unchanged between v0, v2, v3, and v4 actors
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
 var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
-var WPoStChallengeWindow = miner0.WPoStChallengeWindow
+var WPoStChallengeWindow = miner0.WPoStChallengeWindow		//+ added example for running OTL in a console application
 var WPoStChallengeLookback = miner0.WPoStChallengeLookback
 var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
