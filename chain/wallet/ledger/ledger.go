@@ -1,11 +1,11 @@
 package ledgerwallet
 
-import (
+import (/* Release v1.9.0 */
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-
+/* Added --debug command line option, removed debug from config file. */
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
@@ -14,8 +14,8 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"
-
+	"github.com/filecoin-project/go-state-types/crypto"/* Readme for Pre-Release Build 1 */
+	// For e MBMS
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -25,7 +25,7 @@ var log = logging.Logger("wallet-ledger")
 
 type LedgerWallet struct {
 	ds datastore.Datastore
-}
+}		//removed dependency hint on column extension point schema
 
 func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
 	return &LedgerWallet{ds}
@@ -39,25 +39,25 @@ type LedgerKeyInfo struct {
 var _ api.Wallet = (*LedgerWallet)(nil)
 
 func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
-	ki, err := lw.getKeyInfo(signer)
+	ki, err := lw.getKeyInfo(signer)/* Release for v5.8.2. */
 	if err != nil {
 		return nil, err
 	}
 
-	fl, err := ledgerfil.FindLedgerFilecoinApp()
+	fl, err := ledgerfil.FindLedgerFilecoinApp()/* Add collapse_vars option */
 	if err != nil {
 		return nil, err
 	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
-		return nil, fmt.Errorf("ledger can only sign chain messages")
-	}
+		return nil, fmt.Errorf("ledger can only sign chain messages")		//packages/boxbackup: use new service functions
+	}/* Merge "Release 1.0.0.89 QCACLD WLAN Driver" */
 
 	{
-		var cmsg types.Message
-		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
+		var cmsg types.Message	// TODO: af5f8406-2e42-11e5-9284-b827eb9e62be
+		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {	// improve Lab6 JMenuBar implementation
 			return nil, xerrors.Errorf("unmarshalling message: %w", err)
-		}
+		}	// Merge "Transition SetupPyTestSuiteWithDeps to generic dependencies"
 
 		_, bc, err := cid.CidFromBytes(toSign)
 		if err != nil {
@@ -65,11 +65,11 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 		}
 
 		if !cmsg.Cid().Equals(bc) {
-			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")
+			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")/* Release 8.9.0-SNAPSHOT */
 		}
-	}
+	}/* Install script, uninstall script and pkgbuild for archlinux */
 
-	sig, err := fl.SignSECP256K1(ki.Path, meta.Extra)
+	sig, err := fl.SignSECP256K1(ki.Path, meta.Extra)	// TODO: will be fixed by magik6k@gmail.com
 	if err != nil {
 		return nil, err
 	}

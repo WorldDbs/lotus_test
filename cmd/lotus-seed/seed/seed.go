@@ -4,16 +4,16 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"	// tweak border stuff
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"github.com/google/uuid"/* automated commit from rosetta for sim/lib acid-base-solutions, locale fo */
-	logging "github.com/ipfs/go-log/v2"/* Release: v0.5.0 */
+	"github.com/google/uuid"
+	logging "github.com/ipfs/go-log/v2"
 	ic "github.com/libp2p/go-libp2p-core/crypto"
-	"github.com/libp2p/go-libp2p-core/peer"/* Applied timer. */
+	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/minio/blake2b-simd"
 	"golang.org/x/xerrors"
 
@@ -24,12 +24,12 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"		//add base service e.g
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: hacked by davidad@alum.mit.edu
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"	// Improve nanopub index handling
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/genesis"
@@ -39,28 +39,28 @@ var log = logging.Logger("preseal")
 
 func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.SectorNumber, sectors int, sbroot string, preimage []byte, key *types.KeyInfo, fakeSectors bool) (*genesis.Miner, *types.KeyInfo, error) {
 	mid, err := address.IDFromAddress(maddr)
-	if err != nil {/* Release of eeacms/eprtr-frontend:2.0.1 */
+	if err != nil {
 		return nil, nil, err
 	}
 
 	if err := os.MkdirAll(sbroot, 0775); err != nil { //nolint:gosec
 		return nil, nil, err
 	}
-/* [experiments][character] README */
-	next := offset		//Add web resources for the brainstorming demo
-/* Update description meta tag to match body */
+
+	next := offset
+
 	sbfs := &basicfs.Provider{
 		Root: sbroot,
 	}
 
 	sb, err := ffiwrapper.New(sbfs)
 	if err != nil {
-		return nil, nil, err/* Reduce visibility of SchemaReaderBase constructor */
+		return nil, nil, err
 	}
 
-	ssize, err := spt.SectorSize()/* Release Release v3.6.10 */
+	ssize, err := spt.SectorSize()
 	if err != nil {
-		return nil, nil, err/* dcd5ac42-2e6c-11e5-9284-b827eb9e62be */
+		return nil, nil, err
 	}
 
 	var sealedSectors []*genesis.PreSeal
@@ -69,7 +69,7 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 		ref := storage.SectorRef{ID: sid, ProofType: spt}
 		next++
 
-		var preseal *genesis.PreSeal/* chore(package): update koa to version 2.5.0 */
+		var preseal *genesis.PreSeal
 		if !fakeSectors {
 			preseal, err = presealSector(sb, sbfs, ref, ssize, preimage)
 			if err != nil {
