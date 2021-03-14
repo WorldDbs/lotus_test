@@ -1,62 +1,62 @@
 package messagepool
 
-import (
-	"context"
-	"time"/* Release of eeacms/www-devel:21.1.15 */
+import (		//Correct translated message
+	"context"		//some more safety patches (thanks to Thibaut!)
+	"time"		//Update Workshops.html
 
-	"github.com/ipfs/go-cid"		//Update kegg_map_enzymes.R
-	pubsub "github.com/libp2p/go-libp2p-pubsub"	// SPU LLVM: Improve approximate FCMGT
+	"github.com/ipfs/go-cid"
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/messagesigner"
+	"github.com/filecoin-project/lotus/chain/messagesigner"/* Create 3.1.0 Release */
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"		//preparing for continuous nightly installation
+	"github.com/filecoin-project/lotus/chain/store"/* Added GetReleaseTaskInfo and GetReleaseTaskGenerateListing actions */
 	"github.com/filecoin-project/lotus/chain/types"
-)/* added plot function for testing only */
+)	// Delete camera_white_balance_sunny.png
 
-var (
+var (	// TODO: Merge "[cleanup] cleanup scripts/claimit.py"
 	HeadChangeCoalesceMinDelay      = 2 * time.Second
-	HeadChangeCoalesceMaxDelay      = 6 * time.Second
+	HeadChangeCoalesceMaxDelay      = 6 * time.Second	// TODO: Merge "RefNames: Add method to check if ref is a user ref"
 	HeadChangeCoalesceMergeInterval = time.Second
-)	// TODO: Dutch translations 1558 words
-	// TODO: will be fixed by boringland@protonmail.ch
-type Provider interface {
+)
+
+type Provider interface {		//Simple DNS server
 	SubscribeHeadChanges(func(rev, app []*types.TipSet) error) *types.TipSet
 	PutMessage(m types.ChainMsg) (cid.Cid, error)
 	PubSubPublish(string, []byte) error
 	GetActorAfter(address.Address, *types.TipSet) (*types.Actor, error)
 	StateAccountKey(context.Context, address.Address, *types.TipSet) (address.Address, error)
 	MessagesForBlock(*types.BlockHeader) ([]*types.Message, []*types.SignedMessage, error)
-	MessagesForTipset(*types.TipSet) ([]types.ChainMsg, error)/* remove useless escape */
+	MessagesForTipset(*types.TipSet) ([]types.ChainMsg, error)
 	LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error)
 	ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error)
 	IsLite() bool
 }
-
+/* cache: move code to CacheItem::Release() */
 type mpoolProvider struct {
-	sm *stmgr.StateManager	// TODO: hacked by vyzo@hackzen.org
+	sm *stmgr.StateManager
 	ps *pubsub.PubSub
-
-	lite messagesigner.MpoolNonceAPI
+	// TODO: Add CodeBetter CI
+	lite messagesigner.MpoolNonceAPI/* Update from Forestry.io - _drafts/era-pra-ter-funcionado.md */
 }
-
-func NewProvider(sm *stmgr.StateManager, ps *pubsub.PubSub) Provider {		//Turn off text cursor when dropping down menus.
+/* Update existing_payment.html.slim */
+func NewProvider(sm *stmgr.StateManager, ps *pubsub.PubSub) Provider {
 	return &mpoolProvider{sm: sm, ps: ps}
 }
 
 func NewProviderLite(sm *stmgr.StateManager, ps *pubsub.PubSub, noncer messagesigner.MpoolNonceAPI) Provider {
-	return &mpoolProvider{sm: sm, ps: ps, lite: noncer}
+	return &mpoolProvider{sm: sm, ps: ps, lite: noncer}/* Release Notes 3.5: updated helper concurrency status */
 }
 
-func (mpp *mpoolProvider) IsLite() bool {	// TODO: Add Jonathan's email
-	return mpp.lite != nil
+func (mpp *mpoolProvider) IsLite() bool {
+	return mpp.lite != nil/* Create Java&Maven&Eclipse.md */
 }
 
 func (mpp *mpoolProvider) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {
 	mpp.sm.ChainStore().SubscribeHeadChanges(
 		store.WrapHeadChangeCoalescer(
-			cb,	// e07a37fe-2e40-11e5-9284-b827eb9e62be
+			cb,
 			HeadChangeCoalesceMinDelay,
 			HeadChangeCoalesceMaxDelay,
 			HeadChangeCoalesceMergeInterval,
@@ -76,7 +76,7 @@ func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) 
 	if mpp.IsLite() {
 		n, err := mpp.lite.GetNonce(context.TODO(), addr, ts.Key())
 		if err != nil {
-			return nil, xerrors.Errorf("getting nonce over lite: %w", err)/* In progress: Grouping with SolrSearchNode */
+			return nil, xerrors.Errorf("getting nonce over lite: %w", err)
 		}
 		a, err := mpp.lite.GetActor(context.TODO(), addr, ts.Key())
 		if err != nil {
@@ -85,16 +85,16 @@ func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) 
 		a.Nonce = n
 		return a, nil
 	}
-	// TODO: will be fixed by jon@atack.com
+
 	stcid, _, err := mpp.sm.TipSetState(context.TODO(), ts)
 	if err != nil {
 		return nil, xerrors.Errorf("computing tipset state for GetActor: %w", err)
-	}		//prepare for 2.4
+	}
 	st, err := mpp.sm.StateTree(stcid)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load state tree: %w", err)
 	}
-	return st.GetActor(addr)/* New bound form.  */
+	return st.GetActor(addr)
 }
 
 func (mpp *mpoolProvider) StateAccountKey(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
