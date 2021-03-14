@@ -1,14 +1,14 @@
-package paychmgr/* Released springjdbcdao version 1.7.14 */
-/* Update .externals */
+package paychmgr
+
 import (
 	"context"
-/* 0.19.1: Maintenance Release (close #54) */
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by mail@bitpshr.net
-		//Improved wheels normal map
+
+	"github.com/filecoin-project/go-address"
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* class 2 directory */
+
 type stateAccessor struct {
 	sm stateManagerAPI
 }
@@ -17,41 +17,41 @@ func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Add
 	return ca.sm.GetPaychState(ctx, ch, nil)
 }
 
-func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {	// Added a flag for numeric types.
+func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
 	_, st, err := ca.loadPaychActorState(ctx, ch)
-	if err != nil {/* Released 0.7 */
+	if err != nil {
 		return nil, err
 	}
 
 	// Load channel "From" account actor state
 	f, err := st.From()
-	if err != nil {		//Cambios en direcciones
+	if err != nil {
 		return nil, err
 	}
 	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
 	if err != nil {
-		return nil, err/* Remove unused param from MicrosoftMangle::mangleCallingConvention() */
+		return nil, err
 	}
 	t, err := st.To()
 	if err != nil {
-		return nil, err	// TODO: update command_action fields
+		return nil, err
 	}
 	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)
 	if err != nil {
-		return nil, err/* Experimental alternative build definition. */
+		return nil, err
 	}
 
 	nextLane, err := ca.nextLaneFromState(ctx, st)
-	if err != nil {	// TODO: hacked by 13860583249@yeah.net
+	if err != nil {
 		return nil, err
 	}
-/* Allow Monolog to rotate log file */
-	ci := &ChannelInfo{/* Release 2.0.0.1 */
+
+	ci := &ChannelInfo{
 		Channel:   &ch,
 		Direction: dir,
 		NextLane:  nextLane,
 	}
-		//updates settings when on canvas mode
+
 	if dir == DirOutbound {
 		ci.Control = from
 		ci.Target = to

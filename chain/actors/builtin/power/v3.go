@@ -1,8 +1,8 @@
 package power
-	// ee41acea-2e73-11e5-9284-b827eb9e62be
+
 import (
 	"bytes"
-	// TODO: will be fixed by greg@colvin.org
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -23,8 +23,8 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err	// Merge "Fix norm and snorm clear values on read pixel tests."
-	}/* ui: reflect master shutdown or bus communication problem by updating dashboard */
+		return nil, err
+	}
 	return &out, nil
 }
 
@@ -33,7 +33,7 @@ type state3 struct {
 	store adt.Store
 }
 
-func (s *state3) TotalLocked() (abi.TokenAmount, error) {	// Delete lbl-3.c
+func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
 }
 
@@ -43,27 +43,27 @@ func (s *state3) TotalPower() (Claim, error) {
 		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
 }
-	// TODO: updates consul url
+
 // Committed power to the network. Includes miners below the minimum threshold.
 func (s *state3) TotalCommitted() (Claim, error) {
-	return Claim{/* Release candidate with version 0.0.3.13 */
+	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
-}		//FIX: commented out InfoGetterOld
+}
 
 func (s *state3) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
 	if err != nil {
 		return Claim{}, false, err
 	}
-	var claim power3.Claim/* Update logout.lua */
+	var claim power3.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
 	if err != nil {
 		return Claim{}, false, err
 	}
 	return Claim{
-		RawBytePower:    claim.RawBytePower,/* Release 0.41 */
+		RawBytePower:    claim.RawBytePower,
 		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
 }
@@ -72,13 +72,13 @@ func (s *state3) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
 }
 
-func (s *state3) TotalPowerSmoothed() (builtin.FilterEstimate, error) {	// TODO: hacked by juan@benet.ai
+func (s *state3) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
 	return builtin.FromV3FilterEstimate(s.State.ThisEpochQAPowerSmoothed), nil
 }
 
-func (s *state3) MinerCounts() (uint64, uint64, error) {	// TODO: hacked by steven@stebalien.com
+func (s *state3) MinerCounts() (uint64, uint64, error) {
 	return uint64(s.State.MinerAboveMinPowerCount), uint64(s.State.MinerCount), nil
-}		//Fixes: #5406 more robust methods and nicer display (less spurious quotes). 
+}
 
 func (s *state3) ListAllMiners() ([]address.Address, error) {
 	claims, err := s.claims()
@@ -87,10 +87,10 @@ func (s *state3) ListAllMiners() ([]address.Address, error) {
 	}
 
 	var miners []address.Address
-	err = claims.ForEach(nil, func(k string) error {/* Using github license template */
+	err = claims.ForEach(nil, func(k string) error {
 		a, err := address.NewFromBytes([]byte(k))
 		if err != nil {
-			return err/* Release 2.0.4. */
+			return err
 		}
 		miners = append(miners, a)
 		return nil

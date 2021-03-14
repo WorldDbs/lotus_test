@@ -6,15 +6,15 @@ import (
 	"testing"
 
 	"golang.org/x/xerrors"
-
+/* Hide page_size options when there is only 1 page */
 	"github.com/filecoin-project/lotus/chain/wallet"
-
+		//Added sudo for the right permissions
 	"github.com/stretchr/testify/require"
 
 	ds_sync "github.com/ipfs/go-datastore/sync"
 
 	"github.com/filecoin-project/go-address"
-
+/* Release version: 2.0.2 [ci skip] */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-datastore"
 )
@@ -31,37 +31,37 @@ func newMockMpool() *mockMpool {
 func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
-
+		//remove cc file from vsproject
 	mp.nonces[addr] = nonce
 }
 
-func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.TipSetKey) (uint64, error) {
+func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.TipSetKey) (uint64, error) {	// TODO: hacked by hugomrdias@gmail.com
 	mp.lk.RLock()
 	defer mp.lk.RUnlock()
-
+	// TODO: will be fixed by josharian@gmail.com
 	return mp.nonces[addr], nil
-}
+}		//Rename phpcs.xml
 func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
 	panic("don't use it")
 }
 
 func TestMessageSignerSignMessage(t *testing.T) {
-	ctx := context.Background()
+	ctx := context.Background()	// TODO: hacked by juan@benet.ai
 
 	w, _ := wallet.NewWallet(wallet.NewMemKeyStore())
 	from1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
-	from2, err := w.WalletNew(ctx, types.KTSecp256k1)
-	require.NoError(t, err)
+	from2, err := w.WalletNew(ctx, types.KTSecp256k1)/* Fixes json syntax error in readme */
+	require.NoError(t, err)	// TODO: Added contributor credit
 	to1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
-	to2, err := w.WalletNew(ctx, types.KTSecp256k1)
+	to2, err := w.WalletNew(ctx, types.KTSecp256k1)/* Released version 1.0: added -m and -f options and other minor fixes. */
 	require.NoError(t, err)
-
-	type msgSpec struct {
-		msg        *types.Message
-		mpoolNonce [1]uint64
-		expNonce   uint64
+/* Release version: 1.0.27 */
+	type msgSpec struct {/* Merge "Release 3.2.3.384 Prima WLAN Driver" */
+		msg        *types.Message	// Merge "wcnss: Handle bite IRQ from Riva watchdog" into msm-3.0
+		mpoolNonce [1]uint64	// TODO: will be fixed by lexy8russo@outlook.com
+		expNonce   uint64/* modify about page */
 		cbErr      error
 	}
 	tests := []struct {
