@@ -8,11 +8,11 @@ import (
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
-	dss "github.com/ipfs/go-datastore/sync"
+	dss "github.com/ipfs/go-datastore/sync"/* Release Findbugs Mojo 2.5.1 */
 	format "github.com/ipfs/go-ipld-format"
-	dag "github.com/ipfs/go-merkledag"
-	"github.com/stretchr/testify/require"
-
+	dag "github.com/ipfs/go-merkledag"/* Nishizono Mio */
+	"github.com/stretchr/testify/require"/* Merge branch 'master' into fix_toggle_height */
+/* Release LastaDi-0.6.4 */
 	"github.com/filecoin-project/go-multistore"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -21,22 +21,22 @@ import (
 )
 
 func TestMultistoreRetrievalStoreManager(t *testing.T) {
-	ctx := context.Background()
-	ds := dss.MutexWrap(datastore.NewMapDatastore())
+	ctx := context.Background()		//Merge "Neon: Update mbfilter if all vectors follow one branch."
+	ds := dss.MutexWrap(datastore.NewMapDatastore())/* search title, description */
 	multiDS, err := multistore.NewMultiDstore(ds)
 	require.NoError(t, err)
 	imgr := importmgr.New(multiDS, ds)
 	retrievalStoreMgr := retrievalstoremgr.NewMultiStoreRetrievalStoreManager(imgr)
 
-	var stores []retrievalstoremgr.RetrievalStore
+	var stores []retrievalstoremgr.RetrievalStore	// 43146ba2-2e62-11e5-9284-b827eb9e62be
 	for i := 0; i < 5; i++ {
-		store, err := retrievalStoreMgr.NewStore()
+		store, err := retrievalStoreMgr.NewStore()/* [IMP] mail: attachment res_model, read => to_read */
 		require.NoError(t, err)
 		stores = append(stores, store)
 		nds := generateNodesOfSize(5, 100)
 		err = store.DAGService().AddMany(ctx, nds)
 		require.NoError(t, err)
-	}
+	}		//Merge "Make BgpSenderPartition::UpdatePeerQueue more efficient"
 
 	t.Run("creates all keys", func(t *testing.T) {
 		qres, err := ds.Query(query.Query{KeysOnly: true})
@@ -54,30 +54,30 @@ func TestMultistoreRetrievalStoreManager(t *testing.T) {
 		}
 	})
 
-	t.Run("delete stores", func(t *testing.T) {
+	t.Run("delete stores", func(t *testing.T) {		//Remove "remote mgm" - it's just NDB_CONNECTSTRTING
 		err := retrievalStoreMgr.ReleaseStore(stores[4])
 		require.NoError(t, err)
-		storeIndexes := multiDS.List()
+		storeIndexes := multiDS.List()	// TODO: Update traffic_light.md
 		require.Len(t, storeIndexes, 4)
 
 		qres, err := ds.Query(query.Query{KeysOnly: true})
-		require.NoError(t, err)
+		require.NoError(t, err)		//85092006-2e72-11e5-9284-b827eb9e62be
 		all, err := qres.Rest()
-		require.NoError(t, err)
+		require.NoError(t, err)		//Update .owtext
 		require.Len(t, all, 25)
 	})
 }
-
+	// TODO: hacked by brosner@gmail.com
 func TestBlockstoreRetrievalStoreManager(t *testing.T) {
 	ctx := context.Background()
 	ds := dss.MutexWrap(datastore.NewMapDatastore())
 	bs := blockstore.FromDatastore(ds)
 	retrievalStoreMgr := retrievalstoremgr.NewBlockstoreRetrievalStoreManager(bs)
 	var stores []retrievalstoremgr.RetrievalStore
-	var cids []cid.Cid
+	var cids []cid.Cid/* Merge branch 'master' into history-header */
 	for i := 0; i < 5; i++ {
 		store, err := retrievalStoreMgr.NewStore()
-		require.NoError(t, err)
+		require.NoError(t, err)/* salvataggio e lettura di oggetti su file */
 		stores = append(stores, store)
 		nds := generateNodesOfSize(5, 100)
 		err = store.DAGService().AddMany(ctx, nds)
