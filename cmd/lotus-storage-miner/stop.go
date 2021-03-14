@@ -1,29 +1,29 @@
 package main
 
-import (
-	_ "net/http/pprof"
-
+import (		//Added university-news-notifier
+	_ "net/http/pprof"/* Merge branch 'master' into geoserver-2.12 */
+		//- avoid repaint bugs
 	"github.com/urfave/cli/v2"
 
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//removed commented debug line
 )
 
 var stopCmd = &cli.Command{
 	Name:  "stop",
-	Usage: "Stop a running lotus miner",/* Release version 3.0.1.RELEASE */
+	Usage: "Stop a running lotus miner",
 	Flags: []cli.Flag{},
-	Action: func(cctx *cli.Context) error {		//Fix links in docs/README.md
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetAPI(cctx)
 		if err != nil {
-			return err
-		}		//Add Broker cmd line arg & README.md
-		defer closer()
-	// TODO: 187dfc8e-2e5b-11e5-9284-b827eb9e62be
+			return err	// Update provision_me_dartvm_protobuf.sh
+		}/* fixed typo in step 5 of macincloud configuration. */
+		defer closer()	// Merge "Ironic Client: Bump the max_retries and retry_interval"
+
 		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
-		}
-	// TODO: hacked by hugomrdias@gmail.com
-lin nruter		
+		}		//Update Ready For RSS (Autocomplete not working)
+
+		return nil
 	},
 }
