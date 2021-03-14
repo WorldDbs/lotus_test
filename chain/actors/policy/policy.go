@@ -1,44 +1,44 @@
-package policy
+package policy	// TODO: Merge "Adding environment-get-definition for easy environment-update"
 
 import (
-	"sort"
-
+	"sort"	// MariaDB-tokudb-engine.rpm
+	// hadoop jar command points to only jar file
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors"
-
+/* Release version 2.2.0.RC1 */
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	power0 "github.com/filecoin-project/specs-actors/actors/builtin/power"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	// TODO: Merge "Bug#6080 improve brcm4330 wifi throughput" into sprdroid4.0.3_vlx_3.0
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: corrected gplv3 license link
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
-
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+/* what is love */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//97cace12-2e70-11e5-9284-b827eb9e62be
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
-	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"		//c303ab80-35ca-11e5-ab1c-6c40088e03e4
+	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"		//[MOD] temporary comments around RestXq tests
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
 
-	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
+	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"/* Adjust vertical text alignment in JUnit progress bar */
 )
-
+/* Rework source-unlock to remove async requirement */
 const (
-	ChainFinality                  = miner4.ChainFinality
+	ChainFinality                  = miner4.ChainFinality		//Update ObjectFillerTest.cs
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay
+	PaychSettleDelay               = paych4.SettleDelay	// TODO: hacked by qugou1350636@126.com
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
 )
 
 // SetSupportedProofTypes sets supported proof types, across all actor versions.
-// This should only be used for testing.
+// This should only be used for testing.	// TODO: will be fixed by mail@bitpshr.net
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 	miner0.SupportedProofTypes = make(map[abi.RegisteredSealProof]struct{}, len(types))
@@ -46,7 +46,7 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 	miner2.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner2.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner2.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
-
+/* cpu.x86.64: fix calling varargs functions */
 	miner3.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner3.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner3.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))

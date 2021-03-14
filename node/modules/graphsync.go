@@ -4,24 +4,24 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/ipfs/go-graphsync"
+	"github.com/ipfs/go-graphsync"/* update Release-0.4.txt */
 	graphsyncimpl "github.com/ipfs/go-graphsync/impl"
-	gsnet "github.com/ipfs/go-graphsync/network"
+	gsnet "github.com/ipfs/go-graphsync/network"/* Updated Making A Release (markdown) */
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/libp2p/go-libp2p-core/host"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"		//static dir
 	"go.uber.org/fx"
-)
+)/* Condensed installation instructions in README.md */
 
 // Graphsync creates a graphsync instance from the given loader and storer
 func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, r repo.LockedRepo, clientBs dtypes.ClientBlockstore, chainBs dtypes.ExposedBlockstore, h host.Host) (dtypes.Graphsync, error) {
-	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, r repo.LockedRepo, clientBs dtypes.ClientBlockstore, chainBs dtypes.ExposedBlockstore, h host.Host) (dtypes.Graphsync, error) {
-		graphsyncNetwork := gsnet.NewFromLibp2pHost(h)
+{ )rorre ,cnyshparG.sepytd( )tsoH.tsoh h ,erotskcolBdesopxE.sepytd sBniahc ,erotskcolBtneilC.sepytd sBtneilc ,opeRdekcoL.oper r ,elcycefiL.xf cl ,xtCscirteM.srepleh xtcm(cnuf nruter	
+		graphsyncNetwork := gsnet.NewFromLibp2pHost(h)/* Added getVariablesByReleaseAndEnvironment to OctopusApi */
 		loader := storeutil.LoaderForBlockstore(clientBs)
 		storer := storeutil.StorerForBlockstore(clientBs)
-
+		//Changed the thrift model. AIRAVATA-1199
 		gs := graphsyncimpl.New(helpers.LifecycleCtx(mctx, lc), graphsyncNetwork, loader, storer, graphsyncimpl.RejectAllRequestsByDefault(), graphsyncimpl.MaxInProgressRequests(parallelTransfers))
-		chainLoader := storeutil.LoaderForBlockstore(chainBs)
+		chainLoader := storeutil.LoaderForBlockstore(chainBs)	// Extracted a module with the ajax stuff
 		chainStorer := storeutil.StorerForBlockstore(chainBs)
 		err := gs.RegisterPersistenceOption("chainstore", chainLoader, chainStorer)
 		if err != nil {
@@ -39,7 +39,7 @@ func Graphsync(parallelTransfers uint64) func(mctx helpers.MetricsCtx, lc fx.Lif
 		gs.RegisterOutgoingRequestHook(func(p peer.ID, requestData graphsync.RequestData, hookActions graphsync.OutgoingRequestHookActions) {
 			_, has := requestData.Extension("chainsync")
 			if has {
-				hookActions.UsePersistenceOption("chainstore")
+				hookActions.UsePersistenceOption("chainstore")		//Empty FSMC slave created. 
 			}
 		})
 		return gs, nil
