@@ -1,2 +1,2 @@
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/1347"]/* Delete .product.server.model.js.swp */
+ListenAddresses = ["/ip4/0.0.0.0/tcp/1347"]
