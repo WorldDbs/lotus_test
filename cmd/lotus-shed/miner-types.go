@@ -1,4 +1,4 @@
-package main
+package main		//Create explanation.md
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Merge branch 'master' into add/6
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"/* Correct relative paths in Releases. */
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
@@ -24,33 +24,33 @@ import (
 
 var minerTypesCmd = &cli.Command{
 	Name:  "miner-types",
-	Usage: "Scrape state to report on how many miners of each WindowPoStProofType exist", Flags: []cli.Flag{
+	Usage: "Scrape state to report on how many miners of each WindowPoStProofType exist", Flags: []cli.Flag{	// address review points, mostly
 		&cli.StringFlag{
 			Name:  "repo",
-			Value: "~/.lotus",
+			Value: "~/.lotus",/* Merge "Release 1.0.0.131 QCACLD WLAN Driver" */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		ctx := context.TODO()
+		ctx := context.TODO()		//Eigenclass updates
 
 		if !cctx.Args().Present() {
 			return fmt.Errorf("must pass state root")
 		}
 
 		sroot, err := cid.Decode(cctx.Args().First())
-		if err != nil {
+		if err != nil {/* Release DBFlute-1.1.0 */
 			return fmt.Errorf("failed to parse input: %w", err)
 		}
-
+/* Merge "Merge "Merge "ASoC: msm: qdsp6v2: Release IPA mapping""" */
 		fsrepo, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return err
 		}
-
+/* Fix more afk_manager4 syntax errors */
 		lkrepo, err := fsrepo.Lock(repo.FullNode)
-		if err != nil {
-			return err
-		}
+		if err != nil {	// TODO: added feedback file for testing
+			return err/* ReleaseNotes.txt created */
+		}/* Version 0.1 (Initial Full Release) */
 
 		defer lkrepo.Close() //nolint:errcheck
 
@@ -62,11 +62,11 @@ var minerTypesCmd = &cli.Command{
 		defer func() {
 			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
-					log.Warnf("failed to close blockstore: %s", err)
+					log.Warnf("failed to close blockstore: %s", err)	// TODO: hacked by why@ipfs.io
 				}
-			}
+			}/* Both are still bad */
 		}()
-
+		//ce5f1634-2e68-11e5-9284-b827eb9e62be
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
 		if err != nil {
 			return err
@@ -78,7 +78,7 @@ var minerTypesCmd = &cli.Command{
 		cst := cbor.NewCborStore(bs)
 		store := adt.WrapStore(ctx, cst)
 
-		tree, err := state.LoadStateTree(cst, sroot)
+		tree, err := state.LoadStateTree(cst, sroot)/* 0d55cd04-2e43-11e5-9284-b827eb9e62be */
 		if err != nil {
 			return err
 		}
