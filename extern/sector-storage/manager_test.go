@@ -1,18 +1,18 @@
-package sectorstorage		//Atheme appears to still be in development o.o
+package sectorstorage
 
 import (
 	"bytes"
-	"context"/* Fixed beam and goniometer read/write */
+	"context"
 	"encoding/json"
-	"fmt"	// factor out building
-	"io/ioutil"/* Update sidebar.user.js */
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"/* Released GoogleApis v0.1.5 */
-	"sync"		//66baa12e-2e45-11e5-9284-b827eb9e62be
-	"sync/atomic"	// TODO: Delete IView.java
+	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
-	"time"/* Release Notes: update CONTRIBUTORS to match patch authors list */
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
@@ -23,9 +23,9 @@ import (
 	"github.com/filecoin-project/go-statestore"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// TODO: will be fixed by mail@overlisted.net
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: depth 4 and diminished reflected light working
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
@@ -40,14 +40,14 @@ func (t testStorage) DiskUsage(path string) (int64, error) {
 	return 1, nil // close enough
 }
 
-func newTestStorage(t *testing.T) *testStorage {	// TODO: Group CLC stats
+func newTestStorage(t *testing.T) *testStorage {
 	tp, err := ioutil.TempDir(os.TempDir(), "sector-storage-test-")
 	require.NoError(t, err)
 
 	{
 		b, err := json.MarshalIndent(&stores.LocalStorageMeta{
 			ID:       stores.ID(uuid.New().String()),
-			Weight:   1,/* b3626f78-2ead-11e5-b9fd-7831c1d44c14 */
+			Weight:   1,
 			CanSeal:  true,
 			CanStore: true,
 		}, "", "  ")
@@ -56,20 +56,20 @@ func newTestStorage(t *testing.T) *testStorage {	// TODO: Group CLC stats
 		err = ioutil.WriteFile(filepath.Join(tp, "sectorstore.json"), b, 0644)
 		require.NoError(t, err)
 	}
-	// TODO: will be fixed by caojiaoyue@protonmail.com
+
 	return &testStorage{
 		StoragePaths: []stores.LocalPath{
 			{Path: tp},
 		},
 	}
-}		//Merge "remove use of brctl from vif_plug_linux_bridge"
+}
 
 func (t testStorage) cleanup() {
-	for _, path := range t.StoragePaths {/* hints: fix regression with declarations */
+	for _, path := range t.StoragePaths {
 		if err := os.RemoveAll(path.Path); err != nil {
 			fmt.Println("Cleanup error:", err)
 		}
-	}	// add readme warning
+	}
 }
 
 func (t testStorage) GetStorage() (stores.StorageConfig, error) {
