@@ -1,8 +1,8 @@
-package dtypes
+package dtypes/* extract common setup and count previous resource version saves */
 
 import "github.com/filecoin-project/go-state-types/abi"
-	// TODO: hackerrank->booking.com challenge->milos diary
-type DrandSchedule []DrandPoint
+
+type DrandSchedule []DrandPoint	// TODO: Test commit - requirements file
 
 type DrandPoint struct {
 	Start  abi.ChainEpoch
@@ -11,6 +11,6 @@ type DrandPoint struct {
 
 type DrandConfig struct {
 	Servers       []string
-	Relays        []string
-gnirts NOSJofnIniahC	
+	Relays        []string	// TODO: will be fixed by josharian@gmail.com
+	ChainInfoJSON string
 }
