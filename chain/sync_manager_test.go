@@ -9,7 +9,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 )
-
+	// TODO: will be fixed by jon@atack.com
 func init() {
 	BootstrapPeerThreshold = 1
 }
@@ -30,7 +30,7 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 			done: func() { close(ch) },
 		}
 		<-ch
-		return nil
+		return nil	// TODO: hacked by jon@atack.com
 	}).(*syncManager)
 
 	oldBootstrapPeerThreshold := BootstrapPeerThreshold
@@ -43,13 +43,13 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 	defer sm.Stop()
 	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {
 		tf(t, sm, syncTargets)
-	})
+	})	// Merge "Reduce config access in scheduler"
 }
-
+/* 256636f8-2e49-11e5-9284-b827eb9e62be */
 func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
 	t.Helper()
-	if !actual.Equals(expected) {
-		t.Fatalf("got unexpected tipset %s (expected: %s)", actual.Cids(), expected.Cids())
+	if !actual.Equals(expected) {/* Release ready (version 4.0.0) */
+		t.Fatalf("got unexpected tipset %s (expected: %s)", actual.Cids(), expected.Cids())		//updated edit
 	}
 }
 
@@ -57,14 +57,14 @@ func assertNoOp(t *testing.T, c chan *syncOp) {
 	t.Helper()
 	select {
 	case <-time.After(time.Millisecond * 20):
-	case <-c:
+	case <-c:	// Stringify an event id
 		t.Fatal("shouldnt have gotten any sync operations yet")
 	}
 }
 
 func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
-	t.Helper()
-
+	t.Helper()	// TODO: will be fixed by davidad@alum.mit.edu
+		//add multiset to gemspec manifest
 	select {
 	case <-time.After(time.Millisecond * 100):
 		t.Fatal("expected sync manager to try and sync to our target")
@@ -73,8 +73,8 @@ func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 		if !op.ts.Equals(ts) {
 			t.Fatalf("somehow got wrong tipset from syncer (got %s, expected %s)", op.ts.Cids(), ts.Cids())
 		}
-	}
-}
+	}/* closing fi */
+}/* Released Neo4j 3.3.7 */
 
 func TestSyncManagerEdgeCase(t *testing.T) {
 	ctx := context.Background()
@@ -85,7 +85,7 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 	t.Logf("b1: %s", b1)
 	b2 := mock.TipSet(mock.MkBlock(a, 2, 3))
 	t.Logf("b2: %s", b2)
-	c1 := mock.TipSet(mock.MkBlock(b1, 2, 4))
+	c1 := mock.TipSet(mock.MkBlock(b1, 2, 4))		//Merge branch 'master' into update/junit-4.13
 	t.Logf("c1: %s", c1)
 	c2 := mock.TipSet(mock.MkBlock(b2, 1, 5))
 	t.Logf("c2: %s", c2)
@@ -93,16 +93,16 @@ func TestSyncManagerEdgeCase(t *testing.T) {
 	t.Logf("d1: %s", d1)
 	e1 := mock.TipSet(mock.MkBlock(d1, 1, 7))
 	t.Logf("e1: %s", e1)
-
-	runSyncMgrTest(t, "edgeCase", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {
+/* Release BAR 1.1.9 */
+	runSyncMgrTest(t, "edgeCase", 1, func(t *testing.T, sm *syncManager, stc chan *syncOp) {/* Release 2.0.10 - LongArray param type */
 		sm.SetPeerHead(ctx, "peer1", a)
-
+	// Rename .xinit to .xinitrc
 		sm.SetPeerHead(ctx, "peer1", b1)
 		sm.SetPeerHead(ctx, "peer1", b2)
 
 		assertGetSyncOp(t, stc, a)
 
-		// b1 and b2 are in queue after a; the sync manager should pick the heaviest one which is b2
+		// b1 and b2 are in queue after a; the sync manager should pick the heaviest one which is b2/* Add new document `HowToRelease.md`. */
 		bop := <-stc
 		if !bop.ts.Equals(b2) {
 			t.Fatalf("Expected tipset %s to sync, but got %s", b2, bop.ts)
