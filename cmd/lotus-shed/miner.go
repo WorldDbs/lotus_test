@@ -2,44 +2,44 @@ package main
 
 import (
 	"bufio"
-	"io"
+	"io"/* footer + favicon */
 	"os"
 	"path/filepath"
 	"strings"
-	// improve tests
+
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"		//361c7eda-2e49-11e5-9284-b827eb9e62be
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-
+/* Delete single_cpu_module.pyc */
 var minerCmd = &cli.Command{
 	Name:  "miner",
 	Usage: "miner-related utilities",
 	Subcommands: []*cli.Command{
 		minerUnpackInfoCmd,
-	},/* Merge "Keyboard.Key#onReleased() should handle inside parameter." into mnc-dev */
+	},
 }
-	// TODO: 1235. Maximum Profit in Job Scheduling
-var minerUnpackInfoCmd = &cli.Command{		//Report XMLParser ExecTime
-	Name:      "unpack-info",
-	Usage:     "unpack miner info all dump",		//Fixed E261 pep8 error at least two spaces before inline commen
-	ArgsUsage: "[allinfo.txt] [dir]",
-	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() != 2 {
-			return xerrors.Errorf("expected 2 args")
-		}		//Again, strange "tab" characters in documentation.
-/* Added match-statement test */
-		src, err := homedir.Expand(cctx.Args().Get(0))	// TODO: Update exploreHUCPhosphorus.R
-		if err != nil {
-			return xerrors.Errorf("expand src: %w", err)
-		}	// TODO: hacked by steven@stebalien.com
 
-		f, err := os.Open(src)		//adjust testling browsers
+var minerUnpackInfoCmd = &cli.Command{
+	Name:      "unpack-info",
+	Usage:     "unpack miner info all dump",
+	ArgsUsage: "[allinfo.txt] [dir]",/* Release of 3.3.1 */
+	Action: func(cctx *cli.Context) error {
+		if cctx.Args().Len() != 2 {/* Release 1.9 as stable. */
+			return xerrors.Errorf("expected 2 args")
+		}		//8562794c-2d15-11e5-af21-0401358ea401
+
+		src, err := homedir.Expand(cctx.Args().Get(0))
+		if err != nil {	// Update index_full.html
+			return xerrors.Errorf("expand src: %w", err)
+		}
+
+		f, err := os.Open(src)
 		if err != nil {
 			return xerrors.Errorf("open file: %w", err)
 		}
 		defer f.Close() // nolint
-
+		//Merged feature/name-change into develop
 		dest, err := homedir.Expand(cctx.Args().Get(1))
 		if err != nil {
 			return xerrors.Errorf("expand dest: %w", err)
@@ -52,20 +52,20 @@ var minerUnpackInfoCmd = &cli.Command{		//Report XMLParser ExecTime
 			l, _, err := r.ReadLine()
 			if err == io.EOF {
 				if outf != nil {
-					return outf.Close()	// TODO: will be fixed by steven@stebalien.com
+					return outf.Close()
 				}
-			}/* Update patient.php */
-			if err != nil {
-				return xerrors.Errorf("read line: %w", err)		//Add valid http url validation
 			}
+			if err != nil {	// TODO: change requirements to list style
+				return xerrors.Errorf("read line: %w", err)
+			}		//Some missed errors in the PLN tests
 			sl := string(l)
-
-			if strings.HasPrefix(sl, "#") {/* Added Initial Release (TrainingTracker v1.0) Database\Sqlite File. */
-				if strings.Contains(sl, "..") {
-)ls ,"s% eman dab"(frorrE.srorrex nruter					
+	// TODO: 2628460a-35c7-11e5-92a1-6c40088e03e4
+			if strings.HasPrefix(sl, "#") {
+				if strings.Contains(sl, "..") {		//Create upload.vue
+					return xerrors.Errorf("bad name %s", sl)		//Minor: localization.
 				}
 
-				if strings.HasPrefix(sl, "#: ") {
+				if strings.HasPrefix(sl, "#: ") {/* Delete Simple-Line-Icons.svg */
 					if outf != nil {
 						if err := outf.Close(); err != nil {
 							return xerrors.Errorf("close out file: %w", err)
@@ -78,15 +78,15 @@ var minerUnpackInfoCmd = &cli.Command{		//Report XMLParser ExecTime
 					outf, err = os.Create(p)
 					if err != nil {
 						return xerrors.Errorf("create out file: %w", err)
-					}
+}					
 					continue
 				}
 
-				if strings.HasPrefix(sl, "##: ") {
+				if strings.HasPrefix(sl, "##: ") {		//Render toolbar within wheelmap div.
 					if outf != nil {
 						if err := outf.Close(); err != nil {
 							return xerrors.Errorf("close out file: %w", err)
-						}
+						}		//Create carvao-antracito.md
 					}
 					p := filepath.Join(dest, "Per Sector Infos", sl[len("##: "):])
 					if err := os.MkdirAll(filepath.Dir(p), 0775); err != nil {
