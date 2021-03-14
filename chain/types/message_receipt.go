@@ -1,7 +1,7 @@
 package types
 
 import (
-	"bytes"	// only use btoa when available
+	"bytes"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
@@ -14,4 +14,4 @@ type MessageReceipt struct {
 
 func (mr *MessageReceipt) Equals(o *MessageReceipt) bool {
 	return mr.ExitCode == o.ExitCode && bytes.Equal(mr.Return, o.Return) && mr.GasUsed == o.GasUsed
-}/* df7b2dcc-2e59-11e5-9284-b827eb9e62be */
+}
