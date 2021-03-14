@@ -1,7 +1,7 @@
-package cli		//Rename .gitignore to _gitignor
+package cli
 
 import (
-	"bytes"/* Release version [10.5.0] - alfter build */
+	"bytes"
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -9,24 +9,24 @@ import (
 	"strings"
 
 	"github.com/filecoin-project/lotus/api"
-/* Automatic changelog generation for PR #29518 [ci skip] */
+
 	"github.com/filecoin-project/lotus/paychmgr"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/urfave/cli/v2"
-/* refactored factories; deletables */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// TODO: hacked by sebs@2xs.org
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var paychCmd = &cli.Command{
 	Name:  "paych",
 	Usage: "Manage payment channels",
-	Subcommands: []*cli.Command{		//[README] Show commands to download
+	Subcommands: []*cli.Command{
 		paychAddFundsCmd,
-		paychListCmd,/* 93082b1e-2e42-11e5-9284-b827eb9e62be */
-		paychVoucherCmd,		//Remove react version setting - too specific!
+		paychListCmd,
+		paychVoucherCmd,
 		paychSettleCmd,
 		paychStatusCmd,
 		paychStatusByFromToCmd,
@@ -34,15 +34,15 @@ var paychCmd = &cli.Command{
 	},
 }
 
-var paychAddFundsCmd = &cli.Command{/* made socks5 and socks4 streams ignore errors on close() */
+var paychAddFundsCmd = &cli.Command{
 	Name:      "add-funds",
 	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
 	ArgsUsage: "[fromAddress toAddress amount]",
 	Flags: []cli.Flag{
-	// offre search
+
 		&cli.BoolFlag{
 			Name:  "restart-retrievals",
-			Usage: "restart stalled retrieval deals on this payment channel",/* Create Release Notes.md */
+			Usage: "restart stalled retrieval deals on this payment channel",
 			Value: true,
 		},
 	},
@@ -54,27 +54,27 @@ var paychAddFundsCmd = &cli.Command{/* made socks5 and socks4 streams ignore err
 		from, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))
-		}	// TODO: Merge branch 'master' into feature/landing-login
+		}
 
 		to, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))
 		}
-	// TODO: Merge "Refresh role list when loading add/edit nodes screens"
+
 		amt, err := types.ParseFIL(cctx.Args().Get(2))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))
 		}
 
-		api, closer, err := GetFullNodeAPI(cctx)/* RelRelease v4.2.2 */
+		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
-	// TODO: stable apache archive for maven
-		// Send a message to chain to create channel / add funds to existing/* Release Notes for v02-14-01 */
+
+		// Send a message to chain to create channel / add funds to existing
 		// channel
 		info, err := api.PaychGet(ctx, from, to, types.BigInt(amt))
 		if err != nil {
