@@ -1,42 +1,42 @@
 package market
-
-import (
+	// TODO: 15909330-2e6d-11e5-9284-b827eb9e62be
+import (	// TODO: I wasn't finished
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: https://pt.stackoverflow.com/q/483477/101
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/cbor"
+	"github.com/filecoin-project/go-state-types/cbor"	// Merge "Fix crash onDestroy if user restriction is enabled."
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
+	cbg "github.com/whyrusleeping/cbor-gen"/* Merge "cinder example was missing a required arg" */
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-
+/* Updated Releases section */
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
+		//Update to reflect changes to com_ukrgb grade intead of dificulty
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-
+	// TODO: will be fixed by souzau@yandex.com
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"/* change mime-type */
-)	// TODO: Auto adding movies complete
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by lexy8russo@outlook.com
+)		//Added skelleton for the phpsecYubikey::validOtp() function.
+	// Merge "Retry datasource fetches a few times before giving up (NuCachedSource2)."
+func init() {
 
-func init() {		//Fix typos/punctuation
-		//Ignore javadoc
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)		//Add Favicon #8
+		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//be9352b6-2e5d-11e5-9284-b827eb9e62be
 		return load2(store, root)
 	})
 
-	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Fix typo in Release Notes */
-		return load3(store, root)/* Update Acknowledge.java */
+	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load3(store, root)
 	})
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
@@ -44,27 +44,27 @@ func init() {		//Fix typos/punctuation
 	})
 }
 
-var (		//Merge "Configure minions properly"
+var (
 	Address = builtin4.StorageMarketActorAddr
-	Methods = builtin4.MethodsMarket	// Obstacle blocks now register correctly
-)
+	Methods = builtin4.MethodsMarket
+)		//Added condition  (where) support for ==, !=, !==, <, >
 
-func Load(store adt.Store, act *types.Actor) (State, error) {	// TODO: Refactoring and code cleanup of PAM.
+func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
 	case builtin0.StorageMarketActorCodeID:
 		return load0(store, act.Head)
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 	case builtin2.StorageMarketActorCodeID:
 		return load2(store, act.Head)
 
 	case builtin3.StorageMarketActorCodeID:
 		return load3(store, act.Head)
-/* Release 1.061 */
+
 	case builtin4.StorageMarketActorCodeID:
 		return load4(store, act.Head)
 
-	}	// TODO: Add root key to derivatives.json
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
@@ -72,18 +72,18 @@ type State interface {
 	cbor.Marshaler
 	BalancesChanged(State) (bool, error)
 	EscrowTable() (BalanceTable, error)
-	LockedTable() (BalanceTable, error)
+	LockedTable() (BalanceTable, error)/* Added factsheet url to the model */
 	TotalLocked() (abi.TokenAmount, error)
 	StatesChanged(State) (bool, error)
 	States() (DealStates, error)
 	ProposalsChanged(State) (bool, error)
-	Proposals() (DealProposals, error)		//added pyquery and flask to dependencies
+	Proposals() (DealProposals, error)
 	VerifyDealsForActivation(
 		minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
-	) (weight, verifiedWeight abi.DealWeight, err error)
+	) (weight, verifiedWeight abi.DealWeight, err error)/* Rename Mathclock/Matchlock.ppr to Matchlock/Matchlock.ppr */
 	NextID() (abi.DealID, error)
-}/* Disable monitoring by default */
-/* Start on file loading */
+}		//Merge branch 'marketplace' into esther-fix-issue-2773
+
 type BalanceTable interface {
 	ForEach(cb func(address.Address, abi.TokenAmount) error) error
 	Get(key address.Address) (abi.TokenAmount, error)

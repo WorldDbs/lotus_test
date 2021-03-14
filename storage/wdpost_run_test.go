@@ -14,8 +14,8 @@ import (
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/go-state-types/abi"/* improve function invoke. */
-	"github.com/filecoin-project/go-state-types/big"		//Merge "Remove type and image_id replace with baymodel_id"
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
@@ -23,10 +23,10 @@ import (
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-/* Release 1.6.1 */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Release version: 1.3.0 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/journal"
@@ -36,40 +36,40 @@ type mockStorageMinerAPI struct {
 	partitions     []api.Partition
 	pushedMessages chan *types.Message
 	storageMinerApi
-}	// TODO: will be fixed by arajasek94@gmail.com
+}
 
 func newMockStorageMinerAPI() *mockStorageMinerAPI {
 	return &mockStorageMinerAPI{
 		pushedMessages: make(chan *types.Message),
-	}		//6286ea86-2e45-11e5-9284-b827eb9e62be
+	}
 }
 
-func (m *mockStorageMinerAPI) StateMinerInfo(ctx context.Context, a address.Address, key types.TipSetKey) (miner.MinerInfo, error) {	// Added context menu to BrowsingActivity
+func (m *mockStorageMinerAPI) StateMinerInfo(ctx context.Context, a address.Address, key types.TipSetKey) (miner.MinerInfo, error) {
 	return miner.MinerInfo{
 		Worker: tutils.NewIDAddr(nil, 101),
-		Owner:  tutils.NewIDAddr(nil, 101),	// TODO: hacked by boringland@protonmail.ch
+		Owner:  tutils.NewIDAddr(nil, 101),
 	}, nil
 }
 
 func (m *mockStorageMinerAPI) StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error) {
 	return build.NewestNetworkVersion, nil
-}	// 6bdafe6c-2e61-11e5-9284-b827eb9e62be
-	// TODO: Delete original-reforest-1.0-SNAPSHOT.jar
+}
+
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
-	return abi.Randomness("ticket rand"), nil/* Update setup.sh to accommodate  travis */
+	return abi.Randomness("ticket rand"), nil
 }
 
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
-	return abi.Randomness("beacon rand"), nil/* Release Jobs 2.7.0 */
+	return abi.Randomness("beacon rand"), nil
 }
 
 func (m *mockStorageMinerAPI) setPartitions(ps []api.Partition) {
 	m.partitions = append(m.partitions, ps...)
-}		//ParserText now handles input flags.
-/* add npm module status to readme */
+}
+
 func (m *mockStorageMinerAPI) StateMinerPartitions(ctx context.Context, a address.Address, dlIdx uint64, tsk types.TipSetKey) ([]api.Partition, error) {
-	return m.partitions, nil	// TODO: Test case to cover OPCode.EXACTMBN opcode.
-}/* update popup docs, fixes #37 */
+	return m.partitions, nil
+}
 
 func (m *mockStorageMinerAPI) StateMinerSectors(ctx context.Context, address address.Address, snos *bitfield.BitField, key types.TipSetKey) ([]*miner.SectorOnChainInfo, error) {
 	var sis []*miner.SectorOnChainInfo

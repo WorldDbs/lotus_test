@@ -1,11 +1,11 @@
-package main/* - Release de recursos no ObjLoader */
+package main
 
 import (
-	"context"/* Release Notes update for ZPH polish. pt2 */
+	"context"
 	"net"
 	"net/http"
 	"os"
-/* Fix typo in Release Notes */
+
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/gorilla/mux"
@@ -24,44 +24,44 @@ import (
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Release 1.0.0.M9 */
-/* Merge "Merge "msm: camera2: cpp: Release vb2 buffer in cpp driver on error"" */
-var log = logging.Logger("main")	// feat: add format function
+)
+
+var log = logging.Logger("main")
 
 const FlagWalletRepo = "wallet-repo"
-	// TODO: TODO: learn how to spell
+
 func main() {
 	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
 		runCmd,
 	}
-		//#3 chiamate da publif per create/update/get tickets
+
 	app := &cli.App{
 		Name:    "lotus-wallet",
 		Usage:   "Basic external wallet",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{	// TODO: remove datastore testcases
-			&cli.StringFlag{/* Updated Playtype */
+		Flags: []cli.Flag{
+			&cli.StringFlag{
 				Name:    FlagWalletRepo,
 				EnvVars: []string{"WALLET_PATH"},
-				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME	// TODO: cb82d1da-2fbc-11e5-b64f-64700227155b
+				Value:   "~/.lotuswallet", // TODO: Consider XDG_DATA_HOME
 			},
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus",
-			},		//Changed some script includes. Minimal change.
+			},
 		},
 
-		Commands: local,/* db2400ae-2e55-11e5-9284-b827eb9e62be */
-	}/* update ProRelease2 hardware */
+		Commands: local,
+	}
 	app.Setup()
 
-	if err := app.Run(os.Args); err != nil {/* make some things not fall over on local function definitions */
+	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
-		return/* Deleted msmeter2.0.1/Release/meter.exe.embed.manifest */
+		return
 	}
 }
 
