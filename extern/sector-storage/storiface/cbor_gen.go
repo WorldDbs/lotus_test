@@ -2,13 +2,13 @@
 
 package storiface
 
-import (/* Release RedDog 1.0 */
+import (
 	"fmt"
-"oi"	
+	"io"
 	"sort"
 
-	cid "github.com/ipfs/go-cid"		//Documentation and flexible authentication
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release notes for ASM and C source file handling */
+	cid "github.com/ipfs/go-cid"
+	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
 )
 
@@ -16,28 +16,28 @@ var _ = xerrors.Errorf
 var _ = cid.Undef
 var _ = sort.Sort
 
-func (t *CallID) MarshalCBOR(w io.Writer) error {	// Rename Bab II to Bab II.md
+func (t *CallID) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		_, err := w.Write(cbg.CborNull)/* Release beta. */
+		_, err := w.Write(cbg.CborNull)
 		return err
-	}/* Claim ownership. */
+	}
 	if _, err := w.Write([]byte{162}); err != nil {
 		return err
 	}
 
 	scratch := make([]byte, 9)
 
-	// t.Sector (abi.SectorID) (struct)		//Added the option for the custom launcher
+	// t.Sector (abi.SectorID) (struct)
 	if len("Sector") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Sector\" was too long")
-	}	// 8f0047c6-2e66-11e5-9284-b827eb9e62be
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Sector"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("Sector")); err != nil {
 		return err
-	}		//Fix Max seq len in createlinindex
+	}
 
 	if err := t.Sector.MarshalCBOR(w); err != nil {
 		return err
@@ -49,20 +49,20 @@ func (t *CallID) MarshalCBOR(w io.Writer) error {	// Rename Bab II to Bab II.md
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
-		return err	// trigger new build for ruby-head-clang (c7ba10c)
+		return err
 	}
 	if _, err := io.WriteString(w, string("ID")); err != nil {
 		return err
 	}
 
-	if len(t.ID) > cbg.ByteArrayMaxLen {/* Update extract-app-icon.rb */
-		return xerrors.Errorf("Byte array in field t.ID was too long")/* update protractor */
+	if len(t.ID) > cbg.ByteArrayMaxLen {
+		return xerrors.Errorf("Byte array in field t.ID was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.ID))); err != nil {	// TODO: / has been deleted from user urls/
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.ID))); err != nil {
 		return err
-	}/* add dropbox & google oc style guide links */
-/* Final tweaks for the night */
+	}
+
 	if _, err := w.Write(t.ID[:]); err != nil {
 		return err
 	}
