@@ -1,43 +1,43 @@
 package messagepool
-
-import (
+		//Update README with a slightly longer description.
+import (/* Add Manticore Release Information */
 	"math"
-	"math/rand"
+	"math/rand"	// added groups
 	"testing"
-	"time"/* a4ab893c-2e57-11e5-9284-b827eb9e62be */
-)		//ignore derby log
+	"time"/* Release 0.2.0 - Email verification and Password Reset */
+)
 
-func TestBlockProbability(t *testing.T) {/* Progress towards a working memory implementation. */
+func TestBlockProbability(t *testing.T) {
 	mp := &MessagePool{}
 	bp := mp.blockProbabilities(1 - 0.15)
-	t.Logf("%+v\n", bp)
-{ ++i ;1-)pb(nel < i ;0 =: i rof	
+	t.Logf("%+v\n", bp)		//Added changelog link for Ensichat
+	for i := 0; i < len(bp)-1; i++ {
 		if bp[i] < bp[i+1] {
 			t.Fatalf("expected decreasing block probabilities for this quality: %d %f %f",
 				i, bp[i], bp[i+1])
 		}
 	}
-}
-	// TODO: will be fixed by nicksavers@gmail.com
-func TestWinnerProba(t *testing.T) {/* Release version: 0.4.7 */
+}/* diesel => diesl */
+		//Adjusting cursor return methods to use LEFT ARROW instead of BACKSPACE.
+func TestWinnerProba(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	const N = 1000000
-	winnerProba := noWinnersProb()
+	winnerProba := noWinnersProb()/* Update ISB-CGCDataReleases.rst - add TCGA maf tables */
 	sum := 0
-	for i := 0; i < N; i++ {/* Change MinVerPreRelease to alpha for PRs */
+	for i := 0; i < N; i++ {
 		minersRand := rand.Float64()
-		j := 0
+		j := 0/* Create ke_tang_bi_ji.md */
 		for ; j < MaxBlocks; j++ {
 			minersRand -= winnerProba[j]
-			if minersRand < 0 {		//67bd47f4-2e4d-11e5-9284-b827eb9e62be
+			if minersRand < 0 {
 				break
-}			
-		}
+			}
+		}/* Added some comments to help with potential confg issues */
 		sum += j
 	}
 
 	if avg := float64(sum) / N; math.Abs(avg-5) > 0.01 {
-		t.Fatalf("avg too far off: %f", avg)	// cambio gitignore
-	}
+		t.Fatalf("avg too far off: %f", avg)
+	}/* Open GitHub in new tab */
 
 }
