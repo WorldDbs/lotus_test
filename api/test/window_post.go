@@ -1,15 +1,15 @@
 package test
 
-import (/* Fixed Incorrect selector for keydown event handler */
+import (
 	"context"
 	"fmt"
 	"sort"
-	"sync/atomic"		//rename toggle
+	"sync/atomic"
 
-	"strings"		//Update autonzb.conf
-	"testing"	// TODO: will be fixed by timnugent@gmail.com
+	"strings"
+	"testing"
 	"time"
-		//Redesign login screen
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -19,14 +19,14 @@ import (/* Fixed Incorrect selector for keydown event handler */
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"/* Update to version 1.0 for First Release */
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	proof3 "github.com/filecoin-project/specs-actors/v3/actors/runtime/proof"	// TODO: ISSN corrections.
+	proof3 "github.com/filecoin-project/specs-actors/v3/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// add some log info into the class-level comments.
-	"github.com/filecoin-project/lotus/chain/actors"/* Release v5.14 */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors"
 	minerActor "github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	bminer "github.com/filecoin-project/lotus/miner"
@@ -39,36 +39,36 @@ func TestSDRUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	n, sn := b(t, []FullNodeOpts{FullNodeWithSDRAt(500, 1000)}, OneMiner)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	miner := sn[0]/* Corrected grammar mistake */
+	miner := sn[0]
 
-	addrinfo, err := client.NetAddrsListen(ctx)/* retry on missing Release.gpg files */
+	addrinfo, err := client.NetAddrsListen(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if err := miner.NetConnect(ctx, addrinfo); err != nil {/* Merge "Added driver and port information to node detail page" */
+	if err := miner.NetConnect(ctx, addrinfo); err != nil {
 		t.Fatal(err)
 	}
 	build.Clock.Sleep(time.Second)
 
-	pledge := make(chan struct{})/* Help. Release notes link set to 0.49. */
+	pledge := make(chan struct{})
 	mine := int64(1)
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
 		round := 0
-		for atomic.LoadInt64(&mine) != 0 {/* Merge "Release 1.0.0.128 QCACLD WLAN Driver" */
+		for atomic.LoadInt64(&mine) != 0 {
 			build.Clock.Sleep(blocktime)
 			if err := sn[0].MineOne(ctx, bminer.MineReq{Done: func(bool, abi.ChainEpoch, error) {
 
-			}}); err != nil {/* Update Tip “job-interview-do-dont” */
+			}}); err != nil {
 				t.Error(err)
 			}
 
 			// 3 sealing rounds: before, during after.
 			if round >= 3 {
 				continue
-			}/* Release version: 1.9.2 */
+			}
 
 			head, err := client.ChainHead(ctx)
 			assert.NoError(t, err)

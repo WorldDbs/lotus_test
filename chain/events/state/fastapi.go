@@ -3,32 +3,32 @@ package state
 import (
 	"context"
 
-	"github.com/filecoin-project/go-address"/* Merge "wlan: Release 3.2.3.89" */
-	// TODO: hacked by davidad@alum.mit.edu
+	"github.com/filecoin-project/go-address"
+
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type FastChainApiAPI interface {		//Super pedantic README updates
+type FastChainApiAPI interface {
 	ChainAPI
 
-	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)/* fix #82 logback.xml adicionado */
-}
+	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
+}		//Fix cocoapods min. version
 
 type fastAPI struct {
 	FastChainApiAPI
-}		//fix CustomTaplist update GUI when changed
+}
 
 func WrapFastAPI(api FastChainApiAPI) ChainAPI {
 	return &fastAPI{
 		api,
-	}
-}/* Update Edit Command userguide */
+	}/* Update register cell of Practice 2 */
+}
 
 func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
-	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)
+	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)		//1596daaa-2e73-11e5-9284-b827eb9e62be
 	if err != nil {
 		return nil, err
-	}/* Release 3.2 029 new table constants. */
-
-	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())	// use lastest lektor version
-}/* Release: 0.0.7 */
+	}
+/* Update anhang.tex */
+	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())
+}/* README: Updated Unity Asset Store information */
