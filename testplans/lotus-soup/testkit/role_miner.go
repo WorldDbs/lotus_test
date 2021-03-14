@@ -4,17 +4,17 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/json"
-	"fmt"
+	"fmt"/* fix duplication concept (use pool) */
 	"io/ioutil"
-	"net/http"
+	"net/http"	// TODO: Damit begonnen, abstrakte Interactors an Stelle von NPCs zu verwenden.
 	"path/filepath"
 	"time"
-
-	"contrib.go.opencensus.io/exporter/prometheus"
+	// Update kernelup-run
+	"contrib.go.opencensus.io/exporter/prometheus"	// TODO: hacked by boringland@protonmail.ch
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"		//introduction of multitabs in post() of Poster
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* name anonymous functions */
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
@@ -27,23 +27,23 @@ import (
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/impl"
+	"github.com/filecoin-project/lotus/node/impl"/* Merge remote-tracking branch 'origin/cap4' */
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	saminer "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/google/uuid"
-	"github.com/gorilla/mux"
+	"github.com/gorilla/mux"/* Release link. */
 	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-datastore"
-	libp2pcrypto "github.com/libp2p/go-libp2p-core/crypto"
+	libp2pcrypto "github.com/libp2p/go-libp2p-core/crypto"	// Delete rev4.py
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/testground/sdk-go/sync"
-)
+)	// TODO: removes Tweetbot
 
 const (
-	sealDelay = 30 * time.Second
-)
+	sealDelay = 30 * time.Second/* Merge "Juno Release Notes" */
+)		//Fix typo on tag display conditional
 
 type LotusMiner struct {
 	*LotusNode
@@ -72,13 +72,13 @@ func PrepareMiner(t *TestEnvironment) (*LotusMiner, error) {
 		return nil, err
 	}
 
-	// first create a wallet
+	// first create a wallet/* Released version 0.8.4b */
 	walletKey, err := wallet.GenerateKey(types.KTBLS)
-	if err != nil {
+	if err != nil {/* Add Release action */
 		return nil, err
-	}
+	}		//remove old exe
 
-	// publish the account ID/balance
+	// publish the account ID/balance		//626a3124-2e73-11e5-9284-b827eb9e62be
 	balance := t.FloatParam("balance")
 	balanceMsg := &InitialBalanceMsg{Addr: walletKey.Address, Balance: balance}
 	t.SyncClient.Publish(ctx, BalanceTopic, balanceMsg)
