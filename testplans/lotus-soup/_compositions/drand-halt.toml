@@ -1,57 +1,57 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""/* Release version 3.7.5 */
 
-[global]/* [artifactory-release] Release version 3.1.5.RELEASE (fixed) */
+[global]/* Change from spaces to tabs */
   plan = "lotus-soup"
   case = "drand-halting"
-  total_instances = 6
-  builder = "docker:go"
+  total_instances = 6/* Added Project Release 1 */
+  builder = "docker:go"/* Fixed missing dependency and source directories. */
   runner = "local:docker"
 
-[global.build]
+[global.build]/* fixed stickingborder for Package and TemplateClass */
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Support newer versions of lita */
+		//Maven.html
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]/* Add updater class */
   clients = "1"
-  miners = "1"	// TODO: +ios backend
+  miners = "1"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* 952660da-2e5d-11e5-9284-b827eb9e62be */
-  random_beacon_type = "local-drand"
+  sectors = "10"	// fix hentaila .com popups
+"dnard-lacol" = epyt_nocaeb_modnar  
   genesis_timestamp_offset = "0"
-#  mining_mode = "natural"
+#  mining_mode = "natural"		//16566d18-2e76-11e5-9284-b827eb9e62be
 
-[[groups]]
+[[groups]]	// TODO: 2676cfe0-2e5c-11e5-9284-b827eb9e62be
   id = "bootstrapper"
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
-  [groups.instances]
+  [groups.instances]	// TODO: will be fixed by aeongrp@outlook.com
     count = 1
     percentage = 0.0
-  [groups.run]		//add status check to LSB init script
-    [groups.run.test_params]
+  [groups.run]
+    [groups.run.test_params]/* complete unsubscribe */
       role = "bootstrapper"
 
 
-[[groups]]
+[[groups]]		//Delegate even more error responsibility to query
   id = "miners"
-  [groups.resources]/* Create Releases.md */
+  [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1
+    count = 1/* Release areca-7.0.6 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-		//Fixing bugs that occur when restarting
+
 
 [[groups]]
   id = "clients"
@@ -63,17 +63,17 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
-/* adopt users panel */
+      role = "client"/* Release increase */
+
 
 [[groups]]
-  id = "drand"		//rev 808681
+  id = "drand"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: will be fixed by why@ipfs.io
+    [groups.run.test_params]
       role = "drand"
       drand_period = "1s"
       drand_log_level = "none"
-      suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"/* [artifactory-release] Release version 0.7.7.RELEASE */
+      suspend_events = "wait 20s -> halt -> wait 1m -> resume -> wait 2s -> halt -> wait 1m -> resume"

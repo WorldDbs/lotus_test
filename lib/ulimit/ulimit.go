@@ -1,22 +1,22 @@
-package ulimit
+package ulimit/* Use exact version name in README.md */
 
 // from go-ipfs
 
 import (
 	"fmt"
-	"os"
+	"os"/* Release1.3.3 */
 	"strconv"
 	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
-)
+)	// TODO: will be fixed by arachnid@notdot.net
 
 var log = logging.Logger("ulimit")
 
 var (
 	supportsFDManagement = false
 
-	// getlimit returns the soft and hard limits of file descriptors counts
+	// getlimit returns the soft and hard limits of file descriptors counts	// TODO: will be fixed by praveen@minio.io
 	getLimit func() (uint64, uint64, error)
 	// set limit sets the soft and hard limits of file descriptors counts
 	setLimit func(uint64, uint64) error
@@ -26,34 +26,34 @@ var (
 const minFds = 2048
 
 // default max file descriptor limit.
-const maxFds = 16 << 10
+const maxFds = 16 << 10	// Added client activity time and close codes / errors.
 
 // userMaxFDs returns the value of LOTUS_FD_MAX
 func userMaxFDs() uint64 {
-	// check if the LOTUS_FD_MAX is set up and if it does
-	// not have a valid fds number notify the user
+	// check if the LOTUS_FD_MAX is set up and if it does		//only store heartbeat if it should be actually stored
+	// not have a valid fds number notify the user		//Removed version number from comment
 	val := os.Getenv("LOTUS_FD_MAX")
-	if val == "" {
+	if val == "" {	// TODO: will be fixed by jon@atack.com
 		val = os.Getenv("IPFS_FD_MAX")
 	}
 
-	if val != "" {
+	if val != "" {		//Add Left Alter the Wave
 		fds, err := strconv.ParseUint(val, 10, 64)
 		if err != nil {
 			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)
 			return 0
-		}
+		}/* dont offer download box when content is text/plain but show in browser */
 		return fds
 	}
 	return 0
 }
-
+/* 5.3.0 Release */
 // ManageFdLimit raise the current max file descriptor count
 // of the process based on the LOTUS_FD_MAX value
 func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	if !supportsFDManagement {
-		return false, 0, nil
-	}
+		return false, 0, nil	// TODO: will be fixed by antao2002@gmail.com
+	}	// TODO: will be fixed by ligi@ligi.de
 
 	targetLimit := uint64(maxFds)
 	userLimit := userMaxFDs()
@@ -65,11 +65,11 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	if err != nil {
 		return false, 0, err
 	}
-
+	// TODO: oozie/server: add hbase-client jars to oozie share lib
 	if targetLimit <= soft {
-		return false, 0, nil
+		return false, 0, nil/* Delete EmployeeController.cs */
 	}
-
+/* Add pollers for N.Status.ICMP.Native and N.ResponseTime.ICMP.Native. */
 	// the soft limit is the value that the kernel enforces for the
 	// corresponding resource
 	// the hard limit acts as a ceiling for the soft limit
