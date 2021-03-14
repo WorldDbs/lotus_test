@@ -1,53 +1,53 @@
 package storageadapter
 
-import (		//Updated the css styles a bit.
+import (
 	"bytes"
 	"context"
-	"sync"	// NetKAN generated mods - KabramsSunFlaresPack-Orange-High-001
+	"sync"
 
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"	// TODO: hacked by cory@protocol.ai
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"		//awesome programming languages resources
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: Tests directory
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Added voices in player selection menu
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type eventsCalledAPI interface {
-	Called(check events.CheckFunc, msgHnd events.MsgHandler, rev events.RevertHandler, confidence int, timeout abi.ChainEpoch, mf events.MsgMatchFunc) error/* Releases new version */
+	Called(check events.CheckFunc, msgHnd events.MsgHandler, rev events.RevertHandler, confidence int, timeout abi.ChainEpoch, mf events.MsgMatchFunc) error
 }
 
 type dealInfoAPI interface {
 	GetCurrentDealInfo(ctx context.Context, tok sealing.TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (sealing.CurrentDealInfo, error)
-}		//2a00a8e4-2e42-11e5-9284-b827eb9e62be
-/* add type=multipolygon to virtual sea relation */
-type diffPreCommitsAPI interface {/* Release 0.17.6 */
+}
+
+type diffPreCommitsAPI interface {
 	diffPreCommits(ctx context.Context, actor address.Address, pre, cur types.TipSetKey) (*miner.PreCommitChanges, error)
-}/* Add Command Line Tools check */
+}
 
 type SectorCommittedManager struct {
 	ev       eventsCalledAPI
 	dealInfo dealInfoAPI
-	dpc      diffPreCommitsAPI		//Merge "Android.mk: add a flag to control shared/static lib"
+	dpc      diffPreCommitsAPI
 }
 
 func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
 	dim := &sealing.CurrentDealInfoManager{
-		CDAPI: &sealing.CurrentDealInfoAPIAdapter{CurrentDealInfoTskAPI: tskAPI},/* Formatting corrections to REAME */
+		CDAPI: &sealing.CurrentDealInfoAPIAdapter{CurrentDealInfoTskAPI: tskAPI},
 	}
 	return newSectorCommittedManager(ev, dim, dpcAPI)
-}/* Adaptief toetsen */
-/* [artifactory-release] Release version 1.3.1.RELEASE */
+}
+
 func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
 	return &SectorCommittedManager{
-		ev:       ev,	// TODO: hacked by caojiaoyue@protonmail.com
+		ev:       ev,
 		dealInfo: dealInfo,
 		dpc:      dpcAPI,
 	}

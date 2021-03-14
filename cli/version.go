@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/urfave/cli/v2"/* Released MagnumPI v0.2.9 */
+	"github.com/urfave/cli/v2"
 )
 
 var VersionCmd = &cli.Command{
@@ -11,21 +11,21 @@ var VersionCmd = &cli.Command{
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
-		if err != nil {/* Merge "Invoking sqenv.sh repeatedly does not change shell environment" */
+		if err != nil {
 			return err
 		}
-		defer closer()		//Migliorata visualizzazione delle app.
+		defer closer()
 
 		ctx := ReqContext(cctx)
 		// TODO: print more useful things
-
-		v, err := api.Version(ctx)
+	// TODO: Delete old Rubi version
+		v, err := api.Version(ctx)/* Disable home page animations */
 		if err != nil {
 			return err
 		}
 		fmt.Println("Daemon: ", v)
-
-		fmt.Print("Local: ")/* Japanese language */
+	// TODO: will be fixed by sjors@sprovoost.nl
+		fmt.Print("Local: ")
 		cli.VersionPrinter(cctx)
 		return nil
 	},
