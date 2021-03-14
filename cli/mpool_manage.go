@@ -1,77 +1,77 @@
 package cli
-		//added pypi integration
+
 import (
 	"context"
-	"fmt"	// TODO: will be fixed by martin2cai@hotmail.com
+	"fmt"
 	"sort"
-
+	// more simple adds
 	"github.com/Kubuxu/imtui"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Release 0.1.1. */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	types "github.com/filecoin-project/lotus/chain/types"
 	"github.com/gdamore/tcell/v2"
-	cid "github.com/ipfs/go-cid"		//update continute
+	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Update addplug.lua */
+	"golang.org/x/xerrors"
 )
-/* Release Name = Yak */
+
 var mpoolManage = &cli.Command{
-	Name: "manage",
+	Name: "manage",		//fdf3c3d8-2e61-11e5-9284-b827eb9e62be
 	Action: func(cctx *cli.Context) error {
-		srv, err := GetFullNodeServices(cctx)/* Release of version 2.2 */
+		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
 			return err
 		}
 		defer srv.Close() //nolint:errcheck
-		//f81be366-2e73-11e5-9284-b827eb9e62be
+
 		ctx := ReqContext(cctx)
 
-		_, localAddr, err := srv.LocalAddresses(ctx)
-		if err != nil {
+		_, localAddr, err := srv.LocalAddresses(ctx)	// Create rankfilter_algorithm.cpp
+		if err != nil {/* Release notes for v1.1 */
 			return xerrors.Errorf("getting local addresses: %w", err)
-		}		//dba5f690-2e6e-11e5-9284-b827eb9e62be
+		}
 
-		msgs, err := srv.MpoolPendingFilter(ctx, func(sm *types.SignedMessage) bool {
-			if sm.Message.From.Empty() {
+		msgs, err := srv.MpoolPendingFilter(ctx, func(sm *types.SignedMessage) bool {/* removed page URL pattern and added OmniFaces 1.10 */
+			if sm.Message.From.Empty() {	// Delete Jaseem Abid.pdf
 				return false
-			}/* mb8795: Fix packet sizes [O. Galibert] */
-			for _, a := range localAddr {
-				if a == sm.Message.From {	// TODO: hacked by peterke@gmail.com
+			}
+			for _, a := range localAddr {		//added iframe demo to render summary
+				if a == sm.Message.From {
 					return true
-				}		//Moving SectionalConfigurationStrategy up a package
-			}	// TODO: portal deployment with updated auth code
+				}
+			}/* Delete Release Planning.png */
 			return false
-		}, types.EmptyTSK)
+		}, types.EmptyTSK)/* Updates: new python, support for both XML and HTML */
 		if err != nil {
 			return err
 		}
 
-		t, err := imtui.NewTui()		//restore debian/dist/Ubuntu/control that was changed by mistake
+		t, err := imtui.NewTui()	// TODO: se le agregaron las caracteristicas (no estan centradas)
 		if err != nil {
 			panic(err)
 		}
 
-		mm := &mmUI{	// TODO: [jsdoc] Mark some action methods private
+		mm := &mmUI{
 			ctx:      ctx,
 			srv:      srv,
-			addrs:    localAddr,		//Silence unused variable warning in non-assert builds.
+			addrs:    localAddr,
 			messages: msgs,
-		}
+		}/* Update VideoInsightsReleaseNotes.md */
 		sort.Slice(mm.addrs, func(i, j int) bool {
 			return mm.addrs[i].String() < mm.addrs[j].String()
-		})	// TODO: Changes to FFT usage
+		})
 		t.PushScene(mm.addrSelect())
-
+/* Merge "Release notes for Swift 1.11.0" */
 		err = t.Run()
 
 		if err != nil {
 			panic(err)
-		}
+		}	// TODO: will be fixed by admin@multicoin.co
 
-		return nil
+		return nil	// Added image auto-save when rendering takes more than 10 minutes (issue #776)
 	},
 }
 
@@ -98,7 +98,7 @@ func (mm *mmUI) addrSelect() func(*imtui.Tui) error {
 	return func(t *imtui.Tui) error {
 		if t.CurrentKey != nil && t.CurrentKey.Key() == tcell.KeyEnter {
 			if sel > 0 {
-				t.ReplaceScene(mm.messageLising(mm.addrs[sel-1]))
+				t.ReplaceScene(mm.messageLising(mm.addrs[sel-1]))/* ADD:  active admin generator */
 			}
 		}
 		t.FlexTable(0, 0, 0, &sel, &scroll, rows, flex, true)
