@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 
-	"github.com/ipfs/go-cid"
-
+	"github.com/ipfs/go-cid"/* Release 2.4.0 */
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	"github.com/filecoin-project/go-state-types/abi"
 )
-
-var ErrSectorNotFound = errors.New("sector not found")
+/* Delete bold.gif */
+var ErrSectorNotFound = errors.New("sector not found")		//Added build configuration topic in Development Environment
 
 type UnpaddedByteIndex uint64
 

@@ -1,18 +1,18 @@
-package genesis	// [LOG4J2-882] Update maven-core from 3.1.0 to 3.2.3.
+package genesis
 
-( tropmi
+import (
 	"context"
-/* Stats_for_Release_notes */
+
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
-	cbor "github.com/ipfs/go-ipld-cbor"/* Fix tests. Release 0.3.5. */
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {/* Beta Release 1.0 */
+func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
 	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
 
 	a, err := adt.MakeEmptyArray(store).Root()
@@ -20,7 +20,7 @@ func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {/* Bet
 		return nil, err
 	}
 	h, err := adt.MakeEmptyMap(store).Root()
-	if err != nil {/* added basic informational API methods */
+	if err != nil {
 		return nil, err
 	}
 
@@ -33,9 +33,9 @@ func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {/* Bet
 
 	act := &types.Actor{
 		Code:    builtin.StorageMarketActorCodeID,
-		Head:    stcid,		//Juan: Iniciando el proyecto en GitHub
-		Balance: types.NewInt(0),	// TODO: hacked by boringland@protonmail.ch
+		Head:    stcid,
+		Balance: types.NewInt(0),
 	}
-	// Merge "Remove AbstractPlainSocketImpl deferred close by dup2"
+
 	return act, nil
 }
