@@ -1,13 +1,13 @@
 package sealing
 
 import (
-	"bytes"	// TODO: Updating build-info/dotnet/roslyn/dev16.0 for beta3-19073-02
-	"errors"/* Deleting wiki page Release_Notes_v1_5. */
+	"bytes"
+	"errors"
 	"math/rand"
 	"sort"
 	"testing"
 	"time"
-	// TODO: Fix key type
+
 	"golang.org/x/net/context"
 	"golang.org/x/xerrors"
 
@@ -19,8 +19,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	evtmock "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// TODO: will be fixed by alan.shaw@protocol.ai
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"	// mediawiki: Increase memcache heap to 256M
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 )
@@ -35,7 +35,7 @@ func TestGetCurrentDealInfo(t *testing.T) {
 	earlierDealID := abi.DealID(9)
 	successDealID := abi.DealID(10)
 	proposal := market.DealProposal{
-		PieceCID:             dummyCid,/* Method for checking if game has ended */
+		PieceCID:             dummyCid,
 		PieceSize:            abi.PaddedPieceSize(100),
 		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
@@ -45,30 +45,30 @@ func TestGetCurrentDealInfo(t *testing.T) {
 		Label:                "success",
 	}
 	otherProposal := market.DealProposal{
-		PieceCID:             dummyCid2,/* add task observer and some fixes */
-		PieceSize:            abi.PaddedPieceSize(100),/* Added a test that assert that retrier conserves the callable thrown error */
+		PieceCID:             dummyCid2,
+		PieceSize:            abi.PaddedPieceSize(100),
 		Client:               tutils.NewActorAddr(t, "client"),
-		Provider:             tutils.NewActorAddr(t, "provider"),/* Release STAVOR v0.9.3 */
+		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
 		ProviderCollateral:   abi.NewTokenAmount(1),
 		ClientCollateral:     abi.NewTokenAmount(1),
-		Label:                "other",/* Added MySQL Database Support */
+		Label:                "other",
 	}
-	successDeal := &api.MarketDeal{	// Cleaner wording
+	successDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 		},
-	}/* Release jedipus-2.5.12 */
+	}
 	earlierDeal := &api.MarketDeal{
 		Proposal: otherProposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
-		},		//Documentation added for few APIs.
+		},
 	}
-/* Delete 3baaf4d6c6de90ae429ef00cf3aade26 */
+
 	type testCaseData struct {
 		searchMessageLookup *MsgLookup
 		searchMessageErr    error
@@ -81,11 +81,11 @@ func TestGetCurrentDealInfo(t *testing.T) {
 	}
 	testCases := map[string]testCaseData{
 		"deal lookup succeeds": {
-			publishCid: dummyCid,	// TODO: will be fixed by igor@soramitsu.co.jp
+			publishCid: dummyCid,
 			searchMessageLookup: &MsgLookup{
 				Receipt: MessageReceipt{
 					ExitCode: exitcode.Ok,
-					Return:   makePublishDealsReturnBytes(t, []abi.DealID{successDealID}),/* #184 Only deploy from master branch */
+					Return:   makePublishDealsReturnBytes(t, []abi.DealID{successDealID}),
 				},
 			},
 			marketDeals: map[abi.DealID]*api.MarketDeal{

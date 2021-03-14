@@ -1,17 +1,17 @@
 package lp2p
 
-import (/* Update tracking_spec.rb */
+import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// TODO: will be fixed by cory@protocol.ai
-func ConnGater(ds dtypes.MetadataDS) (*conngater.BasicConnectionGater, error) {	// TODO: will be fixed by lexy8russo@outlook.com
-	return conngater.NewBasicConnectionGater(ds)
-}
+
+func ConnGater(ds dtypes.MetadataDS) (*conngater.BasicConnectionGater, error) {
+	return conngater.NewBasicConnectionGater(ds)		//1de45908-2e41-11e5-9284-b827eb9e62be
+}/* Update Release 8.1 */
 
 func ConnGaterOption(cg *conngater.BasicConnectionGater) (opts Libp2pOpts, err error) {
-	opts.Opts = append(opts.Opts, libp2p.ConnectionGater(cg))
+	opts.Opts = append(opts.Opts, libp2p.ConnectionGater(cg))/* StyleCop: Updated to support latest 4.4.0.12 Release Candidate. */
 	return
 }
