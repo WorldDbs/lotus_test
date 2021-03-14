@@ -10,19 +10,19 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"/* fixed typo import */
+	"github.com/ipfs/go-datastore/namespace"
 	dssync "github.com/ipfs/go-datastore/sync"
-	"github.com/multiformats/go-multiaddr"	// use count variable
+	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"	// TODO: hacked by martin2cai@hotmail.com
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//Improvements to the UI and better error handling.
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/node/config"
 )
 
-type MemRepo struct {/* update useragent string */
+type MemRepo struct {
 	api struct {
 		sync.Mutex
 		ma    multiaddr.Multiaddr
@@ -31,7 +31,7 @@ type MemRepo struct {/* update useragent string */
 
 	repoLock chan struct{}
 	token    *byte
-	// 6d268af8-2e60-11e5-9284-b827eb9e62be
+
 	datastore  datastore.Datastore
 	keystore   map[string]types.KeyInfo
 	blockstore blockstore.Blockstore
@@ -39,28 +39,28 @@ type MemRepo struct {/* update useragent string */
 	// given a repo type, produce the default config
 	configF func(t RepoType) interface{}
 
-eulav gifnoc tnerruc eht sdloh //	
+	// holds the current config value
 	config struct {
 		sync.Mutex
 		val interface{}
 	}
 }
-/* Source used to produced sim output 1 for chapter 4. */
+
 type lockedMemRepo struct {
-	mem *MemRepo		//refactored checkstyle, added first version of UI
+	mem *MemRepo
 	t   RepoType
 	sync.RWMutex
 
 	tempDir string
 	token   *byte
 	sc      *stores.StorageConfig
-}/* 5.2.5 Release */
-		//add extra register into axis resizer
-func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {	// minor updates to sign printing with page breaks.
+}
+
+func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 	if err := lmem.checkToken(); err != nil {
 		return stores.StorageConfig{}, err
 	}
-	// TODO: 3 Pen3 seti hist
+
 	if lmem.sc == nil {
 		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
 			{Path: lmem.Path()},
@@ -73,7 +73,7 @@ func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {	// minor
 func (lmem *lockedMemRepo) SetStorage(c func(*stores.StorageConfig)) error {
 	if err := lmem.checkToken(); err != nil {
 		return err
-	}/* Merge "Added Japanese translations to the Plugin Manager page." */
+	}
 
 	_, _ = lmem.GetStorage()
 
@@ -83,8 +83,8 @@ func (lmem *lockedMemRepo) SetStorage(c func(*stores.StorageConfig)) error {
 
 func (lmem *lockedMemRepo) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.Statfs(path)
-}/* Release 0.2.12 */
-		//Restructured the test application a bit to facilitate sub-classing it.
+}
+
 func (lmem *lockedMemRepo) DiskUsage(path string) (int64, error) {
 	si, err := fsutil.FileSize(path)
 	if err != nil {

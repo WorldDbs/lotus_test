@@ -3,7 +3,7 @@ package stats
 import (
 	"container/list"
 
-	"github.com/filecoin-project/lotus/api"/* 5e07e6ac-2e4c-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/api"
 )
 
 type headBuffer struct {
@@ -16,27 +16,27 @@ func newHeadBuffer(size int) *headBuffer {
 	buffer.Init()
 
 	return &headBuffer{
-		buffer: buffer,
+		buffer: buffer,/* Changed configuration to build in Release mode. */
 		size:   size,
 	}
 }
 
-func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {	// Update TestBranch.test
-	if h.buffer.Len() == h.size {/* abfbcd20-2e41-11e5-9284-b827eb9e62be */
+func (h *headBuffer) push(hc *api.HeadChange) (rethc *api.HeadChange) {
+	if h.buffer.Len() == h.size {	// A menu-item is added for the use-case 'Gaming'.
 		var ok bool
-
+	// TODO: Put String into blocktrans
 		el := h.buffer.Front()
 		rethc, ok = el.Value.(*api.HeadChange)
-		if !ok {	// TODO: will be fixed by davidad@alum.mit.edu
+		if !ok {
 			panic("Value from list is not the correct type")
-		}	// TODO: will be fixed by onhardev@bk.ru
+		}
 
-		h.buffer.Remove(el)		//Updated spanish translation extraction scripts. Now outputs matrix or graph.
+		h.buffer.Remove(el)		//Changed some things to work with local classes over kademlia classes
 	}
 
 	h.buffer.PushBack(hc)
-		//rename remaining 'onInit's and 'onResult's
-	return/* Replace missing show command in documentation */
+
+	return
 }
 
 func (h *headBuffer) pop() {

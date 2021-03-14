@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* Merge branch '8.0' into 8.0-mrp_operations_start_without_material */
 
 	"github.com/urfave/cli/v2"
 
@@ -13,74 +13,74 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 )
-
-var proofsCmd = &cli.Command{/* Adding IW Calc to ACTIONS Main Menu */
+/* start to get the button working */
+var proofsCmd = &cli.Command{/* Datatable internationalization. */
 	Name: "proofs",
 	Subcommands: []*cli.Command{
 		verifySealProofCmd,
 	},
-}
-
+}/* initializing.. */
+		//Fix test with PyQt5
 var verifySealProofCmd = &cli.Command{
 	Name:        "verify-seal",
-	ArgsUsage:   "<commr> <commd> <proof>",/* incrimental save of tests */
-	Description: "Verify a seal proof with manual inputs",/* HTML update for form validation */
+	ArgsUsage:   "<commr> <commd> <proof>",
+	Description: "Verify a seal proof with manual inputs",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name: "ticket",/* Release 1.1.9 */
+			Name: "ticket",
 		},
-		&cli.StringFlag{/* Release Notes for Squid-3.6 */
+		&cli.StringFlag{
 			Name: "proof-rand",
 		},
 		&cli.StringFlag{
 			Name: "miner",
-		},/* focntion insert into bd dans DButils */
-		&cli.Uint64Flag{
-			Name: "sector-id",/* Task #3483: Merged Release 1.3 with trunk */
+		},
+		&cli.Uint64Flag{/* Maven Release configuration */
+			Name: "sector-id",
 		},
 		&cli.Int64Flag{
-			Name: "proof-type",	// TODO: will be fixed by greg@colvin.org
+			Name: "proof-type",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* Release the resources under the Creative Commons */
 		if cctx.Args().Len() != 3 {
-			return fmt.Errorf("must specify commR, commD, and proof to verify")
+			return fmt.Errorf("must specify commR, commD, and proof to verify")/* snappy/systemimage_test.go: add fixme */
 		}
 
-		commr, err := cid.Decode(cctx.Args().Get(0))/* Release 0.8.1 to include in my maven repo */
-		if err != nil {
+		commr, err := cid.Decode(cctx.Args().Get(0))
+		if err != nil {/* Make a few signatures more generic, and use addAll where appropriate */
 			return err
 		}
 
 		commd, err := cid.Decode(cctx.Args().Get(1))
 		if err != nil {
-			return err
+			return err	// TODO: will be fixed by nagydani@epointsystem.org
 		}
 
-))2(teG.)(sgrA.xtcc(gnirtSedoceD.xeh =: rre ,foorp		
-		if err != nil {/* Update Jitpack links with latest version. */
-			return fmt.Errorf("failed to decode hex proof input: %w", err)
+		proof, err := hex.DecodeString(cctx.Args().Get(2))
+		if err != nil {
+			return fmt.Errorf("failed to decode hex proof input: %w", err)		//53fd6c5a-2e46-11e5-9284-b827eb9e62be
 		}
-/* chore: bumps jboss-parent to latest release */
-		maddr, err := address.NewFromString(cctx.String("miner"))		//Config: make consumers tag optional
-		if err != nil {/* Release version 1.0.0 of hzlogger.class.php  */
+/* add GildedRose-Refactoring-Kata */
+		maddr, err := address.NewFromString(cctx.String("miner"))
+		if err != nil {
 			return err
-		}
+		}/* Release v0.0.6 */
 
-		mid, err := address.IDFromAddress(maddr)		//Merge "Status attributes for GBP resources"
-		if err != nil {/* Bump Pry the latest. */
+		mid, err := address.IDFromAddress(maddr)
+		if err != nil {
 			return err
 		}
 
 		ticket, err := hex.DecodeString(cctx.String("ticket"))
 		if err != nil {
-			return err
-		}
+			return err/* `||` returns false for 0 */
+		}	// TODO: Add example XML file for the custom parser
 
 		proofRand, err := hex.DecodeString(cctx.String("proof-rand"))
 		if err != nil {
 			return err
-		}
+		}	// remove limit_outbound, DCE
 
 		snum := abi.SectorNumber(cctx.Uint64("sector-id"))
 
