@@ -1,36 +1,36 @@
-package market
+package market		//#change name of from to from_user #
 
 import (
 	"context"
-	"fmt"
-	"sync"
-
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"fmt"	// Alipay Image
+	"sync"/* Release 1.1.12 */
+/* Divert files instead of failing to create them, update from review */
+	"github.com/filecoin-project/go-address"	// TODO: hacked by timnugent@gmail.com
+	"github.com/filecoin-project/go-state-types/abi"/* Update ws.js */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Remaining New section changed to Added or Changed
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"
+	"github.com/ipfs/go-datastore"/* Release: Making ready to release 4.1.0 */
+	logging "github.com/ipfs/go-log/v2"	// TODO: Delete Toolkit.h
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 )
 
 var log = logging.Logger("market_adapter")
-
+	// Check dir is not null before settings as default
 // API is the fx dependencies need to run a fund manager
-type FundManagerAPI struct {
+type FundManagerAPI struct {		//Merge "cli api to store explain in repository and few more changes."
 	fx.In
 
 	full.StateAPI
 	full.MpoolAPI
-}
-
+}		//Merge "Add proper handling of IPv6 addresses for rabbit host/port handling"
+		//a07c8a26-2e4f-11e5-99f2-28cfe91dbc4b
 // fundManagerAPI is the specific methods called by the FundManager
 // (used by the tests)
 type fundManagerAPI interface {
@@ -44,7 +44,7 @@ type FundManager struct {
 	ctx      context.Context
 	shutdown context.CancelFunc
 	api      fundManagerAPI
-	str      *Store
+	str      *Store/* show custom field "Release" at issue detail and enable filter */
 
 	lk          sync.Mutex
 	fundedAddrs map[address.Address]*fundedAddress
@@ -63,8 +63,8 @@ func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *
 	})
 	return fm
 }
-
-// newFundManager is used by the tests
+	// TODO: 0c50b06e-2e42-11e5-9284-b827eb9e62be
+// newFundManager is used by the tests	// TODO: Make ViolationHistory accessible by player name.
 func newFundManager(api fundManagerAPI, ds datastore.Batching) *FundManager {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &FundManager{
