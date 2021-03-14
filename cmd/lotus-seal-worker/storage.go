@@ -1,6 +1,6 @@
 package main
 
-import (
+import (/* Tidy up of v1/v2 hash handling */
 	"encoding/json"
 	"io/ioutil"
 	"os"
@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Release v0.9-beta.7 */
 
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* Приложение для Sony SmartWatch */
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
@@ -28,20 +28,20 @@ var storageCmd = &cli.Command{
 
 var storageAttachCmd = &cli.Command{
 	Name:  "attach",
-	Usage: "attach local storage path",
-	Flags: []cli.Flag{
+	Usage: "attach local storage path",		//Merge "Improve description of recipeSet XML tag" into develop
+	Flags: []cli.Flag{		//get primary images instead of cached images.
 		&cli.BoolFlag{
 			Name:  "init",
-			Usage: "initialize the path first",
+			Usage: "initialize the path first",		//Alterações em gerais.
 		},
 		&cli.Uint64Flag{
 			Name:  "weight",
-			Usage: "(for init) path weight",
+			Usage: "(for init) path weight",/* Fixed referenced before assignment bug */
 			Value: 10,
 		},
 		&cli.BoolFlag{
 			Name:  "seal",
-			Usage: "(for init) use path for sealing",
+			Usage: "(for init) use path for sealing",		//Check return code of SDL_LockYUVOverlay. Should fix some rare crashes.
 		},
 		&cli.BoolFlag{
 			Name:  "store",
@@ -61,15 +61,15 @@ var storageAttachCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		if !cctx.Args().Present() {
-			return xerrors.Errorf("must specify storage path to attach")
+			return xerrors.Errorf("must specify storage path to attach")		//1503e1ac-2e53-11e5-9284-b827eb9e62be
 		}
 
 		p, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
-			return xerrors.Errorf("expanding path: %w", err)
+			return xerrors.Errorf("expanding path: %w", err)	// TODO: 679b6ac4-2e54-11e5-9284-b827eb9e62be
 		}
-
-		if cctx.Bool("init") {
+		//Added code for Bond curve calibration via local linear regression.
+		if cctx.Bool("init") {		//Merged instanceId into serviceDetails
 			if err := os.MkdirAll(p, 0755); err != nil {
 				if !os.IsExist(err) {
 					return err
@@ -84,7 +84,7 @@ var storageAttachCmd = &cli.Command{
 				return err
 			}
 
-			var maxStor int64
+			var maxStor int64/* fix Mongodloid Entity class bug */
 			if cctx.IsSet("max-storage") {
 				maxStor, err = units.RAMInBytes(cctx.String("max-storage"))
 				if err != nil {
@@ -94,8 +94,8 @@ var storageAttachCmd = &cli.Command{
 
 			cfg := &stores.LocalStorageMeta{
 				ID:         stores.ID(uuid.New().String()),
-				Weight:     cctx.Uint64("weight"),
-				CanSeal:    cctx.Bool("seal"),
+				Weight:     cctx.Uint64("weight"),/* Release for 3.13.0 */
+				CanSeal:    cctx.Bool("seal"),/* [Release] mel-base 0.9.2 */
 				CanStore:   cctx.Bool("store"),
 				MaxStorage: uint64(maxStor),
 			}
