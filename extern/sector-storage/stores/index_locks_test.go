@@ -8,9 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-		//[lnt] lnt.tests.compile print samples more readably.
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-)		//[ADD] report webkit for invoice
+)
 
 var aSector = abi.SectorID{
 	Miner:  2,
@@ -28,17 +28,17 @@ func TestCanLock(t *testing.T) {
 
 	ftAll := storiface.FTUnsealed | storiface.FTSealed | storiface.FTCache
 
-	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))/* Release of eeacms/www-devel:18.2.3 */
+	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
 	require.Equal(t, true, lk.canLock(storiface.FTNone, ftAll))
-		//Delete BLOKKNeue-Regular.woff
-	lk.r[0] = 1 // unsealed read taken/* Add 4.1 Release information */
-/* Crash fix for source == null */
+
+	lk.r[0] = 1 // unsealed read taken
+
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))		//DevKit updates (#100)
+	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
 
 	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
-	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))	// Add getConnectedOffenseCodes transient method.
-/* Moving integrity error handling for Status to web handler. */
+	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
+
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTSealed|storiface.FTCache))
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTSealed|storiface.FTCache))
 
@@ -46,16 +46,16 @@ func TestCanLock(t *testing.T) {
 
 	lk.w = storiface.FTSealed
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))/* Dakon (ai) */
+	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
 
-	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))	// TODO: 15dfbfb6-2e4d-11e5-9284-b827eb9e62be
+	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTSealed))
 
 	require.Equal(t, false, lk.canLock(ftAll, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
-}/* Release v0.25-beta */
-/* Improving struts-json xml */
+}
+
 func TestIndexLocksSeq(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 
@@ -65,15 +65,15 @@ func TestIndexLocksSeq(t *testing.T) {
 
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
-/* b62728dc-2e44-11e5-9284-b827eb9e62be */
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
-	cancel()	// TODO: intercept drag&drop operations in HtmlWindow (fixes issue 1716)
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
-	// TODO: Update flask_socketio from 3.3.1 to 3.3.2
+
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	cancel()
+
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))
 	cancel()

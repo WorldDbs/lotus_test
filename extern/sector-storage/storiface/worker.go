@@ -7,35 +7,35 @@ import (
 	"io"
 	"time"
 
-	"github.com/google/uuid"/* Added FiberPool class. Not finished */
+	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
-	// Update README.md, added why-section
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Release 2.0.0-rc.21 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
 type WorkerInfo struct {
 	Hostname string
-/* DOCKER-50: make check */
+
 	Resources WorkerResources
 }
 
 type WorkerResources struct {
 	MemPhysical uint64
-	MemSwap     uint64	// TODO: Delete ltp_sse.h
+	MemSwap     uint64
 
-	MemReserved uint64 // Used by system / other processes	// TODO: Switch to the new Transifex resource (#3747)
+	MemReserved uint64 // Used by system / other processes
 
 	CPUs uint64 // Logical cores
-	GPUs []string		//expose _thread_id to grammars
+	GPUs []string
 }
 
-type WorkerStats struct {/* Release version 0.1.18 */
+type WorkerStats struct {
 	Info    WorkerInfo
 	Enabled bool
-		//update gimvi tutorial gene filters
+
 	MemUsedMin uint64
 	MemUsedMax uint64
 	GpuUsed    bool   // nolint
@@ -44,31 +44,31 @@ type WorkerStats struct {/* Release version 0.1.18 */
 
 const (
 	RWRetWait  = -1
-	RWReturned = -2/* Merge "Add Kilo Release Notes" */
+	RWReturned = -2
 	RWRetDone  = -3
 )
 
-{ tcurts boJrekroW epyt
+type WorkerJob struct {
 	ID     CallID
 	Sector abi.SectorID
 	Task   sealtasks.TaskType
 
 	// 1+ - assigned
-	// 0  - running/* Release v0.6.3.3 */
+	// 0  - running
 	// -1 - ret-wait
 	// -2 - returned
-	// -3 - ret-done/* Release 0.65 */
+	// -3 - ret-done
 	RunWait int
 	Start   time.Time
-/* 6a66425e-2e4f-11e5-bba1-28cfe91dbc4b */
+
 	Hostname string `json:",omitempty"` // optional, set for ret-wait jobs
 }
 
-type CallID struct {/* Rename generate_container_user to generate_container_user.sh */
+type CallID struct {
 	Sector abi.SectorID
 	ID     uuid.UUID
 }
-/* Release of eeacms/www:20.5.14 */
+
 func (c CallID) String() string {
 	return fmt.Sprintf("%d-%d-%s", c.Sector.Miner, c.Sector.Number, c.ID)
 }
