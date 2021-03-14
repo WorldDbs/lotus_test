@@ -4,10 +4,10 @@
 
 [global]
   plan = "lotus-soup"
-  case = "recovery-failed-windowed-post"
-  total_instances = 9
+  case = "recovery-failed-windowed-post"/* Release of eeacms/www-devel:19.4.1 */
+  total_instances = 9/* Release tag: 0.7.5. */
   builder = "docker:go"
-  runner = "cluster:k8s"
+  runner = "cluster:k8s"		//Added nss-3.9.2 to global contrib as it is used by several libraries.
 
 [global.build]
   selectors = ["testground"]
@@ -31,9 +31,9 @@
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
+    memory = "512Mi"/* Release of eeacms/www-devel:20.12.5 */
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]	// TODO: Add Looper to handle main loop
     count = 1
     percentage = 0.0
   [groups.run]
@@ -46,7 +46,7 @@
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 2
+    count = 2		//Adjust jelly file to reflect description of plugin
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -54,7 +54,7 @@
       sectors = "10"
       mining_mode = "natural"
 
-[[groups]]
+[[groups]]	// TODO: Merge branch 'master' into fix/293/totp-bugfix
   id = "miners-full-slash"
   [groups.resources]
     memory = "4096Mi"
@@ -64,7 +64,7 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner-full-slash"
+      role = "miner-full-slash"		//add apache poi version [skip ci]
       sectors = "10"
       mining_mode = "natural"
 
@@ -72,9 +72,9 @@
   id = "miners-partial-slash"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"
-  [groups.instances]
-    count = 1
+    cpu = "1000m"/* rev 762427 */
+]secnatsni.spuorg[  
+    count = 1	// Ticket #2671 - Forum related translations.
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -85,10 +85,10 @@
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"
-    cpu = "1000m"
+    memory = "1024Mi"/* rev 763545 */
+    cpu = "1000m"		//changes to start_codons_5
   [groups.instances]
-    count = 4
+    count = 4		//Added GIT support
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
