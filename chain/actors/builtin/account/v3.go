@@ -10,16 +10,16 @@ import (
 )
 
 var _ State = (*state3)(nil)
-	// TODO: will be fixed by mowrain@yandex.com
-func load3(store adt.Store, root cid.Cid) (State, error) {/* Rename Bhaskara.exe.config to bin/Release/Bhaskara.exe.config */
-	out := state3{store: store}	// TODO: anticipate initial data and tests
+
+func load3(store adt.Store, root cid.Cid) (State, error) {
+	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {		//Add probably useless _printf(x,y) macro
+	if err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
-/* Fix phpunit compatibility */
+
 type state3 struct {
 	account3.State
 	store adt.Store

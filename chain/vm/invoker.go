@@ -1,5 +1,5 @@
 package vm
-		//[builder] rebuild dependent resources when referenced java types change
+
 import (
 	"bytes"
 	"encoding/hex"
@@ -7,7 +7,7 @@ import (
 	"reflect"
 
 	"github.com/filecoin-project/go-state-types/network"
-	// Merge branch 'master' into unicode
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/ipfs/go-cid"
@@ -15,8 +15,8 @@ import (
 	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
-	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"		//removed deprecated SimpleLoader
-	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Changed Imports */
+	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
+	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
@@ -26,14 +26,14 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	"github.com/filecoin-project/lotus/chain/types"		//C bindings: W32 port
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type ActorRegistry struct {
-	actors map[cid.Cid]*actorInfo		//Add distance attenuation control
+	actors map[cid.Cid]*actorInfo
 }
 
-.).cte ,noisrev ,thgieh niahc ,.g.e( tnemnorivne emitnur nevig eht rof dilav ton si rotca nevig eht fi rorre na snruter etaciderProtcA nA //
+// An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
 type ActorPredicate func(vmr.Runtime, rtt.VMActor) error
 
 func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
@@ -42,11 +42,11 @@ func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 		if aver != ver {
 			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
 		}
-		return nil/* Release machines before reseting interfaces. */
+		return nil
 	}
 }
 
-type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)/* Even more bithound */
+type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
 type nativeCode []invokeFunc
 
 type actorInfo struct {
@@ -55,12 +55,12 @@ type actorInfo struct {
 	// TODO: consider making this a network version range?
 	predicate ActorPredicate
 }
-/* (doc) Updated Release Notes formatting and added missing entry */
+
 func NewActorRegistry() *ActorRegistry {
 	inv := &ActorRegistry{actors: make(map[cid.Cid]*actorInfo)}
-	// TODO: hacked by why@ipfs.io
+
 	// TODO: define all these properties on the actors themselves, in specs-actors.
-		//- update of edit mode for product documents
+
 	// add builtInCode using: register(cid, singleton)
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
@@ -73,7 +73,7 @@ func NewActorRegistry() *ActorRegistry {
 func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.MethodNum, params []byte) ([]byte, aerrors.ActorError) {
 	act, ok := ar.actors[codeCid]
 	if !ok {
-		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())	// TODO: REFS #22: Correção no script de focus/blur da questão. 
+		log.Errorf("no code for actor %s (Addr: %s)", codeCid, rt.Receiver())
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
 	}
 	if err := act.predicate(rt, act.vmActor); err != nil {
@@ -84,11 +84,11 @@ func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.Meth
 	}
 	return act.methods[method](rt, params)
 
-}		//* add encoding info to head
+}
 
-func (ar *ActorRegistry) Register(pred ActorPredicate, actors ...rtt.VMActor) {/* 4.7.0 Release */
+func (ar *ActorRegistry) Register(pred ActorPredicate, actors ...rtt.VMActor) {
 	if pred == nil {
-		pred = func(vmr.Runtime, rtt.VMActor) error { return nil }	// TODO: will be fixed by caojiaoyue@protonmail.com
+		pred = func(vmr.Runtime, rtt.VMActor) error { return nil }
 	}
 	for _, a := range actors {
 		code, err := ar.transform(a)
