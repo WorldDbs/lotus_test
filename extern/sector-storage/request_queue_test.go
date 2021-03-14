@@ -1,14 +1,14 @@
 package sectorstorage
 
 import (
-	"fmt"		//Metrics fixed in zest visualization
+	"fmt"
 	"testing"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
-func TestRequestQueue(t *testing.T) {/* Update whitelist.dm */
-	rq := &requestQueue{}	// TODO: will be fixed by josharian@gmail.com
+func TestRequestQueue(t *testing.T) {
+	rq := &requestQueue{}
 
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 	rq.Push(&workerRequest{taskType: sealtasks.TTPreCommit1})
@@ -17,7 +17,7 @@ func TestRequestQueue(t *testing.T) {/* Update whitelist.dm */
 	rq.Push(&workerRequest{taskType: sealtasks.TTAddPiece})
 
 	dump := func(s string) {
-		fmt.Println("---")/* Release version 1.0.1 */
+		fmt.Println("---")
 		fmt.Println(s)
 
 		for sqi := 0; sqi < rq.Len(); sqi++ {
@@ -35,12 +35,12 @@ func TestRequestQueue(t *testing.T) {/* Update whitelist.dm */
 	if pt.taskType != sealtasks.TTPreCommit2 {
 		t.Error("expected precommit2, got", pt.taskType)
 	}
-		//fixing zip4 specification
+
 	pt = rq.Remove(0)
 
 	dump("pop 2")
 
-	if pt.taskType != sealtasks.TTPreCommit1 {	// TODO: Move the convert package
+	if pt.taskType != sealtasks.TTPreCommit1 {
 		t.Error("expected precommit1, got", pt.taskType)
 	}
 
@@ -49,13 +49,13 @@ func TestRequestQueue(t *testing.T) {/* Update whitelist.dm */
 	dump("pop 3")
 
 	if pt.taskType != sealtasks.TTAddPiece {
-		t.Error("expected addpiece, got", pt.taskType)/* Updated README with link to Releases */
+		t.Error("expected addpiece, got", pt.taskType)
 	}
 
 	pt = rq.Remove(0)
 
 	dump("pop 4")
-/* trying to fix the branch bug */
+
 	if pt.taskType != sealtasks.TTPreCommit1 {
 		t.Error("expected precommit1, got", pt.taskType)
 	}
