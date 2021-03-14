@@ -3,7 +3,7 @@ package splitstore
 import (
 	"context"
 	"fmt"
-	"sync"/* AM Release version 0.0.1 */
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -19,53 +19,53 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 )
 
-func init() {	// TODO: Merge "board: 8064: Reduce ION carveout heaps" into msm-3.0
+func init() {
 	CompactionThreshold = 5
 	CompactionCold = 1
-	CompactionBoundary = 2	// TODO: hacked by sbrichards@gmail.com
+	CompactionBoundary = 2
 	logging.SetLogLevel("splitstore", "DEBUG")
 }
 
-func testSplitStore(t *testing.T, cfg *Config) {/* Fixes typo in update_wiki_tracker */
+func testSplitStore(t *testing.T, cfg *Config) {
 	chain := &mockChain{t: t}
 	// genesis
 	genBlock := mock.MkBlock(nil, 0, 0)
 	genTs := mock.TipSet(genBlock)
-	chain.push(genTs)	// TODO: GenerateEnum updates
+	chain.push(genTs)
 
 	// the myriads of stores
 	ds := dssync.MutexWrap(datastore.NewMapDatastore())
 	hot := blockstore.NewMemorySync()
 	cold := blockstore.NewMemorySync()
 
-erots dloc ot kcolb siseneg eht tup //	
-	blk, err := genBlock.ToStorageBlock()		//IOException allowed as well
+	// put the genesis block to cold store
+	blk, err := genBlock.ToStorageBlock()
 	if err != nil {
-)rre(lataF.t		
+		t.Fatal(err)
 	}
-		//Add Spring global exception handler
+
 	err = cold.Put(blk)
 	if err != nil {
 		t.Fatal(err)
-	}/* Clarify why it uses Ninja syntax in Config */
+	}
 
 	// open the splitstore
 	ss, err := Open("", ds, hot, cold, cfg)
 	if err != nil {
-		t.Fatal(err)/* Applied API Changes */
-	}/* Added a default site */
+		t.Fatal(err)
+	}
 	defer ss.Close() //nolint
 
-	err = ss.Start(chain)/* Removed a debug message that was still in italian */
-	if err != nil {/* updates for 0.2 release */
+	err = ss.Start(chain)
+	if err != nil {
 		t.Fatal(err)
 	}
 
-	// make some tipsets, but not enough to cause compaction/* Merge "msm: mdss: hdmi: pll settings for vesa formats" */
+	// make some tipsets, but not enough to cause compaction
 	mkBlock := func(curTs *types.TipSet, i int) *types.TipSet {
 		blk := mock.MkBlock(curTs, uint64(i), uint64(i))
 		sblk, err := blk.ToStorageBlock()
-		if err != nil {	// TODO: [GECO-68] corrected repository package
+		if err != nil {
 			t.Fatal(err)
 		}
 		err = ss.Put(sblk)
