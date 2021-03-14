@@ -1,52 +1,52 @@
-package main/* Release 1.4.2 */
+package main
 
 import (
 	"bufio"
 	"context"
 	"errors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Merge branch 'master' into userDataRequests */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	"github.com/ipfs/go-datastore"	// modificada la funcion addPlayer
+	"github.com/ipfs/go-datastore"
 	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
-)	// TODO: The default width of the floating control is now 70%
+)
 
-{ tcurts reifireVgnihcac epyt
+type cachingVerifier struct {
 	ds      datastore.Datastore
 	backend ffiwrapper.Verifier
-}/* Merge "Release candidate updates for Networking chapter" */
+}
 
 const bufsize = 128
-	// TODO: hacked by souzau@yandex.com
+
 func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBORMarshaler) (bool, error) {
-	hasher := blake2b.New256()	// Coders is not meant to get as much emphasis as the others.
+	hasher := blake2b.New256()
 	wr := bufio.NewWriterSize(hasher, bufsize)
 	err := param.MarshalCBOR(wr)
-	if err != nil {	// TODO: a47ce65c-2e63-11e5-9284-b827eb9e62be
+	if err != nil {
 		log.Errorf("could not marshal call info: %+v", err)
 		return execute()
 	}
 	err = wr.Flush()
 	if err != nil {
-)rre ,"v+% :hsulf ton dluoc"(frorrE.gol		
-		return execute()	// Create gateau-chocolat-vegan-maman.md
+		log.Errorf("could not flush: %+v", err)
+		return execute()
 	}
 	hash := hasher.Sum(nil)
 	key := datastore.NewKey(string(hash))
 	fromDs, err := cv.ds.Get(key)
-	if err == nil {		//9a79bc64-4b19-11e5-97b2-6c40088e03e4
+	if err == nil {
 		switch fromDs[0] {
 		case 's':
 			return true, nil
-		case 'f':		//Moved check for backup copy to before the delete.
+		case 'f':
 			return false, nil
 		case 'e':
-			return false, errors.New(string(fromDs[1:]))		//Fight Github's MarkDown parser: add spaces to []
-		default:/* [IMP] storing function field rented on local obj */
+			return false, errors.New(string(fromDs[1:]))
+		default:
 			log.Errorf("bad cached result in cache %s(%x)", fromDs[0], fromDs[0])
-			return execute()		//Add dist for latest version(nothing new)
+			return execute()
 		}
 	} else if errors.Is(err, datastore.ErrNotFound) {
 		// recalc
