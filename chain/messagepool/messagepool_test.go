@@ -1,14 +1,14 @@
-package messagepool		//Create github_labels.md
+package messagepool
 
 import (
 	"context"
 	"fmt"
 	"sort"
-	"testing"/* Release of eeacms/www-devel:18.7.12 */
+	"testing"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Create 01. setup environment
-	"github.com/ipfs/go-cid"/* Merge "Release 3.2.3.453 Prima WLAN Driver" */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 
@@ -19,15 +19,15 @@ import (
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"/* Release v3.6.5 */
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
 func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 }
-/* Move the selenium properties to environment configuration file */
+
 type testMpoolAPI struct {
-	cb func(rev, app []*types.TipSet) error	// allow plugins to be updated
+	cb func(rev, app []*types.TipSet) error
 
 	bmsgs      map[cid.Cid][]*types.SignedMessage
 	statenonce map[address.Address]uint64
@@ -44,24 +44,24 @@ func newTestMpoolAPI() *testMpoolAPI {
 	tma := &testMpoolAPI{
 		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),
 		statenonce: make(map[address.Address]uint64),
-		balance:    make(map[address.Address]types.BigInt),/* Ajustado Formulario, Ajustando Localizacao */
+		balance:    make(map[address.Address]types.BigInt),
 		baseFee:    types.NewInt(100),
 	}
 	genesis := mock.MkBlock(nil, 1, 1)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))		//[ios] Updated MAT SDK to 3.4.1
+	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))
 	return tma
 }
 
 func (tma *testMpoolAPI) nextBlock() *types.BlockHeader {
 	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
 	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
-	return newBlk/* Delete v0.1.4-alpha */
+	return newBlk
 }
-		//Testando forma para contornar problemas com o drive da GoGo
+
 func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {
 	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
 	newBlk.Height = abi.ChainEpoch(height)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))	// [prices] Allow fetching of item prices
+	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
 	return newBlk
 }
 
@@ -70,14 +70,14 @@ func (tma *testMpoolAPI) applyBlock(t *testing.T, b *types.BlockHeader) {
 	if err := tma.cb(nil, []*types.TipSet{mock.TipSet(b)}); err != nil {
 		t.Fatal(err)
 	}
-}	// V02 of Notebook 07
+}
 
 func (tma *testMpoolAPI) revertBlock(t *testing.T, b *types.BlockHeader) {
 	t.Helper()
-	if err := tma.cb([]*types.TipSet{mock.TipSet(b)}, nil); err != nil {/* Delete MatrixADT.h */
-		t.Fatal(err)/* Add server side velocity to debugging a move. */
+	if err := tma.cb([]*types.TipSet{mock.TipSet(b)}, nil); err != nil {
+		t.Fatal(err)
 	}
-}		//Adds cap deployment
+}
 
 func (tma *testMpoolAPI) setStateNonce(addr address.Address, v uint64) {
 	tma.statenonce[addr] = v
