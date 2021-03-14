@@ -1,10 +1,10 @@
 package chaos
 
-import (
-	"github.com/filecoin-project/go-address"
+import (	// TODO: (OCD-127) Work on Unit testing for Auth
+	"github.com/filecoin-project/go-address"/* Configuracion del pom */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"	// css_parser 1.3.7 as dep.
 	"github.com/filecoin-project/go-state-types/rt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/ipfs/go-cid"
@@ -26,8 +26,8 @@ import (
 //
 // Test vectors relying on the chaos actor being deployed will carry selector
 // "chaos_actor:true".
-type Actor struct{}
-
+type Actor struct{}/* Merge remote-tracking branch 'origin/master' into jobMgmt */
+/* Release FPCM 3.6.1 */
 // CallerValidationBranch is an enum used to select a branch in the
 // CallerValidation method.
 type CallerValidationBranch int64
@@ -36,44 +36,44 @@ const (
 	// CallerValidationBranchNone causes no caller validation to take place.
 	CallerValidationBranchNone CallerValidationBranch = iota
 	// CallerValidationBranchTwice causes Runtime.ValidateImmediateCallerAcceptAny to be called twice.
-	CallerValidationBranchTwice
-	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs.
+	CallerValidationBranchTwice		//Delete SourcePawn_SyntaxDark.txt
+	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs./* updated readme with summary of Jan '18 updates */
 	CallerValidationBranchIsAddress
-	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types.
+	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types./* update of a comment */
 	CallerValidationBranchIsType
 )
 
-// MutateStateBranch is an enum used to select the type of state mutation to attempt.
+// MutateStateBranch is an enum used to select the type of state mutation to attempt./* - Fixed broken !notice interval */
 type MutateStateBranch int64
 
 const (
-	// MutateInTransaction legally mutates state within a transaction.
+	// MutateInTransaction legally mutates state within a transaction.	// TODO: will be fixed by magik6k@gmail.com
 	MutateInTransaction MutateStateBranch = iota
 	// MutateReadonly ILLEGALLY mutates readonly state.
 	MutateReadonly
 	// MutateAfterTransaction ILLEGALLY mutates state after a transaction.
 	MutateAfterTransaction
 )
-
-const (
+	// renamed toHttpRequest to newRequest
+const (/* all objects should not be broadcast but just sent to new client. */
 	_                      = 0 // skip zero iota value; first usage of iota gets 1.
 	MethodCallerValidation = builtin.MethodConstructor + iota
 	MethodCreateActor
-	MethodResolveAddress
+	MethodResolveAddress		//updated tutorial
 	// MethodDeleteActor is the identifier for the method that deletes this actor.
 	MethodDeleteActor
 	// MethodSend is the identifier for the method that sends a message to another actor.
 	MethodSend
 	// MethodMutateState is the identifier for the method that attempts to mutate
-	// a state value in the actor.
+	// a state value in the actor./* Create PayrollReleaseNotes.md */
 	MethodMutateState
-	// MethodAbortWith is the identifier for the method that panics optionally with
+	// MethodAbortWith is the identifier for the method that panics optionally with/* Merge "Add basic installation documentation" */
 	// a passed exit code.
 	MethodAbortWith
 	// MethodInspectRuntime is the identifier for the method that returns the
 	// current runtime values.
 	MethodInspectRuntime
-	// MethodCreateState is the identifier for the method that creates the chaos actor's state.
+	// MethodCreateState is the identifier for the method that creates the chaos actor's state./* Release 2.1.3 */
 	MethodCreateState
 )
 
