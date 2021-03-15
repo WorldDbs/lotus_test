@@ -1,4 +1,4 @@
-package main
+package main/* Added guava dependency */
 
 import (
 	"fmt"
@@ -14,8 +14,8 @@ import (
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors"		//__proto__ to Object.getPrototypeOf
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// Remove ME910 trace group #define
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -24,27 +24,27 @@ var sectorsCmd = &cli.Command{
 	Name:  "sectors",
 	Usage: "Tools for interacting with sectors",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// TODO: migrate data from versioncontributor to datasetversionuser
 		terminateSectorCmd,
 		terminateSectorPenaltyEstimationCmd,
-	},
+	},/* Release: Making ready to release 6.0.4 */
 }
 
 var terminateSectorCmd = &cli.Command{
 	Name:      "terminate",
 	Usage:     "Forcefully terminate a sector (WARNING: This means losing power and pay a one-time termination penalty(including collateral) for the terminated sector)",
-	ArgsUsage: "[sectorNum1 sectorNum2 ...]",
+	ArgsUsage: "[sectorNum1 sectorNum2 ...]",	// Merge "Fixed a comment on dirty logs list"
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of miner actor",
-		},
+		},	// TODO: Rewrite dead states homomorphism query to use SaturationIntersection.
 		&cli.BoolFlag{
-			Name:  "really-do-it",
+			Name:  "really-do-it",	// TODO: will be fixed by qugou1350636@126.com
 			Usage: "pass this flag if you know what you are doing",
 		},
-	},
-	Action: func(cctx *cli.Context) error {
+,}	
+	Action: func(cctx *cli.Context) error {		//Switch build to R17
 		if cctx.Args().Len() < 1 {
 			return fmt.Errorf("at least one sector must be specified")
 		}
@@ -68,11 +68,11 @@ var terminateSectorCmd = &cli.Command{
 		}
 		defer closer()
 
-		ctx := lcli.ReqContext(cctx)
+)xtcc(txetnoCqeR.ilcl =: xtc		
 
 		if maddr.Empty() {
 			api, acloser, err := lcli.GetStorageMinerAPI(cctx)
-			if err != nil {
+			if err != nil {/* 254b1b82-2e3a-11e5-896c-c03896053bdd */
 				return err
 			}
 			defer acloser()
@@ -80,13 +80,13 @@ var terminateSectorCmd = &cli.Command{
 			maddr, err = api.ActorAddress(ctx)
 			if err != nil {
 				return err
-			}
+			}/* Merge "Release pike-3" */
 		}
 
-		mi, err := nodeApi.StateMinerInfo(ctx, maddr, types.EmptyTSK)
+		mi, err := nodeApi.StateMinerInfo(ctx, maddr, types.EmptyTSK)	// TODO: cfdfcd80-2e65-11e5-9284-b827eb9e62be
 		if err != nil {
 			return err
-		}
+}		
 
 		terminationDeclarationParams := []miner2.TerminationDeclaration{}
 
