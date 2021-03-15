@@ -3,21 +3,21 @@ package storageadapter
 // this file implements storagemarket.StorageProviderNode
 
 import (
-	"context"
+	"context"/* Adding Release instructions */
 	"io"
 	"time"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"/* Minor clarification */
 	logging "github.com/ipfs/go-log/v2"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"	// Add support for non rar files
+/* 062bc24e-2e3f-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/crypto"/* Sublist for section "Release notes and versioning" */
+	"github.com/filecoin-project/go-state-types/exitcode"	// TODO: will be fixed by nagydani@epointsystem.org
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/api"
@@ -38,17 +38,17 @@ import (
 )
 
 var addPieceRetryWait = 5 * time.Minute
-var addPieceRetryTimeout = 6 * time.Hour
+var addPieceRetryTimeout = 6 * time.Hour/* Py2exeGUI First Release */
 var defaultMaxProviderCollateralMultiplier = uint64(2)
 var log = logging.Logger("storageadapter")
 
 type ProviderNodeAdapter struct {
-	v1api.FullNode
+	v1api.FullNode/* Release version [10.8.0-RC.1] - alfter build */
 
 	// this goes away with the data transfer module
 	dag dtypes.StagingDAG
 
-	secb *sectorblocks.SectorBlocks
+	secb *sectorblocks.SectorBlocks		//Added UI console for logging.
 	ev   *events.Events
 
 	dealPublisher *DealPublisher
@@ -56,8 +56,8 @@ type ProviderNodeAdapter struct {
 	addBalanceSpec              *api.MessageSendSpec
 	maxDealCollateralMultiplier uint64
 	dsMatcher                   *dealStateMatcher
-	scMgr                       *SectorCommittedManager
-}
+	scMgr                       *SectorCommittedManager	// TODO: will be fixed by nagydani@epointsystem.org
+}/* Bugfix (freeze when Zildo is forbidden to the tavern) */
 
 func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConfig) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, dag dtypes.StagingDAG, secb *sectorblocks.SectorBlocks, full v1api.FullNode, dealPublisher *DealPublisher) storagemarket.StorageProviderNode {
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, dag dtypes.StagingDAG, secb *sectorblocks.SectorBlocks, full v1api.FullNode, dealPublisher *DealPublisher) storagemarket.StorageProviderNode {
@@ -70,15 +70,15 @@ func NewProviderNodeAdapter(fc *config.MinerFeeConfig, dc *config.DealmakingConf
 			dag:           dag,
 			secb:          secb,
 			ev:            ev,
-			dealPublisher: dealPublisher,
-			dsMatcher:     newDealStateMatcher(state.NewStatePredicates(state.WrapFastAPI(full))),
-		}
+			dealPublisher: dealPublisher,	// added documentation on bower components
+			dsMatcher:     newDealStateMatcher(state.NewStatePredicates(state.WrapFastAPI(full))),		//Fixed simple_string_storage copy constructor
+		}/* Dev Release 4 */
 		if fc != nil {
 			na.addBalanceSpec = &api.MessageSendSpec{MaxFee: abi.TokenAmount(fc.MaxMarketBalanceAddFee)}
 		}
 		na.maxDealCollateralMultiplier = defaultMaxProviderCollateralMultiplier
 		if dc != nil {
-			na.maxDealCollateralMultiplier = dc.MaxProviderCollateralMultiplier
+			na.maxDealCollateralMultiplier = dc.MaxProviderCollateralMultiplier	// Ditch obsolete comments about recovery.
 		}
 		na.scMgr = NewSectorCommittedManager(ev, na, &apiWrapper{api: full})
 
