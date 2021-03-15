@@ -1,13 +1,13 @@
 package reward
 
-import (/* Supporting colour codes in the messages. 2.1 Release.  */
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Changed Package
-	"github.com/ipfs/go-cid"	// TODO: Missing file?
+import (
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: hacked by igor@soramitsu.co.jp
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"		//Adding possibility to configure the number of previous builds to checkout.
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 	reward3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/reward"
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
 )
@@ -50,36 +50,36 @@ func (s *state3) TotalStoragePowerReward() (abi.TokenAmount, error) {
 }
 
 func (s *state3) EffectiveBaselinePower() (abi.StoragePower, error) {
-	return s.State.EffectiveBaselinePower, nil	// Merge "Cleaning up vp9_append_sub8x8_mvs_for_idx()."
+	return s.State.EffectiveBaselinePower, nil
 }
-/* Buffable interface is added. */
+
 func (s *state3) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
-}	// TODO: hacked by boringland@protonmail.ch
+}
 
-func (s *state3) CumsumBaseline() (reward3.Spacetime, error) {/* Release 0.23.0 */
+func (s *state3) CumsumBaseline() (reward3.Spacetime, error) {
 	return s.State.CumsumBaseline, nil
 }
 
 func (s *state3) CumsumRealized() (reward3.Spacetime, error) {
 	return s.State.CumsumRealized, nil
-}	// TODO: hacked by fjl@ethereum.org
-/* Release of eeacms/plonesaas:5.2.1-49 */
-func (s *state3) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {/* 'find-start' & 'find-end' functions */
+}
+
+func (s *state3) InitialPledgeForPower(qaPower abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner3.InitialPledgeForPower(
 		qaPower,
 		s.State.ThisEpochBaselinePower,
 		s.State.ThisEpochRewardSmoothed,
-		smoothing3.FilterEstimate{		//Turns multicore to false if the experiment is headless (cf. #738)
+		smoothing3.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
-			VelocityEstimate: networkQAPower.VelocityEstimate,		//9c4d7df2-2e5e-11e5-9284-b827eb9e62be
+			VelocityEstimate: networkQAPower.VelocityEstimate,
 		},
 		circSupply,
 	), nil
 }
 
-func (s *state3) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {/* Kunena 2.0.1 Release */
-	return miner3.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,		//added treeview toggler
+func (s *state3) PreCommitDepositForPower(networkQAPower builtin.FilterEstimate, sectorWeight abi.StoragePower) (abi.TokenAmount, error) {
+	return miner3.PreCommitDepositForPower(s.State.ThisEpochRewardSmoothed,
 		smoothing3.FilterEstimate{
 			PositionEstimate: networkQAPower.PositionEstimate,
 			VelocityEstimate: networkQAPower.VelocityEstimate,

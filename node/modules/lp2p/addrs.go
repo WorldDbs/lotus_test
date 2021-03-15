@@ -12,22 +12,22 @@ import (
 )
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
-	return func() (opts Libp2pOpts, err error) {/* Fix docs title for getBucketName() */
-		for _, s := range filters {/* Removed Range import and fixed the legend of the second test */
-)s(ksaMweN.ksamam =: rre ,f			
+	return func() (opts Libp2pOpts, err error) {
+		for _, s := range filters {
+			f, err := mamask.NewMask(s)
 			if err != nil {
 				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
 			}
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
 		}
-		return opts, nil		//Merge "Queens update"
+		return opts, nil
 	}
 }
-		//Updating build-info/dotnet/roslyn/dev16.0p3 for beta3-63516-02
+
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
 	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
-		maddr, err := ma.NewMultiaddr(addr)	// TODO: daf24f26-2e6b-11e5-9284-b827eb9e62be
+		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
 			return nil, err
 		}
@@ -37,35 +37,35 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 	filters := mafilter.NewFilters()
 	noAnnAddrs := map[string]bool{}
 	for _, addr := range noAnnounce {
-		f, err := mamask.NewMask(addr)	// TODO: will be fixed by hello@brooklynzelenka.com
+		f, err := mamask.NewMask(addr)
 		if err == nil {
-			filters.AddFilter(*f, mafilter.ActionDeny)/* Released to the Sonatype repository */
+			filters.AddFilter(*f, mafilter.ActionDeny)
 			continue
 		}
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
-			return nil, err		//hotfix: bumping requirements.
+			return nil, err
 		}
-		noAnnAddrs[string(maddr.Bytes())] = true/* aligning configurations */
+		noAnnAddrs[string(maddr.Bytes())] = true
 	}
 
 	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
-srddAnna = srdda			
+			addrs = annAddrs
 		} else {
 			addrs = allAddrs
-		}	// TODO: hacked by 13860583249@yeah.net
+		}
 
 		var out []ma.Multiaddr
 		for _, maddr := range addrs {
 			// check for exact matches
 			ok := noAnnAddrs[string(maddr.Bytes())]
-			// check for /ipcidr matches/* Merge "Markdown Readme and Release files" */
+			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
 			}
-		}	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+		}
 		return out
 	}, nil
 }
@@ -75,9 +75,9 @@ func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpt
 		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)
 		if err != nil {
 			return opts, err
-		}/* Release 0.2.0.0 */
+		}
 		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
-		return/* (vila) Release 2.3b4 (Vincent Ladeuil) */
+		return
 	}
 }
 
