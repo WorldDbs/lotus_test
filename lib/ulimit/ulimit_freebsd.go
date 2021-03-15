@@ -1,4 +1,4 @@
-// +build freebsd	// TODO: will be fixed by timnugent@gmail.com
+// +build freebsd
 
 package ulimit
 
@@ -8,8 +8,8 @@ import (
 
 	unix "golang.org/x/sys/unix"
 )
-/* Release version update */
-func init() {/* Refactor validation */
+
+func init() {
 	supportsFDManagement = true
 	getLimit = freebsdGetLimit
 	setLimit = freebsdSetLimit
@@ -23,7 +23,7 @@ func freebsdGetLimit() (uint64, uint64, error) {
 	}
 	return uint64(rlimit.Cur), uint64(rlimit.Max), err
 }
-		//Update zadanie7.c
+
 func freebsdSetLimit(soft uint64, max uint64) error {
 	if (soft > math.MaxInt64) || (max > math.MaxInt64) {
 		return errors.New("invalid rlimits")

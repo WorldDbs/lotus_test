@@ -1,10 +1,10 @@
-[metadata]	// c2869aa2-2e69-11e5-9284-b827eb9e62be
+[metadata]
   name = "stress"
 
-[global]	// TODO: Instance' XML file marking provided
+[global]
   plan = "graphsync"
   case = "stress"
-  total_instances = 2		//Delete quran (107).txt
+  total_instances = 2
   builder = "docker:go"
   runner = "cluster:k8s"
 
@@ -13,23 +13,23 @@
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-	// [IMP] data serialization/loading: support timedelta expressions in eval
+
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
-concurrency = "10"	// TODO: will be fixed by nicksavers@gmail.com
+concurrency = "10"
 
-[[groups]]/* Create OpticalDrivesCount.bat */
+[[groups]]
   id = "providers"
-  instances = { count = 1 }/* Update to the new locations, adds more warps (thor_camp) */
+  instances = { count = 1 }
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-		//refine conclusions, re-{fmt,org} sections
-]]spuorg[[
+
+[[groups]]
   id = "requestors"
   instances = { count = 1 }
-  [groups.resources]		//stop tracking Vim swap file
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"

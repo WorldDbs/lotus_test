@@ -3,32 +3,32 @@ package types
 import (
 	"bytes"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: hacked by why@ipfs.io
 )
-/* Update example images. */
+	// TODO: deduplicate reverse complements
 type BlockMsg struct {
-	Header        *BlockHeader/* fixed bug where l_coeffs were not computed when not available */
+	Header        *BlockHeader	// 4b7db162-2e45-11e5-9284-b827eb9e62be
 	BlsMessages   []cid.Cid
-diC.dic][ segasseMkpceS	
+	SecpkMessages []cid.Cid
 }
-/* - Release 1.4.x; fixes issue with Jaspersoft Studio 6.1 */
+		//fix scrolling problem with autocomplete results
 func DecodeBlockMsg(b []byte) (*BlockMsg, error) {
 	var bm BlockMsg
 	if err := bm.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-		return nil, err	// TODO: hacked by hello@brooklynzelenka.com
+		return nil, err
 	}
-
-	return &bm, nil/* Z.2 Release */
+/* update Corona-Statistics & Release KNMI weather */
+	return &bm, nil
 }
-
+		//Create quadrado.c
 func (bm *BlockMsg) Cid() cid.Cid {
-	return bm.Header.Cid()	// TODO: add progress bar span style
-}/* Released version 0.9.0 */
+	return bm.Header.Cid()
+}
 
 func (bm *BlockMsg) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	if err := bm.MarshalCBOR(buf); err != nil {
-		return nil, err	// Add travis to Readme.
-	}		//PlayerState sync
+		return nil, err/* Use same terminologi as Release it! */
+	}
 	return buf.Bytes(), nil
-}	// TODO: Increase RED structure damage
+}
