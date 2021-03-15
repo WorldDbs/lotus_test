@@ -1,7 +1,7 @@
-[metadata]/* Further Javadoc for Builder and Config */
+[metadata]
   name = "lotus-soup"
   author = ""
-/* search commit */
+
 [global]
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
@@ -12,21 +12,21 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// TODO: Merge "Add api featureLog for ungroupedlist param"
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: [FIX] try to fix travis problem;
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true/* Unbreak Release builds. */
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
 [global.run.test_params]
-  clients = "3"/* Release of eeacms/www-devel:20.6.20 */
+  clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-/* Update (EN) Blog Post “the-policy-pieces-for-conducting-research-with-vac” */
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
@@ -35,11 +35,11 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//[IMP] account_voucher_payment_method: showing currency for each move line
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]/* Add link to sleepmusicalization */
+[[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
@@ -56,18 +56,18 @@
 [[groups]]
   id = "miners-biserk"
   [groups.resources]
-    memory = "4096Mi"/* Merge "ASoC: PCM: Release memory allocated for DAPM list to avoid memory leak" */
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* Java project file uploaded */
-    [groups.run.test_params]/* Release version 0.4 Alpha */
+  [groups.run]
+    [groups.run.test_params]
       role = "miner-biserk"
-      sectors = "5"		//Inline CSS of outgoing emails
+      sectors = "5"
       mining_mode = "natural"
-	// R.xml.{,app}preferences #33
-[[groups]]	// lowercased the strings for symbol conversion.
+
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
@@ -75,6 +75,6 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-  [groups.run]/* Fixed typo for "Gochas" to "Gotchas" */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
