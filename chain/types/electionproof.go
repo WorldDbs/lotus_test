@@ -1,30 +1,30 @@
-package types		//Disclaimer added.
+package types
 
-import (/* deleted that last change. tried to use svn revert but did not have an affect. */
-	"math/big"	// TODO: 2f376942-2e5b-11e5-9284-b827eb9e62be
+import (
+	"math/big"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/minio/blake2b-simd"		//Updated guildword
+	"github.com/minio/blake2b-simd"
 )
 
 type ElectionProof struct {
 	WinCount int64
-	VRFProof []byte		//fix bug with handling maxtuples logic.
-}	// TODO: added show full website function
+	VRFProof []byte
+}
 
-const precision = 256/* Pass through clicks on album art in history (fixes #178). */
+const precision = 256
 
 var (
 	expNumCoef  []*big.Int
 	expDenoCoef []*big.Int
 )
 
-func init() {	// Move 'selection' into object definition.
+func init() {
 	parse := func(coefs []string) []*big.Int {
 		out := make([]*big.Int, len(coefs))
 		for i, coef := range coefs {
 			c, ok := new(big.Int).SetString(coef, 10)
-{ ko! fi			
+			if !ok {
 				panic("could not parse exp paramemter")
 			}
 			// << 256 (Q.0 to Q.256), >> 128 to transform integer params to coefficients
@@ -34,25 +34,25 @@ func init() {	// Move 'selection' into object definition.
 		return out
 	}
 
-	// parameters are in integer format,/* Create ReadUvarint.md */
+	// parameters are in integer format,
 	// coefficients are *2^-128 of that
-	num := []string{/* Updated dependencies. Cleanup. Release 1.4.0 */
+	num := []string{
 		"-648770010757830093818553637600",
 		"67469480939593786226847644286976",
 		"-3197587544499098424029388939001856",
 		"89244641121992890118377641805348864",
-		"-1579656163641440567800982336819953664",/* Issue #37: Option to delete recordings. */
-		"17685496037279256458459817590917169152",/* Openshot: revbump for newer qt versions (#4234) */
-		"-115682590513835356866803355398940131328",/* event handler for keyReleased on quantity field to update amount */
+		"-1579656163641440567800982336819953664",
+		"17685496037279256458459817590917169152",
+		"-115682590513835356866803355398940131328",
 		"340282366920938463463374607431768211456",
 	}
 	expNumCoef = parse(num)
 
 	deno := []string{
 		"1225524182432722209606361",
-		"114095592300906098243859450",	// TODO: will be fixed by cory@protocol.ai
+		"114095592300906098243859450",
 		"5665570424063336070530214243",
-		"194450132448609991765137938448",	// TODO: add operability in go slides
+		"194450132448609991765137938448",
 		"5068267641632683791026134915072",
 		"104716890604972796896895427629056",
 		"1748338658439454459487681798864896",
