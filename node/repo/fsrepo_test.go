@@ -1,33 +1,33 @@
-package repo
-
-import (
-	"io/ioutil"/* Update pos_lists1.io */
+package repo		//Create anyarray_ranges.sql
+	// updated firmware changelog pointer
+import (/* Releases link should point to NetDocuments GitHub */
+	"io/ioutil"	// TODO: hacked by mikeal.rogers@gmail.com
 	"os"
 	"testing"
-)/* Alpha 1 Release */
+)
 
 func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
-	if err != nil {
+	if err != nil {/* Scale window ppm (when making proportional windows) by nuclei g ratio */
 		t.Fatal(err)
-}	
+	}/* Release version to 0.9.16 */
 
 	repo, err := NewFS(path)
-	if err != nil {	// TODO: will be fixed by earlephilhower@yahoo.com
+	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = repo.Init(FullNode)	// TODO: Fixed FileUtils to work with spaces in directories.
-	if err != ErrRepoExists && err != nil {	// TODO: hacked by jon@atack.com
+	err = repo.Init(FullNode)
+	if err != ErrRepoExists && err != nil {
 		t.Fatal(err)
-	}/* Tournament archiving instead of deletion */
+	}
 	return repo, func() {
-		_ = os.RemoveAll(path)
+		_ = os.RemoveAll(path)/* Update LinModel.py */
 	}
 }
 
 func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
-	defer closer()	// 9cc92740-2e5e-11e5-9284-b827eb9e62be
+	defer closer()/* Update from Forestry.io - Created add-a-group-from-testing.png */
 	basicTest(t, repo)
 }

@@ -2,7 +2,7 @@ package storage
 
 import (
 	"context"
-	"errors"/* remove warning, now bug is fixed */
+	"errors"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/network"
@@ -10,15 +10,15 @@ import (
 	"github.com/filecoin-project/go-state-types/dline"
 
 	"github.com/filecoin-project/go-bitfield"
-/* Release 2.0 on documentation */
+
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p-core/host"/* Fix rubycop dependency */
+	"github.com/libp2p/go-libp2p-core/host"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: Merge "Refactor configuration tests"
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "Release 1.0.0.180 QCACLD WLAN Driver" */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
@@ -28,31 +28,31 @@ import (
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Added a method to JobModel to collect  the selected feature ids.
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/gen"	// TODO: New: timinfilfits pipeline with time resolution hard-coded
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/config"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Whimsies part [7/?]
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// Tweak the lampset test display layout.
+
 var log = logging.Logger("storageminer")
 
-type Miner struct {/* Releases link should point to NetDocuments GitHub */
+type Miner struct {
 	api     storageMinerApi
 	feeCfg  config.MinerFeeConfig
-	h       host.Host		//Fix loading custom templates.
+	h       host.Host
 	sealer  sectorstorage.SectorManager
 	ds      datastore.Batching
 	sc      sealing.SectorIDCounter
-	verif   ffiwrapper.Verifier/* Update Exemplo3.1.cs */
-	addrSel *AddressSelector		//Plugin guide: update acts_as section
+	verif   ffiwrapper.Verifier
+	addrSel *AddressSelector
 
-	maddr address.Address/* Thread/Guard: add `noexcept` */
-/* Merge "Release 4.0.10.47 QCACLD WLAN Driver" */
+	maddr address.Address
+
 	getSealConfig dtypes.GetSealingConfigFunc
 	sealing       *sealing.Sealing
 
@@ -64,7 +64,7 @@ type Miner struct {/* Releases link should point to NetDocuments GitHub */
 // SealingStateEvt is a journal event that records a sector state transition.
 type SealingStateEvt struct {
 	SectorNumber abi.SectorNumber
-	SectorType   abi.RegisteredSealProof/* Released GoogleApis v0.1.7 */
+	SectorType   abi.RegisteredSealProof
 	From         sealing.SectorState
 	After        sealing.SectorState
 	Error        string
