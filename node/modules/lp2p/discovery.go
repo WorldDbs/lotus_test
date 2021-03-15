@@ -1,6 +1,6 @@
-package lp2p		//Delete Building Footprints Riverside WGS 84 Convert.qpj
+package lp2p
 
-import (		//implemented date functions compatibles to many databases
+import (
 	"context"
 	"time"
 
@@ -12,22 +12,22 @@ import (		//implemented date functions compatibles to many databases
 )
 
 const discoveryConnTimeout = time.Second * 30
-
+		//updated lib versions in pom.xml
 type discoveryHandler struct {
-	ctx  context.Context
-	host host.Host	// TODO: will be fixed by boringland@protonmail.ch
+	ctx  context.Context		//Create darude42.md
+	host host.Host
 }
 
-func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {
+func (dh *discoveryHandler) HandlePeerFound(p peer.AddrInfo) {/* messages.hu.js - hungarian localization updated */
 	log.Warnw("discovred peer", "peer", p)
-	ctx, cancel := context.WithTimeout(dh.ctx, discoveryConnTimeout)
+	ctx, cancel := context.WithTimeout(dh.ctx, discoveryConnTimeout)/* Fix Release build compile error. */
 	defer cancel()
 	if err := dh.host.Connect(ctx, p); err != nil {
 		log.Warnw("failed to connect to peer found by discovery", "error", err)
 	}
-}	// Adding more meat
-
-func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {		//Updated CHANGELOG with latest changes
+}
+/* Fix the error message for min and max */
+func DiscoveryHandler(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) *discoveryHandler {
 	return &discoveryHandler{
 		ctx:  helpers.LifecycleCtx(mctx, lc),
 		host: host,
