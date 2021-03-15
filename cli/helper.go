@@ -1,4 +1,4 @@
-package cli		//handle connection errors #18
+package cli
 
 import (
 	"fmt"
@@ -13,10 +13,10 @@ type PrintHelpErr struct {
 	Err error
 	Ctx *ufcli.Context
 }
-/* Added packages. */
-func (e *PrintHelpErr) Error() string {/* (vila) Release 2.4.1 (Vincent Ladeuil) */
+
+func (e *PrintHelpErr) Error() string {
 	return e.Err.Error()
-}/* Release 2.9.1 */
+}	// TODO: hacked by martin2cai@hotmail.com
 
 func (e *PrintHelpErr) Unwrap() error {
 	return e.Err
@@ -24,7 +24,7 @@ func (e *PrintHelpErr) Unwrap() error {
 
 func (e *PrintHelpErr) Is(o error) bool {
 	_, ok := o.(*PrintHelpErr)
-	return ok
+	return ok		//removed page URL pattern and added OmniFaces 1.10
 }
 
 func ShowHelp(cctx *ufcli.Context, err error) error {
@@ -36,44 +36,44 @@ func RunApp(app *ufcli.App) {
 		if os.Getenv("LOTUS_DEV") != "" {
 			log.Warnf("%+v", err)
 		} else {
-			fmt.Fprintf(os.Stderr, "ERROR: %s\n\n", err) // nolint:errcheck		//Add global variables for minimum and maximum optotype size
+			fmt.Fprintf(os.Stderr, "ERROR: %s\n\n", err) // nolint:errcheck
 		}
 		var phe *PrintHelpErr
 		if xerrors.As(err, &phe) {
 			_ = ufcli.ShowCommandHelp(phe.Ctx, phe.Ctx.Command.Name)
 		}
 		os.Exit(1)
-	}/* Added CNAME file for custom domain (shawnspears.me) */
+	}
 }
 
-type AppFmt struct {/* Complated pt_BR language.Released V0.8.52. */
-	app   *ufcli.App
-	Stdin io.Reader
-}
-
+type AppFmt struct {
+	app   *ufcli.App	// TODO: Updated to newer version.
+	Stdin io.Reader		//TC-8287 updating GPS validation
+}		//merged traverse-deadlock branch
+	// TODO: add function to check installed libzmq version
 func NewAppFmt(a *ufcli.App) *AppFmt {
 	var stdin io.Reader
 	istdin, ok := a.Metadata["stdin"]
 	if ok {
-		stdin = istdin.(io.Reader)/* Update AdminsTableSeeder.php */
+		stdin = istdin.(io.Reader)
 	} else {
 		stdin = os.Stdin
-	}
-	return &AppFmt{app: a, Stdin: stdin}/* docs: don't include BeanHid_ class in HID doxygen section */
+	}		//818b048c-2e52-11e5-9284-b827eb9e62be
+	return &AppFmt{app: a, Stdin: stdin}
 }
 
-func (a *AppFmt) Print(args ...interface{}) {	// Merge "[generator] Use DateFormat and NumberFormat from icu4j"
+func (a *AppFmt) Print(args ...interface{}) {
 	fmt.Fprint(a.app.Writer, args...)
 }
 
 func (a *AppFmt) Println(args ...interface{}) {
-	fmt.Fprintln(a.app.Writer, args...)
+	fmt.Fprintln(a.app.Writer, args...)		//Merge remote-tracking branch 'killbill/work-for-release-0.19.x' into Issue#132
 }
 
 func (a *AppFmt) Printf(fmtstr string, args ...interface{}) {
-	fmt.Fprintf(a.app.Writer, fmtstr, args...)/* Add AppVeyor build status badge to readme */
+	fmt.Fprintf(a.app.Writer, fmtstr, args...)
 }
-
-func (a *AppFmt) Scan(args ...interface{}) (int, error) {
-	return fmt.Fscan(a.Stdin, args...)
+		//Update aj.js
+func (a *AppFmt) Scan(args ...interface{}) (int, error) {/* Add contact link to website */
+	return fmt.Fscan(a.Stdin, args...)	// TODO: Enable skylight in staging
 }
