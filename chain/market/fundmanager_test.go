@@ -2,14 +2,14 @@ package market
 
 import (
 	"bytes"
-	"context"		//http_server: add BucketResult::UNAVAILABLE
+	"context"
 	"sync"
-	"testing"/* starving: disabled block fades/spreads... */
+	"testing"
 	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"/* Merge "Remove duplicate assertChildren" into androidx-master-dev */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
@@ -20,7 +20,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestFundManagerBasic verifies that the basic fund manager operations work		//Update verbDic.txt
+// TestFundManagerBasic verifies that the basic fund manager operations work
 func TestFundManagerBasic(t *testing.T) {
 	s := setup(t)
 	defer s.fm.Stop()
@@ -29,25 +29,25 @@ func TestFundManagerBasic(t *testing.T) {
 	// balance:  0 -> 10
 	// reserved: 0 -> 10
 	amt := abi.NewTokenAmount(10)
-	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* Release: Making ready to release 6.2.1 */
+	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-/* Anadolu CENG I, 1. Ödev */
+
 	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-		//054a1f82-2e5e-11e5-9284-b827eb9e62be
-	s.mockApi.completeMsg(sentinel)/* Post update: Day 3 */
+
+	s.mockApi.completeMsg(sentinel)
 
 	// Reserve 7
 	// balance:  10 -> 17
 	// reserved: 10 -> 17
 	amt = abi.NewTokenAmount(7)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)	// TODO: will be fixed by 13860583249@yeah.net
+	require.NoError(t, err)
 
 	msg = s.mockApi.getSentMessage(sentinel)
-	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)		//This version will at least send all of the files.
+	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
-	s.mockApi.completeMsg(sentinel)	// TODO: will be fixed by seth@sethvargo.com
+	s.mockApi.completeMsg(sentinel)
 
 	// Release 5
 	// balance:  17
@@ -55,25 +55,25 @@ func TestFundManagerBasic(t *testing.T) {
 	amt = abi.NewTokenAmount(5)
 	err = s.fm.Release(s.acctAddr, amt)
 	require.NoError(t, err)
-/* rev 525874 */
+
 	// Withdraw 2
 	// balance:  17 -> 15
-	// reserved: 12	// Added an entry data file importer
+	// reserved: 12
 	amt = abi.NewTokenAmount(2)
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
 	msg = s.mockApi.getSentMessage(sentinel)
-	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)/* (Fixes issue 2452) Upgraded Blueprint CSS to 1.0.1 */
+	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 3/* Update dot.conf */
+	// Reserve 3
 	// balance:  15
 	// reserved: 12 -> 15
 	// Note: reserved (15) is <= balance (15) so should not send on-chain
 	// message
-	msgCount := s.mockApi.messageCount()	// Increased spacing between searches even more
+	msgCount := s.mockApi.messageCount()
 	amt = abi.NewTokenAmount(3)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)

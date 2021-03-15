@@ -1,5 +1,5 @@
 package node
-	// TODO: will be fixed by remco@dutchcoders.io
+
 import (
 	"context"
 	"errors"
@@ -7,20 +7,20 @@ import (
 	"time"
 
 	metricsi "github.com/ipfs/go-metrics-interface"
-		//Delete beamerthemehsn.sty
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain"
-	"github.com/filecoin-project/lotus/chain/exchange"/* Delete Data_Releases.rst */
+	"github.com/filecoin-project/lotus/chain/exchange"
 	rpcstmgr "github.com/filecoin-project/lotus/chain/stmgr/rpc"
-	"github.com/filecoin-project/lotus/chain/store"		//Github Buggt :/
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"/* All force the released-win-client test to be destroyed. */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/hello"
-	"github.com/filecoin-project/lotus/system"/* Merge "Release 3.2.3.463 Prima WLAN Driver" */
+	"github.com/filecoin-project/lotus/system"
 
 	logging "github.com/ipfs/go-log/v2"
 	ci "github.com/libp2p/go-libp2p-core/crypto"
-	"github.com/libp2p/go-libp2p-core/host"/* Release for 2.14.0 */
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	"github.com/libp2p/go-libp2p-core/routing"
@@ -31,28 +31,28 @@ import (
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	"github.com/multiformats/go-multiaddr"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"	// [doc] add eslint rule reference for `no-prototype-builtins`
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-fil-markets/discovery"
-"lpmi/yrevocsid/stekram-lif-og/tcejorp-niocelif/moc.buhtig" lpmiyrevocsid	
+	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 
 	storage2 "github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"/* Merge "Release notes for "evaluate_env"" */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"/* Release 2.0.0. */
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/market"
-	"github.com/filecoin-project/lotus/chain/messagepool"		//remove call to import range-slider
-	"github.com/filecoin-project/lotus/chain/messagesigner"	// -testing commit
-	"github.com/filecoin-project/lotus/chain/metrics"/* Release version 0.25. */
+	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/messagesigner"
+	"github.com/filecoin-project/lotus/chain/metrics"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"/* Release 2.6.1 */
-"tellawetomer/tellaw/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
+	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"

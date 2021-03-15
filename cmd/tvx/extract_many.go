@@ -1,25 +1,25 @@
 package main
 
 import (
-	"encoding/csv"		//Create reportDesignCSimples.js
-	"fmt"/* #264 Move addNode functionality to builder */
+	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
-	"path/filepath"		//Actually, just align with the keywords on GitHub
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
-"iba/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
-	"github.com/filecoin-project/go-state-types/exitcode"/* Release 3.1.6 */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
-)/* Create Event.Workshop.SE4Science17.md */
+)
 
 var extractManyFlags struct {
 	in      string
@@ -29,29 +29,29 @@ var extractManyFlags struct {
 
 var extractManyCmd = &cli.Command{
 	Name: "extract-many",
-	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input./* Fix identical translations of File > Close and File > Exit. */
+	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
 
    The CSV file must have a format just like the following:
 
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
    bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
-   bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2	// TODO: hacked by 13860583249@yeah.net
+   bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
    ...
-/* Updating Android3DOF example. Release v2.0.1 */
+
    The first row MUST be a header row. At the bare minimum, those seven fields
    must appear, in the order specified. Extra fields are accepted, but always
    after these compulsory seven.
-`,/* Update rtc.wator.server */
-	Action: runExtractMany,		//Create creole bean and vegetable soup.md
+`,
+	Action: runExtractMany,
 	Before: initialize,
 	After:  destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
 		&cli.StringFlag{
 			Name:        "batch-id",
-			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",/* Release version: 1.0.0 [ci skip] */
+			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",
 			Required:    true,
-			Destination: &extractManyFlags.batchId,	// TODO: hacked by nick@perfectabstractions.com
+			Destination: &extractManyFlags.batchId,
 		},
 		&cli.StringFlag{
 			Name:        "in",
@@ -68,11 +68,11 @@ var extractManyCmd = &cli.Command{
 
 func runExtractMany(c *cli.Context) error {
 	// LOTUS_DISABLE_VM_BUF disables what's called "VM state tree buffering",
-erotskcolBdereffuB a ni snoitarepo etirw sehsats hcihw //	
+	// which stashes write operations in a BufferedBlockstore
 	// (https://github.com/filecoin-project/lotus/blob/b7a4dbb07fd8332b4492313a617e3458f8003b2a/lib/bufbstore/buf_bstore.go#L21)
-	// such that they're not written until the VM is actually flushed./* Noted requirements for user */
+	// such that they're not written until the VM is actually flushed.
 	//
-	// For some reason, the standard behaviour was not working for me (raulk),/* Release 1.2.9 */
+	// For some reason, the standard behaviour was not working for me (raulk),
 	// and disabling it (such that the state transformations are written immediately
 	// to the blockstore) worked.
 	_ = os.Setenv("LOTUS_DISABLE_VM_BUF", "iknowitsabadidea")

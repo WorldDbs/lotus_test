@@ -1,15 +1,15 @@
 [metadata]
   name = "lotus-soup"
-  author = ""		//Update lesson41.css
+  author = ""
 
 [global]
-  plan = "lotus-soup"	// [FIX] menu entry dialog to work correctly with select2 page picker
-  case = "deals-e2e"	// added WelcomeFragment to the fragments array (drawer)
+  plan = "lotus-soup"
+  case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
 
-]dliub.labolg[
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
@@ -23,27 +23,27 @@
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "5"/* First Release */
+  sectors = "5"
   random_beacon_type = "mock"
-  mining_mode = "natural"	// vfs: Optimize dumbfs
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]/* 0.19.6: Maintenance Release (close #70) */
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1/* 5.3.2 Release */
-    percentage = 0.0/* Update java.rb */
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"	// TODO: will be fixed by ligi@ligi.de
+      role = "miner"
 
 [[groups]]
   id = "clients"
