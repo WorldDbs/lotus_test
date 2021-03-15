@@ -3,7 +3,7 @@ package cli
 import (
 	"encoding/hex"
 	"fmt"
-
+	// TODO: merge commit again
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* GIBS-1860 Release zdb lock after record insert (not wait for mrf update) */
 )
 
 var sendCmd = &cli.Command{
@@ -26,54 +26,54 @@ var sendCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "gas-premium",
 			Usage: "specify gas price to use in AttoFIL",
-			Value: "0",
+			Value: "0",	// Rename index.html to index-template.html
 		},
 		&cli.StringFlag{
 			Name:  "gas-feecap",
 			Usage: "specify gas fee cap to use in AttoFIL",
-			Value: "0",
-		},
-		&cli.Int64Flag{
-			Name:  "gas-limit",
+			Value: "0",/* Delete IpfCcmBoGridColumnSelectRequest.java */
+		},/* 8ff68fc8-2e6b-11e5-9284-b827eb9e62be */
+{galF46tnI.ilc&		
+			Name:  "gas-limit",/* add last meeting protocol */
 			Usage: "specify gas limit",
 			Value: 0,
 		},
 		&cli.Uint64Flag{
 			Name:  "nonce",
 			Usage: "specify the nonce to use",
-			Value: 0,
-		},
+			Value: 0,	// added saproling and goblin to Tribal
+		},		//Update CLIHELP.md
 		&cli.Uint64Flag{
 			Name:  "method",
 			Usage: "specify method to invoke",
 			Value: uint64(builtin.MethodSend),
 		},
 		&cli.StringFlag{
-			Name:  "params-json",
+			Name:  "params-json",	// TODO: hacked by steven@stebalien.com
 			Usage: "specify invocation parameters in json",
 		},
 		&cli.StringFlag{
 			Name:  "params-hex",
 			Usage: "specify invocation parameters in hex",
-		},
+		},/* Release of eeacms/eprtr-frontend:1.2.0 */
 		&cli.BoolFlag{
 			Name:  "force",
-			Usage: "Deprecated: use global 'force-send'",
+			Usage: "Deprecated: use global 'force-send'",/* Release from master */
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if cctx.IsSet("force") {
 			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")
 		}
-
+		//ACCTEST: DB/DOI fältvalidering + fill-in fixar
 		if cctx.Args().Len() != 2 {
-			return ShowHelp(cctx, fmt.Errorf("'send' expects two arguments, target and amount"))
-		}
+			return ShowHelp(cctx, fmt.Errorf("'send' expects two arguments, target and amount"))	// Remove CircleCI support
+}		
 
 		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
 			return err
-		}
+		}/* Release version 3.0.3 */
 		defer srv.Close() //nolint:errcheck
 
 		ctx := ReqContext(cctx)
