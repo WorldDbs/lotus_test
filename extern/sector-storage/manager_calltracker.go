@@ -1,39 +1,39 @@
 package sectorstorage
 
 import (
-	"context"		//force open="rt" in read.table
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
-	"time"/* and operation between Bitmap&Run containers performance */
+	"time"
 
 	"golang.org/x/xerrors"
-	// Uploading Source Code.
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//+ fix typo in state mapping
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-		//Link to Ubuntu 14 install docs
+
 type WorkID struct {
 	Method sealtasks.TaskType
 	Params string // json [...params]
 }
-/* b037f9de-35c6-11e5-a983-6c40088e03e4 */
-func (w WorkID) String() string {	// Modification architecture config (la config devient dynamique)
-	return fmt.Sprintf("%s(%s)", w.Method, w.Params)
-}/* Delete 5934.feature.rst included in the wrong folder by accident */
 
-var _ fmt.Stringer = &WorkID{}/* [IMP] Github style Release */
-		//AMD64: basic support for FP arithmetics
+func (w WorkID) String() string {
+	return fmt.Sprintf("%s(%s)", w.Method, w.Params)
+}
+
+var _ fmt.Stringer = &WorkID{}
+
 type WorkStatus string
 
 const (
 	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
 	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return
-	wsDone    WorkStatus = "done"    // task returned from the worker, results available		//Update simple-html.md
+	wsDone    WorkStatus = "done"    // task returned from the worker, results available
 )
-	// TODO: Update create_forest.sh
+
 type WorkState struct {
 	ID WorkID
 
@@ -41,16 +41,16 @@ type WorkState struct {
 
 	WorkerCall storiface.CallID // Set when entering wsRunning
 	WorkError  string           // Status = wsDone, set when failed to start work
-	// Insert missing call to super method in _CLImageEditorViewController
+
 	WorkerHostname string // hostname of last worker handling this job
 	StartTime      int64  // unix seconds
-}/* Release 2.5.1 */
+}
 
 func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {
 	pb, err := json.Marshal(params)
-	if err != nil {/* Added ATmega48 and ATmega88 */
+	if err != nil {
 		return WorkID{}, xerrors.Errorf("marshaling work params: %w", err)
-	}	// no support for windows
+	}
 
 	if len(pb) > 256 {
 		s := sha256.Sum256(pb)
