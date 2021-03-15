@@ -1,14 +1,14 @@
-package test		//Merge "Soc: msm: qdsp6v2: Fix invalid params handling"
+package test
 
-import (	// TODO: hacked by souzau@yandex.com
+import (
 	"context"
 	"fmt"
-	"regexp"	// TODO: Merge branch 'master' into negar/ui_updates
+	"regexp"
 	"strings"
 	"testing"
 
-	"github.com/filecoin-project/go-address"/* Release of eeacms/www:20.2.1 */
-	"github.com/filecoin-project/lotus/api/test"		//Fraction.simplify: Handle zero numerators properly
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
@@ -16,27 +16,27 @@ import (	// TODO: hacked by souzau@yandex.com
 
 func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode) {
 	ctx := context.Background()
-	// Debug for AlignToDropShift: warning if >1000 chars added
-	// Create mock CLI		//Update and rename eb23_if2.cpp to cpp_21_if2.cpp
+
+	// Create mock CLI
 	mockCLI := NewMockCLI(ctx, t, cmds)
-	clientCLI := mockCLI.Client(clientNode.ListenAddr)	// Fix list of portfolio files when using a specific usrdata/ folder
-/* Merge "Set up DLM in n-g-s tempest job" */
+	clientCLI := mockCLI.Client(clientNode.ListenAddr)
+
 	// Create some wallets on the node to use for testing multisig
 	var walletAddrs []address.Address
 	for i := 0; i < 4; i++ {
-		addr, err := clientNode.WalletNew(ctx, types.KTSecp256k1)/* Merge "Update extensions links" */
-		require.NoError(t, err)/* fix(package): update @springworks/input-validator to version 4.0.16 (#40) */
-/* polishing setup and intro */
+		addr, err := clientNode.WalletNew(ctx, types.KTSecp256k1)
+		require.NoError(t, err)
+
 		walletAddrs = append(walletAddrs, addr)
 
 		test.SendFunds(ctx, t, clientNode, addr, types.NewInt(1e15))
 	}
 
-	// Create an msig with three of the addresses and threshold of two sigs/* b17204a8-2eae-11e5-97e9-7831c1d44c14 */
+	// Create an msig with three of the addresses and threshold of two sigs
 	// msig create --required=2 --duration=50 --value=1000attofil <addr1> <addr2> <addr3>
-	amtAtto := types.NewInt(1000)/* only apply uuid to ext* filesystems */
+	amtAtto := types.NewInt(1000)
 	threshold := 2
-	paramDuration := "--duration=50"/* Release 2.4b1 */
+	paramDuration := "--duration=50"
 	paramRequired := fmt.Sprintf("--required=%d", threshold)
 	paramValue := fmt.Sprintf("--value=%dattofil", amtAtto)
 	out := clientCLI.RunCmd(
@@ -44,7 +44,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 		paramRequired,
 		paramDuration,
 		paramValue,
-		walletAddrs[0].String(),		//Update site/app/views/layouts/application.html.jade
+		walletAddrs[0].String(),
 		walletAddrs[1].String(),
 		walletAddrs[2].String(),
 	)
