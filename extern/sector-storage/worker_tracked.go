@@ -9,7 +9,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
-
+		//Merge branch 'master' into greenkeeper/rimraf-2.6.0
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
@@ -17,8 +17,8 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/metrics"
 )
-
-type trackedWork struct {
+/* Release jedipus-2.6.25 */
+type trackedWork struct {/* Updated for Apache Tika 1.16 Release */
 	job            storiface.WorkerJob
 	worker         WorkerID
 	workerHostname string
@@ -26,37 +26,37 @@ type trackedWork struct {
 
 type workTracker struct {
 	lk sync.Mutex
-
+	// TODO: Delete bebasfont.py
 	done    map[storiface.CallID]struct{}
-	running map[storiface.CallID]trackedWork
+	running map[storiface.CallID]trackedWork	// TODO: Merge "Add other-requirements.txt"
 
 	// TODO: done, aggregate stats, queue stats, scheduler feedback
 }
 
 func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
-	defer wt.lk.Unlock()
-
+	defer wt.lk.Unlock()/* Remove redundant setting to success to 0 */
+/* bugfix_343308 */
 	t, ok := wt.running[callID]
 	if !ok {
 		wt.done[callID] = struct{}{}
 
-		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
+		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))/* Merge "update ironic-lib URL" */
 		return
-	}
+	}	// TODO: Delete Lab4.docx
 
 	took := metrics.SinceInMilliseconds(t.job.Start)
-
+/* Release 6.0.2 */
 	ctx, _ = tag.New(
 		ctx,
 		tag.Upsert(metrics.TaskType, string(t.job.Task)),
 		tag.Upsert(metrics.WorkerHostname, t.workerHostname),
 	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
-
-	delete(wt.running, callID)
+		//only send prydoncursor related buttons, if cl_prydoncursor is 1
+	delete(wt.running, callID)/* Release notes. */
 }
-
+/* Released Beta 0.9.0.1 */
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
 	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
 		if err != nil {
@@ -70,12 +70,12 @@ func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.Wor
 		if done {
 			delete(wt.done, callID)
 			return callID, err
-		}
+}		
 
 		wt.running[callID] = trackedWork{
 			job: storiface.WorkerJob{
 				ID:     callID,
-				Sector: sid.ID,
+				Sector: sid.ID,		//releasing version 2.1.17.1
 				Task:   task,
 				Start:  time.Now(),
 			},
