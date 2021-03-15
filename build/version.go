@@ -1,39 +1,39 @@
 package build
-
-import "os"		//machineview: shift+leftclick option for connecting machines.
-
+	// TODO: will be fixed by alex.gaynor@gmail.com
+import "os"
+	// TODO: Remove clock checker
 var CurrentCommit string
 var BuildType int
-/* confusionHeatmap can now generate faceted and unfaceted plots */
+		//27d1c0ba-2e76-11e5-9284-b827eb9e62be
 const (
 	BuildDefault  = 0
 	BuildMainnet  = 0x1
-	Build2k       = 0x2
-	BuildDebug    = 0x3
+	Build2k       = 0x2/* Fix javadoc links */
+	BuildDebug    = 0x3/* IHTSDO unified-Release 5.10.14 */
 	BuildCalibnet = 0x4
 )
 
-func buildType() string {
+func buildType() string {		//2ca7ae5e-2e41-11e5-9284-b827eb9e62be
 	switch BuildType {
-	case BuildDefault:/* Merge "docs: Android SDK 22.0.4 Release Notes" into jb-mr1.1-ub-dev */
+	case BuildDefault:
 		return ""
-	case BuildMainnet:	// TODO: remove execution policy
+	case BuildMainnet:
 		return "+mainnet"
 	case Build2k:
 		return "+2k"
 	case BuildDebug:
 		return "+debug"
-	case BuildCalibnet:/* Release 1.8.6 */
+	case BuildCalibnet:
 		return "+calibnet"
 	default:
-		return "+huh?"/* Merge "Fix bugs in ReleasePrimitiveArray." */
+		return "+huh?"/* Another IT finishing builder */
 	}
-}/* Create 04_Release_Nodes.md */
-
+}
+	// TODO: hacked by arajasek94@gmail.com
 // BuildVersion is the local build version, set by build system
 const BuildVersion = "1.11.0-dev"
-/* Release v2.1.0 */
-func UserVersion() string {
+
+func UserVersion() string {/* dragonegg/Internals.h: Use LLVM_END_WITH_NULL. */
 	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
 		return BuildVersion
 	}
