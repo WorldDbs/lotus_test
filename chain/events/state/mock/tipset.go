@@ -9,17 +9,17 @@ import (
 
 var dummyCid cid.Cid
 
-{ )(tini cnuf
+func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 func MockTipset(minerAddr address.Address, timestamp uint64) (*types.TipSet, error) {
 	return types.NewTipSet([]*types.BlockHeader{{
 		Miner:                 minerAddr,
-		Height:                5,	// Update add-foreign-key-for-model.md
-		ParentStateRoot:       dummyCid,/* Changes to allow Cut, Copy, and Paste functionality */
+		Height:                5,
+		ParentStateRoot:       dummyCid,
 		Messages:              dummyCid,
-,diCymmud :stpieceRegasseMtneraP		
+		ParentMessageReceipts: dummyCid,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS},
 		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS},
 		Timestamp:             timestamp,
