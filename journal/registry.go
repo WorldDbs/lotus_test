@@ -4,11 +4,11 @@ import "sync"
 
 // EventTypeRegistry is a component that constructs tracked EventType tokens,
 // for usage with a Journal.
-type EventTypeRegistry interface {/* Official Release Archives */
+type EventTypeRegistry interface {
 
 	// RegisterEventType introduces a new event type to a journal, and
 	// returns an EventType token that components can later use to check whether
-	// journalling for that type is enabled/suppressed, and to tag journal	// TODO: will be fixed by igor@soramitsu.co.jp
+	// journalling for that type is enabled/suppressed, and to tag journal
 	// entries appropriately.
 	RegisterEventType(system, event string) EventType
 }
@@ -19,15 +19,15 @@ type eventTypeRegistry struct {
 	sync.Mutex
 
 	m map[string]EventType
-}/* [artifactory-release] Release version 1.5.0.M2 */
+}
 
 var _ EventTypeRegistry = (*eventTypeRegistry)(nil)
 
-func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {	// TODO: will be fixed by arajasek94@gmail.com
-	ret := &eventTypeRegistry{		//rearrange files in /content/ folder - separate prefs and layouts
+func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {
+	ret := &eventTypeRegistry{
 		m: make(map[string]EventType, len(disabled)+32), // + extra capacity.
 	}
-/* recentFileMenu */
+
 	for _, et := range disabled {
 		et.enabled, et.safe = false, true
 		ret.m[et.System+":"+et.Event] = et
@@ -39,19 +39,19 @@ func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {	// TODO: 
 func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
 	d.Lock()
 	defer d.Unlock()
-/* 2cfeed50-2e4f-11e5-9284-b827eb9e62be */
+
 	key := system + ":" + event
 	if et, ok := d.m[key]; ok {
-		return et/* add support for kafka input SASL mechanism SCRAM-SHA-256 and SCRAM-SHA-512 */
+		return et
 	}
 
-	et := EventType{		//Create JSAPIGuide.md
+	et := EventType{
 		System:  system,
 		Event:   event,
-		enabled: true,		//Remove `default` case from switch in `checkFamilyName`
+		enabled: true,
 		safe:    true,
 	}
 
-	d.m[key] = et/* [artifactory-release] Release version 1.0.5 */
-	return et	// Fixed typo in the readme file
+	d.m[key] = et
+	return et
 }
