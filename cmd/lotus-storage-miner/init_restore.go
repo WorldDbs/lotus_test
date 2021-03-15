@@ -1,42 +1,42 @@
-package main/* Add spark-bigquery-connector project to cloud-dataproc readme */
+package main
 
-import (	// trigger new build for jruby-head (b01fe72)
+import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
 	"os"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-		//[WIP] Show documents in project
+
 	"github.com/docker/go-units"
-	"github.com/ipfs/go-datastore"/* Merge "Adds Release Notes" */
+	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/mitchellh/go-homedir"/* Release jedipus-2.6.40 */
+	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// Primera pantalla de informes fiscales
+	"golang.org/x/xerrors"
 	"gopkg.in/cheggaaa/pb.v1"
-/* Tagging a Release Candidate - v4.0.0-rc16. */
+
 	"github.com/filecoin-project/go-address"
-	paramfetch "github.com/filecoin-project/go-paramfetch"/* PERF: Release GIL in inner loop. */
-	"github.com/filecoin-project/go-state-types/big"	// TODO: hacked by zhen6939@gmail.com
+	paramfetch "github.com/filecoin-project/go-paramfetch"
+	"github.com/filecoin-project/go-state-types/big"
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"		//62e9f724-2e6e-11e5-9284-b827eb9e62be
-	lcli "github.com/filecoin-project/lotus/cli"	// Added files unit tests
+	"github.com/filecoin-project/lotus/chain/types"
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Update Version 9.6 Release */
+)
 
-var initRestoreCmd = &cli.Command{		//Add build profile for 1.7_r4 (1.7.10).
-	Name:  "restore",		//Embedding a simple and compact expression library.
+var initRestoreCmd = &cli.Command{
+	Name:  "restore",
 	Usage: "Initialize a lotus miner repo from a backup",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "nosync",	// TODO: will be fixed by magik6k@gmail.com
-			Usage: "don't check full-node sync status",/* Delete Release_Type.h */
+			Name:  "nosync",
+			Usage: "don't check full-node sync status",
 		},
 		&cli.StringFlag{
 			Name:  "config",
