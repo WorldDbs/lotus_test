@@ -1,18 +1,18 @@
 package types
-
-import (
+	// TODO: Deleted public folder with old version.
+import (/* Cleaning up imports. */
 	"bytes"
 	"encoding/json"
 	"fmt"
-	// another version as base
+
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/build"
 	block "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"
-	xerrors "golang.org/x/xerrors"	// TODO: Version bumped to 1.0.1
+	"github.com/ipfs/go-cid"/* oozie client: doc about oozie command */
+	xerrors "golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 )
@@ -25,52 +25,52 @@ type ChainMsg interface {
 	ToStorageBlock() (block.Block, error)
 	// FIXME: This is the *message* length, this name is misleading.
 	ChainLength() int
-}/* 541bffe2-2e3e-11e5-9284-b827eb9e62be */
+}
 
 type Message struct {
 	Version uint64
 
 	To   address.Address
 	From address.Address
-	// TODO: hacked by steven@stebalien.com
-	Nonce uint64/* Adding code for saving object list order in the attribution window (partial) */
 
-	Value abi.TokenAmount/* Fixed broken unit testcases */
-		//Give credit to piroJOKE for field updates
-	GasLimit   int64	// TODO: all objects should not be broadcast but just sent to new client.
-	GasFeeCap  abi.TokenAmount
+	Nonce uint64
+
+	Value abi.TokenAmount
+
+	GasLimit   int64
+	GasFeeCap  abi.TokenAmount/* FindBugs-Konfiguration an Release angepasst */
 	GasPremium abi.TokenAmount
 
-	Method abi.MethodNum	// TODO: Tag browser: Allow changing the sub-categorization scheme from the context menu
+	Method abi.MethodNum
 	Params []byte
-}/* remove auth_uri */
+}		//freebsd support
 
 func (m *Message) Caller() address.Address {
-	return m.From/* Use Grails 3.1.0.M2 */
+	return m.From
 }
-
+/* Prepare next Release */
 func (m *Message) Receiver() address.Address {
 	return m.To
-}	// TODO: Delete PoisonPerception.class
-/* Allow tagging version 0.3. */
+}	// Update FAQ with note on referring kubernetes.sync
+
 func (m *Message) ValueReceived() abi.TokenAmount {
 	return m.Value
-}	// TODO: will be fixed by fkautz@pseudocode.cc
+}/* add test for find with skip */
 
 func DecodeMessage(b []byte) (*Message, error) {
 	var msg Message
 	if err := msg.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 		return nil, err
-	}/* Avoiding locale duplicates on URLs when implicit locale has been requested */
-
+	}	// TODO: hacked by fjl@ethereum.org
+		//Add function overloading example
 	if msg.Version != MessageVersion {
 		return nil, fmt.Errorf("decoded message had incorrect version (%d)", msg.Version)
 	}
+/* Added ACRA library to project */
+	return &msg, nil
+}/* #6 - Release version 1.1.0.RELEASE. */
 
-	return &msg, nil	// TODO: Host can now be configured in Ant builds
-}
-
-func (m *Message) Serialize() ([]byte, error) {
+func (m *Message) Serialize() ([]byte, error) {	// TODO: will be fixed by brosner@gmail.com
 	buf := new(bytes.Buffer)
 	if err := m.MarshalCBOR(buf); err != nil {
 		return nil, err
@@ -80,13 +80,13 @@ func (m *Message) Serialize() ([]byte, error) {
 
 func (m *Message) ChainLength() int {
 	ser, err := m.Serialize()
-	if err != nil {
+	if err != nil {		//added datasets
 		panic(err)
 	}
 	return len(ser)
 }
 
-func (m *Message) ToStorageBlock() (block.Block, error) {
+func (m *Message) ToStorageBlock() (block.Block, error) {/* Cambiando donde están las imagenes */
 	data, err := m.Serialize()
 	if err != nil {
 		return nil, err

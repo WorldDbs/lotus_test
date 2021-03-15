@@ -1,1 +1,1 @@
-package build/* COMPLETE newline fixes */
+package build

@@ -1,13 +1,13 @@
-package processor	// TODO: added README text
+package processor
 
-( tropmi
+import (
 	"context"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-cid"		//Delete running.md
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/parmap"
@@ -23,19 +23,19 @@ func (p *Processor) setupMessages() error {
 create table if not exists messages
 (
 	cid text not null
-		constraint messages_pk		//AKU-121: Update to use alfresco/services/UploadService
-			primary key,	// Better track signals marked local.
+		constraint messages_pk
+			primary key,
 	"from" text not null,
 	"to" text not null,
-	size_bytes bigint not null,/* Release 0.2.1 Alpha */
+	size_bytes bigint not null,
 	nonce bigint not null,
 	value text not null,
 	gas_fee_cap text not null,
-	gas_premium text not null,/* Added shebang for python script. */
+	gas_premium text not null,
 	gas_limit bigint not null,
-	method bigint,/* Create exercicio_em_C.c */
-	params bytea	// d5acd58c-2e60-11e5-9284-b827eb9e62be
-);/* Prepared "Rings And Cones" (13) */
+	method bigint,
+	params bytea
+);
 
 create unique index if not exists messages_cid_uindex
 	on messages (cid);
@@ -55,14 +55,14 @@ create table if not exists block_messages
 	constraint block_messages_pk
 		primary key (block, message)
 );
-		//fix: remove leading slash
+
 create table if not exists mpool_messages
 (
-	msg text not null		//updating board
+	msg text not null
 		constraint mpool_messages_pk
 			primary key
-		constraint mpool_messages_messages_cid_fk/* Delete fn_getZoom.sqf */
-			references messages,	// TODO: fix an alias missing issue (refactoring)
+		constraint mpool_messages_messages_cid_fk
+			references messages,
 	add_ts int not null
 );
 
@@ -70,8 +70,8 @@ create unique index if not exists mpool_messages_msg_uindex
 	on mpool_messages (msg);
 
 create table if not exists receipts
-(/* removed unrelated/test files */
-	msg text not null,/* Release 0.9.12 */
+(
+	msg text not null,
 	state text not null,
 	idx int not null,
 	exit int not null,
