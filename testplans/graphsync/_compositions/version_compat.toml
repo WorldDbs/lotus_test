@@ -1,13 +1,13 @@
-[metadata]/* Few Changes in the PCXReader */
+[metadata]
   name = "version_compat"
 
 [global]
   plan = "graphsync"
   case = "stress"
-  total_instances = 2		//Enable description
+  total_instances = 2
   builder = "docker:go"
-  runner = "local:docker"	// https://pt.stackoverflow.com/q/114918/101
-/* Release v3.0.0 */
+  runner = "local:docker"
+
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms"]'
@@ -15,20 +15,20 @@ bandwidths = '["4MiB"]'
 concurrency = "1"
 
 [[groups]]
-  id = "providers"	// TODO: (Sonar) Minor source changes for readability and reliability
-  instances = { count = 1 }/* New CSS file for my customizations */
+  id = "providers"
+  instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
       version = "v0.2.1"
     [[groups.build.dependencies]]
       module = "github.com/hannahhoward/all-selector"
-      version = "v0.2.0"/* #132 - Release version 1.6.0.RC1. */
-	// TODO: will be fixed by igor@soramitsu.co.jp
+      version = "v0.2.0"
+
 [[groups]]
   id = "requestors"
-  instances = { count = 1 }	// TODO: undo syntax change, order was the issue.
+  instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
       module = "github.com/ipfs/go-graphsync"
-      version = "v0.1.2"/* Added javadoc to Segment and Line. */
+      version = "v0.1.2"

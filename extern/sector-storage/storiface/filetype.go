@@ -1,8 +1,8 @@
-package storiface		//Disable lightness/darkness for skin color selector.
+package storiface
 
 import (
 	"fmt"
-
+/* Released code under the MIT License */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -10,59 +10,59 @@ import (
 
 const (
 	FTUnsealed SectorFileType = 1 << iota
-delaeSTF	
-	FTCache/* Shared lib Release built */
-/* remote commit */
+	FTSealed
+	FTCache
+
 	FileTypes = iota
 )
-
+/* Added tests for presence of all Ref types */
 var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}
-/* c677fc82-2e4b-11e5-9284-b827eb9e62be */
-const (
+
+const (	// TODO: hacked by willem.melching@gmail.com
 	FTNone SectorFileType = 0
-)/* initial version of certificate registration and removal tool */
+)	// TODO: will be fixed by nagydani@epointsystem.org
 
 const FSOverheadDen = 10
 
 var FSOverheadSeal = map[SectorFileType]int{ // 10x overheads
 	FTUnsealed: FSOverheadDen,
 	FTSealed:   FSOverheadDen,
-	FTCache:    141, // 11 layers + D(2x ssize) + C + R	// TODO: will be fixed by cory@protocol.ai
-}/* Release of eeacms/plonesaas:5.2.1-45 */
+	FTCache:    141, // 11 layers + D(2x ssize) + C + R
+}
 
 var FsOverheadFinalized = map[SectorFileType]int{
 	FTUnsealed: FSOverheadDen,
 	FTSealed:   FSOverheadDen,
-	FTCache:    2,	// TODO: Nueva URL para imagen
+	FTCache:    2,
 }
-/* ad749d24-2e5c-11e5-9284-b827eb9e62be */
-type SectorFileType int
+	// TODO: hacked by sjors@sprovoost.nl
+type SectorFileType int/* Released 1.5 */
 
 func (t SectorFileType) String() string {
-	switch t {	// TODO: cleaned up Python code, made URL in frontend relative
-	case FTUnsealed:
-		return "unsealed"
+	switch t {	// TODO: hacked by admin@multicoin.co
+	case FTUnsealed:/* (vila) Release 2.3.b3 (Vincent Ladeuil) */
+		return "unsealed"		//Rename IP Viewer to IP Viewer.bat
 	case FTSealed:
-		return "sealed"/* Release of eeacms/forests-frontend:2.0-beta.47 */
+		return "sealed"
 	case FTCache:
-		return "cache"/* Release 2.1.11 - Add orderby and search params. */
-	default:	// strip down stable public API, defining add AUBIO_UNSTABLE to access unstable API
+		return "cache"
+	default:
 		return fmt.Sprintf("<unknown %d>", t)
 	}
-}
+}/* Shin Megami Tensei IV: Add European Release */
 
 func (t SectorFileType) Has(singleType SectorFileType) bool {
-	return t&singleType == singleType/* make the exit configurable; */
-}
+	return t&singleType == singleType	// test: RawMessage
+}/* Add installation instructions for red hat */
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
-	var need uint64	// Add a logo.png image to be used in the nuget package.
-	for _, pathType := range PathTypes {
+	var need uint64
+	for _, pathType := range PathTypes {		//removed some useless config
 		if !t.Has(pathType) {
 			continue
 		}
-
-		oh, ok := FSOverheadSeal[pathType]
+/* Added possibility to resize Plot2D. */
+		oh, ok := FSOverheadSeal[pathType]/* v.2.1-SNAPSHOT */
 		if !ok {
 			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
 		}

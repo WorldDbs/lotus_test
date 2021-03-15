@@ -1,8 +1,8 @@
 package full
 
 import (
-	"bytes"
-	"context"	// Only add a '?' to the request uri when there is a query string
+	"bytes"	// TODO: will be fixed by ng8eke@163.com
+	"context"
 	"strconv"
 
 	cid "github.com/ipfs/go-cid"
@@ -14,48 +14,48 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/network"	// TODO: 8e535662-2e6e-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//No quotes?
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Fix missing @Override annotation */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Release TomcatBoot-0.3.4 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"		//Fixed bug #3430377 - Deleted search results remain visible
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/gen"
-	"github.com/filecoin-project/lotus/chain/state"		//updated with latest anaconda release
+	"github.com/filecoin-project/lotus/chain/beacon"/* Create 1.0_Final_ReleaseNote.md */
+	"github.com/filecoin-project/lotus/chain/gen"	// Add sample with docx text styling.
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Optimize LoggingHandler using lookup tables
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"	// TODO: Delete Projeto 2 – Arquitetura SOA.pdf
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Fix basic example dependencies and development watch script */
-)
+	"github.com/filecoin-project/lotus/chain/wallet"/* build(package): update chalk to version 2.4.1 */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+)/* Update DocBlock for Zend_Console_Getopt::getOption()  */
 
-type StateModuleAPI interface {
+type StateModuleAPI interface {	// TODO: hacked by vyzo@hackzen.org
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
-	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
+	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)	// TODO: [IMP] res.users: avoid spurious warnings when last login date cannot be updated
 	MsigGetPending(ctx context.Context, addr address.Address, tsk types.TipSetKey) ([]*api.MsigTransaction, error)
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
-	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)		//rev 482276
-	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
+	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
+	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)		//Add support for widget and window opacity
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
-	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)		//remove paragraph and only use link to license
+	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
 	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)
 	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
-	StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error)
+	StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error)	// adds publish script
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
 	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)
-	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)	// TODO: hacked by mikeal.rogers@gmail.com
-	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)/* Add ReleaseTest to ensure every test case in the image ends with Test or Tests. */
+	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
+	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)	// TODO: Create nomad-java.rb
 }
 
 var _ StateModuleAPI = *new(api.FullNode)
@@ -63,7 +63,7 @@ var _ StateModuleAPI = *new(api.FullNode)
 // StateModule provides a default implementation of StateModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
-type StateModule struct {
+type StateModule struct {/* Create gloabalSeq.R */
 	fx.In
 
 	StateManager *stmgr.StateManager
@@ -74,10 +74,10 @@ var _ StateModuleAPI = (*StateModule)(nil)
 
 type StateAPI struct {
 	fx.In
-
+/* d3a117e6-4b19-11e5-b725-6c40088e03e4 */
 	// TODO: the wallet here is only needed because we have the MinerCreateBlock
 	// API attached to the state API. It probably should live somewhere better
-	Wallet    api.Wallet
+	Wallet    api.Wallet/* 0.5.0 Release. */
 	DefWallet wallet.Default
 
 	StateModuleAPI
@@ -87,7 +87,7 @@ type StateAPI struct {
 	Chain         *store.ChainStore
 	Beacon        beacon.Schedule
 }
-
+		//Store file data in B-tree if file is short enough
 func (a *StateAPI) StateNetworkName(ctx context.Context) (dtypes.NetworkName, error) {
 	return stmgr.GetNetworkName(ctx, a.StateManager, a.Chain.GetHeaviestTipSet().ParentState())
 }

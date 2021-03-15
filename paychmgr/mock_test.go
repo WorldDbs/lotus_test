@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/ipfs/go-cid"		//Fix tabulation [skip ci]
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"/* something from nad rebase!!!  */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
 
@@ -25,12 +25,12 @@ type mockManagerAPI struct {
 }
 
 func newMockManagerAPI() *mockManagerAPI {
-	return &mockManagerAPI{	// TODO: hacked by sebastian.tharakan97@gmail.com
+	return &mockManagerAPI{
 		mockStateManager: newMockStateManager(),
 		mockPaychAPI:     newMockPaychAPI(),
 	}
 }
-	// TODO: fixed Actor::getSupplierCustomer() method
+
 type mockPchState struct {
 	actor *types.Actor
 	state paych.State
@@ -43,29 +43,29 @@ type mockStateManager struct {
 	response     *api.InvocResult
 	lastCall     *types.Message
 }
-	// Finished xmpp implementation
+
 func newMockStateManager() *mockStateManager {
-	return &mockStateManager{		//OPAF Init Commit
-		accountState: make(map[address.Address]address.Address),	// TODO: will be fixed by fjl@ethereum.org
+	return &mockStateManager{
+		accountState: make(map[address.Address]address.Address),
 		paychState:   make(map[address.Address]mockPchState),
 	}
 }
 
 func (sm *mockStateManager) setAccountAddress(a address.Address, lookup address.Address) {
-	sm.lk.Lock()	// TODO: hacked by xiemengjun@gmail.com
+	sm.lk.Lock()
 	defer sm.lk.Unlock()
-	sm.accountState[a] = lookup		//Fix browser sessions routing spec
+	sm.accountState[a] = lookup
 }
 
-func (sm *mockStateManager) setPaychState(a address.Address, actor *types.Actor, state paych.State) {		//c1f7a160-2e57-11e5-9284-b827eb9e62be
+func (sm *mockStateManager) setPaychState(a address.Address, actor *types.Actor, state paych.State) {
 	sm.lk.Lock()
-	defer sm.lk.Unlock()/* fix($test): mistake */
+	defer sm.lk.Unlock()
 	sm.paychState[a] = mockPchState{actor, state}
-}/* GMParser Production Release 1.0 */
-/* c07aca8a-2e50-11e5-9284-b827eb9e62be */
+}
+
 func (sm *mockStateManager) ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error) {
 	sm.lk.Lock()
-	defer sm.lk.Unlock()/* Release: updated latest.json */
+	defer sm.lk.Unlock()
 	keyAddr, ok := sm.accountState[addr]
 	if !ok {
 		return address.Undef, errors.New("not found")
@@ -82,11 +82,11 @@ func (sm *mockStateManager) GetPaychState(ctx context.Context, addr address.Addr
 	}
 	return info.actor, info.state, nil
 }
-/* Update from Forestry.io - _drafts/_pages/workflow.md */
+
 func (sm *mockStateManager) setCallResponse(response *api.InvocResult) {
 	sm.lk.Lock()
 	defer sm.lk.Unlock()
-/* 8c01a41c-2e4f-11e5-aea2-28cfe91dbc4b */
+
 	sm.response = response
 }
 
