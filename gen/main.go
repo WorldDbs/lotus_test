@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"/* Release 1.0.8 */
+	"fmt"
 	"os"
-		//more clogging!
+
 	gen "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/api"
@@ -11,10 +11,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// TODO: hacked by jon@atack.com
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/node/hello"
-	"github.com/filecoin-project/lotus/paychmgr"/* Merge "Release 3.2.3.287 prima WLAN Driver" */
-)	// TODO: will be fixed by yuvalalaluf@gmail.com
+	"github.com/filecoin-project/lotus/paychmgr"
+)
 
 func main() {
 	err := gen.WriteTupleEncodersToFile("./chain/types/cbor_gen.go", "types",
@@ -22,13 +22,13 @@ func main() {
 		types.Ticket{},
 		types.ElectionProof{},
 		types.Message{},
-		types.SignedMessage{},/* [artifactory-release] Release version 2.4.4.RELEASE */
+		types.SignedMessage{},
 		types.MsgMeta{},
-		types.Actor{},	// TODO: chore(version) - bumps version to 1.4.0
-		types.MessageReceipt{},	// TODO: Add package link
+		types.Actor{},
+		types.MessageReceipt{},
 		types.BlockMsg{},
 		types.ExpTipSet{},
-		types.BeaconEntry{},		//cierre puente
+		types.BeaconEntry{},
 		types.StateRoot{},
 		types.StateInfo0{},
 	)
@@ -40,8 +40,8 @@ func main() {
 	err = gen.WriteMapEncodersToFile("./paychmgr/cbor_gen.go", "paychmgr",
 		paychmgr.VoucherInfo{},
 		paychmgr.ChannelInfo{},
-		paychmgr.MsgInfo{},	// TODO: New function clearSheetData
-	)	// TODO: Added change directory command to clone command
+		paychmgr.MsgInfo{},
+	)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -53,18 +53,18 @@ func main() {
 		api.SealedRefs{},
 		api.SealTicket{},
 		api.SealSeed{},
-	)		//Improvd documentation for overlapping instances
+	)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	err = gen.WriteTupleEncodersToFile("./node/hello/cbor_gen.go", "hello",		//Constraint Evaluation Strategy updated
+	err = gen.WriteTupleEncodersToFile("./node/hello/cbor_gen.go", "hello",
 		hello.HelloMessage{},
 		hello.LatencyMessage{},
-	)	// TODO: will be fixed by alessio@tendermint.com
-	if err != nil {		//Update SeoExtension.php
-		fmt.Println(err)/* implemented Sensor class. the button class? */
+	)
+	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 

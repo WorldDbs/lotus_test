@@ -4,11 +4,11 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/json"
-	"fmt"	// TODO: Merge "Hygiene: Eliminate api fixmes from PageApi"
+	"fmt"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Making JSOG to work with Hibernate
-		//Rename testar-email-command-line.md to testar-email-command-line.txt
-"lanruoj/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+
+	"github.com/filecoin-project/lotus/journal"
 
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
@@ -18,33 +18,33 @@ import (
 
 	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by admin@multicoin.co
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"		//Added deploy.sh
+	"github.com/filecoin-project/go-state-types/crypto"
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"/* Create CONTRIBUTUNG.md */
-	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"		//0b3ZQbXbHp27NSEJfeXwvIbZicv7FgOa
+	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
+	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
-/* Working on the first drawings and events (paddle and ball) */
-	bstore "github.com/filecoin-project/lotus/blockstore"		//Updated README to use closure in subscription
-	"github.com/filecoin-project/lotus/build"/* Finished new tutorial mission */
-	"github.com/filecoin-project/lotus/chain/state"/* Release 4.3: merge domui-4.2.1-shared */
-	"github.com/filecoin-project/lotus/chain/store"/* Release 29.1.0 */
+
+	bstore "github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
-	// TODO: will be fixed by nagydani@epointsystem.org
+
 const AccountStart = 100
 const MinerStart = 1000
-const MaxAccounts = MinerStart - AccountStart	// TODO: Cmake out-of-source build adaptions
+const MaxAccounts = MinerStart - AccountStart
 
 var log = logging.Logger("genesis")
 
 type GenesisBootstrap struct {
-	Genesis *types.BlockHeader		//Updated build details
+	Genesis *types.BlockHeader
 }
 
 /*

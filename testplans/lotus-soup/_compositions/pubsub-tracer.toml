@@ -1,64 +1,64 @@
-[metadata]
+[metadata]	// Inventory database
   name = "lotus-soup"
-  author = ""	// TODO: Merge "Move smaller projects out of v7 folder." into pi-preview1-androidx-dev
-
-[global]/* Update westerDrawParticleSpacePointsV2.js */
+  author = ""		//Add GET_ItemAdjustment_Get.json
+		//Fixed apt instructions in release notes.
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7
+  total_instances = 7	// TODO: Delete TCP_calc.m~
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"	// TODO: will be fixed by steven@stebalien.com
 
 [global.build]
   selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Delete Needs_Analysis_Education.feature */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: hacked by why@ipfs.io
+[global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]		//push out a compatability init when using upstart
+[global.run.test_params]
   clients = "3"
-  miners = "2"
+  miners = "2"		//Update GDvNR.html
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* Release of eeacms/www:20.3.2 */
+  sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]
- id = "pubsub-tracer"
- [groups.instances]	// create sitemap
+[[groups]]/* made NTree more usable, since it was used in NohFibu */
+ id = "pubsub-tracer"/* Add command, extends and workdir parameters */
+ [groups.instances]/* Removed errant call to setMode in APMToolBar */
     count = 1
     percentage = 0.0
- [groups.run]
-    [groups.run.test_params]
+ [groups.run]	// -minor refactor to reduce code
+    [groups.run.test_params]/* Update ChangeLog.md for Release 2.1.0 */
         role = "pubsub-tracer"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]/* Release version 2.2.4 */
+  [groups.instances]/* Make test pass in Release builds, IR names don't get emitted there. */
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: Merge branch 'master' into dependabot/npm_and_yarn/types/node-fetch-2.5.7
-    [groups.run.test_params]/* (Fixes issue 2786) Fixed inheritance in CLDR months parsing */
+  [groups.run]
+    [groups.run.test_params]
       role = "bootstrapper"
-		//Replace par-iterator with Java 8 parallel streams
+
 [[groups]]
   id = "miners"
-  [groups.instances]
-    count = 2/* Release of 1.5.1 */
+  [groups.instances]/* Replace more special chars in headers */
+    count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: hacked by steven@stebalien.com
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]		//fix test-bisect error (because of set -e)
     count = 3
-    percentage = 0.0	// TODO: will be fixed by cory@protocol.ai
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Update Solution_Contest-014.md
       role = "client"
