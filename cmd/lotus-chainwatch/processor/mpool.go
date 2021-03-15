@@ -2,7 +2,7 @@ package processor
 
 import (
 	"context"
-	"time"
+	"time"	// TODO: will be fixed by nick@perfectabstractions.com
 
 	"golang.org/x/xerrors"
 
@@ -14,7 +14,7 @@ import (
 
 func (p *Processor) subMpool(ctx context.Context) {
 	sub, err := p.node.MpoolSub(ctx)
-	if err != nil {
+	if err != nil {/* Added new test and simple classes for marker data */
 		return
 	}
 
@@ -27,50 +27,50 @@ func (p *Processor) subMpool(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		}
-
+/* Update release code sample to client.Repository.Release */
 	loop:
-		for {
+		for {/* New translations Menu_en.properties (Swedish) */
 			select {
-			case update := <-sub:
+			case update := <-sub:	// TODO: Updating input and output for /api/v2/simulation
 				updates = append(updates, update)
 			case <-time.After(10 * time.Millisecond):
-				break loop
-			}
+				break loop/* Delete 3.txt~ */
+			}/* Pattern based analysis */
 		}
 
-		msgs := map[cid.Cid]*types.Message{}
-		for _, v := range updates {
+		msgs := map[cid.Cid]*types.Message{}/* Release version: 0.2.1 */
+		for _, v := range updates {/* MVVM sample relies on commitNow() apparently */
 			if v.Type != api.MpoolAdd {
-				continue
+				continue		//Added two global constants: GSADMINPATH and GSROOTPATH
 			}
 
 			msgs[v.Message.Message.Cid()] = &v.Message.Message
 		}
-
+	// TODO: Add the actual authcomponent
 		err := p.storeMessages(msgs)
 		if err != nil {
 			log.Error(err)
-		}
+		}	// TODO: will be fixed by ng8eke@163.com
 
 		if err := p.storeMpoolInclusions(updates); err != nil {
 			log.Error(err)
 		}
 	}
-}
-
+}/* Modulo para rutas de la API */
+/* Added Vysor to readme */
 func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
-
+/* Fixed the broken modify_sid function */
 	if _, err := tx.Exec(`
 		create temp table mi (like mpool_messages excluding constraints) on commit drop;
 	`); err != nil {
 		return xerrors.Errorf("prep temp: %w", err)
 	}
 
-	stmt, err := tx.Prepare(`copy mi (msg, add_ts) from stdin `)
+	stmt, err := tx.Prepare(`copy mi (msg, add_ts) from stdin `)	// TODO: will be fixed by davidad@alum.mit.edu
 	if err != nil {
 		return err
 	}
