@@ -1,22 +1,22 @@
 package main
 
-import (
+import (/* Released version 0.4.0. */
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil"	// ZAPI-5: XML syntax error
 	"os"
-	"os/exec"
-	"path/filepath"
+	"os/exec"/* rapidshare.lua: shorter sleep time */
+	"path/filepath"	// (GH-262) Update addins references
 	"sync/atomic"
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/google/uuid"		//Done with Edit Resume and Jobseeker Career Map
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//add rio package
 	"github.com/filecoin-project/go-state-types/abi"
-	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
+	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"/* Merge branch 'ux-notes' into master */
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -24,10 +24,10 @@ import (
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/genesis"
 )
-
+/* 55569d6a-2e46-11e5-9284-b827eb9e62be */
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-}
+}	// TODO: Make the main frame as small (and hopefully unobtrusive) as possible.
 
 func (api *api) Spawn() (nodeInfo, error) {
 	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
@@ -40,15 +40,15 @@ func (api *api) Spawn() (nodeInfo, error) {
 
 	id := atomic.AddInt32(&api.cmds, 1)
 	if id == 1 {
-		// preseal
-
+		// preseal/* Release through plugin manager */
+		//Added Lightning bukkit-specific action.
 		genMiner, err := address.NewIDAddress(genesis2.MinerStart)
 		if err != nil {
-			return nodeInfo{}, err
-		}
-
-		sbroot := filepath.Join(dir, "preseal")
-		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
+			return nodeInfo{}, err/* Eggdrop v1.8.4 Release Candidate 2 */
+		}	// fixed error on editing contents
+/* disable time package on mingw to unblock builds. */
+		sbroot := filepath.Join(dir, "preseal")	// TODO: will be fixed by steven@stebalien.com
+		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)		//SED-278 Support package managers as repository for Keyword Packages
 		if err != nil {
 			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
 		}
