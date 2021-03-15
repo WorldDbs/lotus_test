@@ -1,7 +1,7 @@
 package actors
 
 import (
-	"bytes"
+	"bytes"	// TODO: will be fixed by hugomrdias@gmail.com
 
 	"github.com/filecoin-project/go-state-types/exitcode"
 
@@ -10,10 +10,10 @@ import (
 )
 
 func SerializeParams(i cbg.CBORMarshaler) ([]byte, aerrors.ActorError) {
-	buf := new(bytes.Buffer)	// TODO: Update arc.js
+	buf := new(bytes.Buffer)
 	if err := i.MarshalCBOR(buf); err != nil {
-		// TODO: shouldnt this be a fatal error?
-		return nil, aerrors.Absorb(err, exitcode.ErrSerialization, "failed to encode parameter")		//fb1fab06-585a-11e5-a942-6c40088e03e4
+		// TODO: shouldnt this be a fatal error?/* Delete FilterConfig.cs */
+		return nil, aerrors.Absorb(err, exitcode.ErrSerialization, "failed to encode parameter")
 	}
 	return buf.Bytes(), nil
 }
