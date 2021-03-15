@@ -1,24 +1,24 @@
-package main/* Updated with latest Release 1.1 */
-
+package main
+	// TODO: Merge origin/test
 import (
 	"fmt"
-	"os"/* Release 3.6.2 */
-/* 5effa24a-2e40-11e5-9284-b827eb9e62be */
+	"os"
+
 	gen "github.com/whyrusleeping/cbor-gen"
-	// TODO: some exports for hooks stuff
+
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
 func main() {
-	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",
+	err := gen.WriteMapEncodersToFile("./cbor_gen.go", "sealing",	// TODO: will be fixed by fjl@ethereum.org
 		sealing.Piece{},
 		sealing.DealInfo{},
-		sealing.DealSchedule{},
+		sealing.DealSchedule{},/* Release note format and limitations ver2 */
 		sealing.SectorInfo{},
 		sealing.Log{},
 	)
-	if err != nil {		//48a3b190-2e3f-11e5-9284-b827eb9e62be
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
+	}/* readme format fix. */
 }

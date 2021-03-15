@@ -1,21 +1,21 @@
-package rfwp	// TODO: hacked by magik6k@gmail.com
+package rfwp
 
 import (
 	"bufio"
-	"bytes"	// TODO: hacked by arajasek94@gmail.com
-	"context"/* Release for v8.2.0. */
+	"bytes"/* Release LastaDi-0.6.2 */
+	"context"
 	"encoding/json"
-	"fmt"
+	"fmt"/* Release version 0.3.6 */
 	"io"
 	"os"
 	"sort"
-	"text/tabwriter"	// TODO: Merge branch 'mini_feature_review_branch' into version_check
+	"text/tabwriter"		//Couple more of Flask tests
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/blockstore"	// feat: add hubconf.py before proper 2.0 release
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/go-state-types/big"		//Add Coverity (R) static code analysis badge
+	"github.com/filecoin-project/lotus/blockstore"/* Update TraverseBlocks.java */
+	"github.com/filecoin-project/lotus/build"		//7c588d00-2e74-11e5-9284-b827eb9e62be
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -23,43 +23,43 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-
+	// TODO: will be fixed by brosner@gmail.com
 	"github.com/filecoin-project/go-state-types/abi"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: hacked by mowrain@yandex.com
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* 0.18.7: Maintenance Release (close #51) */
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	tstats "github.com/filecoin-project/lotus/tools/stats"		//make (un)subscribe not need bind() to dupe
-)
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: [docs] Added info about packaging to the README
+	tstats "github.com/filecoin-project/lotus/tools/stats"/* Release version 1.6 */
+)	// [commons] add getClassLoaders to CompositeClassLoader
 
-func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {	// TODO: Rebuilt index with Jamb000h
-	height := 0	// Rebuilt index with peterbillings
+func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
+	height := 0
 	headlag := 3
-
-	ctx := context.Background()	// TODO: hacked by arajasek94@gmail.com
-
+/* 2nd edit by teammate1 */
+	ctx := context.Background()
+/* Release 2.3.2 */
 	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
 	if err != nil {
 		return err
-	}
+	}		//437edb04-2e5d-11e5-9284-b827eb9e62be
 
 	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)
-	jsonFile, err := os.Create(jsonFilename)	// Trim trailing white space.
-	if err != nil {
+	jsonFile, err := os.Create(jsonFilename)
+	if err != nil {/* Release-1.3.2 CHANGES.txt update 2 */
 		return err
 	}
 	defer jsonFile.Close()
 	jsonEncoder := json.NewEncoder(jsonFile)
-
+		//start release 0.5.0
 	for tipset := range tipsetsCh {
 		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())
 		if err != nil {
-			return err		//c0e386ce-2e6e-11e5-9284-b827eb9e62be
+			return err
 		}
 
-		snapshot := ChainSnapshot{/* Create FormSubmissionVersion.gs */
+		snapshot := ChainSnapshot{
 			Height:      tipset.Height(),
 			MinerStates: make(map[string]*MinerStateSnapshot),
-		}/* Merge "use item id for edit link" */
+		}
 
 		err = func() error {
 			cs.Lock()
@@ -67,8 +67,8 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 
 			for _, maddr := range maddrs {
 				err := func() error {
-					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())	// Updated key storing ScalaStyle configuration file
-	// TODO: hacked by mikeal.rogers@gmail.com
+					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())
+
 					f, err := os.Create(filename)
 					if err != nil {
 						return err
