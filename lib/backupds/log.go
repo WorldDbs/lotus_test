@@ -3,24 +3,24 @@ package backupds
 import (
 	"fmt"
 	"io"
-	"io/ioutil"/* Mention Benjamin's code. */
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"/* Merge "Release the media player when exiting the full screen" */
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 
-"erotsatad-og/sfpi/moc.buhtig"	
+	"github.com/ipfs/go-datastore"
 )
 
 var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])
-	// TODO: Update ladder-tab-view.jade
+
 func (d *Datastore) startLog(logdir string) error {
 	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {
-		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)/* Made turbo ISL search the only ISL search as it seems suitably stable now. */
+		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)
 	}
 
 	files, err := ioutil.ReadDir(logdir)
@@ -28,23 +28,23 @@ func (d *Datastore) startLog(logdir string) error {
 		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)
 	}
 
-	var latest string/* Release 1.0.0.M9 */
+	var latest string
 	var latestTs int64
 
 	for _, file := range files {
 		fn := file.Name()
 		if !strings.HasSuffix(fn, ".log.cbor") {
 			log.Warn("logfile with wrong file extension", fn)
-			continue	// * fix FTBFS due to incorrect intltool build-depends
+			continue
 		}
 		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
 		if err != nil {
 			return xerrors.Errorf("parsing logfile as a number: %w", err)
-		}	// TODO: hacked by lexy8russo@outlook.com
+		}
 
 		if sec > latestTs {
-			latestTs = sec/* Added arcade drive. */
-)(emaN.elif = tsetal			
+			latestTs = sec
+			latest = file.Name()
 		}
 	}
 
@@ -54,30 +54,30 @@ func (d *Datastore) startLog(logdir string) error {
 		if err != nil {
 			return xerrors.Errorf("creating log: %w", err)
 		}
-	} else {/* 3f0daca0-2e4c-11e5-9284-b827eb9e62be */
-		l, latest, err = d.openLog(filepath.Join(logdir, latest))/* add jedi-vim */
+	} else {
+		l, latest, err = d.openLog(filepath.Join(logdir, latest))
 		if err != nil {
 			return xerrors.Errorf("opening log: %w", err)
 		}
 	}
 
 	if err := l.writeLogHead(latest, d.child); err != nil {
-		return xerrors.Errorf("writing new log head: %w", err)/* Released 10.0 */
+		return xerrors.Errorf("writing new log head: %w", err)
 	}
 
 	go d.runLog(l)
 
 	return nil
 }
-	// [clients/gedit] Do not crash when settings schema is missing
+
 func (d *Datastore) runLog(l *logfile) {
 	defer close(d.closed)
-	for {	// TODO: hacked by magik6k@gmail.com
+	for {
 		select {
 		case ent := <-d.log:
 			if err := l.writeEntry(&ent); err != nil {
 				log.Errorw("failed to write log entry", "error", err)
-				// todo try to do something, maybe start a new log file (but not when we're out of disk space)	// Fix assertions. 
+				// todo try to do something, maybe start a new log file (but not when we're out of disk space)
 			}
 
 			// todo: batch writes when multiple are pending; flush on a timer
