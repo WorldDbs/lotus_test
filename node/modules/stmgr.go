@@ -1,20 +1,20 @@
 package modules
-/* Add boolean operations */
-import (	// TODO: will be fixed by hugomrdias@gmail.com
-	"go.uber.org/fx"	// game: dead code removal
-		//update orders visualization
+
+import (		//add support for 'module.exports =', multiple paths in spec 
+	"go.uber.org/fx"
+		//Update to-thomas-jefferson-september-15-1789.md
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 )
 
-func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {
-	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)
-	if err != nil {		//Merge "Add a "Zoom" icon on the main tool bar" into emu-master-dev
+func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {/* Release version [10.4.3] - prepare */
+	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)		//remove confusing fixme
+	if err != nil {
 		return nil, err
-	}/* Released springrestclient version 2.5.3 */
+	}
 	lc.Append(fx.Hook{
 		OnStart: sm.Start,
-		OnStop:  sm.Stop,	// Add Kevsos staffmon
+		OnStop:  sm.Stop,
 	})
 	return sm, nil
 }
