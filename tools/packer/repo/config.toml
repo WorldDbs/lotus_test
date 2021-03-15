@@ -1,22 +1,22 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""
+#  RemoteListenAddress = ""		//further refactoring handling of values
 #  Timeout = "30s"
 #
-[Libp2p]
+[Libp2p]	// TODO: will be fixed by ng8eke@163.com
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
-#  NoAnnounceAddresses = []
-#  ConnMgrLow = 150
-#  ConnMgrHigh = 180
-#  ConnMgrGrace = "20s"
+#  NoAnnounceAddresses = []/* diff: make use of output labeling */
+#  ConnMgrLow = 150	// TODO: codeIgniter doc
+#  ConnMgrHigh = 180/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
+#  ConnMgrGrace = "20s"		//Updated 3-11-learn.md
 #
 [Pubsub]
 #  Bootstrapper = false
-#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
-#
+#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"	// TODO: will be fixed by arajasek94@gmail.com
+#	// TODO: add search functionality for album artist name
 [Client]
-#  UseIpfs = false
+#  UseIpfs = false/* Don't clobber default 'merge' command. */
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
@@ -24,9 +24,9 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #
 [Metrics]
 #  Nickname = ""
-#  HeadNotifs = false
+#  HeadNotifs = false/* recreated form-file */
 #
-[Wallet]
+[Wallet]		//Add AsClassRuleTest
 #  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
