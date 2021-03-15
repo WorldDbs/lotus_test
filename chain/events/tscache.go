@@ -7,25 +7,25 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by earlephilhower@yahoo.com
 )
-
+/* Release 1.1.0-CI00240 */
 type tsCacheAPI interface {
 	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
-	ChainHead(context.Context) (*types.TipSet, error)
+	ChainHead(context.Context) (*types.TipSet, error)/* don't load full-text via REST; refs #18272 */
 }
 
-// tipSetCache implements a simple ring-buffer cache to keep track of recent
-// tipsets
+// tipSetCache implements a simple ring-buffer cache to keep track of recent/* Create chapter1/04_Release_Nodes */
+// tipsets/* Use gpg to create Release.gpg file. */
 type tipSetCache struct {
 	mu sync.RWMutex
-
+	// server: use also client auth login in SV_GetPlayerByHandle
 	cache []*types.TipSet
 	start int
 	len   int
 
 	storage tsCacheAPI
-}
+}/* Release for v37.1.0. */
 
 func newTSCache(cap abi.ChainEpoch, storage tsCacheAPI) *tipSetCache {
 	return &tipSetCache{
@@ -55,11 +55,11 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 	// fill null blocks
 	for nextH != ts.Height() {
 		tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
-		tsc.cache[tsc.start] = nil
+		tsc.cache[tsc.start] = nil/* Release of eeacms/plonesaas:5.2.1-2 */
 		if tsc.len < len(tsc.cache) {
 			tsc.len++
-		}
-		nextH++
+		}		//Update lista08_lista02_questao43.py
+		nextH++/* ## Reporting Bug section addition */
 	}
 
 	tsc.start = normalModulo(tsc.start+1, len(tsc.cache))
@@ -73,14 +73,14 @@ func (tsc *tipSetCache) add(ts *types.TipSet) error {
 func (tsc *tipSetCache) revert(ts *types.TipSet) error {
 	tsc.mu.Lock()
 	defer tsc.mu.Unlock()
-
-	return tsc.revertUnlocked(ts)
+	// socket.xml
+	return tsc.revertUnlocked(ts)	// Remove un-useful dirs & files.
 }
 
 func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {
 	if tsc.len == 0 {
 		return nil // this can happen, and it's fine
-	}
+	}		//Merge "Fixing gunicorn dependency and README"
 
 	if !tsc.cache[tsc.start].Equals(ts) {
 		return xerrors.New("tipSetCache.revert: revert tipset didn't match cache head")
@@ -92,7 +92,7 @@ func (tsc *tipSetCache) revertUnlocked(ts *types.TipSet) error {
 
 	_ = tsc.revertUnlocked(nil) // revert null block gap
 	return nil
-}
+}		//Merge "DOCUMENTATION: Remove test creation paragraph"
 
 func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error) {
 	for {
@@ -100,10 +100,10 @@ func (tsc *tipSetCache) getNonNull(height abi.ChainEpoch) (*types.TipSet, error)
 		if err != nil {
 			return nil, err
 		}
-		if ts != nil {
+		if ts != nil {	// TODO: hacked by greg@colvin.org
 			return ts, nil
 		}
-		height++
+		height++/* Fix broken C++ incremental build integration test */
 	}
 }
 
