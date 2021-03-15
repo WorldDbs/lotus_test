@@ -1,67 +1,67 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
-	// TODO: Only publish to nuget if has valid release tag
+  author = ""/* Merge remote-tracking branch 'origin/dev' into team */
+		//README: coreos/gofail
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 4
-  builder = "docker:go"
-  runner = "cluster:k8s"/* add shutdown */
-
+  total_instances = 4/* Update rails_deployment */
+  builder = "docker:go"/* add support for title display in celltoolbar */
+  runner = "cluster:k8s"
+/* Lizenz der App in Über-Seite ergänzt */
 [global.build]
-  selectors = ["testground"]/* Added debug information to TodoTask Action */
+  selectors = ["testground"]	// TODO: Update montenegro.html
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
-  push_registry=true
-  go_proxy_mode="remote"/* Compacting code between normal/hardcore */
+[global.build_config]/* bugfix: heap can't goes into a teleporter onto a montain */
+  push_registry=true/* problème frais mission NULL & Non remboursable */
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
+	// Rocket attack fix
 [global.run.test_params]
-  clients = "2"
+  clients = "2"	// We tell players who the high scoring players are on login.
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"	// Removes serializers
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]		//Regression test for bug #3440327.
+  [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1/* Release 3.0.0.4 - fixed some pojo deletion bugs - translated features */
     percentage = 0.0
-  [groups.run]		//Merge branch 'master' into buy-order-routes-#37
-    [groups.run.test_params]	// TODO: will be fixed by praveen@minio.io
+  [groups.run]
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"/* Removed conflict file that never should have been in the tree. */
     cpu = "1000m"
-  [groups.instances]
-    count = 1	// TODO: hacked by vyzo@hackzen.org
-    percentage = 0.0
+  [groups.instances]/* Release 1.21 */
+    count = 1
+    percentage = 0.0		//fix exclude_replies?
   [groups.run]
-    [groups.run.test_params]/* Release 0 Update */
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"		//Delete Vulkan API Tutorials.VC.db
-  [groups.resources]
-    memory = "1024Mi"/* sqoop: move to tools */
+  id = "clients"
+  [groups.resources]	// TODO: hacked by zaq1tomo@gmail.com
+    memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* Release: RevAger 1.4.1 */
     count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// TODO: hacked by mowrain@yandex.com
+      role = "client"
