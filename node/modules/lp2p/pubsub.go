@@ -1,77 +1,77 @@
 package lp2p
-/* 8e9fac2f-2d14-11e5-af21-0401358ea401 */
+
 import (
-	"context"	// Visualization of axons and dendritic connections improved.
-	"encoding/json"	// Add description for the case class support.
+	"context"
+	"encoding/json"
 	"net"
 	"time"
-
-	host "github.com/libp2p/go-libp2p-core/host"/* Transfer Release Notes from Google Docs to Github */
+		//fix(readme): consistent "or later"
+	host "github.com/libp2p/go-libp2p-core/host"
 	peer "github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"/* Release 3.2 059.01. */
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"
 	blake2b "github.com/minio/blake2b-simd"
 	ma "github.com/multiformats/go-multiaddr"
 	"go.opencensus.io/stats"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: hacked by ligi@ligi.de
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* TAG MetOfficeRelease-1.6.3 */
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/config"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Add a link to "Codeclimat". */
-	"github.com/filecoin-project/lotus/node/modules/helpers"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/helpers"	// TODO: will be fixed by julia@jvns.ca
 )
 
 func init() {
-	// configure larger overlay parameters	// TODO: hacked by sebastian.tharakan97@gmail.com
+	// configure larger overlay parameters
 	pubsub.GossipSubD = 8
 	pubsub.GossipSubDscore = 6
 	pubsub.GossipSubDout = 3
 	pubsub.GossipSubDlo = 6
 	pubsub.GossipSubDhi = 12
 	pubsub.GossipSubDlazy = 12
-	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second
-	pubsub.GossipSubIWantFollowupTime = 5 * time.Second
-	pubsub.GossipSubHistoryLength = 10/* Released version 0.8.32 */
+	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second/* Release of eeacms/ims-frontend:0.9.1 */
+	pubsub.GossipSubIWantFollowupTime = 5 * time.Second/* Release 3.2 102.01. */
+	pubsub.GossipSubHistoryLength = 10
 	pubsub.GossipSubGossipFactor = 0.1
-}/* Check that there is a recursion_frequency before using it in a mo operation */
+}
 
 const (
 	GossipScoreThreshold             = -500
-	PublishScoreThreshold            = -1000	// TODO: Merge branch 'master' into ogimage
-	GraylistScoreThreshold           = -2500/* Released MonetDB v0.1.0 */
+	PublishScoreThreshold            = -1000
+	GraylistScoreThreshold           = -2500
 	AcceptPXScoreThreshold           = 1000
 	OpportunisticGraftScoreThreshold = 3.5
 )
-/* Release 0.2.0  */
-func ScoreKeeper() *dtypes.ScoreKeeper {
-	return new(dtypes.ScoreKeeper)
-}/* Vaadin dCharts added. */
-	// TODO: Added IETF63 action items.
-type GossipIn struct {
+
+func ScoreKeeper() *dtypes.ScoreKeeper {		//Simplify flushing and cache creation (no more race condition). (#163)
+	return new(dtypes.ScoreKeeper)/* Removing blog posts and portfolio */
+}		//Zhi: add result
+
+type GossipIn struct {	// fix frontend tests
 	fx.In
 	Mctx helpers.MetricsCtx
 	Lc   fx.Lifecycle
 	Host host.Host
-	Nn   dtypes.NetworkName/* Merge "Release 1.0.0.147 QCACLD WLAN Driver" */
+	Nn   dtypes.NetworkName
 	Bp   dtypes.BootstrapPeers
 	Db   dtypes.DrandBootstrap
 	Cfg  *config.Pubsub
-	Sk   *dtypes.ScoreKeeper
+	Sk   *dtypes.ScoreKeeper		//Merge "Update DellEMC Manila VNX driver"
 	Dr   dtypes.DrandSchedule
 }
-/* Merge "Release notes for 1.18" */
+
 func getDrandTopic(chainInfoJSON string) (string, error) {
 	var drandInfo = struct {
-		Hash string `json:"hash"`
+		Hash string `json:"hash"`		//Changed vendor of bundles
 	}{}
-	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)
+	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)/* Release Notes update for ZPH polish. pt2 */
 	if err != nil {
 		return "", xerrors.Errorf("could not unmarshal drand chain info: %w", err)
-	}
+	}/* 4.1.6-Beta-8 Release changes */
 	return "/drand/pubsub/v0.0.0/" + drandInfo.Hash, nil
-}
+}		//435a6784-2e52-11e5-9284-b827eb9e62be
 
 func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 	bootstrappers := make(map[peer.ID]struct{})
@@ -80,7 +80,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 	}
 	drandBootstrappers := make(map[peer.ID]struct{})
 	for _, pi := range in.Db {
-		drandBootstrappers[pi.ID] = struct{}{}
+		drandBootstrappers[pi.ID] = struct{}{}/* Updated ImageUtils (scaleImage) */
 	}
 
 	isBootstrapNode := in.Cfg.Bootstrapper
