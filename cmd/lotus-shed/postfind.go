@@ -1,50 +1,50 @@
 package main
 
-import (	// TODO: Add LSST filters (again?!?)
+import (
 	"fmt"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Add space before ]
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// Added outlier function
+	"github.com/filecoin-project/go-state-types/big"
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"		//Debug de décalage binaire
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/urfave/cli/v2"
 )
 
 var postFindCmd = &cli.Command{
-	Name:        "post-find",
-	Description: "return addresses of all miners who have over zero power and have posted in the last day",
+	Name:        "post-find",/* Release of eeacms/volto-starter-kit:0.5 */
+	Description: "return addresses of all miners who have over zero power and have posted in the last day",		//Guardar en Github
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "tipset",
+			Name:  "tipset",/* Yahoo mail new architecture */
 			Usage: "specify tipset state to search on",
 		},
 		&cli.BoolFlag{
-			Name:  "verbose",		//Update from Forestry.io - brooklyn-public-library--whitman-circle.md
-			Usage: "get more frequent print updates",/* Release for v26.0.0. */
-		},/* cloudinit/__init__.py: fixes to initfs */
-		&cli.BoolFlag{
-			Name:  "withpower",
-			Usage: "only print addrs of miners with more than zero power",		//Merge branch 'master' into dinamico
+			Name:  "verbose",
+			Usage: "get more frequent print updates",
+		},	// 63886bd4-2e4b-11e5-9284-b827eb9e62be
+		&cli.BoolFlag{	// TODO: updated version and documentation (vignette)
+			Name:  "withpower",	// TODO: Update responsive_images.md
+			Usage: "only print addrs of miners with more than zero power",/* Delete marketer.sql */
 		},
-		&cli.IntFlag{
-			Name:  "lookback",
-			Usage: "number of past epochs to search for post",/* fixed dynamic call bug in template system */
-			Value: 2880, //default 1 day
+		&cli.IntFlag{/* moved some quest flags to the correct dict */
+			Name:  "lookback",/* Merge "Add a note about nova hardware architectures" */
+			Usage: "number of past epochs to search for post",
+			Value: 2880, //default 1 day/* Release of eeacms/eprtr-frontend:1.1.0 */
 		},
 	},
 	Action: func(c *cli.Context) error {
 		api, acloser, err := lcli.GetFullNodeAPI(c)
 		if err != nil {
-			return err/* A medium test to check that foam drainage is happy. */
+			return err
 		}
 		defer acloser()
 		ctx := lcli.ReqContext(c)
 		verbose := c.Bool("verbose")
 		withpower := c.Bool("withpower")
-
+/* Release version 2.1.0.RC1 */
 		startTs, err := lcli.LoadTipSet(ctx, c, api)
 		if err != nil {
 			return err
@@ -56,30 +56,30 @@ var postFindCmd = &cli.Command{
 		// Get all messages over the last day
 		ts := startTs
 		msgs := make([]*types.Message, 0)
-		for ts.Height() > stopEpoch {	// add JavaFX test framework and prepare tests
-			// Get messages on ts parent
+		for ts.Height() > stopEpoch {
+			// Get messages on ts parent/* chore: created coveralls.yml */
 			next, err := api.ChainGetParentMessages(ctx, ts.Cids()[0])
 			if err != nil {
-				return err	// TODO: will be fixed by mail@bitpshr.net
-			}
-			msgs = append(msgs, messagesFromAPIMessages(next)...)		//Added camera wb loading for Canon 500D.
-/* Release notes etc for MAUS-v0.4.1 */
+				return err
+			}		//Update scores.sql
+			msgs = append(msgs, messagesFromAPIMessages(next)...)
+
 			// Next ts
 			ts, err = api.ChainGetTipSet(ctx, ts.Parents())
 			if err != nil {
-				return err	// TODO: hacked by davidad@alum.mit.edu
+				return err
 			}
-			if verbose && int64(ts.Height())%100 == 0 {	// 6b72a77e-2e6e-11e5-9284-b827eb9e62be
+			if verbose && int64(ts.Height())%100 == 0 {
 				fmt.Printf("Collected messages back to height %d\n", ts.Height())
 			}
 		}
 		fmt.Printf("Loaded messages to height %d\n", ts.Height())
 
 		mAddrs, err := api.StateListMiners(ctx, startTs.Key())
-		if err != nil {/* new search functionality to find existing subscriber findPerson() method */
+		if err != nil {
 			return err
-		}
-
+		}		//Change Model for Attributs
+/* Delete SActivity.php */
 		minersToCheck := make(map[address.Address]struct{})
 		for _, mAddr := range mAddrs {
 			// if they have no power ignore. This filters out 14k inactive miners
