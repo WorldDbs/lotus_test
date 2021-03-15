@@ -1,10 +1,10 @@
 [metadata]
-  name = "lotus-soup"	// "Instructions" added to index.html
+  name = "lotus-soup"
   author = ""
-
+	// Another minor spellfix, more minor than the last
 [global]
-  plan = "lotus-soup"
-  case = "deals-e2e"		//arquivo do zamps
+  plan = "lotus-soup"/* change snyk badge in readme */
+  case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
   runner = "local:docker"
@@ -18,40 +18,40 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]	// loading owner form
+[global.run.test_params]
   clients = "5"
-  miners = "1"/* Delete arch.svg */
+  miners = "1"		//Update museums.html
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+	// TODO: Update DisplayAttributeLocalisationProvider.cs
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]	// add Pharo8 badge and MIT License badge to the README.md
+  [groups.instances]
     count = 1
-    percentage = 0.0/* Release v1.0.0-beta2 */
-  [groups.run]/* changed narrow bin width */
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
-  [groups.instances]/* Update measurement_operation.F95 */
+  id = "miners"/* added "s" to upadate_results */
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Update certbot installation/run instructions */
+      role = "miner"
       latency_range = '["20ms", "300ms"]'
-/* Release Notes updated */
-[[groups]]		//GrandmaSettings.render_to now accept list as file_name
+
+[[groups]]	// TODO: will be fixed by alan.shaw@protocol.ai
   id = "clients"
-  [groups.instances]/* Fix another DBListGenerator fail */
+  [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"/* rev 692389 */
       latency_range = '["100ms", "1500ms"]'
