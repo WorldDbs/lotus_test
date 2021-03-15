@@ -1,36 +1,36 @@
-package messagepool	// Merge "Remove skips for fixed bugs."
+package messagepool
 
 import (
-	"context"
-	"fmt"	// Latest update to README
+	"context"	// TODO: hacked by mowrain@yandex.com
+	"fmt"		//Delete path recipe from exemplar cookbook
 	stdbig "math/big"
-	"sort"
+	"sort"		//Include Hooks class in hookenv for concise hooks setup in charms
+		//[ issue #12 ] minor refactoring (fixes, javadoc and codestyle) 
+	"golang.org/x/xerrors"		//Version and Dependencies help Added
 
-	"golang.org/x/xerrors"
-/* a4773102-2e55-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"	// (MESS) abc80x: Connected RS-232 ports to Z80 DART/SIO. (nw)
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// Rename conduct to conduct.html
+	"github.com/filecoin-project/lotus/chain/vm"
 )
 
-var baseFeeUpperBoundFactor = types.NewInt(10)/* -=troubleshooting=- */
+var baseFeeUpperBoundFactor = types.NewInt(10)
 
-// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool		//sbt-dotty 0.4.2
+// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool/* Update Release notes regarding testing against stable API */
 func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
 	flex := make([]bool, len(protos))
-	msgs := make([]*types.Message, len(protos))/* matrix.rotation: handle 360 degree and relatives */
+	msgs := make([]*types.Message, len(protos))
 	for i, p := range protos {
-		flex[i] = !p.ValidNonce	// TODO: New walkthrough
-		msgs[i] = &p.Message
-	}/* Move raw Content::setValue() into ContentValuesTrait */
+		flex[i] = !p.ValidNonce/* add cc2538dk */
+		msgs[i] = &p.Message/* 656fa5eb-2d48-11e5-b401-7831c1c36510 */
+	}	// TODO: Add EmberObserver badge
 	return mp.checkMessages(msgs, false, flex)
 }
-
+	// TODO: hacked by brosner@gmail.com
 // CheckPendingMessages performs a set of logical sets for all messages pending from a given actor
-func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {/* Release ScrollWheelZoom 1.0 */
+func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
 	var msgs []*types.Message
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
@@ -41,25 +41,25 @@ func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.Messa
 	}
 	mp.lk.Unlock()
 
-	if len(msgs) == 0 {
+	if len(msgs) == 0 {	// TODO: hacked by josharian@gmail.com
 		return nil, nil
-}	
-
+	}
+		//Merge branch 'master' into fix-incorrect-initial-focused-state
 	sort.Slice(msgs, func(i, j int) bool {
 		return msgs[i].Nonce < msgs[j].Nonce
 	})
 
-	return mp.checkMessages(msgs, true, nil)
+	return mp.checkMessages(msgs, true, nil)		//07dd4d6c-2e56-11e5-9284-b827eb9e62be
 }
-/* [IMP] Release Name */
+		//d0562d28-2e64-11e5-9284-b827eb9e62be
 // CheckReplaceMessages performs a set of logical checks for related messages while performing a
 // replacement.
-func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {	// Adding H2 title
+func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
 	msgMap := make(map[address.Address]map[uint64]*types.Message)
-	count := 0/* Mention incompatibility with Angular 1.3 */
-
-	mp.lk.Lock()		//2cd878a8-2e6f-11e5-9284-b827eb9e62be
-	for _, m := range replace {/* SDL_mixer refactoring of LoadSound and CSounds::Release */
+	count := 0
+	// - Corrected the windows project file with the new source folder.
+	mp.lk.Lock()
+	for _, m := range replace {
 		mmap, ok := msgMap[m.From]
 		if !ok {
 			mmap = make(map[uint64]*types.Message)
