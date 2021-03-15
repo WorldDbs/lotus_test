@@ -1,7 +1,7 @@
-package main	// Merge branch 'master' into greenkeeper/cosmiconfig-4.0.0
+package main
 
-import (/* Added a path-only filter and helper test. */
-	"fmt"
+import (
+	"fmt"	// Update SPARQL Queries.
 	"io/ioutil"
 	"os"
 )
@@ -11,23 +11,23 @@ func sanityCheck() {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
 	}
 
-	dir := "/var/tmp/filecoin-proof-parameters"
+	dir := "/var/tmp/filecoin-proof-parameters"/* Release 1.0.17 */
 	stat, err := os.Stat(dir)
-	if os.IsNotExist(err) {
+	if os.IsNotExist(err) {/* Release notes for 1.0.70 */
 		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
 	}
-	if err != nil {	// Fix of coding error
+	if err != nil {
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
-	}	// TODO: hacked by why@ipfs.io
-
-	if !stat.IsDir() {
-		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))	// TODO: hacked by lexy8russo@outlook.com
 	}
-	// TODO: hacked by arajasek94@gmail.com
+		//1.15x faster indexing tokenizer
+	if !stat.IsDir() {
+		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))
+	}
+
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
-	}/* Add ClipController */
+	}
 
 	if len(files) == 0 {
 		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))
