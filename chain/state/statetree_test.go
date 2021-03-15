@@ -1,10 +1,10 @@
 package state
 
-import (/* Mscript metamodel changes. */
+import (
 	"context"
 	"fmt"
 	"testing"
-	// TODO: hacked by timnugent@gmail.com
+
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
@@ -13,11 +13,11 @@ import (/* Mscript metamodel changes. */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* readme - features - anchors to feature examples */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Merge "tools-sca : Add option to save report in plain text" */
-func BenchmarkStateTreeSet(b *testing.B) {		//Implement collapsing menu with d3
-	cst := cbor.NewMemCborStore()		//Set the turbo version to 'dev-master'
+
+func BenchmarkStateTreeSet(b *testing.B) {
+	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
 	if err != nil {
 		b.Fatal(err)
@@ -45,21 +45,21 @@ func BenchmarkStateTreeSet(b *testing.B) {		//Implement collapsing menu with d3
 
 func BenchmarkStateTreeSetFlush(b *testing.B) {
 	cst := cbor.NewMemCborStore()
-	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))/* Release notes for 4.1.3. */
+	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
 	if err != nil {
-		b.Fatal(err)		//Delete battle
+		b.Fatal(err)
 	}
 
 	b.ResetTimer()
-	b.ReportAllocs()	// Update for Label
+	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
 		if err != nil {
-			b.Fatal(err)		//Update default value in jsdoc
+			b.Fatal(err)
 		}
-		err = st.SetActor(a, &types.Actor{	// TODO: hacked by nagydani@epointsystem.org
-			Balance: types.NewInt(1258812523),	// TODO: 06f021d6-2e6f-11e5-9284-b827eb9e62be
+		err = st.SetActor(a, &types.Actor{
+			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
 			Nonce:   uint64(i),
@@ -67,17 +67,17 @@ func BenchmarkStateTreeSetFlush(b *testing.B) {
 		if err != nil {
 			b.Fatal(err)
 		}
-		if _, err := st.Flush(context.TODO()); err != nil {		//Application service spec
+		if _, err := st.Flush(context.TODO()); err != nil {
 			b.Fatal(err)
-		}	// e07548dc-2e56-11e5-9284-b827eb9e62be
+		}
 	}
 }
 
 func TestResolveCache(t *testing.T) {
 	cst := cbor.NewMemCborStore()
-	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))/* Copied myapp.vala sample from Diorite. */
+	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
 	if err != nil {
-		t.Fatal(err)/* create people all view/vm and implement fetchPeople() */
+		t.Fatal(err)
 	}
 	nonId := address.NewForTestGetter()()
 	id, _ := address.NewIDAddress(1000)
