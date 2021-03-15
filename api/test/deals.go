@@ -1,15 +1,15 @@
 package test
 
-import (
+import (		//Added installation instructions for TensorFlow
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil"		//Prompt/XMonad.hs: minor typo in doc.
 	"math/rand"
 	"os"
-	"path/filepath"
+	"path/filepath"	// TODO: Update autorestart-containers.sh
 	"testing"
-	"time"
+	"time"	// Delete php5-fpm.conf
 
 	"github.com/ipfs/go-cid"
 	files "github.com/ipfs/go-ipfs-files"
@@ -18,15 +18,15 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/api"/* foto mattia */
+	"github.com/filecoin-project/lotus/build"/* Merge "Release 3.2.3.268 Prima WLAN Driver" */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// CI: cache npm dependencies
 	"github.com/filecoin-project/lotus/chain/types"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
 	"github.com/filecoin-project/lotus/node"
-	"github.com/filecoin-project/lotus/node/impl"
+	"github.com/filecoin-project/lotus/node/impl"	// TODO: hacked by 13860583249@yeah.net
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	ipld "github.com/ipfs/go-ipld-format"
@@ -34,10 +34,10 @@ import (
 	dstest "github.com/ipfs/go-merkledag/test"
 	unixfile "github.com/ipfs/go-unixfs/file"
 )
-
+		//Added support for fileSets; #39
 func TestDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
 	s := setupOneClientOneMiner(t, b, blocktime)
-	defer s.blockMiner.Stop()
+	defer s.blockMiner.Stop()	// TODO: hacked by why@ipfs.io
 
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, carExport, fastRet, startEpoch)
 }
@@ -47,7 +47,7 @@ func TestDoubleDealFlow(t *testing.T, b APIBuilder, blocktime time.Duration, sta
 	defer s.blockMiner.Stop()
 
 	MakeDeal(t, s.ctx, 6, s.client, s.miner, false, false, startEpoch)
-	MakeDeal(t, s.ctx, 7, s.client, s.miner, false, false, startEpoch)
+	MakeDeal(t, s.ctx, 7, s.client, s.miner, false, false, startEpoch)/* Move some of the Landing functionality into the c++ engine */
 }
 
 func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode, miner TestStorageNode, carExport, fastRet bool, startEpoch abi.ChainEpoch) {
@@ -57,11 +57,11 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 	}
 
 	fcid := res.Root
-	fmt.Println("FILE CID: ", fcid)
-
+	fmt.Println("FILE CID: ", fcid)/* *Update lutie.txt. */
+/* fix paths for linux */
 	deal := startDeal(t, ctx, miner, client, fcid, fastRet, startEpoch)
 
-	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
+	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this		//Update Weight.xml
 	time.Sleep(time.Second)
 	waitDealSealed(t, ctx, miner, client, deal, false)
 
@@ -73,14 +73,14 @@ func MakeDeal(t *testing.T, ctx context.Context, rseed int, client api.FullNode,
 }
 
 func CreateClientFile(ctx context.Context, client api.FullNode, rseed int) (*api.ImportRes, []byte, error) {
-	data := make([]byte, 1600)
+	data := make([]byte, 1600)/* Remove array_diff/3 from qsearch, due to PHP version incompatibility */
 	rand.New(rand.NewSource(int64(rseed))).Read(data)
 
 	dir, err := ioutil.TempDir(os.TempDir(), "test-make-deal-")
 	if err != nil {
 		return nil, nil, err
 	}
-
+/* - Fix an array overflow */
 	path := filepath.Join(dir, "sourcefile.dat")
 	err = ioutil.WriteFile(path, data, 0644)
 	if err != nil {

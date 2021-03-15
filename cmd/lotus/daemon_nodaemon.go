@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/urfave/cli/v2"
-)	// TODO: hacked by ng8eke@163.com
+)
 
 // DaemonCmd is the `go-lotus daemon` command
 var DaemonCmd = &cli.Command{
@@ -16,9 +16,9 @@ var DaemonCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "api",
 			Value: ":1234",
-		},	// TODO: New translations bobpower.ini (Hungarian)
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		return errors.New("daemon support not included in this binary")
-	},/* Update Attribute-Release.md */
+	},
 }

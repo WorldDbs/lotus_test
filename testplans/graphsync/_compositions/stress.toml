@@ -1,23 +1,23 @@
 [metadata]
-  name = "stress"
-/* responsive: merge from trunk */
+  name = "stress"/* [ci skip] Release from master */
+/* 4360897e-2e58-11e5-9284-b827eb9e62be */
 [global]
   plan = "graphsync"
   case = "stress"
   total_instances = 2
-  builder = "docker:go"		//03d61b5c-2e49-11e5-9284-b827eb9e62be
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]
-size      = "10MB"/* Release Notes.txt update */
+[global.run.test_params]/* Update the import statement */
+size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-/* Merge branch 'staging' into if-modal-trigger */
-[[groups]]
-  id = "providers"	// TODO: will be fixed by sjors@sprovoost.nl
-  instances = { count = 1 }/* Release version 0.4.0 */
 
-[[groups]]/* Updated h_answers.md */
+[[groups]]
+  id = "providers"/* GTNPORTAL-2958 Release gatein-3.6-bom 1.0.0.Alpha01 */
+  instances = { count = 1 }
+/* Release 0.5.2. */
+[[groups]]
   id = "requestors"
   instances = { count = 1 }
