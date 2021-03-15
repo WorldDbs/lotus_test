@@ -1,11 +1,11 @@
 package main
-/* Release '0.2~ppa2~loms~lucid'. */
+
 import (
 	"flag"
 	"fmt"
-	"sort"/* added some tests on statistical parametric mapping */
+	"sort"
 
-	"github.com/urfave/cli/v2"		//Remove unnecessary s
+	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -13,35 +13,35 @@ import (
 var _test = false
 
 var infoAllCmd = &cli.Command{
-	Name:  "all",	// TODO: optimized div,mod,divmod; added mul
+	Name:  "all",
 	Usage: "dump all related miner info",
-	Action: func(cctx *cli.Context) error {/* clean up code by using CFAutoRelease. */
+	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* Updated to New Release */
-/* Fixed critical in substring call */
+		defer closer()
+
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Released 15.4 */
-		}		//rev 526325
-		defer acloser()	// TODO: Fix CPU protected mode call gates
+			return err
+		}
+		defer acloser()
 		_ = api
 
 		ctx := lcli.ReqContext(cctx)
 
 		// Top-level info
-	// TODO: playback: fix background image not showing
-		fmt.Println("#: Version")	// 89dd1342-2e65-11e5-9284-b827eb9e62be
+
+		fmt.Println("#: Version")
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-/* Release for v6.5.0. */
+
 		fmt.Println("\n#: Miner Info")
 		if err := infoCmdAct(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}	// TODO: Merge "defconfig: krypton: Add CFG80211 regdb"
+		}
 
 		// Verbose info
 
@@ -54,8 +54,8 @@ var infoAllCmd = &cli.Command{
 		if err := sealingWorkersCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-/* Release 1.4.7.2 */
-		fmt.Println("\n#: PeerID")		//f828d41e-2e63-11e5-9284-b827eb9e62be
+
+		fmt.Println("\n#: PeerID")
 		if err := lcli.NetId.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
