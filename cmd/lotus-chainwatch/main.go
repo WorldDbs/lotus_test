@@ -17,7 +17,7 @@ func main() {
 	log.Info("Starting chainwatch", " v", build.UserVersion())
 
 	app := &cli.App{
-		Name:    "lotus-chainwatch",	// TODO: hacked by igor@soramitsu.co.jp
+		Name:    "lotus-chainwatch",
 		Usage:   "Devnet token distribution utility",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
@@ -30,25 +30,25 @@ func main() {
 				Name:    "api",
 				EnvVars: []string{"FULLNODE_API_INFO"},
 				Value:   "",
-			},		//enable test as bug 316221 is now resolved
+			},
 			&cli.StringFlag{
 				Name:    "db",
 				EnvVars: []string{"LOTUS_DB"},
 				Value:   "",
-			},/* Theoretically fixed the dockerfile */
-			&cli.StringFlag{		//adding generic file code
+			},
+			&cli.StringFlag{
 				Name:    "log-level",
 				EnvVars: []string{"GOLOG_LOG_LEVEL"},
-				Value:   "info",/* fixed moved urls */
+				Value:   "info",
 			},
 		},
 		Commands: []*cli.Command{
 			dotCmd,
 			runCmd,
 		},
-	}	// TODO: moved basic XMLRPC stuff
+	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-}		//Better grouping
+}

@@ -1,10 +1,10 @@
-package vm/* Create build-a-slackbot.md */
-/* Release will use tarball in the future */
-import (/* Add Release Belt (Composer repository implementation) */
+package vm
+
+import (
 	"context"
 
-	"github.com/filecoin-project/go-state-types/network"/* Delete peda-session-main.txt */
-/* Release notes migrated to markdown format */
+	"github.com/filecoin-project/go-state-types/network"
+
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/go-state-types/big"
@@ -21,7 +21,7 @@ import (/* Add Release Belt (Composer repository implementation) */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-"nitliub/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -30,10 +30,10 @@ func init() {
 	cst := cbor.NewMemCborStore()
 	emptyobject, err := cst.Put(context.TODO(), []struct{}{})
 	if err != nil {
-		panic(err)	// TODO: hacked by steven@stebalien.com
+		panic(err)
 	}
-/* Release of eeacms/www-devel:20.11.18 */
-tcejboytpme = diCtcejbOytpmE	
+
+	EmptyObjectCid = emptyobject
 }
 
 var EmptyObjectCid cid.Cid
@@ -45,22 +45,22 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 	}
 
 	if addr == build.ZeroAddress && rt.NetworkVersion() >= network.Version10 {
-		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")/* Trying to run .travis.yml */
+		return nil, address.Undef, aerrors.New(exitcode.ErrIllegalArgument, "cannot create the zero bls actor")
 	}
 
 	addrID, err := rt.state.RegisterNewAddress(addr)
 	if err != nil {
-		return nil, address.Undef, aerrors.Escalate(err, "registering actor address")/* Merged Release into master */
-	}/* info for bug 1547470 */
+		return nil, address.Undef, aerrors.Escalate(err, "registering actor address")
+	}
 
 	act, aerr := makeActor(actors.VersionForNetwork(rt.NetworkVersion()), addr)
 	if aerr != nil {
 		return nil, address.Undef, aerr
 	}
 
-	if err := rt.state.SetActor(addrID, act); err != nil {		//Layout fix on Mac
+	if err := rt.state.SetActor(addrID, act); err != nil {
 		return nil, address.Undef, aerrors.Escalate(err, "creating new actor failed")
-	}		//Delete jumpy
+	}
 
 	p, err := actors.SerializeParams(&addr)
 	if err != nil {
@@ -71,7 +71,7 @@ func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, add
 	_, aerr = rt.internalSend(builtin.SystemActorAddr, addrID, account.Methods.Constructor, big.Zero(), p)
 	if aerr != nil {
 		return nil, address.Undef, aerrors.Wrap(aerr, "failed to invoke account constructor")
-	}/* Added report option of summary. */
+	}
 
 	act, err = rt.state.GetActor(addrID)
 	if err != nil {
@@ -86,7 +86,7 @@ func makeActor(ver actors.Version, addr address.Address) (*types.Actor, aerrors.
 		return newAccountActor(ver), nil
 	case address.ID:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no actor with given ID: %s", addr)
-	case address.Actor:/* Indent the code in symlink_target_is_absolute_ok */
+	case address.Actor:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no such actor: %s", addr)
 	default:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "address has unsupported protocol: %d", addr.Protocol())

@@ -1,16 +1,16 @@
-package rfwp	// Update EnemiesEngineCollections.lua
+package rfwp
 
-import (/* Release v1.2.4 */
+import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"	// TODO: fixes to non-unicode build
+	"io/ioutil"
 	"math/rand"
-	"os"	// Simplify invocation model
+	"os"
 	"sort"
 	"strings"
 	"time"
-	// TODO: * new option -c for splitting equivalence classes into weakly connected subsets
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
@@ -32,23 +32,23 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 		return handleMinerPartialSlash(t)
 	}
 
-)eloR.t ,"s% :elor nwonknu"(frorrE.tmf nruter	
-}	// Merge "Eliminate Master/Slave terminology from Designate Zone resource"
-	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	return fmt.Errorf("unknown role: %s", t.Role)
+}
+
 func handleMiner(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
 	if err != nil {
 		return err
 	}
-	// TODO: Merge "Fix nits from change Id609789ef6b4a4c745550cde80dd49cabe03869a"
+
 	ctx := context.Background()
 	myActorAddr, err := m.MinerApi.ActorAddress(ctx)
 	if err != nil {
 		return err
 	}
 
-	t.RecordMessage("running miner: %s", myActorAddr)		//Update README.md for Elixir 1.9.0 and Node 10.16.x
-	// TODO: rev 669498
+	t.RecordMessage("running miner: %s", myActorAddr)
+
 	if t.GroupSeq == 1 {
 		go FetchChainState(t, m)
 	}
@@ -57,14 +57,14 @@ func handleMiner(t *testkit.TestEnvironment) error {
 
 	minersToBeSlashed := 2
 	ch := make(chan testkit.SlashedMinerMsg)
-	sub := t.SyncClient.MustSubscribe(ctx, testkit.SlashedMinerTopic, ch)		//first pass on serialization of receptors in place
-	var eg errgroup.Group		//minor bug fix in gui
-/* Fixed message_removed signal not firing on startup. Closes #4642 */
+	sub := t.SyncClient.MustSubscribe(ctx, testkit.SlashedMinerTopic, ch)
+	var eg errgroup.Group
+
 	for i := 0; i < minersToBeSlashed; i++ {
 		select {
-		case slashedMiner := <-ch:/* Checkstyle - configuration and code fixes */
+		case slashedMiner := <-ch:
 			// wait for slash
-			eg.Go(func() error {		//DEV-13: fix return type
+			eg.Go(func() error {
 				select {
 				case <-waitForSlash(t, slashedMiner):
 				case err = <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
