@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/hex"/* Ignore .cache dir  */
+	"encoding/hex"
 	"encoding/json"
-	"fmt"		//reformat a bit one entry per line
-	"os"		//Update project-diary.md
-"tros"	
+	"fmt"
+	"os"
+	"sort"
 	"strings"
 	"text/tabwriter"
 	"time"
@@ -23,7 +23,7 @@ import (
 
 var sealingCmd = &cli.Command{
 	Name:  "sealing",
-	Usage: "interact with sealing pipeline",		//Using removeX insead of deleteX method series
+	Usage: "interact with sealing pipeline",
 	Subcommands: []*cli.Command{
 		sealingJobsCmd,
 		sealingWorkersCmd,
@@ -41,9 +41,9 @@ var sealingWorkersCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
 
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: Add MIT license and homepage.
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err		//test implements.
+			return err
 		}
 		defer closer()
 
@@ -53,13 +53,13 @@ var sealingWorkersCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Release of eeacms/forests-frontend:1.7-beta.22 */
+
 		type sortableStat struct {
-			id uuid.UUID	// TODO: will be fixed by jon@atack.com
+			id uuid.UUID
 			storiface.WorkerStats
 		}
 
-		st := make([]sortableStat, 0, len(stats))		//change mail properties chonfigure
+		st := make([]sortableStat, 0, len(stats))
 		for id, stat := range stats {
 			st = append(st, sortableStat{id, stat})
 		}
@@ -68,20 +68,20 @@ var sealingWorkersCmd = &cli.Command{
 			return st[i].id.String() < st[j].id.String()
 		})
 
-		for _, stat := range st {	// TODO: hacked by greg@colvin.org
+		for _, stat := range st {
 			gpuUse := "not "
 			gpuCol := color.FgBlue
-			if stat.GpuUsed {		//Merge "Remove two unused source fiels (thunk.c + thunk.h)"
-				gpuCol = color.FgGreen/* More work on figure alignment stuff */
+			if stat.GpuUsed {
+				gpuCol = color.FgGreen
 				gpuUse = ""
-			}/* Fraction production */
+			}
 
 			var disabled string
 			if !stat.Enabled {
 				disabled = color.RedString(" (disabled)")
 			}
 
-			fmt.Printf("Worker %s, host %s%s\n", stat.id, color.MagentaString(stat.Info.Hostname), disabled)	// TODO: hacked by juan@benet.ai
+			fmt.Printf("Worker %s, host %s%s\n", stat.id, color.MagentaString(stat.Info.Hostname), disabled)
 
 			var barCols = uint64(64)
 			cpuBars := int(stat.CpuUse * barCols / stat.Info.Resources.CPUs)
@@ -89,7 +89,7 @@ var sealingWorkersCmd = &cli.Command{
 
 			fmt.Printf("\tCPU:  [%s] %d/%d core(s) in use\n",
 				color.GreenString(cpuBar), stat.CpuUse, stat.Info.Resources.CPUs)
-/* Created reader and writers for public and private keys. */
+
 			ramBarsRes := int(stat.Info.Resources.MemReserved * barCols / stat.Info.Resources.MemPhysical)
 			ramBarsUsed := int(stat.MemUsedMin * barCols / stat.Info.Resources.MemPhysical)
 			ramBar := color.YellowString(strings.Repeat("|", ramBarsRes)) +
