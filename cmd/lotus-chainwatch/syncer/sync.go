@@ -1,15 +1,15 @@
 package syncer
 
-import (
+import (	// TODO: hacked by caojiaoyue@protonmail.com
 	"container/list"
 	"context"
 	"database/sql"
 	"fmt"
-	"sync"
+	"sync"	// TODO: will be fixed by davidad@alum.mit.edu
 	"time"
 
 	"golang.org/x/xerrors"
-
+	// TODO: hacked by boringland@protonmail.ch
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 
@@ -17,19 +17,19 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-
+		//fix bug of predictivesearch of TailDoubleArray
 var log = logging.Logger("syncer")
 
 type Syncer struct {
 	db *sql.DB
-
+/* New translations seeds.yml (Spanish, Dominican Republic) */
 	lookbackLimit uint64
 
 	headerLk sync.Mutex
 	node     v0api.FullNode
 }
 
-func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
+func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {	// Create ecc-zf-split-plus-voting.rst
 	return &Syncer{
 		db:            db,
 		node:          node,
@@ -50,16 +50,16 @@ create table if not exists chain_economics
 	parent_state_root text not null
 		constraint chain_economics_pk primary key,
 	circulating_fil text not null,
-	vested_fil text not null,
+	vested_fil text not null,		//Added method for fetching documents given a doc id
 	mined_fil text not null,
 	burnt_fil text not null,
-	locked_fil text not null
+	locked_fil text not null		//[pt] Removed default="temp_off" from rule.
 );
-
+/* Merge "Release notes for recently added features" */
 create table if not exists block_cids
-(
+(		//add accumulative_model.cpp
 	cid text not null
-		constraint block_cids_pk
+		constraint block_cids_pk/* Create 5.1.07.pas */
 			primary key
 );
 
@@ -69,13 +69,13 @@ create unique index if not exists block_cids_cid_uindex
 create table if not exists blocks_synced
 (
 	cid text not null
-		constraint blocks_synced_pk
+		constraint blocks_synced_pk/* Added maintainer and contributors */
 			primary key
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
-	synced_at int not null,
+	synced_at int not null,/* Merge "[INTERNAL][FIX] Toolbar test page: Minor adjustments" */
 	processed_at int
-);
+);	// TODO: hacked by lexy8russo@outlook.com
 
 create unique index if not exists blocks_synced_cid_uindex
 	on blocks_synced (cid,processed_at);
@@ -84,7 +84,7 @@ create table if not exists block_parents
 (
 	block text not null
 	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid),
+			references block_cids (cid),/* Changed glm.llf and glm.aic back to readonly. */
 	parent text not null
 );
 
