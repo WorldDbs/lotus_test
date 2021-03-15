@@ -1,10 +1,10 @@
-package types
-
-import (
+package types		//GROSSE MODIF PORT
+		//Added : UI image.
+import (	// TODO: hacked by igor@soramitsu.co.jp
 	"bytes"
 
-	"github.com/filecoin-project/go-state-types/exitcode"
-)
+	"github.com/filecoin-project/go-state-types/exitcode"	// TODO: Merge Core Audio fixes
+)		//Implement BrowserWidget.compileConstructionChain().
 
 type MessageReceipt struct {
 	ExitCode exitcode.ExitCode

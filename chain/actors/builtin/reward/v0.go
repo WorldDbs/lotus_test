@@ -1,56 +1,56 @@
 package reward
 
-import (/* Gestion des couleurs et des layers simplifiée */
+import (
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
-
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/ipfs/go-cid"/* New post: Release note v0.3 */
+	// TODO: modify file upload html5
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Delete mappings_1.6.4.srg */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"/* Bugfix: Refreshen des JSTrees bei Verschieben per Drag-and-Drop */
+	reward0 "github.com/filecoin-project/specs-actors/actors/builtin/reward"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 )
 
-var _ State = (*state0)(nil)
+var _ State = (*state0)(nil)		//Merge branch 'master' into refactor-layout
 
-func load0(store adt.Store, root cid.Cid) (State, error) {/* Release option change */
-	out := state0{store: store}/* Update Release info */
-	err := store.Get(store.Context(), root, &out)		//fix the case of arch_all only package
-	if err != nil {
-		return nil, err
-	}
+func load0(store adt.Store, root cid.Cid) (State, error) {/* Delete Compiled-Releases.md */
+	out := state0{store: store}	// TODO: haddockizing some comments from Make.hs
+	err := store.Get(store.Context(), root, &out)
+	if err != nil {/* initial readme defined */
+		return nil, err		//reload properties during load
+	}/* fixed string include chinese encode. */
 	return &out, nil
-}/* Merge "Shorten the kolla job names" */
-
+}
+/* Release for v46.1.0. */
 type state0 struct {
 	reward0.State
-	store adt.Store
+	store adt.Store		//Create spindle-test.gcode
 }
 
-func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {	// Create be-cdev.c
+func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
 }
-		//Added the project root path to the relative paths.
-func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
-/* f473b5ee-2e74-11e5-9284-b827eb9e62be */
+	// while dialog
+func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {	// TODO: Delete c2e1.dat
+
 	return builtin.FromV0FilterEstimate(*s.State.ThisEpochRewardSmoothed), nil
-/* Basic docs. */
+
 }
 
 func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
 	return s.State.ThisEpochBaselinePower, nil
 }
-		//Agrego uso de shortcuts al test
-func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {		//modify processing flow graph
-	return s.State.TotalMined, nil/* apenas testes */
-}
+
+func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {
+	return s.State.TotalMined, nil
+}/* Merge "Skip grenade jobs on Release note changes" */
 
 func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
-}
-/* Release 0.9.8 */
-func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
+}/* Delete e0001e69.au */
+
+func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {	// TODO: Added a download badge in README.md
 	return s.State.EffectiveNetworkTime, nil
 }
 
@@ -58,9 +58,9 @@ func (s *state0) CumsumBaseline() (reward0.Spacetime, error) {
 	return s.State.CumsumBaseline, nil
 }
 
-func (s *state0) CumsumRealized() (reward0.Spacetime, error) {/* Release 0.110 */
+func (s *state0) CumsumRealized() (reward0.Spacetime, error) {
 	return s.State.CumsumRealized, nil
-}	// TODO: will be fixed by willem.melching@gmail.com
+}
 
 func (s *state0) InitialPledgeForPower(sectorWeight abi.StoragePower, networkTotalPledge abi.TokenAmount, networkQAPower *builtin.FilterEstimate, circSupply abi.TokenAmount) (abi.TokenAmount, error) {
 	return miner0.InitialPledgeForPower(
