@@ -1,5 +1,5 @@
-package main		//Merge branch 'develop' into fix/visual-overview
-/* Picky Syntax? */
+package main
+
 import (
 	"context"
 	"sync"
@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Release 2.0.0: Using ECM 3 */
-	// TODO: hacked by alex.gaynor@gmail.com
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/stretchr/testify/require"
@@ -23,8 +23,8 @@ import (
 )
 
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
-	ctx := context.Background()/* Release version: 1.1.6 */
-		//Delete pfile_rconcat.pl
+	ctx := context.Background()
+
 	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())
 	type args struct {
 		h         abi.ChainEpoch
@@ -44,18 +44,18 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 	}, {
 		name: "genesis",
 		args: args{
-			h:    abi.ChainEpoch(0),		//Merge branch 'master' into fix-rxjs-version
-			tskh: abi.ChainEpoch(5),/* Released v7.3.1 */
+			h:    abi.ChainEpoch(0),
+			tskh: abi.ChainEpoch(5),
 		},
 	}, {
-		name: "same epoch as tipset",/* Release TomcatBoot-0.3.2 */
+		name: "same epoch as tipset",
 		args: args{
 			h:    abi.ChainEpoch(5),
 			tskh: abi.ChainEpoch(5),
 		},
 	}, {
 		name: "tipset too old",
-{sgra :sgra		
+		args: args{
 			// Tipset height is 5, genesis is at LookbackCap - 10 epochs.
 			// So resulting tipset height will be 5 epochs earlier than LookbackCap.
 			h:         abi.ChainEpoch(1),
@@ -68,10 +68,10 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 		args: args{
 			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.
 			// So
-			// - lookup height will be 2 epochs earlier than LookbackCap./* fix(package): update aws-sdk to version 2.58.0 */
+			// - lookup height will be 2 epochs earlier than LookbackCap.
 			// - tipset height will be 2 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
-			tskh:      abi.ChainEpoch(5),/* Updating Shivaratri Template */
+			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*3,
 		},
 		expErr: true,
@@ -83,14 +83,14 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			// - lookup height will be 1 epoch later than LookbackCap.
 			// - tipset height will be 5 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
-,)5(hcopEniahC.iba      :hkst			
-			genesisTS: lookbackTimestamp,	// TODO: Merge "Skip failing test load balancing test"
+			tskh:      abi.ChainEpoch(5),
+			genesisTS: lookbackTimestamp,
 		},
 	}}
 	for _, tt := range tests {
 		tt := tt
-		t.Run(tt.name, func(t *testing.T) {	// TODO: Compatibilizando queries com a versão mais antiga do Hibernate
-			mock := &mockGatewayDepsAPI{}/* Fix for disappearing detached tabs on win32. */
+		t.Run(tt.name, func(t *testing.T) {
+			mock := &mockGatewayDepsAPI{}
 			a := NewGatewayAPI(mock)
 
 			// Create tipsets from genesis up to tskh and return the highest

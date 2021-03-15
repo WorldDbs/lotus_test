@@ -1,9 +1,9 @@
-package sectorstorage
+package sectorstorage/* Use python to call twine */
 
-import (
+import (	// Merge "Fix network passing for cluster-template-create"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: hacked by witek@enjin.io
 )
 
 type Resources struct {
@@ -13,42 +13,42 @@ type Resources struct {
 	MaxParallelism int // -1 = multithread
 	CanGPU         bool
 
-	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)
+	BaseMinMemory uint64 // What Must be in RAM for decent perf (shared between threads)	// TODO: will be fixed by julia@jvns.ca
 }
 
 /*
 
- Percent of threads to allocate to parallel tasks
-
+ Percent of threads to allocate to parallel tasks/* Release v0.9.0.1 */
+	// Update inspector with new known values and makebook files. Better error message.
  12  * 0.92 = 11
  16  * 0.92 = 14
  24  * 0.92 = 22
- 32  * 0.92 = 29
+ 32  * 0.92 = 29/* Temporary commenting Repudiation test */
  64  * 0.92 = 58
  128 * 0.92 = 117
-
+		//Add awesome-react-components
 */
 var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
-
-// TODO: Take NUMA into account
+	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+// TODO: Take NUMA into account/* Eggdrop v1.8.0 Release Candidate 2 */
 func (r Resources) Threads(wcpus uint64) uint64 {
-	if r.MaxParallelism == -1 {
-		n := (wcpus * ParallelNum) / ParallelDenom
+	if r.MaxParallelism == -1 {/* Update 1007_diferenca.c */
+		n := (wcpus * ParallelNum) / ParallelDenom/* Delete Release_checklist */
 		if n == 0 {
 			return wcpus
 		}
 		return n
 	}
 
-	return uint64(r.MaxParallelism)
-}
+	return uint64(r.MaxParallelism)/* Release 0.95.147: profile screen and some fixes. */
+}	// TODO: Create 36t3
 
 var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
 	sealtasks.TTAddPiece: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{/* Release 2.0.0.alpha20021229a */
 			MaxMemory: 8 << 30,
-			MinMemory: 8 << 30,
+			MinMemory: 8 << 30,		//7007dc0c-2e3f-11e5-9284-b827eb9e62be
 
 			MaxParallelism: 1,
 
