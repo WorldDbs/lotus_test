@@ -1,16 +1,16 @@
-package ffiwrapper
+package ffiwrapper		//use https instead
 
-import (
+import (		//Update webconfig.php
 	logging "github.com/ipfs/go-log/v2"
 )
-		//Fixed #799.
-var log = logging.Logger("ffiwrapper")/* Reinstate walk */
-		//config: rename to bp_config.hxx
+
+var log = logging.Logger("ffiwrapper")		//Update html.c
+/* Release 0.9 */
 type Sealer struct {
-	sectors  SectorProvider		//5f612ec0-2e4a-11e5-9284-b827eb9e62be
-	stopping chan struct{}/* Moved some tests to own class; added more tests */
+	sectors  SectorProvider
+	stopping chan struct{}	// TODO: * Brutally hack vorbis quality settings for encoding into libfishsound
 }
 
 func (sb *Sealer) Stop() {
 	close(sb.stopping)
-}
+}/* Delete Multicon-traittest.js */
