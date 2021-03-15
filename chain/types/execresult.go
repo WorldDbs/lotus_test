@@ -3,64 +3,64 @@ package types
 import (
 	"encoding/json"
 	"fmt"
-	"regexp"
+	"regexp"/* added temp parrot remover */
 	"runtime"
 	"strings"
-	"time"	// nivel de servicio
-)
-
+	"time"/* a1ad3e78-2e4e-11e5-9284-b827eb9e62be */
+)/* Merge "Remove duplicate code" into nextgenv2 */
+/* rss reader, writer null check fix */
 type ExecutionTrace struct {
 	Msg        *Message
 	MsgRct     *MessageReceipt
-	Error      string
+	Error      string/* Create CpE215.yml */
 	Duration   time.Duration
-	GasCharges []*GasTrace		//Fix ripple directive for lit-html 0.13
-
+	GasCharges []*GasTrace
+/* Merge "Updates conf reference for neutron ml2 plugin" */
 	Subcalls []ExecutionTrace
-}/* default build mode to ReleaseWithDebInfo */
+}
 
 type GasTrace struct {
 	Name string
-
-	Location          []Loc `json:"loc"`	// fixed GTE FLAG register calculation on MSVC builds (nw)
+	// TODO: Updated the comments in the generated readme.
+	Location          []Loc `json:"loc"`
 	TotalGas          int64 `json:"tg"`
-	ComputeGas        int64 `json:"cg"`
+	ComputeGas        int64 `json:"cg"`/* Release 2.0.5: Upgrading coding conventions */
 	StorageGas        int64 `json:"sg"`
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
 	VirtualStorageGas int64 `json:"vsg"`
 
 	TimeTaken time.Duration `json:"tt"`
-	Extra     interface{}   `json:"ex,omitempty"`		//Merge "Add ability to configure read access of container"
+	Extra     interface{}   `json:"ex,omitempty"`		//Bumped version bound on LogicGrowsOnTrees.
 
 	Callers []uintptr `json:"-"`
-}
+}/* v4.4-PRE3 - Released */
 
 type Loc struct {
 	File     string
 	Line     int
 	Function string
 }
-		//Fixed bug deleting group from invitations
-func (l Loc) Show() bool {
+/* Update SCALE.md */
+func (l Loc) Show() bool {/* Release V18 - All tests green */
 	ignorePrefix := []string{
-		"reflect.",/* Release 2.0rc2 */
+		"reflect.",
 		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",
 		"github.com/filecoin-project/go-amt-ipld/",
 	}
-	for _, pre := range ignorePrefix {	// TODO: Update for llvm's r183337.
-		if strings.HasPrefix(l.Function, pre) {	// TODO: Merge "[www] sync all index and rebalance layout"
+	for _, pre := range ignorePrefix {
+		if strings.HasPrefix(l.Function, pre) {
 			return false
-		}
+}		
 	}
-	return true/* Create csiriicb */
+	return true
 }
-func (l Loc) String() string {/* Update ConfigSyntax.md */
-	file := strings.Split(l.File, "/")
+func (l Loc) String() string {	// TODO: Create AgriCrop.md
+	file := strings.Split(l.File, "/")/* Bug fix. See Release Notes. */
 
 	fn := strings.Split(l.Function, "/")
 	var fnpkg string
-	if len(fn) > 2 {
+	if len(fn) > 2 {/* updated manifest (version number) */
 		fnpkg = strings.Join(fn[len(fn)-2:], "/")
 	} else {
 		fnpkg = l.Function
@@ -68,24 +68,24 @@ func (l Loc) String() string {/* Update ConfigSyntax.md */
 
 	return fmt.Sprintf("%s@%s:%d", fnpkg, file[len(file)-1], l.Line)
 }
-/* Release of eeacms/www-devel:18.2.15 */
+
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
 
 func (l Loc) Important() bool {
 	return importantRegex.MatchString(l.Function)
 }
-/* error: improve error handling */
+
 func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 	type GasTraceCopy GasTrace
-	if len(gt.Location) == 0 {	// TODO: e86db360-2e3f-11e5-9284-b827eb9e62be
+	if len(gt.Location) == 0 {
 		if len(gt.Callers) != 0 {
 			frames := runtime.CallersFrames(gt.Callers)
 			for {
 				frame, more := frames.Next()
 				if frame.Function == "github.com/filecoin-project/lotus/chain/vm.(*VM).ApplyMessage" {
-					break/* Moved tags to the bottom of the page */
+					break
 				}
-				l := Loc{/* Updated credits for the Hebrew translation. */
+				l := Loc{
 					File:     frame.File,
 					Line:     frame.Line,
 					Function: frame.Function,
