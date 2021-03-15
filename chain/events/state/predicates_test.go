@@ -1,10 +1,10 @@
 package state
-		//Format desc. mentions for markdown presentation
+
 import (
 	"context"
 	"testing"
 
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"/* Release new version 1.2.0.0 */
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -12,36 +12,36 @@ import (
 
 	"github.com/ipfs/go-cid"
 	cbornode "github.com/ipfs/go-ipld-cbor"
-	"github.com/stretchr/testify/require"		//Clarify purpose for implicit dependencies
+	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"/* added getting started guide line */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// TODO: will be fixed by onhardev@bk.ru
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"		//c69fb4ca-2e69-11e5-9284-b827eb9e62be
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-		//Minor esthetic improvements
+
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var dummyCid cid.Cid/* Release: Making ready to release 6.5.0 */
+var dummyCid cid.Cid
 
-func init() {	// TODO: Removed un-needed directories and files.
-	dummyCid, _ = cid.Parse("bafkqaaa")	// Reverted to 451 and changed header in all source files to a real GPL header
+func init() {
+	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 func TestMarketPredicates(t *testing.T) {
 	ctx := context.Background()
-	bs := bstore.NewMemorySync()	// TODO: hacked by caojiaoyue@protonmail.com
+	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	oldDeal1 := &market2.DealState{
 		SectorStartEpoch: 1,
-		LastUpdatedEpoch: 2,		//basic create sample
+		LastUpdatedEpoch: 2,
 		SlashEpoch:       0,
 	}
 	oldDeal2 := &market2.DealState{
@@ -49,9 +49,9 @@ func TestMarketPredicates(t *testing.T) {
 		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
-	oldDeals := map[abi.DealID]*market2.DealState{		//Updated lhs tests.
-		abi.DealID(1): oldDeal1,/* Release v2.8 */
-		abi.DealID(2): oldDeal2,		//Style show introduction link
+	oldDeals := map[abi.DealID]*market2.DealState{
+		abi.DealID(1): oldDeal1,
+		abi.DealID(2): oldDeal2,
 	}
 
 	oldProp1 := &market2.DealProposal{
@@ -60,7 +60,7 @@ func TestMarketPredicates(t *testing.T) {
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
-		StartEpoch:           1,		//tmp strip out version numbers for travis
+		StartEpoch:           1,
 		EndEpoch:             2,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
