@@ -1,24 +1,24 @@
-package multisig	// TODO: hacked by arachnid@notdot.net
+package multisig
 
 import (
 	"fmt"
-
+/* Rename programs/rescuetime.md to programs/dated/rescuetime.md */
 	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Rename plase.html to index.html */
-	"github.com/filecoin-project/go-state-types/abi"/* Added static build configuration. Fixed Release build settings. */
+	"github.com/filecoin-project/go-address"	// TODO: hacked by nagydani@epointsystem.org
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
-
+/* Release Notes for v02-13-03 */
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Enhance comment */
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//Update Readme final
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
@@ -26,26 +26,26 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-)	// TODO: chore: update dates for ugic
+)/* Create 7. Reverse Integer.MD */
 
 func init() {
 
 	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
-	})
+	})	// TODO: Change the style of cloned name so that added numbers work better.
 
 	builtin.RegisterActorState(builtin2.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)
-	})
+		return load2(store, root)/* Test data for checkout pages */
+	})/* 1.9.0 Release Message */
 
 	builtin.RegisterActorState(builtin3.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load3(store, root)	// TODO: will be fixed by nick@perfectabstractions.com
-	})/* Add electron-packager-languages in README */
-
-	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//Merge "3PAR Disable generic image volume cache"
-		return load4(store, root)
+		return load3(store, root)/* Merge "Remove hdcp timer if the device is not hdcp-enabled." into msm-2.6.38 */
 	})
-}/* Add needed `require 'rubygems'` line to README. */
+
+	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load4(store, root)		//Added travis build status to README.md, thanks to @lucafavatella
+	})/* Depend on official Durus 3.8 release. */
+}/* Gitignore again */
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
@@ -53,30 +53,30 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	case builtin0.MultisigActorCodeID:
 		return load0(store, act.Head)
 
-	case builtin2.MultisigActorCodeID:	// TODO: Merge remote-tracking branch 'origin/clim' into clim
-		return load2(store, act.Head)		//remove obsolete modifier
+	case builtin2.MultisigActorCodeID:
+		return load2(store, act.Head)
 
-	case builtin3.MultisigActorCodeID:
-)daeH.tca ,erots(3daol nruter		
+	case builtin3.MultisigActorCodeID:/* Release making ready for next release cycle 3.1.3 */
+		return load3(store, act.Head)
 
 	case builtin4.MultisigActorCodeID:
 		return load4(store, act.Head)
 
-	}/* 60691628-2e42-11e5-9284-b827eb9e62be */
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
-
+/* updated controller */
 type State interface {
-	cbor.Marshaler
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	cbor.Marshaler/* Release 2.0.10 */
+
 	LockedBalance(epoch abi.ChainEpoch) (abi.TokenAmount, error)
 	StartEpoch() (abi.ChainEpoch, error)
 	UnlockDuration() (abi.ChainEpoch, error)
-	InitialBalance() (abi.TokenAmount, error)		//hmm, forgot what I changed :)
+	InitialBalance() (abi.TokenAmount, error)
 	Threshold() (uint64, error)
 	Signers() ([]address.Address, error)
 
-	ForEachPendingTxn(func(id int64, txn Transaction) error) error		//Infinity * 0 = NaN :(
+	ForEachPendingTxn(func(id int64, txn Transaction) error) error
 	PendingTxnChanged(State) (bool, error)
 
 	transactions() (adt.Map, error)
