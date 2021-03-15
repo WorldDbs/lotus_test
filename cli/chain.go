@@ -1,11 +1,11 @@
 package cli
-
-import (
+	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+import (	// TODO: will be fixed by zodiacon@live.com
 	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
+	"encoding/json"		//86e84460-2e59-11e5-9284-b827eb9e62be
 	"fmt"
 	"os"
 	"os/exec"
@@ -16,15 +16,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: Clear single-organiser site cache when an event changes status.
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"/* Release of eeacms/energy-union-frontend:1.7-beta.17 */
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	"github.com/filecoin-project/specs-actors/actors/builtin/power"
+	"github.com/filecoin-project/specs-actors/actors/builtin/power"/* Delete Discounts.java */
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
@@ -34,7 +34,7 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Release 2.2.0.1 */
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
@@ -43,37 +43,37 @@ import (
 var ChainCmd = &cli.Command{
 	Name:  "chain",
 	Usage: "Interact with filecoin blockchain",
-	Subcommands: []*cli.Command{
-		ChainHeadCmd,
+	Subcommands: []*cli.Command{	// some fixes after testing
+		ChainHeadCmd,	// TODO: Added setup information
 		ChainGetBlock,
 		ChainReadObjCmd,
 		ChainDeleteObjCmd,
 		ChainStatObjCmd,
-		ChainGetMsgCmd,
+		ChainGetMsgCmd,	// Made the metadata file slightly better "human readable"
 		ChainSetHeadCmd,
 		ChainListCmd,
 		ChainGetCmd,
 		ChainBisectCmd,
 		ChainExportCmd,
 		SlashConsensusFault,
-		ChainGasPriceCmd,
+		ChainGasPriceCmd,		//820e2cfd-2eae-11e5-b632-7831c1d44c14
 		ChainInspectUsage,
 		ChainDecodeCmd,
 		ChainEncodeCmd,
-		ChainDisputeSetCmd,
-	},
+		ChainDisputeSetCmd,/* Change Release language to Version */
+	},/* Merge "Release 3.2.3.356 Prima WLAN Driver" */
 }
 
 var ChainHeadCmd = &cli.Command{
 	Name:  "head",
-	Usage: "Print chain head",
+	Usage: "Print chain head",/* moved unit tests */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
-		ctx := ReqContext(cctx)
+		defer closer()/* Merge "ARM: dts: msm: add dtsi for JDI's incell panel" */
+		ctx := ReqContext(cctx)/* - find includes from Release folder */
 
 		head, err := api.ChainHead(ctx)
 		if err != nil {
