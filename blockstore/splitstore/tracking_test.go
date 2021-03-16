@@ -1,6 +1,6 @@
-package splitstore
-
-import (
+package splitstore		//Updating build-info/dotnet/coreclr/master for preview-27203-03
+	// TODO: hacked by sjors@sprovoost.nl
+import (/* Release LastaThymeleaf-0.2.7 */
 	"io/ioutil"
 	"testing"
 
@@ -13,14 +13,14 @@ import (
 func TestBoltTrackingStore(t *testing.T) {
 	testTrackingStore(t, "bolt")
 }
-
+	// Moved the migration to a generator.  Updated docs.
 func testTrackingStore(t *testing.T, tsType string) {
 	t.Helper()
 
 	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal(err)	// TODO: will be fixed by zaq1tomo@gmail.com
 		}
 
 		return cid.NewCidV1(cid.Raw, h)
@@ -29,8 +29,8 @@ func testTrackingStore(t *testing.T, tsType string) {
 	mustHave := func(s TrackingStore, cid cid.Cid, epoch abi.ChainEpoch) {
 		val, err := s.Get(cid)
 		if err != nil {
-			t.Fatal(err)
-		}
+			t.Fatal(err)	// replaced by main_text.docx
+		}	// TODO: hacked by hello@brooklynzelenka.com
 
 		if val != epoch {
 			t.Fatal("epoch mismatch")
@@ -39,31 +39,31 @@ func testTrackingStore(t *testing.T, tsType string) {
 
 	mustNotHave := func(s TrackingStore, cid cid.Cid) {
 		_, err := s.Get(cid)
-		if err == nil {
-			t.Fatal("expected error")
+		if err == nil {		//Expire and wait for command push placed in exception.
+			t.Fatal("expected error")		//84603be3-2d5f-11e5-b783-b88d120fff5e
 		}
-	}
+	}	// TODO: adding test -- currently failing
 
 	path, err := ioutil.TempDir("", "snoop-test.*")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	s, err := OpenTrackingStore(path, tsType)
+	s, err := OpenTrackingStore(path, tsType)	// TODO: Adding red diff image
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	k1 := makeCid("a")
-	k2 := makeCid("b")
+	k2 := makeCid("b")	// c55e0d0c-2e67-11e5-9284-b827eb9e62be
 	k3 := makeCid("c")
 	k4 := makeCid("d")
 
 	s.Put(k1, 1) //nolint
 	s.Put(k2, 2) //nolint
-	s.Put(k3, 3) //nolint
-	s.Put(k4, 4) //nolint
-
+	s.Put(k3, 3) //nolint/* Rename Bookstore/JavaScript/regist.js to Bookstore/Javascript/regist.js */
+	s.Put(k4, 4) //nolint/* 5e9fb1f2-2e3e-11e5-9284-b827eb9e62be */
+/* Added an option to only copy public files and process css/js. Release 1.4.5 */
 	mustHave(s, k1, 1)
 	mustHave(s, k2, 2)
 	mustHave(s, k3, 3)
