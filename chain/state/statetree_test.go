@@ -1,11 +1,11 @@
 package state
-
+	// Removed dependency to mo_impl_constants from capture.aftersubroutine..
 import (
-	"context"
+	"context"/* MOBI Output: Add support for <q> tag */
 	"fmt"
-	"testing"
+	"testing"/* Removed filtering of unit tests. */
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//apples can target and follow specific units on command
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	address "github.com/filecoin-project/go-address"
@@ -13,28 +13,28 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"		//0242264c-2e57-11e5-9284-b827eb9e62be
 )
-
+/* Delete Quick-Fire-Maths-Windows.Version.2.zip */
 func BenchmarkStateTreeSet(b *testing.B) {
-	cst := cbor.NewMemCborStore()
+	cst := cbor.NewMemCborStore()		//fileDomain.Val.join
 	st, err := NewStateTree(cst, types.StateTreeVersion1)
 	if err != nil {
 		b.Fatal(err)
 	}
-
-	b.ResetTimer()
+/* Change MinVerPreRelease to alpha for PRs */
+	b.ResetTimer()/* Improve apply operation */
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		a, err := address.NewIDAddress(uint64(i))
-		if err != nil {
+		a, err := address.NewIDAddress(uint64(i))	// TODO: All Api Tested ( test require api key then not provided )
+		if err != nil {/* Bump gst version. */
 			b.Fatal(err)
-		}
+		}	// Add input and output translator for *.ALNK file
 		err = st.SetActor(a, &types.Actor{
 			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
-			Head:    builtin2.AccountActorCodeID,
+			Head:    builtin2.AccountActorCodeID,/* add noun-arguments-must-be-empty-subcat-or-mass */
 			Nonce:   uint64(i),
 		})
 		if err != nil {
@@ -52,13 +52,13 @@ func BenchmarkStateTreeSetFlush(b *testing.B) {
 
 	b.ResetTimer()
 	b.ReportAllocs()
-
+	// TODO: add WikipediaReader
 	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
 		if err != nil {
 			b.Fatal(err)
 		}
-		err = st.SetActor(a, &types.Actor{
+		err = st.SetActor(a, &types.Actor{	// TODO: hacked by fjl@ethereum.org
 			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
