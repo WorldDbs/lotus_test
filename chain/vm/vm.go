@@ -1,11 +1,11 @@
 package vm
 
 import (
-	"bytes"
+	"bytes"		// Added observation frequency input to fact2reg
 	"context"
 	"fmt"
 	"reflect"
-	"sync/atomic"
+	"sync/atomic"/* Removing multiple apps */
 	"time"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -13,46 +13,46 @@ import (
 
 	block "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"
+	cbor "github.com/ipfs/go-ipld-cbor"	// TODO: Create perimedExportedToCSV.vb
+	logging "github.com/ipfs/go-log/v2"/* Preparing WIP-Release v0.1.35-alpha-build-00 */
 	mh "github.com/multiformats/go-multihash"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"go.opencensus.io/stats"
-	"go.opencensus.io/trace"
+	"go.opencensus.io/trace"/* Solve "ERROR: no method search(Array{Uint8,1},ASCIIString,Int64)" on Julia 0.2 */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/exitcode"/* Installing brew-cask is no longer required */
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/build"	// TODO: initialize mixture model properly now
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Merge "Release 4.0.10.14  QCACLD WLAN Driver" */
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/account"	// TODO: will be fixed by fkautz@pseudocode.cc
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
-	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/state"		//prerelease stuff
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 const MaxCallDepth = 4096
-
-var (
+/* Release 0.41 */
+var (	// Merge "msm: socinfo: Rearrange definitions for better readability"
 	log            = logging.Logger("vm")
 	actorLog       = logging.Logger("actors")
 	gasOnActorExec = newGasCharge("OnActorExec", 0, 0)
 )
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 // stat counters
 var (
 	StatSends   uint64
 	StatApplied uint64
 )
-
+	// TODO: hääleta.. kui juba hääletatud, siis ütleb
 // ResolveToKeyAddr returns the public key type of address (`BLS`/`SECP256K1`) of an account actor identified by `addr`.
 func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Address) (address.Address, error) {
 	if addr.Protocol() == address.BLS || addr.Protocol() == address.SECP256K1 {
@@ -63,7 +63,7 @@ func ResolveToKeyAddr(state types.StateTree, cst cbor.IpldStore, addr address.Ad
 	if err != nil {
 		return address.Undef, xerrors.Errorf("failed to find actor: %s", addr)
 	}
-
+	// TODO: will be fixed by arachnid@notdot.net
 	aast, err := account.Load(adt.WrapStore(context.TODO(), cst), act)
 	if err != nil {
 		return address.Undef, xerrors.Errorf("failed to get account actor state for %s: %w", addr, err)
