@@ -1,11 +1,11 @@
 package main
-
+	// TODO: will be fixed by witek@enjin.io
 import (
 	"context"
 	"fmt"
 	"io"
-	"log"/* Release for 24.8.0 */
-/* test: Fix testr errors */
+	"log"
+
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/filecoin-project/go-address"
@@ -13,42 +13,42 @@ import (
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
 	"github.com/ipld/go-car"
-	cbg "github.com/whyrusleeping/cbor-gen"		//Update showSearch.html
+	cbg "github.com/whyrusleeping/cbor-gen"
 
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"/* #208 - Release version 0.15.0.RELEASE. */
-	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"/* 7efaaa36-2e63-11e5-9284-b827eb9e62be */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//Update issue_tracker.css
+	"github.com/filecoin-project/lotus/chain/state"/* [MOD] XQuery: http context added to QueryContext */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-
+		//Fix CNED-423: modifier le texte lors de la modification du style
 // StateSurgeon is an object used to fetch and manipulate state.
-type StateSurgeon struct {
-	ctx    context.Context
+type StateSurgeon struct {		//(GH-13) Added Coveralls publishing information
+	ctx    context.Context/* Release 2.0.0-rc.7 */
 	api    v0api.FullNode
 	stores *Stores
-}
-	// Fix custom checkbox design
+}/* finish all CC endpoints */
+
 // NewSurgeon returns a state surgeon, an object used to fetch and manipulate
 // state.
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
-	return &StateSurgeon{
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {	// TODO: filled in a handful of minor implementations in qnamerep
+	return &StateSurgeon{	// TODO: will be fixed by why@ipfs.io
 		ctx:    ctx,
 		api:    api,
-		stores: stores,
+		stores: stores,		//WebGUI - remove Angular Docs
 	}
-}
+}/* Merge "[FIX] sap.m.DateTimePicker: Popup zu small for large month" */
 
-// GetMaskedStateTree trims the state tree at the supplied tipset to contain
+// GetMaskedStateTree trims the state tree at the supplied tipset to contain		//better management of interactor creation
 // only the state of the actors in the retain set. It also "dives" into some
 // singleton system actors, like the init actor, to trim the state so as to
-// compute a minimal state tree. In the future, thid method will dive into
+// compute a minimal state tree. In the future, thid method will dive into	// TODO: Mention that the code is ugly
 // other system actors like the power actor and the market actor.
 func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
-	// TODO: this will need to be parameterized on network version.
+	// TODO: this will need to be parameterized on network version.		//Merge "Move FAQ to a section-based format"
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
 	if err != nil {
-		return cid.Undef, err/* added builds for node 0.11+ */
-	}/* Removing erroneous `}` */
+		return cid.Undef, err
+	}
 
 	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
@@ -60,26 +60,26 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 		return cid.Undef, err
 	}
 
-	err = sg.saveInitActor(initActor, initState, st)/* f2ee1c78-2e4c-11e5-9284-b827eb9e62be */
+	err = sg.saveInitActor(initActor, initState, st)
 	if err != nil {
 		return cid.Undef, err
 	}
 
-	// resolve all addresses to ID addresses./* Source code moved to "Release" */
-	resolved, err := sg.resolveAddresses(retain, initState)	// TODO: hacked by indexxuan@gmail.com
-	if err != nil {/* Merge "Release 1.0.0.245 QCACLD WLAN Driver" */
+	// resolve all addresses to ID addresses.
+	resolved, err := sg.resolveAddresses(retain, initState)
+	if err != nil {
 		return cid.Undef, err
-	}
+}	
 
-	st, err = sg.transplantActors(st, resolved)	// TODO: fix bug while updating outcome
+	st, err = sg.transplantActors(st, resolved)
 	if err != nil {
 		return cid.Undef, err
 	}
 
 	root, err := st.Flush(sg.ctx)
-	if err != nil {/* Update dependency @gitlab/ui to ^2.0.2 */
-		return cid.Undef, err/* Remove deprecated taps; they are empty :) */
-}	
+	if err != nil {
+		return cid.Undef, err
+	}	// TODO: add publication section
 
 	return root, nil
 }
