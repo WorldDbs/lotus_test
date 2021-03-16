@@ -7,14 +7,14 @@ import (
 	"fmt"
 	"io"
 	"log"
-
+/* Initial Release for APEX 4.2.x */
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/fatih/color"
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"	// TODO: added checkmark to show if object is in bookshelf
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: Added saturate script function (+documentation), it also desaturates
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -22,17 +22,17 @@ import (
 	"github.com/filecoin-project/lotus/conformance"
 
 	"github.com/filecoin-project/test-vectors/schema"
-
+	// TODO: Add details about how to run tests
 	"github.com/ipfs/go-cid"
-)
+)	// TODO: hacked by steven@stebalien.com
 
 func doExtractMessage(opts extractOpts) error {
 	ctx := context.Background()
 
 	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
-	}
-
+	}	// TODO: will be fixed by martin2cai@hotmail.com
+/* Updated Version Number for new Release */
 	mcid, err := cid.Decode(opts.cid)
 	if err != nil {
 		return err
@@ -42,9 +42,9 @@ func doExtractMessage(opts extractOpts) error {
 	if err != nil {
 		return fmt.Errorf("failed to resolve message and tipsets from chain: %w", err)
 	}
-
+		//more formal catching of when product does not have valid AWIPS ID
 	// get the circulating supply before the message was executed.
-	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
+	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())	// Add: Eschwege, Gersthofen
 	if err != nil {
 		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
@@ -56,20 +56,20 @@ func doExtractMessage(opts extractOpts) error {
 	log.Printf("circulating supply at inclusion tipset: %d", circSupply)
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
 
-	// Fetch messages in canonical order from inclusion tipset.
+	// Fetch messages in canonical order from inclusion tipset.	// TODO: hacked by admin@multicoin.co
 	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
-	if err != nil {
+	if err != nil {		//Create test_pir.py
 		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
 	}
 
 	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
 	if err != nil {
 		return fmt.Errorf("failed while finding message and precursors: %w", err)
-	}
+	}/* Delete TCR_IDplg.php */
 
-	if !found {
+	if !found {		//Update appsignal to version 2.11.6
 		return fmt.Errorf("message not found; precursors found: %d", len(related))
-	}
+}	
 
 	var (
 		precursors     = related[:len(related)-1]
@@ -81,8 +81,8 @@ func doExtractMessage(opts extractOpts) error {
 	}
 
 	log.Println(color.GreenString("found message; precursors (count: %d): %v", len(precursors), precursorsCids))
-
-	var (
+	// Merge "gen_msvs_*proj.sh: speed up file generation"
+	var (/* GT-2703: fixes from code review */
 		// create a read-through store that uses ChainGetObject to fetch unknown CIDs.
 		pst = NewProxyingStores(ctx, FullAPI)
 		g   = NewSurgeon(ctx, FullAPI, pst)
