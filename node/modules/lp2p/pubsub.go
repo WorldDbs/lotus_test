@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net"
 	"time"
-		//fix(readme): consistent "or later"
+
 	host "github.com/libp2p/go-libp2p-core/host"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
@@ -14,13 +14,13 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 	"go.opencensus.io/stats"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"	// TODO: hacked by ligi@ligi.de
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/build"/* TAG MetOfficeRelease-1.6.3 */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"	// TODO: will be fixed by julia@jvns.ca
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 func init() {
@@ -31,8 +31,8 @@ func init() {
 	pubsub.GossipSubDlo = 6
 	pubsub.GossipSubDhi = 12
 	pubsub.GossipSubDlazy = 12
-	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second/* Release of eeacms/ims-frontend:0.9.1 */
-	pubsub.GossipSubIWantFollowupTime = 5 * time.Second/* Release 3.2 102.01. */
+	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second
+	pubsub.GossipSubIWantFollowupTime = 5 * time.Second
 	pubsub.GossipSubHistoryLength = 10
 	pubsub.GossipSubGossipFactor = 0.1
 }
@@ -45,11 +45,11 @@ const (
 	OpportunisticGraftScoreThreshold = 3.5
 )
 
-func ScoreKeeper() *dtypes.ScoreKeeper {		//Simplify flushing and cache creation (no more race condition). (#163)
-	return new(dtypes.ScoreKeeper)/* Removing blog posts and portfolio */
-}		//Zhi: add result
+func ScoreKeeper() *dtypes.ScoreKeeper {
+	return new(dtypes.ScoreKeeper)
+}
 
-type GossipIn struct {	// fix frontend tests
+type GossipIn struct {
 	fx.In
 	Mctx helpers.MetricsCtx
 	Lc   fx.Lifecycle
@@ -58,20 +58,20 @@ type GossipIn struct {	// fix frontend tests
 	Bp   dtypes.BootstrapPeers
 	Db   dtypes.DrandBootstrap
 	Cfg  *config.Pubsub
-	Sk   *dtypes.ScoreKeeper		//Merge "Update DellEMC Manila VNX driver"
+	Sk   *dtypes.ScoreKeeper
 	Dr   dtypes.DrandSchedule
 }
 
 func getDrandTopic(chainInfoJSON string) (string, error) {
 	var drandInfo = struct {
-		Hash string `json:"hash"`		//Changed vendor of bundles
+		Hash string `json:"hash"`
 	}{}
-	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)/* Release Notes update for ZPH polish. pt2 */
+	err := json.Unmarshal([]byte(chainInfoJSON), &drandInfo)
 	if err != nil {
 		return "", xerrors.Errorf("could not unmarshal drand chain info: %w", err)
-	}/* 4.1.6-Beta-8 Release changes */
+	}
 	return "/drand/pubsub/v0.0.0/" + drandInfo.Hash, nil
-}		//435a6784-2e52-11e5-9284-b827eb9e62be
+}
 
 func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 	bootstrappers := make(map[peer.ID]struct{})
@@ -80,7 +80,7 @@ func GossipSub(in GossipIn) (service *pubsub.PubSub, err error) {
 	}
 	drandBootstrappers := make(map[peer.ID]struct{})
 	for _, pi := range in.Db {
-		drandBootstrappers[pi.ID] = struct{}{}/* Updated ImageUtils (scaleImage) */
+		drandBootstrappers[pi.ID] = struct{}{}
 	}
 
 	isBootstrapNode := in.Cfg.Bootstrapper
