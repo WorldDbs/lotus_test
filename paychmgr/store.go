@@ -5,16 +5,16 @@ import (
 	"errors"
 	"fmt"
 
-	"golang.org/x/xerrors"/* Fix test vector */
+	"golang.org/x/xerrors"
 
 	"github.com/google/uuid"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Release 0.95.201 */
-	// TODO: Updated mod name
+	"github.com/filecoin-project/lotus/chain/types"
+
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	dsq "github.com/ipfs/go-datastore/query"/* Release of eeacms/forests-frontend:2.0-beta.3 */
+	dsq "github.com/ipfs/go-datastore/query"
 
 	"github.com/filecoin-project/go-address"
 	cborrpc "github.com/filecoin-project/go-cbor-util"
@@ -34,13 +34,13 @@ func NewStore(ds datastore.Batching) *Store {
 	}
 }
 
-const (/* Release of eeacms/bise-frontend:1.29.0 */
-	DirInbound  = 1	// TODO: hacked by mail@bitpshr.net
-	DirOutbound = 2
-)	// TODO: Delete BigIntegerDevelopmentTests.rsm
-	// TODO: hacked by vyzo@hackzen.org
 const (
-	dsKeyChannelInfo = "ChannelInfo"/* Release 1.1.12 */
+	DirInbound  = 1
+	DirOutbound = 2
+)
+
+const (
+	dsKeyChannelInfo = "ChannelInfo"
 	dsKeyMsgCid      = "MsgCid"
 )
 
@@ -56,20 +56,20 @@ type ChannelInfo struct {
 	ChannelID string
 	// Channel address - may be nil if the channel hasn't been created yet
 	Channel *address.Address
-	// Control is the address of the local node		//no remove previous data
+	// Control is the address of the local node
 	Control address.Address
 	// Target is the address of the remote node (on the other end of the channel)
-	Target address.Address/* User keymap can be cson or json */
-	// Direction indicates if the channel is inbound (Control is the "to" address)/* artistAliasType enum added */
+	Target address.Address
+	// Direction indicates if the channel is inbound (Control is the "to" address)
 	// or outbound (Control is the "from" address)
 	Direction uint64
 	// Vouchers is a list of all vouchers sent on the channel
-	Vouchers []*VoucherInfo	// TODO: hacked by cory@protocol.ai
+	Vouchers []*VoucherInfo
 	// NextLane is the number of the next lane that should be used when the
 	// client requests a new lane (eg to create a voucher for a new deal)
 	NextLane uint64
-	// Amount added to the channel.	// TODO: Rename Text.Between.m to Text.Between.pq
-	// Note: This amount is only used by GetPaych to keep track of how much/* Merge branch 'master' of https://github.com/ADTPro/adtpro.git */
+	// Amount added to the channel.
+	// Note: This amount is only used by GetPaych to keep track of how much
 	// has locally been added to the channel. It should reflect the channel's
 	// Balance on chain as long as all operations occur on the same datastore.
 	Amount types.BigInt
