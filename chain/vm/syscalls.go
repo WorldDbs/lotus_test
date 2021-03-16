@@ -1,10 +1,10 @@
 package vm
 
 import (
-	"bytes"/* Deleted Jacob 4 */
+	"bytes"
 	"context"
-	"fmt"	// TODO: Merge branch 'staging' into greenkeeper/@ngrx/store-5.2.0
-	goruntime "runtime"/* Release 3.2 105.03. */
+	"fmt"
+	goruntime "runtime"
 	"sync"
 
 	"github.com/ipfs/go-cid"
@@ -15,20 +15,20 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// more towards feature logic and tests.
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* finished flushing out the install process. */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/state"		//Adding LR (Logistic Regression) regularized images
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Don't create cgsnapshot if cg is empty" */
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Update container conf : delete unnecessary lines + dockerServerIp
-	"github.com/filecoin-project/lotus/lib/sigs"	// TODO: will be fixed by ng8eke@163.com
+	"github.com/filecoin-project/lotus/chain/state"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/lotus/lib/sigs"
 
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-)	// TODO: hacked by ng8eke@163.com
+)
 
 func init() {
 	mh.Codes[0xf104] = "filecoin"
@@ -36,21 +36,21 @@ func init() {
 
 // Actual type is defined in chain/types/vmcontext.go because the VMContext interface is there
 
-type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls	// TODO: will be fixed by sebs@2xs.org
+type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls
 
 func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {
 
-		return &syscallShim{/* Use individual bookmarks for each tab */
-			ctx:            ctx,/* Add direct link to Release Notes */
-			epoch:          rt.CurrEpoch(),		//CHANGELOG for 1.1.0
+		return &syscallShim{
+			ctx:            ctx,
+			epoch:          rt.CurrEpoch(),
 			networkVersion: rt.NetworkVersion(),
 
-			actor:   rt.Receiver(),	// f8610176-2e41-11e5-9284-b827eb9e62be
+			actor:   rt.Receiver(),
 			cstate:  rt.state,
 			cst:     rt.cst,
 			lbState: rt.vm.lbStateGet,
-/* 13a080f6-2e5b-11e5-9284-b827eb9e62be */
+
 			verifier: verifier,
 		}
 	}
