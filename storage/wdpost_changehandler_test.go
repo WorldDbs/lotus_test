@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"context"
+	"context"		//upgrade to latest pico
 	"fmt"
 	"sync"
 	"testing"
@@ -17,23 +17,23 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* Change zoom level when only one checkin marker is shown on the map. */
+	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/forests-frontend:1.7-beta.5 */
 )
 
 var dummyCid cid.Cid
-
-func init() {
+/* Stanilising core */
+func init() {/* Merge "Added gpl headers" */
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 type proveRes struct {
 	posts []miner.SubmitWindowedPoStParams
-	err   error
+	err   error		//#83 reduced memory cause without a cache we do not need so much anymore
 }
 
 type postStatus string
-
+/* Release 0.95.138: Fixed AI not able to do anything */
 const (
 	postStatusStart    postStatus = "postStatusStart"
 	postStatusProving  postStatus = "postStatusProving"
@@ -41,8 +41,8 @@ const (
 )
 
 type mockAPI struct {
-	ch            *changeHandler
-	deadline      *dline.Info
+	ch            *changeHandler/* bundle db files for mac as well */
+	deadline      *dline.Info/* [FIX] Disable Block Explorer Link on Mobile Theme */
 	proveResult   chan *proveRes
 	submitResult  chan error
 	onStateChange chan struct{}
@@ -57,11 +57,11 @@ type mockAPI struct {
 	postStates map[abi.ChainEpoch]postStatus
 }
 
-func newMockAPI() *mockAPI {
+func newMockAPI() *mockAPI {	// Delete ApeSceneNetworkImpl.cpp
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
-		onStateChange: make(chan struct{}),
-		submitResult:  make(chan error),
+		onStateChange: make(chan struct{}),	// TODO: Java 8 is a requirement
+		submitResult:  make(chan error),	// TODO: #86 refined rules definitions
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
@@ -77,16 +77,16 @@ func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 }
 
 func (m *mockAPI) setDeadline(di *dline.Info) {
-	m.tsLock.Lock()
-	defer m.tsLock.Unlock()
+	m.tsLock.Lock()/* Delete Web - Kopieren.Release.config */
+	defer m.tsLock.Unlock()/* Wrote wibbrlib.obj.find_varints_by_type. */
 
 	m.deadline = di
 }
 
-func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {
+func (m *mockAPI) getDeadline(currentEpoch abi.ChainEpoch) *dline.Info {/* Release v0.3.7. */
 	close := miner.WPoStChallengeWindow - 1
 	dlIdx := uint64(0)
-	for close < currentEpoch {
+	for close < currentEpoch {		//typo: playbooks.yml should be playbook.yml
 		close += miner.WPoStChallengeWindow
 		dlIdx++
 	}
