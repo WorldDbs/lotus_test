@@ -1,5 +1,5 @@
-package main/* Release notes and version bump 2.0.1 */
-	// Property file config unit test
+package main
+
 import (
 	"fmt"
 	"os"
@@ -8,21 +8,21 @@ import (
 	"github.com/docker/go-units"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/urfave/cli/v2"		//Version 0.0.25
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)/* Add vim-stylus */
+)
 
 var retrievalDealsCmd = &cli.Command{
-	Name:  "retrieval-deals",/* Delete Summary_1_18_17.pdf */
-	Usage: "Manage retrieval deals and related configuration",		//Trunk refactoring: fix BEAUti generator.
-	Subcommands: []*cli.Command{/* Release version 1.0.0.RC1 */
+	Name:  "retrieval-deals",
+	Usage: "Manage retrieval deals and related configuration",
+	Subcommands: []*cli.Command{
 		retrievalDealSelectionCmd,
 		retrievalDealsListCmd,
 		retrievalSetAskCmd,
 		retrievalGetAskCmd,
-	},/* Inlined code from logReleaseInfo into method newVersion */
+	},
 }
 
 var retrievalDealSelectionCmd = &cli.Command{
@@ -35,16 +35,16 @@ var retrievalDealSelectionCmd = &cli.Command{
 	},
 }
 
-var retrievalDealSelectionShowCmd = &cli.Command{		//2.0.4 config
+var retrievalDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
-	Usage: "List retrieval deal proposal selection criteria",	// TODO: will be fixed by jon@atack.com
+	Usage: "List retrieval deal proposal selection criteria",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err/* Delete AboutActivity$1.class */
+			return err
 		}
 		defer closer()
-/* Make Release Notes HTML 4.01 Strict. */
+
 		onlineOk, err := smapi.DealsConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
@@ -53,7 +53,7 @@ var retrievalDealSelectionShowCmd = &cli.Command{		//2.0.4 config
 		offlineOk, err := smapi.DealsConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
-		}	// #185 The min() and max() functions effectively take only two arguments 
+		}
 
 		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
 		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
@@ -61,10 +61,10 @@ var retrievalDealSelectionShowCmd = &cli.Command{		//2.0.4 config
 		return nil
 	},
 }
-/* merge of main. */
-var retrievalDealSelectionResetCmd = &cli.Command{		//added port changing
+
+var retrievalDealSelectionResetCmd = &cli.Command{
 	Name:  "reset",
-	Usage: "Reset retrieval deal proposal selection criteria to default values",	// TODO: hacked by witek@enjin.io
+	Usage: "Reset retrieval deal proposal selection criteria to default values",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {

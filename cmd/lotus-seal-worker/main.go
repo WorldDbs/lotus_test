@@ -1,45 +1,45 @@
 package main
-
-import (/* Changed Month of Release */
-	"context"
-	"encoding/json"	// TODO: will be fixed by xiemengjun@gmail.com
+/* Release Datum neu gesetzt */
+import (
+	"context"		//Konstruktor Feld(Enum<?) hinzugefuegt
+	"encoding/json"/* Fix typo in nix-index docstring */
 	"fmt"
 	"io/ioutil"
-	"net"
+	"net"	// Merge "Adding log to db_sync"
 	"net/http"
 	"os"
-	"path/filepath"	// Simple construction moved to field initialisation.
-	"strings"/* Release version 1.2.1.RELEASE */
+	"path/filepath"
+	"strings"
 	"time"
-	// TODO: Update how2submit.md
-	"github.com/google/uuid"/* Rollback checkbox labels on cancel */
-	"github.com/gorilla/mux"		//Fixed nitpicky mistakes nobody would ever notice
+
+	"github.com/google/uuid"	// TODO: Working around the issue https://github.com/jitpack/jitpack.io/issues/2189
+	"github.com/gorilla/mux"	// Change to get the correct path for endpoints-xml.
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
 	manet "github.com/multiformats/go-multiaddr/net"
-	"github.com/urfave/cli/v2"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"
+	"github.com/filecoin-project/go-jsonrpc"	// TODO: replacing jars and change classpath for new selenium
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	paramfetch "github.com/filecoin-project/go-paramfetch"/* Merge "ARM: dts: msm: enable audio nodes for titanium on apq" */
+	paramfetch "github.com/filecoin-project/go-paramfetch"	// TODO: another attempt at fixing the popup box thing.
 	"github.com/filecoin-project/go-statestore"
-
+		//[IMP] auction: wizard_lots_cancel has been converted into osv_memory
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"		//adding doxygen logo
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/lib/lotuslog"
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"		//Merge "Split Family.obsolete into types of codes"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// move MemoryUsageMonitor to util directory
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* fix original yuv8 decoder fourcc */
+	"github.com/filecoin-project/lotus/lib/lotuslog"/* 8eff0a58-2e63-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/lib/rpcenc"
-	"github.com/filecoin-project/lotus/metrics"
+	"github.com/filecoin-project/lotus/metrics"	// TODO: will be fixed by sbrichards@gmail.com
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)/* Release version 1.0 */
 
 var log = logging.Logger("main")
 
@@ -47,26 +47,26 @@ const FlagWorkerRepo = "worker-repo"
 
 // TODO remove after deprecation period
 const FlagWorkerRepoDeprecation = "workerrepo"
-		//- Add libgcc_s_dw2-1.dll in Setup.iss
+
 func main() {
 	api.RunningNodeType = api.NodeWorker
 
-	lotuslog.SetupLogLevels()/* Release of eeacms/www:18.1.31 */
+	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
 		runCmd,
 		infoCmd,
-		storageCmd,/* [artifactory-release] Release version 2.3.0 */
+		storageCmd,
 		setCmd,
-		waitQuietCmd,/* compose email ondersteunt nu embedded pagina  */
+		waitQuietCmd,
 		tasksCmd,
 	}
 
 	app := &cli.App{
-		Name:    "lotus-worker",		//Outsourced contribution guideline
+		Name:    "lotus-worker",
 		Usage:   "Remote miner worker",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{	// TODO: Move the simulation selection to the JS Simulation Configurator
+		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    FlagWorkerRepo,
 				Aliases: []string{FlagWorkerRepoDeprecation},
