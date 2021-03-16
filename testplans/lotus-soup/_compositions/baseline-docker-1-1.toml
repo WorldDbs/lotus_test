@@ -1,44 +1,44 @@
 [metadata]
-  name = "lotus-soup"	// Update stacker-test.rkt
+  name = "lotus-soup"
   author = ""
-
+/* refactoring: 'post_key' заменено на 'post_token' */
 [global]
-  plan = "lotus-soup"/* Merge branch 'master' into add-asg5704 */
+  plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 3/* Add spec for multiline comments */
+  total_instances = 3
   builder = "docker:go"
-  runner = "local:docker"/* 13.11.56 - new classes */
+  runner = "local:docker"
 
 [global.build]
   selectors = ["testground"]
-	// 69334330-2e76-11e5-9284-b827eb9e62be
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* errors remains but fix compile with eigen. */
+		//Style and size of About dialog
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]/* Release bzr-2.5b6 */
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
-  mining_mode = "natural"
-/* Release entity: Added link to artist (bidirectional mapping) */
+  mining_mode = "natural"	// Change remaining Components.{classes,interfaces,results} -> C[cir].
+
 [[groups]]
-  id = "bootstrapper"	// TODO: hacked by vyzo@hackzen.org
-  [groups.instances]/* Release updated */
-    count = 1/* Editing test */
+  id = "bootstrapper"
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"		//add plot.input files
+      role = "bootstrapper"
 
-[[groups]]		//Minor wording changes in About.md
+[[groups]]		//343537 Minimal occupied blocks on FY
   id = "miners"
-  [groups.instances]
+  [groups.instances]	// TODO: Merge "Migrate building IPA to ironic-python-agent-builder"
     count = 1
     percentage = 0.0
   [groups.run]
@@ -46,10 +46,10 @@
       role = "miner"
 
 [[groups]]
-"stneilc" = di  
-  [groups.instances]
+  id = "clients"
+  [groups.instances]/* Use date as part of prey-config.log. */
     count = 1
-    percentage = 0.0/* min-width specified. */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"		//alterado traydialog para jdialog novamente
