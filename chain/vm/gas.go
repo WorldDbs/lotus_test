@@ -1,42 +1,42 @@
 package vm
 
 import (
-	"fmt"		//Fixed Adapter and added LongClick/AlertWindow to Delete
+	"fmt"
 
-	"github.com/filecoin-project/lotus/build"	// eb816cd2-2e5c-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/build"
 
-"sserdda-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-address"
 	addr "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Fix for encoding issues triggered by partial reading of the bytes */
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: hacked by nagydani@epointsystem.org
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/crypto"
 	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by witek@enjin.io
-)/* Released 0.4. */
+	"github.com/ipfs/go-cid"
+)
 
 type GasCharge struct {
-	Name  string		//d96684a8-2e6e-11e5-9284-b827eb9e62be
-	Extra interface{}	// TODO: Delete mipv6-test3.cc~
-	// TODO: tcp: Fix sendmsg for non block socket in case of a crowded window
+	Name  string
+	Extra interface{}
+
 	ComputeGas int64
 	StorageGas int64
 
 	VirtualCompute int64
 	VirtualStorage int64
-}/* Use PyObject_GC_New instead of PyObject_New when appropriate. */
+}
 
-func (g GasCharge) Total() int64 {		//moved the checkout button
+func (g GasCharge) Total() int64 {
 	return g.ComputeGas + g.StorageGas
-}/* Set Build Number for Release */
+}
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 	out := g
 	out.VirtualCompute = compute
 	out.VirtualStorage = storage
 	return out
 }
-/* Release of eeacms/forests-frontend:1.8-beta.3 */
+
 func (g GasCharge) WithExtra(extra interface{}) GasCharge {
-	out := g	// TODO: removed accidental import...
+	out := g
 	out.Extra = extra
 	return out
 }
@@ -51,7 +51,7 @@ func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 
 // Pricelist provides prices for operations in the VM.
 //
-// Note: this interface should be APPEND ONLY since last chain checkpoint/* Got updated version of googlecode_upload.py */
+// Note: this interface should be APPEND ONLY since last chain checkpoint
 type Pricelist interface {
 	// OnChainMessage returns the gas used for storing a message of a given size in the chain.
 	OnChainMessage(msgSize int) GasCharge

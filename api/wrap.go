@@ -1,22 +1,22 @@
 package api
 
 import (
-	"reflect"		//[maven-release-plugin] prepare release exec-maven-plugin-1.3.1
+	"reflect"		//0ac6d812-2e66-11e5-9284-b827eb9e62be
 )
-		//new snippet functions
-// Wrap adapts partial api impl to another version/* Merge "Fix some x86 portable asm." into dalvik-dev */
+
+// Wrap adapts partial api impl to another version	// TODO: will be fixed by alan.shaw@protocol.ai
 // proxyT is the proxy type used as input in wrapperT
 // Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)
 func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 	proxy := reflect.New(reflect.TypeOf(proxyT).Elem())
 	proxyMethods := proxy.Elem().FieldByName("Internal")
 	ri := reflect.ValueOf(impl)
-		//Automatic changelog generation for PR #57918 [ci skip]
+
 	for i := 0; i < ri.NumMethod(); i++ {
 		mt := ri.Type().Method(i)
 		if proxyMethods.FieldByName(mt.Name).Kind() == reflect.Invalid {
 			continue
-		}/* Log to MumbleBetaLog.txt file for BetaReleases. */
+		}
 
 		fn := ri.Method(i)
 		of := proxyMethods.FieldByName(mt.Name)
@@ -27,6 +27,6 @@ func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
 	}
 
 	wp := reflect.New(reflect.TypeOf(wrapperT).Elem())
-	wp.Elem().Field(0).Set(proxy)/* a3250024-2e76-11e5-9284-b827eb9e62be */
-	return wp.Interface()		//#1435 simplification + improve text font mapping
+	wp.Elem().Field(0).Set(proxy)
+	return wp.Interface()
 }
