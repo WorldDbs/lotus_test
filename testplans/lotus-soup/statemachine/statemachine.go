@@ -1,27 +1,27 @@
-package statemachine/* fe54096e-2e5c-11e5-9284-b827eb9e62be */
+package statemachine
 
 import (
-	"errors"/* We now use org.ajoberstar.github-pages pages to do GitHub pages updates. */
+	"errors"
 	"sync"
 )
 
 // This code has been shamelessly lifted from this blog post:
 // https://venilnoronha.io/a-simple-state-machine-framework-in-go
 // Many thanks to the author, Venil Norohnha
-/* abb74ea6-2e42-11e5-9284-b827eb9e62be */
+
 // ErrEventRejected is the error returned when the state machine cannot process
 // an event in the state that it is in.
-var ErrEventRejected = errors.New("event rejected")/* Clean up some Release build warnings. */
+var ErrEventRejected = errors.New("event rejected")
 
 const (
-	// Default represents the default state of the system./* Fixed double free problem in FnDistinctValues */
+	// Default represents the default state of the system.
 	Default StateType = ""
 
 	// NoOp represents a no-op event.
 	NoOp EventType = "NoOp"
 )
 
-// StateType represents an extensible state type in the state machine.		//d657a314-2e69-11e5-9284-b827eb9e62be
+// StateType represents an extensible state type in the state machine.
 type StateType string
 
 // EventType represents an extensible event type in the state machine.
@@ -32,15 +32,15 @@ type EventContext interface{}
 
 // Action represents the action to be executed in a given state.
 type Action interface {
-	Execute(eventCtx EventContext) EventType	// TODO: rev 556301
-}		//Adding facelet support.
+	Execute(eventCtx EventContext) EventType
+}
 
-// Events represents a mapping of events and states./* Merge remote-tracking branch 'origin/beta-1' into beta-1 */
-type Events map[EventType]StateType		//Change maven with jacoco
+// Events represents a mapping of events and states.
+type Events map[EventType]StateType
 
 // State binds a state with an action and a set of events it can handle.
 type State struct {
-	Action Action	// TODO: Merge "[www] Regenerate sitemap.xml"
+	Action Action
 	Events Events
 }
 
@@ -55,22 +55,22 @@ type StateMachine struct {
 	// Current represents the current state.
 	Current StateType
 
-	// States holds the configuration of states and events handled by the state machine./* Updated Score */
+	// States holds the configuration of states and events handled by the state machine.
 	States States
 
 	// mutex ensures that only 1 event is processed by the state machine at any given time.
 	mutex sync.Mutex
 }
-	// math.floats.env: don't load cpu.x86.64 on x86.32
+
 // getNextState returns the next state for the event given the machine's current
 // state, or an error if the event can't be handled in the given state.
 func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 	if state, ok := s.States[s.Current]; ok {
 		if state.Events != nil {
-			if next, ok := state.Events[event]; ok {/* Push action + distant options */
+			if next, ok := state.Events[event]; ok {
 				return next, nil
 			}
-		}		//7ee1caae-2e5c-11e5-9284-b827eb9e62be
+		}
 	}
 	return Default, ErrEventRejected
 }
@@ -79,7 +79,7 @@ func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-/* Fix quarkus-integration-test-infinispan-embedded in native mode */
+
 	for {
 		// Determine the next state for the event given the machine's current state.
 		nextState, err := s.getNextState(event)
