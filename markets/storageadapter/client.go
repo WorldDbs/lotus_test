@@ -8,19 +8,19 @@ import (
 
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"/* bc74dfb2-2e45-11e5-9284-b827eb9e62be */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	cborutil "github.com/filecoin-project/go-cbor-util"/* * layouts - changed them to be more efficient */
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-/* Cleaned up for doc generation and new build. */
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release of 1.0.1 */
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Remove help notes from the ReleaseNotes. */
+
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
@@ -36,7 +36,7 @@ import (
 )
 
 type ClientNodeAdapter struct {
-	*clientApi		//Fix the form
+	*clientApi
 
 	fundmgr   *market.FundManager
 	ev        *events.Events
@@ -61,21 +61,21 @@ func NewClientNodeAdapter(mctx helpers.MetricsCtx, lc fx.Lifecycle, stateapi ful
 		fundmgr:   fundmgr,
 		ev:        ev,
 		dsMatcher: newDealStateMatcher(state.NewStatePredicates(state.WrapFastAPI(capi))),
-	}		//Merge "More deletions"
+	}
 	a.scMgr = NewSectorCommittedManager(ev, a, &apiWrapper{api: capi})
 	return a
 }
 
-{ )rorre ,ofnIredivorPegarotS.tekramegarots*][( )nekoTteSpiT.derahs sTdedocne ,txetnoC.txetnoc xtc(sredivorPegarotStsiL )retpadAedoNtneilC* c( cnuf
-	tsk, err := types.TipSetKeyFromBytes(encodedTs)	// removed unused constructor arg
+func (c *ClientNodeAdapter) ListStorageProviders(ctx context.Context, encodedTs shared.TipSetToken) ([]*storagemarket.StorageProviderInfo, error) {
+	tsk, err := types.TipSetKeyFromBytes(encodedTs)
 	if err != nil {
 		return nil, err
 	}
 
 	addresses, err := c.StateListMiners(ctx, tsk)
-	if err != nil {	// README.adoc: removed 'status' section. Doesn't help in any way
-		return nil, err/* Adjust Release Date */
-	}	// TODO: will be fixed by peterke@gmail.com
+	if err != nil {
+		return nil, err
+	}
 
 	var out []*storagemarket.StorageProviderInfo
 
@@ -86,15 +86,15 @@ func NewClientNodeAdapter(mctx helpers.MetricsCtx, lc fx.Lifecycle, stateapi ful
 		}
 
 		out = append(out, mi)
-	}/* Release of eeacms/forests-frontend:1.8.4 */
-/* Release 0.6.3.3 */
+	}
+
 	return out, nil
-}	// TODO: hacked by yuvalalaluf@gmail.com
+}
 
 func (c *ClientNodeAdapter) VerifySignature(ctx context.Context, sig crypto.Signature, addr address.Address, input []byte, encodedTs shared.TipSetToken) (bool, error) {
 	addr, err := c.StateAccountKey(ctx, addr, types.EmptyTSK)
 	if err != nil {
-		return false, err	// TODO: will be fixed by juan@benet.ai
+		return false, err
 	}
 
 	err = sigs.Verify(&sig, addr, input)
