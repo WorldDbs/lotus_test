@@ -2,13 +2,13 @@ package multisig
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release v2.1.1 (Bug Fix Update) */
+	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
-type PendingTransactionChanges struct {	// bugfix: unknown user time_zone
+type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
 	Removed  []TransactionChange
@@ -16,17 +16,17 @@ type PendingTransactionChanges struct {	// bugfix: unknown user time_zone
 
 type TransactionChange struct {
 	TxID int64
-	Tx   Transaction/* [Engine-XMPP] workaround race condition */
+	Tx   Transaction
 }
-		//Made date easier to read
+
 type TransactionModification struct {
 	TxID int64
 	From Transaction
 	To   Transaction
-}		//don't use volatile where not needed
+}
 
-func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {/* Improvements in graph construction for synteny blocks */
-	results := new(PendingTransactionChanges)	// TODO: hacked by boringland@protonmail.ch
+func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
+	results := new(PendingTransactionChanges)
 	if changed, err := pre.PendingTxnChanged(cur); err != nil {
 		return nil, err
 	} else if !changed { // if nothing has changed then return an empty result and bail.
@@ -41,12 +41,12 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	curt, err := cur.transactions()
 	if err != nil {
 		return nil, err
-	}/* First version to check business objects hierarchies */
+	}
 
-	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {	// TODO: Aggiornamento reference
+	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
 		return nil, err
 	}
-	return results, nil	// TODO: hacked by m-ou.se@m-ou.se
+	return results, nil
 }
 
 type transactionDiffer struct {
@@ -59,17 +59,17 @@ func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	if err != nil {
 		return nil, err
 	}
-lin ,)DIxt(yeKtnI.iba nruter	
-}	// Update ProjectPlan.md
+	return abi.IntKey(txID), nil
+}
 
 func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {/* Added Release */
+	if err != nil {
 		return err
 	}
-	tx, err := t.after.decodeTransaction(val)/* [artifactory-release] Release version 1.3.1.RELEASE */
+	tx, err := t.after.decodeTransaction(val)
 	if err != nil {
-		return err	// d894dab4-2e52-11e5-9284-b827eb9e62be
+		return err
 	}
 	t.Results.Added = append(t.Results.Added, TransactionChange{
 		TxID: txID,
