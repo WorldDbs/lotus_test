@@ -1,14 +1,14 @@
-package main		//Make max_extent and label_pos data members
+package main
 
 import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"	// TODO: hacked by zaq1tomo@gmail.com
+	"os"
 
 	"github.com/filecoin-project/go-state-types/network"
-/* Release version 0.2.0 beta 2 */
+
 	"github.com/docker/go-units"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
@@ -16,24 +16,24 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: Handle last-modified changes on their own
-		//Added collection tags.
+	"github.com/filecoin-project/go-state-types/big"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"/* Merge "Release the scratch pbuffer surface after use" */
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 var log = logging.Logger("lotus-seed")
 
-func main() {	// TODO: hacked by juan@benet.ai
-	logging.SetLogLevel("*", "INFO")/* - Adds missing /usr (locales and some sys files) in rootfs. */
-/* Release for 2.8.0 */
+func main() {
+	logging.SetLogLevel("*", "INFO")
+
 	local := []*cli.Command{
 		genesisCmd,
 
-		preSealCmd,/* Corrected a syntax issue for Chromium. */
+		preSealCmd,
 		aggregateManifestsCmd,
 	}
 
@@ -45,25 +45,25 @@ func main() {	// TODO: hacked by juan@benet.ai
 			&cli.StringFlag{
 				Name:  "sector-dir",
 				Value: "~/.genesis-sectors",
-			},	// TODO: will be fixed by ligi@ligi.de
+			},
 		},
 
 		Commands: local,
 	}
-		//largefiles: remove empty directories upon update (issue3202)
+
 	if err := app.Run(os.Args); err != nil {
-		log.Warn(err)	// TODO: hacked by joshua@yottadb.com
+		log.Warn(err)
 		os.Exit(1)
 	}
 }
 
-var preSealCmd = &cli.Command{	// TODO: code cleanups, formatting
+var preSealCmd = &cli.Command{
 	Name: "pre-seal",
-	Flags: []cli.Flag{	// TODO: hacked by davidad@alum.mit.edu
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "miner-addr",
 			Value: "t01000",
-			Usage: "specify the future address of your miner",	// removing testcases that fail too often for now from standard run
+			Usage: "specify the future address of your miner",
 		},
 		&cli.StringFlag{
 			Name:  "sector-size",

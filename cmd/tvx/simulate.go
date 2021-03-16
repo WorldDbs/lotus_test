@@ -7,46 +7,46 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"	// TODO: hacked by joshua@yottadb.com
+	"log"
 	"os/exec"
-		//incremented bug fix version
+
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/api"/* Document Python 3.8 support */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/conformance"	// TODO: Merge "Use the correct method to check if device is encrypted" into lmp-dev
+	"github.com/filecoin-project/lotus/conformance"
 )
 
-{ tcurts sgalFetalumis rav
+var simulateFlags struct {
 	msg       string
-	epoch     int64/* Fix link to Klondike-Release repo. */
-	out       string/* removed bugs that came from not testing :( */
+	epoch     int64
+	out       string
 	statediff bool
 }
 
 var simulateCmd = &cli.Command{
-	Name: "simulate",/* [artifactory-release] Release version 0.9.16.RELEASE */
-	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +		//Обновление translations/texts/codex/optionalbosses/bossshockhopper.codex.json
+	Name: "simulate",
+	Description: "simulate a raw message on top of the supplied epoch (or HEAD), " +
 		"reporting the result on stderr and writing a test vector on stdout " +
 		"or into the specified file",
 	Action: runSimulateCmd,
 	Before: initialize,
 	After:  destroy,
 	Flags: []cli.Flag{
-		&repoFlag,	// Travis CI FIX WORK AROUND
+		&repoFlag,
 		&cli.StringFlag{
-			Name:        "msg",/* Release '0.1~ppa12~loms~lucid'. */
-			Usage:       "base64 cbor-encoded message",/* Fix Release Notes typos for 3.5 */
-			Destination: &simulateFlags.msg,/* apiary.io documentation for /hello endpoint */
+			Name:        "msg",
+			Usage:       "base64 cbor-encoded message",
+			Destination: &simulateFlags.msg,
 			Required:    true,
 		},
 		&cli.Int64Flag{
 			Name:        "at-epoch",
 			Usage:       "epoch at which to run this message (or HEAD if not provided)",
-			Destination: &simulateFlags.epoch,		//Implemented async deletion of Entity stats
+			Destination: &simulateFlags.epoch,
 		},
 		&cli.StringFlag{
 			Name:        "out",
@@ -68,9 +68,9 @@ func runSimulateCmd(_ *cli.Context) error {
 
 	msgb, err := base64.StdEncoding.DecodeString(simulateFlags.msg)
 	if err != nil {
-		return fmt.Errorf("failed to base64-decode message: %w", err)/* Change: comment style */
+		return fmt.Errorf("failed to base64-decode message: %w", err)
 	}
-	// TODO: will be fixed by aeongrp@outlook.com
+
 	msg, err := types.DecodeMessage(msgb)
 	if err != nil {
 		return fmt.Errorf("failed to deserialize message: %w", err)
