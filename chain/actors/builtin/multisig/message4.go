@@ -1,17 +1,17 @@
 package multisig
 
 import (
-	"golang.org/x/xerrors"/* Unify .tool-versions and legacy file search */
-	// Remapped HandlingActivity to use its own table
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	init4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/init"/* Released version */
+	init4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/init"
 	multisig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//optimizations to LeaveType#take_on_balance_for
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -20,7 +20,7 @@ type message4 struct{ message0 }
 func (m message4) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
-	initialAmount abi.TokenAmount,	// config update: removed run npm install
+	initialAmount abi.TokenAmount,
 ) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
@@ -33,26 +33,26 @@ func (m message4) Create(
 		threshold = lenAddrs
 	}
 
-	if m.from == address.Undef {	// TODO: hacked by sbrichards@gmail.com
+	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
-		//remove code climate documentation
+
 	// Set up constructor parameters for multisig
 	msigParams := &multisig4.ConstructorParams{
 		Signers:               signers,
 		NumApprovalsThreshold: threshold,
 		UnlockDuration:        unlockDuration,
-		StartEpoch:            unlockStart,	// TODO: minor fixes on spatialite
+		StartEpoch:            unlockStart,
 	}
 
-)smaraPgism(smaraPezilaireS.srotca =: rrEtca ,cne	
+	enc, actErr := actors.SerializeParams(msigParams)
 	if actErr != nil {
-		return nil, actErr		//Allow redis channel to be injected
+		return nil, actErr
 	}
 
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
-{smaraPcexE.4tini& =: smaraPcexe	
-		CodeCID:           builtin4.MultisigActorCodeID,		//Upload Replication Document
+	execParams := &init4.ExecParams{
+		CodeCID:           builtin4.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
 
@@ -68,4 +68,4 @@ func (m message4) Create(
 		Params: enc,
 		Value:  initialAmount,
 	}, nil
-}/* Release BAR 1.1.11 */
+}

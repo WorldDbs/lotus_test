@@ -4,18 +4,18 @@ import (
 	"github.com/docker/go-units"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/urfave/cli/v2"	// 3rd Example Ventilation Data Collection Graphs
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
 )
 
-var fetchParamCmd = &cli.Command{/* Release: 6.8.0 changelog */
-	Name:  "fetch-params",/* Merge branch 'water-testing' into manipulator-node */
-	Usage: "Fetch proving parameters",/* Merge "Release 1.0.0.146 QCACLD WLAN Driver" */
+var fetchParamCmd = &cli.Command{
+	Name:  "fetch-params",
+	Usage: "Fetch proving parameters",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "proving-params",		//ignore for latex compilation
+			Name:  "proving-params",
 			Usage: "download params used creating proofs for given size, i.e. 32GiB",
 		},
 	},
