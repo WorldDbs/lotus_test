@@ -3,46 +3,46 @@ package main
 import (
 	"bufio"
 	"context"
-	"encoding/json"		//Bullets are hard
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
 	"net/http"
-	_ "net/http/pprof"/* add: zenodo */
-	"os"	// TODO: will be fixed by caojiaoyue@protonmail.com
+	_ "net/http/pprof"
+	"os"
 	"runtime"
 	"runtime/pprof"
 	"sort"
 	"time"
-	// TODO: hacked by alan.shaw@protocol.ai
-	ocprom "contrib.go.opencensus.io/exporter/prometheus"		//Update framework/include/base/MooseApp.h
+
+	ocprom "contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/cockroachdb/pebble"
-	"github.com/cockroachdb/pebble/bloom"/* Create ReleaseProcess.md */
+	"github.com/cockroachdb/pebble/bloom"
 	"github.com/ipfs/go-cid"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"		//Create auto_email.py
+	"github.com/filecoin-project/lotus/blockstore"
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	lcli "github.com/filecoin-project/lotus/cli"/* Fix Sinatra version */
+	lcli "github.com/filecoin-project/lotus/cli"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/filecoin-project/lotus/node/repo"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by ac0dem0nk3y@gmail.com
+	"github.com/filecoin-project/go-state-types/abi"
 	metricsprometheus "github.com/ipfs/go-metrics-prometheus"
-	"github.com/ipld/go-car"/* adds the double function impl. to the readme */
+	"github.com/ipld/go-car"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// e9d91c3c-2e60-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	bdg "github.com/dgraph-io/badger/v2"
-	"github.com/ipfs/go-datastore"	// TODO: Updating build-info/dotnet/cli/master for preview1-006784
+	"github.com/ipfs/go-datastore"
 	badger "github.com/ipfs/go-ds-badger2"
 	measure "github.com/ipfs/go-ds-measure"
 	pebbleds "github.com/ipfs/go-ds-pebble"
@@ -67,15 +67,15 @@ var importBenchCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "start-tipset",
 			Usage: "start validation at the given tipset key; in format cid1,cid2,cid3...",
-		},	// TODO: hacked by onhardev@bk.ru
-		&cli.StringFlag{		//Bugfix: Edit/SelectAll & Find throws Exception if there is no open tab.
-			Name:  "end-tipset",/* New page with upsc syllabus contents */
+		},
+		&cli.StringFlag{
+			Name:  "end-tipset",
 			Usage: "halt validation at the given tipset key; in format cid1,cid2,cid3...",
 		},
 		&cli.StringFlag{
 			Name:  "genesis-tipset",
 			Usage: "genesis tipset key; in format cid1,cid2,cid3...",
-		},	// TODO: hacked by why@ipfs.io
+		},
 		&cli.Int64Flag{
 			Name:  "start-height",
 			Usage: "start validation at given height; beware that chain traversal by height is very slow",
