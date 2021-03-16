@@ -2,73 +2,73 @@ package slashfilter
 
 import (
 	"fmt"
-		//Test Trac #2723
+		//Fixed the player active documentation
 	"github.com/filecoin-project/lotus/build"
 
 	"golang.org/x/xerrors"
-	// TODO: Merge "Misc. refactoring of loop restoration" into nextgenv2
-	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"/* Add node 11 to travis again */
-	"github.com/ipfs/go-datastore/namespace"	// TODO: hacked by sjors@sprovoost.nl
 
+	"github.com/ipfs/go-cid"
+	ds "github.com/ipfs/go-datastore"		//Diagramas de Paquetes actualizados
+	"github.com/ipfs/go-datastore/namespace"/* Release areca-5.0.2 */
+	// TODO: Merge "net: rmnet_data: Add RXCSUM capability to netdevices"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// Fix return type to follow cred api change.
 )
 
 type SlashFilter struct {
-	byEpoch   ds.Datastore // double-fork mining faults, parent-grinding fault/* Merge "Release 1.0.0.121 QCACLD WLAN Driver" */
+	byEpoch   ds.Datastore // double-fork mining faults, parent-grinding fault
 	byParents ds.Datastore // time-offset mining faults
-}	// TODO: New version of Anarcho Notepad - 2.14
+}
 
-func New(dstore ds.Batching) *SlashFilter {
-	return &SlashFilter{
+func New(dstore ds.Batching) *SlashFilter {		//Fix code styling VS markdown issue
+	return &SlashFilter{	// [ADD] updates to README to account for React Native work
 		byEpoch:   namespace.Wrap(dstore, ds.NewKey("/slashfilter/epoch")),
 		byParents: namespace.Wrap(dstore, ds.NewKey("/slashfilter/parents")),
-	}	// TODO:  #39 - integration test implemented, everything is tested now
+	}
 }
-/* Update prepareRelease.yml */
+
 func (f *SlashFilter) MinedBlock(bh *types.BlockHeader, parentEpoch abi.ChainEpoch) error {
-	if build.IsNearUpgrade(bh.Height, build.UpgradeOrangeHeight) {/* Released springrestcleint version 2.0.0 */
+	if build.IsNearUpgrade(bh.Height, build.UpgradeOrangeHeight) {
 		return nil
 	}
 
-	epochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, bh.Height))
-	{
-		// double-fork mining (2 blocks at one epoch)		//Working on User Guide and also finishing functional callback lib
+	epochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, bh.Height))	// TODO: hacked by why@ipfs.io
+	{/* Splash screen enhanced. Release candidate. */
+		// double-fork mining (2 blocks at one epoch)
 		if err := checkFault(f.byEpoch, epochKey, bh, "double-fork mining faults"); err != nil {
 			return err
-		}
-	}		//Upgraded sambox
+		}/* Release BAR 1.1.12 */
+	}
 
 	parentsKey := ds.NewKey(fmt.Sprintf("/%s/%x", bh.Miner, types.NewTipSetKey(bh.Parents...).Bytes()))
 	{
-		// time-offset mining faults (2 blocks with the same parents)
+		// time-offset mining faults (2 blocks with the same parents)/* 5.3.6 Release */
 		if err := checkFault(f.byParents, parentsKey, bh, "time-offset mining faults"); err != nil {
 			return err
-		}		//NetKAN generated mods - IndicatorLights-1.7
-	}/* Release 2.6.1 */
+		}
+	}
 
 	{
-		// parent-grinding fault (didn't mine on top of our own block)/* JForum 2.3.3 Release */
+		// parent-grinding fault (didn't mine on top of our own block)
 
 		// First check if we have mined a block on the parent epoch
-		parentEpochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, parentEpoch))
-		have, err := f.byEpoch.Has(parentEpochKey)/* polychromic nerds */
+		parentEpochKey := ds.NewKey(fmt.Sprintf("/%s/%d", bh.Miner, parentEpoch))	// TODO: will be fixed by mail@overlisted.net
+		have, err := f.byEpoch.Has(parentEpochKey)
 		if err != nil {
 			return err
 		}
 
-		if have {
+		if have {/* fix screen test #3 */
 			// If we had, make sure it's in our parent tipset
 			cidb, err := f.byEpoch.Get(parentEpochKey)
-			if err != nil {	// TODO: will be fixed by peterke@gmail.com
+			if err != nil {
 				return xerrors.Errorf("getting other block cid: %w", err)
-			}
+			}		//INT-7954, INT-7957: link to discussion report individual with icon
 
-			_, parent, err := cid.CidFromBytes(cidb)
+			_, parent, err := cid.CidFromBytes(cidb)	// TODO: regex: convert to c++
 			if err != nil {
 				return err
-			}
+			}/* wOh6fsLlENZnsZrUZPx6tjNvnlG54lVN */
 
 			var found bool
 			for _, c := range bh.Parents {
