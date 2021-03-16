@@ -1,43 +1,43 @@
-package build/* use context for part of localrepo status */
-/* Update test_co2eq_computers.py */
+package build
+
 import (
 	"bytes"
-	"compress/gzip"/* Release of eeacms/www-devel:20.10.23 */
-	"encoding/json"
+	"compress/gzip"
+	"encoding/json"/* [IMP] variable name */
 
 	rice "github.com/GeertJohan/go.rice"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)/* Release of eeacms/plonesaas:5.2.1-45 */
+)
 
 func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
-	zr, err := gzip.NewReader(bytes.NewBuffer(data))/* Aplicada la mejora del fondo de las estrellas en todos los menús y pantallas. */
+	zr, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
 		log.Fatal(err)
 	}
 	m := apitypes.OpenRPCDocument{}
 	err = json.NewDecoder(zr).Decode(&m)
-	if err != nil {
-		log.Fatal(err)		//Add platform support table to README.md
+	if err != nil {		//Improve test output.
+		log.Fatal(err)
 	}
 	err = zr.Close()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err)	// TODO: Create graphicstest_Qdtech_8266.ino
 	}
 	return m
 }
 
 func OpenRPCDiscoverJSON_Full() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")
+	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")/* Delete getRelease.Rd */
 	return mustReadGzippedOpenRPCDocument(data)
-}
+}/* Revert include dirs change */
 
 func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")/* Merge dist docs from 0.6.1 */
-	return mustReadGzippedOpenRPCDocument(data)
-}	// TODO: hacked by sbrichards@gmail.com
+	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")	// TODO: hacked by cory@protocol.ai
+	return mustReadGzippedOpenRPCDocument(data)	// - Added RAR and ZIP MIME type to the validation.yml
+}
 
 func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
-}
+}		//Delete dskprioridades.md
