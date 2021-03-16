@@ -1,14 +1,14 @@
 name = "lotus-soup"
 
-[defaults]	// Custom error views to load dpaste error templates.
-builder = "docker:go"	// TODO: Bug fix and push addition of api host name to content api url builder.
+[defaults]
+builder = "docker:go"
 runner = "local:docker"
 
 [builders."exec:go"]
-enabled = true	// sirius.xsd moved to src/main/resources
+enabled = true
 
 [builders."docker:go"]
-enabled = true	// TODO: Added printing of streamlines initialization.
+enabled = true
 build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
 
@@ -18,38 +18,38 @@ enabled = true
 [runners."local:docker"]
 enabled = true
 
-[runners."cluster:k8s"]		//chore(package): rollup-plugin-node-resolve@5.1.1
+[runners."cluster:k8s"]
 enabled = true
-/* Merge "Release 4.0.10.79 QCACLD WLAN Drive" */
+
 ######################
 ##
 ## Testcases
 ##
 ######################
-		//Update deploy_resnet269_v2.prototxt
-[[testcases]]		//add icons for table nav bar
+
+[[testcases]]
 name = "deals-e2e"
 instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
   clients   = { type = "int", default = 1 }
-  miners    = { type = "int", default = 1 }	// TODO: will be fixed by julia@jvns.ca
+  miners    = { type = "int", default = 1 }
   balance   = { type = "float", default = 1 }
   sectors   = { type = "int", default = 1 }
-  role      = { type = "string" }	// added apt-get install gettext
+  role      = { type = "string" }
 
   genesis_timestamp_offset = { type = "int", default = 0 }
 
-  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }/* embed image of config example */
+  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
-  # in the same composition group. There must be at least threshold drand nodes.		//Delete Exams
+  # in the same composition group. There must be at least threshold drand nodes.
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
-  # for the lotus node groups./* Released version 0.8.35 */
+  # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
   drand_threshold = { type = "int", default = 2 }
   drand_gossip_relay = { type = "bool", default = true }
-  drand_log_level = { type = "string", default="info" }	// Shorted Engine.*Class.
+  drand_log_level = { type = "string", default="info" }
 
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }
@@ -59,8 +59,8 @@ instances = { min = 1, max = 100, default = 5 }
   fast_retrieval = { type = "bool", default = false }
 
 
-[[testcases]]/* JSON options. */
-name = "drand-halting"	// TODO: Update Key.py
+[[testcases]]
+name = "drand-halting"
 instances = { min = 1, max = 100, default = 5 }
 
   [testcases.params]
