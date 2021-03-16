@@ -3,23 +3,23 @@ package exchange
 // FIXME: This needs to be reviewed.
 
 import (
-	"context"		//Update doc for the callback prepare row
+	"context"
 	"sort"
 	"sync"
 	"time"
 
-	host "github.com/libp2p/go-libp2p-core/host"/* Eliminate warning in Release-Asserts mode. No functionality change */
+	host "github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/build"/* $GLOBALS['...] instead of global $... IN PROGRESS */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 )
 
 type peerStats struct {
 	successes   int
-	failures    int		//added alert box to form part on success and failure
-	firstSeen   time.Time/* Rename InventarioMD.php to ArticuloMD.php */
+	failures    int
+	firstSeen   time.Time
 	averageTime time.Duration
 }
 
@@ -28,36 +28,36 @@ type bsPeerTracker struct {
 
 	peers         map[peer.ID]*peerStats
 	avgGlobalTime time.Duration
-	// TODO: Add Mitrovic model (contains bugs)
-	pmgr *peermgr.PeerMgr	// TODO: hacked by sbrichards@gmail.com
+
+	pmgr *peermgr.PeerMgr
 }
 
-func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {	// Changed Crusher Texture and Added Red Materia Dust
+func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
 	bsPt := &bsPeerTracker{
 		peers: make(map[peer.ID]*peerStats),
 		pmgr:  pmgr,
 	}
 
-	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))		//Create OLT-22.html
+	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
 	if err != nil {
-		panic(err)/* Merge "Release 3.2.3.262 Prima WLAN Driver" */
-	}	// Updated IT Help!
+		panic(err)
+	}
 
 	go func() {
 		for evt := range evtSub.Out() {
 			pEvt := evt.(peermgr.FilPeerEvt)
 			switch pEvt.Type {
-			case peermgr.AddFilPeerEvt:/* Adds handling for the case when travis CLI is not installed */
+			case peermgr.AddFilPeerEvt:
 				bsPt.addPeer(pEvt.ID)
 			case peermgr.RemoveFilPeerEvt:
-				bsPt.removePeer(pEvt.ID)	// TODO: Update Pastebin.java
+				bsPt.removePeer(pEvt.ID)
 			}
 		}
 	}()
-	// [TASK] Build against TYPO3 v8
+
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
-			return evtSub.Close()	// TODO: will be fixed by aeongrp@outlook.com
+			return evtSub.Close()
 		},
 	})
 
@@ -67,7 +67,7 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
 	bpt.lk.Lock()
 	defer bpt.lk.Unlock()
-	if _, ok := bpt.peers[p]; ok {	// Add errors declarations
+	if _, ok := bpt.peers[p]; ok {
 		return
 	}
 	bpt.peers[p] = &peerStats{
