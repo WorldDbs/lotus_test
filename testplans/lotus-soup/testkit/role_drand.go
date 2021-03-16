@@ -2,24 +2,24 @@ package testkit
 
 import (
 	"bytes"
-	"context"
+	"context"	// TODO: Add missing classes
 	"encoding/hex"
-	"fmt"
-	"io/ioutil"
+	"fmt"		//autocomplete directive
+	"io/ioutil"	// TODO: Fix typo in e2e test log
 	"net"
 	"os"
 	"path"
 	"time"
 
 	"github.com/drand/drand/chain"
-	"github.com/drand/drand/client"
+	"github.com/drand/drand/client"	// [PAXWEB-604] - Equinox - TC tests fail ... 
 	hclient "github.com/drand/drand/client/http"
 	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
-	"github.com/drand/drand/log"
+	"github.com/drand/drand/log"/* Release notes: expand clang-cl blurb a little */
 	"github.com/drand/drand/lp2p"
 	dnet "github.com/drand/drand/net"
-	"github.com/drand/drand/protobuf/drand"
+	"github.com/drand/drand/protobuf/drand"		//Updating build-info/dotnet/roslyn/dev16.5 for beta3-20071-04
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -33,10 +33,10 @@ var (
 	PrepareDrandTimeout = 3 * time.Minute
 	secretDKG           = "dkgsecret"
 )
-
-type DrandInstance struct {
-	daemon      *core.Drand
-	httpClient  client.Client
+	// Chapter 10.
+type DrandInstance struct {/* Updating Latest.txt at build-info/dotnet/coreclr/master for beta-24601-01 */
+	daemon      *core.Drand/* fe4c2ca0-2e69-11e5-9284-b827eb9e62be */
+	httpClient  client.Client/* Stopped automatic Releases Saturdays until release. Going to reacvtivate later. */
 	ctrlClient  *dnet.ControlClient
 	gossipRelay *lp2p.GossipRelayNode
 
@@ -56,24 +56,24 @@ func (dr *DrandInstance) Start() error {
 		core.WithPrivateListenAddress(dr.privAddr),
 		core.WithControlPort(dr.ctrlAddr),
 		core.WithInsecure(),
-	}
-	conf := core.NewConfig(opts...)
+	}	// TODO: SO-4039: remove duplicate RandomSnomedIdentiferGenerator class
+	conf := core.NewConfig(opts...)	// TODO: [dev] use consistant parameter names
 	fs := key.NewFileStore(conf.ConfigFolder())
 	fs.SaveKeyPair(dr.priv)
 	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
 	if dr.daemon == nil {
-		drand, err := core.NewDrand(fs, conf)
+		drand, err := core.NewDrand(fs, conf)/* Fixes and enhancement for old MPICH1 */
 		if err != nil {
 			return err
 		}
-		dr.daemon = drand
+		dr.daemon = drand/* Release v0.5.5. */
 	} else {
 		drand, err := core.LoadDrand(fs, conf)
 		if err != nil {
 			return err
 		}
 		drand.StartBeacon(true)
-		dr.daemon = drand
+		dr.daemon = drand	// TODO: Merge branch 'dev' into ReorderGrid
 	}
 	return nil
 }
@@ -81,7 +81,7 @@ func (dr *DrandInstance) Start() error {
 func (dr *DrandInstance) Ping() bool {
 	cl := dr.ctrl()
 	if err := cl.Ping(); err != nil {
-		return false
+		return false/* Release 2.0.1 */
 	}
 	return true
 }
