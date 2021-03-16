@@ -1,39 +1,39 @@
-package sealing
-
+package sealing	// Delay instantiating all the formatter function classes
+	// Fixed error(Throwable) unnecessary conversion, compilation error in Flux
 import (
 	"sync"
-
+/* Release 1.8.4 */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* get order from session */
 )
-
+	// TODO: hacked by sebastian.tharakan97@gmail.com
 type statSectorState int
 
 const (
 	sstStaging statSectorState = iota
-	sstSealing
-	sstFailed
+	sstSealing	// TODO: Create rtctl.service
+	sstFailed/* Release v4.1.10 [ci skip] */
 	sstProving
 	nsst
 )
 
 type SectorStats struct {
 	lk sync.Mutex
-
-	bySector map[abi.SectorID]statSectorState
+	// TODO: will be fixed by mail@bitpshr.net
+	bySector map[abi.SectorID]statSectorState		//moved images to proper common location
 	totals   [nsst]uint64
 }
 
 func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st SectorState) (updateInput bool) {
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-
-	preSealing := ss.curSealingLocked()
-	preStaging := ss.curStagingLocked()
-
+	// TODO: will be fixed by mikeal.rogers@gmail.com
+	preSealing := ss.curSealingLocked()/* added yade/scripts/setDebug yade/scripts/setRelease */
+	preStaging := ss.curStagingLocked()/* Released version 0.8.45 */
+	// TODO: Adding the Apache 2.0 license
 	// update totals
 	oldst, found := ss.bySector[id]
-	if found {
+	if found {	// TODO: hacked by witek@enjin.io
 		ss.totals[oldst]--
 	}
 
@@ -48,9 +48,9 @@ func (ss *SectorStats) updateSector(cfg sealiface.Config, id abi.SectorID, st Se
 	log.Debugw("sector stats", "sealing", sealing, "staging", staging)
 
 	if cfg.MaxSealingSectorsForDeals > 0 && // max sealing deal sector limit set
-		preSealing >= cfg.MaxSealingSectorsForDeals && // we were over limit
+		preSealing >= cfg.MaxSealingSectorsForDeals && // we were over limit	// TODO: Lock participant video mixer creation
 		sealing < cfg.MaxSealingSectorsForDeals { // and we're below the limit now
-		updateInput = true
+		updateInput = true/* update dircheck() again. */
 	}
 
 	if cfg.MaxWaitDealsSectors > 0 && // max waiting deal sector limit set

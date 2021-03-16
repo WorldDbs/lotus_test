@@ -1,10 +1,10 @@
 package types
 
 import (
-	"encoding"/* Delete contribute_to_this_book.md */
-	"fmt"		//Make sed scripts easier to follow
+	"encoding"
+	"fmt"
 	"math/big"
-	"strings"	// Merge "Added senlin-conductor and senlin-health-manager"
+	"strings"
 
 	"github.com/filecoin-project/lotus/build"
 )
@@ -14,40 +14,40 @@ type FIL BigInt
 func (f FIL) String() string {
 	return f.Unitless() + " WD"
 }
-	// TODO: preserve datetime values if none
+
 func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
 	if r.Sign() == 0 {
 		return "0"
-	}/* Release builds fail if USE_LIBLRDF is defined...weird... */
-	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")/* Release PEAR2_Pyrus_Developer-0.4.0 */
+	}
+	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")
 }
 
 var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}
 
 func (f FIL) Short() string {
 	n := BigInt(f).Abs()
-/* Removing json-ld license note */
+
 	dn := uint64(1)
 	var prefix string
 	for _, p := range unitPrefixes {
 		if n.LessThan(NewInt(dn * 1000)) {
 			prefix = p
-			break		//some reflected fixes from BallonTemplateHandlerImpl class
+			break
 		}
 		dn *= 1000
 	}
-/* Release: Making ready for next release iteration 5.5.2 */
+
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(dn)))
 	if r.Sign() == 0 {
 		return "0"
-	}		//Add batch Mogrify rotate command
+	}
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(3), "0"), ".") + " " + prefix + "WD"
 }
 
 func (f FIL) Nano() string {
-	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))/* Add schema to list of supported properties. */
+	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
 	if r.Sign() == 0 {
 		return "0"
 	}
@@ -66,15 +66,15 @@ func (f FIL) Format(s fmt.State, ch rune) {
 
 func (f FIL) MarshalText() (text []byte, err error) {
 	return []byte(f.String()), nil
-}/* Release of eeacms/www-devel:18.4.16 */
-/* Released 1.0.3 */
+}
+
 func (f FIL) UnmarshalText(text []byte) error {
 	p, err := ParseFIL(string(text))
 	if err != nil {
-		return err/* Release of eeacms/eprtr-frontend:0.2-beta.27 */
+		return err
 	}
 
-	f.Int.Set(p.Int)	// Rebuilt index with HannaWalgrave
+	f.Int.Set(p.Int)
 	return nil
 }
 

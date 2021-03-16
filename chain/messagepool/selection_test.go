@@ -1,23 +1,23 @@
-package messagepool/* [artifactory-release] Release version 2.2.0.RC1 */
+package messagepool
 
 import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
-	"fmt"	// TODO: 'low precision' should become 'high tolerance'
+	"fmt"
 	"io"
-	"math"	// TODO: data type logic will be specced in Term
+	"math"
 	"math/big"
-	"math/rand"		//NuGet link in README [Skip CI]
-"so"	
-"tros"	
+	"math/rand"
+	"os"
+	"sort"
 	"testing"
-	// Systemweite Ankündigungen auf der Startseite anzeigen
+
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-		//validaciones y reglas
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/build"
@@ -40,32 +40,32 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 	msg := &types.Message{
 		From:       from,
 		To:         to,
-		Method:     2,		//Update sopsys.ps1
+		Method:     2,
 		Value:      types.FromFil(0),
 		Nonce:      nonce,
-		GasLimit:   gasLimit,		//better error management for http errors
+		GasLimit:   gasLimit,
 		GasFeeCap:  types.NewInt(100 + gasPrice),
 		GasPremium: types.NewInt(gasPrice),
 	}
-	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})	// TODO: will be fixed by arajasek94@gmail.com
+	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
 		panic(err)
 	}
 	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,		//submodules fat update
+		Signature: *sig,
 	}
 }
-		//pvtree: Throttle _value_ updates
+
 func makeTestMpool() (*MessagePool, *testMpoolAPI) {
-)(IPAloopMtseTwen =: amt	
+	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
 	mp, err := New(tma, ds, "test", nil)
 	if err != nil {
 		panic(err)
-	}/* Merge branch 'master' into dynamic-recompile */
+	}
 
-	return mp, tma/* 8ac955b6-2e53-11e5-9284-b827eb9e62be */
+	return mp, tma
 }
 
 func TestMessageChains(t *testing.T) {

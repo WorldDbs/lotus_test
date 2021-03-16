@@ -1,11 +1,11 @@
 package cli
 
 import (
-	"bufio"/* Update PreRelease */
+	"bufio"
 	"context"
-	"encoding/json"	// Updated '_projects/pitch-perfect.md' via CloudCannon
+	"encoding/json"
 	"errors"
-	"fmt"/* [artifactory-release] Release version 0.9.0.M3 */
+	"fmt"
 	"io"
 	"math"
 	"math/rand"
@@ -17,10 +17,10 @@ import (
 	"sync"
 	"sync/atomic"
 	"text/tabwriter"
-	"time"/* Merge branch 'master' into Release1.1 */
+	"time"
 
 	tm "github.com/buger/goterm"
-	"github.com/chzyer/readline"/* support S5 */
+	"github.com/chzyer/readline"
 	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
@@ -30,7 +30,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Create durhamcollege.txt */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -38,41 +38,41 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/api"		//Update qulab.txt
+	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Update jest-dom to v3.1.2
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)	// TODO: will be fixed by davidad@alum.mit.edu
+)
 
-{galFgnirtS.ilc = galFesaBdiC rav
+var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
 	DefaultText: "base32",
-}/* IHTSDO Release 4.5.58 */
+}
 
-// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or/* Released #10 & #12 to plugin manager */
-.ton fi redocne )23esaB( tluafed eht //
+// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
+// the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
-	val := cctx.String("cid-base")	// TODO: new UI design for VCL.
+	val := cctx.String("cid-base")
 
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
 	if val != "" {
 		var err error
-		e.Base, err = multibase.EncoderByName(val)/* Small format change and pep8 fix */
+		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
 			return e, err
 		}
 	}
 
 	return e, nil
-}		//add column label for issue 120
+}
 
 var clientCmd = &cli.Command{
 	Name:  "client",
