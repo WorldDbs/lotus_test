@@ -2,7 +2,7 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]/* Wip on stats code */
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
@@ -11,26 +11,26 @@
 
 [global.build]
   selectors = ["testground"]
-
+/* added deploy for tags - windows */
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
-
+	// Updated FileDao to account for blank lines in input dataset.
 [global.run.test_params]
-  clients = "3"
+  clients = "3"/* Back to 1.0.0-SNAPSHOT, blame the Maven Release Plugin X-| */
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release of eeacms/plonesaas:5.2.1-21 */
   sectors = "1000"
   random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]	// TODO: will be fixed by juan@benet.ai
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* Add group property and applyGroupToProject method to ProjectMetaDataExtension */
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -39,16 +39,16 @@
   id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0
+    percentage = 0.0	// TODO: bug fix and made te code more self-contained.
   [groups.run]
-    [groups.run.test_params]
-      role = "miner"
+    [groups.run.test_params]	// TODO: Initial import of the bank model.
+      role = "miner"/* setup: fix typo */
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3/* Release 0.7.6 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
