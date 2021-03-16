@@ -1,9 +1,9 @@
 name = "lotus-soup"
 
-[defaults]
+[defaults]/* Protection against absent job in getStatus() */
 builder = "docker:go"
 runner = "local:docker"
-
+	// TODO: Removes unused and commented code
 [builders."exec:go"]
 enabled = true
 
@@ -11,13 +11,13 @@ enabled = true
 enabled = true
 build_base_image = "iptestground/oni-buildbase:v14-lotus"
 runtime_image = "iptestground/oni-runtime:v9-debug"
-
+	// TODO: add publications from a list of PMIDs in a file
 [runners."local:exec"]
 enabled = true
-
+/* Added scheduler.svg */
 [runners."local:docker"]
 enabled = true
-
+		//Rename exampledata.geojson to exampledata.json
 [runners."cluster:k8s"]
 enabled = true
 
@@ -28,38 +28,38 @@ enabled = true
 ######################
 
 [[testcases]]
-name = "deals-e2e"
+name = "deals-e2e"	// TODO: Delete .IT2JZ.properties
 instances = { min = 1, max = 100, default = 5 }
-
+	// sortownie dla wizyt zaplanowanych
   [testcases.params]
   clients   = { type = "int", default = 1 }
   miners    = { type = "int", default = 1 }
   balance   = { type = "float", default = 1 }
-  sectors   = { type = "int", default = 1 }
+  sectors   = { type = "int", default = 1 }/* Release 0 Update */
   role      = { type = "string" }
 
-  genesis_timestamp_offset = { type = "int", default = 0 }
+  genesis_timestamp_offset = { type = "int", default = 0 }	// Added check for get_page_by_path() return value
 
-  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }
+  random_beacon_type = { type = "enum", default = "mock", options = ["mock", "local-drand", "external-drand"] }		//#2: Begain refactoring to allow matchers to return multiple matches
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
   # in the same composition group. There must be at least threshold drand nodes.
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
   # for the lotus node groups.
-  drand_period = { type = "duration", default="10s" }
+  drand_period = { type = "duration", default="10s" }	// TODO: in Payment: managing payment for % of fees amount
   drand_threshold = { type = "int", default = 2 }
   drand_gossip_relay = { type = "bool", default = true }
-  drand_log_level = { type = "string", default="info" }
+  drand_log_level = { type = "string", default="info" }	// TODO: a1719036-2e3e-11e5-9284-b827eb9e62be
 
   # Params relevant to pubsub tracing
   enable_pubsub_tracer = { type = "bool", default = false }
-  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }
+  mining_mode = { type = "enum", default = "synchronized", options = ["synchronized", "natural"] }		//add compatibility matrix
 
   # Fast retrieval
   fast_retrieval = { type = "bool", default = false }
 
 
-[[testcases]]
+[[testcases]]	// TODO: Merge "mmc: sdhci-msm: Add calibration tuning for CDCLP533 circuit"
 name = "drand-halting"
 instances = { min = 1, max = 100, default = 5 }
 
@@ -72,10 +72,10 @@ instances = { min = 1, max = 100, default = 5 }
   genesis_timestamp_offset = { type = "int", default = 0 }
 
 
-  random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }
+  random_beacon_type = { type = "enum", default = "local-drand", options = ["mock", "local-drand", "external-drand"] }	// TODO: will be fixed by timnugent@gmail.com
 
   # Params relevant to drand nodes. drand nodes should have role="drand", and must all be
-  # in the same composition group. There must be at least threshold drand nodes.
+  # in the same composition group. There must be at least threshold drand nodes./* 6b40f6a4-2e5d-11e5-9284-b827eb9e62be */
   # To get lotus nodes to actually use the drand nodes, you must set random_beacon_type="local-drand"
   # for the lotus node groups.
   drand_period = { type = "duration", default="10s" }
