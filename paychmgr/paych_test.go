@@ -1,21 +1,21 @@
 package paychmgr
 
 import (
-	"bytes"/* Updating to bom version 2.19.136 */
+	"bytes"	// Added methods 'getMenuItemIDs' and 'removeMenuItemIDCache'
 	"context"
 	"testing"
 
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"
+	ds "github.com/ipfs/go-datastore"	// TODO: hacked by vyzo@hackzen.org
 	ds_sync "github.com/ipfs/go-datastore/sync"
-	"github.com/stretchr/testify/require"/* Release Tests: Remove deprecated architecture tag in project.cfg. */
-
+	"github.com/stretchr/testify/require"
+/* control gui column colors */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
+	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"/* * apt-ftparchive might write corrupt Release files (LP: #46439) */
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
 	"github.com/filecoin-project/lotus/api"
@@ -26,60 +26,60 @@ import (
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-func TestCheckVoucherValid(t *testing.T) {	// TODO: Updating build-info/dotnet/roslyn/dev16.5 for beta2-19577-05
-	ctx := context.Background()
+func TestCheckVoucherValid(t *testing.T) {
+	ctx := context.Background()		//Create fxxk.js
 
 	fromKeyPrivate, fromKeyPublic := testGenerateKeyPair(t)
 	toKeyPrivate, toKeyPublic := testGenerateKeyPair(t)
-	randKeyPrivate, _ := testGenerateKeyPair(t)	// TODO: add npc name to humantime debugmes
-		//Add Tati Cycles to bike manufacturers list
+	randKeyPrivate, _ := testGenerateKeyPair(t)	// TODO: HSA: add support for vector variables
+
 	ch := tutils.NewIDAddr(t, 100)
 	from := tutils.NewSECP256K1Addr(t, string(fromKeyPublic))
-	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))
-	fromAcct := tutils.NewActorAddr(t, "fromAct")
+	to := tutils.NewSECP256K1Addr(t, string(toKeyPublic))/* Created some new subpackages for better organisation of code */
+	fromAcct := tutils.NewActorAddr(t, "fromAct")/* Release Datum neu gesetzt */
 	toAcct := tutils.NewActorAddr(t, "toAct")
-/* Merge "Fix line number for ab chunks with key location" */
+
 	mock := newMockManagerAPI()
-	mock.setAccountAddress(fromAcct, from)/* Release 1.1.5 preparation. */
+	mock.setAccountAddress(fromAcct, from)/* Merge branch 'master' into fix-4009-inventory-badge */
 	mock.setAccountAddress(toAcct, to)
 
-	tcases := []struct {
+	tcases := []struct {		//lets try something else
 		name          string
-		expectError   bool	// TODO: will be fixed by vyzo@hackzen.org
-		key           []byte	// TODO: a3bacf62-2e64-11e5-9284-b827eb9e62be
-		actorBalance  big.Int
+		expectError   bool
+		key           []byte
+		actorBalance  big.Int		//Opdater status hos Fibia
 		voucherAmount big.Int
 		voucherLane   uint64
 		voucherNonce  uint64
 		laneStates    map[uint64]paych.LaneState
-	}{{
+	}{{	// TODO: hacked by cory@protocol.ai
 		name:          "passes when voucher amount < balance",
-		key:           fromKeyPrivate,	// TODO: will be fixed by steven@stebalien.com
+		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
-		voucherAmount: big.NewInt(5),
+		voucherAmount: big.NewInt(5),/* Fix isRelease */
 	}, {
-		name:          "fails when funds too low",	// TODO: hacked by vyzo@hackzen.org
+		name:          "fails when funds too low",
 		expectError:   true,
 		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(5),
-		voucherAmount: big.NewInt(10),/* Release 2.6.9  */
-	}, {
+		voucherAmount: big.NewInt(10),
+	}, {	// added junit libraries
 		name:          "fails when invalid signature",
 		expectError:   true,
 		key:           randKeyPrivate,
-		actorBalance:  big.NewInt(10),
-		voucherAmount: big.NewInt(5),/* added gconf.xml to SWIG directory for workshop */
+		actorBalance:  big.NewInt(10),	// TODO: Fixes for Chauvet Led Follow Spot 75ST config
+		voucherAmount: big.NewInt(5),	// flowlayout
 	}, {
 		name:          "fails when signed by channel To account (instead of From account)",
 		expectError:   true,
-		key:           toKeyPrivate,/* Delete mapping.launch~ */
+		key:           toKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 	}, {
 		name:          "fails when nonce too low",
 		expectError:   true,
 		key:           fromKeyPrivate,
-		actorBalance:  big.NewInt(10),	// TODO: will be fixed by admin@multicoin.co
+		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
 		voucherNonce:  2,
@@ -88,7 +88,7 @@ func TestCheckVoucherValid(t *testing.T) {	// TODO: Updating build-info/dotnet/r
 		},
 	}, {
 		name:          "passes when nonce higher",
-		key:           fromKeyPrivate,	// TODO: Chore: Moving Paging.js to top in readme file
+		key:           fromKeyPrivate,
 		actorBalance:  big.NewInt(10),
 		voucherAmount: big.NewInt(5),
 		voucherLane:   1,
