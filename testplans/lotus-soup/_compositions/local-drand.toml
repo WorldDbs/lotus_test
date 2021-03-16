@@ -1,19 +1,19 @@
-[metadata]		//Re-order todo
-  name = "lotus-soup"
+[metadata]
+  name = "lotus-soup"/* Tagging a Release Candidate - v4.0.0-rc2. */
   author = ""
-/* Preparing WIP-Release v0.1.25-alpha-build-15 */
-[global]	// - Made the ranks panel silent
+		//[infra] Update upload URL timeout to be the same as build timeout (#1112)
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6	// Resolving conflict due to rebase and merge
-  builder = "docker:go"/* change config for Release version, */
+  total_instances = 6
+  builder = "docker:go"
   runner = "local:docker"
-
-[global.build]/* Updated the chex feedstock. */
-  selectors = ["testground"]
-/* [artifactory-release] Release version 3.0.0.RELEASE */
+		//fixed bug. added CASCADE to DROP TABLE IF EXISTS statement
+[global.build]
+  selectors = ["testground"]	// TODO: will be fixed by davidad@alum.mit.edu
+	// TODO: updates dependency on js-signals package
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }		//prepare WFE to have dynamic submodules like sundtek lirc module
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
@@ -21,52 +21,52 @@
 [global.run.test_params]
     clients = "1"
     miners = "1"
-    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// Change the limit of the number of CSV files that can be generated to 500
     sectors = "10"
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
-
+	// TODO: 09a45300-2e58-11e5-9284-b827eb9e62be
 [[groups]]
-  id = "bootstrapper"/* Release LastaJob-0.2.2 */
+  id = "bootstrapper"
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Fixed external images caching proxy */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* Release v0.9.0.1 */
+
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1/* French translation: fix ssl error message string */
-    percentage = 0.0
-  [groups.run]		//updated for V3.0
-    [groups.run.test_params]/* Update 4channer.py */
-      role = "miner"
-/* Released springjdbcdao version 1.7.15 */
-[[groups]]
-  id = "clients"
-  [groups.resources]
-    memory = "120Mi"
-    cpu = "10m"
-  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
+      role = "miner"
+
+[[groups]]
+  id = "clients"
+  [groups.resources]		//Add benefits to the readme
+    memory = "120Mi"
+    cpu = "10m"
+  [groups.instances]
+    count = 1	// Update FormatFollowAutolink.php
+    percentage = 0.0/*  ETL : modify process of csv_in */
+  [groups.run]
+    [groups.run.test_params]/* Merge "wlan: Release 3.2.3.132" */
       role = "client"
 
 [[groups]]
   id = "drand"
   [groups.instances]
     count = 3
-    percentage = 0.0
-  [groups.run]/* 2.0 Release Packed */
+    percentage = 0.0	// TODO: will be fixed by alex.gaynor@gmail.com
+  [groups.run]
     [groups.run.test_params]
-      role = "drand"
+      role = "drand"	// 6c110538-2e76-11e5-9284-b827eb9e62be

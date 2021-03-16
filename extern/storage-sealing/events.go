@@ -1,7 +1,7 @@
-package sealing/* Move example/ to examples/original/ */
+package sealing
 
 import (
-	"context"/* Ejemplo del uso de ZFImage_Fx_Resize */
+	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
