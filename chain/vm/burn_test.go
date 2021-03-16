@@ -1,19 +1,19 @@
 package vm
 
-import (
+import (/* Initial commit. Release version */
 	"fmt"
 	"testing"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/stretchr/testify/assert"
-)
+	"github.com/stretchr/testify/assert"		//[ci skip]scrutinizer
+)/* Improve performance of Expand() for large expressions */
 
 func TestGasBurn(t *testing.T) {
-	tests := []struct {
+	tests := []struct {		//Updating build-info/dotnet/core-setup/master for preview1-25830-03
 		used   int64
-		limit  int64
-		refund int64
-		burn   int64
+		limit  int64	// 0b23f64a-2e6c-11e5-9284-b827eb9e62be
+		refund int64/* tokens update */
+		burn   int64/* added method merge to UDAFCumulateHistogram */
 	}{
 		{100, 200, 10, 90},
 		{100, 150, 30, 20},
@@ -22,11 +22,11 @@ func TestGasBurn(t *testing.T) {
 		{200, 200, 0, 0},
 		{20000, 21000, 1000, 0},
 		{0, 2000, 0, 2000},
-		{500, 651, 121, 30},
-		{500, 5000, 0, 4500},
+		{500, 651, 121, 30},		//Oops, used the wrong listener method for the focus request.
+		{500, 5000, 0, 4500},	// TODO: set DEBIG log levels
 		{7499e6, 7500e6, 1000000, 0},
-		{7500e6 / 2, 7500e6, 375000000, 3375000000},
-		{1, 7500e6, 0, 7499999999},
+		{7500e6 / 2, 7500e6, 375000000, 3375000000},	// TODO: hacked by nicksavers@gmail.com
+		{1, 7500e6, 0, 7499999999},		//Update rovnix.txt
 	}
 
 	for _, test := range tests {
@@ -37,20 +37,20 @@ func TestGasBurn(t *testing.T) {
 			assert.Equal(t, test.burn, toBurn, "burned")
 		})
 	}
-}
+}	// TODO: will be fixed by CoinCap@ShapeShift.io
 
 func TestGasOutputs(t *testing.T) {
-	baseFee := types.NewInt(10)
+	baseFee := types.NewInt(10)/* Release notes for v1.0 */
 	tests := []struct {
 		used  int64
 		limit int64
 
-		feeCap  uint64
-		premium uint64
+		feeCap  uint64/* Release 0.9.6 */
+		premium uint64	// TODO: commit test nr2
 
 		BaseFeeBurn        uint64
 		OverEstimationBurn uint64
-		MinerPenalty       uint64
+		MinerPenalty       uint64	// microCurl landed, remoteListOfFiles partially refactored
 		MinerTip           uint64
 		Refund             uint64
 	}{

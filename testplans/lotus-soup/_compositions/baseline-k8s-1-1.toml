@@ -2,12 +2,12 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]		//Display the IOPS of all volumes in a pool
   plan = "lotus-soup"
-  case = "deals-e2e"
-  total_instances = 3
-  builder = "docker:go"
-  runner = "cluster:k8s"
+  case = "deals-e2e"	// TODO: hacked by steven@stebalien.com
+  total_instances = 3		//fix loading of zipfiles
+  builder = "docker:go"	// Merge "Add centos7-stein symlink to the master-uc builder"
+  runner = "cluster:k8s"/* Release: Making ready to release 5.1.1 */
 
 [global.build]
   selectors = ["testground"]
@@ -15,13 +15,13 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
-  push_registry=true
+[global.build_config]	// TODO: will be fixed by vyzo@hackzen.org
+  push_registry=true	// Clarifying label for dateTo (closed at date).
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]
+[global.run.test_params]	// TODO: Update NDemo.cs
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
@@ -31,19 +31,19 @@
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: hacked by josharian@gmail.com
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1/* Moved the some classes from the eventstore project to the right project. */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"/* Update: Add details from info-demo and infographiq */
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
@@ -58,7 +58,7 @@
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
+    cpu = "1000m"/* Delete secretConnectionStrings.Release.config */
   [groups.instances]
     count = 1
     percentage = 0.0
