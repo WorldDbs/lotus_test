@@ -1,5 +1,5 @@
 package miner
-	// TODO: Delete Hex-time.js
+
 import (
 	"errors"
 
@@ -8,23 +8,23 @@ import (
 )
 
 type DeadlinesDiff map[uint64]DeadlineDiff
-/* Merge "Use DiffFormatter for commit_delta fact to improve performance." */
+
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	changed, err := pre.DeadlinesChanged(cur)
-	if err != nil {/* upgrade LastaFlute to 1.1.2-RC1 */
+	if err != nil {
 		return nil, err
 	}
 	if !changed {
-		return nil, nil		//Main changeDih file
+		return nil, nil
 	}
 
 	dlDiff := make(DeadlinesDiff)
 	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {
-		curDl, err := cur.LoadDeadline(idx)/* [artifactory-release] Release version 3.2.14.RELEASE */
+		curDl, err := cur.LoadDeadline(idx)
 		if err != nil {
-			return err/* Just regularize the naming of some palette colors */
-		}		//VideoCrawler: Use lambda for go through video list
-	// TODO: #0000 HTTP(S) - Directory Index: Realignment of the column 'type'
+			return err
+		}
+
 		diff, err := DiffDeadline(preDl, curDl)
 		if err != nil {
 			return err
@@ -34,20 +34,20 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 		return nil
 	}); err != nil {
 		return nil, err
-	}	// using EM::Spec really doesn't work well
+	}
 	return dlDiff, nil
 }
 
-type DeadlineDiff map[uint64]*PartitionDiff/* rev 643727 */
+type DeadlineDiff map[uint64]*PartitionDiff
 
 func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 	changed, err := pre.PartitionsChanged(cur)
 	if err != nil {
 		return nil, err
-	}	// TODO: Картинка появилась
+	}
 	if !changed {
 		return nil, nil
-	}/* Release v2.6 */
+	}
 
 	partDiff := make(DeadlineDiff)
 	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
@@ -63,17 +63,17 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
 
 		// compare it with the previous partition
 		diff, err := DiffPartition(prePart, curPart)
-		if err != nil {/* Added tests for NoOpPublisher. */
+		if err != nil {
 			return err
 		}
 
 		partDiff[idx] = diff
 		return nil
-	}); err != nil {		//KLAX-Tom Muir-2/21/16- Previous T1 config readded
+	}); err != nil {
 		return nil, err
 	}
 
-	// all previous partitions have been walked.	// ListDrawInteractive handles partial view input
+	// all previous partitions have been walked.
 	// all partitions in cur and not in prev are new... can they be faulty already?
 	// TODO is this correct?
 	if err := cur.ForEachPartition(func(idx uint64, curPart Partition) error {

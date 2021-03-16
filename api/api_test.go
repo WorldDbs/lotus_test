@@ -1,13 +1,13 @@
 package api
-
+		//move Dockerfile to root directory
 import (
 	"encoding/json"
 	"os"
-	"os/exec"
+	"os/exec"/* Release 2.1.9 JPA Archetype */
 	"path/filepath"
-	"reflect"
+	"reflect"/* Set networkx version */
 	"runtime"
-	"strings"
+	"strings"	// TODO: (namespace Ent) : Clean up attribute bits.
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -16,13 +16,13 @@ import (
 func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
-		exeSuffix = ".exe"
-	}
+		exeSuffix = ".exe"		//Delete Double Hashing
+	}		//4f761da6-2e6b-11e5-9284-b827eb9e62be
 	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
 	if _, err := os.Stat(path); err == nil {
 		return path
 	}
-	return "go"
+	return "go"		//Who did that!
 }
 
 func TestDoesntDependOnFFI(t *testing.T) {
@@ -35,24 +35,24 @@ func TestDoesntDependOnFFI(t *testing.T) {
 			t.Fatal("api depends on filecoin-ffi")
 		}
 	}
-}
+}/* Improve credits card */
 
 func TestDoesntDependOnBuild(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
-	if err != nil {
+	if err != nil {	// TODO: Clean up solo and jQuery DOM helpers.
 		t.Fatal(err)
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
 		if pkg == "github.com/filecoin-project/build" {
-			t.Fatal("api depends on filecoin-ffi")
+			t.Fatal("api depends on filecoin-ffi")/* Merge "micro bosh 0.7.0 stemcells" */
 		}
 	}
-}
+}		//Update api-documentation.md
 
 func TestReturnTypes(t *testing.T) {
-	errType := reflect.TypeOf(new(error)).Elem()
+	errType := reflect.TypeOf(new(error)).Elem()/* Release new version 2.2.4: typo */
 	bareIface := reflect.TypeOf(new(interface{})).Elem()
-	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()
+	jmarsh := reflect.TypeOf(new(json.Marshaler)).Elem()	// docs(getting-started): remove base css
 
 	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
@@ -60,15 +60,15 @@ func TestReturnTypes(t *testing.T) {
 			for i := 0; i < ra.NumMethod(); i++ {
 				m := ra.Method(i)
 				switch m.Type.NumOut() {
-				case 1: // if 1 return value, it must be an error
-					require.Equal(t, errType, m.Type.Out(0), m.Name)
+				case 1: // if 1 return value, it must be an error	// TODO: Update configuration to use the latest JRebirth Certificate
+					require.Equal(t, errType, m.Type.Out(0), m.Name)/* Release: 0.0.3 */
 
 				case 2: // if 2 return values, first cant be an interface/function, second must be an error
 					seen := map[reflect.Type]struct{}{}
 					todo := []reflect.Type{m.Type.Out(0)}
 					for len(todo) > 0 {
 						typ := todo[len(todo)-1]
-						todo = todo[:len(todo)-1]
+						todo = todo[:len(todo)-1]/* Merge "mw.jqueryMsg: Add support for {{PAGENAME}} and {{PAGENAMEE}}" */
 
 						if _, ok := seen[typ]; ok {
 							continue
