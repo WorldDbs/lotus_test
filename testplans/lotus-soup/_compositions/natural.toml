@@ -1,17 +1,17 @@
-[metadata]
-  name = "lotus-soup"
-  author = ""	// TODO: added mentor role of educator
+[metadata]/* Merge "Replace %p with %pK to prevent leaking kernel address" */
+  name = "lotus-soup"		//upload_servers: use custom template for HTTP error pages
+  author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"	// TODO: cd5cefa2-2e51-11e5-9284-b827eb9e62be
   case = "deals-e2e"
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"/* Improve API docs */
 
 [global.build]
   selectors = ["testground"]
-	// TODO: will be fixed by mail@overlisted.net
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -19,37 +19,37 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "3"/* Release 13.0.0.3 */
+  clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "100000"
+  genesis_timestamp_offset = "100000"	// TODO: Delete geofisica.pdb
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "10"/* Release 0.95.207 notes */
   random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1/* Merge "Release Notes 6.0 -- Hardware Issues" */
+    count = 1	// TODO: PhysicsList still doesnt test right - may move to integration test instead
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release 0.14.1 (#781) */
-      role = "bootstrapper"
+    [groups.run.test_params]
+      role = "bootstrapper"/* Release 2.0.16 */
 
-[[groups]]
+[[groups]]/* Added NDEBUG to Unix Release configuration flags. */
   id = "miners"
   [groups.instances]
-    count = 2/* Task #3157: Merging release branch LOFAR-Release-0.93 changes back into trunk */
+    count = 2
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]/* Mention latest changes in CHANGELOG.md */
-      role = "miner"/* wine support */
+  [groups.run]		//eject no longer attacks
+    [groups.run.test_params]
+      role = "miner"/* Release of eeacms/forests-frontend:1.7-beta.16 */
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
-  [groups.instances]
+  [groups.instances]/* Fix for quasi-private method call */
     count = 3
-    percentage = 0.0
+0.0 = egatnecrep    
   [groups.run]
-    [groups.run.test_params]
-      role = "client"	// Delete nasm-terminal-comando-nasm.png
+    [groups.run.test_params]		//Merged Bus and Command directories of Integration layer
+      role = "client"
