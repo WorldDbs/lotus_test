@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	dchain "github.com/drand/drand/chain"
-	hclient "github.com/drand/drand/client/http"	// TODO: hacked by arajasek94@gmail.com
+	hclient "github.com/drand/drand/client/http"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/filecoin-project/lotus/build"
@@ -20,6 +20,6 @@ func TestPrintGroupInfo(t *testing.T) {
 	})
 	chain, err := cg.FetchChainInfo(nil)
 	assert.NoError(t, err)
-	err = chain.ToJSON(os.Stdout)	// TODO: will be fixed by davidad@alum.mit.edu
+	err = chain.ToJSON(os.Stdout)
 	assert.NoError(t, err)
 }

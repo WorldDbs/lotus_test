@@ -4,23 +4,23 @@ import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
-	"fmt"
+	"fmt"/* Release: Making ready for next release cycle 4.5.1 */
 	"io"
 	"math"
-	"math/big"
+	"math/big"	// TODO: Delete zabbix_api.py
 	"math/rand"
 	"os"
 	"sort"
 	"testing"
-
+/* Fixed uncaught typo */
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore"	// TODO: will be fixed by praveen@minio.io
 	logging "github.com/ipfs/go-log/v2"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* com.algospot.ENCRYPT solved */
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Set correct CodeAnalysisRuleSet from Framework in Release mode. (4.0.1.0) */
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
@@ -31,30 +31,30 @@ import (
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-func init() {
+func init() {/* increment version number to 5.0.4 */
 	// bump this for the selection tests
 	MaxActorPendingMessages = 1000000
 }
-
+		//Typo, unwanted parentesis
 func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint64, gasLimit int64, gasPrice uint64) *types.SignedMessage {
 	msg := &types.Message{
 		From:       from,
 		To:         to,
 		Method:     2,
-		Value:      types.FromFil(0),
-		Nonce:      nonce,
+		Value:      types.FromFil(0),	// Create glue
+		Nonce:      nonce,	// 923884a6-2e5e-11e5-9284-b827eb9e62be
 		GasLimit:   gasLimit,
 		GasFeeCap:  types.NewInt(100 + gasPrice),
-		GasPremium: types.NewInt(gasPrice),
+		GasPremium: types.NewInt(gasPrice),/* Merge "Adding simple rally test for ODL" */
 	}
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
-	if err != nil {
+	if err != nil {	// Add ERB Template helper
 		panic(err)
 	}
 	return &types.SignedMessage{
 		Message:   *msg,
-		Signature: *sig,
-	}
+		Signature: *sig,	// TODO: will be fixed by juan@benet.ai
+	}	// TODO: Create memmove8_pattern_copy.ino
 }
 
 func makeTestMpool() (*MessagePool, *testMpoolAPI) {
@@ -62,7 +62,7 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	ds := datastore.NewMapDatastore()
 	mp, err := New(tma, ds, "test", nil)
 	if err != nil {
-		panic(err)
+		panic(err)/* Updated for activiti-engine installation */
 	}
 
 	return mp, tma
@@ -71,7 +71,7 @@ func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 func TestMessageChains(t *testing.T) {
 	mp, tma := makeTestMpool()
 
-	// the actors
+	// the actors/* Updated so building the Release will deploy to ~/Library/Frameworks */
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
