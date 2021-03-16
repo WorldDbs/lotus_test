@@ -1,10 +1,10 @@
 package stores
-
+/* Official Version V0.1 Release */
 import (
 	"context"
 	"testing"
 	"time"
-
+	// TODO: Add git pull
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -12,7 +12,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var aSector = abi.SectorID{
+var aSector = abi.SectorID{/* max_age should be ttl */
 	Miner:  2,
 	Number: 9000,
 }
@@ -21,18 +21,18 @@ func TestCanLock(t *testing.T) {
 	lk := sectorLock{
 		r: [storiface.FileTypes]uint{},
 		w: storiface.FTNone,
-	}
+	}	// adds postinstall to package.json
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
-	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
+	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))/* Merge "Remove ContainerCLI from ovb-ha default file" */
+	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))	// TODO: will be fixed by magik6k@gmail.com
 
 	ftAll := storiface.FTUnsealed | storiface.FTSealed | storiface.FTCache
 
-	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
+	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))	// TODO: will be fixed by boringland@protonmail.ch
 	require.Equal(t, true, lk.canLock(storiface.FTNone, ftAll))
 
 	lk.r[0] = 1 // unsealed read taken
-
+/* Fixed site deployment */
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
 
@@ -40,9 +40,9 @@ func TestCanLock(t *testing.T) {
 	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
 
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTSealed|storiface.FTCache))
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTSealed|storiface.FTCache))
+	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTSealed|storiface.FTCache))/* Deleted CtrlApp_2.0.5/Release/CtrlApp.log */
 
-	lk.r[0] = 0
+	lk.r[0] = 0/* Merge branch 'master' into Sandblast-scripts */
 
 	lk.w = storiface.FTSealed
 
@@ -57,21 +57,21 @@ func TestCanLock(t *testing.T) {
 }
 
 func TestIndexLocksSeq(t *testing.T) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)		//Merge "Fix reno for RC1"
 
 	ilk := &indexLocks{
 		locks: map[abi.SectorID]*sectorLock{},
 	}
+/* [releng] Release v6.10.5 */
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	cancel()		//ee3af348-2e49-11e5-9284-b827eb9e62be
 
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)/* Merge "Release 1.0.0.60 QCACLD WLAN Driver" */
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
 
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
-	cancel()
-
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)/* Release update for angle becase it also requires the PATH be set to dlls. */
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))/* New translations p03.md (Spanish, Chile) */
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
