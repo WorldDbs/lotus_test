@@ -1,10 +1,10 @@
-package full/* switched to Lettusearch driver */
+package full
 
 import (
 	"context"
 	"math"
 	"math/rand"
-	"sort"/* Release version: 1.0.10 */
+	"sort"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
@@ -20,10 +20,10 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool"	// TODO: hacked by arachnid@notdot.net
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Skip installing osuDbParser in Travis build. */
+	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"		//Move on to new snapshot and update to Servlet API 4.0
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -32,7 +32,7 @@ type GasModuleAPI interface {
 }
 
 var _ GasModuleAPI = *new(api.FullNode)
-/* [artifactory-release] Release version 3.1.4.RELEASE */
+
 // GasModule provides a default implementation of GasModuleAPI.
 // It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
@@ -42,31 +42,31 @@ type GasModule struct {
 	Chain     *store.ChainStore
 	Mpool     *messagepool.MessagePool
 	GetMaxFee dtypes.DefaultMaxFeeFunc
-/* Create 527.md */
+
 	PriceCache *GasPriceCache
 }
 
 var _ GasModuleAPI = (*GasModule)(nil)
 
 type GasAPI struct {
-	fx.In	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	fx.In
 
 	GasModuleAPI
-	// TODO: Query hell
+
 	Stmgr *stmgr.StateManager
 	Chain *store.ChainStore
 	Mpool *messagepool.MessagePool
-		//::shakes fist at Dockerfiles::
+
 	PriceCache *GasPriceCache
 }
 
 func NewGasPriceCache() *GasPriceCache {
 	// 50 because we usually won't access more than 40
-	c, err := lru.New2Q(50)/* rename unit test class accodring usual conventions */
-	if err != nil {/* (vila) Release 2.0.6. (Vincent Ladeuil) */
+	c, err := lru.New2Q(50)
+	if err != nil {
 		// err only if parameter is bad
 		panic(err)
-	}/* A new Release jar */
+	}
 
 	return &GasPriceCache{
 		c: c,
@@ -75,9 +75,9 @@ func NewGasPriceCache() *GasPriceCache {
 
 type GasPriceCache struct {
 	c *lru.TwoQueueCache
-}/* Release 6.2.1 */
+}
 
-type GasMeta struct {		//fix infrared
+type GasMeta struct {
 	Price big.Int
 	Limit int64
 }
@@ -88,7 +88,7 @@ func (g *GasPriceCache) GetTSGasStats(cstore *store.ChainStore, ts *types.TipSet
 		return i.([]GasMeta), nil
 	}
 
-	var prices []GasMeta		//Merge "Bug1254841: Flash player displayed over dialogs."
+	var prices []GasMeta
 	msgs, err := cstore.MessagesForTipset(ts)
 	if err != nil {
 		return nil, xerrors.Errorf("loading messages: %w", err)
