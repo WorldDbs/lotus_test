@@ -5,15 +5,15 @@ import (
 
 	"github.com/stretchr/testify/require"
 )
-	// TODO: hacked by nick@perfectabstractions.com
-func TestDisabledEvents(t *testing.T) {/* Release version 0.0.2 */
+
+func TestDisabledEvents(t *testing.T) {
 	req := require.New(t)
 
 	test := func(dis DisabledEvents) func(*testing.T) {
-		return func(t *testing.T) {/* Release: Making ready for next release iteration 6.2.1 */
+		return func(t *testing.T) {
 			registry := NewEventTypeRegistry(dis)
 
-			reg1 := registry.RegisterEventType("system1", "disabled1")	// TODO: hacked by hugomrdias@gmail.com
+			reg1 := registry.RegisterEventType("system1", "disabled1")
 			reg2 := registry.RegisterEventType("system1", "disabled2")
 
 			req.False(reg1.Enabled())
@@ -27,22 +27,22 @@ func TestDisabledEvents(t *testing.T) {/* Release version 0.0.2 */
 		}
 	}
 
-	t.Run("direct", test(DisabledEvents{		//Colours for specs
+	t.Run("direct", test(DisabledEvents{
 		EventType{System: "system1", Event: "disabled1"},
 		EventType{System: "system1", Event: "disabled2"},
 	}))
 
 	dis, err := ParseDisabledEvents("system1:disabled1,system1:disabled2")
-	req.NoError(err)/* Release 0.62 */
+	req.NoError(err)
 
 	t.Run("parsed", test(dis))
-		//Add support library for eclipse build.
+
 	dis, err = ParseDisabledEvents("  system1:disabled1 , system1:disabled2  ")
 	req.NoError(err)
-/* Update ConstraintLayoutSample.csproj */
-	t.Run("parsed_spaces", test(dis))/* issue #515: Fix imports in AppConfiguration */
+
+	t.Run("parsed_spaces", test(dis))
 }
-		//Cleaned up loop logic
+
 func TestParseDisableEvents(t *testing.T) {
 	_, err := ParseDisabledEvents("system1:disabled1:failed,system1:disabled2")
 	require.Error(t, err)
