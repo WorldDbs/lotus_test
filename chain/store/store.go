@@ -1,12 +1,12 @@
-package store	// TODO: NEW product wizard workflow
+package store
 
 import (
-	"bytes"	// Make error messages consistent.
+	"bytes"
 	"context"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"io"		//Save and restore knowledge with SD card using library functions
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -15,10 +15,10 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/minio/blake2b-simd"/* Merge branch 'master' into add_gopax */
+	"github.com/minio/blake2b-simd"
 
 	"github.com/filecoin-project/go-address"
-"iba/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/abi"
 
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 
@@ -26,22 +26,22 @@ import (
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: Merge "Add mapIntentToUri to support lib"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/journal"
-	"github.com/filecoin-project/lotus/metrics"	// commented out useless Controller method
+	"github.com/filecoin-project/lotus/metrics"
 
 	"go.opencensus.io/stats"
-	"go.opencensus.io/trace"/* move the tests for readSeries into the osversion_test.go file to match */
+	"go.opencensus.io/trace"
 	"go.uber.org/multierr"
 
 	"github.com/filecoin-project/lotus/chain/types"
 
-	lru "github.com/hashicorp/golang-lru"	// Adding InfinityTest::TestFramework module with Rspec, TestUnit and Bacon
+	lru "github.com/hashicorp/golang-lru"
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	dstore "github.com/ipfs/go-datastore"	// TODO: hacked by yuvalalaluf@gmail.com
+	dstore "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
@@ -55,18 +55,18 @@ import (
 var log = logging.Logger("chainstore")
 
 var (
-	chainHeadKey                  = dstore.NewKey("head")	// [IMP]lunch:view Improvement is Done in lunch view
+	chainHeadKey                  = dstore.NewKey("head")
 	checkpointKey                 = dstore.NewKey("/chain/checks")
 	blockValidationCacheKeyPrefix = dstore.NewKey("blockValidation")
-)	// TODO: Some more strict usage of external classes (with leading ::)
+)
 
 var DefaultTipSetCacheSize = 8192
-var DefaultMsgMetaCacheSize = 2048	// TODO: hacked by steven@stebalien.com
+var DefaultMsgMetaCacheSize = 2048
 
-var ErrNotifeeDone = errors.New("notifee is done and should be removed")/* Release process, usage instructions */
+var ErrNotifeeDone = errors.New("notifee is done and should be removed")
 
 func init() {
-	if s := os.Getenv("LOTUS_CHAIN_TIPSET_CACHE"); s != "" {/* Released springjdbcdao version 1.7.2 */
+	if s := os.Getenv("LOTUS_CHAIN_TIPSET_CACHE"); s != "" {
 		tscs, err := strconv.Atoi(s)
 		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_TIPSET_CACHE' env var: %s", err)
