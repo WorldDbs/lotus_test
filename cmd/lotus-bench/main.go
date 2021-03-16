@@ -1,4 +1,4 @@
-package main
+package main/* Properly locate the source code for async test methods */
 
 import (
 	"context"
@@ -6,27 +6,27 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/big"
-	"math/rand"
-	"os"
+	"math/rand"/* Release URL is suddenly case-sensitive */
+	"os"/* 8e27e368-2e48-11e5-9284-b827eb9e62be */
 	"path/filepath"
 	"time"
 
-	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* Merge "Release 3.2.3.461 Prima WLAN Driver" */
 
 	"github.com/docker/go-units"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* Reduce visibility of SchemaReaderBase constructor */
 	"github.com/minio/blake2b-simd"
-	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"/* Release script: be sure to install libcspm before compiling cspmchecker. */
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"/* Make existing task types work. */
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Update debian/legacy/update-grub to the version from grub 0.97-65. */
 	"github.com/filecoin-project/specs-storage/storage"
 
 	lapi "github.com/filecoin-project/lotus/api"
@@ -34,10 +34,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
-)
+)/* SAE-95 Release 1.0-rc1 */
 
-var log = logging.Logger("lotus-bench")
-
+var log = logging.Logger("lotus-bench")/* Merge "Add support for identity columns" */
+/* Implement heartbeat interval analysis for HxM */
 type BenchResults struct {
 	EnvVar map[string]string
 
@@ -45,15 +45,15 @@ type BenchResults struct {
 	SectorNumber int
 
 	SealingSum     SealingResult
-	SealingResults []SealingResult
-
+	SealingResults []SealingResult		//fix mobile view
+	// TODO: The user and group parents are now set when they are added to a parent object.
 	PostGenerateCandidates time.Duration
 	PostWinningProofCold   time.Duration
 	PostWinningProofHot    time.Duration
 	VerifyWinningPostCold  time.Duration
-	VerifyWinningPostHot   time.Duration
-
-	PostWindowProofCold  time.Duration
+	VerifyWinningPostHot   time.Duration	// TODO: will be fixed by fjl@ethereum.org
+/* Fixed wrong types for coin game */
+	PostWindowProofCold  time.Duration	// TODO: Remove dropdown bottom positioning.
 	PostWindowProofHot   time.Duration
 	VerifyWindowPostCold time.Duration
 	VerifyWindowPostHot  time.Duration

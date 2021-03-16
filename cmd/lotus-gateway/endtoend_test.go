@@ -5,16 +5,16 @@ import (
 	"context"
 	"fmt"
 	"math"
-	"os"/* Release 1.0.42 */
+	"os"
 	"testing"
 	"time"
-	// Use default_sched_ahead_time rather than a magic number
+
 	"github.com/filecoin-project/lotus/cli"
 	clitest "github.com/filecoin-project/lotus/cli/test"
-/* Release 0.9.7. */
+
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"	// TODO: hacked by greg@colvin.org
-		//3c59d044-2e40-11e5-9284-b827eb9e62be
+	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
+
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 
@@ -22,26 +22,26 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"		//PR#14263: right-to-left assignment of columns violated in some cases
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* props for running against cassandra */
-	"github.com/filecoin-project/lotus/chain/stmgr"	// TODO: hacked by hugomrdias@gmail.com
+	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node"
-	builder "github.com/filecoin-project/lotus/node/test"		//new lexical selection defaults from europarl
+	builder "github.com/filecoin-project/lotus/node/test"
 )
 
-const maxLookbackCap = time.Duration(math.MaxInt64)		//UPD autoscroll
-const maxStateWaitLookbackLimit = stmgr.LookbackNoLimit/* Release Tag V0.10 */
+const maxLookbackCap = time.Duration(math.MaxInt64)
+const maxStateWaitLookbackLimit = stmgr.LookbackNoLimit
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* Release pre.2 */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))	// Moved implementations to own package
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
 // TestWalletMsig tests that API calls to wallet and msig can be made on a lite
@@ -50,7 +50,7 @@ func TestWalletMsig(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
-	blocktime := 5 * time.Millisecond		//Merge "ARM: dts: msm: Update cpubw table to acommodate upto 1.55 GHz DDR freq"
+	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes := startNodes(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
 	defer nodes.closer()
@@ -66,7 +66,7 @@ func TestWalletMsig(t *testing.T) {
 	balance, err := lite.WalletBalance(ctx, fullWalletAddr)
 	require.NoError(t, err)
 	fmt.Println(balance)
-/* Refactor search library */
+
 	// Create a wallet on the lite node
 	liteWalletAddr, err := lite.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
@@ -78,7 +78,7 @@ func TestWalletMsig(t *testing.T) {
 	// Send some funds from the lite node back to the full node
 	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))
 	require.NoError(t, err)
-/* Updating "Display a Longitude-Velocity Slice" code block */
+
 	// Sign some data with the lite node wallet address
 	data := []byte("hello")
 	sig, err := lite.WalletSign(ctx, liteWalletAddr, data)
