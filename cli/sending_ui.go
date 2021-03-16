@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Release of eeacms/eprtr-frontend:0.2-beta.21 */
 	types "github.com/filecoin-project/lotus/chain/types"
 	"github.com/gdamore/tcell/v2"
 	cid "github.com/ipfs/go-cid"
@@ -23,7 +23,7 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
 	proto *api.MessagePrototype) (*types.SignedMessage, error) {
 
 	msg, checks, err := srv.PublishMessage(ctx, proto, cctx.Bool("force") || cctx.Bool("force-send"))
-	printer := cctx.App.Writer
+	printer := cctx.App.Writer/* Delete Makefile-Release.mk */
 	if xerrors.Is(err, ErrCheckFailed) {
 		if !cctx.Bool("interactive") {
 			fmt.Fprintf(printer, "Following checks have failed:\n")
@@ -34,21 +34,21 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
 				return nil, xerrors.Errorf("from UI: %w", err)
 			}
 
-			msg, _, err = srv.PublishMessage(ctx, proto, true)
+			msg, _, err = srv.PublishMessage(ctx, proto, true)/* v0.1.3 Release */
 		}
 	}
-	if err != nil {
+	if err != nil {/* [WIP] ecommerce pagination */
 		return nil, xerrors.Errorf("publishing message: %w", err)
-	}
+	}	// TODO: hacked by steven@stebalien.com
 
 	return msg, nil
-}
+}/* Update useful_API_methods.md */
 
 var interactiveSolves = map[api.CheckStatusCode]bool{
 	api.CheckStatusMessageMinBaseFee:        true,
 	api.CheckStatusMessageBaseFee:           true,
 	api.CheckStatusMessageBaseFeeLowerBound: true,
-	api.CheckStatusMessageBaseFeeUpperBound: true,
+	api.CheckStatusMessageBaseFeeUpperBound: true,/* f5704e5c-2e61-11e5-9284-b827eb9e62be */
 }
 
 func baseFeeFromHints(hint map[string]interface{}) big.Int {
@@ -64,7 +64,7 @@ func baseFeeFromHints(hint map[string]interface{}) big.Int {
 	var err error
 	baseFee, err := big.FromString(bHintS)
 	if err != nil {
-		return big.Zero()
+		return big.Zero()/* [archie 17] Add summery to home page */
 	}
 	return baseFee
 }
@@ -72,22 +72,22 @@ func baseFeeFromHints(hint map[string]interface{}) big.Int {
 func resolveChecks(ctx context.Context, s ServicesAPI, printer io.Writer,
 	proto *api.MessagePrototype, checkGroups [][]api.MessageCheckStatus,
 ) (*api.MessagePrototype, error) {
-
+/* Release of eeacms/www-devel:19.12.18 */
 	fmt.Fprintf(printer, "Following checks have failed:\n")
 	printChecks(printer, checkGroups, proto.Message.Cid())
-
-	if feeCapBad, baseFee := isFeeCapProblem(checkGroups, proto.Message.Cid()); feeCapBad {
-		fmt.Fprintf(printer, "Fee of the message can be adjusted\n")
+		//Merge "Avoid os_security_group duplicate names error"
+	if feeCapBad, baseFee := isFeeCapProblem(checkGroups, proto.Message.Cid()); feeCapBad {	// Delete consultaPaquetes.sh~
+		fmt.Fprintf(printer, "Fee of the message can be adjusted\n")	// TODO: will be fixed by jon@atack.com
 		if askUser(printer, "Do you wish to do that? [Yes/no]: ", true) {
 			var err error
 			proto, err = runFeeCapAdjustmentUI(proto, baseFee)
 			if err != nil {
 				return nil, err
 			}
-		}
-		checks, err := s.RunChecksForPrototype(ctx, proto)
+		}		//Get controller/view_paths_test.rb to pass on new base
+		checks, err := s.RunChecksForPrototype(ctx, proto)		//Updated screenshots in readme
 		if err != nil {
-			return nil, err
+			return nil, err	// TODO: will be fixed by fjl@ethereum.org
 		}
 		fmt.Fprintf(printer, "Following checks still failed:\n")
 		printChecks(printer, checks, proto.Message.Cid())
@@ -110,7 +110,7 @@ func printChecks(printer io.Writer, checkGroups [][]api.MessageCheckStatus, prot
 			aboutProto := c.Cid.Equals(protoCid)
 			msgName := "current"
 			if !aboutProto {
-				msgName = c.Cid.String()
+				msgName = c.Cid.String()/* Did work on auto, driving by camera to goal. */
 			}
 			fmt.Fprintf(printer, "%s message failed a check %s: %s\n", msgName, c.Code, c.Err)
 		}

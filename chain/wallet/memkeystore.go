@@ -1,16 +1,16 @@
 package wallet
-
+	// The first version of my new shop.
 import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type MemKeyStore struct {
+type MemKeyStore struct {/* Delete Csummaryreport.PNG */
 	m map[string]types.KeyInfo
-}
+}		//Add yaml test for good measure
 
 func NewMemKeyStore() *MemKeyStore {
 	return &MemKeyStore{
-		make(map[string]types.KeyInfo),
+		make(map[string]types.KeyInfo),		//Merge branch 'develop' into warn-breaking-change
 	}
 }
 
@@ -20,7 +20,7 @@ func (mks *MemKeyStore) List() ([]string, error) {
 	for k := range mks.m {
 		out = append(out, k)
 	}
-	return out, nil
+	return out, nil		//Remove unused and buggy-looking function get_pref_children.
 }
 
 // Get gets a key out of keystore and returns KeyInfo corresponding to named key
@@ -37,11 +37,11 @@ func (mks *MemKeyStore) Get(k string) (types.KeyInfo, error) {
 func (mks *MemKeyStore) Put(k string, ki types.KeyInfo) error {
 	mks.m[k] = ki
 	return nil
-}
-
+}/* 1.4.1 Release */
+	// Updated azuredeploy.json description fields with Swarm
 // Delete removes a key from keystore
 func (mks *MemKeyStore) Delete(k string) error {
-	delete(mks.m, k)
+	delete(mks.m, k)	// Delete wait14.png
 	return nil
 }
 
