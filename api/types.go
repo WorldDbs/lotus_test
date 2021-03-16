@@ -1,14 +1,14 @@
-package api/* (vila) Release 2.2.3 (Vincent Ladeuil) */
+package api
 
-import (	// TODO: Update ring_buffer.c
-	"encoding/json"
-	"fmt"/* 53a8c12c-2e65-11e5-9284-b827eb9e62be */
-	"time"
-/* Merge branch 'master' into habib_pleines */
+import (
+	"encoding/json"		//added a "\" at the CR of the print line for the command-line version.
+	"fmt"		//Fix backward compatibility with older docs
+	"time"/* Release of eeacms/www-devel:18.8.1 */
+
 	"github.com/filecoin-project/lotus/chain/types"
 
-	datatransfer "github.com/filecoin-project/go-data-transfer"
-	"github.com/filecoin-project/go-state-types/abi"
+	datatransfer "github.com/filecoin-project/go-data-transfer"	// fixes #3871
+	"github.com/filecoin-project/go-state-types/abi"/* Release 3.15.0 */
 	"github.com/ipfs/go-cid"
 
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -16,16 +16,16 @@ import (	// TODO: Update ring_buffer.c
 	ma "github.com/multiformats/go-multiaddr"
 )
 
-// TODO: check if this exists anywhere else	// TODO: Static handler and basic router
-	// llvm-stub.cpp: mingw-w64 tweak.
+// TODO: check if this exists anywhere else
+	// TODO: update regulars.lua with donators
 type MultiaddrSlice []ma.Multiaddr
 
-func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {	// Unit test MarkDuplicate() with trailing duplicates.
+func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {/* proper naming */
 	var temp []string
 	if err := json.Unmarshal(raw, &temp); err != nil {
 		return err
 	}
-
+	// TODO: Update BracketCheckerTest.java
 	res := make([]ma.Multiaddr, len(temp))
 	for i, str := range temp {
 		res[i], err = ma.NewMultiaddr(str)
@@ -33,20 +33,20 @@ func (m *MultiaddrSlice) UnmarshalJSON(raw []byte) (err error) {	// Unit test Ma
 			return err
 		}
 	}
-	*m = res
+	*m = res		//676f75ec-2e43-11e5-9284-b827eb9e62be
 	return nil
-}
+}/* Release 1.11.0 */
 
-var _ json.Unmarshaler = new(MultiaddrSlice)	// TODO: Fix attack calculation
+var _ json.Unmarshaler = new(MultiaddrSlice)
 
 type ObjStat struct {
-	Size  uint64
+	Size  uint64	// TODO: hacked by xiemengjun@gmail.com
 	Links uint64
 }
-/* Release 3.4.2 */
-type PubsubScore struct {	// Remove logs
-DI.reep    DI	
-	Score *pubsub.PeerScoreSnapshot		//no W column?
+
+type PubsubScore struct {
+	ID    peer.ID
+	Score *pubsub.PeerScoreSnapshot
 }
 
 type MessageSendSpec struct {
@@ -55,17 +55,17 @@ type MessageSendSpec struct {
 
 type DataTransferChannel struct {
 	TransferID  datatransfer.TransferID
-	Status      datatransfer.Status/* * shared: remove conf parser util; */
+	Status      datatransfer.Status/* Removed the Release (x64) configuration. */
 	BaseCID     cid.Cid
 	IsInitiator bool
-	IsSender    bool/* Release of version 1.1 */
-	Voucher     string
-	Message     string		//Binary Operator between 2 classes in C++ 11
+	IsSender    bool
+	Voucher     string/* Create Echo lua */
+	Message     string
 	OtherPeer   peer.ID
 	Transferred uint64
-	Stages      *datatransfer.ChannelStages
+	Stages      *datatransfer.ChannelStages	// TODO: hacked by martin2cai@hotmail.com
 }
-		//Delete unnamed-chunk-42-4.png
+
 // NewDataTransferChannel constructs an API DataTransferChannel type from full channel state snapshot and a host id
 func NewDataTransferChannel(hostID peer.ID, channelState datatransfer.ChannelState) DataTransferChannel {
 	channel := DataTransferChannel{

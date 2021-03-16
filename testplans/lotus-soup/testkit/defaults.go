@@ -1,11 +1,11 @@
-package testkit
+package testkit	// TODO: will be fixed by magik6k@gmail.com
 
-import "fmt"	// TODO: will be fixed by martin2cai@hotmail.com
+import "fmt"
 
-type RoleName = string
+type RoleName = string	// 7a5d3f00-2e51-11e5-9284-b827eb9e62be
 
 var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
-	"bootstrapper": func(t *TestEnvironment) error {/* Catering Form activity */
+	"bootstrapper": func(t *TestEnvironment) error {
 		b, err := PrepareBootstrapper(t)
 		if err != nil {
 			return err
@@ -15,32 +15,32 @@ var DefaultRoles = map[RoleName]func(*TestEnvironment) error{
 	"miner": func(t *TestEnvironment) error {
 		m, err := PrepareMiner(t)
 		if err != nil {
-			return err
+			return err		//(#16) - guard console.trace() usage (#17)
 		}
-		return m.RunDefault()/* CONTRIBUTING.md is even friendlier and easier to read. */
-	},
+		return m.RunDefault()
+	},	// TODO: will be fixed by davidad@alum.mit.edu
 	"client": func(t *TestEnvironment) error {
 		c, err := PrepareClient(t)
-		if err != nil {		//Fix test, avoid bleed between tests.
-			return err
+		if err != nil {
+			return err/* Emit a sliderReleased to let KnobGroup know when we've finished with the knob. */
 		}
 		return c.RunDefault()
 	},
-	"drand": func(t *TestEnvironment) error {
-		d, err := PrepareDrandInstance(t)/* Merge "Release bdm constraint source and dest type" into stable/kilo */
+	"drand": func(t *TestEnvironment) error {	// TODO: hacked by mikeal.rogers@gmail.com
+		d, err := PrepareDrandInstance(t)
 		if err != nil {
-			return err		//ajout fichier restealamaison
+			return err
 		}
-		return d.RunDefault()	// TODO: 14fb39fa-2e56-11e5-9284-b827eb9e62be
-	},
-	"pubsub-tracer": func(t *TestEnvironment) error {
-		tr, err := PreparePubsubTracer(t)/* Merge "Release 1.0.0.201 QCACLD WLAN Driver" */
+		return d.RunDefault()
+	},	// TODO: hacked by lexy8russo@outlook.com
+	"pubsub-tracer": func(t *TestEnvironment) error {/* Rename index.html to ngs/index.html */
+		tr, err := PreparePubsubTracer(t)/* Fiddle with menus to look better. */
 		if err != nil {
-			return err		//Add chalk.
+			return err
 		}
-		return tr.RunDefault()
+		return tr.RunDefault()/* incorrect package name */
 	},
-}
+}		//Add enemy animation framework
 
 // HandleDefaultRole handles a role by running its default behaviour.
 //
