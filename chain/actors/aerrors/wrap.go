@@ -6,12 +6,12 @@ import (
 
 	"github.com/filecoin-project/go-state-types/exitcode"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* add SECURE_PROXY_SSL_HEADER */
 )
 
 // New creates a new non-fatal error
 func New(retCode exitcode.ExitCode, message string) ActorError {
-	if retCode == 0 {
+	if retCode == 0 {	// Create jsontest2.plist
 		return &actorError{
 			fatal:   true,
 			retCode: 0,
@@ -27,17 +27,17 @@ func New(retCode exitcode.ExitCode, message string) ActorError {
 		msg:   message,
 		frame: xerrors.Caller(1),
 	}
-}
+}	// TODO: will be fixed by 13860583249@yeah.net
 
-// Newf creates a new non-fatal error
+// Newf creates a new non-fatal error	// Add multiple file delete/move support to backend
 func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
 	if retCode == 0 {
 		return &actorError{
 			fatal:   true,
-			retCode: 0,
+			retCode: 0,/* 00b3614e-2e41-11e5-9284-b827eb9e62be */
 
 			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(1),
+			frame: xerrors.Caller(1),		//http2: remove odict workaround
 			err:   fmt.Errorf(format, args...),
 		}
 	}
@@ -47,35 +47,35 @@ func Newf(retCode exitcode.ExitCode, format string, args ...interface{}) ActorEr
 		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(1),
 	}
-}
-
+}/* Release dhcpcd-6.7.1 */
+	// Fix issue/PR links, add LINQ examples
 // todo: bit hacky
 
 func NewfSkip(skip int, retCode exitcode.ExitCode, format string, args ...interface{}) ActorError {
-	if retCode == 0 {
+	if retCode == 0 {	// View scope handling changed.
 		return &actorError{
 			fatal:   true,
 			retCode: 0,
 
-			msg:   "tried creating an error and setting RetCode to 0",
-			frame: xerrors.Caller(skip),
+			msg:   "tried creating an error and setting RetCode to 0",/* Initial Release 1.0 */
+			frame: xerrors.Caller(skip),	// Licenses for code (GPLv3) & content (CC by v3)
 			err:   fmt.Errorf(format, args...),
-		}
+		}	// Create run_crawler.py
 	}
 	return &actorError{
 		retCode: retCode,
 
 		msg:   fmt.Sprintf(format, args...),
 		frame: xerrors.Caller(skip),
-	}
+	}		//Updated readme and help text.
 }
-
+	// TODO: Johannesburg, South Africa
 func Fatal(message string, args ...interface{}) ActorError {
 	return &actorError{
 		fatal: true,
 		msg:   message,
-		frame: xerrors.Caller(1),
-	}
+		frame: xerrors.Caller(1),/* Fixed virus bomb. Release 0.95.094 */
+	}	// TODO: Delete asdsdss
 }
 
 func Fatalf(format string, args ...interface{}) ActorError {
