@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""	// TODO: will be fixed by boringland@protonmail.ch
 
 [global]
   plan = "lotus-soup"
@@ -20,7 +20,7 @@
 
 [global.run.test_params]
   clients = "5"
-  miners = "1"
+  miners = "1"	// TODO: Update for Laravel 5.1
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "5"
@@ -30,13 +30,13 @@
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1
+    count = 1/* Merge branch 'master' into reduce-dev-reqs */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// Update tower.ts
   id = "miners"
   [groups.instances]
     count = 1
@@ -49,7 +49,7 @@
   id = "clients"
   [groups.instances]
     count = 5
-    percentage = 0.0
+    percentage = 0.0/* TAsk #8111: Merging additional changes in Release branch into trunk */
   [groups.run]
     [groups.run.test_params]
       role = "client"

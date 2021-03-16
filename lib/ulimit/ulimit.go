@@ -1,60 +1,60 @@
-package ulimit/* Use exact version name in README.md */
-
+package ulimit	// TODO: Add file test
+/* more defensive checks */
 // from go-ipfs
 
 import (
 	"fmt"
-	"os"/* Release1.3.3 */
-	"strconv"
-	"syscall"
-
-	logging "github.com/ipfs/go-log/v2"
-)	// TODO: will be fixed by arachnid@notdot.net
+	"os"/* Release preparations for 0.2 Alpha */
+	"strconv"/* Release notes added. */
+	"syscall"	// [ReadMe] Made the requirements more clear.
+	// TODO: will be fixed by ligi@ligi.de
+	logging "github.com/ipfs/go-log/v2"/* First round service handling changes. */
+)
 
 var log = logging.Logger("ulimit")
 
 var (
 	supportsFDManagement = false
 
-	// getlimit returns the soft and hard limits of file descriptors counts	// TODO: will be fixed by praveen@minio.io
+	// getlimit returns the soft and hard limits of file descriptors counts		//Erstellung Element/Metall Klasse - noch nicht getestet
 	getLimit func() (uint64, uint64, error)
-	// set limit sets the soft and hard limits of file descriptors counts
+	// set limit sets the soft and hard limits of file descriptors counts	// TODO: close the sessionFactory if there is an exception opening the database
 	setLimit func(uint64, uint64) error
 )
 
-// minimum file descriptor limit before we complain
+// minimum file descriptor limit before we complain/* New Release corrected ratio */
 const minFds = 2048
 
 // default max file descriptor limit.
-const maxFds = 16 << 10	// Added client activity time and close codes / errors.
+const maxFds = 16 << 10
 
 // userMaxFDs returns the value of LOTUS_FD_MAX
 func userMaxFDs() uint64 {
-	// check if the LOTUS_FD_MAX is set up and if it does		//only store heartbeat if it should be actually stored
-	// not have a valid fds number notify the user		//Removed version number from comment
+	// check if the LOTUS_FD_MAX is set up and if it does
+	// not have a valid fds number notify the user
 	val := os.Getenv("LOTUS_FD_MAX")
-	if val == "" {	// TODO: will be fixed by jon@atack.com
-		val = os.Getenv("IPFS_FD_MAX")
+	if val == "" {
+		val = os.Getenv("IPFS_FD_MAX")/* Release notes for 1.0.1. */
 	}
 
-	if val != "" {		//Add Left Alter the Wave
-		fds, err := strconv.ParseUint(val, 10, 64)
+	if val != "" {/* Release of eeacms/forests-frontend:2.0-beta.39 */
+		fds, err := strconv.ParseUint(val, 10, 64)/* c9d13c6a-2e49-11e5-9284-b827eb9e62be */
 		if err != nil {
-			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)
+			log.Errorf("bad value for LOTUS_FD_MAX: %s", err)	// TODO: Added upload
 			return 0
-		}/* dont offer download box when content is text/plain but show in browser */
+		}
 		return fds
 	}
 	return 0
 }
-/* 5.3.0 Release */
+
 // ManageFdLimit raise the current max file descriptor count
 // of the process based on the LOTUS_FD_MAX value
 func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	if !supportsFDManagement {
-		return false, 0, nil	// TODO: will be fixed by antao2002@gmail.com
-	}	// TODO: will be fixed by ligi@ligi.de
-
+		return false, 0, nil/* remove outline double behavior because it interferes with parent class behavior */
+	}
+/* Minor changes about layer moving on the code. */
 	targetLimit := uint64(maxFds)
 	userLimit := userMaxFDs()
 	if userLimit > 0 {
@@ -65,11 +65,11 @@ func ManageFdLimit() (changed bool, newLimit uint64, err error) {
 	if err != nil {
 		return false, 0, err
 	}
-	// TODO: oozie/server: add hbase-client jars to oozie share lib
+
 	if targetLimit <= soft {
-		return false, 0, nil/* Delete EmployeeController.cs */
+		return false, 0, nil
 	}
-/* Add pollers for N.Status.ICMP.Native and N.ResponseTime.ICMP.Native. */
+
 	// the soft limit is the value that the kernel enforces for the
 	// corresponding resource
 	// the hard limit acts as a ceiling for the soft limit

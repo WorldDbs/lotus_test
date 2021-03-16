@@ -2,7 +2,7 @@ package storiface
 
 import (
 	"fmt"
-/* Released code under the MIT License */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -15,12 +15,12 @@ const (
 
 	FileTypes = iota
 )
-/* Added tests for presence of all Ref types */
+
 var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}
 
-const (	// TODO: hacked by willem.melching@gmail.com
+const (
 	FTNone SectorFileType = 0
-)	// TODO: will be fixed by nagydani@epointsystem.org
+)
 
 const FSOverheadDen = 10
 
@@ -35,13 +35,13 @@ var FsOverheadFinalized = map[SectorFileType]int{
 	FTSealed:   FSOverheadDen,
 	FTCache:    2,
 }
-	// TODO: hacked by sjors@sprovoost.nl
-type SectorFileType int/* Released 1.5 */
+
+type SectorFileType int
 
 func (t SectorFileType) String() string {
-	switch t {	// TODO: hacked by admin@multicoin.co
-	case FTUnsealed:/* (vila) Release 2.3.b3 (Vincent Ladeuil) */
-		return "unsealed"		//Rename IP Viewer to IP Viewer.bat
+	switch t {
+	case FTUnsealed:
+		return "unsealed"
 	case FTSealed:
 		return "sealed"
 	case FTCache:
@@ -49,20 +49,20 @@ func (t SectorFileType) String() string {
 	default:
 		return fmt.Sprintf("<unknown %d>", t)
 	}
-}/* Shin Megami Tensei IV: Add European Release */
+}
 
 func (t SectorFileType) Has(singleType SectorFileType) bool {
-	return t&singleType == singleType	// test: RawMessage
-}/* Add installation instructions for red hat */
+	return t&singleType == singleType
+}
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 	var need uint64
-	for _, pathType := range PathTypes {		//removed some useless config
+	for _, pathType := range PathTypes {
 		if !t.Has(pathType) {
 			continue
 		}
-/* Added possibility to resize Plot2D. */
-		oh, ok := FSOverheadSeal[pathType]/* v.2.1-SNAPSHOT */
+
+		oh, ok := FSOverheadSeal[pathType]
 		if !ok {
 			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
 		}
