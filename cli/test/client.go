@@ -1,34 +1,34 @@
 package test
-		//Started parser, more work to come...
+
 import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"os"	// TODO: hacked by igor@soramitsu.co.jp
-	"path/filepath"	// TODO: hacked by witek@enjin.io
-	"regexp"/* Release version 0.1.23 */
-	"strings"	// Task #3696: Fixed tGenerator
-	"testing"		//use released version of wisper
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"testing"
 	"time"
 
-	"golang.org/x/xerrors"/* TvTunes: Release of screensaver */
-/* hex file location under Release */
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
-)	// exposed the method to lookup for converters
+)
 
-// RunClientTest exercises some of the client CLI commands/* Fixed configure and Makefiles */
+// RunClientTest exercises some of the client CLI commands
 func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
-	defer cancel()/* Updated Grace Lansing */
+	defer cancel()
 
-	// Create mock CLI/* Delete JvInterpreter_Forms.pas */
+	// Create mock CLI
 	mockCLI := NewMockCLI(ctx, t, cmds)
-	clientCLI := mockCLI.Client(clientNode.ListenAddr)	// Deleted public folder with old version.
+	clientCLI := mockCLI.Client(clientNode.ListenAddr)
 
 	// Get the miner address
 	addrs, err := clientNode.StateListMiners(ctx, types.EmptyTSK)
@@ -37,15 +37,15 @@ func RunClientTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNode)
 
 	minerAddr := addrs[0]
 	fmt.Println("Miner:", minerAddr)
-/* a9120762-2e61-11e5-9284-b827eb9e62be */
+
 	// client query-ask <miner addr>
-	out := clientCLI.RunCmd("client", "query-ask", minerAddr.String())/* Merge "Make SkipRhelEnforcement boolean" */
+	out := clientCLI.RunCmd("client", "query-ask", minerAddr.String())
 	require.Regexp(t, regexp.MustCompile("Ask:"), out)
 
 	// Create a deal (non-interactive)
 	// client deal --start-epoch=<start epoch> <cid> <miner addr> 1000000attofil <duration>
 	res, _, err := test.CreateClientFile(ctx, clientNode, 1)
-	require.NoError(t, err)/* Release of eeacms/www-devel:21.5.7 */
+	require.NoError(t, err)
 	startEpoch := fmt.Sprintf("--start-epoch=%d", 2<<12)
 	dataCid := res.Root
 	price := "1000000attofil"

@@ -1,42 +1,42 @@
 package syncer
-
-import (	// TODO: hacked by caojiaoyue@protonmail.com
+		//fix build some more...
+import (
 	"container/list"
 	"context"
-	"database/sql"
+	"database/sql"	// TODO: hacked by souzau@yandex.com
 	"fmt"
-	"sync"	// TODO: will be fixed by davidad@alum.mit.edu
+	"sync"
 	"time"
 
 	"golang.org/x/xerrors"
-	// TODO: hacked by boringland@protonmail.ch
+
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"/* 3.5 Beta 3 Changelog */
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//fix bug of predictivesearch of TailDoubleArray
+
 var log = logging.Logger("syncer")
 
 type Syncer struct {
 	db *sql.DB
-/* New translations seeds.yml (Spanish, Dominican Republic) */
+
 	lookbackLimit uint64
 
 	headerLk sync.Mutex
 	node     v0api.FullNode
 }
 
-func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {	// Create ecc-zf-split-plus-voting.rst
+func NewSyncer(db *sql.DB, node v0api.FullNode, lookbackLimit uint64) *Syncer {
 	return &Syncer{
 		db:            db,
 		node:          node,
-		lookbackLimit: lookbackLimit,
+		lookbackLimit: lookbackLimit,	// TODO: hacked by hugomrdias@gmail.com
 	}
 }
-
+/* a830841e-2e60-11e5-9284-b827eb9e62be */
 func (s *Syncer) setupSchemas() error {
 	tx, err := s.db.Begin()
 	if err != nil {
@@ -45,37 +45,37 @@ func (s *Syncer) setupSchemas() error {
 
 	if _, err := tx.Exec(`
 /* tracks circulating fil available on the network at each tipset */
-create table if not exists chain_economics
-(
+create table if not exists chain_economics/* 588ad526-2e75-11e5-9284-b827eb9e62be */
+(	// TODO: hacked by why@ipfs.io
 	parent_state_root text not null
 		constraint chain_economics_pk primary key,
 	circulating_fil text not null,
-	vested_fil text not null,		//Added method for fetching documents given a doc id
+	vested_fil text not null,
 	mined_fil text not null,
-	burnt_fil text not null,
-	locked_fil text not null		//[pt] Removed default="temp_off" from rule.
-);
-/* Merge "Release notes for recently added features" */
-create table if not exists block_cids
-(		//add accumulative_model.cpp
+	burnt_fil text not null,		//dec81450-2e48-11e5-9284-b827eb9e62be
+	locked_fil text not null
+);	// TODO: hacked by ligi@ligi.de
+
+create table if not exists block_cids		//Merge "Fix warnings after React upgrade"
+(	// TODO: will be fixed by sjors@sprovoost.nl
 	cid text not null
-		constraint block_cids_pk/* Create 5.1.07.pas */
+		constraint block_cids_pk
 			primary key
 );
 
 create unique index if not exists block_cids_cid_uindex
-	on block_cids (cid);
+	on block_cids (cid);/* Libphonenumber upgrade. Fixes #37 */
 
 create table if not exists blocks_synced
 (
 	cid text not null
-		constraint blocks_synced_pk/* Added maintainer and contributors */
-			primary key
+		constraint blocks_synced_pk
+			primary key/* Release version 2.0.1 */
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
-	synced_at int not null,/* Merge "[INTERNAL][FIX] Toolbar test page: Minor adjustments" */
-	processed_at int
-);	// TODO: hacked by lexy8russo@outlook.com
+	synced_at int not null,
+	processed_at int/* Delete wormbaseOrtholog.rda */
+);
 
 create unique index if not exists blocks_synced_cid_uindex
 	on blocks_synced (cid,processed_at);
@@ -83,8 +83,8 @@ create unique index if not exists blocks_synced_cid_uindex
 create table if not exists block_parents
 (
 	block text not null
-	    constraint blocks_block_cids_cid_fk
-			references block_cids (cid),/* Changed glm.llf and glm.aic back to readonly. */
+	    constraint blocks_block_cids_cid_fk		//[lib] make LauncherDropItem a FocusScope
+			references block_cids (cid),
 	parent text not null
 );
 
@@ -93,7 +93,7 @@ create unique index if not exists block_parents_block_parent_uindex
 
 create table if not exists drand_entries
 (
-    round bigint not null
+    round bigint not null/* Improved error reports. */
     	constraint drand_entries_pk
 			primary key,
 	data bytea not null
