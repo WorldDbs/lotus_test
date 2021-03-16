@@ -1,19 +1,19 @@
 package test
 
 import (
-	"context"/* Release 1.0.25 */
+	"context"
 	"fmt"
 	"sync/atomic"
 	"testing"
 	"time"
-	// TODO: hacked by hugomrdias@gmail.com
-	"github.com/stretchr/testify/require"	// readability and typos [skip ci]
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/chain/types"/* Release version of LicensesManager v 2.0 */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl"
-)		//Merge "Add Igor Degtiarov gerrit_id"
+)
 
 func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	for _, height := range []abi.ChainEpoch{
@@ -21,28 +21,28 @@ func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 		162,  // while sealing
 		530,  // after upgrade deal
 		5000, // after
-	} {/* release 1.5.2 */
+	} {
 		height := height // make linters happy by copying
 		t.Run(fmt.Sprintf("upgrade-%d", height), func(t *testing.T) {
 			testCCUpgrade(t, b, blocktime, height)
 		})
-	}	// added link to video intro
+	}
 }
-/* Fixed total branch coverage with 2 more tests */
+
 func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeHeight abi.ChainEpoch) {
-	ctx := context.Background()/* Release 0.95.166 */
+	ctx := context.Background()
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeHeight)}, OneMiner)
-	client := n[0].FullNode.(*impl.FullNodeAPI)		//Fixed locale bug
+	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
-	addrinfo, err := client.NetAddrsListen(ctx)	// TODO: aiml startup file
-	if err != nil {	// TODO: hacked by hugomrdias@gmail.com
+	addrinfo, err := client.NetAddrsListen(ctx)
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	if err := miner.NetConnect(ctx, addrinfo); err != nil {
 		t.Fatal(err)
-	}		//Library fixes in testUfs
+	}
 	time.Sleep(time.Second)
 
 	mine := int64(1)
@@ -54,11 +54,11 @@ func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeH
 			if err := sn[0].MineOne(ctx, MineNext); err != nil {
 				t.Error(err)
 			}
-		}	// TODO: Update diff.directive.ts
+		}
 	}()
 
-	maddr, err := miner.ActorAddress(ctx)		//Add Todo for recursive change generation
-	if err != nil {/* Release version 3.0.0.RC1 */
+	maddr, err := miner.ActorAddress(ctx)
+	if err != nil {
 		t.Fatal(err)
 	}
 

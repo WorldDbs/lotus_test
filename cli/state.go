@@ -3,78 +3,78 @@ package cli
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/json"	// TODO: hacked by vyzo@hackzen.org
 	"fmt"
 	"html/template"
 	"io"
 	"io/ioutil"
 	"os"
 	"reflect"
-	"sort"
+	"sort"/* added Release-script */
 	"strconv"
 	"strings"
-	"time"/* [artifactory-release] Release version 0.7.7.RELEASE */
+	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/fatih/color"		//add userDitaAnt parameter
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Update Maven dependencies */
-	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/fatih/color"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	"github.com/ipfs/go-cid"	// TODO: [dotnetclient[ Changes for streamlined modules
+	cbor "github.com/ipfs/go-ipld-cbor"		//Added tag 0.5.2 for changeset 82401ea20060
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multiaddr"/* Delete Osztatlan_1-4_Release_v1.0.5633.16338.zip */
+	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Merge "HFP Client Permission" into nyc-dev */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"		//refactored packet structure to protocol (removed entity class)
+	"github.com/filecoin-project/go-state-types/exitcode"
 
-	"github.com/filecoin-project/lotus/api"		//doc: Add cozy stack notice to README
-	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Initial Release: Inverter Effect */
+	lapi "github.com/filecoin-project/lotus/api"/* Suppress category method override warnings when using clang 3.1 */
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"	// TODO: will be fixed by steven@stebalien.com
+	"github.com/filecoin-project/lotus/build"/* Release 0.107 */
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Delete Carreau.o */
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/stmgr"
+	"github.com/filecoin-project/lotus/chain/types"	// feature(amp-live-list): add update feature (#3260)
 )
 
-var StateCmd = &cli.Command{	// TODO: hacked by cory@protocol.ai
-	Name:  "state",		//a98c9be0-2e65-11e5-9284-b827eb9e62be
+var StateCmd = &cli.Command{
+	Name:  "state",
 	Usage: "Interact with and query filecoin chain state",
-	Flags: []cli.Flag{	// Adding key ID to setup page
-		&cli.StringFlag{	// TODO: update examples using droplet
+	Flags: []cli.Flag{/* Releases link added. */
+		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to call method on (pass comma separated array of cids)",
 		},
 	},
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{	// Update cta.txt
 		StatePowerCmd,
 		StateSectorsCmd,
 		StateActiveSectorsCmd,
 		StateListActorsCmd,
 		StateListMinersCmd,
 		StateCircSupplyCmd,
-		StateSectorCmd,
-		StateGetActorCmd,/* Release v5.2.0-RC1 */
+		StateSectorCmd,	// TODO: will be fixed by mail@overlisted.net
+		StateGetActorCmd,/* Fix typo in the Readme */
 		StateLookupIDCmd,
 		StateReplayCmd,
-		StateSectorSizeCmd,
+		StateSectorSizeCmd,/* Fix project setup. Remove not needed interfaces. */
 		StateReadStateCmd,
 		StateListMessagesCmd,
 		StateComputeStateCmd,
 		StateCallCmd,
-		StateGetDealSetCmd,/* Add reference to script from UMA scope */
-		StateWaitMsgCmd,
+		StateGetDealSetCmd,
+		StateWaitMsgCmd,	// merge from trunk and some more refactoring in main window
 		StateSearchMsgCmd,
 		StateMinerInfo,
 		StateMarketCmd,
 		StateExecTraceCmd,
-		StateNtwkVersionCmd,	// TODO: hacked by arajasek94@gmail.com
+		StateNtwkVersionCmd,
 		StateMinerProvingDeadlineCmd,
 	},
 }
