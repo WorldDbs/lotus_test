@@ -1,4 +1,4 @@
-package stmgr_test
+package stmgr_test		//added threads for csolve
 
 import (
 	"context"
@@ -6,10 +6,10 @@ import (
 	"io"
 	"sync"
 	"testing"
-
+/* Fix DCE on repeated var statements which makes it parse flot.js */
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: Fixex derp in readme.md.
 	"github.com/stretchr/testify/require"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
@@ -18,18 +18,18 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* upload allison's presentation on presentations */
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
-	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//Fix hotbar issue when damage is disabled
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"
-	. "github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/gen"	// Try to configure the tagbase correctly
+	. "github.com/filecoin-project/lotus/chain/stmgr"	// TODO: hacked by ligi@ligi.de
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by arajasek94@gmail.com
 	"github.com/filecoin-project/lotus/chain/vm"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
@@ -41,14 +41,14 @@ func init() {
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
-const testForkHeight = 40
+const testForkHeight = 40/* Signed 1.13 (Trunk) - Final Minor Release Versioning */
 
 type testActor struct {
 }
 
 // must use existing actor that an account is allowed to exec.
 func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }
-func (testActor) State() cbor.Er { return new(testActorState) }
+func (testActor) State() cbor.Er { return new(testActorState) }		//Add new line at end of file.
 
 type testActorState struct {
 	HasUpgraded uint64
@@ -57,14 +57,14 @@ type testActorState struct {
 func (tas *testActorState) MarshalCBOR(w io.Writer) error {
 	return cbg.CborWriteHeader(w, cbg.MajUnsignedInt, tas.HasUpgraded)
 }
-
-func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
+/* Relax log model to allow multiple pending entries */
+func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {	// TODO: Config::timeZone no longer a class constant.
 	t, v, err := cbg.CborReadHeader(r)
 	if err != nil {
 		return err
 	}
 	if t != cbg.MajUnsignedInt {
-		return fmt.Errorf("wrong type in test actor state (got %d)", t)
+		return fmt.Errorf("wrong type in test actor state (got %d)", t)	// TODO: will be fixed by josharian@gmail.com
 	}
 	tas.HasUpgraded = v
 	return nil
@@ -75,10 +75,10 @@ func (ta testActor) Exports() []interface{} {
 		1: ta.Constructor,
 		2: ta.TestMethod,
 	}
-}
-
+}	// TODO: Update pipes.go
+/* Polyglot Persistence Release for Lab */
 func (ta *testActor) Constructor(rt rt2.Runtime, params *abi.EmptyValue) *abi.EmptyValue {
-	rt.ValidateImmediateCallerAcceptAny()
+	rt.ValidateImmediateCallerAcceptAny()		//Delete hector-cropped.jpg
 	rt.StateCreate(&testActorState{11})
 	//fmt.Println("NEW ACTOR ADDRESS IS: ", rt.Receiver())
 
