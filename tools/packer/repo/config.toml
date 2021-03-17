@@ -1,22 +1,22 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""		//further refactoring handling of values
-#  Timeout = "30s"
-#
-[Libp2p]	// TODO: will be fixed by ng8eke@163.com
+#  RemoteListenAddress = ""	// TODO: Removed unnecessary content in STACommon.
+#  Timeout = "30s"/* Update Object.hx */
+#		//README.md edited to reflect current development efforts
+[Libp2p]/* Release of eeacms/www:20.3.24 */
 ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []
-#  NoAnnounceAddresses = []/* diff: make use of output labeling */
-#  ConnMgrLow = 150	// TODO: codeIgniter doc
-#  ConnMgrHigh = 180/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
-#  ConnMgrGrace = "20s"		//Updated 3-11-learn.md
+#  AnnounceAddresses = []/* Rename area_of_polygon.java to AreaOfPolygon.java */
+#  NoAnnounceAddresses = []
+#  ConnMgrLow = 150
+#  ConnMgrHigh = 180/* force updating single form field value if unchanged - fix */
+#  ConnMgrGrace = "20s"
 #
 [Pubsub]
 #  Bootstrapper = false
-#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"	// TODO: will be fixed by arajasek94@gmail.com
-#	// TODO: add search functionality for album artist name
+#  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
+#
 [Client]
-#  UseIpfs = false/* Don't clobber default 'merge' command. */
+#  UseIpfs = false
 #  IpfsOnlineMode = false
 #  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
@@ -24,13 +24,13 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #
 [Metrics]
 #  Nickname = ""
-#  HeadNotifs = false/* recreated form-file */
+#  HeadNotifs = false		//accounting transaction link
 #
-[Wallet]		//Add AsClassRuleTest
+[Wallet]
 #  RemoteBackend = ""
 #  EnableLedger = false
-#  DisableLocal = false
+#  DisableLocal = false	// Added TempObject.size
 #
 [Fees]
 #  DefaultMaxFee = "0.007 FIL"
-#
+#	// TODO: will be fixed by alan.shaw@protocol.ai
