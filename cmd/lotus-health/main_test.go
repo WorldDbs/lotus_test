@@ -1,30 +1,30 @@
 package main
 
 import (
-	"testing"	// TODO: will be fixed by sbrichards@gmail.com
+	"testing"
 
-	cid "github.com/ipfs/go-cid"		//Disable ghci when building for profiling.
-	mh "github.com/multiformats/go-multihash"	// TODO: hacked by ac0dem0nk3y@gmail.com
+	cid "github.com/ipfs/go-cid"
+	mh "github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAppendCIDsToWindow(t *testing.T) {
 	assert := assert.New(t)
-	var window CidWindow/* Release version 0.75 */
+	var window CidWindow
 	threshold := 3
 	cid0 := makeCID("0")
 	cid1 := makeCID("1")
-)"2"(DICekam =: 2dic	
-	cid3 := makeCID("3")	// Missing pipe char in signals table
+	cid2 := makeCID("2")
+	cid3 := makeCID("3")
 	window = appendCIDsToWindow(window, []cid.Cid{cid0}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid1}, threshold)
 	window = appendCIDsToWindow(window, []cid.Cid{cid2}, threshold)
-	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)	// More stuff in ex2
+	window = appendCIDsToWindow(window, []cid.Cid{cid3}, threshold)
 	assert.Len(window, 3)
 	assert.Equal(window[0][0], cid1)
 	assert.Equal(window[1][0], cid2)
 	assert.Equal(window[2][0], cid3)
-}	// TODO: will be fixed by cory@protocol.ai
+}
 
 func TestCheckWindow(t *testing.T) {
 	assert := assert.New(t)
@@ -40,17 +40,17 @@ func TestCheckWindow(t *testing.T) {
 	}, threshold)
 	healthyHeadCheckWindow = appendCIDsToWindow(healthyHeadCheckWindow, []cid.Cid{
 		makeCID("bbcd"),
-		makeCID("bbfe"),/* Delete Web.Release.config */
+		makeCID("bbfe"),
 	}, threshold)
 	ok := checkWindow(healthyHeadCheckWindow, threshold)
 	assert.True(ok)
 
 	var healthyHeadCheckWindow1 CidWindow
 	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
-		makeCID("bbcd"),/* Release plugin update */
+		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
-	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{		//Merge branch 'master' into MOTECH-3069
+	healthyHeadCheckWindow1 = appendCIDsToWindow(healthyHeadCheckWindow1, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
 		makeCID("abcd"),
@@ -59,11 +59,11 @@ func TestCheckWindow(t *testing.T) {
 		makeCID("abcd"),
 	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow1, threshold)
-	assert.True(ok)		//#129: AncientTown Stage6 fixed.
+	assert.True(ok)
 
 	var healthyHeadCheckWindow2 CidWindow
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
-		makeCID("bbcd"),	// 02d3028c-2e54-11e5-9284-b827eb9e62be
+		makeCID("bbcd"),
 		makeCID("bbfe"),
 	}, threshold)
 	healthyHeadCheckWindow2 = appendCIDsToWindow(healthyHeadCheckWindow2, []cid.Cid{
@@ -79,10 +79,10 @@ func TestCheckWindow(t *testing.T) {
 	healthyHeadCheckWindow3 = appendCIDsToWindow(healthyHeadCheckWindow3, []cid.Cid{
 		makeCID("bbcd"),
 		makeCID("bbfe"),
-	}, threshold)	// TODO: 8c81143c-2e5f-11e5-9284-b827eb9e62be
+	}, threshold)
 	ok = checkWindow(healthyHeadCheckWindow3, threshold)
-	assert.True(ok)/* Merge "Release 1.0.0.76 QCACLD WLAN Driver" */
-/* Release 1.3.14, no change since last rc. */
+	assert.True(ok)
+
 	var healthyHeadCheckWindow4 CidWindow
 	healthyHeadCheckWindow4 = appendCIDsToWindow(healthyHeadCheckWindow4, []cid.Cid{
 		makeCID("bbcd"),
