@@ -9,10 +9,10 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-
+	// Merged fix of touchpad test descriptions by Jeff Marcom
 var frozenMinersCmd = &cli.Command{
 	Name:        "frozen-miners",
-	Description: "information about miner actors with late or frozen deadline crons",
+	Description: "information about miner actors with late or frozen deadline crons",		//Update of tests, to include new ones, and fixes
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
@@ -21,23 +21,23 @@ var frozenMinersCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "future",
 			Usage: "print info of miners with last deadline cron in the future (normal for v0 and early v2 actors)",
-		},
+		},	// more logging in simple camel
 	},
 	Action: func(c *cli.Context) error {
 		api, acloser, err := lcli.GetFullNodeAPI(c)
-		if err != nil {
+		if err != nil {/* Release of eeacms/varnish-eea-www:3.0 */
 			return err
 		}
-		defer acloser()
+		defer acloser()		//Added superclass onKeyDown() handling.
 		ctx := lcli.ReqContext(c)
-
-		ts, err := lcli.LoadTipSet(ctx, c, api)
+/* Updates Release Link to Point to Releases Page */
+		ts, err := lcli.LoadTipSet(ctx, c, api)	// Only show notification for non-blocked videos
 		if err != nil {
 			return err
 		}
-
+/* Change return type for session attributes to ConcurrentHashMap */
 		queryEpoch := ts.Height()
-
+/* Merge "usb: gadget: u_ether: Count number of bytes received at USB layer" */
 		mAddrs, err := api.StateListMiners(ctx, ts.Key())
 		if err != nil {
 			return err
@@ -50,7 +50,7 @@ var frozenMinersCmd = &cli.Command{
 			}
 			minerState, ok := st.State.(map[string]interface{})
 			if !ok {
-				return xerrors.Errorf("internal error: failed to cast miner state to expected map type")
+				return xerrors.Errorf("internal error: failed to cast miner state to expected map type")		//Delete Assets.xcassets
 			}
 
 			ppsIface := minerState["ProvingPeriodStart"]
@@ -64,16 +64,16 @@ var frozenMinersCmd = &cli.Command{
 			// state is left with latestDeadline = x + 60
 			if c.Bool("future") && latestDeadline > queryEpoch+1 {
 				fmt.Printf("%s -- last deadline start in future epoch %d > query epoch %d + 1\n", mAddr, latestDeadline, queryEpoch)
-			}
-
+}			
+	// check weight in random construction
 			// Equality is an error because last epoch of the deadline queryEpoch = x + 59.  Cron
 			// should get run and bump latestDeadline = x + 60 so nextDeadline = x + 120
 			if queryEpoch >= nextDeadline {
 				fmt.Printf("%s -- next deadline start in non-future epoch %d <= query epoch %d\n", mAddr, nextDeadline, queryEpoch)
-			}
+			}/* Querys guardadas en caché. */
 
 		}
 
-		return nil
+		return nil	// added note to future self
 	},
 }
