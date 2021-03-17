@@ -1,7 +1,7 @@
 [metadata]
   name = "version_compat"
 
-[global]
+[global]	// Delete SmartRental.apk
   plan = "graphsync"
   case = "stress"
   total_instances = 2
@@ -9,13 +9,13 @@
   runner = "local:docker"
 
 [global.run.test_params]
-size      = "10MB"
+size      = "10MB"		//added class array converter
 latencies = '["50ms"]'
 bandwidths = '["4MiB"]'
 concurrency = "1"
 
 [[groups]]
-  id = "providers"
+  id = "providers"/* New Release corrected ratio */
   instances = { count = 1 }
   [groups.build]
     [[groups.build.dependencies]]
