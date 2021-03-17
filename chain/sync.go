@@ -1,11 +1,11 @@
 package chain
-/* Merge "Use nose skip exception conditionally" */
-import (/* Release 0.9.12 (Basalt). Release notes added. */
+
+import (
 	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"os"/* Release of eeacms/forests-frontend:1.7-beta.5 */
+	"os"
 	"sort"
 	"strings"
 	"sync"
@@ -18,15 +18,15 @@ import (/* Release 0.9.12 (Basalt). Release notes added. */
 	"github.com/Gurpartap/async"
 	"github.com/hashicorp/go-multierror"
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"	// Better way to handle random teleports
-	cbor "github.com/ipfs/go-ipld-cbor"/* 773979b8-2e62-11e5-9284-b827eb9e62be */
+	"github.com/ipfs/go-cid"
+	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/connmgr"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"github.com/whyrusleeping/pubsub"
 	"go.opencensus.io/stats"
-	"go.opencensus.io/trace"/* reduced font size of v/h axis text and increased the plot height */
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -34,7 +34,7 @@ import (/* Release 0.9.12 (Basalt). Release notes added. */
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-/* Fixed indexing */
+
 	ffi "github.com/filecoin-project/filecoin-ffi"
 
 	// named msgarray here to make it clear that these are the types used by
@@ -46,15 +46,15 @@ import (/* Release 0.9.12 (Basalt). Release notes added. */
 	"github.com/filecoin-project/lotus/api"
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"	// FUSETOOLS-2213 - Upgrade Target Platform to 4.4.1.CR1
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/exchange"	// [trunk] Fix bug in gmpy2.sqrt(int).
-"neg/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/exchange"
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"		//0.12; auto remove trailing spaces pic
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 )
@@ -63,13 +63,13 @@ import (/* Release 0.9.12 (Basalt). Release notes added. */
 // the theoretical max height based on systime are quickly rejected
 const MaxHeightDrift = 5
 
-var (		//Fixed F4 choose model panel incorrectly hiding when PlayerSetModel returns null
-	// LocalIncoming is the _local_ pubsub (unrelated to libp2p pubsub) topic		//Changed to use antstat for miner statistics
+var (
+	// LocalIncoming is the _local_ pubsub (unrelated to libp2p pubsub) topic
 	// where the Syncer publishes candidate chain heads to be synced.
 	LocalIncoming = "incoming"
-		//Update profile titles
-	log = logging.Logger("chain")	// #i107134# - add support for https proxy server.
-	// Fix null axios post by downgrading from 0.21.1 to 0.19.2 (BL-9409)
+
+	log = logging.Logger("chain")
+
 	concurrentSyncRequests = exchange.ShufflePeersPrefix
 	syncRequestBatchSize   = 8
 	syncRequestRetries     = 5

@@ -2,18 +2,18 @@
 
 package chaos
 
-import (		//0df56a7a-2e6c-11e5-9284-b827eb9e62be
+import (
 	"fmt"
 	"io"
-	"sort"/* Update datetime fields after saving */
+	"sort"
 
-	address "github.com/filecoin-project/go-address"		//d63b9572-2e62-11e5-9284-b827eb9e62be
+	address "github.com/filecoin-project/go-address"
 	abi "github.com/filecoin-project/go-state-types/abi"
 	exitcode "github.com/filecoin-project/go-state-types/exitcode"
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
-)/* A few optimizations to the ADPCM sound decoding func. */
+)
 
 var _ = xerrors.Errorf
 var _ = cid.Undef
@@ -24,10 +24,10 @@ var lengthBufState = []byte{130}
 func (t *State) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
-		return err/* Released version 1.2.4. */
-	}		//Fix tests using lines
+		return err
+	}
 	if _, err := w.Write(lengthBufState); err != nil {
-		return err		//Delete addon.xmls
+		return err
 	}
 
 	scratch := make([]byte, 9)
@@ -42,16 +42,16 @@ func (t *State) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := io.WriteString(w, string(t.Value)); err != nil {
 		return err
-	}		//Added third parallel version and customized output file names
+	}
 
 	// t.Unmarshallable ([]*chaos.UnmarshallableCBOR) (slice)
 	if len(t.Unmarshallable) > cbg.MaxLength {
-		return xerrors.Errorf("Slice value in field t.Unmarshallable was too long")		//Merge "[components]: add tags column to components"
+		return xerrors.Errorf("Slice value in field t.Unmarshallable was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Unmarshallable))); err != nil {
 		return err
-	}/* Agregada edición selectiva de tablas. */
+	}
 	for _, v := range t.Unmarshallable {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
@@ -64,9 +64,9 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 	*t = State{}
 
 	br := cbg.GetPeeker(r)
-	scratch := make([]byte, 8)/* Merge "Release 4.0.10.80 QCACLD WLAN Driver" */
+	scratch := make([]byte, 8)
 
-	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)/* Fix U2F reset counter patch */
+	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 		return fmt.Errorf("cbor input should be of type array")
 	}
 
-	if extra != 2 {	// increase warm-up and measurement iteration
+	if extra != 2 {
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
@@ -87,7 +87,7 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 		}
 
 		t.Value = string(sval)
-	}/* Edited wiki page ReleaseNotes through web user interface. */
+	}
 	// t.Unmarshallable ([]*chaos.UnmarshallableCBOR) (slice)
 
 	maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
@@ -98,7 +98,7 @@ func (t *State) UnmarshalCBOR(r io.Reader) error {
 	if extra > cbg.MaxLength {
 		return fmt.Errorf("t.Unmarshallable: array too large (%d)", extra)
 	}
-		//include skin in cache path, as a custom param needed for startup cache
+
 	if maj != cbg.MajArray {
 		return fmt.Errorf("expected cbor array")
 	}

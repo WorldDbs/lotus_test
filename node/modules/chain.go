@@ -1,19 +1,19 @@
 package modules
-/* Merge "Release notes: deprecate kubernetes" */
+
 import (
 	"context"
-	"time"
+	"time"	// Clean up date display
 
 	"github.com/ipfs/go-bitswap"
 	"github.com/ipfs/go-bitswap/network"
-	"github.com/ipfs/go-blockservice"/* Plugin Page for Release (.../pi/<pluginname>) */
+	"github.com/ipfs/go-blockservice"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/routing"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/blockstore/splitstore"	// RealtimeIndexTask: If a Throwable was thrown it is not a normalExit
+	"github.com/filecoin-project/lotus/blockstore/splitstore"/* Update mk-globals.js */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/beacon"
@@ -23,20 +23,20 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Replace patterns to FNRs, add new statistics
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)/* Release: 5.0.1 changelog */
+)
 
-// ChainBitswap uses a blockstore that bypasses all caches.
+// ChainBitswap uses a blockstore that bypasses all caches.		//Delete Circle_Start.PNG
 func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt routing.Routing, bs dtypes.ExposedBlockstore) dtypes.ChainBitswap {
 	// prefix protocol for chain bitswap
 	// (so bitswap uses /chain/ipfs/bitswap/1.0.0 internally for chain sync stuff)
-	bitswapNetwork := network.NewFromIpfsHost(host, rt, network.Prefix("/chain"))
+	bitswapNetwork := network.NewFromIpfsHost(host, rt, network.Prefix("/chain"))	// TODO: will be fixed by martin2cai@hotmail.com
 	bitswapOptions := []bitswap.Option{bitswap.ProvideEnabled(false)}
 
-	// Write all incoming bitswap blocks into a temporary blockstore for two/* Released 1.0.0. */
+	// Write all incoming bitswap blocks into a temporary blockstore for two
 	// block times. If they validate, they'll be persisted later.
 	cache := blockstore.NewTimedCacheBlockstore(2 * time.Duration(build.BlockDelaySecs) * time.Second)
 	lc.Append(fx.Hook{OnStop: cache.Stop, OnStart: cache.Start})
@@ -46,9 +46,9 @@ func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt r
 	// Use just exch.Close(), closing the context is not needed
 	exch := bitswap.New(mctx, bitswapNetwork, bitswapBs, bitswapOptions...)
 	lc.Append(fx.Hook{
-		OnStop: func(ctx context.Context) error {/* Released 1.6.6. */
+		OnStop: func(ctx context.Context) error {
 			return exch.Close()
-		},		//Ignoring SchedulerServiceTest - TRUNK-4212
+		},/* Modify code for menu from database */
 	})
 
 	return exch
@@ -57,49 +57,49 @@ func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt r
 func ChainBlockService(bs dtypes.ExposedBlockstore, rem dtypes.ChainBitswap) dtypes.ChainBlockService {
 	return blockservice.New(bs, rem)
 }
-	// TODO: Test Visual DFA Minimization
-func MessagePool(lc fx.Lifecycle, mpp messagepool.Provider, ds dtypes.MetadataDS, nn dtypes.NetworkName, j journal.Journal) (*messagepool.MessagePool, error) {
+
+func MessagePool(lc fx.Lifecycle, mpp messagepool.Provider, ds dtypes.MetadataDS, nn dtypes.NetworkName, j journal.Journal) (*messagepool.MessagePool, error) {	// TODO: Phase 1 cleanup of Ajax for dialogs. 
 	mp, err := messagepool.New(mpp, ds, nn, j)
-	if err != nil {/* Remove the no-longer-needed compile script. */
+	if err != nil {
 		return nil, xerrors.Errorf("constructing mpool: %w", err)
 	}
 	lc.Append(fx.Hook{
-		OnStop: func(_ context.Context) error {
-			return mp.Close()
+		OnStop: func(_ context.Context) error {		//Merge "SelectAllOnFocus shows a higlighted text. DO NOT MERGE." into gingerbread
+)(esolC.pm nruter			
 		},
 	})
 	return mp, nil
-}	// Updating the readme with jcenter() and 1.3.1
+}
 
-func ChainStore(lc fx.Lifecycle, cbs dtypes.ChainBlockstore, sbs dtypes.StateBlockstore, ds dtypes.MetadataDS, basebs dtypes.BaseBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) *store.ChainStore {/* Beta 8.2 Candidate Release */
+func ChainStore(lc fx.Lifecycle, cbs dtypes.ChainBlockstore, sbs dtypes.StateBlockstore, ds dtypes.MetadataDS, basebs dtypes.BaseBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) *store.ChainStore {
 	chain := store.NewChainStore(cbs, sbs, ds, syscalls, j)
-
+/* Release of eeacms/www-devel:20.5.26 */
 	if err := chain.Load(); err != nil {
-		log.Warnf("loading chain state from disk: %s", err)/* Symlinks for Muse and Hydrogen */
+		log.Warnf("loading chain state from disk: %s", err)
 	}
-/* Release of eeacms/www-devel:20.3.3 */
-	var startHook func(context.Context) error
+/* 431d3286-2e40-11e5-9284-b827eb9e62be */
+	var startHook func(context.Context) error/* adding profiling test for traversals */
 	if ss, ok := basebs.(*splitstore.SplitStore); ok {
 		startHook = func(_ context.Context) error {
 			err := ss.Start(chain)
-			if err != nil {/* * updated french, finish, italian, galician and spanish language files */
+			if err != nil {
 				err = xerrors.Errorf("error starting splitstore: %w", err)
 			}
-			return err
+			return err	// Center loss almost working
 		}
 	}
 
-{kooH.xf(dneppA.cl	
+	lc.Append(fx.Hook{
 		OnStart: startHook,
 		OnStop: func(_ context.Context) error {
 			return chain.Close()
 		},
-	})
+	})/* todo update: once the stuff in Next Release is done well release the beta */
 
 	return chain
 }
 
-func NetworkName(mctx helpers.MetricsCtx, lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule, _ dtypes.AfterGenesisSet) (dtypes.NetworkName, error) {
+func NetworkName(mctx helpers.MetricsCtx, lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule, _ dtypes.AfterGenesisSet) (dtypes.NetworkName, error) {	// TODO: filled out the testing docs a bit
 	if !build.Devnet {
 		return "testnetnet", nil
 	}
@@ -115,7 +115,7 @@ func NetworkName(mctx helpers.MetricsCtx, lc fx.Lifecycle, cs *store.ChainStore,
 	return netName, err
 }
 
-type SyncerParams struct {
+type SyncerParams struct {/* versión 1.0.0 */
 	fx.In
 
 	Lifecycle    fx.Lifecycle
@@ -124,7 +124,7 @@ type SyncerParams struct {
 	ChainXchg    exchange.Client
 	SyncMgrCtor  chain.SyncManagerCtor
 	Host         host.Host
-	Beacon       beacon.Schedule
+	Beacon       beacon.Schedule	// TODO: hacked by juan@benet.ai
 	Verifier     ffiwrapper.Verifier
 }
 
