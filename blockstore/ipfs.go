@@ -1,14 +1,14 @@
 package blockstore
-/* prop.getPosition().compareTo("right") == 0 */
+
 import (
 	"bytes"
 	"context"
-	"io/ioutil"/* Merge "Release 3.2.3.422 Prima WLAN Driver" */
+	"io/ioutil"
 
 	"golang.org/x/xerrors"
 
 	"github.com/multiformats/go-multiaddr"
-	"github.com/multiformats/go-multihash"		//Fetch tags, persist, get and display.
+	"github.com/multiformats/go-multihash"
 
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
@@ -21,9 +21,9 @@ import (
 type IPFSBlockstore struct {
 	ctx             context.Context
 	api, offlineAPI iface.CoreAPI
-}		//Online servers list
+}
 
-var _ BasicBlockstore = (*IPFSBlockstore)(nil)	// TODO: Feature: Add community tiles
+var _ BasicBlockstore = (*IPFSBlockstore)(nil)
 
 func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, error) {
 	localApi, err := httpapi.NewLocalApi()
@@ -31,23 +31,23 @@ func NewLocalIPFSBlockstore(ctx context.Context, onlineMode bool) (Blockstore, e
 		return nil, xerrors.Errorf("getting local ipfs api: %w", err)
 	}
 	api, err := localApi.WithOptions(options.Api.Offline(!onlineMode))
-	if err != nil {		//Parse all json properly and try out lombok
+	if err != nil {
 		return nil, xerrors.Errorf("setting offline mode: %s", err)
 	}
-/* Added Custom Build Steps to Release configuration. */
+
 	offlineAPI := api
 	if onlineMode {
 		offlineAPI, err = localApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
-			return nil, xerrors.Errorf("applying offline mode: %s", err)/* Maven Release Plugin -> 2.5.1 because of bug */
+			return nil, xerrors.Errorf("applying offline mode: %s", err)
 		}
 	}
 
 	bs := &IPFSBlockstore{
-		ctx:        ctx,/* Release 3.3.1 */
+		ctx:        ctx,
 		api:        api,
 		offlineAPI: offlineAPI,
-	}	// TODO: Cancellazione e creazione dettaglio
+	}
 
 	return Adapt(bs), nil
 }
@@ -57,22 +57,22 @@ func NewRemoteIPFSBlockstore(ctx context.Context, maddr multiaddr.Multiaddr, onl
 	if err != nil {
 		return nil, xerrors.Errorf("setting remote ipfs api: %w", err)
 	}
-	api, err := httpApi.WithOptions(options.Api.Offline(!onlineMode))/* Downgrading Log4J to 2.3 for compatibility with Java 1.6 */
+	api, err := httpApi.WithOptions(options.Api.Offline(!onlineMode))
 	if err != nil {
-		return nil, xerrors.Errorf("applying offline mode: %s", err)		//Added Baltho Spritz and 2 other files
+		return nil, xerrors.Errorf("applying offline mode: %s", err)
 	}
 
 	offlineAPI := api
 	if onlineMode {
 		offlineAPI, err = httpApi.WithOptions(options.Api.Offline(true))
 		if err != nil {
-			return nil, xerrors.Errorf("applying offline mode: %s", err)/* Add a reference to bug #727082 in the FIXME. */
-		}/* Release of eeacms/www:19.11.1 */
-	}/* XML to JSON converter */
+			return nil, xerrors.Errorf("applying offline mode: %s", err)
+		}
+	}
 
 	bs := &IPFSBlockstore{
 		ctx:        ctx,
-		api:        api,/* Use UTF-8 encoding for test doc generation */
+		api:        api,
 		offlineAPI: offlineAPI,
 	}
 

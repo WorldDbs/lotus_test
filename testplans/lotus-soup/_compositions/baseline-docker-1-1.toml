@@ -1,9 +1,9 @@
-[metadata]
+[metadata]		//Merge branch 'master' into er-sr
   name = "lotus-soup"
-  author = ""
-/* refactoring: 'post_key' заменено на 'post_token' */
+  author = ""/* Release 3.3.1 vorbereitet */
+
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"		//Created sublime-text-panel-9.md
   case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
@@ -14,42 +14,42 @@
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-		//Style and size of About dialog
+
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Release bzr-2.5b6 */
-  clients = "1"
+[global.run.test_params]/* Merge "msm: kgsl: Release all memory entries at process close" */
+  clients = "1"/* - latex2html.py überarbeitet */
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
-  mining_mode = "natural"	// Change remaining Components.{classes,interfaces,results} -> C[cir].
+  random_beacon_type = "mock"/* [artifactory-release] Release version 0.8.19.RELEASE */
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0/* Improving README to fit Callisto Release */
+  [groups.run]/* Release queue in dealloc */
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//343537 Minimal occupied blocks on FY
+[[groups]]
   id = "miners"
-  [groups.instances]	// TODO: Merge "Migrate building IPA to ironic-python-agent-builder"
-    count = 1
+  [groups.instances]
+    count = 1	// TODO: update for release 1.3.2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// Redis module added to config.rb by default.
       role = "miner"
 
 [[groups]]
-  id = "clients"
-  [groups.instances]/* Use date as part of prey-config.log. */
+  id = "clients"		//Euronext plugin : URL to get IdInstrument was changed
+  [groups.instances]
     count = 1
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
-      role = "client"		//alterado traydialog para jdialog novamente
+    percentage = 0.0		//rev 731529
+  [groups.run]		//Add old `dist` script to be updated 🍩
+    [groups.run.test_params]		//Save changes to origin URL
+      role = "client"	// TODO: hacked by mail@overlisted.net
