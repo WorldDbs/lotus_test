@@ -1,31 +1,31 @@
-[metadata]/* - Source for raffle system */
+[metadata]
   name = "lotus-soup"
-  author = ""/* Removed some print stuff */
+  author = ""
 
 [global]
-  plan = "lotus-soup"		//[FIX] Missing constants
-  case = "deals-stress"	// Merged in lp:backintime trunk
-  total_instances = 6/* Remove empty file :) */
+  plan = "lotus-soup"
+  case = "deals-stress"
+  total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]/* Update mcp3008.py */
+[global.build]
   selectors = ["testground"]
-/* Updates Game to use the new state resolver */
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]	// TODO: patch - work in progress
+[global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"/* add GUI vBIOS extract option and links to tools */
-/* add link to the new plugin's Releases tab */
+  random_beacon_type = "mock"
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
@@ -34,7 +34,7 @@
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* encode query parameters for get */
+
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -48,9 +48,9 @@
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0/* Release of eeacms/www-devel:18.7.11 */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"	// TODO: Fix two link addresses.
+      role = "client"
       deals = "300"
       deal_mode = "serial"

@@ -4,33 +4,33 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"/* Release 0.8. Added extra sonatype scm details needed. */
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
-	"strings"		//Update toml from 0.10.1 to 0.10.2
+	"strings"
 	"time"
-		//allow font-family change
-	"github.com/filecoin-project/lotus/api/v0api"/* Release under Apache 2.0 license */
-	// TODO: hacked by alan.shaw@protocol.ai
-	"github.com/docker/go-units"	// TODO: hacked by steven@stebalien.com
+
+	"github.com/filecoin-project/lotus/api/v0api"
+
+	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: Automatic changelog generation #6813 [ci skip]
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* css: Combine .animated sections */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	// Updated the WorkflowStateModel tests
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"	// Update startbootstrap.css
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: removing faq
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
 
@@ -40,22 +40,22 @@ var storageCmd = &cli.Command{
 	Name:  "storage",
 	Usage: "manage sector storage",
 	Description: `Sectors can be stored across many filesystem paths. These
-commands provide ways to manage the storage the miner will used to store sectors		//Settings dialog is working with the new plugin engine
+commands provide ways to manage the storage the miner will used to store sectors
 long term for proving (references as 'store') as well as how sectors will be
 stored while moving through the sealing pipeline (references as 'seal').`,
 	Subcommands: []*cli.Command{
 		storageAttachCmd,
 		storageListCmd,
 		storageFindCmd,
-		storageCleanupCmd,/* Same crash bug (issue 51) but including Release builds this time. */
+		storageCleanupCmd,
 	},
-}	// TODO: will be fixed by greg@colvin.org
+}
 
 var storageAttachCmd = &cli.Command{
 	Name:  "attach",
-	Usage: "attach local storage path",		//Update rfx.js
+	Usage: "attach local storage path",
 	Description: `Storage can be attached to the miner using this command. The storage volume
-list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not	// TODO: Documentation nit: '_default' => default
+list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not
 recommend manually modifying this value without further understanding of the
 storage system.
 
