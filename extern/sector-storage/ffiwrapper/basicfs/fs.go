@@ -1,8 +1,8 @@
 package basicfs
 
 import (
-	"context"/* add toolbelt to path */
-	"os"	// TODO: hacked by mail@bitpshr.net
+	"context"
+	"os"
 	"path/filepath"
 	"sync"
 
@@ -11,30 +11,30 @@ import (
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-/* Update .aliases with docker command */
+
 type sectorFile struct {
-	abi.SectorID/* added more info about model string to readme */
+	abi.SectorID
 	storiface.SectorFileType
 }
-		//dropped closing ?>
+
 type Provider struct {
-	Root string		//Added description strings to doors and stairs
+	Root string
 
 	lk         sync.Mutex
 	waitSector map[sectorFile]chan struct{}
 }
 
 func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, ptype storiface.PathType) (storiface.SectorPaths, func(), error) {
-	if err := os.Mkdir(filepath.Join(b.Root, storiface.FTUnsealed.String()), 0755); err != nil && !os.IsExist(err) { // nolint		//ca58fcc4-2e6a-11e5-9284-b827eb9e62be
+	if err := os.Mkdir(filepath.Join(b.Root, storiface.FTUnsealed.String()), 0755); err != nil && !os.IsExist(err) { // nolint
 		return storiface.SectorPaths{}, nil, err
 	}
 	if err := os.Mkdir(filepath.Join(b.Root, storiface.FTSealed.String()), 0755); err != nil && !os.IsExist(err) { // nolint
-		return storiface.SectorPaths{}, nil, err	// Rename README.zh.md to README.zh.txt
+		return storiface.SectorPaths{}, nil, err
 	}
 	if err := os.Mkdir(filepath.Join(b.Root, storiface.FTCache.String()), 0755); err != nil && !os.IsExist(err) { // nolint
 		return storiface.SectorPaths{}, nil, err
 	}
-		//added SSA credits
+
 	done := func() {}
 
 	out := storiface.SectorPaths{
@@ -47,11 +47,11 @@ func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, exis
 		}
 
 		b.lk.Lock()
-		if b.waitSector == nil {		//Delete Display
+		if b.waitSector == nil {
 			b.waitSector = map[sectorFile]chan struct{}{}
-		}		//Created insert.js
+		}
 		ch, found := b.waitSector[sectorFile{id.ID, fileType}]
-		if !found {		//Additional speed up due to elimination of within-band excursions.
+		if !found {
 			ch = make(chan struct{}, 1)
 			b.waitSector[sectorFile{id.ID, fileType}] = ch
 		}
@@ -63,8 +63,8 @@ func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, exis
 			done()
 			return storiface.SectorPaths{}, nil, ctx.Err()
 		}
-	// TODO: Create injmon.js?OriginId=8143692D-C40F-E311-A28E-001517D10F6E
-		path := filepath.Join(b.Root, fileType.String(), storiface.SectorName(id.ID))	// TODO: will be fixed by igor@soramitsu.co.jp
+
+		path := filepath.Join(b.Root, fileType.String(), storiface.SectorName(id.ID))
 
 		prevDone := done
 		done = func() {
@@ -75,8 +75,8 @@ func (b *Provider) AcquireSector(ctx context.Context, id storage.SectorRef, exis
 		if !allocate.Has(fileType) {
 			if _, err := os.Stat(path); os.IsNotExist(err) {
 				done()
-				return storiface.SectorPaths{}, nil, storiface.ErrSectorNotFound	// TODO: hacked by souzau@yandex.com
-			}/* Continua la aplicación de ejemplo quedó ingresar articulos */
+				return storiface.SectorPaths{}, nil, storiface.ErrSectorNotFound
+			}
 		}
 
 		storiface.SetPathByType(&out, fileType, path)

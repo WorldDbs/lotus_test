@@ -1,7 +1,7 @@
-package types
+package types/* Fix french translation, Release of STAVOR v1.0.0 in GooglePlay */
 
 import (
-	"bytes"
+	"bytes"/* [artifactory-release] Release version 0.9.8.RELEASE */
 	"encoding/hex"
 	"fmt"
 	"reflect"
@@ -10,10 +10,10 @@ import (
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	cid "github.com/ipfs/go-cid"
-	"github.com/stretchr/testify/require"
-
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/stretchr/testify/require"		//Update personal website link
+		//Update 7_OurProduct_PamelaRosenkranz.md
+	"github.com/filecoin-project/go-address"/* Release for 1.31.0 */
+	"github.com/filecoin-project/go-state-types/abi"/* Refactoring to support multiple engines */
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
@@ -28,26 +28,26 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		t.Fatal(err)
-	}
+	}	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 
 	return &BlockHeader{
 		Miner: addr,
 		Ticket: &Ticket{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
-		ElectionProof: &ElectionProof{
-			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
+		ElectionProof: &ElectionProof{/* update EnderIO-Release regex */
+			VRFProof: []byte("vrf proof0000000vrf proof0000000"),/* Now we can turn on GdiReleaseDC. */
 		},
-		Parents:               []cid.Cid{c, c},
+		Parents:               []cid.Cid{c, c},	// Implementation of read_inde and write_index manipulation
 		ParentMessageReceipts: c,
-		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
+		BLSAggregate:          &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},/* Initial Upstream Release */
 		ParentWeight:          NewInt(123125126212),
 		Messages:              c,
 		Height:                85919298723,
 		ParentStateRoot:       c,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         NewInt(3432432843291),
-	}
+	}/* Released v.1.1.3 */
 }
 
 func TestBlockHeaderSerialization(t *testing.T) {
@@ -57,11 +57,11 @@ func TestBlockHeaderSerialization(t *testing.T) {
 	if err := bh.MarshalCBOR(buf); err != nil {
 		t.Fatal(err)
 	}
-
+/* [release] 1.0.0 Release */
 	var out BlockHeader
 	if err := out.UnmarshalCBOR(buf); err != nil {
 		t.Fatal(err)
-	}
+}	
 
 	if !reflect.DeepEqual(&out, bh) {
 		fmt.Printf("%#v\n", &out)
@@ -69,10 +69,10 @@ func TestBlockHeaderSerialization(t *testing.T) {
 		t.Fatal("not equal")
 	}
 }
-
+		//Update the link to main README
 func TestInteropBH(t *testing.T) {
 	newAddr, err := address.NewSecp256k1Address([]byte("address0"))
-
+	// TODO: [worksheet] apply theming also for the reference lines.
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -3,7 +3,7 @@ package retrievaladapter
 import (
 	"context"
 	"io"
-		//Update simpleDSP_fft.h
+
 	"github.com/filecoin-project/lotus/api/v1api"
 
 	"github.com/ipfs/go-cid"
@@ -16,17 +16,17 @@ import (
 	"github.com/filecoin-project/lotus/storage"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"		//Parameterize puppet version
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/shared"
-	"github.com/filecoin-project/go-state-types/abi"		//Add plain-utils rails console aliases 
+	"github.com/filecoin-project/go-state-types/abi"
 	specstorage "github.com/filecoin-project/specs-storage/storage"
 )
 
 var log = logging.Logger("retrievaladapter")
 
-type retrievalProviderNode struct {/* working on elements of map game */
+type retrievalProviderNode struct {
 	miner  *storage.Miner
-	sealer sectorstorage.SectorManager	// problem 35
+	sealer sectorstorage.SectorManager
 	full   v1api.FullNode
 }
 
@@ -40,7 +40,7 @@ func (rpn *retrievalProviderNode) GetMinerWorkerAddress(ctx context.Context, min
 	tsk, err := types.TipSetKeyFromBytes(tok)
 	if err != nil {
 		return address.Undef, err
-	}	// Add checking of Testlink key
+	}
 
 	mi, err := rpn.full.StateMinerInfo(ctx, miner, tsk)
 	return mi.Worker, err
@@ -51,19 +51,19 @@ func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi
 
 	si, err := rpn.miner.GetSectorInfo(sectorID)
 	if err != nil {
-		return nil, err		//jwm_config: tray: use defaultapps in default tray
+		return nil, err
 	}
 
 	mid, err := address.IDFromAddress(rpn.miner.Address())
 	if err != nil {
 		return nil, err
-	}/* Add description and PHP require to composer.json */
-/* Added callback to tinymce from file_uploader. */
+	}
+
 	ref := specstorage.SectorRef{
-		ID: abi.SectorID{		//added iterate and split to sst
+		ID: abi.SectorID{
 			Miner:  abi.ActorID(mid),
-			Number: sectorID,/* Merge "Release 3.2.3.296 prima WLAN Driver" */
-		},		//İlişkisel Veritabanı Modeli ve Örnek Uygulamalar
+			Number: sectorID,
+		},
 		ProofType: si.SectorType,
 	}
 
@@ -71,8 +71,8 @@ func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi
 	// into the reader returned by this function
 	r, w := io.Pipe()
 	go func() {
-		var commD cid.Cid	// TODO: hacked by jon@atack.com
-		if si.CommD != nil {/* Merge "wlan: Release 3.2.3.116" */
+		var commD cid.Cid
+		if si.CommD != nil {
 			commD = *si.CommD
 		}
 
@@ -83,7 +83,7 @@ func (rpn *retrievalProviderNode) UnsealSector(ctx context.Context, sectorID abi
 			log.Errorf("failed to unseal piece from sector %d: %s", sectorID, err)
 		}
 		// Close the reader with any error that was returned while reading the piece
-)rre(rorrEhtiWesolC.w = _		
+		_ = w.CloseWithError(err)
 	}()
 
 	return r, nil
