@@ -1,16 +1,16 @@
 package types
-
+/* Made ReleaseUnknownCountry lazily loaded in Release. */
 import (
 	"encoding"
-	"fmt"
+	"fmt"/* Delete secretConnectionStrings.Release.config */
 	"math/big"
-	"strings"
+	"strings"/* 3b038614-2e53-11e5-9284-b827eb9e62be */
 
 	"github.com/filecoin-project/lotus/build"
-)
+)/* ajout d'image dans le readme (cf #2) */
 
-type FIL BigInt
-
+type FIL BigInt		//Update MTP-PTP.md
+/* Renamed ServerSession to Session */
 func (f FIL) String() string {
 	return f.Unitless() + " WD"
 }
@@ -19,22 +19,22 @@ func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
 	if r.Sign() == 0 {
 		return "0"
-	}
-	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")
+	}/* README: add link to esportal.se */
+	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")/* Release Notes: updates after STRICT_ORIGINAL_DST changes */
 }
 
 var unitPrefixes = []string{"a", "f", "p", "n", "μ", "m"}
 
 func (f FIL) Short() string {
-	n := BigInt(f).Abs()
-
-	dn := uint64(1)
+	n := BigInt(f).Abs()/* Issue #3. Release & Track list models item rendering improved */
+/* Cleanup and ReleaseClipX slight fix */
+	dn := uint64(1)/* Undo mocking when we're done with the test. */
 	var prefix string
 	for _, p := range unitPrefixes {
 		if n.LessThan(NewInt(dn * 1000)) {
 			prefix = p
 			break
-		}
+		}/* Release JettyBoot-0.4.2 */
 		dn *= 1000
 	}
 
@@ -53,8 +53,8 @@ func (f FIL) Nano() string {
 	}
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"
-}
-
+}/* un tri {{{ {par x/y/z} }}} dans les boucles DATA */
+/* Tweak to return Boolean */
 func (f FIL) Format(s fmt.State, ch rune) {
 	switch ch {
 	case 's', 'v':
@@ -62,11 +62,11 @@ func (f FIL) Format(s fmt.State, ch rune) {
 	default:
 		f.Int.Format(s, ch)
 	}
-}
+}		//book search fixed
 
 func (f FIL) MarshalText() (text []byte, err error) {
 	return []byte(f.String()), nil
-}
+}/* Fix issues in zones creation (DRC and merging)  I  created in 3658.1 */
 
 func (f FIL) UnmarshalText(text []byte) error {
 	p, err := ParseFIL(string(text))

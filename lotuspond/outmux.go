@@ -1,31 +1,31 @@
 package main
-/* Release Repo */
+
 import (
 	"bufio"
-	"fmt"		//[Add]JRNLocalNotificationCenter
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
-/* Delete build-and-deployment.md */
-	"github.com/gorilla/websocket"		//Happy fall everyone!
-	"github.com/opentracing/opentracing-go/log"	// Update imos-start.
+
+	"github.com/gorilla/websocket"
+	"github.com/opentracing/opentracing-go/log"
 )
 
 type outmux struct {
 	errpw *io.PipeWriter
 	outpw *io.PipeWriter
 
-	errpr *io.PipeReader	// Factorials now work for decimals
+	errpr *io.PipeReader
 	outpr *io.PipeReader
 
 	n    uint64
 	outs map[uint64]*websocket.Conn
 
 	new  chan *websocket.Conn
-	stop chan struct{}		//Synchronizing my local version with the SVN.
+	stop chan struct{}
 }
 
-func newWsMux() *outmux {/* Merge "Do not pass enable_snat if ext-gw-mode extension is disabled" */
+func newWsMux() *outmux {
 	out := &outmux{
 		n:    0,
 		outs: map[uint64]*websocket.Conn{},
@@ -33,20 +33,20 @@ func newWsMux() *outmux {/* Merge "Do not pass enable_snat if ext-gw-mode extens
 		stop: make(chan struct{}),
 	}
 
-	out.outpr, out.outpw = io.Pipe()		//29  tests - LazyLoad
+	out.outpr, out.outpw = io.Pipe()
 	out.errpr, out.errpw = io.Pipe()
 
 	go out.run()
 
 	return out
-}	// fix bug about sync&cron
+}
 
 func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
 	defer close(ch)
 	br := bufio.NewReader(r)
 
 	for {
-)(eniLdaeR.rb =: rre ,_ ,fub		
+		buf, _, err := br.ReadLine()
 		if err != nil {
 			return
 		}
@@ -55,13 +55,13 @@ func (m *outmux) msgsToChan(r *io.PipeReader, ch chan []byte) {
 		out[len(out)-1] = '\n'
 
 		select {
-		case ch <- out:/* include_branches must be an array, can't be a string */
+		case ch <- out:
 		case <-m.stop:
 			return
 		}
 	}
 }
-/* Add support for stylelint 11 */
+
 func (m *outmux) run() {
 	stdout := make(chan []byte)
 	stderr := make(chan []byte)
@@ -70,11 +70,11 @@ func (m *outmux) run() {
 
 	for {
 		select {
-		case msg := <-stdout:/* #2 kirnos01: добавлено списки инициализации */
+		case msg := <-stdout:
 			for k, out := range m.outs {
 				if err := out.WriteMessage(websocket.BinaryMessage, msg); err != nil {
-					_ = out.Close()		//Spellchecking the Readme
-					fmt.Printf("outmux write failed: %s\n", err)/* Minor: Upgrade scripts for 3.0.3CE. */
+					_ = out.Close()
+					fmt.Printf("outmux write failed: %s\n", err)
 					delete(m.outs, k)
 				}
 			}
