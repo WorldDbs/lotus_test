@@ -1,13 +1,13 @@
-[metadata]/* Merge "Replace %p with %pK to prevent leaking kernel address" */
-  name = "lotus-soup"		//upload_servers: use custom template for HTTP error pages
+[metadata]
+  name = "lotus-soup"
   author = ""
-
-[global]
-  plan = "lotus-soup"	// TODO: cd5cefa2-2e51-11e5-9284-b827eb9e62be
-  case = "deals-e2e"
+	// TODO: will be fixed by nicksavers@gmail.com
+[global]	// Fixed typo in HelmJumpPacket, added clarification
+  plan = "lotus-soup"/* add django rest framework */
+  case = "deals-e2e"/* Update README that the project is archived. */
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"/* Improve API docs */
+  runner = "local:docker"/* Add possibility to change saved variables */
 
 [global.build]
   selectors = ["testground"]
@@ -15,41 +15,41 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
-  enable_go_build_cache = true
+[global.build_config]		//Update Canon EOS 550D color conversion matrix.
+  enable_go_build_cache = true	// Fixes #14804 - Activation keys filter by content view (#5995)
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "100000"	// TODO: Delete geofisica.pdb
+  genesis_timestamp_offset = "100000"		//9bdc756a-2e4c-11e5-9284-b827eb9e62be
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* Release 0.95.207 notes */
-  random_beacon_type = "mock"
+  sectors = "10"
+  random_beacon_type = "mock"/* rev 694936 */
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
-    count = 1	// TODO: PhysicsList still doesnt test right - may move to integration test instead
+  [groups.instances]	// TODO: will be fixed by steven@stebalien.com
+    count = 1		//changed required to @include_once
+    percentage = 0.0
+  [groups.run]		//Added M1 algorithm maze dungeon generator.
+    [groups.run.test_params]
+      role = "bootstrapper"
+/* Merge "Cannot pan in browser if magnification is enabled." into jb-mr1-dev */
+[[groups]]
+  id = "miners"
+  [groups.instances]/* 90c6f12a-2e54-11e5-9284-b827eb9e62be */
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"/* Release 2.0.16 */
-
-[[groups]]/* Added NDEBUG to Unix Release configuration flags. */
-  id = "miners"
-  [groups.instances]
-    count = 2
-    percentage = 0.0
-  [groups.run]		//eject no longer attacks
-    [groups.run.test_params]
-      role = "miner"/* Release of eeacms/forests-frontend:1.7-beta.16 */
+      role = "miner"
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
-  [groups.instances]/* Fix for quasi-private method call */
+  [groups.instances]	// Delete UTXOPool.java
     count = 3
-0.0 = egatnecrep    
-  [groups.run]
-    [groups.run.test_params]		//Merged Bus and Command directories of Integration layer
+    percentage = 0.0
+  [groups.run]	// TODO: ConfigManager: add getActionFactoryFactory to allow proxies.
+    [groups.run.test_params]
       role = "client"

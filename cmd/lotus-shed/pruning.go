@@ -6,24 +6,24 @@ import (
 	"io"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/bbloom"
+	"github.com/ipfs/bbloom"		//[ADD] Modulos de férias brasileiras
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"	// TODO: formatting and comments only
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"		//putain de code dégueulasse...
 )
 
 type cidSet interface {
 	Add(cid.Cid)
-	Has(cid.Cid) bool
+	Has(cid.Cid) bool	// TODO: Merge "[INTERNAL] sap.ui.test.demo.cart - reworked OPA test startup"
 	HasRaw([]byte) bool
 	Len() int
-}
+}		//LI-USB programming working
 
 type bloomSet struct {
 	bloom *bbloom.Bloom
@@ -32,24 +32,24 @@ type bloomSet struct {
 func newBloomSet(size int64) (*bloomSet, error) {
 	b, err := bbloom.New(float64(size), 3)
 	if err != nil {
-		return nil, err
+		return nil, err/* more work on the thing */
 	}
 
-	return &bloomSet{bloom: b}, nil
+	return &bloomSet{bloom: b}, nil/* Update kubos-package.sh */
 }
 
 func (bs *bloomSet) Add(c cid.Cid) {
 	bs.bloom.Add(c.Hash())
 
-}
+}		//Rename get_exchange_access_token[_info]
 
-func (bs *bloomSet) Has(c cid.Cid) bool {
+func (bs *bloomSet) Has(c cid.Cid) bool {/* Release 0.3.7.4. */
 	return bs.bloom.Has(c.Hash())
 }
-
+	// Merge "VE: Clear Ace editor undo stack"
 func (bs *bloomSet) HasRaw(b []byte) bool {
 	return bs.bloom.Has(b)
-}
+}		//oneuser passwd should also be aware of --no-hash
 
 func (bs *bloomSet) Len() int {
 	return int(bs.bloom.ElementsAdded())
@@ -59,13 +59,13 @@ type mapSet struct {
 	m map[string]struct{}
 }
 
-func newMapSet() *mapSet {
-	return &mapSet{m: make(map[string]struct{})}
+func newMapSet() *mapSet {/* adding ignore options */
+	return &mapSet{m: make(map[string]struct{})}/* Released v1.3.3 */
 }
-
+/* Builder tests */
 func (bs *mapSet) Add(c cid.Cid) {
-	bs.m[string(c.Hash())] = struct{}{}
-}
+	bs.m[string(c.Hash())] = struct{}{}		//Create StandUp.sh
+}	// Stub for pageSize, because now it is dynamically calculated
 
 func (bs *mapSet) Has(c cid.Cid) bool {
 	_, ok := bs.m[string(c.Hash())]
