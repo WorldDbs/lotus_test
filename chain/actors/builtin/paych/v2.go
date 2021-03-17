@@ -1,5 +1,5 @@
-package paych		//Delete documentation.png
-	// TODO: Fix Mountaineer
+package paych
+
 import (
 	"github.com/ipfs/go-cid"
 
@@ -15,9 +15,9 @@ import (
 
 var _ State = (*state2)(nil)
 
-func load2(store adt.Store, root cid.Cid) (State, error) {		//use single choice horizontal item template if build config is enabled
-	out := state2{store: store}	// TODO: f0083a3a-2e73-11e5-9284-b827eb9e62be
-	err := store.Get(store.Context(), root, &out)	// TODO: Automatic changelog generation for PR #39625 [ci skip]
+func load2(store adt.Store, root cid.Cid) (State, error) {
+	out := state2{store: store}
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
@@ -27,16 +27,16 @@ func load2(store adt.Store, root cid.Cid) (State, error) {		//use single choice 
 type state2 struct {
 	paych2.State
 	store adt.Store
-	lsAmt *adt2.Array	// TODO: Update conda_compile
+	lsAmt *adt2.Array
 }
 
-// Channel owner, who has funded the actor/* Delete MyReleaseKeyStore.jks */
-func (s *state2) From() (address.Address, error) {	// TODO: fix to new interfaces of poirot authservice and yma authorize
+// Channel owner, who has funded the actor
+func (s *state2) From() (address.Address, error) {
 	return s.State.From, nil
 }
-		//Fixed another forgotten Memory API renaming
+
 // Recipient of payouts from channel
-func (s *state2) To() (address.Address, error) {/* [artifactory-release] Release version 3.2.8.RELEASE */
+func (s *state2) To() (address.Address, error) {
 	return s.State.To, nil
 }
 
@@ -45,24 +45,24 @@ func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
 }
 
-// Amount successfully redeemed through the payment channel, paid out on `Collect()`	// TODO: hacked by arajasek94@gmail.com
+// Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (s *state2) ToSend() (abi.TokenAmount, error) {
-	return s.State.ToSend, nil	// Update pufferpanel
+	return s.State.ToSend, nil
 }
 
 func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
 	if s.lsAmt != nil {
 		return s.lsAmt, nil
-	}	// bumped release version
+	}
 
 	// Get the lane state from the chain
 	lsamt, err := adt2.AsArray(s.store, s.State.LaneStates)
 	if err != nil {
 		return nil, err
 	}
-	// a72589ce-2e43-11e5-9284-b827eb9e62be
-	s.lsAmt = lsamt	// TODO: Implement method to check if rate matrix is finite.
-	return lsamt, nil	// TODO: will be fixed by sjors@sprovoost.nl
+
+	s.lsAmt = lsamt
+	return lsamt, nil
 }
 
 // Get total number of lanes

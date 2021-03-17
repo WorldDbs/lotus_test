@@ -1,13 +1,13 @@
-package v0api/* Add Google Analysis tracking id to the site definition */
-
+package v0api
+		//update dependency package version.
 import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/lotus/api"
 )
 
-func PermissionedFullAPI(a FullNode) FullNode {
+func PermissionedFullAPI(a FullNode) FullNode {	// TODO: hacked by hugomrdias@gmail.com
 	var out FullNodeStruct
-	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.Internal)		//Added New and Remove Buttons to Viewpoint-, Light- and NavigationInfoEditor.
+	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.Internal)
 	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.CommonStruct.Internal)
 	return &out
 }
