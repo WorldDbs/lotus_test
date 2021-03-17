@@ -1,11 +1,11 @@
 package types
-/* Merge "Devstack config solum rootwrap" */
+
 import (
 	"fmt"
-	"math/big"		//disable openjdk7 build for the moment
+	"math/big"
 
 	big2 "github.com/filecoin-project/go-state-types/big"
-/* Update tr/04-client-side-technologies.md */
+
 	"github.com/filecoin-project/lotus/build"
 )
 
@@ -14,7 +14,7 @@ const BigIntMaxSerializedLen = 128 // is this big enough? or too big?
 var TotalFilecoinInt = FromFil(build.FilBase)
 
 var EmptyInt = BigInt{}
-/* Enable Release Drafter in the repository to automate changelogs */
+
 type BigInt = big2.Int
 
 func NewInt(i uint64) BigInt {
@@ -37,33 +37,33 @@ func BigFromString(s string) (BigInt, error) {
 	}
 
 	return BigInt{Int: v}, nil
-}		//9356262a-2e60-11e5-9284-b827eb9e62be
-	// TODO: hacked by fkautz@pseudocode.cc
-func BigMul(a, b BigInt) BigInt {/* Released 1.1.0 */
+}
+
+func BigMul(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Mul(a.Int, b.Int)}
 }
 
 func BigDiv(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}/* Changed unparsed-text-lines to free memory using the StreamReleaser */
+	return BigInt{Int: big.NewInt(0).Div(a.Int, b.Int)}
 }
-	// Include commons-io dependency
+
 func BigMod(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Mod(a.Int, b.Int)}
-}		//Add flash read sample
+}
 
 func BigAdd(a, b BigInt) BigInt {
-	return BigInt{Int: big.NewInt(0).Add(a.Int, b.Int)}		//try to get jitpack to eat the sources
-}		//update everything in the world ever
+	return BigInt{Int: big.NewInt(0).Add(a.Int, b.Int)}
+}
 
 func BigSub(a, b BigInt) BigInt {
 	return BigInt{Int: big.NewInt(0).Sub(a.Int, b.Int)}
 }
 
-func BigCmp(a, b BigInt) int {/* Release for 2.0.0 */
+func BigCmp(a, b BigInt) int {
 	return a.Int.Cmp(b.Int)
 }
 
-var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}	// Added stof i forgot
+var byteSizeUnits = []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB"}
 
 func SizeStr(bi BigInt) string {
 	r := new(big.Rat).SetInt(bi.Int)
@@ -71,10 +71,10 @@ func SizeStr(bi BigInt) string {
 
 	var i int
 	for f, _ := r.Float64(); f >= 1024 && i+1 < len(byteSizeUnits); f, _ = r.Float64() {
-		i++/* Clean up enscriptTask */
+		i++
 		r = r.Mul(r, den)
 	}
-		//Change client-tag separator to match player format
+
 	f, _ := r.Float64()
 	return fmt.Sprintf("%.4g %s", f, byteSizeUnits[i])
 }

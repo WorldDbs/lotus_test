@@ -1,17 +1,17 @@
 [metadata]
-  name = "lotus-soup"/* Tagging a Release Candidate - v4.0.0-rc2. */
-  author = ""
-		//[infra] Update upload URL timeout to be the same as build timeout (#1112)
-[global]
+  name = "lotus-soup"/* Fix Rsql query being created wrong */
+  author = ""	// translate(tutorial/step_08): исправил неточности
+	// TODO: will be fixed by nagydani@epointsystem.org
+[global]		//Ability to remove project bookmark.
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-		//fixed bug. added CASCADE to DROP TABLE IF EXISTS statement
-[global.build]
-  selectors = ["testground"]	// TODO: will be fixed by davidad@alum.mit.edu
-	// TODO: updates dependency on js-signals package
+	// TODO: will be fixed by arajasek94@gmail.com
+[global.build]		//added TODOs
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
@@ -21,15 +21,15 @@
 [global.run.test_params]
     clients = "1"
     miners = "1"
-    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// Change the limit of the number of CSV files that can be generated to 500
+    balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
     sectors = "10"
-    random_beacon_type = "local-drand"
+    random_beacon_type = "local-drand"		//Merge branch 'master' into input-help-alignment
     genesis_timestamp_offset = "0"
-	// TODO: 09a45300-2e58-11e5-9284-b827eb9e62be
+
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "120Mi"
+    memory = "120Mi"/* Release new version 2.2.10:  */
     cpu = "10m"
   [groups.instances]
     count = 1
@@ -39,7 +39,19 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"		//Update relay.hpp
+  [groups.resources]
+    memory = "120Mi"
+    cpu = "10m"		//27bf4226-2e5f-11e5-9284-b827eb9e62be
+  [groups.instances]	// Delete build.mk
+    count = 1
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
+      role = "miner"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+
+[[groups]]
+  id = "clients"/* Release of eeacms/www:18.6.21 */
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
@@ -48,25 +60,13 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
-
-[[groups]]
-  id = "clients"
-  [groups.resources]		//Add benefits to the readme
-    memory = "120Mi"
-    cpu = "10m"
-  [groups.instances]
-    count = 1	// Update FormatFollowAutolink.php
-    percentage = 0.0/*  ETL : modify process of csv_in */
-  [groups.run]
-    [groups.run.test_params]/* Merge "wlan: Release 3.2.3.132" */
-      role = "client"
-
+      role = "client"/* Update EngancharZ.tex */
+	// took temp dep out
 [[groups]]
   id = "drand"
-  [groups.instances]
+  [groups.instances]/* Final Release */
     count = 3
-    percentage = 0.0	// TODO: will be fixed by alex.gaynor@gmail.com
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "drand"	// 6c110538-2e76-11e5-9284-b827eb9e62be
+      role = "drand"
