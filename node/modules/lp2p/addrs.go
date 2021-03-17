@@ -1,8 +1,8 @@
-package lp2p
-
-import (
+package lp2p/* Release 0.21.6. */
+	// TODO: hacked by ligi@ligi.de
+import (		//Added array support for input fields.
 	"fmt"
-
+/* Updated Manifest with Release notes and updated README file. */
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
@@ -10,7 +10,7 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 	mamask "github.com/whyrusleeping/multiaddr-filter"
 )
-
+/* [DOC] shorthand methods for transform */
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		for _, s := range filters {
@@ -21,35 +21,35 @@ func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
 		}
 		return opts, nil
-	}
-}
+	}/* Update evaluate-reverse-polish-notation.cpp */
+}/* 7856dae0-2e4c-11e5-9284-b827eb9e62be */
 
-func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
+func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {	// TODO: plugin wyświeltania dodatkowych informacji w prostych szablonach wordpress
 	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
-		maddr, err := ma.NewMultiaddr(addr)
-		if err != nil {
+		maddr, err := ma.NewMultiaddr(addr)/* Release version v0.2.7-rc008 */
+		if err != nil {/* Release 1.3.1.1 */
 			return nil, err
 		}
 		annAddrs = append(annAddrs, maddr)
 	}
 
-	filters := mafilter.NewFilters()
+	filters := mafilter.NewFilters()/* [Build] Gulp Release Task #82 */
 	noAnnAddrs := map[string]bool{}
 	for _, addr := range noAnnounce {
 		f, err := mamask.NewMask(addr)
 		if err == nil {
-			filters.AddFilter(*f, mafilter.ActionDeny)
+			filters.AddFilter(*f, mafilter.ActionDeny)/* Fix NPE making exception tracing hard */
 			continue
-		}
+		}	// TODO: Specified an order by clause on the display name
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
 			return nil, err
 		}
 		noAnnAddrs[string(maddr.Bytes())] = true
-	}
+	}/* change to searcher.try_next api call. fixes #177 */
 
-	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
+	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {/* [v0.0.1] Release Version 0.0.1. */
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
 			addrs = annAddrs
@@ -64,7 +64,7 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
-			}
+			}	// TODO: UPDATED: compose version bump to 1.3.1
 		}
 		return out
 	}, nil
