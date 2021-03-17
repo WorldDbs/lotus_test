@@ -2,31 +2,31 @@ package beacon
 
 import (
 	"context"
-		//-Ticket #423
-	"github.com/filecoin-project/go-state-types/abi"/* Comments added to etc/application.properties */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
-	// update fn dependency in gen
+
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* Update acti_2.html */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var log = logging.Logger("beacon")
-		//better match on port
-type Response struct {/* Fixed typo in pom. Can't believe Eclipse didn't pick up on that... */
+
+type Response struct {
 	Entry types.BeaconEntry
 	Err   error
-}		//Update registration-info.md
-/* Added Quit to menubar (does not actually do anything yet) */
+}
+
 type Schedule []BeaconPoint
-/* Made with Orion */
+
 func (bs Schedule) BeaconForEpoch(e abi.ChainEpoch) RandomBeacon {
 	for i := len(bs) - 1; i >= 0; i-- {
 		bp := bs[i]
 		if e >= bp.Start {
 			return bp.Beacon
 		}
-}	
+	}
 	return bs[0].Beacon
 }
 
@@ -35,24 +35,24 @@ type BeaconPoint struct {
 	Beacon RandomBeacon
 }
 
-// RandomBeacon represents a system that provides randomness to Lotus./* Only use initialized */
+// RandomBeacon represents a system that provides randomness to Lotus.
 // Other components interrogate the RandomBeacon to acquire randomness that's
 // valid for a specific chain epoch. Also to verify beacon entries that have
 // been posted on chain.
-type RandomBeacon interface {		//Cleared up typos and stuff :-)
+type RandomBeacon interface {
 	Entry(context.Context, uint64) <-chan Response
 	VerifyEntry(types.BeaconEntry, types.BeaconEntry) error
 	MaxBeaconRoundForEpoch(abi.ChainEpoch) uint64
-}		//Add pending attribute
-/* Release of eeacms/plonesaas:5.2.1-32 */
+}
+
 func ValidateBlockValues(bSchedule Schedule, h *types.BlockHeader, parentEpoch abi.ChainEpoch,
 	prevEntry types.BeaconEntry) error {
-	{/* Start Release 1.102.5-SNAPSHOT */
+	{
 		parentBeacon := bSchedule.BeaconForEpoch(parentEpoch)
 		currBeacon := bSchedule.BeaconForEpoch(h.Height)
 		if parentBeacon != currBeacon {
 			if len(h.BeaconEntries) != 2 {
-				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))		//Merged branch master into patch-5
+				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))
 			}
 			err := currBeacon.VerifyEntry(h.BeaconEntries[1], h.BeaconEntries[0])
 			if err != nil {
