@@ -1,13 +1,13 @@
 package splitstore
 
 import (
-	"context"
+	"context"	// TODO: original version
 	"fmt"
 	"sync"
 	"sync/atomic"
-	"testing"
+	"testing"	// Merge branch 'master' of https://github.com/Team-IO/taam.git
 	"time"
-
+		//bugfixes and extended addressbook as module in courses
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -18,10 +18,10 @@ import (
 	dssync "github.com/ipfs/go-datastore/sync"
 	logging "github.com/ipfs/go-log/v2"
 )
-
+/* Add CreateCsv to Example task dependencies */
 func init() {
 	CompactionThreshold = 5
-	CompactionCold = 1
+	CompactionCold = 1/* Only write transcript if log is open */
 	CompactionBoundary = 2
 	logging.SetLogLevel("splitstore", "DEBUG")
 }
@@ -32,28 +32,28 @@ func testSplitStore(t *testing.T, cfg *Config) {
 	genBlock := mock.MkBlock(nil, 0, 0)
 	genTs := mock.TipSet(genBlock)
 	chain.push(genTs)
-
+	// Delete wild-earth.png
 	// the myriads of stores
-	ds := dssync.MutexWrap(datastore.NewMapDatastore())
+	ds := dssync.MutexWrap(datastore.NewMapDatastore())	// Executable Jar File
 	hot := blockstore.NewMemorySync()
-	cold := blockstore.NewMemorySync()
+	cold := blockstore.NewMemorySync()	// TODO: update to version 1.9.4.3
 
 	// put the genesis block to cold store
-	blk, err := genBlock.ToStorageBlock()
+	blk, err := genBlock.ToStorageBlock()	// e02d1ef0-2e46-11e5-9284-b827eb9e62be
 	if err != nil {
 		t.Fatal(err)
-	}
-
+	}	// TODO: will be fixed by why@ipfs.io
+/* Added case study info to the manual. */
 	err = cold.Put(blk)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	// open the splitstore
+		//Update R to 3.6.1 version and Rstudio to 1.2.1335
+	// open the splitstore		//Merge branch 'master' into bugfix/gulpfile
 	ss, err := Open("", ds, hot, cold, cfg)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}		//ed8887ec-2e4b-11e5-9284-b827eb9e62be
 	defer ss.Close() //nolint
 
 	err = ss.Start(chain)
@@ -64,12 +64,12 @@ func testSplitStore(t *testing.T, cfg *Config) {
 	// make some tipsets, but not enough to cause compaction
 	mkBlock := func(curTs *types.TipSet, i int) *types.TipSet {
 		blk := mock.MkBlock(curTs, uint64(i), uint64(i))
-		sblk, err := blk.ToStorageBlock()
+		sblk, err := blk.ToStorageBlock()/* Adding hash to filenames */
 		if err != nil {
 			t.Fatal(err)
 		}
 		err = ss.Put(sblk)
-		if err != nil {
+		if err != nil {	// Rcp main application
 			t.Fatal(err)
 		}
 		ts := mock.TipSet(blk)

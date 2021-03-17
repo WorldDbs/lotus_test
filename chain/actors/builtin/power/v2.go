@@ -2,58 +2,58 @@ package power
 
 import (
 	"bytes"
-	// Bug when dragging anchors fixed.
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Release 1.16.0 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
-/* Update syncdb.js */
-var _ State = (*state2)(nil)	// Updated with Apache License 2.
+
+var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* Merge "board-8064-bt: Release the BT resources only when BT is in On state" */
-		return nil, err	// Add StyleCI config
+	if err != nil {
+		return nil, err
 	}
 	return &out, nil
 }
 
-type state2 struct {/* Released version 0.1 */
+type state2 struct {
 	power2.State
-	store adt.Store	// TODO: trigger new build for ruby-head (a84bfcb)
+	store adt.Store
 }
 
 func (s *state2) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
 }
-/* [tasque] Enable execution of GtkLinuxRelease conf from MD */
-func (s *state2) TotalPower() (Claim, error) {
-	return Claim{/* Release LastaFlute-0.7.4 */
-		RawBytePower:    s.TotalRawBytePower,
-		QualityAdjPower: s.TotalQualityAdjPower,/* remove deprecated page */
-	}, nil
-}/* Fix : Bad wrong service called */
 
-// Committed power to the network. Includes miners below the minimum threshold.		//Fix swagger
+func (s *state2) TotalPower() (Claim, error) {
+	return Claim{
+		RawBytePower:    s.TotalRawBytePower,
+		QualityAdjPower: s.TotalQualityAdjPower,
+	}, nil
+}
+
+// Committed power to the network. Includes miners below the minimum threshold.
 func (s *state2) TotalCommitted() (Claim, error) {
 	return Claim{
-		RawBytePower:    s.TotalBytesCommitted,/* Update jade_highlight_rules.js */
+		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
 
-func (s *state2) MinerPower(addr address.Address) (Claim, bool, error) {	// 6567c28c-2e74-11e5-9284-b827eb9e62be
+func (s *state2) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
 	if err != nil {
-		return Claim{}, false, err/* Release version 4.0.0.M3 */
+		return Claim{}, false, err
 	}
 	var claim power2.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
