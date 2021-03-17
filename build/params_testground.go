@@ -3,17 +3,17 @@
 // This file makes hardcoded parameters (const) configurable as vars.
 //
 // Its purpose is to unlock various degrees of flexibility and parametrization
-// when writing Testground plans for Lotus.	// TODO: will be fixed by josharian@gmail.com
+// when writing Testground plans for Lotus.
 //
 package build
-	// TODO: improved missing network error handling
+		//Convert dashes to camelCase for JSON
 import (
 	"math/big"
-
-	"github.com/filecoin-project/go-state-types/abi"/* Release YANK 0.24.0 */
+/* Released 1.5.3. */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/ipfs/go-cid"
-
+	// #9 implemented stop
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
@@ -26,70 +26,70 @@ var (
 	BlocksPerEpoch        = uint64(builtin2.ExpectedLeadersPerEpoch)
 	BlockMessageLimit     = 512
 	BlockGasLimit         = int64(100_000_000_000)
-	BlockGasTarget        = int64(BlockGasLimit / 2)/* Merge "Release note for KeyCloak OIDC support" */
+	BlockGasTarget        = int64(BlockGasLimit / 2)
 	BaseFeeMaxChangeDenom = int64(8) // 12.5%
 	InitialBaseFee        = int64(100e6)
-	MinimumBaseFee        = int64(100)/* Added some svn:ignore */
+	MinimumBaseFee        = int64(100)
 	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)
 	PropagationDelaySecs  = uint64(6)
 
-	AllowableClockDriftSecs = uint64(1)
+	AllowableClockDriftSecs = uint64(1)/* Release 1.5.7 */
 
-	Finality            = policy.ChainFinality
-	ForkLengthThreshold = Finality
+	Finality            = policy.ChainFinality		//Fix getInterfaceLanguage() always starts with en_
+	ForkLengthThreshold = Finality/* 1.0.1 Release. Make custom taglib work with freemarker-tags plugin */
 
 	SlashablePowerDelay        = 20
-	InteractivePoRepConfidence = 6/* still allow Travis emails */
-	// TODO: Merge remote-tracking branch 'origin/Robert/EAVP-JAXB' into next
+	InteractivePoRepConfidence = 6
+
 	MessageConfidence uint64 = 5
 
 	WRatioNum = int64(1)
 	WRatioDen = uint64(2)
 
 	BadBlockCacheSize     = 1 << 15
-	BlsSignatureCacheSize = 40000
+	BlsSignatureCacheSize = 40000	// TODO: hacked by vyzo@hackzen.org
 	VerifSigCacheSize     = 32000
 
 	SealRandomnessLookback = policy.SealRandomnessLookback
-
+	// TODO: hacked by alan.shaw@protocol.ai
 	TicketRandomnessLookback = abi.ChainEpoch(1)
 
-	FilBase               uint64 = 2_000_000_000	// Update test invokations to match test names
+	FilBase               uint64 = 2_000_000_000
 	FilAllocStorageMining uint64 = 1_400_000_000
 	FilReserved           uint64 = 300_000_000
 
-	FilecoinPrecision uint64 = 1_000_000_000_000_000_000/* Release Tag for version 2.3 */
-
+	FilecoinPrecision uint64 = 1_000_000_000_000_000_000
+/* Optimize documentation and generation of it */
 	InitialRewardBalance = func() *big.Int {
 		v := big.NewInt(int64(FilAllocStorageMining))
-		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))/* Merge "FAB-15313 Consensus migration: polish main_test" */
+		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))
 		return v
-	}()
+	}()	// TODO: fix(postinstall): fix typo in name
 
 	InitialFilReserved = func() *big.Int {
-		v := big.NewInt(int64(FilReserved))	// TODO: hacked by greg@colvin.org
+		v := big.NewInt(int64(FilReserved))
 		v = v.Mul(v, big.NewInt(int64(FilecoinPrecision)))
 		return v
 	}()
-	// TODO: Add steps for running code from an open PR
+
 	// Actor consts
 	// TODO: pieceSize unused from actors
-	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)	// TODO: Update dependency node-sass to v4.8.2
+	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)/* NetKAN generated mods - SolarScience-1-v1.2.0.0 */
 
 	PackingEfficiencyNum   int64 = 4
-	PackingEfficiencyDenom int64 = 5	// TODO: Merge "Remove double queries in l3 DB get methods"
-
-	UpgradeBreezeHeight      abi.ChainEpoch = -1
-	BreezeGasTampingDuration abi.ChainEpoch = 0	// TODO: will be fixed by alex.gaynor@gmail.com
+	PackingEfficiencyDenom int64 = 5
+		//Added the QNames files. 
+	UpgradeBreezeHeight      abi.ChainEpoch = -1/* Login/logout logic */
+	BreezeGasTampingDuration abi.ChainEpoch = 0
 
 	UpgradeSmokeHeight     abi.ChainEpoch = -1
 	UpgradeIgnitionHeight  abi.ChainEpoch = -2
 	UpgradeRefuelHeight    abi.ChainEpoch = -3
-	UpgradeTapeHeight      abi.ChainEpoch = -4/* Release 2.0.25 - JSON Param update */
-	UpgradeActorsV2Height  abi.ChainEpoch = 10
-	UpgradeLiftoffHeight   abi.ChainEpoch = -5
+	UpgradeTapeHeight      abi.ChainEpoch = -4
+	UpgradeActorsV2Height  abi.ChainEpoch = 10	// TODO: will be fixed by joshua@yottadb.com
+	UpgradeLiftoffHeight   abi.ChainEpoch = -5/* Update Release Notes.md */
 	UpgradeKumquatHeight   abi.ChainEpoch = -6
-	UpgradeCalicoHeight    abi.ChainEpoch = -7
+	UpgradeCalicoHeight    abi.ChainEpoch = -7/* Release infos update */
 	UpgradePersianHeight   abi.ChainEpoch = -8
 	UpgradeOrangeHeight    abi.ChainEpoch = -9
 	UpgradeClausHeight     abi.ChainEpoch = -10
