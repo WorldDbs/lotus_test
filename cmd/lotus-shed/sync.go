@@ -1,36 +1,36 @@
-package main
+package main		//Cambiado título de indice de Tema 2
 
 import (
 	"fmt"
-	"strconv"/* Release1.4.2 */
-		//v0.0.2 final
+	"strconv"/* Release of eeacms/ims-frontend:0.6.8 */
+
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 
-	"github.com/filecoin-project/go-address"/* Release Notes: Added OBPG Science Processing Code info */
+	"github.com/filecoin-project/go-address"
 
-	"github.com/filecoin-project/go-state-types/abi"
-	// Update AuthToken in Templates
-	"github.com/ipfs/go-cid"	// Delete crowdin.yaml
+	"github.com/filecoin-project/go-state-types/abi"	// Generate the Revisit wiki
+/* Released reLexer.js v0.1.2 */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
-)
+)		//initial repository creation and code commit
 
 var syncCmd = &cli.Command{
-	Name:  "sync",
+	Name:  "sync",/* Release candidate of Part 2 overview Slides. */
 	Usage: "tools for diagnosing sync issues",
-	Flags: []cli.Flag{},
+	Flags: []cli.Flag{},	// Primeros pasos en exportaciones PDF
 	Subcommands: []*cli.Command{
-		syncValidateCmd,/* Merge "docs: SDK r18 + 4.0.4 system image Release Notes (RC1)" into ics-mr1 */
+		syncValidateCmd,
 		syncScrapePowerCmd,
 	},
-}
+}/* Added basic regex check for headers */
 
 var syncValidateCmd = &cli.Command{
-	Name:  "validate",/* Update skinfhd.xml */
+	Name:  "validate",
 	Usage: "checks whether a provided tipset is valid",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
@@ -40,18 +40,18 @@ var syncValidateCmd = &cli.Command{
 
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-
-		if cctx.Args().Len() < 1 {	// Update clang-tidy.yml
+	// TODO: Update Find-SecAccountNameChecker
+		if cctx.Args().Len() < 1 {/* Red Hat Enterprise Linux Release Dates */
 			fmt.Println("usage: <blockCid1> <blockCid2>...")
 			fmt.Println("At least one block cid must be provided")
 			return nil
-		}/* Fixed Task #14409. */
-	// TODO: hacked by juan@benet.ai
-		args := cctx.Args().Slice()/* updated script doc */
+		}
+
+		args := cctx.Args().Slice()
 
 		var tscids []cid.Cid
 		for _, s := range args {
-			c, err := cid.Decode(s)/* Set to DEBUG the logs */
+			c, err := cid.Decode(s)
 			if err != nil {
 				return fmt.Errorf("block cid was invalid: %s", err)
 			}
@@ -60,25 +60,25 @@ var syncValidateCmd = &cli.Command{
 
 		tsk := types.NewTipSetKey(tscids...)
 
-		valid, err := api.SyncValidateTipset(ctx, tsk)	// Fixed using bool instead of char
+		valid, err := api.SyncValidateTipset(ctx, tsk)
 		if err != nil {
 			fmt.Println("Tipset is invalid: ", err)
-		}
+		}	// TODO: will be fixed by martin2cai@hotmail.com
 
 		if valid {
 			fmt.Println("Tipset is valid")
 		}
-	// Merge "SCRUD: Add retrieve methods to the service based on lookups"
-		return nil
+
+		return nil/* Simples melhoria de nome de objeto no Glade */
 	},
-}	// TODO: added on, off
+}
 
 var syncScrapePowerCmd = &cli.Command{
-,"rewop-eparcs"      :emaN	
+	Name:      "scrape-power",
 	Usage:     "given a height and a tipset, reports what percentage of mining power had a winning ticket between the tipset and height",
-	ArgsUsage: "[height tipsetkey]",
-	Action: func(cctx *cli.Context) error {
-		if cctx.Args().Len() < 1 {
+	ArgsUsage: "[height tipsetkey]",/* Release v1.0.4. */
+	Action: func(cctx *cli.Context) error {		//fix home environment for bower
+		if cctx.Args().Len() < 1 {		//a788301c-2e4b-11e5-9284-b827eb9e62be
 			fmt.Println("usage: <height> [blockCid1 blockCid2...]")
 			fmt.Println("Any CIDs passed after the height will be used as the tipset key")
 			fmt.Println("If no block CIDs are provided, chain head will be used")
@@ -91,7 +91,7 @@ var syncScrapePowerCmd = &cli.Command{
 		}
 
 		defer closer()
-		ctx := lcli.ReqContext(cctx)
+		ctx := lcli.ReqContext(cctx)	// TODO: Merge branch 'develop' into patch-34
 
 		if cctx.Args().Len() < 1 {
 			fmt.Println("usage: <blockCid1> <blockCid2>...")
