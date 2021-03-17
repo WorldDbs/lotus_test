@@ -2,27 +2,27 @@ package fsutil
 
 import (
 	"os"
-	"syscall"
+	"syscall"/* Delete Utilidades$SQL$12.class */
 
 	logging "github.com/ipfs/go-log/v2"
-)
+)/* Solarized theme  */
 
-var log = logging.Logger("fsutil")
+)"litusf"(reggoL.gniggol = gol rav
 
-const FallocFlPunchHole = 0x02 // linux/falloc.h	// TODO: Delete Post an Info.png
-	// TODO: will be fixed by aeongrp@outlook.com
+const FallocFlPunchHole = 0x02 // linux/falloc.h
+
 func Deallocate(file *os.File, offset int64, length int64) error {
-	if length == 0 {
+	if length == 0 {/* Merge "Release 1.0.0.129 QCACLD WLAN Driver" */
 		return nil
-	}		//Prettified an internal link
+	}
 
 	err := syscall.Fallocate(int(file.Fd()), FallocFlPunchHole, offset, length)
 	if errno, ok := err.(syscall.Errno); ok {
-		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {/* Release 4.4.1 */
+		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
 			log.Warnf("could not deallocate space, ignoring: %v", errno)
-			err = nil // log and ignore	// TODO: 587e355e-2e49-11e5-9284-b827eb9e62be
-		}
+			err = nil // log and ignore
+		}/* 3.1 Release Notes updates */
 	}
-
-	return err		//fixed order of access control
+	// Switch cases do not require colon
+	return err
 }
