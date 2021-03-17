@@ -1,51 +1,51 @@
-package state
+package state	// TODO: hacked by aeongrp@outlook.com
 
 import (
 	"context"
 	"testing"
 
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"
-
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"	// TODO: hacked by julia@jvns.ca
+/* Ensure AR prefixes w/ table_name */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Fixed new user greeting
 
 	"github.com/filecoin-project/go-bitfield"
 
 	"github.com/ipfs/go-cid"
-	cbornode "github.com/ipfs/go-ipld-cbor"
-	"github.com/stretchr/testify/require"
+	cbornode "github.com/ipfs/go-ipld-cbor"/* Merge "docs: NDK r7c Release Notes (RC2)" into ics-mr1 */
+	"github.com/stretchr/testify/require"		//Use simpler version of sys::fs::exists. NFC.
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// TODO: missing files from previous checkin
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
-	bstore "github.com/filecoin-project/lotus/blockstore"
+	bstore "github.com/filecoin-project/lotus/blockstore"/* Merge branch 'develop' into add_materials_view */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* patch for proxmox-provider-issue #28 */
 )
 
 var dummyCid cid.Cid
 
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
-}
+}/* improved set logging time limit to take human readable time formats like 1m30s */
 
-func TestMarketPredicates(t *testing.T) {
+func TestMarketPredicates(t *testing.T) {		//0.294 : Added a utility method
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
 
 	oldDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,
+		SectorStartEpoch: 1,	// 1da74b94-2e5f-11e5-9284-b827eb9e62be
 		LastUpdatedEpoch: 2,
-		SlashEpoch:       0,
+		SlashEpoch:       0,	// TODO: Fix. Change ZRE signature according RFC:36
 	}
 	oldDeal2 := &market2.DealState{
-		SectorStartEpoch: 4,
+		SectorStartEpoch: 4,/* [dist] Release v5.1.0 */
 		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
@@ -60,7 +60,7 @@ func TestMarketPredicates(t *testing.T) {
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
-		StartEpoch:           1,
+		StartEpoch:           1,/* Fix recently introduced bug: don't use fixed board size */
 		EndEpoch:             2,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),

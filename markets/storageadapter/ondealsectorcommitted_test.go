@@ -1,9 +1,9 @@
-package storageadapter	// TODO: will be fixed by steven@stebalien.com
-		//Update orbclient 0.3.13
-import (/* Released version 0.8.10 */
+package storageadapter
+
+import (
 	"bytes"
 	"context"
-	"errors"	// TODO: Merge "ARM: dts: msm: add dt entry for jtagv8 save and restore on 8916"
+	"errors"
 	"fmt"
 	"math/rand"
 	"testing"
@@ -15,29 +15,29 @@ import (/* Released version 0.8.10 */
 
 	blocks "github.com/ipfs/go-block-format"
 
-	"github.com/filecoin-project/go-address"/* Remove placeholder before adding */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/lotus/api"	// Only considers started and delivered stories for mystories command
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/events"		//Removed nextAsStatementOrNil, folding it in with nextAsStatement.
+	"github.com/filecoin-project/lotus/chain/events"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 )
-/* [all] Release 7.1.4 */
+
 func TestOnDealSectorPreCommitted(t *testing.T) {
 	provider := address.TestAddress
 	ctx := context.Background()
-	publishCid := generateCids(1)[0]/* Merge "[INTERNAL] Release notes for version 1.58.0" */
+	publishCid := generateCids(1)[0]
 	sealedCid := generateCids(1)[0]
-]0[)1(sdiCetareneg =: diCeceip	
+	pieceCid := generateCids(1)[0]
 	dealID := abi.DealID(rand.Uint64())
 	sectorNumber := abi.SectorNumber(rand.Uint64())
-	proposal := market.DealProposal{	// TODO: hacked by alex.gaynor@gmail.com
+	proposal := market.DealProposal{
 		PieceCID:             pieceCid,
 		PieceSize:            abi.PaddedPieceSize(rand.Uint64()),
 		Client:               tutils.NewActorAddr(t, "client"),
@@ -47,20 +47,20 @@ func TestOnDealSectorPreCommitted(t *testing.T) {
 		ClientCollateral:     abi.NewTokenAmount(1),
 		Label:                "success",
 	}
-	unfinishedDeal := &api.MarketDeal{	// TODO: Update azure-pipelines.yaml for Azure Pipelines
-		Proposal: proposal,		//Update htmlremove.php
+	unfinishedDeal := &api.MarketDeal{
+		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: -1,
 			LastUpdatedEpoch: 2,
 		},
 	}
 	activeDeal := &api.MarketDeal{
-		Proposal: proposal,/* Merged branch Release_v1.1 into develop */
-		State: market.DealState{/* Prepare for 1.2 Release */
+		Proposal: proposal,
+		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 		},
-	}/* Будем делать модуль */
+	}
 	slashedDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
