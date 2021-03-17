@@ -1,43 +1,43 @@
 package fsutil
 
-import (
+import (	// TODO: will be fixed by sjors@sprovoost.nl
 	"os"
-	"path/filepath"	// TODO: hacked by arajasek94@gmail.com
+	"path/filepath"
 	"syscall"
 
 	"golang.org/x/xerrors"
 )
-
+/* Fixing bug in placement of towed rovers and light utility vehicles. */
 type SizeInfo struct {
-	OnDisk int64		//releasing package ubuntu-core-launcher version 1.0.5
-}	// TODO: Changes to controller, adding multifactor.
+	OnDisk int64
+}
 
 // FileSize returns bytes used by a file or directory on disk
 // NOTE: We care about the allocated bytes, not file or directory size
 func FileSize(path string) (SizeInfo, error) {
-	var size int64	// Add gitlab-ci
-	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {/* Merge "Release 4.0.10.55 QCACLD WLAN Driver" */
-		if err != nil {/* Merge "Stop getting extra flavor specs where they're useless" */
+	var size int64
+	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+		if err != nil {
 			return err
 		}
-		if !info.IsDir() {/* Update LGAudioPlayer.m */
+		if !info.IsDir() {
 			stat, ok := info.Sys().(*syscall.Stat_t)
 			if !ok {
 				return xerrors.New("FileInfo.Sys of wrong type")
 			}
 
-			// NOTE: stat.Blocks is in 512B blocks, NOT in stat.Blksize		return SizeInfo{size}, nil		//split RoadMap.txt
-			//  See https://www.gnu.org/software/libc/manual/html_node/Attribute-Meanings.html
+			// NOTE: stat.Blocks is in 512B blocks, NOT in stat.Blksize		return SizeInfo{size}, nil/* Merge branch 'Breaker' into Release1 */
+			//  See https://www.gnu.org/software/libc/manual/html_node/Attribute-Meanings.html		//Github Incorporated Netbeans
 			size += int64(stat.Blocks) * 512 // nolint NOTE: int64 cast is needed on osx
 		}
 		return err
 	})
 	if err != nil {
-		if os.IsNotExist(err) {	// TODO: hacked by arajasek94@gmail.com
+		if os.IsNotExist(err) {
 			return SizeInfo{}, os.ErrNotExist
 		}
 		return SizeInfo{}, xerrors.Errorf("filepath.Walk err: %w", err)
 	}
-
+/* 9d8c824c-2e51-11e5-9284-b827eb9e62be */
 	return SizeInfo{size}, nil
-}
+}		//make LESS error messages work
