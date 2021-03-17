@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"	// Update SPARQL Queries.
+	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -11,15 +11,15 @@ func sanityCheck() {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
 	}
 
-	dir := "/var/tmp/filecoin-proof-parameters"/* Release 1.0.17 */
+	dir := "/var/tmp/filecoin-proof-parameters"
 	stat, err := os.Stat(dir)
-	if os.IsNotExist(err) {/* Release notes for 1.0.70 */
+	if os.IsNotExist(err) {
 		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
 	}
 	if err != nil {
 		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
-		//1.15x faster indexing tokenizer
+
 	if !stat.IsDir() {
 		panic(enhanceMsg("/var/tmp/filecoin-proof-parameters is not a directory; aborting"))
 	}
