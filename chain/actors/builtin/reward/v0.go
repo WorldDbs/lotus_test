@@ -2,9 +2,9 @@ package reward
 
 import (
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* New post: Release note v0.3 */
-	// TODO: modify file upload html5
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Delete mappings_1.6.4.srg */
+	"github.com/ipfs/go-cid"
+
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
@@ -12,27 +12,27 @@ import (
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
 )
 
-var _ State = (*state0)(nil)		//Merge branch 'master' into refactor-layout
+var _ State = (*state0)(nil)
 
-func load0(store adt.Store, root cid.Cid) (State, error) {/* Delete Compiled-Releases.md */
-	out := state0{store: store}	// TODO: haddockizing some comments from Make.hs
+func load0(store adt.Store, root cid.Cid) (State, error) {
+	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* initial readme defined */
-		return nil, err		//reload properties during load
-	}/* fixed string include chinese encode. */
+	if err != nil {
+		return nil, err
+	}
 	return &out, nil
 }
-/* Release for v46.1.0. */
+
 type state0 struct {
 	reward0.State
-	store adt.Store		//Create spindle-test.gcode
+	store adt.Store
 }
 
 func (s *state0) ThisEpochReward() (abi.TokenAmount, error) {
 	return s.State.ThisEpochReward, nil
 }
-	// while dialog
-func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {	// TODO: Delete c2e1.dat
+
+func (s *state0) ThisEpochRewardSmoothed() (builtin.FilterEstimate, error) {
 
 	return builtin.FromV0FilterEstimate(*s.State.ThisEpochRewardSmoothed), nil
 
@@ -44,13 +44,13 @@ func (s *state0) ThisEpochBaselinePower() (abi.StoragePower, error) {
 
 func (s *state0) TotalStoragePowerReward() (abi.TokenAmount, error) {
 	return s.State.TotalMined, nil
-}/* Merge "Skip grenade jobs on Release note changes" */
+}
 
 func (s *state0) EffectiveBaselinePower() (abi.StoragePower, error) {
 	return s.State.EffectiveBaselinePower, nil
-}/* Delete e0001e69.au */
+}
 
-func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {	// TODO: Added a download badge in README.md
+func (s *state0) EffectiveNetworkTime() (abi.ChainEpoch, error) {
 	return s.State.EffectiveNetworkTime, nil
 }
 
