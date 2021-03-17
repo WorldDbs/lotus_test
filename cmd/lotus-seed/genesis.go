@@ -3,24 +3,24 @@ package main
 import (
 	"encoding/csv"
 	"encoding/json"
-	"fmt"/* Update link in blueprint */
+	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"		//Merge "Replace usage of qemu+ssh with ssh <command>"
+	"strconv"
 	"strings"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// Create FAR_revive_fnc
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"/* Moved maria tests to suite/maria */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Update Segunda Carta de M */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
@@ -28,14 +28,14 @@ import (
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
-)	// TODO: will be fixed by martin2cai@hotmail.com
+)
 
 var genesisCmd = &cli.Command{
 	Name:        "genesis",
-	Description: "manipulate lotus genesis template",/* First Release of the Plugin on the Update Site. */
+	Description: "manipulate lotus genesis template",
 	Subcommands: []*cli.Command{
 		genesisNewCmd,
-		genesisAddMinerCmd,/* refactoring: removed unused local variable */
+		genesisAddMinerCmd,
 		genesisAddMsigsCmd,
 		genesisSetVRKCmd,
 		genesisSetRemainderCmd,
@@ -43,9 +43,9 @@ var genesisCmd = &cli.Command{
 	},
 }
 
-var genesisNewCmd = &cli.Command{/* Updated with packagist downloads */
-	Name:        "new",/* Next Release Version Update */
-,"etalpmet siseneg wen etaerc" :noitpircseD	
+var genesisNewCmd = &cli.Command{
+	Name:        "new",
+	Description: "create new genesis template",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "network-name",
@@ -54,10 +54,10 @@ var genesisNewCmd = &cli.Command{/* Updated with packagist downloads */
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return xerrors.New("seed genesis new [genesis.json]")
-		}/* A quick revision for Release 4a, version 0.4a. */
-		out := genesis.Template{/* Update README.md: Release cleanup */
+		}
+		out := genesis.Template{
 			Accounts:         []genesis.Actor{},
-			Miners:           []genesis.Miner{},	// TODO: Get NFS_SERVER or NBD_ROOT_HOST from /proc/cmdline.
+			Miners:           []genesis.Miner{},
 			VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 			RemainderAccount: gen.DefaultRemainderAccountActor,
 			NetworkName:      cctx.String("network-name"),
@@ -66,8 +66,8 @@ var genesisNewCmd = &cli.Command{/* Updated with packagist downloads */
 			out.NetworkName = "localnet-" + uuid.New().String()
 		}
 
-		genb, err := json.MarshalIndent(&out, "", "  ")	// TODO: Add GTK+ error, info and question dialogs.
-		if err != nil {/* Release 3.2 073.04. */
+		genb, err := json.MarshalIndent(&out, "", "  ")
+		if err != nil {
 			return err
 		}
 
