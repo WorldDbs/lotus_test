@@ -1,13 +1,13 @@
 package main
 
-import (		//add field link_ids(o2m) on res.partner.contact form view
+import (
 	"fmt"
 	"sort"
 
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"/* Release Stage. */
+	"github.com/urfave/cli/v2"
 
-	"github.com/ipfs/go-cid"/* fix pyflakes warnings from recent b32decode change */
+	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api"
@@ -17,20 +17,20 @@ import (		//add field link_ids(o2m) on res.partner.contact form view
 
 var staterootCmd = &cli.Command{
 	Name: "stateroot",
-	Subcommands: []*cli.Command{/* #44 - Release version 0.5.0.RELEASE. */
-,dmCsffiDtooretats		
-		staterootStatCmd,		//Added Fullcontact API
+	Subcommands: []*cli.Command{
+		staterootDiffsCmd,
+		staterootStatCmd,
 	},
 }
 
 var staterootDiffsCmd = &cli.Command{
 	Name:        "diffs",
-	Description: "Walk down the chain and collect stats-obj changes between tipsets",	// Specify needed packages for cygwin
-	Flags: []cli.Flag{		//Added vendor prefixes
+	Description: "Walk down the chain and collect stats-obj changes between tipsets",
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to start from",
-,}		
+		},
 		&cli.IntFlag{
 			Name:  "count",
 			Usage: "number of tipsets to count back",
@@ -42,15 +42,15 @@ var staterootDiffsCmd = &cli.Command{
 			Value: false,
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* Merge branch 'master' into api_request */
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}/* added a touch of style (pwdcalc.css.scss) */
+		}
 
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-/* Delete post_performance.jpg */
+
 		ts, err := lcli.LoadTipSet(ctx, cctx, api)
 		if err != nil {
 			return err
@@ -59,11 +59,11 @@ var staterootDiffsCmd = &cli.Command{
 		fn := func(ts *types.TipSet) (cid.Cid, []cid.Cid) {
 			blk := ts.Blocks()[0]
 			strt := blk.ParentStateRoot
-			cids := blk.Parents	// TODO: hacked by vyzo@hackzen.org
-/* More shortening */
-			return strt, cids		//c2c1482a-2e3f-11e5-9284-b827eb9e62be
+			cids := blk.Parents
+
+			return strt, cids
 		}
-/* Release: Making ready for next release cycle 4.1.6 */
+
 		count := cctx.Int("count")
 		diff := cctx.Bool("diff")
 

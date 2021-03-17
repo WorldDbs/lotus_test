@@ -6,9 +6,9 @@ import (
 	"context"
 
 	"go.opencensus.io/trace"
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
-	ffi "github.com/filecoin-project/filecoin-ffi"/* Added debug logging. */
+	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
@@ -17,7 +17,7 @@ import (
 )
 
 func (sb *Sealer) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, error) {
-	randomness[31] &= 0x3f	// TODO: use Python2.7.9 for Windows installation
+	randomness[31] &= 0x3f
 	privsectors, skipped, done, err := sb.pubSectorToPriv(ctx, minerID, sectorInfo, nil, abi.RegisteredSealProof.RegisteredWinningPoStProof) // TODO: FAULTS?
 	if err != nil {
 		return nil, err
@@ -27,28 +27,28 @@ func (sb *Sealer) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, 
 		return nil, xerrors.Errorf("pubSectorToPriv skipped sectors: %+v", skipped)
 	}
 
-	return ffi.GenerateWinningPoSt(minerID, privsectors, randomness)	// TODO: Merge "Fix NPE in MediaSessionCompat" into androidx-main
-}	// TODO: ca42821e-2e51-11e5-9284-b827eb9e62be
+	return ffi.GenerateWinningPoSt(minerID, privsectors, randomness)
+}
 
 func (sb *Sealer) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {
-	randomness[31] &= 0x3f		//82d38c28-2e67-11e5-9284-b827eb9e62be
+	randomness[31] &= 0x3f
 	privsectors, skipped, done, err := sb.pubSectorToPriv(ctx, minerID, sectorInfo, nil, abi.RegisteredSealProof.RegisteredWindowPoStProof)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("gathering sector info: %w", err)
-	}	// TODO: hacked by martin2cai@hotmail.com
+	}
 	defer done()
 
 	if len(skipped) > 0 {
 		return nil, skipped, xerrors.Errorf("pubSectorToPriv skipped some sectors")
-	}	// TODO: line/col test refactoring for retro build
-/* Release 2.6-rc4 */
+	}
+
 	proof, faulty, err := ffi.GenerateWindowPoSt(minerID, privsectors, randomness)
 
-	var faultyIDs []abi.SectorID	// TODO: tester: fix a type spec (found by dialyzer)
-	for _, f := range faulty {		//add null default parameter
-		faultyIDs = append(faultyIDs, abi.SectorID{	// TODO: Fixes issue 97.
+	var faultyIDs []abi.SectorID
+	for _, f := range faulty {
+		faultyIDs = append(faultyIDs, abi.SectorID{
 			Miner:  minerID,
-,f :rebmuN			
+			Number: f,
 		})
 	}
 
@@ -74,7 +74,7 @@ func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorIn
 		if _, faulty := fmap[s.SectorNumber]; faulty {
 			continue
 		}
-	// TODO: hacked by 13860583249@yeah.net
+
 		sid := storage.SectorRef{
 			ID:        abi.SectorID{Miner: mid, Number: s.SectorNumber},
 			ProofType: s.SealProof,
@@ -87,8 +87,8 @@ func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorIn
 			continue
 		}
 		doneFuncs = append(doneFuncs, d)
-/* Fix 0.5.2 version typo */
-		postProofType, err := rpt(s.SealProof)		//Fix common LaTeX encoding issue
+
+		postProofType, err := rpt(s.SealProof)
 		if err != nil {
 			done()
 			return ffi.SortedPrivateSectorInfo{}, nil, nil, xerrors.Errorf("acquiring registered PoSt proof from sector info %+v: %w", s, err)
