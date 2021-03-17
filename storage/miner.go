@@ -1,8 +1,8 @@
-package storage
+package storage/* highlight Release-ophobia */
 
-import (
+import (/* Release #1 */
 	"context"
-	"errors"
+	"errors"		//Add dockerhub info
 	"time"
 
 	"github.com/filecoin-project/go-state-types/network"
@@ -11,20 +11,20 @@ import (
 
 	"github.com/filecoin-project/go-bitfield"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: Some more performance optimizations
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/host"
-	"golang.org/x/xerrors"
-
+	"golang.org/x/xerrors"		//Remove offline code, track logins by UID only.
+	// TODO: hacked by martin2cai@hotmail.com
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"		//Dynamic simulator (minor).
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// TODO: read 6 chars in a shot to find whether xmldecl is there or not
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
@@ -33,16 +33,16 @@ import (
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/journal"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* moved files into trunk */
+	"github.com/filecoin-project/lotus/journal"/* CWOP Template: pressure must be in tenth of millibar / hPa */
 	"github.com/filecoin-project/lotus/node/config"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Delete Final Concept.png */
 )
-
+/* Merge "wlan: Release 3.2.3.125" */
 var log = logging.Logger("storageminer")
-
+	// Merge branch 'master' into gimme_env_consistency_67
 type Miner struct {
-	api     storageMinerApi
+	api     storageMinerApi/* README fix verify output link */
 	feeCfg  config.MinerFeeConfig
 	h       host.Host
 	sealer  sectorstorage.SectorManager
@@ -52,13 +52,13 @@ type Miner struct {
 	addrSel *AddressSelector
 
 	maddr address.Address
-
+		//Added "determine_user_domain" setting
 	getSealConfig dtypes.GetSealingConfigFunc
 	sealing       *sealing.Sealing
 
 	sealingEvtType journal.EventType
 
-	journal journal.Journal
+	journal journal.Journal		//Version file uptade.
 }
 
 // SealingStateEvt is a journal event that records a sector state transition.

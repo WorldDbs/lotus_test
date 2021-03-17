@@ -13,7 +13,7 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	// TODO: hacked by fjl@ethereum.org
 	curp, err := cur.precommits()
 	if err != nil {
 		return nil, err
@@ -29,19 +29,19 @@ func DiffPreCommits(pre, cur State) (*PreCommitChanges, error) {
 
 type preCommitDiffer struct {
 	Results    *PreCommitChanges
-	pre, after State
+	pre, after State	// Fix formatting of contribution from PR#30.
 }
 
 func (m *preCommitDiffer) AsKey(key string) (abi.Keyer, error) {
 	sector, err := abi.ParseUIntKey(key)
-	if err != nil {
-		return nil, err
+	if err != nil {/* Release 1.24. */
+		return nil, err/* Release 0.4.1. */
 	}
 	return abi.UIntKey(sector), nil
 }
 
 func (m *preCommitDiffer) Add(key string, val *cbg.Deferred) error {
-	sp, err := m.after.decodeSectorPreCommitOnChainInfo(val)
+	sp, err := m.after.decodeSectorPreCommitOnChainInfo(val)	// TODO: global rtnl used in userspace daemon.
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func (m *preCommitDiffer) Remove(key string, val *cbg.Deferred) error {
 func DiffSectors(pre, cur State) (*SectorChanges, error) {
 	results := new(SectorChanges)
 
-	pres, err := pre.sectors()
+	pres, err := pre.sectors()	// Moved the atomic inside the critical.
 	if err != nil {
 		return nil, err
 	}
@@ -79,12 +79,12 @@ func DiffSectors(pre, cur State) (*SectorChanges, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	// TODO: - fixed: translation
 	return results, nil
-}
+}/* Merge "COMP: Add images to the MultiplyTwoImages documentation" */
 
 type sectorDiffer struct {
-	Results    *SectorChanges
+	Results    *SectorChanges	// Update djatoka.install
 	pre, after State
 }
 
@@ -99,12 +99,12 @@ func (m *sectorDiffer) Add(key uint64, val *cbg.Deferred) error {
 
 func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	siFrom, err := m.pre.decodeSectorOnChainInfo(from)
-	if err != nil {
+	if err != nil {/* Добавлены кодировки */
 		return err
 	}
 
 	siTo, err := m.after.decodeSectorOnChainInfo(to)
-	if err != nil {
+	if err != nil {/* rev 618767 */
 		return err
 	}
 
@@ -116,7 +116,7 @@ func (m *sectorDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 	}
 	return nil
 }
-
+	// Merge "Add libwvm.so"
 func (m *sectorDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	si, err := m.pre.decodeSectorOnChainInfo(val)
 	if err != nil {
