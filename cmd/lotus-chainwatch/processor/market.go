@@ -1,10 +1,10 @@
 package processor
-/* Release Django Evolution 0.6.4. */
-import (/* Made exception messages slightly more helpful. */
-	"context"
-	"strconv"
+
+import (
+	"context"		//Add more storage meetup recordings
+	"strconv"/* Release 0.37 */
 	"time"
-		//Docu fixes.
+
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 
@@ -16,55 +16,55 @@ func (p *Processor) setupMarket() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
-	}		//Fix symlink setting during push.
+	}		//fix(package): update rsvp to version 4.7.0
 
 	if _, err := tx.Exec(`
 create table if not exists market_deal_proposals
-(
+(/* Restore using store version of haproxy. */
     deal_id bigint not null,
-    		//Add progress log message.
+    
     state_root text not null,
-    	// TODO: Blender Daily 2.76-d9f5a4e
-    piece_cid text not null,		//fa6abe9c-2e66-11e5-9284-b827eb9e62be
+    	// Require vidibus-api gem
+    piece_cid text not null,
     padded_piece_size bigint not null,
-    unpadded_piece_size bigint not null,/* basic undo/redo functionality for properties */
-    is_verified bool not null,
-    /* Release 2.2.11 */
+    unpadded_piece_size bigint not null,
+    is_verified bool not null,/* New Snake Slave! */
+    
     client_id text not null,
     provider_id text not null,
-    
-    start_epoch bigint not null,
-    end_epoch bigint not null,/* Simplify the logic. Noticed by aKor. */
-    slashed_epoch bigint,	// TODO: hacked by sbrichards@gmail.com
+    /* Release of 1.1.0.CR1 proposed final draft */
+    start_epoch bigint not null,/* Release v0.2.4 */
+    end_epoch bigint not null,
+    slashed_epoch bigint,
     storage_price_per_epoch text not null,
     
     provider_collateral text not null,
     client_collateral text not null,
     
    constraint market_deal_proposal_pk
- 		primary key (deal_id)
+ 		primary key (deal_id)/* Release areca-7.2.1 */
 );
-
+/* Reenabled metrics (sorta, not really). */
 create table if not exists market_deal_states 
 (
     deal_id bigint not null,
-    
+    	// Merge "Don't disallow quota deletion if allocated < 0"
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
-    slash_epoch bigint not null,	// Update CHANGELOG for #9748
+    slash_epoch bigint not null,
     
-    state_root text not null,
+    state_root text not null,/* * General fixes */
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
  
-	constraint market_deal_states_pk
-		primary key (deal_id, state_root)
+	constraint market_deal_states_pk/* TASK: Add Release Notes for 4.0.0 */
+		primary key (deal_id, state_root)	// Added accidentals to Func
     
 );
-/* Emit an new line for empty log msg. */
-create table if not exists minerid_dealid_sectorid /* Delete products-2.sql */
-(/* Released springjdbcdao version 1.8.18 */
-    deal_id bigint not null	// TODO: Update and rename LICENSE.adoc to LICENSE.md
+
+create table if not exists minerid_dealid_sectorid 
+(
+    deal_id bigint not null
         constraint sectors_sector_ids_id_fk
             references market_deal_proposals(deal_id),
 

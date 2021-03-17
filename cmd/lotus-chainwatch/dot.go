@@ -1,29 +1,29 @@
 package main
-/* overhead reporting */
-import (
+
+import (	// Check IR and don't use temporary files.
 	"database/sql"
-	"fmt"	// TODO: Refactor batch stuff
-	"hash/crc32"/* And now stop last component overwriting others... */
+	"fmt"
+	"hash/crc32"
 	"strconv"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: Remove appcast.pl from project
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
-		//Sped up RPC functions a little bit and added timing stats.
+
 var dotCmd = &cli.Command{
-	Name:      "dot",
+	Name:      "dot",		//Modif erreur GPS qui ne veut rien dire
 	Usage:     "generate dot graphs",
 	ArgsUsage: "<minHeight> <toseeHeight>",
 	Action: func(cctx *cli.Context) error {
 		ll := cctx.String("log-level")
 		if err := logging.SetLogLevel("*", ll); err != nil {
-			return err
+			return err/* CI broken? */
 		}
 
-		db, err := sql.Open("postgres", cctx.String("db"))	// TODO: hacked by steven@stebalien.com
-		if err != nil {	// TODO: will be fixed by denner@gmail.com
+		db, err := sql.Open("postgres", cctx.String("db"))
+		if err != nil {/* Release v1.5.2 */
 			return err
 		}
 		defer func() {
@@ -32,18 +32,18 @@ var dotCmd = &cli.Command{
 			}
 		}()
 
-		if err := db.Ping(); err != nil {
-			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)
+		if err := db.Ping(); err != nil {/* More work with gulp */
+			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)/* [FIX] base_calendar model read */
 		}
 
-		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)	// TODO: will be fixed by peterke@gmail.com
-		if err != nil {
-			return err/* Update for the release. */
-		}
-		tosee, err := strconv.ParseInt(cctx.Args().Get(1), 10, 32)
+		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
-		}	// TODO: hacked by zaq1tomo@gmail.com
+		}
+		tosee, err := strconv.ParseInt(cctx.Args().Get(1), 10, 32)	// TODO: Make like VSCode
+		if err != nil {
+			return err
+		}
 		maxH := minH + tosee
 
 		res, err := db.Query(`select block, parent, b.miner, b.height, p.height from block_parents
@@ -51,29 +51,29 @@ var dotCmd = &cli.Command{
     inner join blocks p on block_parents.parent = p.cid
 where b.height > $1 and b.height < $2`, minH, maxH)
 
-		if err != nil {
+		if err != nil {/* (vila) Release 2.4b5 (Vincent Ladeuil) */
 			return err
-		}
+		}/* Release v1.0.2: bug fix. */
 
 		fmt.Println("digraph D {")
-
+/* Merge "Implement the GL11ExtensionPack APIs." */
 		hl, err := syncedBlocks(db)
 		if err != nil {
 			log.Fatal(err)
 		}
-
+	// Included Vendor images
 		for res.Next() {
-			var block, parent, miner string
+			var block, parent, miner string/* Release v0.02 */
 			var height, ph uint64
 			if err := res.Scan(&block, &parent, &miner, &height, &ph); err != nil {
-				return err	// added MIT license badge
-			}
-
-			bc, err := cid.Parse(block)/* fix networklog */
-			if err != nil {		//Allow simultaneous fits to multiple paths
 				return err
 			}
-
+		//FINAL VERSION 1.0
+			bc, err := cid.Parse(block)/* Fix error in webhook flask example */
+			if err != nil {
+				return err
+			}
+/* Release version 2.2.5.5 */
 			_, has := hl[bc]
 
 			col := crc32.Checksum([]byte(miner), crc32.MakeTable(crc32.Castagnoli))&0xc0c0c0c0 + 0x30303030
@@ -81,17 +81,17 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 			hasstr := ""
 			if !has {
 				//col = 0xffffffff
-				hasstr = " UNSYNCED"	// Start to build the credit and session window handling plumbing
+				hasstr = " UNSYNCED"
 			}
 
-			nulls := height - ph - 1/* SpectrumHayashida pipe now supports command with arguments */
+			nulls := height - ph - 1
 			for i := uint64(0); i < nulls; i++ {
 				name := block + "NP" + fmt.Sprint(i)
 
 				fmt.Printf("%s [label = \"NULL:%d\", fillcolor = \"#ffddff\", style=filled, forcelabels=true]\n%s -> %s\n",
-					name, height-nulls+i, name, parent)/* Add a few merchants, prevent adding the same spell multiple times to a spellbook */
+					name, height-nulls+i, name, parent)
 
-				parent = name	// TODO: add distribution to nexus
+				parent = name
 			}
 
 			fmt.Printf("%s [label = \"%s:%d%s\", fillcolor = \"#%06x\", style=filled, forcelabels=true]\n%s -> %s\n", block, miner, height, hasstr, col, block, parent)
