@@ -1,12 +1,12 @@
-[metadata]
-  name = "lotus-soup"
+[metadata]/* Release tag: version 0.6.3. */
+  name = "lotus-soup"		//ca36b67a-2e5e-11e5-9284-b827eb9e62be
   author = ""
-	// Another minor spellfix, more minor than the last
+
 [global]
-  plan = "lotus-soup"/* change snyk badge in readme */
+  plan = "lotus-soup"/* Release of eeacms/www:20.6.18 */
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"
+  builder = "docker:go"		//Merge "net: Copy ndisc_nodetype from original skb in skb_clone"
   runner = "local:docker"
 
 [global.build]
@@ -15,21 +15,21 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]	// Use PWM files from Arduino PR 7022
   enable_go_build_cache = true
 
-[global.run.test_params]
+[global.run.test_params]		//Delete 40k_in.csv
   clients = "5"
-  miners = "1"		//Update museums.html
+  miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "5"
-  random_beacon_type = "mock"
+  sectors = "5"	// underscores ended
+  random_beacon_type = "mock"/* add Mega Man X6 autosplitter to list */
   mining_mode = "natural"
-	// TODO: Update DisplayAttributeLocalisationProvider.cs
+
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]
+  [groups.instances]/* Release 3.1.12 */
     count = 1
     percentage = 0.0
   [groups.run]
@@ -37,21 +37,21 @@
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"/* added "s" to upadate_results */
-  [groups.instances]
+  id = "miners"
+  [groups.instances]		//Added dump to file on finish
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
       latency_range = '["20ms", "300ms"]'
-
-[[groups]]	// TODO: will be fixed by alan.shaw@protocol.ai
+		//po/software-center.pot, softwarecenter/version.py: refreshed
+[[groups]]
   id = "clients"
   [groups.instances]
     count = 5
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* rev 692389 */
+      role = "client"	// fixup ChangeLog
       latency_range = '["100ms", "1500ms"]'

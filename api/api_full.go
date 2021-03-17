@@ -2,20 +2,20 @@ package api
 
 import (
 	"context"
-	"encoding/json"/* Release 5.0 */
+	"encoding/json"
 	"fmt"
 	"time"
-/* Fix link to "Getting started with GitLab and DigitalOcean" page. */
-	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/peer"/* 443905f0-2e63-11e5-9284-b827eb9e62be */
 
-	"github.com/filecoin-project/go-address"		//Update DBconnect.java
+	"github.com/ipfs/go-cid"
+	"github.com/libp2p/go-libp2p-core/peer"
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/go-state-types/abi"	// Modify contributors list and bump version
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -31,14 +31,14 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-//go:generate go run github.com/golang/mock/mockgen -destination=mocks/mock_full.go -package=mocks . FullNode/* 1bcf3f3a-2e6d-11e5-9284-b827eb9e62be */
+//go:generate go run github.com/golang/mock/mockgen -destination=mocks/mock_full.go -package=mocks . FullNode
 
-// ChainIO abstracts operations for accessing raw IPLD objects.	// TODO: hacked by why@ipfs.io
-type ChainIO interface {/* 6c12bf84-2e6e-11e5-9284-b827eb9e62be */
+// ChainIO abstracts operations for accessing raw IPLD objects.
+type ChainIO interface {
 	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 }
-	// TODO: will be fixed by nagydani@epointsystem.org
+
 const LookbackNoLimit = abi.ChainEpoch(-1)
 
 //                       MODIFYING THE API INTERFACE
@@ -46,10 +46,10 @@ const LookbackNoLimit = abi.ChainEpoch(-1)
 // NOTE: This is the V1 (Unstable) API - to add methods to the V0 (Stable) API
 // you'll have to add those methods to interfaces in `api/v0api`
 //
-// When adding / changing methods in this file:		//Added short
+// When adding / changing methods in this file:
 // * Do the change here
 // * Adjust implementation in `node/impl/`
-// * Run `make gen` - this will:/* Merge "FAB-2189 Scope rich queries to chaincode(QueryWrapper)" */
+// * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
@@ -59,9 +59,9 @@ const LookbackNoLimit = abi.ChainEpoch(-1)
 type FullNode interface {
 	Common
 
-	// MethodGroup: Chain	// TODO: hacked by lexy8russo@outlook.com
-	// The Chain method group contains methods for interacting with the	// TODO: hacked by juan@benet.ai
-	// blockchain, but that do not require any form of state computation./* Added callhistory panel strings */
+	// MethodGroup: Chain
+	// The Chain method group contains methods for interacting with the
+	// blockchain, but that do not require any form of state computation.
 
 	// ChainNotify returns channel with chain head updates.
 	// First message is guaranteed to be of len == 1, and type == 'current'.
@@ -69,10 +69,10 @@ type FullNode interface {
 
 	// ChainHead returns the current head of the chain.
 	ChainHead(context.Context) (*types.TipSet, error) //perm:read
-		//Adding More Libraries and Sites for ML
+
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
 	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
-/* Release 1.2.4. */
+
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
 	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 

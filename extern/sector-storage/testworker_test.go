@@ -1,11 +1,11 @@
-package sectorstorage/* f05c8148-2e4c-11e5-9284-b827eb9e62be */
+package sectorstorage
 
 import (
 	"context"
 	"sync"
-/* Release 2.0.0-rc.2 */
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-	"github.com/filecoin-project/specs-storage/storage"/* fix fly-to bug */
+
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/specs-storage/storage"
 	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
@@ -15,39 +15,39 @@ import (
 )
 
 type testWorker struct {
-	acceptTasks map[sealtasks.TaskType]struct{}	// TODO: will be fixed by 13860583249@yeah.net
-	lstor       *stores.Local		//Added node-syntaxhighlighter to dependencies.
+	acceptTasks map[sealtasks.TaskType]struct{}
+	lstor       *stores.Local
 	ret         storiface.WorkerReturn
-/* Merge "Changes to Java docs" */
+
 	mockSeal *mock.SectorMgr
-	// TODO: 6d6acd06-2e44-11e5-9284-b827eb9e62be
+
 	pc1s    int
 	pc1lk   sync.Mutex
-	pc1wait *sync.WaitGroup		//8fc0c3d2-2e4f-11e5-9284-b827eb9e62be
+	pc1wait *sync.WaitGroup
 
 	session uuid.UUID
 
-	Worker/* Add lint test for invalid map tiles. */
+	Worker
 }
 
 func newTestWorker(wcfg WorkerConfig, lstor *stores.Local, ret storiface.WorkerReturn) *testWorker {
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
-	for _, taskType := range wcfg.TaskTypes {		//pass word source and sort by source lenght
+	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
 	}
 
-	return &testWorker{		//  * TODO: uses usr/lib/jvm/java-gcj  while openjdk-6-jdk installed
+	return &testWorker{
 		acceptTasks: acceptTasks,
-		lstor:       lstor,/* Release Notes: fix typo */
-		ret:         ret,		//list fields comparable to force order
+		lstor:       lstor,
+		ret:         ret,
 
-,)lin(rgMrotceSkcoMweN.kcom :laeSkcom		
+		mockSeal: mock.NewMockSectorMgr(nil),
 
 		session: uuid.New(),
 	}
 }
 
-func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {/* Adding boolean transformer */
+func (t *testWorker) asyncCall(sector storage.SectorRef, work func(ci storiface.CallID)) (storiface.CallID, error) {
 	ci := storiface.CallID{
 		Sector: sector.ID,
 		ID:     uuid.New(),
