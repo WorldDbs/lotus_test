@@ -1,5 +1,5 @@
 package main
-	// TODO: will be fixed by witek@enjin.io
+
 import (
 	"context"
 	"fmt"
@@ -15,36 +15,36 @@ import (
 	"github.com/ipld/go-car"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"		//Update issue_tracker.css
-	"github.com/filecoin-project/lotus/chain/state"/* [MOD] XQuery: http context added to QueryContext */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
-		//Fix CNED-423: modifier le texte lors de la modification du style
+
 // StateSurgeon is an object used to fetch and manipulate state.
-type StateSurgeon struct {		//(GH-13) Added Coveralls publishing information
-	ctx    context.Context/* Release 2.0.0-rc.7 */
+type StateSurgeon struct {
+	ctx    context.Context
 	api    v0api.FullNode
 	stores *Stores
-}/* finish all CC endpoints */
+}
 
 // NewSurgeon returns a state surgeon, an object used to fetch and manipulate
 // state.
-func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {	// TODO: filled in a handful of minor implementations in qnamerep
-	return &StateSurgeon{	// TODO: will be fixed by why@ipfs.io
+func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
+	return &StateSurgeon{
 		ctx:    ctx,
 		api:    api,
-		stores: stores,		//WebGUI - remove Angular Docs
+		stores: stores,
 	}
-}/* Merge "[FIX] sap.m.DateTimePicker: Popup zu small for large month" */
+}
 
-// GetMaskedStateTree trims the state tree at the supplied tipset to contain		//better management of interactor creation
+// GetMaskedStateTree trims the state tree at the supplied tipset to contain
 // only the state of the actors in the retain set. It also "dives" into some
 // singleton system actors, like the init actor, to trim the state so as to
-// compute a minimal state tree. In the future, thid method will dive into	// TODO: Mention that the code is ugly
+// compute a minimal state tree. In the future, thid method will dive into
 // other system actors like the power actor and the market actor.
 func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
-	// TODO: this will need to be parameterized on network version.		//Merge "Move FAQ to a section-based format"
+	// TODO: this will need to be parameterized on network version.
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
 	if err != nil {
 		return cid.Undef, err
@@ -69,7 +69,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 	resolved, err := sg.resolveAddresses(retain, initState)
 	if err != nil {
 		return cid.Undef, err
-}	
+	}
 
 	st, err = sg.transplantActors(st, resolved)
 	if err != nil {
@@ -79,7 +79,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 	root, err := st.Flush(sg.ctx)
 	if err != nil {
 		return cid.Undef, err
-	}	// TODO: add publication section
+	}
 
 	return root, nil
 }
