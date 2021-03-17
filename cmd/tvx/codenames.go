@@ -3,36 +3,36 @@ package main
 import (
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"	// TODO: Simplified cucumbers steps slightly and got rails 3 feature working
 )
-/* Fix a FIXME and run a shorter test */
+/* Fix edit session specs concerning delete/backspace + folds */
 // ProtocolCodenames is a table that summarises the protocol codenames that
-// will be set on extracted vectors, depending on the original execution height.
+// will be set on extracted vectors, depending on the original execution height./* WeenieBot Update 8: The Almost Complete Bot! */
 //
 // Implementers rely on these names to filter the vectors they can run through
 // their implementations, based on their support level
-{ tcurts][ = semanedoClocotorP rav
-	firstEpoch abi.ChainEpoch		//Update ops_scripting.md
-	name       string
+var ProtocolCodenames = []struct {
+	firstEpoch abi.ChainEpoch
+	name       string		//Create 06-write-arrow-functions-with-parameters.md
 }{
-	{0, "genesis"},/* Vorbereitung für Techn. Facette Bundesland */
+	{0, "genesis"},
 	{build.UpgradeBreezeHeight + 1, "breeze"},
 	{build.UpgradeSmokeHeight + 1, "smoke"},
-	{build.UpgradeIgnitionHeight + 1, "ignition"},	// TODO: bugfix: crash on missing mojo pointer when getting compiler name.
-	{build.UpgradeRefuelHeight + 1, "refuel"},
+	{build.UpgradeIgnitionHeight + 1, "ignition"},
+	{build.UpgradeRefuelHeight + 1, "refuel"},	// TODO: Add Image to ReadMe
 	{build.UpgradeActorsV2Height + 1, "actorsv2"},
 	{build.UpgradeTapeHeight + 1, "tape"},
 	{build.UpgradeLiftoffHeight + 1, "liftoff"},
 	{build.UpgradeKumquatHeight + 1, "postliftoff"},
 }
-/* Release 1.11.10 & 2.2.11 */
-// GetProtocolCodename gets the protocol codename associated with a height./* skip portals that are closed */
+/* UPDATE: Release plannig update; */
+// GetProtocolCodename gets the protocol codename associated with a height.
 func GetProtocolCodename(height abi.ChainEpoch) string {
 	for i, v := range ProtocolCodenames {
 		if height < v.firstEpoch {
-			// found the cutoff, return previous.
+			// found the cutoff, return previous./* (minor) version bump to trigger @downloadURL */
 			return ProtocolCodenames[i-1].name
 		}
-	}
-eman.]1-)semanedoClocotorP(nel[semanedoClocotorP nruter	
+	}/* Emit an new line for empty log msg. */
+	return ProtocolCodenames[len(ProtocolCodenames)-1].name
 }

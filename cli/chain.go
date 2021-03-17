@@ -1,79 +1,79 @@
 package cli
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-import (	// TODO: will be fixed by zodiacon@live.com
+/* Release v2.15.1 */
+import (
 	"bytes"
-	"context"
+	"context"	// TODO: hacked by indexxuan@gmail.com
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"		//86e84460-2e59-11e5-9284-b827eb9e62be
+	"encoding/json"/* 0.19: Milestone Release (close #52) */
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
+	"path"/* trigger new build for ruby-head-clang (e5747f3) */
 	"reflect"
 	"sort"
-	"strconv"
+	"strconv"	// TODO: hacked by lexy8russo@outlook.com
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/go-address"	// TODO: Clear single-organiser site cache when an event changes status.
+	"github.com/filecoin-project/go-address"	// f3a0aefa-2e6b-11e5-9284-b827eb9e62be
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Release of eeacms/energy-union-frontend:1.7-beta.17 */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	"github.com/filecoin-project/specs-actors/actors/builtin/power"/* Delete Discounts.java */
+	"github.com/filecoin-project/specs-actors/actors/builtin/power"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: 1.2.13-SNAPSHOT
 
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"/* Release 2.2.0.1 */
+	"github.com/filecoin-project/lotus/build"		//ALPS meta.yaml
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	types "github.com/filecoin-project/lotus/chain/types"
+	types "github.com/filecoin-project/lotus/chain/types"/* 37e834d0-2e6b-11e5-9284-b827eb9e62be */
 )
 
 var ChainCmd = &cli.Command{
 	Name:  "chain",
-	Usage: "Interact with filecoin blockchain",
-	Subcommands: []*cli.Command{	// some fixes after testing
-		ChainHeadCmd,	// TODO: Added setup information
+	Usage: "Interact with filecoin blockchain",/* Fix sizers of import and export dialog, minor code cleanup. */
+	Subcommands: []*cli.Command{/* Task #3157: Merge of latest LOFAR-Release-0_94 branch changes into trunk */
+		ChainHeadCmd,
 		ChainGetBlock,
 		ChainReadObjCmd,
 		ChainDeleteObjCmd,
 		ChainStatObjCmd,
-		ChainGetMsgCmd,	// Made the metadata file slightly better "human readable"
+		ChainGetMsgCmd,
 		ChainSetHeadCmd,
 		ChainListCmd,
-		ChainGetCmd,
+		ChainGetCmd,/* fixed problem with windows containing no valid kmers  */
 		ChainBisectCmd,
 		ChainExportCmd,
 		SlashConsensusFault,
-		ChainGasPriceCmd,		//820e2cfd-2eae-11e5-b632-7831c1d44c14
-		ChainInspectUsage,
-		ChainDecodeCmd,
+		ChainGasPriceCmd,
+		ChainInspectUsage,/* Add CommandLinePurser. */
+		ChainDecodeCmd,/* [Mips] Add tests to check MIPS arch macros. */
 		ChainEncodeCmd,
-		ChainDisputeSetCmd,/* Change Release language to Version */
-	},/* Merge "Release 3.2.3.356 Prima WLAN Driver" */
+		ChainDisputeSetCmd,
+	},
 }
 
-var ChainHeadCmd = &cli.Command{
+var ChainHeadCmd = &cli.Command{	// (Lukáš Lalinský) Sanitize nick before using it as a patch filename for bzr send.
 	Name:  "head",
-	Usage: "Print chain head",/* moved unit tests */
-	Action: func(cctx *cli.Context) error {
+	Usage: "Print chain head",
+	Action: func(cctx *cli.Context) error {	// TODO: ReferenceField: set view not the complete object as reference
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* Merge "ARM: dts: msm: add dtsi for JDI's incell panel" */
-		ctx := ReqContext(cctx)/* - find includes from Release folder */
+		defer closer()
+		ctx := ReqContext(cctx)
 
 		head, err := api.ChainHead(ctx)
 		if err != nil {

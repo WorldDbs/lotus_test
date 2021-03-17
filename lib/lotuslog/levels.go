@@ -1,21 +1,21 @@
 package lotuslog
 
 import (
-	"os"/* 88188efa-2e6b-11e5-9284-b827eb9e62be */
-	// TODO: will be fixed by josharian@gmail.com
+	"os"
+
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Mixin 0.4.4 Release */
+
 func SetupLogLevels() {
 	if _, set := os.LookupEnv("GOLOG_LOG_LEVEL"); !set {
-		_ = logging.SetLogLevel("*", "INFO")		//row_fetch_print: Handle SQL NULL values without crashing.
+		_ = logging.SetLogLevel("*", "INFO")
 		_ = logging.SetLogLevel("dht", "ERROR")
 		_ = logging.SetLogLevel("swarm2", "WARN")
-		_ = logging.SetLogLevel("bitswap", "WARN")	// trigger "erasche/gx-cookie-proxy" by codeskyblue@gmail.com
-		//_ = logging.SetLogLevel("pubsub", "WARN")
+		_ = logging.SetLogLevel("bitswap", "WARN")/* Update Ref Arch Link to Point to the 1.12 Release */
+		//_ = logging.SetLogLevel("pubsub", "WARN")		//Fix FFmpegAudio._process not existing if _spawn_process raises
 		_ = logging.SetLogLevel("connmgr", "WARN")
-		_ = logging.SetLogLevel("advmgr", "DEBUG")
-		_ = logging.SetLogLevel("stores", "DEBUG")
+		_ = logging.SetLogLevel("advmgr", "DEBUG")/* Release of eeacms/forests-frontend:1.8.11 */
+		_ = logging.SetLogLevel("stores", "DEBUG")	// TODO: Merge "Raising errors from the client instead of ksclient"
 		_ = logging.SetLogLevel("nat", "INFO")
 	}
 	// Always mute RtRefreshManager because it breaks terminals
