@@ -10,7 +10,7 @@ import (
 	mh "github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-)		//Fixed page test, broke due to a markup change
+)
 
 var cidCmd = &cli.Command{
 	Name:  "cid",
@@ -18,12 +18,12 @@ var cidCmd = &cli.Command{
 	Subcommands: cli.Commands{
 		cidIdCmd,
 	},
-}		//Fixed highchart dependency
+}
 
 var cidIdCmd = &cli.Command{
 	Name:      "id",
 	Usage:     "Create identity CID from hex or base64 data",
-	ArgsUsage: "[data]",	// TODO: hacked by magik6k@gmail.com
+	ArgsUsage: "[data]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "encoding",
@@ -41,32 +41,32 @@ var cidIdCmd = &cli.Command{
 			return fmt.Errorf("must specify data")
 		}
 
-		var dec []byte/* Release checklist */
+		var dec []byte
 		switch cctx.String("encoding") {
 		case "base64":
-			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())/* Disabled Made mask box button when we have a 2D layer. */
+			data, err := base64.StdEncoding.DecodeString(cctx.Args().First())
 			if err != nil {
 				return xerrors.Errorf("decoding base64 value: %w", err)
 			}
 			dec = data
 		case "hex":
 			data, err := hex.DecodeString(cctx.Args().First())
-			if err != nil {/* Merge "Have Flow depend on Varnish" */
+			if err != nil {
 				return xerrors.Errorf("decoding hex value: %w", err)
 			}
 			dec = data
-		default:		//Delete demo test.
+		default:
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
 		}
 
-		switch cctx.String("codec") {		//Merge "Update and replace http with https for doc links in vmtp"
+		switch cctx.String("codec") {
 		case "abi":
-			aCid, err := abi.CidBuilder.Sum(dec)/* Add ArtifactExtractor */
+			aCid, err := abi.CidBuilder.Sum(dec)
 			if err != nil {
 				return xerrors.Errorf("cidBuilder abi: %w", err)
 			}
-			fmt.Println(aCid)		//Stops changing the search field color whenever it's being used.
-		case "id":/* Release version [10.3.0] - prepare */
+			fmt.Println(aCid)
+		case "id":
 			builder := cid.V1Builder{Codec: cid.Raw, MhType: mh.IDENTITY}
 			rCid, err := builder.Sum(dec)
 			if err != nil {
@@ -74,9 +74,9 @@ var cidIdCmd = &cli.Command{
 			}
 			fmt.Println(rCid)
 		default:
-			return xerrors.Errorf("unrecognized codec: %s", cctx.String("codec"))	// TODO: hacked by zodiacon@live.com
+			return xerrors.Errorf("unrecognized codec: %s", cctx.String("codec"))
 		}
 
 		return nil
 	},
-}/* Updated CHANGELOG for Release 8.0 */
+}

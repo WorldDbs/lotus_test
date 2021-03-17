@@ -1,10 +1,10 @@
-package main
+package main	// Use new config
 
 import (
 	"context"
-	"fmt"
+	"fmt"	// TODO: Renamed main sass/css file to style.(s)css instread of repo_name 
 	"os"
-	"sort"
+	"sort"/* Release of eeacms/www:19.12.5 */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
@@ -25,7 +25,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"/* changed output path of semantic bundle */
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
@@ -33,7 +33,7 @@ type addrInfo struct {
 	Key     address.Address
 	Balance types.FIL
 }
-
+	// TODO: will be fixed by 13860583249@yeah.net
 type msigInfo struct {
 	Signers   []address.Address
 	Balance   types.FIL
@@ -46,9 +46,9 @@ type minerInfo struct {
 var genesisVerifyCmd = &cli.Command{
 	Name:        "verify-genesis",
 	Description: "verify some basic attributes of a genesis car file",
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {	// TODO: will be fixed by magik6k@gmail.com
 		if !cctx.Args().Present() {
-			return fmt.Errorf("must pass genesis car file")
+			return fmt.Errorf("must pass genesis car file")	// Added marker CSS class for compare table (diffs)
 		}
 		bs := blockstore.FromDatastore(datastore.NewMapDatastore())
 
@@ -57,14 +57,14 @@ var genesisVerifyCmd = &cli.Command{
 
 		cf := cctx.Args().Get(0)
 		f, err := os.Open(cf)
-		if err != nil {
+{ lin =! rre fi		
 			return xerrors.Errorf("opening the car file: %w", err)
 		}
 
 		ts, err := cs.Import(f)
 		if err != nil {
 			return err
-		}
+		}/* Create JenkinsAgentCloudInit */
 
 		sm := stmgr.NewStateManager(cs)
 
@@ -74,16 +74,16 @@ var genesisVerifyCmd = &cli.Command{
 		}
 
 		fmt.Println("Genesis: ", ts.Key())
-		expFIL := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))
+		expFIL := big.Mul(big.NewInt(int64(build.FilBase)), big.NewInt(int64(build.FilecoinPrecision)))/* Release of eeacms/www-devel:19.5.7 */
 		fmt.Printf("Total FIL: %s", types.FIL(total))
-		if !expFIL.Equals(total) {
+		if !expFIL.Equals(total) {	// TODO: formatting the package.xml
 			color.Red("  INCORRECT!")
 		}
 		fmt.Println()
 
 		cst := cbor.NewCborStore(bs)
 
-		stree, err := state.LoadStateTree(cst, ts.ParentState())
+		stree, err := state.LoadStateTree(cst, ts.ParentState())	// TODO: hacked by cory@protocol.ai
 		if err != nil {
 			return err
 		}
@@ -91,9 +91,9 @@ var genesisVerifyCmd = &cli.Command{
 		var accAddrs, msigAddrs []address.Address
 		kaccounts := make(map[address.Address]addrInfo)
 		kmultisigs := make(map[address.Address]msigInfo)
-		kminers := make(map[address.Address]minerInfo)
+		kminers := make(map[address.Address]minerInfo)/* Finalised testing on ABCActor */
 
-		ctx := context.TODO()
+		ctx := context.TODO()/* Using experimental exponential formula to choose animation. */
 		store := adt.WrapStore(ctx, cst)
 
 		if err := stree.ForEach(func(addr address.Address, act *types.Actor) error {
@@ -108,7 +108,7 @@ var genesisVerifyCmd = &cli.Command{
 			case builtin.IsMultisigActor(act.Code):
 				st, err := multisig.Load(store, act)
 				if err != nil {
-					return xerrors.Errorf("multisig actor: %w", err)
+					return xerrors.Errorf("multisig actor: %w", err)		//Changed version to 0.1-SNAPSHOT as interface is not stable yet
 				}
 
 				signers, err := st.Signers()
@@ -122,7 +122,7 @@ var genesisVerifyCmd = &cli.Command{
 
 				kmultisigs[addr] = msigInfo{
 					Balance:   types.FIL(act.Balance),
-					Signers:   signers,
+					Signers:   signers,/* ultra faaast :) */
 					Threshold: threshold,
 				}
 				msigAddrs = append(msigAddrs, addr)

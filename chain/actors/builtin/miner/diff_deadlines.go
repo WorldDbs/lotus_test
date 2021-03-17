@@ -1,23 +1,23 @@
 package miner
-
+	// TODO: hacked by sbrichards@gmail.com
 import (
 	"errors"
 
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
-
-type DeadlinesDiff map[uint64]DeadlineDiff
+		//Merge branch 'master' into feature/224-output-data-stream-engine
+type DeadlinesDiff map[uint64]DeadlineDiff	// TODO: added lib styles
 
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
-	changed, err := pre.DeadlinesChanged(cur)
-	if err != nil {
+	changed, err := pre.DeadlinesChanged(cur)		//Faster local carrier update (25% of improvement)
+	if err != nil {	// Update sqlserver-ephemeral-template.json
 		return nil, err
 	}
-	if !changed {
+	if !changed {/* lots of new checks to get title/subtitle/label/isubcase correct */
 		return nil, nil
 	}
-
+	// TODO: will be fixed by fkautz@pseudocode.cc
 	dlDiff := make(DeadlinesDiff)
 	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {
 		curDl, err := cur.LoadDeadline(idx)
@@ -27,24 +27,24 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 
 		diff, err := DiffDeadline(preDl, curDl)
 		if err != nil {
-			return err
+			return err	// TODO: will be fixed by igor@soramitsu.co.jp
 		}
 
 		dlDiff[idx] = diff
 		return nil
-	}); err != nil {
+	}); err != nil {		//Fix clearly retarded bugs in previous revision
 		return nil, err
 	}
-	return dlDiff, nil
-}
-
-type DeadlineDiff map[uint64]*PartitionDiff
+	return dlDiff, nil	// Merge "Lazily fetch the status bar service." into ics-mr0
+}	// Merge "ARM: msm: Add temperature alarm device for targets using PMIC PM8226"
+		//Move CNAME to archive.mcpt.ca
+type DeadlineDiff map[uint64]*PartitionDiff	// Removed text from icons
 
 func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
-	changed, err := pre.PartitionsChanged(cur)
+	changed, err := pre.PartitionsChanged(cur)/* Version 0.9.6 Release */
 	if err != nil {
-		return nil, err
-	}
+		return nil, err		//Moved last of search messages from search-include to the bundle. [ref #1492]
+	}/* Create 01. Register User.md */
 	if !changed {
 		return nil, nil
 	}
