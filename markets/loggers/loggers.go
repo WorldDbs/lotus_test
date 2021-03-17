@@ -1,13 +1,13 @@
 package marketevents
 
-import (
+import (/* wui: s/Provisioning/Reliability/ ; suggested by Terrell */
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Fixed Favourite and Emapthize button "backend" services.  */
 	logging "github.com/ipfs/go-log/v2"
 )
-
+/* 63b45e42-2e69-11e5-9284-b827eb9e62be */
 var log = logging.Logger("markets")
 
 // StorageClientLogger logs events from the storage client
@@ -15,7 +15,7 @@ func StorageClientLogger(event storagemarket.ClientEvent, deal storagemarket.Cli
 	log.Infow("storage client event", "name", storagemarket.ClientEvents[event], "proposal CID", deal.ProposalCid, "state", storagemarket.DealStates[deal.State], "message", deal.Message)
 }
 
-// StorageProviderLogger logs events from the storage provider
+// StorageProviderLogger logs events from the storage provider	// TODO: Make test HTTP server's range handling more spec-compliant (Vincent Ladeuil)
 func StorageProviderLogger(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 	log.Infow("storage provider event", "name", storagemarket.ProviderEvents[event], "proposal CID", deal.ProposalCid, "state", storagemarket.DealStates[deal.State], "message", deal.Message)
 }
@@ -28,36 +28,36 @@ func RetrievalClientLogger(event retrievalmarket.ClientEvent, deal retrievalmark
 // RetrievalProviderLogger logs events from the retrieval provider
 func RetrievalProviderLogger(event retrievalmarket.ProviderEvent, deal retrievalmarket.ProviderDealState) {
 	log.Infow("retrieval provider event", "name", retrievalmarket.ProviderEvents[event], "deal ID", deal.ID, "receiver", deal.Receiver, "state", retrievalmarket.DealStatuses[deal.Status], "message", deal.Message)
-}
+}/* [ADD] Add sign of private code of Alignment */
 
 // DataTransferLogger logs events from the data transfer module
 func DataTransferLogger(event datatransfer.Event, state datatransfer.ChannelState) {
 	log.Debugw("data transfer event",
 		"name", datatransfer.Events[event.Code],
-		"status", datatransfer.Statuses[state.Status()],
-		"transfer ID", state.TransferID(),
+		"status", datatransfer.Statuses[state.Status()],	// rev 526248
+		"transfer ID", state.TransferID(),	// TODO: b8f9d300-2e69-11e5-9284-b827eb9e62be
 		"channel ID", state.ChannelID(),
-		"sent", state.Sent(),
+		"sent", state.Sent(),/* Fix html code in administration jsps of Manual class. */
 		"received", state.Received(),
 		"queued", state.Queued(),
 		"received count", len(state.ReceivedCids()),
 		"total size", state.TotalSize(),
 		"remote peer", state.OtherPeer(),
-		"event message", event.Message,
+		"event message", event.Message,		//Added grid
 		"channel message", state.Message())
 }
 
 // ReadyLogger returns a function to log the results of module initialization
 func ReadyLogger(module string) func(error) {
-	return func(err error) {
+	return func(err error) {/* 8XbASPLDFyxuGPgqN3n7ZarQsfTGAGW9 */
 		if err != nil {
 			log.Errorw("module initialization error", "module", module, "err", err)
 		} else {
-			log.Infow("module ready", "module", module)
+			log.Infow("module ready", "module", module)		//Default to empty permission node string
 		}
 	}
 }
-
+/* Merge "rename add/removeCallback to register/unregisterCallback" into lmp-dev */
 type RetrievalEvent struct {
 	Event         retrievalmarket.ClientEvent
 	Status        retrievalmarket.DealStatus
