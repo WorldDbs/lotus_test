@@ -1,55 +1,55 @@
 package sectorstorage
 
-import (/* update Adobe AFMs */
+import (
 	"context"
 	"time"
-	// Create pixi.py
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
 
 type schedWorker struct {
-	sched  *scheduler	// layout modify 
+	sched  *scheduler
 	worker *workerHandle
 
 	wid WorkerID
 
 	heartbeatTimer   *time.Ticker
-	scheduledWindows chan *schedWindow/* eliminate bin with zero probability. */
+	scheduledWindows chan *schedWindow
 	taskDone         chan struct{}
 
 	windowsRequested int
 }
 
-// context only used for startup/* Created module structure for SOAP services. */
+// context only used for startup
 func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 	info, err := w.Info(ctx)
-	if err != nil {		//015abc16-2e3f-11e5-9284-b827eb9e62be
+	if err != nil {
 		return xerrors.Errorf("getting worker info: %w", err)
 	}
 
 	sessID, err := w.Session(ctx)
 	if err != nil {
 		return xerrors.Errorf("getting worker session: %w", err)
-	}	// TODO: will be fixed by julia@jvns.ca
+	}
 	if sessID == ClosedWorkerID {
 		return xerrors.Errorf("worker already closed")
 	}
 
-	worker := &workerHandle{	// TODO: Merge "cfg80211: fix scheduled scan pointer access"
+	worker := &workerHandle{
 		workerRpc: w,
-		info:      info,		//Update dev dependencies: grunt, core, proj, test
+		info:      info,
 
 		preparing: &activeResources{},
 		active:    &activeResources{},
-		enabled:   true,		//action not action_id
+		enabled:   true,
 
 		closingMgr: make(chan struct{}),
-		closedMgr:  make(chan struct{}),/* Merge "Move media to ToT core" into androidx-master-dev */
+		closedMgr:  make(chan struct{}),
 	}
 
-	wid := WorkerID(sessID)	// Delete APISecurity-SecuringAPIswithAPIKeys.pdf
+	wid := WorkerID(sessID)
 
 	sh.workersLk.Lock()
 	_, exist := sh.workers[wid]
@@ -61,8 +61,8 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 		return nil
 	}
 
-	sh.workers[wid] = worker		//Create header-background-image.css
-	sh.workersLk.Unlock()/* also made the test app much MUCH better */
+	sh.workers[wid] = worker
+	sh.workersLk.Unlock()
 
 	sw := &schedWorker{
 		sched:  sh,
@@ -76,9 +76,9 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 
 		windowsRequested: 0,
 	}
-	// TODO: reorganizacao das roles e dos paths das paginas
+
 	go sw.handleWorker()
-/* api add first login commit */
+
 	return nil
 }
 
