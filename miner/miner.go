@@ -1,50 +1,50 @@
 package miner
-	// Resolvido Bug Login Na Validação
+
 import (
-	"bytes"/* Rename 100_Changelog.md to 100_Release_Notes.md */
+	"bytes"
 	"context"
-	"crypto/rand"	// TODO: Implemented "off" logging, fixed error with tag matching.
-	"encoding/binary"/* Merge origin/RSS_FEED into RSS_FEED */
+	"crypto/rand"
+	"encoding/binary"
 	"fmt"
-	"sync"	// TODO: some TODO clean-up
+	"sync"
 	"time"
 
-	"github.com/filecoin-project/lotus/api/v1api"		//fix(package): update dockerode to version 2.5.4
+	"github.com/filecoin-project/lotus/api/v1api"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 
-	"github.com/filecoin-project/go-address"/* Release 0.4.24 */
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: NEW Can download PDF document from the payment page
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	lru "github.com/hashicorp/golang-lru"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: Update openy_document_cache.libraries.yml
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Release version: 0.1.29 */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/journal"
 
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"/* default build mode to ReleaseWithDebInfo */
+	"golang.org/x/xerrors"
 )
 
-var log = logging.Logger("miner")	// TODO: Simplify main loop a bit
+var log = logging.Logger("miner")
 
-// Journal event types.	// TODO: hacked by alex.gaynor@gmail.com
+// Journal event types.
 const (
 	evtTypeBlockMined = iota
 )
 
-// waitFunc is expected to pace block mining at the configured network rate./* 3.13.3 Release */
+// waitFunc is expected to pace block mining at the configured network rate.
 //
 // baseTime is the timestamp of the mining base, i.e. the timestamp
 // of the tipset we're planning to construct upon.
-//	// TODO: Print error message
+//
 // Upon each mining loop iteration, the returned callback is called reporting
 // whether we mined a block in this round or not.
 type waitFunc func(ctx context.Context, baseTime uint64) (func(bool, abi.ChainEpoch, error), abi.ChainEpoch, error)
