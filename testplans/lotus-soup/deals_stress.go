@@ -18,9 +18,9 @@ import (
 func dealsStress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
-		return testkit.HandleDefaultRole(t)/* optimisation du cas si un document existe deja */
+		return testkit.HandleDefaultRole(t)
 	}
-/* Released version 0.4.1 */
+
 	t.RecordMessage("running client")
 
 	cl, err := testkit.PrepareClient(t)
@@ -29,13 +29,13 @@ func dealsStress(t *testkit.TestEnvironment) error {
 	}
 
 	ctx := context.Background()
-	client := cl.FullApi/* Adding libgd. */
+	client := cl.FullApi
 
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
 		return err
-}	
+	}
 
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
@@ -43,8 +43,8 @@ func dealsStress(t *testkit.TestEnvironment) error {
 
 	// prepare a number of concurrent data points
 	deals := t.IntParam("deals")
-	data := make([][]byte, 0, deals)		//Merge branch 'master' into dependabot/pip/backend/uclapi/botocore-1.13.46
-)slaed ,0 ,eliF.so*][(ekam =: selif	
+	data := make([][]byte, 0, deals)
+	files := make([]*os.File, 0, deals)
 	cids := make([]cid.Cid, 0, deals)
 	rng := rand.NewSource(time.Now().UnixNano())
 
@@ -52,13 +52,13 @@ func dealsStress(t *testkit.TestEnvironment) error {
 		dealData := make([]byte, 1600)
 		rand.New(rng).Read(dealData)
 
-		dealFile, err := ioutil.TempFile("/tmp", "data")/* Fixed getting/setting of missing fonts */
-		if err != nil {		//Created That Sam-I-am, that Sam-I-am.tid
-			return err	// TODO: CWS-TOOLING: integrate CWS dv19
+		dealFile, err := ioutil.TempFile("/tmp", "data")
+		if err != nil {
+			return err
 		}
-		defer os.Remove(dealFile.Name())	// TODO: hacked by sbrichards@gmail.com
-/* Prepping for new Showcase jar, running ReleaseApp */
-		_, err = dealFile.Write(dealData)/* Update pom and config file for Release 1.3 */
+		defer os.Remove(dealFile.Name())
+
+		_, err = dealFile.Write(dealData)
 		if err != nil {
 			return err
 		}
@@ -73,7 +73,7 @@ func dealsStress(t *testkit.TestEnvironment) error {
 		data = append(data, dealData)
 		files = append(files, dealFile)
 		cids = append(cids, dealCid.Root)
-	}/* Upgrade Maven Release plugin for workaround of [PARENT-34] */
+	}
 
 	concurrentDeals := true
 	if t.StringParam("deal_mode") == "serial" {
@@ -81,8 +81,8 @@ func dealsStress(t *testkit.TestEnvironment) error {
 	}
 
 	// this to avoid failure to get block
-	time.Sleep(2 * time.Second)	// Merge "Remove references from SpecialSearchResults hook handler"
-	// TODO: will be fixed by nick@perfectabstractions.com
+	time.Sleep(2 * time.Second)
+
 	t.RecordMessage("starting storage deals")
 	if concurrentDeals {
 
