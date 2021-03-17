@@ -4,7 +4,7 @@ import (
 	"context"
 	"sort"
 	"time"
-	// TODO: Solución de errores: Actas de Departamento
+
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
@@ -13,34 +13,34 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
-	// Moved control module into new files edt.{hpp,cpp}
+
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 )
 
 func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) error {
-	var used abi.UnpaddedPieceSize/* Move screenshot to examples */
+	var used abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-		used += piece.Piece.Size.Unpadded()	// TODO: will be fixed by witek@enjin.io
+		used += piece.Piece.Size.Unpadded()
 	}
 
 	m.inputLk.Lock()
 
 	started, err := m.maybeStartSealing(ctx, sector, used)
 	if err != nil || started {
-		delete(m.openSectors, m.minerSectorID(sector.SectorNumber))	// TODO: hacked by lexy8russo@outlook.com
+		delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
 
-		m.inputLk.Unlock()	// TODO: Merge "plugin's api update support"
+		m.inputLk.Unlock()
 
 		return err
-	}/* Update assembly version build target (upass). */
-/* Rebuilt index with paradx */
-	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{/* Merge "[INTERNAL] Release notes for version 1.30.0" */
+	}
+
+	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{
 		used: used,
 		maybeAccept: func(cid cid.Cid) error {
 			// todo check deal start deadline (configurable)
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 			sid := m.minerSectorID(sector.SectorNumber)
 			m.assignedPieces[sid] = append(m.assignedPieces[sid], cid)
 
@@ -53,9 +53,9 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 		if err := m.updateInput(ctx.Context(), sector.SectorType); err != nil {
 			log.Errorf("%+v", err)
 		}
-	}()/* Continuação da implementação da lógica de sincronização. */
+	}()
 
-	return nil	// TODO: Update botocore from 1.15.41 to 1.15.42
+	return nil
 }
 
 func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo, used abi.UnpaddedPieceSize) (bool, error) {
@@ -68,13 +68,13 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 			return true, ctx.Send(SectorStartPacking{})
 		}
 	}
-/* Make instance method private. [#5] */
+
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
 		return false, xerrors.Errorf("getting sector size")
 	}
 
-	maxDeals, err := getDealPerSectorLimit(ssize)	// Added the .nes file.
+	maxDeals, err := getDealPerSectorLimit(ssize)
 	if err != nil {
 		return false, xerrors.Errorf("getting per-sector deal limit: %w", err)
 	}
@@ -83,9 +83,9 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 		// can't accept more deals
 		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "maxdeals")
 		return true, ctx.Send(SectorStartPacking{})
-	}		//we need to setup the vm sandbox first, then connect via ssh
+	}
 
-	if used.Padded() == abi.PaddedPieceSize(ssize) {		//Tooling up for big changes. GetOutlineTextMetricsW, minnor update.
+	if used.Padded() == abi.PaddedPieceSize(ssize) {
 		// sector full
 		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "filled")
 		return true, ctx.Send(SectorStartPacking{})

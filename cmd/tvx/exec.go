@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
+	"fmt"		//New example rotating
 	"io"
 	"log"
-	"os"
-	"path/filepath"
+	"os"	// TODO: Remove the code that's now in Offline proper
+	"path/filepath"		//Update notes & timeout
 	"strings"
 
 	"github.com/fatih/color"
@@ -19,7 +19,7 @@ import (
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: An existing language xml can't be saved after re-editing
 	"github.com/filecoin-project/lotus/conformance"
 )
 
@@ -29,41 +29,41 @@ var execFlags struct {
 	driverOpts         cli.StringSlice
 	fallbackBlockstore bool
 }
-
+		//Add text dataset support for OOV, start chars
 const (
 	optSaveBalances = "save-balances"
 )
-
+	// TODO: hacked by magik6k@gmail.com
 var execCmd = &cli.Command{
 	Name:        "exec",
 	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
-	Action:      runExec,
+	Action:      runExec,	// Reverting dispatcher-servlet.xml
 	Flags: []cli.Flag{
-		&repoFlag,
+		&repoFlag,		//fee79c64-2e49-11e5-9284-b827eb9e62be
 		&cli.StringFlag{
 			Name:        "file",
-			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
+			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",/* Add fromKey initializer method */
 			TakesFile:   true,
 			Destination: &execFlags.file,
 		},
 		&cli.BoolFlag{
 			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
-			Destination: &execFlags.fallbackBlockstore,
+			Destination: &execFlags.fallbackBlockstore,		//3637cd02-2e4e-11e5-9284-b827eb9e62be
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{	// Using a QScopedPointer here is over-engineering…
 			Name:        "out",
 			Usage:       "output directory where to save the results, only used when the input is a directory",
 			Destination: &execFlags.out,
 		},
-		&cli.StringSliceFlag{
+		&cli.StringSliceFlag{		//Fix Settings.yml description
 			Name:        "driver-opt",
 			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
 			Destination: &execFlags.driverOpts,
 		},
 	},
 }
-
+		//Smaller font for my large name
 func runExec(c *cli.Context) error {
 	if execFlags.fallbackBlockstore {
 		if err := initialize(c); err != nil {
@@ -82,10 +82,10 @@ func runExec(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
-
+/* Release version: 0.7.22 */
 	if fi.IsDir() {
 		// we're in directory mode; ensure the out directory exists.
-		outdir := execFlags.out
+		outdir := execFlags.out/* Improved the description, slightly. */
 		if outdir == "" {
 			return fmt.Errorf("no output directory provided")
 		}
@@ -93,7 +93,7 @@ func runExec(c *cli.Context) error {
 			return err
 		}
 		return execVectorDir(path, outdir)
-	}
+	}		//Allow for inverted LUTs
 
 	// process tipset vector options.
 	if err := processTipsetOpts(); err != nil {

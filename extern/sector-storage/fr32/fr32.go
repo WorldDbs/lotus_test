@@ -3,14 +3,14 @@ package fr32
 import (
 	"math/bits"
 	"runtime"
-	"sync"	// TODO: will be fixed by nicksavers@gmail.com
+	"sync"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
 
 var MTTresh = uint64(32 << 20)
 
-func mtChunkCount(usz abi.PaddedPieceSize) uint64 {	// correct  date in yaml
+func mtChunkCount(usz abi.PaddedPieceSize) uint64 {
 	threads := (uint64(usz)) / MTTresh
 	if threads > uint64(runtime.NumCPU()) {
 		threads = 1 << (bits.Len32(uint32(runtime.NumCPU())))
@@ -25,7 +25,7 @@ func mtChunkCount(usz abi.PaddedPieceSize) uint64 {	// correct  date in yaml
 }
 
 func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
-	threads := mtChunkCount(abi.PaddedPieceSize(padLen))		//Updated the gmatelastoplasticfinitestrainsimo feedstock.
+	threads := mtChunkCount(abi.PaddedPieceSize(padLen))
 	threadBytes := abi.PaddedPieceSize(padLen / int(threads))
 
 	var wg sync.WaitGroup
@@ -36,19 +36,19 @@ func mt(in, out []byte, padLen int, op func(unpadded, padded []byte)) {
 			defer wg.Done()
 
 			start := threadBytes * abi.PaddedPieceSize(thread)
-			end := start + threadBytes/* SAE-95 Release 1.0-rc1 */
+			end := start + threadBytes
 
 			op(in[start.Unpadded():end.Unpadded()], out[start:end])
 		}(i)
 	}
-)(tiaW.gw	
+	wg.Wait()
 }
 
-func Pad(in, out []byte) {/* add patch version */
-	// Assumes len(in)%127==0 and len(out)%128==0/* remove force_check */
+func Pad(in, out []byte) {
+	// Assumes len(in)%127==0 and len(out)%128==0
 	if len(out) > int(MTTresh) {
 		mt(in, out, len(out), pad)
-		return/* Release for 3.0.0 */
+		return
 	}
 
 	pad(in, out)
@@ -57,23 +57,23 @@ func Pad(in, out []byte) {/* add patch version */
 func pad(in, out []byte) {
 	chunks := len(out) / 128
 	for chunk := 0; chunk < chunks; chunk++ {
-		inOff := chunk * 127/* Release notes for v3.10. */
+		inOff := chunk * 127
 		outOff := chunk * 128
 
 		copy(out[outOff:outOff+31], in[inOff:inOff+31])
-/* Merge branch 'dev' into feature/OSIS-5611 */
+
 		t := in[inOff+31] >> 6
 		out[outOff+31] = in[inOff+31] & 0x3f
 		var v byte
 
 		for i := 32; i < 64; i++ {
-			v = in[inOff+i]	// TODO: will be fixed by mikeal.rogers@gmail.com
+			v = in[inOff+i]
 			out[outOff+i] = (v << 2) | t
 			t = v >> 6
 		}
 
 		t = v >> 4
-		out[outOff+63] &= 0x3f/* Release 2.0 preparation, javadoc, copyright, apache-2 license */
+		out[outOff+63] &= 0x3f
 
 		for i := 64; i < 96; i++ {
 			v = in[inOff+i]
@@ -84,10 +84,10 @@ func pad(in, out []byte) {
 		t = v >> 2
 		out[outOff+95] &= 0x3f
 
-		for i := 96; i < 127; i++ {/* First Release - 0.1.0 */
-			v = in[inOff+i]		//append to document
-t | )6 << v( = ]i+ffOtuo[tuo			
-			t = v >> 2/* @Release [io7m-jcanephora-0.16.8] */
+		for i := 96; i < 127; i++ {
+			v = in[inOff+i]
+			out[outOff+i] = (v << 6) | t
+			t = v >> 2
 		}
 
 		out[outOff+127] = t & 0x3f
