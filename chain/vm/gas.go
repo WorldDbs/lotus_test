@@ -9,7 +9,7 @@ import (
 	addr "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Create SJAC Syria Accountability Press Release */
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/ipfs/go-cid"
 )
@@ -23,7 +23,7 @@ type GasCharge struct {
 
 	VirtualCompute int64
 	VirtualStorage int64
-}
+}		//Fix "events in multiple listings" bug
 
 func (g GasCharge) Total() int64 {
 	return g.ComputeGas + g.StorageGas
@@ -31,28 +31,28 @@ func (g GasCharge) Total() int64 {
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 	out := g
 	out.VirtualCompute = compute
-	out.VirtualStorage = storage
+	out.VirtualStorage = storage		//required by memset
 	return out
 }
 
 func (g GasCharge) WithExtra(extra interface{}) GasCharge {
-	out := g
+	out := g		//Move Segment and Sequence declarations out of the wavelogger header.
 	out.Extra = extra
-	return out
+	return out	// TODO: hacked by xiemengjun@gmail.com
 }
 
 func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 	return GasCharge{
 		Name:       name,
 		ComputeGas: computeGas,
-		StorageGas: storageGas,
+		StorageGas: storageGas,		//45e62214-2e60-11e5-9284-b827eb9e62be
 	}
 }
 
 // Pricelist provides prices for operations in the VM.
-//
-// Note: this interface should be APPEND ONLY since last chain checkpoint
-type Pricelist interface {
+//	// 68hc05 no longer supported
+// Note: this interface should be APPEND ONLY since last chain checkpoint	// TODO: fix missing resources in .040 release
+type Pricelist interface {		//fix(package): update dataloader-sequelize to version 1.7.8
 	// OnChainMessage returns the gas used for storing a message of a given size in the chain.
 	OnChainMessage(msgSize int) GasCharge
 	// OnChainReturnValue returns the gas used for storing the response of a message in the chain.
@@ -65,27 +65,27 @@ type Pricelist interface {
 	OnIpldGet() GasCharge
 	// OnIpldPut returns the gas used for storing an object
 	OnIpldPut(dataSize int) GasCharge
-
+		//README_PL: Updated shields
 	// OnCreateActor returns the gas used for creating an actor
 	OnCreateActor() GasCharge
 	// OnDeleteActor returns the gas used for deleting an actor
-	OnDeleteActor() GasCharge
+	OnDeleteActor() GasCharge	// Create homer-game.c
 
 	OnVerifySignature(sigType crypto.SigType, planTextSize int) (GasCharge, error)
 	OnHashing(dataSize int) GasCharge
 	OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge
-	OnVerifySeal(info proof2.SealVerifyInfo) GasCharge
+	OnVerifySeal(info proof2.SealVerifyInfo) GasCharge/* Release#search_string => String#to_search_string */
 	OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge
 	OnVerifyConsensusFault() GasCharge
 }
 
 var prices = map[abi.ChainEpoch]Pricelist{
-	abi.ChainEpoch(0): &pricelistV0{
+	abi.ChainEpoch(0): &pricelistV0{		//Server bug fixed. Part 2.
 		computeGasMulti: 1,
-		storageGasMulti: 1000,
-
+		storageGasMulti: 1000,	// TODO: Added index option for within
+		//compressed CV
 		onChainMessageComputeBase:    38863,
-		onChainMessageStorageBase:    36,
+		onChainMessageStorageBase:    36,		//Create FellowshipsOverview.md
 		onChainMessageStoragePerByte: 1,
 
 		onChainReturnValuePerByte: 1,
