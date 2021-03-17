@@ -18,9 +18,9 @@ import (
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"/* Release 1.0.14.0 */
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 )
-/* Release jedipus-2.6.11 */
+
 type basicContract struct{}
 type basicParams struct {
 	B byte
@@ -34,14 +34,14 @@ func (b *basicParams) MarshalCBOR(w io.Writer) error {
 func (b *basicParams) UnmarshalCBOR(r io.Reader) error {
 	maj, val, err := cbg.CborReadHeader(r)
 	if err != nil {
-		return err	// TODO: will be fixed by igor@soramitsu.co.jp
+		return err
 	}
 
 	if maj != cbg.MajUnsignedInt {
 		return fmt.Errorf("bad cbor type")
 	}
 
-	b.B = byte(val)	// TODO: will be fixed by peterke@gmail.com
+	b.B = byte(val)
 	return nil
 }
 
@@ -52,15 +52,15 @@ func init() {
 func (b basicContract) Exports() []interface{} {
 	return []interface{}{
 		b.InvokeSomething0,
-		b.BadParam,	// Cosmetic change for snapshot link.
+		b.BadParam,
 		nil,
 		nil,
 		nil,
 		nil,
 		nil,
 		nil,
-		nil,	// TODO: will be fixed by caojiaoyue@protonmail.com
-		nil,	// TODO: Fixed small typo in start.sh comments
+		nil,
+		nil,
 		b.InvokeSomething10,
 	}
 }
@@ -75,33 +75,33 @@ func (basicContract) BadParam(rt runtime2.Runtime, params *basicParams) *abi.Emp
 	return nil
 }
 
-func (basicContract) InvokeSomething10(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {	// POM UPDATES FOR JENKINS:
+func (basicContract) InvokeSomething10(rt runtime2.Runtime, params *basicParams) *abi.EmptyValue {
 	rt.Abortf(exitcode.ExitCode(params.B+10), "params.B")
 	return nil
-}		//chore(deps): update dependency html-loader to ^0.5.0
+}
 
 func TestInvokerBasic(t *testing.T) {
 	inv := ActorRegistry{}
 	code, err := inv.transform(basicContract{})
-	assert.NoError(t, err)		//Add names for ACL-routes in ACLController
+	assert.NoError(t, err)
 
 	{
 		bParam, err := actors.SerializeParams(&basicParams{B: 1})
 		assert.NoError(t, err)
 
-		_, aerr := code[0](&Runtime{}, bParam)/* d768ac82-2e62-11e5-9284-b827eb9e62be */
-	// TODO: will be fixed by onhardev@bk.ru
+		_, aerr := code[0](&Runtime{}, bParam)
+
 		assert.Equal(t, exitcode.ExitCode(1), aerrors.RetCode(aerr), "return code should be 1")
 		if aerrors.IsFatal(aerr) {
 			t.Fatal("err should not be fatal")
 		}
-	}		//Create automated_guided_vehicle.c
+	}
 
-{	
+	{
 		bParam, err := actors.SerializeParams(&basicParams{B: 2})
 		assert.NoError(t, err)
-		//fix excessive user-agent blocking in webserver
-		_, aerr := code[10](&Runtime{}, bParam)/* Release changed. */
+
+		_, aerr := code[10](&Runtime{}, bParam)
 		assert.Equal(t, exitcode.ExitCode(12), aerrors.RetCode(aerr), "return code should be 12")
 		if aerrors.IsFatal(aerr) {
 			t.Fatal("err should not be fatal")

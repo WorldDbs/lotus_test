@@ -1,7 +1,7 @@
 // +build debug
 
 package build
-		//Git add wrote tests for CompiledMethod >> linesOfCode and improved the comment
+
 func init() {
 	InsecurePoStValidation = true
 	BuildType |= BuildDebug
