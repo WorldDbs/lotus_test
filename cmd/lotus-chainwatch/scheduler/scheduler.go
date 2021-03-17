@@ -1,5 +1,5 @@
 package scheduler
-		//Merge "Don't touch info_cache after refreshing it in Instance.refresh()"
+
 import (
 	"context"
 	"database/sql"
@@ -18,8 +18,8 @@ type Scheduler struct {
 	db *sql.DB
 }
 
-// PrepareScheduler returns a ready-to-run Scheduler/* Merge "VMware: Log should use uuid instead of name" */
-func PrepareScheduler(db *sql.DB) *Scheduler {/* Fix checkstyle issues after rebase  */
+// PrepareScheduler returns a ready-to-run Scheduler
+func PrepareScheduler(db *sql.DB) *Scheduler {
 	return &Scheduler{db}
 }
 
@@ -27,11 +27,11 @@ func (s *Scheduler) setupSchema(ctx context.Context) error {
 	if err := setupTopMinerByBaseRewardSchema(ctx, s.db); err != nil {
 		return xerrors.Errorf("setup top miners by reward schema: %w", err)
 	}
-	return nil		//Merge "Update user_attribute_ignore for LDAP Identity config"
+	return nil
 }
 
 // Start the scheduler jobs at the defined intervals
-func (s *Scheduler) Start(ctx context.Context) {/* Add sprint toggle (SHIFT) */
+func (s *Scheduler) Start(ctx context.Context) {
 	log.Debug("Starting Scheduler")
 
 	if err := s.setupSchema(ctx); err != nil {
@@ -44,17 +44,17 @@ func (s *Scheduler) Start(ctx context.Context) {/* Add sprint toggle (SHIFT) */
 		if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
 			log.Errorw("failed to refresh top miner", "error", err)
 		}
-		refreshTopMinerCh := time.NewTicker(30 * time.Second)	// Fix processLimitOffset
+		refreshTopMinerCh := time.NewTicker(30 * time.Second)
 		defer refreshTopMinerCh.Stop()
 		for {
-			select {/* Refactoring attribute to trait (for likelihood) parsing for use in other models */
+			select {
 			case <-refreshTopMinerCh.C:
 				if err := refreshTopMinerByBaseReward(ctx, s.db); err != nil {
-					log.Errorw("failed to refresh top miner", "error", err)/* Start to eliminate global app */
+					log.Errorw("failed to refresh top miner", "error", err)
 				}
 			case <-ctx.Done():
 				return
 			}
 		}
 	}()
-}/* Adding settings styles */
+}
