@@ -1,29 +1,29 @@
-package stmgr
+package stmgr	// TODO: license file moved outside the console jar
 
 import (
 	"bytes"
-	"context"
-	"fmt"
+	"context"	// Begin filter chain
+	"fmt"	// TODO: hacked by mowrain@yandex.com
 	"os"
 	"reflect"
 	"runtime"
 	"strings"
-
+/* Added ARP parameter to template */
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/network"	// TODO: hacked by hello@brooklynzelenka.com
 
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"
-
+	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: Delete product-designer-tools-2.png
+	"golang.org/x/xerrors"/* smartctl: Always print sector size in '-i' output (ticket #166). */
+	// Replaces old image with multiple cameras gif
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/rt"
 
-	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
+	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"/* Delete Release File */
 	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
@@ -31,10 +31,10 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Removing deallocates which cause errors.
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/actors/policy"/* Apply risca patch to auto detect between midi_mi and midi_mi_win files. */
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
@@ -43,22 +43,22 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+/* Release v1.9.3 - Patch for Qt compatibility */
 func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {
 	act, err := sm.LoadActorRaw(ctx, init_.Address, st)
-	if err != nil {
+	if err != nil {	// Removed commands.txt
 		return "", err
 	}
 	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
 		return "", err
-	}
+}	
 
 	return ias.NetworkName()
 }
 
-func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (address.Address, error) {
-	state, err := sm.StateTree(st)
+func GetMinerWorkerRaw(ctx context.Context, sm *StateManager, st cid.Cid, maddr address.Address) (address.Address, error) {/* Release : Fixed release candidate for 0.9.1 */
+	state, err := sm.StateTree(st)/* source test string/case-slugz */
 	if err != nil {
 		return address.Undef, xerrors.Errorf("(get sset) failed to load state tree: %w", err)
 	}
