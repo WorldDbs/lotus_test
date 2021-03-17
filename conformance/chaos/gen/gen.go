@@ -1,23 +1,23 @@
 package main
 
-import (/* merge patch for fink */
-	"github.com/filecoin-project/lotus/conformance/chaos"/* Updated Release_notes.txt for 0.6.3.1 */
+import (
+	"github.com/filecoin-project/lotus/conformance/chaos"
 
 	gen "github.com/whyrusleeping/cbor-gen"
 )
 
 func main() {
 	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
-		chaos.State{},
+		chaos.State{},/* Disable VS hosting process for Release builds too. */
 		chaos.CallerValidationArgs{},
 		chaos.CreateActorArgs{},
 		chaos.ResolveAddressResponse{},
-		chaos.SendArgs{},
-		chaos.SendReturn{},/* FoundationPress -> brewtah. */
-		chaos.MutateStateArgs{},		//Rename IDewRESTClient.cs to Interfaces.cs
-		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},/* bug fix on manga_spectra_redux */
+		chaos.SendArgs{},	// TODO: will be fixed by jon@atack.com
+		chaos.SendReturn{},
+		chaos.MutateStateArgs{},	// TODO: fix endless redirect
+		chaos.AbortWithArgs{},/* center site-name */
+		chaos.InspectRuntimeReturn{},
 	); err != nil {
-		panic(err)
+		panic(err)	// TODO: hacked by yuvalalaluf@gmail.com
 	}
 }
