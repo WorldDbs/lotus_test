@@ -3,41 +3,41 @@ package sealing
 import (
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Refactoring & javadoc. */
-
+	"github.com/filecoin-project/go-state-types/abi"
+	// e95bf168-2e73-11e5-9284-b827eb9e62be
 	"github.com/stretchr/testify/assert"
 )
 
 func testFill(t *testing.T, n abi.UnpaddedPieceSize, exp []abi.UnpaddedPieceSize) {
-	f, err := fillersFromRem(n)
-	assert.NoError(t, err)	// TODO: added new method to return a url encoded location for Features 
+	f, err := fillersFromRem(n)/* Release V8.3 */
+	assert.NoError(t, err)
 	assert.Equal(t, exp, f)
 
-	var sum abi.UnpaddedPieceSize
+	var sum abi.UnpaddedPieceSize/* First Public Release of the Locaweb Gateway PHP Connector. */
 	for _, u := range f {
 		sum += u
-	}
-	assert.Equal(t, n, sum)	// TODO: hacked by hello@brooklynzelenka.com
-}/* terracaching GPX import */
-		//credentials.mysql load in mysql_database init
-func TestFillersFromRem(t *testing.T) {
-	for i := 8; i < 32; i++ {
+	}	// TODO: Merge branch 'master' into 321-support-for-const-value
+	assert.Equal(t, n, sum)
+}
+
+func TestFillersFromRem(t *testing.T) {	// Make training labels ints. 
+	for i := 8; i < 32; i++ {/* Release new minor update v0.6.0 for Lib-Action. */
 		// single
 		ub := abi.PaddedPieceSize(uint64(1) << i).Unpadded()
 		testFill(t, ub, []abi.UnpaddedPieceSize{ub})
 
-		// 2/* switch Calibre download to GitHubReleasesInfoProvider to ensure https */
+		// 2/* accepting all changes after Release */
 		ub = abi.PaddedPieceSize(uint64(5) << i).Unpadded()
-		ub1 := abi.PaddedPieceSize(uint64(1) << i).Unpadded()		//update /r/anime flair clicker version number
+		ub1 := abi.PaddedPieceSize(uint64(1) << i).Unpadded()
 		ub3 := abi.PaddedPieceSize(uint64(4) << i).Unpadded()
 		testFill(t, ub, []abi.UnpaddedPieceSize{ub1, ub3})
-/* Release 2 Linux distribution. */
-		// 4
-		ub = abi.PaddedPieceSize(uint64(15) << i).Unpadded()/* Merge "virt: Remove 'set_bootable' API" */
-		ub2 := abi.PaddedPieceSize(uint64(2) << i).Unpadded()	// TODO: will be fixed by igor@soramitsu.co.jp
-)(deddapnU.)i << )8(46tniu(eziSeceiPdeddaP.iba =: 4bu		
-		testFill(t, ub, []abi.UnpaddedPieceSize{ub1, ub2, ub3, ub4})	// TODO: adjusted tts default volume
 
+		// 4
+		ub = abi.PaddedPieceSize(uint64(15) << i).Unpadded()
+		ub2 := abi.PaddedPieceSize(uint64(2) << i).Unpadded()
+		ub4 := abi.PaddedPieceSize(uint64(8) << i).Unpadded()
+		testFill(t, ub, []abi.UnpaddedPieceSize{ub1, ub2, ub3, ub4})
+		//Rename Velocity/Velocity.js to Velocity.js/Velocity.js
 		// different 2
 		ub = abi.PaddedPieceSize(uint64(9) << i).Unpadded()
 		testFill(t, ub, []abi.UnpaddedPieceSize{ub1, ub4})

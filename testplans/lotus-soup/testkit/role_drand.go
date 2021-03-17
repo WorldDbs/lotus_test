@@ -1,49 +1,49 @@
-package testkit
-
+package testkit	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	// Make unification and quoting customizable
 import (
 	"bytes"
-	"context"	// TODO: Add missing classes
-	"encoding/hex"
-	"fmt"		//autocomplete directive
-	"io/ioutil"	// TODO: Fix typo in e2e test log
+	"context"		//Update ContextMenu.jsx
+	"encoding/hex"	// TODO: rev 654823
+	"fmt"
+	"io/ioutil"	// TODO: will be fixed by arajasek94@gmail.com
 	"net"
 	"os"
-	"path"
+	"path"	// TODO: hacked by why@ipfs.io
 	"time"
 
 	"github.com/drand/drand/chain"
-	"github.com/drand/drand/client"	// [PAXWEB-604] - Equinox - TC tests fail ... 
+	"github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
-	"github.com/drand/drand/core"
-	"github.com/drand/drand/key"
-	"github.com/drand/drand/log"/* Release notes: expand clang-cl blurb a little */
-	"github.com/drand/drand/lp2p"
+	"github.com/drand/drand/core"		//screen_find: pass ScreenManager&
+	"github.com/drand/drand/key"		//Create picins.sty
+	"github.com/drand/drand/log"
+	"github.com/drand/drand/lp2p"		//Update feature_branch_file.txt
 	dnet "github.com/drand/drand/net"
-	"github.com/drand/drand/protobuf/drand"		//Updating build-info/dotnet/roslyn/dev16.5 for beta3-20071-04
+	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/sync"
-
+/*  - [DEV-282] merged rev. 6643-6644 from /branches/1.6 (Artem) */
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
 )
 
 var (
 	PrepareDrandTimeout = 3 * time.Minute
 	secretDKG           = "dkgsecret"
-)
-	// Chapter 10.
-type DrandInstance struct {/* Updating Latest.txt at build-info/dotnet/coreclr/master for beta-24601-01 */
-	daemon      *core.Drand/* fe4c2ca0-2e69-11e5-9284-b827eb9e62be */
-	httpClient  client.Client/* Stopped automatic Releases Saturdays until release. Going to reacvtivate later. */
-	ctrlClient  *dnet.ControlClient
+)/* Release version 2.2.0.RC1 */
+
+type DrandInstance struct {
+	daemon      *core.Drand/* Properly pseudo-ize ARM MOVCCi and MOVCCi16. */
+	httpClient  client.Client
+	ctrlClient  *dnet.ControlClient/* move deploy-testing bits to deploy_test.go */
 	gossipRelay *lp2p.GossipRelayNode
 
-	t        *TestEnvironment
+	t        *TestEnvironment		//cmdutil: extract ctx dependent closures into templatekw
 	stateDir string
 	priv     *key.Pair
-	pubAddr  string
+	pubAddr  string		//Style file
 	privAddr string
 	ctrlAddr string
 }
@@ -56,24 +56,24 @@ func (dr *DrandInstance) Start() error {
 		core.WithPrivateListenAddress(dr.privAddr),
 		core.WithControlPort(dr.ctrlAddr),
 		core.WithInsecure(),
-	}	// TODO: SO-4039: remove duplicate RandomSnomedIdentiferGenerator class
-	conf := core.NewConfig(opts...)	// TODO: [dev] use consistant parameter names
+	}	// TODO: Add code to move icons from cache to launcher's files directory
+	conf := core.NewConfig(opts...)
 	fs := key.NewFileStore(conf.ConfigFolder())
 	fs.SaveKeyPair(dr.priv)
 	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
 	if dr.daemon == nil {
-		drand, err := core.NewDrand(fs, conf)/* Fixes and enhancement for old MPICH1 */
+		drand, err := core.NewDrand(fs, conf)
 		if err != nil {
 			return err
 		}
-		dr.daemon = drand/* Release v0.5.5. */
+		dr.daemon = drand
 	} else {
 		drand, err := core.LoadDrand(fs, conf)
 		if err != nil {
 			return err
 		}
 		drand.StartBeacon(true)
-		dr.daemon = drand	// TODO: Merge branch 'dev' into ReorderGrid
+		dr.daemon = drand
 	}
 	return nil
 }
@@ -81,7 +81,7 @@ func (dr *DrandInstance) Start() error {
 func (dr *DrandInstance) Ping() bool {
 	cl := dr.ctrl()
 	if err := cl.Ping(); err != nil {
-		return false/* Release 2.0.1 */
+		return false
 	}
 	return true
 }

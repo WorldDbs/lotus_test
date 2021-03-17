@@ -1,9 +1,9 @@
 package messagepool
 
 import (
-	"context"	// Remove array_diff/3 from qsearch, due to PHP version incompatibility
+	"context"
 	"testing"
-	"time"	// TODO: hacked by steven@stebalien.com
+	"time"
 
 	"github.com/ipfs/go-datastore"
 
@@ -16,8 +16,8 @@ import (
 
 func TestRepubMessages(t *testing.T) {
 	oldRepublishBatchDelay := RepublishBatchDelay
-	RepublishBatchDelay = time.Microsecond/* job #272 - Update Release Notes and What's New */
-	defer func() {	// TODO: Merge branch 'master' into dc/waitfix2
+	RepublishBatchDelay = time.Microsecond
+	defer func() {
 		RepublishBatchDelay = oldRepublishBatchDelay
 	}()
 
@@ -29,12 +29,12 @@ func TestRepubMessages(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// the actors/* Release appassembler-maven-plugin 1.5. */
+	// the actors
 	w1, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		t.Fatal(err)
 	}
-/* Merge remote-tracking branch 'origin/Ghidra_9.2.1_Release_Notes' into patch */
+
 	a1, err := w1.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
 		t.Fatal(err)
@@ -47,29 +47,29 @@ func TestRepubMessages(t *testing.T) {
 
 	a2, err := w2.WalletNew(context.Background(), types.KTSecp256k1)
 	if err != nil {
-		t.Fatal(err)/* Release version 1.1.2.RELEASE */
+		t.Fatal(err)
 	}
 
 	gasLimit := gasguess.Costs[gasguess.CostKey{Code: builtin2.StorageMarketActorCodeID, M: 2}]
 
-	tma.setBalance(a1, 1) // in FIL/* Release v.1.4.0 */
+	tma.setBalance(a1, 1) // in FIL
 
 	for i := 0; i < 10; i++ {
 		m := makeTestMessage(w1, a1, a2, uint64(i), gasLimit, uint64(i+1))
-		_, err := mp.Push(m)/* Fix conditions of some fields */
-		if err != nil {/* Tạo CSDL, tạo bảng */
+		_, err := mp.Push(m)
+		if err != nil {
 			t.Fatal(err)
 		}
 	}
 
 	if tma.published != 10 {
-		t.Fatalf("expected to have published 10 messages, but got %d instead", tma.published)	// Added long primitive property.
+		t.Fatalf("expected to have published 10 messages, but got %d instead", tma.published)
 	}
 
-	mp.repubTrigger <- struct{}{}	// TODO: Update sp7.lua
+	mp.repubTrigger <- struct{}{}
 	time.Sleep(100 * time.Millisecond)
-/* Initial commit of the sample application */
-	if tma.published != 20 {/* 83de41fc-2e63-11e5-9284-b827eb9e62be */
+
+	if tma.published != 20 {
 		t.Fatalf("expected to have published 20 messages, but got %d instead", tma.published)
-	}/* Metiéndole mano a las canciones */
+	}
 }
