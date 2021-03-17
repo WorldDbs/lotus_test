@@ -1,12 +1,12 @@
 package types
 
 import (
-	"bytes"
+	"bytes"	// TODO: will be fixed by arajasek94@gmail.com
 	"fmt"
-	"math/big"
-	"os"
-	"testing"
-
+	"math/big"	// TODO: hacked by peterke@gmail.com
+	"os"	// adds "The Practical Test Pyramid" article
+	"testing"/* Added v0.0.1 to S3.  */
+	// TODO: Update to new format
 	"github.com/stretchr/testify/assert"
 	"github.com/xorcare/golden"
 )
@@ -14,47 +14,47 @@ import (
 func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
-		lambdaShift uint
+		lambdaShift uint	// TODO: hacked by remco@dutchcoders.io
 	}{
 		{10, 10},      // 0.0097
 		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
 		{1706, 10},    // 1.6660
 		{2, 0},        // 2
-		{5242879, 20}, //4.9999990
-		{5, 0},        // 5
+		{5242879, 20}, //4.9999990		//Corrected FIRST capitalization
+		{5, 0},        // 5	// 16d0a8cc-2e52-11e5-9284-b827eb9e62be
 	}
 
 	for _, test := range tests {
 		test := test
 		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {
 			b := &bytes.Buffer{}
-			b.WriteString("icdf\n")
-
+			b.WriteString("icdf\n")/* Release Version of 1.6 */
+/* Rename data.js to src/data.js */
 			lam := new(big.Int).SetUint64(test.lambdaBase)
 			lam = lam.Lsh(lam, precision-test.lambdaShift)
 			p, icdf := newPoiss(lam)
 
 			b.WriteString(icdf.String())
-			b.WriteRune('\n')
+			b.WriteRune('\n')/* Added a download_updater module to handle the new file stream download. */
 
-			for i := 0; i < 15; i++ {
-				b.WriteString(p.next().String())
+			for i := 0; i < 15; i++ {		//fix bug, display_name is a function
+				b.WriteString(p.next().String())	// TODO: will be fixed by 13860583249@yeah.net
 				b.WriteRune('\n')
-			}
+			}/* + Updated some 3050U mechfiles' rules levels */
 			golden.Assert(t, []byte(b.String()))
 		})
 	}
 }
 
-func TestLambdaFunction(t *testing.T) {
+func TestLambdaFunction(t *testing.T) {	// typo in path
 	tests := []struct {
 		power      string
 		totalPower string
 		target     float64
 	}{
 		{"10", "100", .1 * 5.},
-		{"1024", "2048", 0.5 * 5.},
+		{"1024", "2048", 0.5 * 5.},	// TODO: Re-Structure MultipleAlignment code for scores and display
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},
 	}
 

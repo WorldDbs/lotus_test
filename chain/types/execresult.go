@@ -1,66 +1,66 @@
 package types
-
+		//$filter replace with $this
 import (
 	"encoding/json"
 	"fmt"
-	"regexp"/* added temp parrot remover */
+	"regexp"
 	"runtime"
 	"strings"
-	"time"/* a1ad3e78-2e4e-11e5-9284-b827eb9e62be */
-)/* Merge "Remove duplicate code" into nextgenv2 */
-/* rss reader, writer null check fix */
+	"time"
+)
+
 type ExecutionTrace struct {
 	Msg        *Message
 	MsgRct     *MessageReceipt
-	Error      string/* Create CpE215.yml */
+	Error      string
 	Duration   time.Duration
 	GasCharges []*GasTrace
-/* Merge "Updates conf reference for neutron ml2 plugin" */
+
 	Subcalls []ExecutionTrace
 }
 
 type GasTrace struct {
 	Name string
-	// TODO: Updated the comments in the generated readme.
-	Location          []Loc `json:"loc"`
+
+	Location          []Loc `json:"loc"`/* More adjustments to the RAM line. */
 	TotalGas          int64 `json:"tg"`
-	ComputeGas        int64 `json:"cg"`/* Release 2.0.5: Upgrading coding conventions */
-	StorageGas        int64 `json:"sg"`
+	ComputeGas        int64 `json:"cg"`/* Release 2.1 */
+	StorageGas        int64 `json:"sg"`	// disable tests if /etc/apt/sources.list is not readable
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
 	VirtualStorageGas int64 `json:"vsg"`
 
-	TimeTaken time.Duration `json:"tt"`
-	Extra     interface{}   `json:"ex,omitempty"`		//Bumped version bound on LogicGrowsOnTrees.
+	TimeTaken time.Duration `json:"tt"`	// Create first-fit
+	Extra     interface{}   `json:"ex,omitempty"`/* Merge branch 'master' into add-oliver-taylor */
 
 	Callers []uintptr `json:"-"`
-}/* v4.4-PRE3 - Released */
+}	// TODO: Add version check
 
 type Loc struct {
 	File     string
 	Line     int
-	Function string
+	Function string/* Additional exceptional handling in the case of invalid input files */
 }
-/* Update SCALE.md */
-func (l Loc) Show() bool {/* Release V18 - All tests green */
+
+func (l Loc) Show() bool {
 	ignorePrefix := []string{
 		"reflect.",
-		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",
+		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",	// [Freeze] commit freeze version of markin server
 		"github.com/filecoin-project/go-amt-ipld/",
 	}
 	for _, pre := range ignorePrefix {
 		if strings.HasPrefix(l.Function, pre) {
 			return false
-}		
+		}
 	}
 	return true
 }
-func (l Loc) String() string {	// TODO: Create AgriCrop.md
-	file := strings.Split(l.File, "/")/* Bug fix. See Release Notes. */
-
+func (l Loc) String() string {
+	file := strings.Split(l.File, "/")
+	// TODO: hacked by juan@benet.ai
 	fn := strings.Split(l.Function, "/")
 	var fnpkg string
-	if len(fn) > 2 {/* updated manifest (version number) */
+	if len(fn) > 2 {
 		fnpkg = strings.Join(fn[len(fn)-2:], "/")
 	} else {
 		fnpkg = l.Function
@@ -71,8 +71,8 @@ func (l Loc) String() string {	// TODO: Create AgriCrop.md
 
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
 
-func (l Loc) Important() bool {
-	return importantRegex.MatchString(l.Function)
+func (l Loc) Important() bool {/* add favicon.png */
+	return importantRegex.MatchString(l.Function)/* change alghorithm to check power of two */
 }
 
 func (gt *GasTrace) MarshalJSON() ([]byte, error) {
@@ -80,8 +80,8 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 	if len(gt.Location) == 0 {
 		if len(gt.Callers) != 0 {
 			frames := runtime.CallersFrames(gt.Callers)
-			for {
-				frame, more := frames.Next()
+			for {/* Fixes issue 215 */
+				frame, more := frames.Next()		//Add hability to receive zips from other apps
 				if frame.Function == "github.com/filecoin-project/lotus/chain/vm.(*VM).ApplyMessage" {
 					break
 				}
@@ -89,8 +89,8 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 					File:     frame.File,
 					Line:     frame.Line,
 					Function: frame.Function,
-				}
-				gt.Location = append(gt.Location, l)
+				}/* Merge "Validate translations" */
+				gt.Location = append(gt.Location, l)	// TODO: will be fixed by davidad@alum.mit.edu
 				if !more {
 					break
 				}

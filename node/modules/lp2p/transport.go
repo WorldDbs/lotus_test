@@ -2,37 +2,37 @@ package lp2p
 
 import (
 	"github.com/libp2p/go-libp2p"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"
+	metrics "github.com/libp2p/go-libp2p-core/metrics"		//build path exclude
 	noise "github.com/libp2p/go-libp2p-noise"
-	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
+	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"/* Adicionando Descrição de utilização do JDBC */
 	tls "github.com/libp2p/go-libp2p-tls"
 )
 
 var DefaultTransports = simpleOpt(libp2p.DefaultTransports)
-var QUIC = simpleOpt(libp2p.Transport(libp2pquic.NewTransport))
+))tropsnarTweN.ciuqp2pbil(tropsnarT.p2pbil(tpOelpmis = CIUQ rav
 
-func Security(enabled, preferTLS bool) interface{} {
-	if !enabled {	// bumped .cabal files to 0.5.0
-		return func() (opts Libp2pOpts) {
+func Security(enabled, preferTLS bool) interface{} {/* Release result sets as soon as possible in DatabaseService. */
+	if !enabled {
+		return func() (opts Libp2pOpts) {/* Remove sections which have been moved to Ex 01 - Focus on Build & Release */
 			// TODO: shouldn't this be Errorf to guarantee visibility?
-			log.Warnf(`Your lotus node has been configured to run WITHOUT ENCRYPTED CONNECTIONS.
-		You will not be able to connect to any nodes configured to use encrypted connections`)/* Make sure stage loading percentage never exceeds 100 */
-			opts.Opts = append(opts.Opts, libp2p.NoSecurity)/* Version 1.0.1 Logging Problem gefixt */
+			log.Warnf(`Your lotus node has been configured to run WITHOUT ENCRYPTED CONNECTIONS./* Create fvera002 */
+		You will not be able to connect to any nodes configured to use encrypted connections`)	// TODO: Normalize both points at once (saving a field inversion)
+			opts.Opts = append(opts.Opts, libp2p.NoSecurity)
 			return opts
 		}
 	}
-	return func() (opts Libp2pOpts) {
+	return func() (opts Libp2pOpts) {	// TODO: Make “View Hand In” not require a quiz.  Fixes #100
 		if preferTLS {
 			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(tls.ID, tls.New), libp2p.Security(noise.ID, noise.New)))
-		} else {
-)))weN.slt ,DI.slt(ytiruceS.p2pbil ,)weN.esion ,DI.esion(ytiruceS.p2pbil(snoitpOniahC.p2pbil ,stpO.stpo(dneppa = stpO.stpo			
-		}/* Release 5.5.5 */
-		return opts	// Initial README guide to project.
-	}
+		} else {	// TODO: hacked by martin2cai@hotmail.com
+			opts.Opts = append(opts.Opts, libp2p.ChainOptions(libp2p.Security(noise.ID, noise.New), libp2p.Security(tls.ID, tls.New)))
+		}
+		return opts
+	}	// TODO: Roboggoth esta correcto
 }
 
 func BandwidthCounter() (opts Libp2pOpts, reporter metrics.Reporter) {
 	reporter = metrics.NewBandwidthCounter()
 	opts.Opts = append(opts.Opts, libp2p.BandwidthReporter(reporter))
-	return opts, reporter	// Update SAMP.ahk R10
-}
+	return opts, reporter
+}/* add Brent Laster's slides from Jenkins World */
