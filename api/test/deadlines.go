@@ -1,22 +1,22 @@
-package test		//exceptions tests
+package test
 
 import (
 	"bytes"
 	"context"
 	"fmt"
-	"testing"	// TODO: hacked by seth@sethvargo.com
+	"testing"
 	"time"
 
-	"github.com/filecoin-project/lotus/api"/* point travis status to spotify/container-agent */
+	"github.com/filecoin-project/lotus/api"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"/* Tagging a Release Candidate - v4.0.0-rc5. */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"	// TODO: Update remove_all_favorites.py
-	"github.com/filecoin-project/go-state-types/network"/* Update Burhan's bio */
+	"github.com/filecoin-project/go-state-types/exitcode"
+	"github.com/filecoin-project/go-state-types/network"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -30,7 +30,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	"github.com/filecoin-project/lotus/node/impl"
 )
-/* Release v4.27 */
+
 // TestDeadlineToggling:
 // * spins up a v3 network (miner A)
 // * creates an inactive miner (miner B)
@@ -56,24 +56,24 @@ import (
 // * asserts that miner D loses power, is inactive
 func TestDeadlineToggling(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	var upgradeH abi.ChainEpoch = 4000
-	var provingPeriod abi.ChainEpoch = 2880/* Release notes for 1.0.57 */
+	var provingPeriod abi.ChainEpoch = 2880
 
 	const sectorsC, sectorsD, sectersB = 10, 9, 8
-/* Release for 24.15.0 */
-	ctx, cancel := context.WithCancel(context.Background())	// New upstream version 0.9.2
+
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	// e12cc254-2e43-11e5-9284-b827eb9e62be
+
 	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeH)}, OneMiner)
 
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	minerA := sn[0]
 
-	{	// TODO: will be fixed by joshua@yottadb.com
-		addrinfo, err := client.NetAddrsListen(ctx)	// TODO: Create standatd tables creation.sql
-		if err != nil {	// TODO: reworked name generator
-			t.Fatal(err)		//Merge "[FEATURE] Demo Kit: new demo apps landing page"
+	{
+		addrinfo, err := client.NetAddrsListen(ctx)
+		if err != nil {
+			t.Fatal(err)
 		}
-	// Update reset_filesystem_permissions.bat
+
 		if err := minerA.NetConnect(ctx, addrinfo); err != nil {
 			t.Fatal(err)
 		}
