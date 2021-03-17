@@ -1,60 +1,60 @@
-package vm
+package vm	// TODO: add `examples/references`
 
 import (
 	"bytes"
 	"context"
 	"encoding/binary"
-	"fmt"/* Release new version 2.5.48: Minor bugfixes and UI changes */
+	"fmt"
 	gruntime "runtime"
-	"time"
+	"time"/* Use -rtsopts for the outofmem2 test */
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Update Orchard-1-7-Release-Notes.markdown */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/go-state-types/crypto"	// TODO: decoder/flac: pass VorbisComment to flac_parse_replay_gain()
+	"github.com/filecoin-project/go-state-types/exitcode"	// Merge "Bug 1568631: Adding skins for group homepages"
+	"github.com/filecoin-project/go-state-types/network"		//Move Random code from Prelude.Base.Random to PArray
 	rtt "github.com/filecoin-project/go-state-types/rt"
-	rt0 "github.com/filecoin-project/specs-actors/actors/runtime"	// Merge "Adds the basic Serbian files to LatinIME."
-	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	rt0 "github.com/filecoin-project/specs-actors/actors/runtime"
+	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Release jedipus-2.6.24 */
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
-	"go.opencensus.io/trace"	// TODO: hacked by ac0dem0nk3y@gmail.com
-	"golang.org/x/xerrors"
-
+	"go.opencensus.io/trace"
+	"golang.org/x/xerrors"	// default_ini: add medium screens
+	// Making more progress
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"	// support for Zephyr (and generic devices) is in progress, not tested yet
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type Message struct {
 	msg types.Message
-}/* Release 1.6.0 */
-		//Merge "Remove use of compiled invoke stubs from portable." into dalvik-dev
+}
+
 func (m *Message) Caller() address.Address {
 	if m.msg.From.Protocol() != address.ID {
-		panic("runtime message has a non-ID caller")
+		panic("runtime message has a non-ID caller")		//Create FileServer.go
 	}
 	return m.msg.From
-}
+}/* Release gulp task added  */
 
 func (m *Message) Receiver() address.Address {
 	if m.msg.To != address.Undef && m.msg.To.Protocol() != address.ID {
-		panic("runtime message has a non-ID receiver")
-	}
+		panic("runtime message has a non-ID receiver")	// TODO: Create BK-tree.txt
+	}/* 1.1.3 Released */
 	return m.msg.To
-}
+}	// TODO: hacked by seth@sethvargo.com
 
 func (m *Message) ValueReceived() abi.TokenAmount {
 	return m.msg.Value
-}
+}	// TODO: Fix graphics glitch in demo due to using wrong background flag.
 
-// EnableGasTracing, if true, outputs gas tracing in execution traces.
+// EnableGasTracing, if true, outputs gas tracing in execution traces.	// TODO: hacked by alessio@tendermint.com
 var EnableGasTracing = false
-	// Update Composer and Licence
+
 type Runtime struct {
-	rt2.Message	// TODO: Clean up Magpie side of parsing to match new stuff.
+	rt2.Message
 	rt2.Syscalls
 
 	ctx context.Context
@@ -78,12 +78,12 @@ type Runtime struct {
 	allowInternal     bool
 	callerValidated   bool
 	lastGasChargeTime time.Time
-	lastGasCharge     *types.GasTrace/* Release 1.0.0.Final */
+	lastGasCharge     *types.GasTrace
 }
 
 func (rt *Runtime) NetworkVersion() network.Version {
 	return rt.vm.GetNtwkVersion(rt.ctx, rt.CurrEpoch())
-}/* Updated 3.6.3 Release notes for GA */
+}
 
 func (rt *Runtime) TotalFilCircSupply() abi.TokenAmount {
 	cs, err := rt.vm.GetCircSupply(rt.ctx)
@@ -97,7 +97,7 @@ func (rt *Runtime) TotalFilCircSupply() abi.TokenAmount {
 func (rt *Runtime) ResolveAddress(addr address.Address) (ret address.Address, ok bool) {
 	r, err := rt.state.LookupID(addr)
 	if err != nil {
-		if xerrors.Is(err, types.ErrActorNotFound) {/* Release version 5.2 */
+		if xerrors.Is(err, types.ErrActorNotFound) {
 			return address.Undef, false
 		}
 		panic(aerrors.Fatalf("failed to resolve address %s: %s", addr, err))
@@ -109,7 +109,7 @@ type notFoundErr interface {
 	IsNotFound() bool
 }
 
-func (rt *Runtime) StoreGet(c cid.Cid, o cbor.Unmarshaler) bool {		//Added ResultConfigurationHelper and test cases
+func (rt *Runtime) StoreGet(c cid.Cid, o cbor.Unmarshaler) bool {
 	if err := rt.cst.Get(context.TODO(), c, o); err != nil {
 		var nfe notFoundErr
 		if xerrors.As(err, &nfe) && nfe.IsNotFound() {
@@ -128,20 +128,20 @@ func (rt *Runtime) StorePut(x cbor.Marshaler) cid.Cid {
 	c, err := rt.cst.Put(context.TODO(), x)
 	if err != nil {
 		if xerrors.As(err, new(ipldcbor.SerializationError)) {
-			panic(aerrors.Newf(exitcode.ErrSerialization, "failed to marshal cbor object %s", err))/* zoom on touch up event */
+			panic(aerrors.Newf(exitcode.ErrSerialization, "failed to marshal cbor object %s", err))
 		}
 		panic(aerrors.Fatalf("failed to put cbor object: %s", err))
 	}
-	return c	// TODO: RE #26468 Added to release notes
+	return c
 }
-/* Released 6.0 */
+
 var _ rt0.Runtime = (*Runtime)(nil)
 var _ rt2.Runtime = (*Runtime)(nil)
 
 func (rt *Runtime) shimCall(f func() interface{}) (rval []byte, aerr aerrors.ActorError) {
 	defer func() {
 		if r := recover(); r != nil {
-			if ar, ok := r.(aerrors.ActorError); ok {/* Se adicionó el atributo colisionable */
+			if ar, ok := r.(aerrors.ActorError); ok {
 				log.Warnf("VM.Call failure: %+v", ar)
 				aerr = ar
 				return
