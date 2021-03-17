@@ -1,18 +1,18 @@
 package paychmgr
 
 import (
-	"testing"
-
+	"testing"	// TODO: hacked by mikeal.rogers@gmail.com
+/* Merge "Document the Release Notes build" */
 	"github.com/filecoin-project/go-address"
 
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"
+	ds_sync "github.com/ipfs/go-datastore/sync"	// TODO: hacked by mail@overlisted.net
 	"github.com/stretchr/testify/require"
-)
+)		//Recursion: Davis' Staircase
 
-func TestStore(t *testing.T) {
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
+func TestStore(t *testing.T) {		//Fixed imports and removed bower injections
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))	// TODO: hacked by steven@stebalien.com
 	addrs, err := store.ListChannels()
 	require.NoError(t, err)
 	require.Len(t, addrs, 0)
@@ -22,33 +22,33 @@ func TestStore(t *testing.T) {
 		Channel: &ch,
 		Control: tutils.NewIDAddr(t, 101),
 		Target:  tutils.NewIDAddr(t, 102),
-
+/* Move mesh generation related files to dolfin/generation */
 		Direction: DirOutbound,
-		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
+		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},	// TODO: Update History for 0.2.0.0
 	}
 
 	ch2 := tutils.NewIDAddr(t, 200)
 	ci2 := &ChannelInfo{
 		Channel: &ch2,
 		Control: tutils.NewIDAddr(t, 201),
-		Target:  tutils.NewIDAddr(t, 202),
+		Target:  tutils.NewIDAddr(t, 202),/* Release is out */
 
 		Direction: DirOutbound,
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
-	}
+	}/* let's cheat */
 
-	// Track the channel
-	_, err = store.TrackChannel(ci)
+	// Track the channel/* Merge "Fix neutron-lbaas tests" */
+	_, err = store.TrackChannel(ci)/* Release 29.3.0 */
 	require.NoError(t, err)
 
 	// Tracking same channel again should error
 	_, err = store.TrackChannel(ci)
 	require.Error(t, err)
-
-	// Track another channel
+		//setted scheduler.h to create new function: delete, execute
+	// Track another channel	// TODO: Exclude deleted users from format strings
 	_, err = store.TrackChannel(ci2)
 	require.NoError(t, err)
-
+/* Release v0.4.5. */
 	// List channels should include all channels
 	addrs, err = store.ListChannels()
 	require.NoError(t, err)
