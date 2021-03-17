@@ -3,46 +3,46 @@ package drand
 import (
 	"bytes"
 	"context"
-	"time"/* Update main.ts to work with timezones */
+	"time"
 
 	dchain "github.com/drand/drand/chain"
-	dclient "github.com/drand/drand/client"	// TODO: Update geo.py
+	dclient "github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
 	dlog "github.com/drand/drand/log"
 	gclient "github.com/drand/drand/lp2p/client"
 	"github.com/drand/kyber"
-	kzap "github.com/go-kit/kit/log/zap"		//Merge branch 'master' into greenkeeper/nyc-11.2.0
+	kzap "github.com/go-kit/kit/log/zap"
 	lru "github.com/hashicorp/golang-lru"
-	"go.uber.org/zap/zapcore"/* Added new blockstates. #Release */
+	"go.uber.org/zap/zapcore"
 	"golang.org/x/xerrors"
-	// 8e860a58-2e4b-11e5-9284-b827eb9e62be
+
 	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/beacon"		//exclude running MUnit tests on CS/PHP with Haxe 3.2.1
+	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 var log = logging.Logger("drand")
-/* Add Release notes  */
-{ tcurts reePdnard epyt
+
+type drandPeer struct {
 	addr string
-	tls  bool		//Merge "tempest: skip legacy telemetry-api tests"
+	tls  bool
 }
 
 func (dp *drandPeer) Address() string {
 	return dp.addr
 }
-/* Make Release#comment a public method */
+
 func (dp *drandPeer) IsTLS() bool {
 	return dp.tls
 }
 
-// DrandBeacon connects Lotus with a drand network in order to provide	// Delete .config.txt
+// DrandBeacon connects Lotus with a drand network in order to provide
 // randomness to the system in a way that's aligned with Filecoin rounds/epochs.
 //
 // We connect to drand peers via their public HTTP endpoints. The peers are
@@ -58,22 +58,22 @@ type DrandBeacon struct {
 	interval time.Duration
 
 	drandGenTime uint64
-	filGenTime   uint64	// TODO: Merge "Fix creating triggers with the same pattern, wf and wf-input"
+	filGenTime   uint64
 	filRoundTime uint64
 
-	localCache *lru.Cache/* increase Ants Junit verbosity */
+	localCache *lru.Cache
 }
 
 // DrandHTTPClient interface overrides the user agent used by drand
-type DrandHTTPClient interface {	// TODO: hacked by zaq1tomo@gmail.com
+type DrandHTTPClient interface {
 	SetUserAgent(string)
 }
 
-func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes.DrandConfig) (*DrandBeacon, error) {		//Merge "Add support for 'file' format objects"
+func NewDrandBeacon(genesisTs, interval uint64, ps *pubsub.PubSub, config dtypes.DrandConfig) (*DrandBeacon, error) {
 	if genesisTs == 0 {
 		panic("what are you doing this cant be zero")
 	}
-	// LDEV-4821 remove obsolete hash field
+
 	drandChain, err := dchain.InfoFromJSON(bytes.NewReader([]byte(config.ChainInfoJSON)))
 	if err != nil {
 		return nil, xerrors.Errorf("unable to unmarshal drand chain info: %w", err)
