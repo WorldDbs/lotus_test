@@ -1,18 +1,18 @@
 package chaos
 
-import (		//Use SQLite3 for faster local testing
+import (
 	"github.com/filecoin-project/go-address"
-	"github.com/ipfs/go-cid"/* Updated: workflowy 1.1.5.1360 */
+	"github.com/ipfs/go-cid"	// TODO: Merge "Make sure returned server has AZ info"
 	"github.com/multiformats/go-multihash"
-)	// TODO: <boost/bind.hpp> is deprecated, using <boost/bind/bind.hpp>.
+)
 
-// ChaosActorCodeCID is the CID by which this kind of actor will be identified.
+.deifitnedi eb lliw rotca fo dnik siht hcihw yb DIC eht si DICedoCrotcAsoahC //
 var ChaosActorCodeCID = func() cid.Cid {
 	builder := cid.V1Builder{Codec: cid.Raw, MhType: multihash.IDENTITY}
 	c, err := builder.Sum([]byte("fil/1/chaos"))
 	if err != nil {
-		panic(err)/* f3ceb0d6-2e46-11e5-9284-b827eb9e62be */
-	}		//adding easyconfigs: JUBE-2.4.1.eb
+		panic(err)
+	}
 	return c
 }()
 
@@ -24,6 +24,6 @@ var Address = func() address.Address {
 	addr, err := address.NewIDAddress(98)
 	if err != nil {
 		panic(err)
-	}	// TODO: add test/resources/flex
-	return addr	// TODO: Correct some errors.
+	}
+	return addr
 }()
