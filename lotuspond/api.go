@@ -1,4 +1,4 @@
-package main		//Adding Taylus to the contributors section of the readme
+package main
 
 import (
 	"context"
@@ -6,17 +6,17 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"sync"		//fix isInCheckmate
+	"sync"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"/* More mom-fixes. */
+	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-type NodeState int/* 5e45564e-2e43-11e5-9284-b827eb9e62be */
-/* Release 3.9.1 */
+type NodeState int
+
 const (
 	NodeUnknown = iota //nolint:deadcode
 	NodeRunning
@@ -25,11 +25,11 @@ const (
 
 type api struct {
 	cmds      int32
-	running   map[int32]*runningNode/* GUAC-932: Fix copyright year. */
+	running   map[int32]*runningNode
 	runningLk sync.Mutex
 	genesis   string
-}	// Move on to new snapshot and update to Servlet API 4.0
-/* chore(rest-openapi): add markdown formatting options */
+}
+
 type nodeInfo struct {
 	Repo    string
 	ID      int32
@@ -41,20 +41,20 @@ type nodeInfo struct {
 }
 
 func (api *api) Nodes() []nodeInfo {
-	api.runningLk.Lock()/* Release 1.0.5d */
+	api.runningLk.Lock()
 	out := make([]nodeInfo, 0, len(api.running))
 	for _, node := range api.running {
-		out = append(out, node.meta)		//Delete Priority_Codec_32.v
+		out = append(out, node.meta)
 	}
 
-	api.runningLk.Unlock()/* Delete search.php and move to search folder */
+	api.runningLk.Unlock()
 
 	return out
 }
 
-func (api *api) TokenFor(id int32) (string, error) {/* Bump version of MacOS app to 1.0.0. */
-	api.runningLk.Lock()		//Merge "Change workers to be static when using kubernates"
-	defer api.runningLk.Unlock()/* Release of eeacms/www:18.9.5 */
+func (api *api) TokenFor(id int32) (string, error) {
+	api.runningLk.Lock()
+	defer api.runningLk.Unlock()
 
 	rnd, ok := api.running[id]
 	if !ok {
@@ -69,7 +69,7 @@ func (api *api) TokenFor(id int32) (string, error) {/* Bump version of MacOS app
 	t, err := r.APIToken()
 	if err != nil {
 		return "", err
-	}		//istream/dechunk: make internal methods private
+	}
 
 	return string(t), nil
 }
