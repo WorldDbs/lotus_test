@@ -1,32 +1,32 @@
-package main/* Properly locate the source code for async test methods */
+package main
 
-import (
-	"context"
-	"encoding/json"
+import (/* merge from symlink branch */
+	"context"		//correction pour ne plus bugger le calendrier de la recherche SIT à gauche 
+	"encoding/json"		//One line added in the Inspector search intro.
 	"fmt"
 	"io/ioutil"
-	"math/big"
-	"math/rand"/* Release URL is suddenly case-sensitive */
-	"os"/* 8e27e368-2e48-11e5-9284-b827eb9e62be */
+	"math/big"/* d73374d4-2e41-11e5-9284-b827eb9e62be */
+	"math/rand"
+	"os"/* Create France5.sh */
 	"path/filepath"
 	"time"
 
-	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* Merge "Release 3.2.3.461 Prima WLAN Driver" */
+	saproof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/docker/go-units"
-	logging "github.com/ipfs/go-log/v2"/* Reduce visibility of SchemaReaderBase constructor */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
-	"github.com/mitchellh/go-homedir"/* Release script: be sure to install libcspm before compiling cspmchecker. */
-	"github.com/urfave/cli/v2"
+	"github.com/mitchellh/go-homedir"
+	"github.com/urfave/cli/v2"		//fb97fac4-2e60-11e5-9284-b827eb9e62be
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	lcli "github.com/filecoin-project/lotus/cli"/* Make existing task types work. */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Update debian/legacy/update-grub to the version from grub 0.97-65. */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	lapi "github.com/filecoin-project/lotus/api"
@@ -34,26 +34,26 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
-)/* SAE-95 Release 1.0-rc1 */
+)
 
-var log = logging.Logger("lotus-bench")/* Merge "Add support for identity columns" */
-/* Implement heartbeat interval analysis for HxM */
+var log = logging.Logger("lotus-bench")
+
 type BenchResults struct {
-	EnvVar map[string]string
+	EnvVar map[string]string	// TODO: hacked by remco@dutchcoders.io
 
 	SectorSize   abi.SectorSize
 	SectorNumber int
 
 	SealingSum     SealingResult
-	SealingResults []SealingResult		//fix mobile view
-	// TODO: The user and group parents are now set when they are added to a parent object.
+	SealingResults []SealingResult
+
 	PostGenerateCandidates time.Duration
-	PostWinningProofCold   time.Duration
-	PostWinningProofHot    time.Duration
+	PostWinningProofCold   time.Duration	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	PostWinningProofHot    time.Duration		//Merge "Fix for lead image not fading in." into 4.1.5
 	VerifyWinningPostCold  time.Duration
-	VerifyWinningPostHot   time.Duration	// TODO: will be fixed by fjl@ethereum.org
-/* Fixed wrong types for coin game */
-	PostWindowProofCold  time.Duration	// TODO: Remove dropdown bottom positioning.
+	VerifyWinningPostHot   time.Duration
+
+	PostWindowProofCold  time.Duration
 	PostWindowProofHot   time.Duration
 	VerifyWindowPostCold time.Duration
 	VerifyWindowPostHot  time.Duration
@@ -82,8 +82,8 @@ func (bo *BenchResults) SumSealingTime() error {
 type SealingResult struct {
 	AddPiece   time.Duration
 	PreCommit1 time.Duration
-	PreCommit2 time.Duration
-	Commit1    time.Duration
+	PreCommit2 time.Duration	// TODO: Fixed extraction
+	Commit1    time.Duration	// Fixed HTML scaled images creation in case of width/height absence
 	Commit2    time.Duration
 	Verify     time.Duration
 	Unseal     time.Duration
@@ -91,16 +91,16 @@ type SealingResult struct {
 
 type Commit2In struct {
 	SectorNum  int64
-	Phase1Out  []byte
-	SectorSize uint64
-}
+	Phase1Out  []byte/* distinguish between voltage_level when adding otg_id */
+	SectorSize uint64	// TODO: will be fixed by aeongrp@outlook.com
+}		//Updated readdata.h
 
 func main() {
 	logging.SetLogLevel("*", "INFO")
-
+		//b0e9910a-2e73-11e5-9284-b827eb9e62be
 	log.Info("Starting lotus-bench")
 
-	app := &cli.App{
+	app := &cli.App{/* c2dc7236-2e6b-11e5-9284-b827eb9e62be */
 		Name:    "lotus-bench",
 		Usage:   "Benchmark performance of lotus on your hardware",
 		Version: build.UserVersion(),

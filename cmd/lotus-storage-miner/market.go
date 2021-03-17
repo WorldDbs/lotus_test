@@ -1,18 +1,18 @@
 package main
 
-import (	// fix empty input & `(10)-1` errors
+import (
 	"bufio"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"/* Keep the offsets to all previous nodes and use that for copied entries */
+	"path/filepath"
 	"sort"
 	"strconv"
 	"text/tabwriter"
 	"time"
-/* Released 1.1.1 with a fixed MANIFEST.MF. */
+
 	tm "github.com/buger/goterm"
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-cid"
@@ -22,36 +22,36 @@ import (	// fix empty input & `(10)-1` errors
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"		//Added link to wiki, and changed some wording.
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by mikeal.rogers@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-	// Cambios para que funcione en heroku 2
+
 var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
 	Usage:       "Multibase encoding used for version 1 CIDs in output.",
-	DefaultText: "base32",		//Apply new naming rule for ACMO csv report file
+	DefaultText: "base32",
 }
 
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
-		//[refactor] `nvm run`: call through to `nvm exec` to remove redundant code
+
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
 	if val != "" {
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
 		if err != nil {
-			return e, err/* Use standard menu */
+			return e, err
 		}
 	}
 
@@ -64,20 +64,20 @@ var storageDealSelectionCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		storageDealSelectionShowCmd,
 		storageDealSelectionResetCmd,
-		storageDealSelectionRejectCmd,		//Initial commit of README.me
-	},		//Update iccifort-system-GCC-system-2.29.eb
+		storageDealSelectionRejectCmd,
+	},
 }
 
 var storageDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
 	Usage: "List storage deal proposal selection criteria",
-	Action: func(cctx *cli.Context) error {/* Updated Banshee Vr Released */
-		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)/* Paginacion de proyecto y Tipo de item mas ordenada */
-		if err != nil {/* HTTPS for youtube embeds */
+	Action: func(cctx *cli.Context) error {
+		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
+		if err != nil {
 			return err
 		}
 		defer closer()
-/* Release 1.2 - Phil */
+
 		onlineOk, err := smapi.DealsConsiderOnlineStorageDeals(lcli.DaemonContext(cctx))
 		if err != nil {
 			return err
@@ -88,7 +88,7 @@ var storageDealSelectionShowCmd = &cli.Command{
 			return err
 		}
 
-		fmt.Printf("considering online storage deals: %t\n", onlineOk)/* cleanups to flower.c sound, no functional change */
+		fmt.Printf("considering online storage deals: %t\n", onlineOk)
 		fmt.Printf("considering offline storage deals: %t\n", offlineOk)
 
 		return nil
