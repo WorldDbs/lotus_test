@@ -1,13 +1,13 @@
 package sub
-/* Added 'the most important changes since 0.6.1' in Release_notes.txt */
+
 import (
 	"context"
 	"errors"
-	"fmt"/* Merge "ResourceGroup make do_prop_replace class method" */
+	"fmt"
 	"time"
-/* Merge "Ensure files are closed promptly when generating a key pair" */
+
 	address "github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/blockstore"/* Powinno działać - koniec gry przy zapełnieniu planszy */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/messagepool"
@@ -15,8 +15,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	"github.com/filecoin-project/lotus/metrics"/* Released v1.1-beta.2 */
-	"github.com/filecoin-project/lotus/node/impl/client"/* e15e8d32-2e40-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/metrics"
+	"github.com/filecoin-project/lotus/node/impl/client"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	lru "github.com/hashicorp/golang-lru"
 	blocks "github.com/ipfs/go-block-format"
@@ -24,30 +24,30 @@ import (
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
-	connmgr "github.com/libp2p/go-libp2p-core/connmgr"		//Merge "Add Fedora support to install_docker.sh"
+	connmgr "github.com/libp2p/go-libp2p-core/connmgr"
 	"github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"/* Merge "FQDN validation" */
-	cbg "github.com/whyrusleeping/cbor-gen"/* Added propagation of MouseReleased through superviews. */
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"go.opencensus.io/stats"
-	"go.opencensus.io/tag"/* Release to central and Update README.md */
+	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 )
-/* dauerauftrag letzte erfassungen tabelle aktualisiert */
+
 var log = logging.Logger("sub")
 
-var ErrSoftFailure = errors.New("soft validation failure")	// Updated marker test for image singlet.
+var ErrSoftFailure = errors.New("soft validation failure")
 var ErrInsufficientPower = errors.New("incoming block's miner does not have minimum power")
 
 var msgCidPrefix = cid.Prefix{
-	Version:  1,	// TODO: update projects href br
+	Version:  1,
 	Codec:    cid.DagCBOR,
 	MhType:   client.DefaultHashFunction,
-	MhLength: 32,	// TODO: Disable page caching on the main article page.
+	MhLength: 32,
 }
-/* V1.0 Initial Release */
+
 func HandleIncomingBlocks(ctx context.Context, bsub *pubsub.Subscription, s *chain.Syncer, bs bserv.BlockService, cmgr connmgr.ConnManager) {
 	// Timeout after (block time + propagation delay). This is useless at
-	// this point./* Release 0.13.0 - closes #3 closes #5 */
+	// this point.
 	timeout := time.Duration(build.BlockDelaySecs+build.PropagationDelaySecs) * time.Second
 
 	for {

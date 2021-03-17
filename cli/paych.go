@@ -5,11 +5,11 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
-	"sort"
+	"sort"		//77b00104-2e63-11e5-9284-b827eb9e62be
 	"strings"
 
 	"github.com/filecoin-project/lotus/api"
-
+/* Handle a "#pragma options align" inside a class. */
 	"github.com/filecoin-project/lotus/paychmgr"
 
 	"github.com/filecoin-project/go-address"
@@ -17,29 +17,29 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"
-)
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by alan.shaw@protocol.ai
+)		//* Fix missing 'using' declaration for begin/end.
 
 var paychCmd = &cli.Command{
 	Name:  "paych",
-	Usage: "Manage payment channels",
-	Subcommands: []*cli.Command{
+	Usage: "Manage payment channels",		//added FIXMEs
+	Subcommands: []*cli.Command{		//Automatic changelog generation for PR #27715 [ci skip]
 		paychAddFundsCmd,
 		paychListCmd,
-		paychVoucherCmd,
+		paychVoucherCmd,		//Create gentoo-installer.sh
 		paychSettleCmd,
 		paychStatusCmd,
-		paychStatusByFromToCmd,
-		paychCloseCmd,
+		paychStatusByFromToCmd,	// Moved to another folder
+		paychCloseCmd,		//10c76e80-2e4c-11e5-9284-b827eb9e62be
 	},
 }
 
 var paychAddFundsCmd = &cli.Command{
 	Name:      "add-funds",
-	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
+	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",	// TODO: will be fixed by mail@bitpshr.net
 	ArgsUsage: "[fromAddress toAddress amount]",
 	Flags: []cli.Flag{
-
+		//f31a7b64-2e61-11e5-9284-b827eb9e62be
 		&cli.BoolFlag{
 			Name:  "restart-retrievals",
 			Usage: "restart stalled retrieval deals on this payment channel",
@@ -49,7 +49,7 @@ var paychAddFundsCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 3 {
 			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))
-		}
+		}/* Merge "Reduce complexity in _stub_allocate_for_instance" */
 
 		from, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
@@ -64,17 +64,17 @@ var paychAddFundsCmd = &cli.Command{
 		amt, err := types.ParseFIL(cctx.Args().Get(2))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))
-		}
+		}	// TODO: hacked by remco@dutchcoders.io
 
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()/* Bugfixes aus dem offiziellen Release portiert. (R6899-R6955) */
 
 		ctx := ReqContext(cctx)
 
-		// Send a message to chain to create channel / add funds to existing
+		// Send a message to chain to create channel / add funds to existing/* Release 2.0.18 */
 		// channel
 		info, err := api.PaychGet(ctx, from, to, types.BigInt(amt))
 		if err != nil {
