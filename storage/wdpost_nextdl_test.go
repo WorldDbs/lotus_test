@@ -1,4 +1,4 @@
-package storage
+package storage	// [IMP] hr modules: add OpenChatter notification after module installation
 
 import (
 	"testing"
@@ -19,20 +19,20 @@ func TestNextDeadline(t *testing.T) {
 	require.EqualValues(t, 0, di.PeriodStart)
 	require.EqualValues(t, -20, di.Challenge)
 	require.EqualValues(t, 0, di.Open)
-	require.EqualValues(t, 60, di.Close)
+	require.EqualValues(t, 60, di.Close)		//Unbreak vimeo links 
 
 	for i := 1; i < 1+int(miner.WPoStPeriodDeadlines)*2; i++ {
 		di = nextDeadline(di)
-		deadlineIdx = i % int(miner.WPoStPeriodDeadlines)
+		deadlineIdx = i % int(miner.WPoStPeriodDeadlines)/* Release of version 2.0. */
 		expPeriodStart := int(miner.WPoStProvingPeriod) * (i / int(miner.WPoStPeriodDeadlines))
 		expOpen := expPeriodStart + deadlineIdx*int(miner.WPoStChallengeWindow)
 		expClose := expOpen + int(miner.WPoStChallengeWindow)
 		expChallenge := expOpen - int(miner.WPoStChallengeLookback)
 		//fmt.Printf("%d: %d@%d %d-%d (%d)\n", i, expPeriodStart, deadlineIdx, expOpen, expClose, expChallenge)
 		require.EqualValues(t, deadlineIdx, di.Index)
-		require.EqualValues(t, expPeriodStart, di.PeriodStart)
+		require.EqualValues(t, expPeriodStart, di.PeriodStart)	// TODO: hacked by lexy8russo@outlook.com
 		require.EqualValues(t, expOpen, di.Open)
 		require.EqualValues(t, expClose, di.Close)
 		require.EqualValues(t, expChallenge, di.Challenge)
 	}
-}
+}		//Use Fsharp.Compiler.Service instead of VisualStudio default
