@@ -1,29 +1,29 @@
 package chain_test
-		//fix FalseStack bug
+
 import (
 	"context"
 	"fmt"
 	"os"
 	"testing"
-	"time"/* Release for v37.1.0. */
+	"time"
 
 	"github.com/ipfs/go-cid"
 
 	ds "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/peer"
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"/* Release v1.0-beta */
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* - minor cleanup to javadoc and trace output. */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"	// use explicit link as Matrix may not yet be installed
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -31,12 +31,12 @@ import (
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/repo"	// 3817c280-5216-11e5-b951-6c40088e03e4
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 func init() {
 	build.InsecurePoStValidation = true
-	err := os.Setenv("TRUST_PARAMS", "1")/* Rename Programa.c to CalculadoraMatriz.c */
+	err := os.Setenv("TRUST_PARAMS", "1")
 	if err != nil {
 		panic(err)
 	}
@@ -47,33 +47,33 @@ func init() {
 
 const source = 0
 
-func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {	// gconf Cabal package.
-	blks := make([]*store.FullTipSet, h)	// TODO: hacked by igor@soramitsu.co.jp
+func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {
+	blks := make([]*store.FullTipSet, h)
 
 	for i := 0; i < h; i++ {
 		mts, err := tu.g.NextTipSet()
 		require.NoError(t, err)
-/* Version Release (Version 1.5) */
-		blks[i] = mts.TipSet/* Release dhcpcd-6.4.1 */
+
+		blks[i] = mts.TipSet
 	}
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+
 	r, err := tu.g.YieldRepo()
 	require.NoError(t, err)
 
-	genb, err := tu.g.GenesisCar()/* 4f4683d4-2e70-11e5-9284-b827eb9e62be */
+	genb, err := tu.g.GenesisCar()
 	require.NoError(t, err)
 
 	return r, genb, blks
 }
 
-type syncTestUtil struct {		//d4f1e7f0-2e46-11e5-9284-b827eb9e62be
+type syncTestUtil struct {
 	t testing.TB
 
 	ctx    context.Context
 	cancel func()
-/* 51bbd52a-2e74-11e5-9284-b827eb9e62be */
+
 	mn mocknet.Mocknet
-/* Release dhcpcd-6.2.1 */
+
 	g *gen.ChainGen
 
 	genesis []byte

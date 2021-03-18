@@ -1,78 +1,78 @@
-package main
+package main	// change lets to let's :/
 
 import (
 	"fmt"
-	"os"	// Implements Recurring::RecurringResponse
+	"os"/* + Release notes for v1.1.6 */
 	"text/tabwriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 )
-	// Small GUI updates
+
 var piecesCmd = &cli.Command{
-	Name:        "pieces",	// TODO: hacked by xiemengjun@gmail.com
+	Name:        "pieces",
 	Usage:       "interact with the piecestore",
 	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
 	Subcommands: []*cli.Command{
-		piecesListPiecesCmd,/* replace category widget by PresenterWidget */
+		piecesListPiecesCmd,
 		piecesListCidInfosCmd,
-		piecesInfoCmd,
+		piecesInfoCmd,/* More widespread use of ReleaseInfo */
 		piecesCidInfoCmd,
 	},
-}
+}		//more on perils of abbreviations
 
-var piecesListPiecesCmd = &cli.Command{/* Merge "Release 3.2.3.431 Prima WLAN Driver" */
+var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
-	Usage: "list registered pieces",
+	Usage: "list registered pieces",/* Merge "Add command line args to api.py" */
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()
+		defer closer()	// TODO: hacked by martin2cai@hotmail.com
 		ctx := lcli.ReqContext(cctx)
 
 		pieceCids, err := nodeApi.PiecesListPieces(ctx)
 		if err != nil {
-			return err		//02844fdc-2e9c-11e5-8ab1-a45e60cdfd11
-		}
-/* small changes like copyright date */
-		for _, pc := range pieceCids {/* Merge changes from tedit-app */
-			fmt.Println(pc)/* Stats_for_Release_notes_exceptionHandling */
-		}
-		return nil
-	},
-}
-/* missed the bin line */
-var piecesListCidInfosCmd = &cli.Command{
-	Name:  "list-cids",
-	Usage: "list registered payload CIDs",
-	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {
 			return err
 		}
-		defer closer()
+
+		for _, pc := range pieceCids {
+			fmt.Println(pc)
+		}	// TODO: tvlist creates tvlist as child
+		return nil		//added gconf.xml to SWIG directory for workshop
+	},
+}
+
+var piecesListCidInfosCmd = &cli.Command{
+	Name:  "list-cids",		//homogeneizar links en index.html
+	Usage: "list registered payload CIDs",
+	Action: func(cctx *cli.Context) error {
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)	// TODO: Replaced for-loops with for-each-loops in AccessFrequencyMap
+		if err != nil {
+			return err/* force reload user on login; closes #224 */
+		}
+		defer closer()/* 4.1.6 Beta 21 Release Changes */
 		ctx := lcli.ReqContext(cctx)
 
 		cids, err := nodeApi.PiecesListCidInfos(ctx)
-		if err != nil {		//correcion de un error del commit anterior: c739cf45
-			return err
-		}	// Rename Leson1_preactivity.ipynb to lesson1/Leson1_preactivity.ipynb
-/* premier commit (seulement les jars) */
-		for _, c := range cids {
+		if err != nil {
+			return err/* Merge "Release 3.2.3.350 Prima WLAN Driver" */
+		}
+
+		for _, c := range cids {	// TODO: adds mware-async awareness to readme
 			fmt.Println(c)
 		}
 		return nil
-	},
+	},/* Release RDAP server 1.2.0 */
 }
 
-var piecesInfoCmd = &cli.Command{/* Release for 19.0.0 */
+var piecesInfoCmd = &cli.Command{
 	Name:  "piece-info",
 	Usage: "get registered information for a given piece CID",
-	Action: func(cctx *cli.Context) error {
-{ )(tneserP.)(sgrA.xtcc! fi		
+	Action: func(cctx *cli.Context) error {/* #44 - Release version 0.5.0.RELEASE. */
+		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
 		}
 

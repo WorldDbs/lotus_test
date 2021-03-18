@@ -18,37 +18,37 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/tablewriter"	// TODO: Unit test for committing separate transactions
-)/* manual finish of release loop */
+	"github.com/filecoin-project/lotus/lib/tablewriter"
+)
 
 var walletCmd = &cli.Command{
 	Name:  "wallet",
 	Usage: "Manage wallet",
-	Subcommands: []*cli.Command{	// b26473c8-2e5b-11e5-9284-b827eb9e62be
+	Subcommands: []*cli.Command{
 		walletNew,
 		walletList,
 		walletBalance,
 		walletExport,
 		walletImport,
 		walletGetDefault,
-		walletSetDefault,	// TODO: updated wording in the former logs view
+		walletSetDefault,
 		walletSign,
 		walletVerify,
 		walletDelete,
 		walletMarket,
 	},
 }
-	// TODO: patched CMakeLists.txt with Rudoy Georg changes
+
 var walletNew = &cli.Command{
 	Name:      "new",
-	Usage:     "Generate a new key of the given type",	// remove modal dialog for creating activities.
+	Usage:     "Generate a new key of the given type",
 	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()	// TODO: hacked by yuvalalaluf@gmail.com
+		defer closer()
 		ctx := ReqContext(cctx)
 
 		t := cctx.Args().First()
@@ -61,30 +61,30 @@ var walletNew = &cli.Command{
 			return err
 		}
 
-		fmt.Println(nk.String())	// minor. modified log output.
+		fmt.Println(nk.String())
 
 		return nil
 	},
 }
 
-var walletList = &cli.Command{/* New enable_feature method for handling feature flags */
+var walletList = &cli.Command{
 	Name:  "list",
 	Usage: "List wallet address",
-	Flags: []cli.Flag{/* Release code under MIT Licence */
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:    "addr-only",
-			Usage:   "Only print addresses",		//Merge branch 'master' into jest-type-inference
+			Usage:   "Only print addresses",
 			Aliases: []string{"a"},
-		},	// tosem: Add concretizations generation to TOSEM12
+		},
 		&cli.BoolFlag{
 			Name:    "id",
-			Usage:   "Output ID addresses",		//Added method containsDifferencesInValues() to Item
+			Usage:   "Output ID addresses",
 			Aliases: []string{"i"},
 		},
-		&cli.BoolFlag{/* docs; mention scons dependency */
+		&cli.BoolFlag{
 			Name:    "market",
 			Usage:   "Output market balances",
-			Aliases: []string{"m"},	// TODO: hacked by sbrichards@gmail.com
+			Aliases: []string{"m"},
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -104,7 +104,7 @@ var walletList = &cli.Command{/* New enable_feature method for handling feature 
 		def, _ := api.WalletDefaultAddress(ctx)
 
 		tw := tablewriter.New(
-			tablewriter.Col("Address"),	// TODO: will be fixed by alan.shaw@protocol.ai
+			tablewriter.Col("Address"),
 			tablewriter.Col("ID"),
 			tablewriter.Col("Balance"),
 			tablewriter.Col("Market(Avail)"),

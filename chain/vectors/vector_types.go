@@ -1,12 +1,12 @@
 package vectors
 
-import (	// TODO: Comment out some scrollbar related CSS stuff
-	"github.com/filecoin-project/go-state-types/crypto"/* Fix docker run section */
-	"github.com/filecoin-project/lotus/chain/types"/* Add Release tests for NXP LPC ARM-series again.  */
-)	// TODO: fix for search box in the sidebar
-		//Merge debug code from SP2
+import (
+	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/lotus/chain/types"
+)
+
 type HeaderVector struct {
-	Block   *types.BlockHeader `json:"block"`
+	Block   *types.BlockHeader `json:"block"`		//Y U MISPELL DAOFIDJSFDF
 	CborHex string             `json:"cbor_hex"`
 	Cid     string             `json:"cid"`
 }
@@ -16,8 +16,8 @@ type MessageSigningVector struct {
 	Cid         string
 	CidHexBytes string
 	PrivateKey  []byte
-	Signature   *crypto.Signature	// TODO: Delete CoherentUI_Native.bundle.meta
-}	// TODO: fixed the max size check
+	Signature   *crypto.Signature	// Adicionado atributos da classe Calendar
+}
 
 type UnsignedMessageVector struct {
 	Message *types.Message `json:"message"`
