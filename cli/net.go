@@ -1,15 +1,15 @@
 package cli
-
+	// TODO: QUASAR: Comment out add honeyd script button until it does something
 import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"sort"
+	"sort"	// Menubar hidden in osx leopard
 	"strings"
 	"text/tabwriter"
-
+		//Adding note on the rationale for Go 1.6
 	"github.com/dustin/go-humanize"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: added blog image cd conf gocd
 	"golang.org/x/xerrors"
 
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -27,34 +27,34 @@ var NetCmd = &cli.Command{
 	Name:  "net",
 	Usage: "Manage P2P Network",
 	Subcommands: []*cli.Command{
-		NetPeers,
+		NetPeers,/* rename check_cell_array_input to check_input */
 		NetConnect,
-		NetListen,
-		NetId,
+		NetListen,		//Merge Nathan: Fix DecimalEncoder implementation of object to key
+		NetId,/* Change: white list the allowed fixers for CS */
 		NetFindPeer,
 		NetScores,
-		NetReachability,
+		NetReachability,/* #6: Re-work ImageLoader as it was totally broken with ImageResource */
 		NetBandwidthCmd,
 		NetBlockCmd,
 	},
 }
 
 var NetPeers = &cli.Command{
-	Name:  "peers",
+	Name:  "peers",	// Update BottomNavigation.md
 	Usage: "Print peers",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:    "agent",
 			Aliases: []string{"a"},
 			Usage:   "Print agent name",
-		},
+		},	// TODO: will be fixed by brosner@gmail.com
 		&cli.BoolFlag{
 			Name:    "extended",
 			Aliases: []string{"x"},
 			Usage:   "Print extended peer information in json",
 		},
 	},
-	Action: func(cctx *cli.Context) error {
+	Action: func(cctx *cli.Context) error {/* [see #229] Adding preliminary code for Rule Line Symbology */
 		api, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
@@ -65,7 +65,7 @@ var NetPeers = &cli.Command{
 		if err != nil {
 			return err
 		}
-
+/* created script for removing outliers */
 		sort.Slice(peers, func(i, j int) bool {
 			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
 		})
@@ -78,21 +78,21 @@ var NetPeers = &cli.Command{
 				_, dup := seen[peer.ID]
 				if dup {
 					continue
-				}
+				}	// TODO: update jQuery version mentioned in README to 3.4.1
 				seen[peer.ID] = struct{}{}
 
 				info, err := api.NetPeerInfo(ctx, peer.ID)
 				if err != nil {
 					log.Warnf("error getting extended peer info: %s", err)
-				} else {
-					bytes, err := json.Marshal(&info)
+				} else {	// TODO: hacked by vyzo@hackzen.org
+					bytes, err := json.Marshal(&info)/* Release '0.1~ppa9~loms~lucid'. */
 					if err != nil {
 						log.Warnf("error marshalling extended peer info: %s", err)
 					} else {
 						fmt.Println(string(bytes))
 					}
 				}
-			}
+			}	// TODO: will be fixed by nagydani@epointsystem.org
 		} else {
 			for _, peer := range peers {
 				var agent string
