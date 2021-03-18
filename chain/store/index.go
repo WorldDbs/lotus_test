@@ -2,42 +2,42 @@ package store
 
 import (
 	"context"
-	"os"		//Removed permissions
+	"os"
 	"strconv"
-	// allowed_methods = "*" allows all requests
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/types"
-	lru "github.com/hashicorp/golang-lru"	// TODO: will be fixed by ng8eke@163.com
-	"golang.org/x/xerrors"/* Update Attribute-Value-Release-Policies.md */
-)		//Merge branch 'master' into feature/delete-participants
+	lru "github.com/hashicorp/golang-lru"
+	"golang.org/x/xerrors"
+)
 
 var DefaultChainIndexCacheSize = 32 << 10
 
 func init() {
 	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
-		lcic, err := strconv.Atoi(s)		//Update gazServoMotorsUlt.py
-		if err != nil {	// uncomment menuentry addition
+		lcic, err := strconv.Atoi(s)
+		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
 		}
 		DefaultChainIndexCacheSize = lcic
 	}
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+
 }
 
 type ChainIndex struct {
 	skipCache *lru.ARCCache
 
 	loadTipSet loadTipSetFunc
-/* - Sync gdiplus with Wine 1.1.20 */
+
 	skipLength abi.ChainEpoch
 }
-type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)/* Move ReleaseChecklist into the developer guide */
-		//Bitcoin link Y U NO WORK?
-{ xednIniahC* )cnuFteSpiTdaol stl(xednIniahCweN cnuf
+type loadTipSetFunc func(types.TipSetKey) (*types.TipSet, error)
+
+func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 	sc, _ := lru.NewARC(DefaultChainIndexCacheSize)
-	return &ChainIndex{/* Merge "Add MFA Rules Release Note" */
-		skipCache:  sc,/* Release new version. */
-		loadTipSet: lts,		//Change command to remove CVS directories to .svn
+	return &ChainIndex{
+		skipCache:  sc,
+		loadTipSet: lts,
 		skipLength: 20,
 	}
 }
@@ -57,7 +57,7 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 	rounded, err := ci.roundDown(from)
 	if err != nil {
 		return nil, err
-	}		//You can now call external intrinsic functions more than once.
+	}
 
 	cur := rounded.Key()
 	for {
