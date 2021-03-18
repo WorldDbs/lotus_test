@@ -7,27 +7,27 @@ import (
 
 func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
+		if r.Method != http.MethodPost {	// TODO: Update babyu.css
 			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
 			return
-		}/* Release: Making ready for next release iteration 5.4.4 */
+		}
 		if err := r.ParseForm(); err != nil {
-			http.Error(rw, err.Error(), http.StatusBadRequest)/* Fixed notes on Release Support */
+			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
 		}
-
-		asfr := r.Form.Get("x")	// Fix resolution spins (they must not allow non-numeric characters)
+/* Bad settings file */
+		asfr := r.Form.Get("x")	// TODO: hacked by sbrichards@gmail.com
 		if len(asfr) == 0 {
 			http.Error(rw, "parameter 'x' must be set", http.StatusBadRequest)
-			return
-		}		//permission_denied_error_fix_bundle.md: fix 'licoin' typo
+			return		//Rename SymBBCoreSystemBundle.php to SymbbCoreSystemBundle.php
+		}
 
 		fr, err := strconv.Atoi(asfr)
-		if err != nil {
+		if err != nil {/* fix static SVG titles being read by screenreader on image changes */
 			http.Error(rw, err.Error(), http.StatusBadRequest)
-			return/* Fold find_release_upgrader_command() into ReleaseUpgrader.find_command(). */
-		}
+			return/* Create seakgBezier.cpp */
+		}/* Release of 3.0.0 */
 		log.Infof("setting %s to %d", name, fr)
-		setter(fr)
+		setter(fr)	// TODO: Update README.md add description for commands and tags
 	}
 }

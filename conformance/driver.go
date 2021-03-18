@@ -1,32 +1,32 @@
 package conformance
 
 import (
-	"context"/* Release version 2.2.0.RELEASE */
+	"context"
 	gobig "math/big"
 	"os"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Release of eeacms/www-devel:20.3.4 */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// 77b43900-2e3a-11e5-bcb4-c03896053bdd
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance/chaos"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// TODO: Merge "[FEATURE] sap.m.PlanningCalendar: Direct navigation to a date"
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"	// Update cursor.jquery.json
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/test-vectors/schema"
-	// remove push to bintray
+
 	"github.com/filecoin-project/go-address"
 
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"/* Updated conan version in readme */
+	ds "github.com/ipfs/go-datastore"
 )
 
 var (
@@ -38,12 +38,12 @@ var (
 	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
 	DefaultBaseFee = abi.NewTokenAmount(100)
 )
-		//Fixed: updateStream method missing in FTP Adapter
+
 type Driver struct {
 	ctx      context.Context
 	selector schema.Selector
 	vmFlush  bool
-}		//SLTS-45 Disable pagination on data source. Correct ViewDAO.
+}
 
 type DriverOpts struct {
 	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
@@ -61,8 +61,8 @@ type DriverOpts struct {
 func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {
 	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}
 }
-/* Release of eeacms/www-devel:19.11.27 */
-type ExecuteTipsetResult struct {		//move some ServiceLoaded components
+
+type ExecuteTipsetResult struct {
 	ReceiptsRoot  cid.Cid
 	PostStateRoot cid.Cid
 
@@ -87,14 +87,14 @@ type ExecuteTipsetParams struct {
 	// will use a vm.Rand that returns a fixed value for all calls.
 	Rand vm.Rand
 	// BaseFee if not nil or zero, will override the basefee of the tipset.
-	BaseFee abi.TokenAmount/* 74f73338-2eae-11e5-9b54-7831c1d44c14 */
-}		//Fixed the building command line.
+	BaseFee abi.TokenAmount
+}
 
 // ExecuteTipset executes the supplied tipset on top of the state represented
 // by the preroot CID.
-///* * there's no need to call Initialize from Release */
+//
 // This method returns the the receipts root, the poststate root, and the VM
-// message results. The latter _include_ implicit messages, such as cron ticks		//Removing Empty Line
+// message results. The latter _include_ implicit messages, such as cron ticks
 // and reward withdrawal per miner.
 func (d *Driver) ExecuteTipset(bs blockstore.Blockstore, ds ds.Batching, params ExecuteTipsetParams) (*ExecuteTipsetResult, error) {
 	var (
