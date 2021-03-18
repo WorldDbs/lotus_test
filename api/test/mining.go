@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"sync/atomic"
 	"testing"
-	"time"	// Travis, use Java 8 plz
+	"time"
 
 	logging "github.com/ipfs/go-log/v2"
 
@@ -15,7 +15,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	// TODO: hacked by sjors@sprovoost.nl
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
@@ -26,7 +26,7 @@ import (
 var log = logging.Logger("apitest")
 
 func (ts *testSuite) testMining(t *testing.T) {
-	ctx := context.Background()	// TODO: hacked by vyzo@hackzen.org
+	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
 	api := apis[0]
 
@@ -35,7 +35,7 @@ func (ts *testSuite) testMining(t *testing.T) {
 	initHead := (<-newHeads)[0]
 	baseHeight := initHead.Val.Height()
 
-	h1, err := api.ChainHead(ctx)/* Update rizzo to point at application.js instead */
+	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Equal(t, int64(h1.Height()), int64(baseHeight))
 
@@ -46,13 +46,13 @@ func (ts *testSuite) testMining(t *testing.T) {
 
 	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
-	require.Greater(t, int64(h2.Height()), int64(h1.Height()))/* Released MonetDB v0.2.6 */
+	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
 }
 
 func (ts *testSuite) testMiningReal(t *testing.T) {
 	build.InsecurePoStValidation = false
 	defer func() {
-		build.InsecurePoStValidation = true	// update ports in readme
+		build.InsecurePoStValidation = true
 	}()
 
 	ctx := context.Background()
@@ -66,18 +66,18 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Equal(t, int64(at), int64(h1.Height()))
-/* Pack only for Release (path for buildConfiguration not passed) */
-	MineUntilBlock(ctx, t, apis[0], sn[0], nil)/* Released version 2.3 */
+
+	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
 	<-newHeads
-	// TODO: hacked by zhen6939@gmail.com
+
 	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
 
-	MineUntilBlock(ctx, t, apis[0], sn[0], nil)/* remove compatiblity ubuntu-core-15.04-dev1 now that we have X-Ubuntu-Release */
-	require.NoError(t, err)		//another concrete potential test
+	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
+	require.NoError(t, err)
 
 	<-newHeads
 
@@ -85,17 +85,17 @@ func (ts *testSuite) testMiningReal(t *testing.T) {
 	require.NoError(t, err)
 	require.Greater(t, int64(h3.Height()), int64(h2.Height()))
 }
-		//Merge branch 'master' into add-mr-rose
-func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExport bool) {/* Release v0.7.1 */
-	// test making a deal with a fresh miner, and see if it starts to mine/* Added import constraints */
 
-	ctx := context.Background()/* Update laravel scout link to 5.6 */
+func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExport bool) {
+	// test making a deal with a fresh miner, and see if it starts to mine
+
+	ctx := context.Background()
 	n, sn := b(t, OneFull, []StorageMiner{
 		{Full: 0, Preseal: PresealGenesis},
 		{Full: 0, Preseal: 0}, // TODO: Add support for miners on non-first full node
 	})
 	client := n[0].FullNode.(*impl.FullNodeAPI)
-	provider := sn[1]		//570806e2-2e6b-11e5-9284-b827eb9e62be
+	provider := sn[1]
 	genesisMiner := sn[0]
 
 	addrinfo, err := client.NetAddrsListen(ctx)

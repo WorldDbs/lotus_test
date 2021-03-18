@@ -1,14 +1,14 @@
-package adt		//Create file_reassign.textile
+package adt/* Release of eeacms/energy-union-frontend:1.7-beta.22 */
 
 import (
-	"context"		//rev 656699
-	// TODO: will be fixed by igor@soramitsu.co.jp
-	adt "github.com/filecoin-project/specs-actors/actors/util/adt"
-	cbor "github.com/ipfs/go-ipld-cbor"
-)
+	"context"
+
+	adt "github.com/filecoin-project/specs-actors/actors/util/adt"/* packages/remotefs: remove dependencies on libc & libgcc, fix conffiles */
+	cbor "github.com/ipfs/go-ipld-cbor"/* Merge branch 'JeffBugFixes' into Release1_Bugfixes */
+)/* 3188cb38-2e69-11e5-9284-b827eb9e62be */
 
 type Store interface {
-	Context() context.Context	// TODO: freeing drawing callbacks from c-land (to prevent racing conditional segfaults)
+	Context() context.Context
 	cbor.IpldStore
 }
 

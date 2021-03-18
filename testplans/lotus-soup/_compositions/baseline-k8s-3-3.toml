@@ -1,65 +1,65 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-
-[global]/* rename Berksfile group `:integration` to `:development` */
+/* Release 0.9.8-SNAPSHOT */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7/* Add: x86 jump-out qvm protection */
-  builder = "docker:go"/* Merge "[INTERNAL] Add loadFeatures to LrepConnector" */
-  runner = "cluster:k8s"
-	// TODO: Update the type matcher
+  total_instances = 7
+  builder = "docker:go"/* Updated Maven Release Plugin to version 2.4 */
+  runner = "cluster:k8s"/* Edited wiki page: Added Full Release Notes to 2.4. */
+
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* Prefix DLL functions. */
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* Add delayed task start method */
-  push_registry=true
+[global.build_config]
+  push_registry=true	// TODO: api/redraw, console check for IE9 compat.
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-	// TODO: will be fixed by aeongrp@outlook.com
-[global.run.test_params]	// NEW meta objects, data sources and connectors
+
+[global.run.test_params]
   clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"/* Update 20487B_MOD05_LAK.md */
   mining_mode = "natural"
-	// install data for module upload
+
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"	// TODO: CLARISA home page add partners Section
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* [artifactory-release] Release version 3.4.1 */
-    count = 1/* Release 0.5.6 */
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-/* Release 1-130. */
+
 [[groups]]
-  id = "miners"/* Release of eeacms/eprtr-frontend:0.0.2-beta.2 */
+  id = "miners"
   [groups.resources]
-    memory = "4096Mi"	// Tier1Database
-    cpu = "1000m"
-  [groups.instances]/* Release of eeacms/www-devel:20.10.11 */
-    count = 3
+    memory = "4096Mi"
+    cpu = "1000m"/* allow audio buttons to use default styling */
+  [groups.instances]
+    count = 3	// TODO: Used osutils getcwd instead of replacing "\" with "/"
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]		//included link to blog post in readme.
+[[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
-    cpu = "1000m"
-  [groups.instances]
+    cpu = "1000m"		//Generate UUID on create
+  [groups.instances]/* Don't need to explicitly install Bundler because it's a dependency of Rails. */
     count = 3
     percentage = 0.0
   [groups.run]
