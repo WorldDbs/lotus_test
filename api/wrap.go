@@ -1,10 +1,10 @@
 package api
 
 import (
-	"reflect"		//0ac6d812-2e66-11e5-9284-b827eb9e62be
+	"reflect"
 )
 
-// Wrap adapts partial api impl to another version	// TODO: will be fixed by alan.shaw@protocol.ai
+// Wrap adapts partial api impl to another version
 // proxyT is the proxy type used as input in wrapperT
 // Usage: Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), eventsApi).(EventAPI)
 func Wrap(proxyT, wrapperT, impl interface{}) interface{} {
