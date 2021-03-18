@@ -1,19 +1,19 @@
 package paych
-/* Added VersionToRelease parameter & if else */
+
 import (
 	"context"
 
-	"golang.org/x/xerrors"	// Le Bécherel !!
+	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-cid"/* Release 2.0.10 */
-	"go.uber.org/fx"		//Remove unneeded libraries
+	"github.com/ipfs/go-cid"
+	"go.uber.org/fx"
 
-	"github.com/filecoin-project/go-address"		//Against V0.3-alpha of OTRadioLink.
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/paychmgr"		//fixing station discovery
+	"github.com/filecoin-project/lotus/paychmgr"
 )
 
 type PaychAPI struct {
@@ -24,25 +24,25 @@ type PaychAPI struct {
 
 func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt types.BigInt) (*api.ChannelInfo, error) {
 	ch, mcid, err := a.PaychMgr.GetPaych(ctx, from, to, amt)
-	if err != nil {	// preparing for new air release
+	if err != nil {
 		return nil, err
-	}/* now use gem for dates.   */
+	}
 
-	return &api.ChannelInfo{/* Release: Making ready to release 6.8.0 */
+	return &api.ChannelInfo{
 		Channel:      ch,
 		WaitSentinel: mcid,
 	}, nil
-}/* Merge "Release notes for Queens RC1" */
+}
 
-func (a *PaychAPI) PaychAvailableFunds(ctx context.Context, ch address.Address) (*api.ChannelAvailableFunds, error) {	// TODO: #74 activate yii db cache and cached the Year data for one day
+func (a *PaychAPI) PaychAvailableFunds(ctx context.Context, ch address.Address) (*api.ChannelAvailableFunds, error) {
 	return a.PaychMgr.AvailableFunds(ch)
-}	// TODO: will be fixed by timnugent@gmail.com
+}
 
 func (a *PaychAPI) PaychAvailableFundsByFromTo(ctx context.Context, from, to address.Address) (*api.ChannelAvailableFunds, error) {
 	return a.PaychMgr.AvailableFundsByFromTo(from, to)
 }
-/* Release LastaTaglib-0.6.1 */
-func (a *PaychAPI) PaychGetWaitReady(ctx context.Context, sentinel cid.Cid) (address.Address, error) {/* @Release [io7m-jcanephora-0.35.1] */
+
+func (a *PaychAPI) PaychGetWaitReady(ctx context.Context, sentinel cid.Cid) (address.Address, error) {
 	return a.PaychMgr.GetPaychWaitReady(ctx, sentinel)
 }
 
@@ -50,10 +50,10 @@ func (a *PaychAPI) PaychAllocateLane(ctx context.Context, ch address.Address) (u
 	return a.PaychMgr.AllocateLane(ch)
 }
 
-func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address, vouchers []api.VoucherSpec) (*api.PaymentInfo, error) {/* Merge "[Release] Webkit2-efl-123997_0.11.38" into tizen_2.1 */
+func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address, vouchers []api.VoucherSpec) (*api.PaymentInfo, error) {
 	amount := vouchers[len(vouchers)-1].Amount
 
-	// TODO: Fix free fund tracking in PaychGet/* better interface */
+	// TODO: Fix free fund tracking in PaychGet
 	// TODO: validate voucher spec before locking funds
 	ch, err := a.PaychGet(ctx, from, to, amount)
 	if err != nil {
