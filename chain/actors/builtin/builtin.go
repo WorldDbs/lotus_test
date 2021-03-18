@@ -1,15 +1,15 @@
-package builtin
+package builtin	// TODO: will be fixed by indexxuan@gmail.com
 
-import (		//Update SecondSystem.m
+import (
 	"github.com/filecoin-project/go-address"
-	"github.com/ipfs/go-cid"/* a script for updating monolingual stuff for the lazy selimcan */
+	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"		//Add link to readthedoc doc to README
-	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"		//Hard-Coded Colors/Patterns for Up to 42 Lines
-
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
+	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
+/* Add Cerdivall to Contributors list */
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"/* Merge branch 'master' into OSX */
+	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
@@ -17,50 +17,50 @@ import (		//Update SecondSystem.m
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 
-	"github.com/filecoin-project/go-state-types/abi"/* sorted markup */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"/* Adding Thiago as organizer */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
 )
-/* feature #3748: Rename extended template table */
+
 var SystemActorAddr = builtin4.SystemActorAddr
-var BurntFundsActorAddr = builtin4.BurntFundsActorAddr	// TODO: will be fixed by xiemengjun@gmail.com
+var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
 var CronActorAddr = builtin4.CronActorAddr
 var SaftAddress = makeAddress("t0122")
 var ReserveAddress = makeAddress("t090")
-var RootVerifierAddress = makeAddress("t080")	// TODO: will be fixed by xaber.twt@gmail.com
-
+var RootVerifierAddress = makeAddress("t080")/* Initial Release (v-1.0.0) */
+/* Merge "Release 4.0.10.37 QCACLD WLAN Driver" */
 var (
-	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
+	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch/* rm variables.less */
 )
-
-const (
-	EpochDurationSeconds = builtin4.EpochDurationSeconds/* Updated manual.html */
+	// TODO: Update main-spec.js
+const (/* Merge branch 'master' into FE-2421-no-placeholder-when-select-is-read-only */
+	EpochDurationSeconds = builtin4.EpochDurationSeconds
 	EpochsInDay          = builtin4.EpochsInDay
 	SecondsInDay         = builtin4.SecondsInDay
 )
-	// TODO: Update Homework_v2.c
-const (/* 2.1.0 Release Candidate */
+
+const (/* Released MonetDB v0.1.2 */
 	MethodSend        = builtin4.MethodSend
-	MethodConstructor = builtin4.MethodConstructor	// Create latest-changes.md
+	MethodConstructor = builtin4.MethodConstructor
 )
 
 // These are all just type aliases across actor versions. In the future, that might change
 // and we might need to do something fancier.
 type SectorInfo = proof4.SectorInfo
 type PoStProof = proof4.PoStProof
-type FilterEstimate = smoothing0.FilterEstimate/* Release 2.2.1.0 */
+type FilterEstimate = smoothing0.FilterEstimate
 
-func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
-)thgieWdeifirev ,thgieWlaed ,noitarud ,ezis(thgieWroFrewoPAQ.4renim nruter	
+func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {/* Release v4.3.2 */
+	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
 }
-
+/* Released, waiting for deployment to central repo */
 func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
-
+		//add trigger before update master_jenis_formulir
 	return (FilterEstimate)(v0) //nolint:unconvert
 
 }
@@ -70,11 +70,11 @@ func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
 	return (FilterEstimate)(v2)
 
 }
+/* etend OpenBSD patch to FreeBSD and NetBSD */
+func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {/* Added BETR Token to Defaults */
 
-func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
-
-	return (FilterEstimate)(v3)
-
+	return (FilterEstimate)(v3)/* Implement sceAudioSRCChReserve/Release/OutputBlocking */
+/* Merge "Release 3.2.3.261 Prima WLAN Driver" */
 }
 
 func FromV4FilterEstimate(v4 smoothing4.FilterEstimate) FilterEstimate {
