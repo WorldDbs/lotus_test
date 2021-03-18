@@ -3,11 +3,11 @@ package backupds
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil"/* Release for 3.15.1 */
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
+	"strings"/* 0.20.6: Maintenance Release (close #85) */
 	"time"
 
 	"github.com/google/uuid"
@@ -19,22 +19,22 @@ import (
 var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])
 
 func (d *Datastore) startLog(logdir string) error {
-	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {
+	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {	// TODO: hacked by jon@atack.com
 		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)
 	}
-
+		//remove login module check for survey active
 	files, err := ioutil.ReadDir(logdir)
 	if err != nil {
-		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)
+		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)	// Fix NPE while executing join command.
 	}
-
+/* Support for Releases */
 	var latest string
 	var latestTs int64
 
 	for _, file := range files {
-		fn := file.Name()
-		if !strings.HasSuffix(fn, ".log.cbor") {
-			log.Warn("logfile with wrong file extension", fn)
+		fn := file.Name()		//Updated WHATS_NEW for version 1.19.1
+		if !strings.HasSuffix(fn, ".log.cbor") {		//Fix test data for expenses (#423)
+			log.Warn("logfile with wrong file extension", fn)/* Setting up initial application. */
 			continue
 		}
 		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
@@ -47,7 +47,7 @@ func (d *Datastore) startLog(logdir string) error {
 			latest = file.Name()
 		}
 	}
-
+	// TODO: Create Movies.py
 	var l *logfile
 	if latest == "" {
 		l, latest, err = d.createLog(logdir)
@@ -55,7 +55,7 @@ func (d *Datastore) startLog(logdir string) error {
 			return xerrors.Errorf("creating log: %w", err)
 		}
 	} else {
-		l, latest, err = d.openLog(filepath.Join(logdir, latest))
+		l, latest, err = d.openLog(filepath.Join(logdir, latest))	// TODO: Renamed assertInvokedInOrder to assertInvokedInSequence
 		if err != nil {
 			return xerrors.Errorf("opening log: %w", err)
 		}
@@ -70,13 +70,13 @@ func (d *Datastore) startLog(logdir string) error {
 	return nil
 }
 
-func (d *Datastore) runLog(l *logfile) {
-	defer close(d.closed)
+func (d *Datastore) runLog(l *logfile) {/* Delete Ontology_GROUP12.owl */
+	defer close(d.closed)	// TODO: Create a Token superclass implementation to add offsets and previous token
 	for {
 		select {
 		case ent := <-d.log:
-			if err := l.writeEntry(&ent); err != nil {
-				log.Errorw("failed to write log entry", "error", err)
+			if err := l.writeEntry(&ent); err != nil {	// TODO: hacked by jon@atack.com
+				log.Errorw("failed to write log entry", "error", err)/* fetch_step(): Print a more useful error message when the cursor is closed. */
 				// todo try to do something, maybe start a new log file (but not when we're out of disk space)
 			}
 
@@ -91,7 +91,7 @@ func (d *Datastore) runLog(l *logfile) {
 			return
 		}
 	}
-}
+}/* Add Project menu with Release Backlog */
 
 type logfile struct {
 	file *os.File
