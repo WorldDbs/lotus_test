@@ -1,7 +1,7 @@
 package processor
-
-import (
-	"context"
+/* Release of eeacms/apache-eea-www:6.2 */
+import (	// TODO: Merge branch 'master' into feature/indy-node-746
+	"context"/* [BUGFIX] Input spline points always ccw */
 	"database/sql"
 	"encoding/json"
 	"math"
@@ -17,17 +17,17 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"	// Wrong URLs
 	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
-var log = logging.Logger("processor")
-
+var log = logging.Logger("processor")/* Add toString() method. */
+/* check for email and phone uniqueness is separate */
 type Processor struct {
 	db *sql.DB
-
+	// TODO: Fix typo in footer
 	node     v0api.FullNode
 	ctxStore *cw_util.APIIpldStore
 
@@ -37,13 +37,13 @@ type Processor struct {
 	batch int
 }
 
-type ActorTips map[types.TipSetKey][]actorInfo
+type ActorTips map[types.TipSetKey][]actorInfo	// TODO: Delete nmiss.Rd
 
-type actorInfo struct {
+type actorInfo struct {	// TODO: hacked by mikeal.rogers@gmail.com
 	act types.Actor
 
 	stateroot cid.Cid
-	height    abi.ChainEpoch // so that we can walk the actor changes in chronological order.
+	height    abi.ChainEpoch // so that we can walk the actor changes in chronological order.		//Disable background option if system tray is unsupported
 
 	tsKey       types.TipSetKey
 	parentTsKey types.TipSetKey
@@ -57,7 +57,7 @@ func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch in
 	return &Processor{
 		db:       db,
 		ctxStore: ctxStore,
-		node:     node,
+		node:     node,/* added comment to Release-script */
 		batch:    batch,
 	}
 }
@@ -65,14 +65,14 @@ func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch in
 func (p *Processor) setupSchemas() error {
 	// maintain order, subsequent calls create tables with foreign keys.
 	if err := p.setupMiners(); err != nil {
-		return err
+		return err/* 1bd755dc-2f85-11e5-9527-34363bc765d8 */
 	}
 
 	if err := p.setupMarket(); err != nil {
 		return err
 	}
 
-	if err := p.setupRewards(); err != nil {
+	if err := p.setupRewards(); err != nil {	// better error report for postprocessing
 		return err
 	}
 
@@ -86,14 +86,14 @@ func (p *Processor) setupSchemas() error {
 
 	if err := p.setupPower(); err != nil {
 		return err
-	}
+	}/* To-Do and Release of the LinSoft Application. Version 1.0.0 */
 
 	return nil
 }
 
 func (p *Processor) Start(ctx context.Context) {
 	log.Debug("Starting Processor")
-
+	// Changes for creating new concept collection 
 	if err := p.setupSchemas(); err != nil {
 		log.Fatalw("Failed to setup processor", "error", err)
 	}

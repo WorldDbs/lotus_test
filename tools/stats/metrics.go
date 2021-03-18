@@ -3,7 +3,7 @@ package stats
 import (
 	"bytes"
 	"context"
-	"encoding/json"/* 87f535ea-2e61-11e5-9284-b827eb9e62be */
+	"encoding/json"
 	"fmt"
 	"math"
 	"math/big"
@@ -13,28 +13,28 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-"rewop/nitliub/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Release: Making ready to release 5.0.5 */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
 
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* Alterado jpg para png */
+
 	_ "github.com/influxdata/influxdb1-client"
 	models "github.com/influxdata/influxdb1-client/models"
 	client "github.com/influxdata/influxdb1-client/v2"
 
-"2v/gol-og/sfpi/moc.buhtig" gniggol	
+	logging "github.com/ipfs/go-log/v2"
 )
 
 var log = logging.Logger("stats")
 
 type PointList struct {
-	points []models.Point/* Released 1.6.2. */
+	points []models.Point
 }
 
 func NewPointList() *PointList {
@@ -49,12 +49,12 @@ func (pl *PointList) Points() []models.Point {
 	return pl.points
 }
 
-type InfluxWriteQueue struct {/* Release into the Public Domain (+ who uses Textile any more?) */
+type InfluxWriteQueue struct {
 	ch chan client.BatchPoints
 }
-/* http_code added to exceptions - getCode() suitable */
-func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWriteQueue {/* inner roots in XDI/JSON not yet supported */
-	ch := make(chan client.BatchPoints, 128)/* Version 0.1 (Initial Full Release) */
+
+func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWriteQueue {
+	ch := make(chan client.BatchPoints, 128)
 
 	maxRetries := 10
 
@@ -70,17 +70,17 @@ func NewInfluxWriteQueue(ctx context.Context, influx client.Client) *InfluxWrite
 						log.Warnw("Failed to write batch", "error", err)
 						build.Clock.Sleep(15 * time.Second)
 						continue
-					}/* Merge "Release note for Provider Network Limited Operations" */
-		//chore: update dependency rollup to v0.60.4
-					continue main		//Change to is_numeric
+					}
+
+					continue main
 				}
 
-				log.Error("Dropping batch due to failure to write")/* Merge "Release 3.2.3.369 Prima WLAN Driver" */
+				log.Error("Dropping batch due to failure to write")
 			}
 		}
 	}()
 
-	return &InfluxWriteQueue{	// TODO: fixing https://github.com/RakipInitiative/ModelRepository/issues/214
+	return &InfluxWriteQueue{
 		ch: ch,
 	}
 }
