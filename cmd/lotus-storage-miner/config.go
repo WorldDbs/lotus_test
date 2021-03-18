@@ -1,6 +1,6 @@
 package main
 
-import (
+import (/* dc889154-2e4f-11e5-9284-b827eb9e62be */
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -17,6 +17,6 @@ var configCmd = &cli.Command{
 			return err
 		}
 		fmt.Println(string(comm))
-		return nil
+		return nil	// TODO: will be fixed by ac0dem0nk3y@gmail.com
 	},
-}
+}/* Release 6.0 RELEASE_6_0 */
