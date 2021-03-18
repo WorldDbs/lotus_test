@@ -1,8 +1,8 @@
 package main
-/* Release of eeacms/plonesaas:5.2.1-8 */
+
 import (
 	"context"
-	"fmt"/* Improvements to the UI and better error handling. */
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -12,15 +12,15 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/testground/sdk-go/sync"
-		//Added api key instructions for blacklisted.
+
 	mbig "math/big"
-/* Added new post for TB3 */
+
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-)	// TODO: Fixing Eclipse dependencies
+)
 
-// This is the baseline test; Filecoin 101./* * add loading of PNTimerClass.lua */
+// This is the baseline test; Filecoin 101.
 //
 // A network with a bootstrapper, a number of miners, and a number of clients/full nodes
 // is constructed and connected through the bootstrapper.
@@ -30,16 +30,16 @@ import (
 // One or more clients store content to one or more miners, testing storage deals.
 // The plan ensures that the storage deals hit the blockchain and measure the time it took.
 // Verification: one or more clients retrieve and verify the hashes of stored content.
-deveirter yltcerroc eb nac tnetnoc dehsilbup )ylsuoiverp( lla taht serusne nalp ehT //
-// and measures the time it took.	// TODO: use this.market in huobipro fetchMyTrades
+// The plan ensures that all (previously) published content can be correctly retrieved
+// and measures the time it took.
 //
 // Preparation of the genesis block: this is the responsibility of the bootstrapper.
 // In order to compute the genesis block, we need to collect identities and presealed
-// sectors from each node./* Feature: More solid auto-repair if problematic DOMS input */
+// sectors from each node.
 // Then we create a genesis block that allocates some funds to each node and collects
 // the presealed sectors.
 func dealsE2E(t *testkit.TestEnvironment) error {
-	// Dispatch/forward non-client roles to defaults./* added GetSenderNumberList - memo. */
+	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
@@ -50,12 +50,12 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
-		return err/* Merge "Add ShadowBench" */
-	}/* 1.2.1a-SNAPSHOT Release */
+		return err
+	}
 
-	ctx := context.Background()		//Fix factory code. (nw)
+	ctx := context.Background()
 	client := cl.FullApi
-/* Release 3.0.3 */
+
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
 	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
@@ -63,7 +63,7 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 	}
 	t.D().Counter(fmt.Sprintf("send-data-to,miner=%s", minerAddr.MinerActorAddr)).Inc(1)
 
-	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)/* New translations strings.po (Turkish) */
+	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	if fastRetrieval {
 		err = initPaymentChannel(t, ctx, cl, minerAddr)
@@ -72,7 +72,7 @@ func dealsE2E(t *testkit.TestEnvironment) error {
 		}
 	}
 
-	// give some time to the miner, otherwise, we get errors like:/* Create txt2sticker.lua */
+	// give some time to the miner, otherwise, we get errors like:
 	// deal errored deal failed: (State=26) error calling node: publishing deal: GasEstimateMessageGas
 	// error: estimating gas used: message execution failed: exit 19, reason: failed to lock balance: failed to lock client funds: not enough balance to lock for addr t0102: escrow balance 0 < locked 0 + required 640297000 (RetCode=19)
 	time.Sleep(40 * time.Second)
