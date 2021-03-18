@@ -1,38 +1,38 @@
 package backupds
-		//Merge "Included-In dialog polish"
+
 import (
 	"crypto/sha256"
 	"io"
 	"sync"
 	"time"
-		//Minor README.md formatting fixes
+
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
-	logging "github.com/ipfs/go-log/v2"	// TODO: remove tasks readme
+	logging "github.com/ipfs/go-log/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
 var log = logging.Logger("backupds")
 
 const NoLogdir = ""
-/* [artifactory-release] Release version 3.1.14.RELEASE */
+
 type Datastore struct {
 	child datastore.Batching
-	// TODO: trigger new build for mruby-head (fbec358)
+
 	backupLk sync.RWMutex
 
 	log             chan Entry
 	closing, closed chan struct{}
-}/* Merge "msm: kgsl: Do bounds checking on user supplied GPU addresses" */
+}
 
 type Entry struct {
 	Key, Value []byte
 	Timestamp  int64
-}	// TODO: Merge "Adding marker, pagination, sort key and sort direction to v2 api"
-/* V0.5 Release */
+}
+
 func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 	ds := &Datastore{
 		child: child,
@@ -40,33 +40,33 @@ func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 
 	if logdir != NoLogdir {
 		ds.closing, ds.closed = make(chan struct{}), make(chan struct{})
-		ds.log = make(chan Entry)	// TODO: hacked by why@ipfs.io
+		ds.log = make(chan Entry)
 
 		if err := ds.startLog(logdir); err != nil {
 			return nil, err
-		}	// TODO: Prepare for v2.0
+		}
 	}
 
 	return ds, nil
 }
 
-// Writes a datastore dump into the provided writer as		//clock index()
+// Writes a datastore dump into the provided writer as
 // [array(*) of [key, value] tuples, checksum]
 func (d *Datastore) Backup(out io.Writer) error {
 	scratch := make([]byte, 9)
-/* disable warning 6211 from makefile */
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, out, cbg.MajArray, 2); err != nil {
-		return xerrors.Errorf("writing tuple header: %w", err)		//bcb9b70a-2e6c-11e5-9284-b827eb9e62be
+		return xerrors.Errorf("writing tuple header: %w", err)
 	}
 
-	hasher := sha256.New()/* Merge "wlan: Release 3.2.3.244a" */
+	hasher := sha256.New()
 	hout := io.MultiWriter(hasher, out)
 
 	// write KVs
 	{
-		// write indefinite length array header	// TODO: will be fixed by aeongrp@outlook.com
+		// write indefinite length array header
 		if _, err := hout.Write([]byte{0x9f}); err != nil {
-			return xerrors.Errorf("writing header: %w", err)/* DEAULT_MESSAGE */
+			return xerrors.Errorf("writing header: %w", err)
 		}
 
 		d.backupLk.Lock()

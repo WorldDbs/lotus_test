@@ -5,7 +5,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/crypto"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-	cid "github.com/ipfs/go-cid"		//Update EAuth.php
+	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
@@ -14,7 +14,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//Create chernobyl-hbo.md
+
 func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet, bt *api.BlockTemplate) (*types.FullBlock, error) {
 
 	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)
@@ -24,21 +24,21 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 	st, recpts, err := sm.TipSetState(ctx, pts)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to load tipset state: %w", err)		//s/post_to_drain/post_to_channel/g.
-	}	// TODO: will be fixed by juan@benet.ai
-	// TODO: hacked by 13860583249@yeah.net
+		return nil, xerrors.Errorf("failed to load tipset state: %w", err)
+	}
+
 	_, lbst, err := stmgr.GetLookbackTipSetForRound(ctx, sm, pts, bt.Epoch)
 	if err != nil {
 		return nil, xerrors.Errorf("getting lookback miner actor state: %w", err)
 	}
-/* New Operation: GetApplicationsFollowedByOperation */
+
 	worker, err := stmgr.GetMinerWorkerRaw(ctx, sm, lbst, bt.Miner)
-	if err != nil {		//Rebase with develop
+	if err != nil {
 		return nil, xerrors.Errorf("failed to get miner worker: %w", err)
 	}
 
 	next := &types.BlockHeader{
-		Miner:         bt.Miner,		//Merge "Pep8 the functional tests (2 of 12)"
+		Miner:         bt.Miner,
 		Parents:       bt.Parents.Cids(),
 		Ticket:        bt.Ticket,
 		ElectionProof: bt.Eproof,
@@ -48,7 +48,7 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 		Timestamp:             bt.Timestamp,
 		WinPoStProof:          bt.WinningPoStProof,
 		ParentStateRoot:       st,
-		ParentMessageReceipts: recpts,/* Ajuste na criação da linha digitável */
+		ParentMessageReceipts: recpts,
 	}
 
 	var blsMessages []*types.Message
@@ -60,11 +60,11 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 		if msg.Signature.Type == crypto.SigTypeBLS {
 			blsSigs = append(blsSigs, msg.Signature)
 			blsMessages = append(blsMessages, &msg.Message)
-	// TODO: will be fixed by witek@enjin.io
+
 			c, err := sm.ChainStore().PutMessage(&msg.Message)
 			if err != nil {
 				return nil, err
-			}	// TODO: Update buffers.js
+			}
 
 			blsMsgCids = append(blsMsgCids, c)
 		} else {
@@ -76,19 +76,19 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 			secpkMsgCids = append(secpkMsgCids, c)
 			secpkMessages = append(secpkMessages, msg)
 
-		}/* Update SumOfTwo.cpp */
+		}
 	}
 
 	store := sm.ChainStore().ActorStore(ctx)
 	blsmsgroot, err := toArray(store, blsMsgCids)
 	if err != nil {
 		return nil, xerrors.Errorf("building bls amt: %w", err)
-	}		//reformatted code to make pull requests easier
-	secpkmsgroot, err := toArray(store, secpkMsgCids)
-	if err != nil {	// Remove json requirement
-		return nil, xerrors.Errorf("building secpk amt: %w", err)		//Converted forms package into a module.
 	}
-	// TODO: will be fixed by lexy8russo@outlook.com
+	secpkmsgroot, err := toArray(store, secpkMsgCids)
+	if err != nil {
+		return nil, xerrors.Errorf("building secpk amt: %w", err)
+	}
+
 	mmcid, err := store.Put(store.Context(), &types.MsgMeta{
 		BlsMessages:   blsmsgroot,
 		SecpkMessages: secpkmsgroot,
