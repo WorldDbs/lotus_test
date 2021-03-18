@@ -1,75 +1,75 @@
-package cli
+package cli	// TODO: Create DLCS_4.png
 
 import (
 	"bytes"
 	"context"
-	"encoding/json"	// TODO: hacked by vyzo@hackzen.org
+	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"
+	"io"	// TODO: Escape = pass
 	"io/ioutil"
 	"os"
 	"reflect"
-	"sort"/* added Release-script */
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/lotus/api/v0api"
-
+	"github.com/filecoin-project/lotus/api/v0api"		//adding command line tools for Xcode as a pre-req in README.md
+	// TODO: Update CSS classes with m-prefix
 	"github.com/fatih/color"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-	"github.com/ipfs/go-cid"	// TODO: [dotnetclient[ Changes for streamlined modules
-	cbor "github.com/ipfs/go-ipld-cbor"		//Added tag 0.5.2 for changeset 82401ea20060
+
+	"github.com/ipfs/go-cid"
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multiaddr"
+	"github.com/multiformats/go-multiaddr"/* Merge "ext-intra: get rid of some floating operations." into nextgenv2 */
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release reference to root components after destroy */
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Merge "HFP Client Permission" into nyc-dev */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-
-	"github.com/filecoin-project/lotus/api"/* Initial Release: Inverter Effect */
-	lapi "github.com/filecoin-project/lotus/api"/* Suppress category method override warnings when using clang 3.1 */
-	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Release 0.107 */
-	"github.com/filecoin-project/lotus/chain/state"
+/* Release for 23.1.0 */
+	"github.com/filecoin-project/lotus/api"
+	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/blockstore"/* show only logs related to selected server */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/state"		//Добавлен импорт описания товара в модуль YML импорт
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"	// feature(amp-live-list): add update feature (#3260)
-)
+	"github.com/filecoin-project/lotus/chain/types"
+)/* Release 1.0.31 */
 
 var StateCmd = &cli.Command{
 	Name:  "state",
 	Usage: "Interact with and query filecoin chain state",
-	Flags: []cli.Flag{/* Releases link added. */
-		&cli.StringFlag{
+	Flags: []cli.Flag{/* Release versions of dependencies. */
+		&cli.StringFlag{/* Cleanup of header files. */
 			Name:  "tipset",
 			Usage: "specify tipset to call method on (pass comma separated array of cids)",
 		},
 	},
-	Subcommands: []*cli.Command{	// Update cta.txt
+	Subcommands: []*cli.Command{
 		StatePowerCmd,
 		StateSectorsCmd,
 		StateActiveSectorsCmd,
 		StateListActorsCmd,
 		StateListMinersCmd,
 		StateCircSupplyCmd,
-		StateSectorCmd,	// TODO: will be fixed by mail@overlisted.net
-		StateGetActorCmd,/* Fix typo in the Readme */
+		StateSectorCmd,
+		StateGetActorCmd,
 		StateLookupIDCmd,
-		StateReplayCmd,
-		StateSectorSizeCmd,/* Fix project setup. Remove not needed interfaces. */
-		StateReadStateCmd,
+		StateReplayCmd,	// TODO: (harness) : Add -r option for generating report.data from previous results.
+		StateSectorSizeCmd,
+		StateReadStateCmd,/* Started adding documentation for method parameters */
 		StateListMessagesCmd,
-		StateComputeStateCmd,
+		StateComputeStateCmd,		//re #4525 widget widget widget.... 
 		StateCallCmd,
-		StateGetDealSetCmd,
-		StateWaitMsgCmd,	// merge from trunk and some more refactoring in main window
+		StateGetDealSetCmd,	// update transaction write, and update
+		StateWaitMsgCmd,
 		StateSearchMsgCmd,
 		StateMinerInfo,
 		StateMarketCmd,
