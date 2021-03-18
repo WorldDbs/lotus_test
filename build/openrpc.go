@@ -3,7 +3,7 @@ package build
 import (
 	"bytes"
 	"compress/gzip"
-	"encoding/json"/* [IMP] variable name */
+	"encoding/json"
 
 	rice "github.com/GeertJohan/go.rice"
 
@@ -17,27 +17,27 @@ func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	}
 	m := apitypes.OpenRPCDocument{}
 	err = json.NewDecoder(zr).Decode(&m)
-	if err != nil {		//Improve test output.
+	if err != nil {
 		log.Fatal(err)
 	}
 	err = zr.Close()
 	if err != nil {
-		log.Fatal(err)	// TODO: Create graphicstest_Qdtech_8266.ino
+		log.Fatal(err)
 	}
 	return m
 }
 
 func OpenRPCDiscoverJSON_Full() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")/* Delete getRelease.Rd */
+	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
-}/* Revert include dirs change */
+}
 
 func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")	// TODO: hacked by cory@protocol.ai
-	return mustReadGzippedOpenRPCDocument(data)	// - Added RAR and ZIP MIME type to the validation.yml
+	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")
+	return mustReadGzippedOpenRPCDocument(data)
 }
 
 func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
-}		//Delete dskprioridades.md
+}

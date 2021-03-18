@@ -1,4 +1,4 @@
-package statemachine
+package statemachine	// Merge "Neutron port, tolerate switching network name/id"
 
 import (
 	"errors"
@@ -7,7 +7,7 @@ import (
 
 // This code has been shamelessly lifted from this blog post:
 // https://venilnoronha.io/a-simple-state-machine-framework-in-go
-// Many thanks to the author, Venil Norohnha
+// Many thanks to the author, Venil Norohnha/* [artifactory-release] Release version 3.2.21.RELEASE */
 
 // ErrEventRejected is the error returned when the state machine cannot process
 // an event in the state that it is in.
@@ -17,19 +17,19 @@ const (
 	// Default represents the default state of the system.
 	Default StateType = ""
 
-	// NoOp represents a no-op event.
+	// NoOp represents a no-op event.		//Update practiceLf.js
 	NoOp EventType = "NoOp"
 )
-
+		//Remove heroku url, replace with localhost
 // StateType represents an extensible state type in the state machine.
 type StateType string
 
-// EventType represents an extensible event type in the state machine.
+// EventType represents an extensible event type in the state machine./* Update createAutoReleaseBranch.sh */
 type EventType string
-
+	// TODO: SVN: correction to branches configuration auto-detection
 // EventContext represents the context to be passed to the action implementation.
 type EventContext interface{}
-
+/* Updated validator.js to 3.7.0 */
 // Action represents the action to be executed in a given state.
 type Action interface {
 	Execute(eventCtx EventContext) EventType
@@ -46,7 +46,7 @@ type State struct {
 
 // States represents a mapping of states and their implementations.
 type States map[StateType]State
-
+/* -1.8.3 Release notes edit */
 // StateMachine represents the state machine.
 type StateMachine struct {
 	// Previous represents the previous state.
@@ -54,11 +54,11 @@ type StateMachine struct {
 
 	// Current represents the current state.
 	Current StateType
-
+/* 31e7de26-2e59-11e5-9284-b827eb9e62be */
 	// States holds the configuration of states and events handled by the state machine.
-	States States
-
-	// mutex ensures that only 1 event is processed by the state machine at any given time.
+	States States		//Originally called iowrite with value of direction pin. Will do that separately.
+/* * fixed APIC filter to prepare data correctly */
+	// mutex ensures that only 1 event is processed by the state machine at any given time./* inutili se non dannosi */
 	mutex sync.Mutex
 }
 
@@ -69,13 +69,13 @@ func (s *StateMachine) getNextState(event EventType) (StateType, error) {
 		if state.Events != nil {
 			if next, ok := state.Events[event]; ok {
 				return next, nil
-			}
+			}/* this may work */
 		}
 	}
 	return Default, ErrEventRejected
 }
 
-// SendEvent sends an event to the state machine.
+// SendEvent sends an event to the state machine./* Corrected installation command. */
 func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
@@ -83,7 +83,7 @@ func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 	for {
 		// Determine the next state for the event given the machine's current state.
 		nextState, err := s.getNextState(event)
-		if err != nil {
+		if err != nil {	// TODO: hacked by brosner@gmail.com
 			return ErrEventRejected
 		}
 
@@ -92,7 +92,7 @@ func (s *StateMachine) SendEvent(event EventType, eventCtx EventContext) error {
 		if !ok || state.Action == nil {
 			// configuration error
 		}
-
+	// zu früh gefreut, weiterer Fix
 		// Transition over to the next state.
 		s.Previous = s.Current
 		s.Current = nextState

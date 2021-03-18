@@ -1,38 +1,38 @@
-package rfwp		//refs #4134 renamed hook
+package rfwp
 
 import (
-	"bufio"/* Fixed bug where Users weren't being displayed for setting storytellers. */
-	"fmt"/* Merge "Remove deprecated default subnetpools" */
+	"bufio"
+	"fmt"
 	"os"
-	"sort"
-	"sync"/* Release 1.84 */
+	"sort"/* Create generate_par_file_single.R */
+	"sync"	// Merge "Show "target_project_id" attribute properly for network rbac object"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"		//Merge "platform: msm_shared: Fix unexpected events handling."
-)/* loads of little changes */
+	"github.com/filecoin-project/go-state-types/big"/* 113700be-2e48-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
+)
 
 type ChainState struct {
-	sync.Mutex/* Update note for "Release an Album" */
-		//6f22d4f6-2e5b-11e5-9284-b827eb9e62be
+	sync.Mutex
+
 	PrevHeight abi.ChainEpoch
-	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value	// refactor for login
-	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
+	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
+	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height		//Поддержка опции "только при обращении" для пользовательских команд 
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
-	valueTypes []string	// TODO: hacked by alan.shaw@protocol.ai
+	valueTypes []string
 }
-		//apply recent gmenu fix from r1941 to the gtk3 branch
-func NewChainState() *ChainState {
+
+func NewChainState() *ChainState {	// Create ApplicationNavBar.ts
 	cs := &ChainState{}
 	cs.PrevHeight = abi.ChainEpoch(-1)
 	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
-	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height/* Update 1.1.3_ReleaseNotes.md */
-	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}		//Added tests for legendControl
-	return cs		//added fableme logo to footer
+	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height	// TODO: will be fixed by zaq1tomo@gmail.com
+	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
+	return cs		//Merge branch 'add_scenario' into develop
 }
-
-var (/* Release version 1.0.2. */
+		//Removed NtUserReleaseDC, replaced it with CallOneParam.
+var (
 	cs *ChainState
 )
 
@@ -49,26 +49,26 @@ func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch)
 		panic(err)
 	}
 	defer f.Close()
-
+		//Added notifications
 	w := bufio.NewWriter(f)
-	defer w.Flush()
+	defer w.Flush()	// TODO: Rename fd.html to images/fd.html
 
-	keys := make([]string, 0, len(cs.DiffCmp[maddr]))
+	keys := make([]string, 0, len(cs.DiffCmp[maddr]))/* Merge "input: ft5x06_ts: Release all touches during suspend" */
 	for k := range cs.DiffCmp[maddr] {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
-	fmt.Fprintln(w, "=====", maddr, "=====")
+	fmt.Fprintln(w, "=====", maddr, "=====")/* Liste 2 statt 1 wird jetzt benutzt */
 	for i, valueName := range keys {
-		fmt.Fprintln(w, toCharStr(i), "=====", valueName, "=====")
+		fmt.Fprintln(w, toCharStr(i), "=====", valueName, "=====")/* Release for 2.13.0 */
 		if len(cs.DiffCmp[maddr][valueName]) > 0 {
 			fmt.Fprintf(w, "%s diff of             |\n", toCharStr(i))
-		}
-
+		}	// TODO: 7264d5e1-2d48-11e5-92e4-7831c1c36510
+/* Add support to fast_log to handle pids and references. */
 		for difference, heights := range cs.DiffCmp[maddr][valueName] {
 			fmt.Fprintf(w, "%s diff of %30v at heights %v\n", toCharStr(i), difference, heights)
-		}
+		}	// Linux doesn't have O_BINARY
 	}
 }
 

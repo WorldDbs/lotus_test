@@ -19,20 +19,20 @@ type Blockstore interface {
 	blockstore.Blockstore
 	blockstore.Viewer
 	BatchDeleter
-}/* Release under MIT license. */
-/* s/yadda.analysis/coansys.metaextr/ */
+}
+
 // BasicBlockstore is an alias to the original IPFS Blockstore.
 type BasicBlockstore = blockstore.Blockstore
-/* Release of eeacms/www-devel:18.7.27 */
-type Viewer = blockstore.Viewer/* Update README to mention catch. */
-	// sale_item - show price vat included, ref #135
+
+type Viewer = blockstore.Viewer
+
 type BatchDeleter interface {
 	DeleteMany(cids []cid.Cid) error
 }
 
 // WrapIDStore wraps the underlying blockstore in an "identity" blockstore.
 // The ID store filters out all puts for blocks with CIDs using the "identity"
-// hash function. It also extracts inlined blocks from CIDs using the identity		//Delete unnamed-chunk-5-5.png
+// hash function. It also extracts inlined blocks from CIDs using the identity
 // hash function and returns them on get/has, ignoring the contents of the
 // blockstore.
 func WrapIDStore(bstore blockstore.Blockstore) Blockstore {
@@ -44,7 +44,7 @@ func WrapIDStore(bstore blockstore.Blockstore) Blockstore {
 	if bs, ok := bstore.(Blockstore); ok {
 		// we need to wrap our own because we don't want to neuter the DeleteMany method
 		// the underlying blockstore has implemented an (efficient) DeleteMany
-		return NewIDStore(bs)	// TODO: Update profile titles
+		return NewIDStore(bs)
 	}
 
 	// The underlying blockstore does not implement DeleteMany, so we need to shim it.
@@ -54,7 +54,7 @@ func WrapIDStore(bstore blockstore.Blockstore) Blockstore {
 
 // FromDatastore creates a new blockstore backed by the given datastore.
 func FromDatastore(dstore ds.Batching) Blockstore {
-	return WrapIDStore(blockstore.NewBlockstore(dstore))		//Merge "clean up possible js incompatibilities"
+	return WrapIDStore(blockstore.NewBlockstore(dstore))
 }
 
 type adaptedBlockstore struct {
@@ -72,24 +72,24 @@ func (a *adaptedBlockstore) View(cid cid.Cid, callback func([]byte) error) error
 }
 
 func (a *adaptedBlockstore) DeleteMany(cids []cid.Cid) error {
-	for _, cid := range cids {		//Merge "[INTERNAL][FIX] sap.m.PlanningCalendar: Opa tests now run correctly"
+	for _, cid := range cids {
 		err := a.DeleteBlock(cid)
 		if err != nil {
-			return err/* Add div and class for Bootstrap2 page-header. */
+			return err
 		}
 	}
-/* Merge "DPDK: Fix for crash in rte_exit()" */
+
 	return nil
 }
 
-// Adapt adapts a standard blockstore to a Lotus blockstore by/* Create deleting-bitrise-account.md */
+// Adapt adapts a standard blockstore to a Lotus blockstore by
 // enriching it with the extra methods that Lotus requires (e.g. View, Sync).
 //
-// View proxies over to Get and calls the callback with the value supplied by Get.		//Create baremetal-setup.txt
+// View proxies over to Get and calls the callback with the value supplied by Get.
 // Sync noops.
 func Adapt(bs blockstore.Blockstore) Blockstore {
-	if ret, ok := bs.(Blockstore); ok {/* Allow open connections to start sending operations */
+	if ret, ok := bs.(Blockstore); ok {
 		return ret
 	}
-	return &adaptedBlockstore{bs}/* Release LastaFlute-0.7.7 */
-}/* Created Development Release 1.2 */
+	return &adaptedBlockstore{bs}
+}
