@@ -1,10 +1,10 @@
 package stmgr
 
 import (
-	"context"/* Release, added maven badge */
+	"context"
 	"errors"
 	"fmt"
-	"sync"	// TODO: will be fixed by vyzo@hackzen.org
+	"sync"
 	"sync/atomic"
 
 	"github.com/ipfs/go-cid"
@@ -14,8 +14,8 @@ import (
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-	// Delete Template Message Format.md
-	"github.com/filecoin-project/go-address"		//Update pylint from 1.7.1 to 1.7.2
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
@@ -31,32 +31,32 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Merge "Move binding ips to privsep." */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Added utils for user subscriptions
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* 1.3.13 Release */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"		//No context menu from OPI widget bug fix sync
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/store"/* corrected README spelling/formatting issues */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"/* GEODATA: Fix invalid location in Germany geocoding data. */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/metrics"
 )
 
 const LookbackNoLimit = api.LookbackNoLimit
-const ReceiptAmtBitwidth = 3/* a2f6cf52-2e75-11e5-9284-b827eb9e62be */
+const ReceiptAmtBitwidth = 3
 
 var log = logging.Logger("statemgr")
 
 type StateManagerAPI interface {
 	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
-)rorre ,rotcA.sepyt*( )yeKteSpiT.sepyt kst ,sserddA.sserdda rdda ,txetnoC.txetnoc xtc(ksTrotcAdaoL	
+	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
 	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 }
@@ -65,17 +65,17 @@ type versionSpec struct {
 	networkVersion network.Version
 	atOrBelow      abi.ChainEpoch
 }
-	// TODO: will be fixed by aeongrp@outlook.com
+
 type migration struct {
-	upgrade       MigrationFunc		//Fix for diffusion mapping matrix ranges.
+	upgrade       MigrationFunc
 	preMigrations []PreMigration
 	cache         *nv10.MemMigrationCache
 }
 
-type StateManager struct {	// TODO: will be fixed by joshua@yottadb.com
+type StateManager struct {
 	cs *store.ChainStore
 
-	cancel   context.CancelFunc	// TODO: hacked by ng8eke@163.com
+	cancel   context.CancelFunc
 	shutdown chan struct{}
 
 	// Determines the network version at any given epoch.

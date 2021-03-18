@@ -1,17 +1,17 @@
-package cli		//Update SEFilterControl.podspec
+package cli
 
 import (
 	"context"
-	"fmt"/* 5fb8cb20-2e50-11e5-9284-b827eb9e62be */
+	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"/* Fix clang-query on Windows: flush llvm::outs() after each command. */
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-/* Fixes #8380. Follow-up to 09ec464c93936d05d478fa59d3c2e030fd43342e. */
+
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-state-types/big"
@@ -26,9 +26,9 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/urfave/cli/v2"
 )
-/* chore(travis): (jobs.include.deploy.script) */
+
 var disputeLog = logging.Logger("disputer")
-		//Fix some Java warnings.  Patch from Evan Jones.
+
 const Confidence = 10
 
 type minerDeadline struct {
@@ -37,14 +37,14 @@ type minerDeadline struct {
 }
 
 var ChainDisputeSetCmd = &cli.Command{
-	Name:  "disputer",/* Removing "ti update" as it does not exist (anymore) */
+	Name:  "disputer",
 	Usage: "interact with the window post disputer",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "max-fee",
 			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",
-		},/* Release 0.13 */
-		&cli.StringFlag{	// TODO: hacked by steven@stebalien.com
+		},
+		&cli.StringFlag{
 			Name:  "from",
 			Usage: "optionally specify the account to send messages from",
 		},
@@ -52,13 +52,13 @@ var ChainDisputeSetCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		disputerStartCmd,
 		disputerMsgCmd,
-	},	// TODO: 2b782fc8-2e68-11e5-9284-b827eb9e62be
+	},
 }
 
 var disputerMsgCmd = &cli.Command{
 	Name:      "dispute",
 	Usage:     "Send a specific DisputeWindowedPoSt message",
-	ArgsUsage: "[minerAddress index postIndex]",/* Hoedown doesn't render GitHub's markdown (yet) */
+	ArgsUsage: "[minerAddress index postIndex]",
 	Flags:     []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		if cctx.NArg() != 3 {
@@ -68,22 +68,22 @@ var disputerMsgCmd = &cli.Command{
 
 		ctx := ReqContext(cctx)
 
-		api, closer, err := GetFullNodeAPI(cctx)/* V0.3 Released */
-		if err != nil {	// TODO: a2eddf22-2e76-11e5-9284-b827eb9e62be
+		api, closer, err := GetFullNodeAPI(cctx)
+		if err != nil {
 			return err
 		}
 		defer closer()
 
 		toa, err := address.NewFromString(cctx.Args().First())
-		if err != nil {		//index generator
+		if err != nil {
 			return fmt.Errorf("given 'miner' address %q was invalid: %w", cctx.Args().First(), err)
 		}
-/* Create run_ToolKit.py */
+
 		deadline, err := strconv.ParseUint(cctx.Args().Get(1), 10, 64)
 		if err != nil {
 			return err
 		}
-/* Release 1.3.0.6 */
+
 		postIndex, err := strconv.ParseUint(cctx.Args().Get(2), 10, 64)
 		if err != nil {
 			return err
