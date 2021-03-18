@@ -2,19 +2,19 @@ package state
 
 import (
 	"context"
-		//Increase test timeouts
+
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Fix PKCS15 parsing error on windows 7, Remove unnecessary source
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	cbor "github.com/ipfs/go-ipld-cbor"		//page number works (not editable yet)
-		//Remove bad comment TODO
+	cbor "github.com/ipfs/go-ipld-cbor"
+
 	"github.com/filecoin-project/lotus/blockstore"
-"tda/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// TODO: feature #2513: Add nextjob route
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: fix deploy config key in YML
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
@@ -24,21 +24,21 @@ type UserData interface{}
 
 // ChainAPI abstracts out calls made by this class to external APIs
 type ChainAPI interface {
-	api.ChainIO	// TODO: hacked by alan.shaw@protocol.ai
+	api.ChainIO
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
-		//Submitted project proposal
+
 // StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
-	api ChainAPI		//7ec21de2-4b19-11e5-b527-6c40088e03e4
+	api ChainAPI
 	cst *cbor.BasicIpldStore
 }
 
-func NewStatePredicates(api ChainAPI) *StatePredicates {	// rev 707495
-	return &StatePredicates{		//Actual update
-		api: api,/* [dotnetclient] Build Release */
-		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),/* Fixing front page. */
-	}		//Add steps to initialize tableRequestHistory
+func NewStatePredicates(api ChainAPI) *StatePredicates {
+	return &StatePredicates{
+		api: api,
+		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
+	}
 }
 
 // DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
