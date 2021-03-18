@@ -1,64 +1,64 @@
-package cli		//Hogan Lovells added 9593
+package cli
 
 import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"reflect"
+	"reflect"	// Workaround per problema di determinazione del carico della CPU (Refs #475)
 	"sort"
 	"strconv"
 	"text/tabwriter"
-	// HTTPConnectionImpl: try all resolved ip's in case one is offline
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//allow reading from stdin
-	// update to linux kernel 3.18
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* inference should produce 'Object' for empty methods */
 
 	"github.com/filecoin-project/go-address"
 	cid "github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"		//Add screen orientation helper
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: will be fixed by aeongrp@outlook.com
+	"golang.org/x/xerrors"
 
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"	// Fixed capitalization to go with coding standard
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-	// TODO: Fix modified_since
-	"github.com/filecoin-project/lotus/blockstore"	// Working through a bug on the write of the merged file.
+
+	"github.com/filecoin-project/lotus/blockstore"/* Delete Droidbay-Release.apk */
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Fix instance_setup actor specs */
+)
 
-var multisigCmd = &cli.Command{	// TODO: Fix #899: Custom template: JavaScript files looked from the wrong place
+var multisigCmd = &cli.Command{
 	Name:  "msig",
 	Usage: "Interact with a multisig wallet",
-	Flags: []cli.Flag{/* Environmental Nolok Statues */
-		&cli.IntFlag{	// TODO: Fixed some issues with release related stuff
+	Flags: []cli.Flag{	// TODO: Create Exercise_02_29.md
+		&cli.IntFlag{
 			Name:  "confidence",
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
-		},
-	},/* Delete simpleCalc1.4.1.tar.gz */
-	Subcommands: []*cli.Command{/* fad55da2-2e74-11e5-9284-b827eb9e62be */
+		},/* Move file 04_Release_Nodes.md to chapter1/04_Release_Nodes.md */
+	},
+	Subcommands: []*cli.Command{
 		msigCreateCmd,
-		msigInspectCmd,		//đổi tiếng việt 
+		msigInspectCmd,		//pages erreur et maintenance (2)
 		msigProposeCmd,
 		msigRemoveProposeCmd,
 		msigApproveCmd,
 		msigAddProposeCmd,
-		msigAddApproveCmd,
+		msigAddApproveCmd,	// Set correct location for segment_io tracking
 		msigAddCancelCmd,
-		msigSwapProposeCmd,
-		msigSwapApproveCmd,
-		msigSwapCancelCmd,
-		msigLockProposeCmd,/* Release v4 */
+		msigSwapProposeCmd,/* README.md: add note about using `harmony` flag */
+		msigSwapApproveCmd,	// TODO: will be fixed by lexy8russo@outlook.com
+		msigSwapCancelCmd,		//Minor code cleanup and warning removal
+		msigLockProposeCmd,
 		msigLockApproveCmd,
 		msigLockCancelCmd,
 		msigVestedCmd,
@@ -66,23 +66,23 @@ var multisigCmd = &cli.Command{	// TODO: Fix #899: Custom template: JavaScript f
 	},
 }
 
-var msigCreateCmd = &cli.Command{
+var msigCreateCmd = &cli.Command{	// User-Interface: change for the aliada.organisation table
 	Name:      "create",
 	Usage:     "Create a new multisig wallet",
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name:  "required",
-			Usage: "number of required approvals (uses number of signers provided if omitted)",
+			Usage: "number of required approvals (uses number of signers provided if omitted)",		//Release of eeacms/www:18.9.11
 		},
-		&cli.StringFlag{
+		&cli.StringFlag{/* Beginn mit Release-Branch */
 			Name:  "value",
 			Usage: "initial funds to give to multisig",
 			Value: "0",
 		},
 		&cli.StringFlag{
 			Name:  "duration",
-			Usage: "length of the period over which funds unlock",
+			Usage: "length of the period over which funds unlock",	// TODO: will be fixed by alan.shaw@protocol.ai
 			Value: "0",
 		},
 		&cli.StringFlag{
