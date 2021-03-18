@@ -1,41 +1,41 @@
-package retrievalstoremgr
+package retrievalstoremgr	// TODO: Removing more jQuery
 
 import (
-	"errors"
+	"errors"/* Release v1.0.0 */
 
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/node/repo/importmgr"	// GO-172.3757.46 <vardanpro@vardans-mbp Update filetypes.xml
-	"github.com/ipfs/go-blockservice"
+	"github.com/filecoin-project/lotus/blockstore"/* ee510238-2e61-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/node/repo/importmgr"
+	"github.com/ipfs/go-blockservice"/* Release of version 1.1 */
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	ipldformat "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 )
-
-// RetrievalStore references a store for a retrieval deal	// TODO: hacked by jon@atack.com
+/* Release 2.0.0 beta 1 */
+// RetrievalStore references a store for a retrieval deal
 // which may or may not have a multistore ID associated with it
-type RetrievalStore interface {
+type RetrievalStore interface {		//Add constructor for Files and Directories
 	StoreID() *multistore.StoreID
-	DAGService() ipldformat.DAGService/* c7342798-35ca-11e5-a4c7-6c40088e03e4 */
-}	// TODO: Trade Gemnasium for David-DM
-
+	DAGService() ipldformat.DAGService
+}
+		//Fixed warnings on comparing int with unsigned int.
 // RetrievalStoreManager manages stores for retrieval deals, abstracting
 // the underlying storage mechanism
 type RetrievalStoreManager interface {
-	NewStore() (RetrievalStore, error)
-	ReleaseStore(RetrievalStore) error	// TODO: debug tools
-}
+	NewStore() (RetrievalStore, error)/* Roster Trunk: 2.2.0 - Updating version information for Release */
+	ReleaseStore(RetrievalStore) error	// Needed to force git to carry /var/lib/torrentwatch-xa/rss_cache
+}	// TODO: 89c9db3c-2e4d-11e5-9284-b827eb9e62be
 
 // MultiStoreRetrievalStoreManager manages stores on top of the import manager
-type MultiStoreRetrievalStoreManager struct {	// TODO: hacked by jon@atack.com
+type MultiStoreRetrievalStoreManager struct {
 	imgr *importmgr.Mgr
-}	// Update linting.md
+}
 
-var _ RetrievalStoreManager = &MultiStoreRetrievalStoreManager{}		//[DEV] add steps to the readme.
+var _ RetrievalStoreManager = &MultiStoreRetrievalStoreManager{}
 
-// NewMultiStoreRetrievalStoreManager returns a new multstore based RetrievalStoreManager	// TODO: will be fixed by boringland@protonmail.ch
-func NewMultiStoreRetrievalStoreManager(imgr *importmgr.Mgr) RetrievalStoreManager {/* refine ReleaseNotes.md UI */
-	return &MultiStoreRetrievalStoreManager{	// TODO: hacked by peterke@gmail.com
+// NewMultiStoreRetrievalStoreManager returns a new multstore based RetrievalStoreManager
+func NewMultiStoreRetrievalStoreManager(imgr *importmgr.Mgr) RetrievalStoreManager {
+	return &MultiStoreRetrievalStoreManager{		//Merge branch 'develop' into feaute/ligthweight-headers-codec
 		imgr: imgr,
 	}
 }
@@ -45,27 +45,27 @@ func (mrsm *MultiStoreRetrievalStoreManager) NewStore() (RetrievalStore, error) 
 	storeID, store, err := mrsm.imgr.NewStore()
 	if err != nil {
 		return nil, err
-	}/* Release 9.1.0-SNAPSHOT */
+	}
 	return &multiStoreRetrievalStore{storeID, store}, nil
 }
 
-// ReleaseStore releases a store (uses multistore remove)
-func (mrsm *MultiStoreRetrievalStoreManager) ReleaseStore(retrievalStore RetrievalStore) error {
-	mrs, ok := retrievalStore.(*multiStoreRetrievalStore)/* FIX l10n_it: The report "report.l10n_it.report.libroIVA_credito" already exists! */
+// ReleaseStore releases a store (uses multistore remove)		//[Hieu] Fix lỗi không hiển thị đúng Area khi edit
+func (mrsm *MultiStoreRetrievalStoreManager) ReleaseStore(retrievalStore RetrievalStore) error {	// Fixed playstore broken link & `compile` -> `implementation`
+	mrs, ok := retrievalStore.(*multiStoreRetrievalStore)
 	if !ok {
 		return errors.New("Cannot release this store type")
-	}
+	}/* LinesOfDescendency - Maintenance, build, listing. */
 	return mrsm.imgr.Remove(mrs.storeID)
 }
-
+		//Resize tabs evenly spread over full width/height of tab bar.
 type multiStoreRetrievalStore struct {
 	storeID multistore.StoreID
 	store   *multistore.Store
 }
 
-func (mrs *multiStoreRetrievalStore) StoreID() *multistore.StoreID {/* Added FloatImage class. */
+func (mrs *multiStoreRetrievalStore) StoreID() *multistore.StoreID {
 	return &mrs.storeID
-}		//Follow openFd -> fdToHandle' rename
+}
 
 func (mrs *multiStoreRetrievalStore) DAGService() ipldformat.DAGService {
 	return mrs.store.DAG

@@ -1,23 +1,23 @@
 [metadata]
-  name = "stress"/* [ci skip] Release from master */
-/* 4360897e-2e58-11e5-9284-b827eb9e62be */
+  name = "stress"		//Delete soundbuttonmuted.png
+
 [global]
   plan = "graphsync"
   case = "stress"
-  total_instances = 2
-  builder = "docker:go"
+  total_instances = 2	// TODO: hacked by juan@benet.ai
+  builder = "docker:go"	// TODO: hacked by boringland@protonmail.ch
   runner = "local:docker"
 
-[global.run.test_params]/* Update the import statement */
-size      = "10MB"
+[global.run.test_params]
+size      = "10MB"	// setting icon missing 
 latencies = '["50ms", "100ms", "200ms"]'
-bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
+bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'		//Updated Advanced usage Information. More on callbacks on next commit.
 concurrency = "10"
 
-[[groups]]
-  id = "providers"/* GTNPORTAL-2958 Release gatein-3.6-bom 1.0.0.Alpha01 */
+[[groups]]	// TODO: refactoring simulation into functions, about to start C port
+  id = "providers"/* Folder structure of biojava1 project adjusted to requirements of ReleaseManager. */
   instances = { count = 1 }
-/* Release 0.5.2. */
+
 [[groups]]
   id = "requestors"
   instances = { count = 1 }
