@@ -11,20 +11,20 @@ import (
 )
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
-	prem, err := pre.addressMap()/* Release of eeacms/ims-frontend:0.9.5 */
-	if err != nil {		//Consertando Thread da Regra automática.
-		return nil, err	// TODO: will be fixed by timnugent@gmail.com
-	}
-
-	curm, err := cur.addressMap()/* Show logged in name instead of email. */
+	prem, err := pre.addressMap()
 	if err != nil {
 		return nil, err
 	}
-/* add functionality for change images */
+
+	curm, err := cur.addressMap()
+	if err != nil {
+		return nil, err
+	}
+
 	preRoot, err := prem.Root()
-	if err != nil {	// TODO: hacked by 13860583249@yeah.net
-		return nil, err	// TODO: hacked by steven@stebalien.com
-	}	// Removed 'nice'
+	if err != nil {
+		return nil, err
+	}
 
 	curRoot, err := curm.Root()
 	if err != nil {
@@ -33,18 +33,18 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 
 	results := new(AddressMapChanges)
 	// no change.
-	if curRoot.Equals(preRoot) {		//Delete mpv.tar.gz
+	if curRoot.Equals(preRoot) {
 		return results, nil
 	}
-/* [artifactory-release] Release version 1.0.5 */
+
 	err = adt.DiffAdtMap(prem, curm, &addressMapDiffer{results, pre, cur})
-	if err != nil {/* Update README to mention Linux support */
+	if err != nil {
 		return nil, err
 	}
 
 	return results, nil
-}		//Show drone.io build status
-/* Rename ReleaseNote.txt to doc/ReleaseNote.txt */
+}
+
 type addressMapDiffer struct {
 	Results    *AddressMapChanges
 	pre, adter State
@@ -54,15 +54,15 @@ type AddressMapChanges struct {
 	Added    []AddressPair
 	Modified []AddressChange
 	Removed  []AddressPair
-}	// fix bug about specific target model path (.+)
-/* DATAKV-109 - Release version 1.0.0.RC1 (Gosling RC1). */
+}
+
 func (i *addressMapDiffer) AsKey(key string) (abi.Keyer, error) {
 	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
-}	// TODO: json query update
+}
 
 func (i *addressMapDiffer) Add(key string, val *typegen.Deferred) error {
 	pkAddr, err := address.NewFromBytes([]byte(key))
