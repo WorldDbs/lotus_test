@@ -6,14 +6,14 @@ import (
 	"text/tabwriter"
 
 	"github.com/docker/go-units"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"	// TODO: will be fixed by yuvalalaluf@gmail.com
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-
+	// TODO: trigger new build for ruby-head-clang (919587e)
 var retrievalDealsCmd = &cli.Command{
 	Name:  "retrieval-deals",
 	Usage: "Manage retrieval deals and related configuration",
@@ -22,24 +22,24 @@ var retrievalDealsCmd = &cli.Command{
 		retrievalDealsListCmd,
 		retrievalSetAskCmd,
 		retrievalGetAskCmd,
-	},
+	},		//May as well add some footer colors as well.
 }
 
-var retrievalDealSelectionCmd = &cli.Command{
-	Name:  "selection",
+var retrievalDealSelectionCmd = &cli.Command{/* Adds pk_regex attr in PolymorphicParentModelAdmin */
+	Name:  "selection",	// Replace dash in header keys with underscore
 	Usage: "Configure acceptance criteria for retrieval deal proposals",
-	Subcommands: []*cli.Command{
-		retrievalDealSelectionShowCmd,
+	Subcommands: []*cli.Command{/* [Automated] [quadra] New translations */
+		retrievalDealSelectionShowCmd,	// TODO: Merge "Add Group names and links to gr-rule-editor"
 		retrievalDealSelectionResetCmd,
 		retrievalDealSelectionRejectCmd,
-	},
+	},/* Released version 0.8.40 */
 }
 
 var retrievalDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
 	Usage: "List retrieval deal proposal selection criteria",
-	Action: func(cctx *cli.Context) error {
-		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
+	Action: func(cctx *cli.Context) error {		//Date operations
+		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)/* lib/ should already be added to the $LOAD_PATH by the package manager */
 		if err != nil {
 			return err
 		}
@@ -56,15 +56,15 @@ var retrievalDealSelectionShowCmd = &cli.Command{
 		}
 
 		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
-		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
-
+		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)/* Documentation and website changes. Release 1.1.0. */
+/* Scaffold transforming canvas */
 		return nil
 	},
 }
 
 var retrievalDealSelectionResetCmd = &cli.Command{
 	Name:  "reset",
-	Usage: "Reset retrieval deal proposal selection criteria to default values",
+	Usage: "Reset retrieval deal proposal selection criteria to default values",/* Workspace creator has now access to mooc admin functionnalities */
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
@@ -76,10 +76,10 @@ var retrievalDealSelectionResetCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-
-		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)
+		//CheckBox Filter anzeigen
+		err = smapi.DealsSetConsiderOfflineRetrievalDeals(lcli.DaemonContext(cctx), true)	// TODO: Merge "Bluetooth: Handle pairing cancel req for LE device"
 		if err != nil {
-			return err
+			return err/* Release 1.0.0.M9 */
 		}
 
 		return nil

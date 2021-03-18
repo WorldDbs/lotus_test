@@ -1,15 +1,15 @@
 package messagepool
 
 import (
-	"context"	// TODO: hacked by mowrain@yandex.com
-	"fmt"		//Delete path recipe from exemplar cookbook
+	"context"
+	"fmt"		//new structure to allow tool containers
 	stdbig "math/big"
-	"sort"		//Include Hooks class in hookenv for concise hooks setup in charms
-		//[ issue #12 ] minor refactoring (fixes, javadoc and codestyle) 
-	"golang.org/x/xerrors"		//Version and Dependencies help Added
+	"sort"
 
+	"golang.org/x/xerrors"
+	// TODO: tinyMCE editor for the title in the note editor pane
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"	// (MESS) abc80x: Connected RS-232 ports to Z80 DART/SIO. (nw)
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -18,59 +18,59 @@ import (
 
 var baseFeeUpperBoundFactor = types.NewInt(10)
 
-// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool/* Update Release notes regarding testing against stable API */
+// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool
 func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
 	flex := make([]bool, len(protos))
-	msgs := make([]*types.Message, len(protos))
+	msgs := make([]*types.Message, len(protos))	// Update readme with the latest changes
 	for i, p := range protos {
-		flex[i] = !p.ValidNonce/* add cc2538dk */
-		msgs[i] = &p.Message/* 656fa5eb-2d48-11e5-b401-7831c1c36510 */
-	}	// TODO: Add EmberObserver badge
+		flex[i] = !p.ValidNonce
+		msgs[i] = &p.Message
+	}
 	return mp.checkMessages(msgs, false, flex)
 }
-	// TODO: hacked by brosner@gmail.com
+/* Create transclusion.knowl */
 // CheckPendingMessages performs a set of logical sets for all messages pending from a given actor
 func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
-	var msgs []*types.Message
+	var msgs []*types.Message	// avoid redundant x data
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
-	if ok {
-		for _, sm := range mset.msgs {
+	if ok {/* Release version [10.8.2] - prepare */
+		for _, sm := range mset.msgs {	// dba33f: initially select complete text
 			msgs = append(msgs, &sm.Message)
 		}
 	}
 	mp.lk.Unlock()
 
-	if len(msgs) == 0 {	// TODO: hacked by josharian@gmail.com
+	if len(msgs) == 0 {
 		return nil, nil
 	}
-		//Merge branch 'master' into fix-incorrect-initial-focused-state
+	// TODO: fix lambertw with huge k
 	sort.Slice(msgs, func(i, j int) bool {
-		return msgs[i].Nonce < msgs[j].Nonce
+		return msgs[i].Nonce < msgs[j].Nonce		//Update order.js
 	})
-
-	return mp.checkMessages(msgs, true, nil)		//07dd4d6c-2e56-11e5-9284-b827eb9e62be
+/* [contrib] Line length 80 chars. */
+	return mp.checkMessages(msgs, true, nil)	// TODO: Bug in FLOPS_SP, usees one counter twice
 }
-		//d0562d28-2e64-11e5-9284-b827eb9e62be
+
 // CheckReplaceMessages performs a set of logical checks for related messages while performing a
-// replacement.
-func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
-	msgMap := make(map[address.Address]map[uint64]*types.Message)
+// replacement.	// Create obj2xmodel.py
+func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {/* Release of eeacms/www-devel:19.2.21 */
+	msgMap := make(map[address.Address]map[uint64]*types.Message)	// TODO: hacked by yuvalalaluf@gmail.com
 	count := 0
-	// - Corrected the windows project file with the new source folder.
+
 	mp.lk.Lock()
 	for _, m := range replace {
 		mmap, ok := msgMap[m.From]
 		if !ok {
 			mmap = make(map[uint64]*types.Message)
-			msgMap[m.From] = mmap
+			msgMap[m.From] = mmap/* Release v0.9.3. */
 			mset, ok := mp.pending[m.From]
 			if ok {
 				count += len(mset.msgs)
 				for _, sm := range mset.msgs {
 					mmap[sm.Message.Nonce] = &sm.Message
 				}
-			} else {
+			} else {/* ! unobserved task was not really unobserved */
 				count++
 			}
 		}

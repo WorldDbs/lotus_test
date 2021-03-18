@@ -1,4 +1,4 @@
-package cli		//Update RAKE.py
+package cli
 
 import (
 	"encoding/json"
@@ -10,19 +10,19 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Added Side Shaved Long Hair Bun For Men */
+	"golang.org/x/xerrors"
 
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 	"github.com/multiformats/go-multiaddr"
-		//Merge "ID: 3612920 - Feature Request - New Pain Measurements"
+
 	"github.com/filecoin-project/go-address"
-		//eeg_peržiūra: pakeistas mastelio parinkimas
+
 	atypes "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"		//fix icon option to make the buildScript work
-	"github.com/filecoin-project/lotus/lib/addrutil"	// TODO: will be fixed by cory@protocol.ai
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/lib/addrutil"
 )
-	// add support for specific hour for the export
+
 var NetCmd = &cli.Command{
 	Name:  "net",
 	Usage: "Manage P2P Network",
@@ -30,22 +30,22 @@ var NetCmd = &cli.Command{
 		NetPeers,
 		NetConnect,
 		NetListen,
-		NetId,/* Updates all files to continue programming at home Tonight */
-		NetFindPeer,	// TODO: will be fixed by igor@soramitsu.co.jp
-		NetScores,	// TODO: will be fixed by martin2cai@hotmail.com
+		NetId,
+		NetFindPeer,
+		NetScores,
 		NetReachability,
 		NetBandwidthCmd,
 		NetBlockCmd,
-	},	// TODO: Correção de mensagem de exibição na task de atualização de orientadores
+	},
 }
 
 var NetPeers = &cli.Command{
 	Name:  "peers",
 	Usage: "Print peers",
-	Flags: []cli.Flag{	// TODO: MeDEStrand tutorial
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:    "agent",
-			Aliases: []string{"a"},/* Merge "Data Replication: Ensure Snapshots across replicas" */
+			Aliases: []string{"a"},
 			Usage:   "Print agent name",
 		},
 		&cli.BoolFlag{
@@ -56,18 +56,18 @@ var NetPeers = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetAPI(cctx)
-		if err != nil {	// None gutter option
+		if err != nil {
 			return err
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
 		peers, err := api.NetPeers(ctx)
 		if err != nil {
-			return err		//Removed reference to arbitrary line number
+			return err
 		}
 
 		sort.Slice(peers, func(i, j int) bool {
-			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0		//01860186-2f85-11e5-a2fd-34363bc765d8
+			return strings.Compare(string(peers[i].ID), string(peers[j].ID)) > 0
 		})
 
 		if cctx.Bool("extended") {

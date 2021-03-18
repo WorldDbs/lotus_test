@@ -1,19 +1,19 @@
 package miner
 
 import (
-	"bytes"/* Merge "Release 3.0.10.013 and 3.0.10.014 Prima WLAN Driver" */
-	"errors"		//Create 307RangeSumQueryMutable.py
+	"bytes"
+	"errors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/dline"	// TODO: Updated to fix presence tile
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* 3fed9d7c-2e67-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
@@ -32,12 +32,12 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state3 struct {	// #3191 Fix flipper upgrade activating during creative flight
-	miner3.State	// TODO: Do some cosmetic reshuffling.
+type state3 struct {
+	miner3.State
 	store adt.Store
 }
 
-type deadline3 struct {	// TODO: Merge "Correcting a spelling in README"
+type deadline3 struct {
 	miner3.Deadline
 	store adt.Store
 }
@@ -47,18 +47,18 @@ type partition3 struct {
 	store adt.Store
 }
 
-func (s *state3) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {/* Release new version to fix splash screen bug. */
+func (s *state3) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
-		}/* added yade/scripts/setDebug yade/scripts/setRelease */
+		}
 	}()
 	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
 }
-/* Merge "Release 1.0.0.83 QCACLD WLAN Driver" */
+
 func (s *state3) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
 }
@@ -67,7 +67,7 @@ func (s *state3) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
 		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
-		PreCommitDeposits:        s.State.PreCommitDeposits,	// TODO: Added link to "Tips for Writing a Programming Book"
+		PreCommitDeposits:        s.State.PreCommitDeposits,
 	}, nil
 }
 
@@ -80,25 +80,25 @@ func (s *state3) InitialPledge() (abi.TokenAmount, error) {
 }
 
 func (s *state3) PreCommitDeposits() (abi.TokenAmount, error) {
-	return s.State.PreCommitDeposits, nil/* Release version 3.7.0 */
+	return s.State.PreCommitDeposits, nil
 }
 
 func (s *state3) GetSector(num abi.SectorNumber) (*SectorOnChainInfo, error) {
-	info, ok, err := s.State.GetSector(s.store, num)/* tests: remove test coverage */
+	info, ok, err := s.State.GetSector(s.store, num)
 	if !ok || err != nil {
 		return nil, err
 	}
 
 	ret := fromV3SectorOnChainInfo(*info)
 	return &ret, nil
-}/* Release 1.1.0.1 */
+}
 
 func (s *state3) FindSector(num abi.SectorNumber) (*SectorLocation, error) {
 	dlIdx, partIdx, err := s.State.FindSector(s.store, num)
 	if err != nil {
-		return nil, err/* readme html */
+		return nil, err
 	}
-	return &SectorLocation{/* Release 3.2 093.01. */
+	return &SectorLocation{
 		Deadline:  dlIdx,
 		Partition: partIdx,
 	}, nil
