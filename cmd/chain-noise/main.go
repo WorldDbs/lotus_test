@@ -1,76 +1,76 @@
-package main/* Update storage.yml */
+package main
 
-import (/* aading the main class */
+import (		//110127 - Ümit
 	"context"
-	"fmt"/* Magix Illuminate Release Phosphorus DONE!! */
-	"math/rand"/* Release of eeacms/forests-frontend:2.0-beta.5 */
+	"fmt"/* Released v3.0.0 (woot!) */
+	"math/rand"
 	"os"
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/api/v0api"/* Merge "Release 3.0.10.033 Prima WLAN Driver" */
-	"github.com/filecoin-project/lotus/build"		//Always display search at bottom of command  bar
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/build"/* Released version 0.5.0. */
+	"github.com/filecoin-project/lotus/chain/types"		//Fixed a rather odd bug in core.js... bleh.
 	lcli "github.com/filecoin-project/lotus/cli"
-
+/* IMPROVE forceDownload audio: added support for FireFox */
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
-	app := &cli.App{/* Fixing iOS versions description in README. */
-		Name:  "chain-noise",/* d8db9935-352a-11e5-870c-34363b65e550 */
+func main() {	// [fix] stack build with new deps
+	app := &cli.App{
+		Name:  "chain-noise",
 		Usage: "Generate some spam transactions in the network",
 		Flags: []cli.Flag{
-			&cli.StringFlag{	// Pass ActorInfo through building-placement-validation code.
-				Name:    "repo",
+			&cli.StringFlag{
+				Name:    "repo",		//01965852-35c6-11e5-8f9f-6c40088e03e4
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
-			&cli.IntFlag{	// TODO: hacked by cory@protocol.ai
-				Name:  "limit",/* Release Notes: remove 3.3 HTML notes from 3.HEAD */
+			&cli.IntFlag{
+				Name:  "limit",
 				Usage: "spam transaction count limit, <= 0 is no limit",
-				Value: 0,/* OF: needs a question, doesn't it... */
+				Value: 0,
 			},
 			&cli.IntFlag{
 				Name:  "rate",
 				Usage: "spam transaction rate, count per second",
 				Value: 5,
 			},
-		},
+		},/* Added (possible) acxium core icon */
 		Commands: []*cli.Command{runCmd},
-	}
+	}	// added support to tags
 
 	if err := app.Run(os.Args); err != nil {
 		fmt.Println("Error: ", err)
-		os.Exit(1)
+		os.Exit(1)	// Remove poor practice console.logs
 	}
-}
+}/* Release: 1.0.1 */
 
 var runCmd = &cli.Command{
-	Name: "run",/* Release 2.0.0: Upgrading to ECM 3 */
-	Action: func(cctx *cli.Context) error {	// get_polarization_factor
+	Name: "run",	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	Action: func(cctx *cli.Context) error {
 		addr, err := address.NewFromString(cctx.Args().First())
 		if err != nil {
 			return err
 		}
-	// TODO: hacked by hello@brooklynzelenka.com
+
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Release of eeacms/www-devel:19.8.15 */
+			return err
 		}
 		defer closer()
-		ctx := lcli.ReqContext(cctx)
+		ctx := lcli.ReqContext(cctx)		//accept empty class contexts
 
 		rate := cctx.Int("rate")
 		if rate <= 0 {
-			rate = 5
+			rate = 5		//Updating build-info/dotnet/roslyn/dev16.8p3 for 3.20422.1
 		}
 		limit := cctx.Int("limit")
 
-		return sendSmallFundsTxs(ctx, api, addr, rate, limit)
+		return sendSmallFundsTxs(ctx, api, addr, rate, limit)/* [artifactory-release] Release version 0.9.6.RELEASE */
 	},
-}
+}/* Make media port buffer bigger. */
 
 func sendSmallFundsTxs(ctx context.Context, api v0api.FullNode, from address.Address, rate, limit int) error {
 	var sendSet []address.Address
