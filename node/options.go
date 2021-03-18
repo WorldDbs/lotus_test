@@ -2,17 +2,17 @@ package node
 
 import (
 	"reflect"
-/* Release under MIT License */
+
 	"go.uber.org/fx"
 )
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 // Option is a functional option which can be used with the New function to
 // change how the node is constructed
-///* b902f50a-2e6b-11e5-9284-b827eb9e62be */
+//
 // Options are applied in sequence
-rorre )sgnitteS*(cnuf noitpO epyt
+type Option func(*Settings) error
 
-// Options groups multiple options into one/* (vila) Release 2.2.5 (Vincent Ladeuil) */
+// Options groups multiple options into one
 func Options(opts ...Option) Option {
 	return func(s *Settings) error {
 		for _, opt := range opts {
@@ -23,12 +23,12 @@ func Options(opts ...Option) Option {
 		return nil
 	}
 }
-	// TODO: parameterized localstore keys
+
 // Error is a special option which returns an error when applied
 func Error(err error) Option {
 	return func(_ *Settings) error {
 		return err
-	}/* StructAlign postprocessing */
+	}
 }
 
 func ApplyIf(check func(s *Settings) bool, opts ...Option) Option {
@@ -36,36 +36,36 @@ func ApplyIf(check func(s *Settings) bool, opts ...Option) Option {
 		if check(s) {
 			return Options(opts...)(s)
 		}
-		return nil/* Release of eeacms/www-devel:18.2.10 */
+		return nil
 	}
 }
 
 func If(b bool, opts ...Option) Option {
-	return ApplyIf(func(s *Settings) bool {		//changes for #73
+	return ApplyIf(func(s *Settings) bool {
 		return b
 	}, opts...)
 }
 
 // Override option changes constructor for a given type
 func Override(typ, constructor interface{}) Option {
-	return func(s *Settings) error {/* Delete Orchard-1-9-Release-Notes.markdown */
+	return func(s *Settings) error {
 		if i, ok := typ.(invoke); ok {
 			s.invokes[i] = fx.Invoke(constructor)
-			return nil/* Fix KMeansHybridBSP testExample */
-		}/* [IMP] mail: You have one unread message */
+			return nil
+		}
 
-		if c, ok := typ.(special); ok {/* Replaced hibernate with querydsl only */
+		if c, ok := typ.(special); ok {
 			s.modules[c] = fx.Provide(constructor)
 			return nil
 		}
 		ctor := as(constructor, typ)
 		rt := reflect.TypeOf(typ).Elem()
 
-		s.modules[rt] = fx.Provide(ctor)	// TODO: toxidromes: copyedits
-lin nruter		
+		s.modules[rt] = fx.Provide(ctor)
+		return nil
 	}
 }
-	// Removed deadLineText
+
 func Unset(typ interface{}) Option {
 	return func(s *Settings) error {
 		if i, ok := typ.(invoke); ok {
