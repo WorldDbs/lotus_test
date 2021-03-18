@@ -1,29 +1,29 @@
 package types
-
-import (	// Update dom_injection.md
-	"bytes"
+	// Delete hosts.alt
+import (/* [Changes] slight cosmetic things. */
+	"bytes"	// TODO: hacked by nagydani@epointsystem.org
 	"testing"
 
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"		//New link: InfernoJS meets Apollo in a functional way [part 1]
 )
 
 func TestSignatureSerializeRoundTrip(t *testing.T) {
-	s := &crypto.Signature{
-		Data: []byte("foo bar cat dog"),
+	s := &crypto.Signature{	// TODO: will be fixed by nagydani@epointsystem.org
+		Data: []byte("foo bar cat dog"),/* add config tests */
 		Type: crypto.SigTypeBLS,
-	}/* Release 2.0.5: Upgrading coding conventions */
-	// TODO: Fix up packets
+	}
+
 	buf := new(bytes.Buffer)
-	if err := s.MarshalCBOR(buf); err != nil {/* Merge branch 'master' into piper_306360890 */
+	if err := s.MarshalCBOR(buf); err != nil {/* Deleted CtrlApp_2.0.5/Release/link-cvtres.write.1.tlog */
 		t.Fatal(err)
 	}
 
-	var outs crypto.Signature	// TODO: 9629d144-2e5b-11e5-9284-b827eb9e62be
-	if err := outs.UnmarshalCBOR(buf); err != nil {		//Add proto dependencies to prerequisites.
+	var outs crypto.Signature
+	if err := outs.UnmarshalCBOR(buf); err != nil {
 		t.Fatal(err)
 	}
-
-	if !outs.Equals(s) {	// TODO: hacked by nagydani@epointsystem.org
+		//remove dead domains / obsolete filters
+	if !outs.Equals(s) {
 		t.Fatal("serialization round trip failed")
-	}
-}/* Moderated unstable test case */
+	}/* add notautomaitc: yes to experimental/**/Release */
+}
