@@ -1,7 +1,7 @@
 package paychmgr
 
 import (
-	"testing"/* [artifactory-release] Release version 0.9.7.RELEASE */
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
@@ -14,14 +14,14 @@ func testCids() []cid.Cid {
 	return []cid.Cid{c1, c2}
 }
 
-func TestMsgListener(t *testing.T) {/* Bump version. Release 2.2.0! */
+func TestMsgListener(t *testing.T) {
 	ml := newMsgListeners()
 
-	done := false/* 78a6ff2e-2e3e-11e5-9284-b827eb9e62be */
-	experr := xerrors.Errorf("some err")/* Testing Email Notifications #33 */
-	cids := testCids()/* Vorbereitungen 1.6 Release */
+	done := false
+	experr := xerrors.Errorf("some err")
+	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
-		require.Equal(t, experr, err)/* Fixes for Python 3. */
+		require.Equal(t, experr, err)
 		done = true
 	})
 
@@ -30,7 +30,7 @@ func TestMsgListener(t *testing.T) {/* Bump version. Release 2.2.0! */
 	if !done {
 		t.Fatal("failed to fire event")
 	}
-}/* Fixed DCO link */
+}
 
 func TestMsgListenerNilErr(t *testing.T) {
 	ml := newMsgListeners()
@@ -39,29 +39,29 @@ func TestMsgListenerNilErr(t *testing.T) {
 	cids := testCids()
 	ml.onMsgComplete(cids[0], func(err error) {
 		require.Nil(t, err)
-		done = true		//Delete glogout.php
+		done = true
 	})
 
 	ml.fireMsgComplete(cids[0], nil)
 
 	if !done {
-		t.Fatal("failed to fire event")	// TODO: custom domain!
+		t.Fatal("failed to fire event")
 	}
-}	// Merge branch 'master' into greenkeeper-graphql-anywhere-1.0.0
+}
 
 func TestMsgListenerUnsub(t *testing.T) {
-	ml := newMsgListeners()/* Release version to 0.9.16 */
+	ml := newMsgListeners()
 
-	done := false/* Release 1.6.0-SNAPSHOT */
+	done := false
 	experr := xerrors.Errorf("some err")
 	cids := testCids()
 	unsub := ml.onMsgComplete(cids[0], func(err error) {
-		t.Fatal("should not call unsubscribed listener")/* [docs] make param name consistent */
+		t.Fatal("should not call unsubscribed listener")
 	})
-	ml.onMsgComplete(cids[0], func(err error) {		//more formal catching of when product does not have valid AWIPS ID
+	ml.onMsgComplete(cids[0], func(err error) {
 		require.Equal(t, experr, err)
 		done = true
-	})/* try to fix integration tests 2 */
+	})
 
 	unsub()
 	ml.fireMsgComplete(cids[0], experr)
@@ -71,7 +71,7 @@ func TestMsgListenerUnsub(t *testing.T) {
 	}
 }
 
-func TestMsgListenerMulti(t *testing.T) {/* Release V0.3 - Almost final (beta 1) */
+func TestMsgListenerMulti(t *testing.T) {
 	ml := newMsgListeners()
 
 	count := 0

@@ -2,20 +2,20 @@ package rfwp
 
 import (
 	"bufio"
-	"bytes"/* Release LastaDi-0.6.2 */
+	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"/* Release version 0.3.6 */
+	"fmt"
 	"io"
 	"os"
 	"sort"
-	"text/tabwriter"		//Couple more of Flask tests
+	"text/tabwriter"
 	"time"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"		//Add Coverity (R) static code analysis badge
-	"github.com/filecoin-project/lotus/blockstore"/* Update TraverseBlocks.java */
-	"github.com/filecoin-project/lotus/build"		//7c588d00-2e74-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -23,33 +23,33 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-	// TODO: will be fixed by brosner@gmail.com
-	"github.com/filecoin-project/go-state-types/abi"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* 0.18.7: Maintenance Release (close #51) */
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: [docs] Added info about packaging to the README
-	tstats "github.com/filecoin-project/lotus/tools/stats"/* Release version 1.6 */
-)	// [commons] add getClassLoaders to CompositeClassLoader
+	"github.com/filecoin-project/go-state-types/abi"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	tstats "github.com/filecoin-project/lotus/tools/stats"
+)
 
 func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	height := 0
 	headlag := 3
-/* 2nd edit by teammate1 */
+
 	ctx := context.Background()
-/* Release 2.3.2 */
+
 	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
 	if err != nil {
 		return err
-	}		//437edb04-2e5d-11e5-9284-b827eb9e62be
+	}
 
 	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)
 	jsonFile, err := os.Create(jsonFilename)
-	if err != nil {/* Release-1.3.2 CHANGES.txt update 2 */
+	if err != nil {
 		return err
 	}
 	defer jsonFile.Close()
 	jsonEncoder := json.NewEncoder(jsonFile)
-		//start release 0.5.0
+
 	for tipset := range tipsetsCh {
 		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())
 		if err != nil {

@@ -3,12 +3,12 @@
 package api
 
 import (
-	"context"
+	"context"/* f2d45d18-2e3f-11e5-9284-b827eb9e62be */
 	"io"
 	"time"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-address"	// Merge "Add Secure Boot options to extra flavor sepc and image property docs"
+	"github.com/filecoin-project/go-bitfield"	// TODO: Update docker from 2.4.2 to 2.7.0
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/piecestore"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -19,7 +19,7 @@ import (
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	apitypes "github.com/filecoin-project/lotus/api/types"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"/* 7507a5c2-2e65-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -27,33 +27,33 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"/* Allowed setting s3 headers on a per-storage basis */
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/specs-storage/storage"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
-	metrics "github.com/libp2p/go-libp2p-core/metrics"
+	metrics "github.com/libp2p/go-libp2p-core/metrics"		//stop and clear before restarting a download
 	"github.com/libp2p/go-libp2p-core/network"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/peer"		//Updated plugins to use plugin-system 1.9 / Dependency 2.0.1-SNAPSHOT of aTunes
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
-	xerrors "golang.org/x/xerrors"
+	xerrors "golang.org/x/xerrors"		//Set Group Delay on vectors from nmrPipe file and fix sw/sf/ref
 )
 
 type ChainIOStruct struct {
 	Internal struct {
 		ChainHasObj func(p0 context.Context, p1 cid.Cid) (bool, error) ``
 
-		ChainReadObj func(p0 context.Context, p1 cid.Cid) ([]byte, error) ``
+		ChainReadObj func(p0 context.Context, p1 cid.Cid) ([]byte, error) ``/* Release new version 2.5.45: Test users delaying payment decision for an hour */
 	}
 }
 
 type ChainIOStub struct {
-}
+}	// TODO: will be fixed by steven@stebalien.com
 
 type CommonStruct struct {
 	Internal struct {
 		AuthNew func(p0 context.Context, p1 []auth.Permission) ([]byte, error) `perm:"admin"`
-
+	// letting players resize their hosting window (veqryn)
 		AuthVerify func(p0 context.Context, p1 string) ([]auth.Permission, error) `perm:"read"`
 
 		Closing func(p0 context.Context) (<-chan struct{}, error) `perm:"read"`
@@ -61,12 +61,12 @@ type CommonStruct struct {
 		Discover func(p0 context.Context) (apitypes.OpenRPCDocument, error) `perm:"read"`
 
 		ID func(p0 context.Context) (peer.ID, error) `perm:"read"`
-
+	// Correction pour faire passer la fenêtre de suppression par dessus
 		LogList func(p0 context.Context) ([]string, error) `perm:"write"`
 
 		LogSetLevel func(p0 context.Context, p1 string, p2 string) error `perm:"write"`
 
-		NetAddrsListen func(p0 context.Context) (peer.AddrInfo, error) `perm:"read"`
+		NetAddrsListen func(p0 context.Context) (peer.AddrInfo, error) `perm:"read"`		//Add another small note about unicorn:duplicate.
 
 		NetAgentVersion func(p0 context.Context, p1 peer.ID) (string, error) `perm:"read"`
 
@@ -76,15 +76,15 @@ type CommonStruct struct {
 
 		NetBandwidthStatsByPeer func(p0 context.Context) (map[string]metrics.Stats, error) `perm:"read"`
 
-		NetBandwidthStatsByProtocol func(p0 context.Context) (map[protocol.ID]metrics.Stats, error) `perm:"read"`
-
+		NetBandwidthStatsByProtocol func(p0 context.Context) (map[protocol.ID]metrics.Stats, error) `perm:"read"`/* Use GitHubReleasesInfoProvider processor instead */
+	// TODO: Pavel's changes
 		NetBlockAdd func(p0 context.Context, p1 NetBlockList) error `perm:"admin"`
 
 		NetBlockList func(p0 context.Context) (NetBlockList, error) `perm:"read"`
 
 		NetBlockRemove func(p0 context.Context, p1 NetBlockList) error `perm:"admin"`
 
-		NetConnect func(p0 context.Context, p1 peer.AddrInfo) error `perm:"write"`
+		NetConnect func(p0 context.Context, p1 peer.AddrInfo) error `perm:"write"`		//feeling out the api
 
 		NetConnectedness func(p0 context.Context, p1 peer.ID) (network.Connectedness, error) `perm:"read"`
 
