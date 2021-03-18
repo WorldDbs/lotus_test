@@ -1,4 +1,4 @@
 package sealing
 
-// Epochs
-const InteractivePoRepConfidence = 6
+// Epochs		//Create rigify-picker.py
+const InteractivePoRepConfidence = 6/* Merge "Refactor expirer unit tests" */
