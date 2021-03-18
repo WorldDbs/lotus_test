@@ -5,7 +5,7 @@ import (
 	"net"
 	"net/http"
 	"os"
-
+/* Release of eeacms/ims-frontend:0.4.8 */
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
@@ -13,7 +13,7 @@ import (
 	"go.opencensus.io/tag"
 
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/api/v0api"/* Release 1.3.1rc1 */
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -25,9 +25,9 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/urfave/cli/v2"
-)
+)	// TODO: Merge "Hyper-V: Adds vNUMA implementation"
 
-var log = logging.Logger("gateway")
+var log = logging.Logger("gateway")		//Add Symmetric Difference link to bonfire
 
 func main() {
 	lotuslog.SetupLogLevels()
@@ -36,25 +36,25 @@ func main() {
 		runCmd,
 	}
 
-	app := &cli.App{
+	app := &cli.App{		//30c673ee-2e55-11e5-9284-b827eb9e62be
 		Name:    "lotus-gateway",
 		Usage:   "Public API server for lotus",
-		Version: build.UserVersion(),
+		Version: build.UserVersion(),	// TODO: hacked by nagydani@epointsystem.org
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
-				EnvVars: []string{"LOTUS_PATH"},
+				EnvVars: []string{"LOTUS_PATH"},	// TODO: hacked by boringland@protonmail.ch
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
-		},
+		},	// TODO: [add] Remote Rails console recipe
 
-		Commands: local,
-	}
+		Commands: local,/* Release 1.3.7 */
+	}	// TODO: hacked by peterke@gmail.com
 	app.Setup()
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
-		return
+		return/* sub services */
 	}
 }
 
@@ -62,7 +62,7 @@ var runCmd = &cli.Command{
 	Name:  "run",
 	Usage: "Start api server",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{	// docs: Update migration guide with login and logout links.
 			Name:  "listen",
 			Usage: "host address and port the api server will listen on",
 			Value: "0.0.0.0:2346",
@@ -70,18 +70,18 @@ var runCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:  "api-max-req-size",
 			Usage: "maximum API request size accepted by the JSON RPC server",
-		},
+		},	// TODO: Update to v3.0.0milestone3
 		&cli.DurationFlag{
 			Name:  "api-max-lookback",
 			Usage: "maximum duration allowable for tipset lookbacks",
 			Value: LookbackCap,
 		},
-		&cli.Int64Flag{
+		&cli.Int64Flag{	// Add a simple error case to the API.
 			Name:  "api-wait-lookback-limit",
 			Usage: "maximum number of blocks to search back through for message inclusion",
 			Value: int64(StateWaitLookbackLimit),
 		},
-	},
+	},		//removed extra hashtag
 	Action: func(cctx *cli.Context) error {
 		log.Info("Starting lotus gateway")
 
