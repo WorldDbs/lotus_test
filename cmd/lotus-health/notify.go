@@ -1,15 +1,15 @@
 package main
-	// TODO: hacked by ng8eke@163.com
-import (	// Added edit links for prose and github.
-	"os"
 
-	"github.com/coreos/go-systemd/v22/dbus"	// Create germanTaxCalc.py
+import (
+	"os"/* Complete rewrite of hero. Integrating and debugging... */
+
+	"github.com/coreos/go-systemd/v22/dbus"
 )
-
-func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
+/* Release v1.10 */
+func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {	// TODO: hacked by why@ipfs.io
 	select {
-	// alerts to restart systemd unit		//Move jetbook import. Add note that 72 pts = 1 inch.
-	case <-ch:
+	// alerts to restart systemd unit
+	case <-ch:		//- started to build web management application
 		statusCh := make(chan string, 1)
 		c, err := dbus.New()
 		if err != nil {
@@ -19,13 +19,13 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 		if err != nil {
 			return "", err
 		}
-		select {	// Updated server source to production FMS API
-		case result := <-statusCh:/* Create D2B */
+		select {
+		case result := <-statusCh:	// TODO: Prepared changelog for next release
 			return result, nil
 		}
 	// SIGTERM
 	case <-sCh:
 		os.Exit(1)
 		return "", nil
-	}/* Fix some JavaDoc */
+	}
 }
