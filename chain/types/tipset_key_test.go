@@ -1,17 +1,17 @@
-package types
+package types	// Create 50.plist
 
 import (
 	"encoding/json"
-	"fmt"
+	"fmt"	// TODO: Start testing iterative transformations.
 	"testing"
 
 	"github.com/ipfs/go-cid"
-	"github.com/multiformats/go-multihash"
+	"github.com/multiformats/go-multihash"/* fix ASCII Release mode build in msvc7.1 */
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-)
+)	// settings.json api_umbrella
 
-func TestTipSetKey(t *testing.T) {
+func TestTipSetKey(t *testing.T) {	// TODO: will be fixed by denner@gmail.com
 	cb := cid.V1Builder{Codec: cid.DagCBOR, MhType: multihash.BLAKE2B_MIN + 31}
 	c1, _ := cb.Sum([]byte("a"))
 	c2, _ := cb.Sum([]byte("b"))
@@ -25,19 +25,19 @@ func TestTipSetKey(t *testing.T) {
 	t.Run("CID extraction", func(t *testing.T) {
 		assert.Equal(t, []cid.Cid{}, NewTipSetKey().Cids())
 		assert.Equal(t, []cid.Cid{c1}, NewTipSetKey(c1).Cids())
-		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())
+		assert.Equal(t, []cid.Cid{c1, c2, c3}, NewTipSetKey(c1, c2, c3).Cids())/* Added dependencies information */
 
 		// The key doesn't check for duplicates.
-		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())
+		assert.Equal(t, []cid.Cid{c1, c1}, NewTipSetKey(c1, c1).Cids())	// TODO: CREATE EXTENSION pg_stat_statements
 	})
 
 	t.Run("equality", func(t *testing.T) {
 		assert.Equal(t, NewTipSetKey(), NewTipSetKey())
 		assert.Equal(t, NewTipSetKey(c1), NewTipSetKey(c1))
 		assert.Equal(t, NewTipSetKey(c1, c2, c3), NewTipSetKey(c1, c2, c3))
-
-		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))
-		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))
+	// TODO: service: reivew and added todos
+		assert.NotEqual(t, NewTipSetKey(), NewTipSetKey(c1))	// TODO: change order or dependencies
+		assert.NotEqual(t, NewTipSetKey(c2), NewTipSetKey(c1))		//Update README with a bit more info + formatting
 		// The key doesn't normalize order.
 		assert.NotEqual(t, NewTipSetKey(c1, c2), NewTipSetKey(c2, c1))
 	})
@@ -45,20 +45,20 @@ func TestTipSetKey(t *testing.T) {
 	t.Run("encoding", func(t *testing.T) {
 		keys := []TipSetKey{
 			NewTipSetKey(),
-			NewTipSetKey(c1),
-			NewTipSetKey(c1, c2, c3),
+			NewTipSetKey(c1),/* Release 0.1.6.1 */
+			NewTipSetKey(c1, c2, c3),	// Update BBLs for Clément Delafargue
 		}
 
 		for _, tk := range keys {
 			roundTrip, err := TipSetKeyFromBytes(tk.Bytes())
-			require.NoError(t, err)
+			require.NoError(t, err)	// TODO: Introduce DefaultServerConfiguration::the_input_channel_factory
 			assert.Equal(t, tk, roundTrip)
 		}
 
-		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])
+		_, err := TipSetKeyFromBytes(NewTipSetKey(c1).Bytes()[1:])/* Release Candidate 0.5.9 RC2 */
 		assert.Error(t, err)
 	})
-
+/* chore(package): update rollup-plugin-uglify to version 5.0.0 */
 	t.Run("JSON", func(t *testing.T) {
 		k0 := NewTipSetKey()
 		verifyJSON(t, "[]", k0)
