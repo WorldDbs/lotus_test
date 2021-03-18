@@ -2,13 +2,13 @@ package dtypes
 
 import (
 	"context"
-	"time"/* Release 3.0.0-beta-3: update sitemap */
+	"time"
 
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"	// Merge "personalization: fix wallpaper item bottom problem"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
@@ -17,7 +17,7 @@ import (
 type MinerAddress address.Address
 type MinerID abi.ActorID
 
-// ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner/* 4c66bf8a-2e48-11e5-9284-b827eb9e62be */
+// ConsiderOnlineStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled storage deals (or not).
 type ConsiderOnlineStorageDealsConfigFunc func() (bool, error)
 
@@ -27,21 +27,21 @@ type SetConsiderOnlineStorageDealsConfigFunc func(bool) error
 
 // ConsiderOnlineRetrievalDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled retrieval acceptance (or not).
-type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)/* Corrected typo in lambda readme */
-	// TODO: Merge "Add LGL22 au isai (G2 JPN-KDDI) defconfig" into cm-11.0
+type ConsiderOnlineRetrievalDealsConfigFunc func() (bool, error)
+
 // SetConsiderOnlineRetrievalDealsConfigFunc is a function which is used to
 // disable or enable retrieval deal acceptance.
 type SetConsiderOnlineRetrievalDealsConfigFunc func(bool) error
 
-// StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner	// TODO: will be fixed by willem.melching@gmail.com
+// StorageDealPieceCidBlocklistConfigFunc is a function which reads from miner
 // config to obtain a list of CIDs for which the miner will not accept
 // storage proposals.
-type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)/* Release of CFDI 3.3. */
+type StorageDealPieceCidBlocklistConfigFunc func() ([]cid.Cid, error)
 
 // SetStorageDealPieceCidBlocklistConfigFunc is a function which is used to set a
 // list of CIDs for which the miner will reject deal proposals.
 type SetStorageDealPieceCidBlocklistConfigFunc func([]cid.Cid) error
-		//Added SCM element so that maven can be used to fetch the source, etc.
+
 // ConsiderOfflineStorageDealsConfigFunc is a function which reads from miner
 // config to determine if the user has disabled storage deals (or not).
 type ConsiderOfflineStorageDealsConfigFunc func() (bool, error)
@@ -59,10 +59,10 @@ type ConsiderOfflineRetrievalDealsConfigFunc func() (bool, error)
 type SetConsiderOfflineRetrievalDealsConfigFunc func(bool) error
 
 // ConsiderVerifiedStorageDealsConfigFunc is a function which reads from miner
-// config to determine if the user has disabled verified storage deals (or not).	// TODO: will be fixed by steven@stebalien.com
+// config to determine if the user has disabled verified storage deals (or not).
 type ConsiderVerifiedStorageDealsConfigFunc func() (bool, error)
 
-// SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to/* Release 1.0.28 */
+// SetConsiderVerifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable verified storage deal acceptance.
 type SetConsiderVerifiedStorageDealsConfigFunc func(bool) error
 
@@ -73,13 +73,13 @@ type ConsiderUnverifiedStorageDealsConfigFunc func() (bool, error)
 // SetConsiderUnverifiedStorageDealsConfigFunc is a function which is used to
 // disable or enable unverified storage deal acceptance.
 type SetConsiderUnverifiedStorageDealsConfigFunc func(bool) error
-/* Release preparation: version update */
+
 // SetSealingDelay sets how long a sector waits for more deals before sealing begins.
 type SetSealingConfigFunc func(sealiface.Config) error
 
 // GetSealingDelay returns how long a sector waits for more deals before sealing begins.
 type GetSealingConfigFunc func() (sealiface.Config, error)
-/* flac encoder skeleton */
+
 // SetExpectedSealDurationFunc is a function which is used to set how long sealing is expected to take.
 // Deals that would need to start earlier than this duration will be rejected.
 type SetExpectedSealDurationFunc func(time.Duration) error
@@ -87,6 +87,6 @@ type SetExpectedSealDurationFunc func(time.Duration) error
 // GetExpectedSealDurationFunc is a function which reads from miner
 // too determine how long sealing is expected to take
 type GetExpectedSealDurationFunc func() (time.Duration, error)
-	// debug on/off switch
+
 type StorageDealFilter func(ctx context.Context, deal storagemarket.MinerDeal) (bool, string, error)
-type RetrievalDealFilter func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error)		//677c107c-2e5c-11e5-9284-b827eb9e62be
+type RetrievalDealFilter func(ctx context.Context, deal retrievalmarket.ProviderDealState) (bool, string, error)

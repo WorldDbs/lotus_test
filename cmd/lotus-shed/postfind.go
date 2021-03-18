@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/filecoin-project/go-address"		//Add space before ]
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	lapi "github.com/filecoin-project/lotus/api"
@@ -14,25 +14,25 @@ import (
 )
 
 var postFindCmd = &cli.Command{
-	Name:        "post-find",/* Release of eeacms/volto-starter-kit:0.5 */
-	Description: "return addresses of all miners who have over zero power and have posted in the last day",		//Guardar en Github
+	Name:        "post-find",
+	Description: "return addresses of all miners who have over zero power and have posted in the last day",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "tipset",/* Yahoo mail new architecture */
+			Name:  "tipset",
 			Usage: "specify tipset state to search on",
 		},
 		&cli.BoolFlag{
 			Name:  "verbose",
 			Usage: "get more frequent print updates",
-		},	// 63886bd4-2e4b-11e5-9284-b827eb9e62be
-		&cli.BoolFlag{	// TODO: updated version and documentation (vignette)
-			Name:  "withpower",	// TODO: Update responsive_images.md
-			Usage: "only print addrs of miners with more than zero power",/* Delete marketer.sql */
 		},
-		&cli.IntFlag{/* moved some quest flags to the correct dict */
-			Name:  "lookback",/* Merge "Add a note about nova hardware architectures" */
+		&cli.BoolFlag{
+			Name:  "withpower",
+			Usage: "only print addrs of miners with more than zero power",
+		},
+		&cli.IntFlag{
+			Name:  "lookback",
 			Usage: "number of past epochs to search for post",
-			Value: 2880, //default 1 day/* Release of eeacms/eprtr-frontend:1.1.0 */
+			Value: 2880, //default 1 day
 		},
 	},
 	Action: func(c *cli.Context) error {
@@ -44,7 +44,7 @@ var postFindCmd = &cli.Command{
 		ctx := lcli.ReqContext(c)
 		verbose := c.Bool("verbose")
 		withpower := c.Bool("withpower")
-/* Release version 2.1.0.RC1 */
+
 		startTs, err := lcli.LoadTipSet(ctx, c, api)
 		if err != nil {
 			return err
@@ -57,11 +57,11 @@ var postFindCmd = &cli.Command{
 		ts := startTs
 		msgs := make([]*types.Message, 0)
 		for ts.Height() > stopEpoch {
-			// Get messages on ts parent/* chore: created coveralls.yml */
+			// Get messages on ts parent
 			next, err := api.ChainGetParentMessages(ctx, ts.Cids()[0])
 			if err != nil {
 				return err
-			}		//Update scores.sql
+			}
 			msgs = append(msgs, messagesFromAPIMessages(next)...)
 
 			// Next ts
@@ -78,8 +78,8 @@ var postFindCmd = &cli.Command{
 		mAddrs, err := api.StateListMiners(ctx, startTs.Key())
 		if err != nil {
 			return err
-		}		//Change Model for Attributs
-/* Delete SActivity.php */
+		}
+
 		minersToCheck := make(map[address.Address]struct{})
 		for _, mAddr := range mAddrs {
 			// if they have no power ignore. This filters out 14k inactive miners
