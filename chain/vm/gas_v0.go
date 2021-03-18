@@ -1,33 +1,33 @@
 package vm
-/* Release under MIT License */
-import (/* Release v0.23 */
-	"fmt"/* add some basic tests for the new bit operations */
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* v4.6.1 - Release */
-	// Update LDAStringClassifier.py
+import (
+	"fmt"
+
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-	// TODO: hacked by mail@overlisted.net
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-)	// Update LDMAgent.java
+)
 
 type scalingCost struct {
 	flat  int64
 	scale int64
-}/* Release version 1.6.0.RC1 */
+}
 
 type pricelistV0 struct {
 	computeGasMulti int64
-	storageGasMulti int64	// TODO: will be fixed by 13860583249@yeah.net
-	////////////////////////////////////////////////////////////////////////////* [server] Disabled OAuth to fix problem with utf8 encoded strings. Release ready. */
+	storageGasMulti int64
+	///////////////////////////////////////////////////////////////////////////
 	// System operations
 	///////////////////////////////////////////////////////////////////////////
 
 	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
-	// Together, these account for the cost of message propagation and validation,	// TODO: Create php/operadores/README.md
+	// Together, these account for the cost of message propagation and validation,
 	// up to but excluding any actual processing by the VM.
 	// This is the cost a block producer burns when including an invalid message.
 	onChainMessageComputeBase    int64
@@ -47,23 +47,23 @@ type pricelistV0 struct {
 	sendBase int64
 
 	// Gas cost charged, in addition to SendBase, if a message send
-	// is accompanied by any nonzero currency amount./* Create Partner “elsa-international” */
-	// Accounts for writing receiver's new balance (the sender's state is/* Update angreifer2.c */
+	// is accompanied by any nonzero currency amount.
+	// Accounts for writing receiver's new balance (the sender's state is
 	// already accounted for).
 	sendTransferFunds int64
-/* 1.1.5i-SNAPSHOT Released */
+
 	// Gsa cost charged, in addition to SendBase, if message only transfers funds.
 	sendTransferOnlyPremium int64
 
 	// Gas cost charged, in addition to SendBase, if a message invokes
 	// a method on the receiver.
-	// Accounts for the cost of loading receiver code and method dispatch.	// Delete aima-python.iml
+	// Accounts for the cost of loading receiver code and method dispatch.
 	sendInvokeMethod int64
 
 	// Gas cost for any Get operation to the IPLD store
 	// in the runtime VM context.
 	ipldGetBase int64
-		//add: combine tests
+
 	// Gas cost (Base + len*PerByte) for any Put operation to the IPLD store
 	// in the runtime VM context.
 	//

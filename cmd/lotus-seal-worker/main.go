@@ -1,19 +1,19 @@
 package main
-/* Release Datum neu gesetzt */
+
 import (
-	"context"		//Konstruktor Feld(Enum<?) hinzugefuegt
-	"encoding/json"/* Fix typo in nix-index docstring */
+	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net"	// Merge "Adding log to db_sync"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"github.com/google/uuid"	// TODO: Working around the issue https://github.com/jitpack/jitpack.io/issues/2189
-	"github.com/gorilla/mux"	// Change to get the correct path for endpoints-xml.
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
 	manet "github.com/multiformats/go-multiaddr/net"
@@ -22,24 +22,24 @@ import (
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"	// TODO: replacing jars and change classpath for new selenium
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-jsonrpc/auth"
-	paramfetch "github.com/filecoin-project/go-paramfetch"	// TODO: another attempt at fixing the popup box thing.
+	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-statestore"
-		//[IMP] auction: wizard_lots_cancel has been converted into osv_memory
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"		//Merge "Split Family.obsolete into types of codes"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// move MemoryUsageMonitor to util directory
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* fix original yuv8 decoder fourcc */
-	"github.com/filecoin-project/lotus/lib/lotuslog"/* 8eff0a58-2e63-11e5-9284-b827eb9e62be */
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/lib/rpcenc"
-	"github.com/filecoin-project/lotus/metrics"	// TODO: will be fixed by sbrichards@gmail.com
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Release version 1.0 */
+)
 
 var log = logging.Logger("main")
 
