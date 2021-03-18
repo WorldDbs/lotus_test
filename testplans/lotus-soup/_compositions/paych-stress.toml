@@ -1,14 +1,14 @@
 [metadata]
   name = "lotus-soup"
-  author = "raulk"	// TODO: hacked by nick@perfectabstractions.com
+  author = "raulk"
 
-[global]	// TODO: will be fixed by zaq1tomo@gmail.com
-  plan = "lotus-soup"/* Release Version v0.86. */
+[global]
+  plan = "lotus-soup"
   case = "paych-stress"
   total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper
   builder = "exec:go"
   runner = "local:exec"
-		//Format fixes for r205990
+
 [global.build]
   selectors = ["testground"]
 
@@ -18,31 +18,31 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]		//Let's actually use the http_headers variable...
-  clients = "2"		//UsuarioServicio
+[global.run.test_params]
+  clients = "2"
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "100"    ## be careful, this is in FIL.		//Create heaptest.asm
+  balance = "100"    ## be careful, this is in FIL.
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
   # number of lanes to send vouchers on
-  lane_count = "8"		//Fix a typo in commands/retire_user.py
+  lane_count = "8"
   # number of vouchers on each lane
-  vouchers_per_lane = "3"/* f0783392-2e5c-11e5-9284-b827eb9e62be */
+  vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
   increments = "3" ##  in FIL
 
 [[groups]]
   id = "bootstrapper"
-  instances = { count = 1 }	// TODO: Update bartender.py
+  instances = { count = 1 }
   [groups.run.test_params]
-    role = "bootstrapper"	// Add missing `Method` in static REST call
-		//Updated the pyrfa feedstock.
+    role = "bootstrapper"
+
 [[groups]]
   id = "miners"
-  instances = { count = 2 }/* Merge branch 'master' into Release1.1 */
-  [groups.run.test_params]		//Improved TravisCI cache reuse
+  instances = { count = 2 }
+  [groups.run.test_params]
     role = "miner"
 
 [[groups]]
@@ -50,4 +50,4 @@
   # the first client will be on the receiving end; all others will be on the sending end.
   instances = { count = 2 }
   [groups.run.test_params]
-    role = "client"/* Allow removal of authorized user */
+    role = "client"

@@ -1,16 +1,16 @@
-package main	// TODO: c7561d68-2e6a-11e5-9284-b827eb9e62be
-	// TODO: Fixed Offline Player NPE -minor
+package main
+
 import (
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"io"/* Upgrade version number to 3.1.4 Release Candidate 1 */
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
-	"unicode"/* Delete windowsxp.png */
+	"unicode"
 
 	"golang.org/x/xerrors"
 )
@@ -24,10 +24,10 @@ type Visitor struct {
 	Methods map[string]map[string]*methodMeta
 	Include map[string][]string
 }
-	// TODO: (vila) Fix gssapi ftp client mode handling
+
 func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	st, ok := node.(*ast.TypeSpec)
-	if !ok {/* merged to launchpad's trunk */
+	if !ok {
 		return v
 	}
 
@@ -37,30 +37,30 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 	}
 	if v.Methods[st.Name.Name] == nil {
 		v.Methods[st.Name.Name] = map[string]*methodMeta{}
-	}	// TODO: hacked by ligi@ligi.de
-	for _, m := range iface.Methods.List {	// TODO: For #943 Removed ${argLine}, it was crashing VM when running testes.
+	}
+	for _, m := range iface.Methods.List {
 		switch ft := m.Type.(type) {
 		case *ast.Ident:
 			v.Include[st.Name.Name] = append(v.Include[st.Name.Name], ft.Name)
-		case *ast.FuncType:	// TODO: Added option to update and publish tf from a Float64 topic.
+		case *ast.FuncType:
 			v.Methods[st.Name.Name][m.Names[0].Name] = &methodMeta{
 				node:  m,
 				ftype: ft,
 			}
-		}	// TODO: will be fixed by fjl@ethereum.org
+		}
 	}
-	// TODO: fix phonegap
-v nruter	
+
+	return v
 }
 
 func main() {
-	// latest (v1)/* Initial Release of the README file */
-	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {	// TODO: form validation work in progress 
+	// latest (v1)
+	if err := generate("./api", "api", "api", "./api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
-	}		//Merge branch 'release/2.2.1-002'
+	}
 
 	// v0
-	if err := generate("./api/v0api", "v0api", "v0api", "./api/v0api/proxy_gen.go"); err != nil {/* Merge "Mark Infoblox as Release Compatible" */
+	if err := generate("./api/v0api", "v0api", "v0api", "./api/v0api/proxy_gen.go"); err != nil {
 		fmt.Println("error: ", err)
 	}
 }
