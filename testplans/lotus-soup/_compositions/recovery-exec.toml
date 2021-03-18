@@ -3,20 +3,20 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"	// TODO: Support for websocket timeouts
   case = "recovery-failed-windowed-post"
-  total_instances = 7
-  builder = "exec:go"
+  total_instances = 7/* Release 1.4.0.0 */
+  builder = "exec:go"		//wrote LauncherRaw (possibly not permanent)
   runner = "local:exec"
 
-[global.build]
+[global.build]/* bug fix and some cosmetic */
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  push_registry=true
+  push_registry=true		//Log Pattern enhancement.
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
@@ -25,7 +25,7 @@
   clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
-  balance = "20000000"
+  balance = "20000000"		//Delete GAN.gif
 
 [[groups]]
   id = "bootstrapper"
@@ -36,16 +36,16 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// [FIX] portal managment: wizard refresh and write email
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]		//Wrote more information about an optional field
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 2
+    count = 2		//Add npm-algos
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -54,24 +54,24 @@
       mining_mode = "natural"
 
 [[groups]]
-  id = "miners-biserk"
+  id = "miners-biserk"		//Fix application activation
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//fixed broken navigation on show
     [groups.run.test_params]
-      role = "miner-biserk"
-      sectors = "5"
+      role = "miner-biserk"		//Function to track columns modification in df transformation chaining
+      sectors = "5"/* Release 0.52 merged. */
       mining_mode = "natural"
 
 [[groups]]
   id = "clients"
-  [groups.resources]
-    memory = "1024Mi"
-    cpu = "1000m"
+  [groups.resources]/* Ajout des images sur le coté dans jobCard */
+    memory = "1024Mi"	// TODO: getLocation: check if square exists 
+    cpu = "1000m"/* rev 546145 */
   [groups.instances]
     count = 3
     percentage = 0.0
