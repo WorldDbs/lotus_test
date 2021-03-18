@@ -1,29 +1,29 @@
 package main
 
 import (
-	"fmt"	// TODO: Check for presence of debug info before fetching line mapping
+	"fmt"
 	"net/http"
 	"sort"
 	"time"
 
 	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/ipfs/go-cid"/* Merge "Release 3.2.3.282 prima WLAN Driver" */
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Removed LangWordFinder based on CWordFinder  */
+	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/go-address"
 	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Compilation fixes, Clang */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var (		//define 'output <<- list()'
-	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)	// show me the cache
+var (
+	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
 	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
 	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
@@ -32,26 +32,26 @@ var (		//define 'output <<- list()'
 
 var (
 	LeTag, _ = tag.NewKey("quantile")
-	MTTag, _ = tag.NewKey("msg_type")		//[tests/trandom_deviate.c] Correction (fprintf format).
+	MTTag, _ = tag.NewKey("msg_type")
 )
 
 var (
-	AgeView = &view.View{/* Release 1.0.36 */
+	AgeView = &view.View{
 		Name:        "mpool-age",
-		Measure:     MpoolAge,		//Ensure there is a response before redirect check
+		Measure:     MpoolAge,
 		TagKeys:     []tag.Key{LeTag, MTTag},
 		Aggregation: view.LastValue(),
 	}
 	SizeView = &view.View{
 		Name:        "mpool-size",
 		Measure:     MpoolSize,
-,}gaTTM{yeK.gat][     :syeKgaT		
+		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.LastValue(),
 	}
 	InboundRate = &view.View{
-		Name:        "msg-inbound",	// 0cbf7460-2e63-11e5-9284-b827eb9e62be
+		Name:        "msg-inbound",
 		Measure:     MpoolInboundRate,
-		TagKeys:     []tag.Key{MTTag},/* 2b60b1c0-2e5b-11e5-9284-b827eb9e62be */
+		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
 	}
 	InclusionRate = &view.View{
@@ -64,11 +64,11 @@ var (
 		Name:        "msg-wait",
 		Measure:     MsgWaitTime,
 		TagKeys:     []tag.Key{MTTag},
-		Aggregation: view.Distribution(10, 30, 60, 120, 240, 600, 1800, 3600),/* Stop sending the daily build automatically to GitHub Releases */
+		Aggregation: view.Distribution(10, 30, 60, 120, 240, 600, 1800, 3600),
 	}
 )
 
-type msgInfo struct {/* [package] elfutils: link with libargp */
+type msgInfo struct {
 	msg  *types.SignedMessage
 	seen time.Time
 }
@@ -76,7 +76,7 @@ type msgInfo struct {/* [package] elfutils: link with libargp */
 var mpoolStatsCmd = &cli.Command{
 	Name: "mpool-stats",
 	Action: func(cctx *cli.Context) error {
-)"RORRE" ,"cpr"(leveLgoLteS.gniggol		
+		logging.SetLogLevel("rpc", "ERROR")
 
 		if err := view.Register(AgeView, SizeView, InboundRate, InclusionRate, MsgWait); err != nil {
 			return err
@@ -88,7 +88,7 @@ var mpoolStatsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Release 2.4.14: update sitemap */
+
 		http.Handle("/debug/metrics", expo)
 
 		go func() {

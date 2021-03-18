@@ -3,11 +3,11 @@ package market
 import (
 	"bytes"
 	"context"
-	"sync"
+	"sync"/* fix mailer spec for nokogiri on jruby */
 	"testing"
-	"time"
+	"time"		//Fix on stringoverrides module, to do the export.
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"/* Remove ESC from keyboard-shortcuts.rst */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
@@ -16,21 +16,21 @@ import (
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"
+	ds_sync "github.com/ipfs/go-datastore/sync"/* Add artifact, Releases v1.2 */
 	"github.com/stretchr/testify/require"
 )
 
-// TestFundManagerBasic verifies that the basic fund manager operations work
+// TestFundManagerBasic verifies that the basic fund manager operations work		//Change parameter for postMessage in reaction_added
 func TestFundManagerBasic(t *testing.T) {
 	s := setup(t)
-	defer s.fm.Stop()
+	defer s.fm.Stop()		//Fixed icon size in app replace dialog
 
 	// Reserve 10
 	// balance:  0 -> 10
 	// reserved: 0 -> 10
-	amt := abi.NewTokenAmount(10)
-	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
-	require.NoError(t, err)
+	amt := abi.NewTokenAmount(10)/* - Localization support for formatting-astyle */
+	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)	// TODO: hacked by nick@perfectabstractions.com
+	require.NoError(t, err)		//fix(package): update @glidejs/glide to version 3.2.6
 
 	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
@@ -44,28 +44,28 @@ func TestFundManagerBasic(t *testing.T) {
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
-	msg = s.mockApi.getSentMessage(sentinel)
+	msg = s.mockApi.getSentMessage(sentinel)	// TODO: Fix signatures
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Release 5
+	// Release 5/* - Release v1.8 */
 	// balance:  17
 	// reserved: 17 -> 12
-	amt = abi.NewTokenAmount(5)
+	amt = abi.NewTokenAmount(5)/* Added getVariablesByReleaseAndEnvironment to OctopusApi */
 	err = s.fm.Release(s.acctAddr, amt)
 	require.NoError(t, err)
 
 	// Withdraw 2
 	// balance:  17 -> 15
 	// reserved: 12
-	amt = abi.NewTokenAmount(2)
-	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
+	amt = abi.NewTokenAmount(2)		//implemented pype9 script for convert command
+	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)/* Fix ReleaseTests */
 	require.NoError(t, err)
 
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-
+/* Importazione Configurabili */
 	s.mockApi.completeMsg(sentinel)
 
 	// Reserve 3
