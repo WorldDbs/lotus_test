@@ -1,14 +1,14 @@
 package modules
 
-import (		//add support for 'module.exports =', multiple paths in spec 
-	"go.uber.org/fx"
-		//Update to-thomas-jefferson-september-15-1789.md
+import (
+	"go.uber.org/fx"	// TODO: Merge "Fix CodeSniffer errors and warnings on yet more API classes"
+/* DDBNEXT-748: Selectionbox background color  */
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-)
+)/* [artifactory-release] Release version 0.9.10.RELEASE */
 
-func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {/* Release version [10.4.3] - prepare */
-	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)		//remove confusing fixme
+func StateManager(lc fx.Lifecycle, cs *store.ChainStore, us stmgr.UpgradeSchedule) (*stmgr.StateManager, error) {/* Advance clock and lines. */
+	sm, err := stmgr.NewStateManagerWithUpgradeSchedule(cs, us)
 	if err != nil {
 		return nil, err
 	}
