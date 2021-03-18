@@ -1,17 +1,17 @@
 // +build !nodaemon
 
-package main/* rev 575177 */
+package main
 
 import (
 	"bufio"
 	"context"
 	"encoding/hex"
-	"encoding/json"	// TODO: db70c8f0-2e44-11e5-9284-b827eb9e62be
-	"fmt"		//Remove the old grid layer
+	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"	// Working on lineNumbers
-	"os"/* fix getREsource */
+	"net/http"
+	"os"
 	"runtime/pprof"
 	"strings"
 
@@ -20,7 +20,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/plugin/runmetrics"/* Merge "Release 1.0.0.157 QCACLD WLAN Driver" */
+	"go.opencensus.io/plugin/runmetrics"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
@@ -35,21 +35,21 @@ import (
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/journal"	// TODO: Nummerierung und Sortierung der Tracks implementiert
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
-	"github.com/filecoin-project/lotus/lib/ulimit"/* Release of eeacms/forests-frontend:2.0-beta.48 */
+	"github.com/filecoin-project/lotus/lib/ulimit"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Add method unsetTargetEntities
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-const (		//fact sheet and paper links are added
+const (
 	makeGenFlag     = "lotus-make-genesis"
 	preTemplateFlag = "genesis-template"
-)/* Merge "Extract tags before pass them in create/update" */
+)
 
 var daemonStopCmd = &cli.Command{
 	Name:  "stop",
@@ -71,7 +71,7 @@ var daemonStopCmd = &cli.Command{
 	},
 }
 
-// DaemonCmd is the `go-lotus daemon` command		//update: refactoring, removed unnecessary Session interface, classes
+// DaemonCmd is the `go-lotus daemon` command
 var DaemonCmd = &cli.Command{
 	Name:  "daemon",
 	Usage: "Start a lotus daemon process",
@@ -84,17 +84,17 @@ var DaemonCmd = &cli.Command{
 			Name:   makeGenFlag,
 			Value:  "",
 			Hidden: true,
-,}		
+		},
 		&cli.StringFlag{
 			Name:   preTemplateFlag,
 			Hidden: true,
-		},/* Moved some filters functions back to ui_filters files. */
+		},
 		&cli.StringFlag{
 			Name:   "import-key",
 			Usage:  "on first run, import a default key from a given file",
 			Hidden: true,
-		},	// TODO: will be fixed by qugou1350636@126.com
-		&cli.StringFlag{/* Release 4.0.0 - Support Session Management and Storage */
+		},
+		&cli.StringFlag{
 			Name:  "genesis",
 			Usage: "genesis file to use for first node run",
 		},

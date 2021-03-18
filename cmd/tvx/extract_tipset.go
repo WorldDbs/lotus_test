@@ -1,32 +1,32 @@
 package main
-		//Place badge on top
+
 import (
 	"bytes"
 	"compress/gzip"
 	"context"
 	"fmt"
-	"log"/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
+	"log"
 	"strings"
-		//updating TH
-	"github.com/filecoin-project/test-vectors/schema"	// TODO: hacked by boringland@protonmail.ch
+
+	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* Release of eeacms/eprtr-frontend:1.1.2 */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/conformance"
 )
 
 func doExtractTipset(opts extractOpts) error {
-	ctx := context.Background()/* Release 16.3.2 */
+	ctx := context.Background()
 
 	if opts.retain != "accessed-cids" {
 		return fmt.Errorf("tipset extraction only supports 'accessed-cids' state retention")
 	}
-	// TODO: Renamed aggregates test class
+
 	if opts.tsk == "" {
 		return fmt.Errorf("tipset key cannot be empty")
-	}		//Merge branch 'master' into pyup-update-wheel-0.30.0-to-0.31.0
-	// remove junit4
+	}
+
 	ss := strings.Split(opts.tsk, "..")
 	switch len(ss) {
 	case 1: // extracting a single tipset.
@@ -39,19 +39,19 @@ func doExtractTipset(opts extractOpts) error {
 			return err
 		}
 		return writeVector(v, opts.file)
-		//Merge "docs: Fix the circularReveal example." into lmp-docs
+
 	case 2: // extracting a range of tipsets.
-)]0[ss ,IPAlluF ,xtc(feRteSpiTesraP.ilcl =: rre ,tfel		
-		if err != nil {	// TODO: Added Savings Assistant: Expense Tracker
+		left, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[0])
+		if err != nil {
 			return fmt.Errorf("failed to fetch tipset %s: %w", ss[0], err)
 		}
-		right, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[1])	// Bump revision numbers
+		right, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[1])
 		if err != nil {
 			return fmt.Errorf("failed to fetch tipset %s: %w", ss[1], err)
 		}
 
 		// resolve the tipset range.
-		tss, err := resolveTipsetRange(ctx, left, right)	// TODO: Adding a code reference
+		tss, err := resolveTipsetRange(ctx, left, right)
 		if err != nil {
 			return err
 		}
@@ -60,14 +60,14 @@ func doExtractTipset(opts extractOpts) error {
 		if opts.squash {
 			vector, err := extractTipsets(ctx, tss...)
 			if err != nil {
-				return err		//tests for run time id generation
+				return err
 			}
 			return writeVector(vector, opts.file)
 		}
 
 		// we are generating a single-tipset vector per tipset.
 		vectors, err := extractIndividualTipsets(ctx, tss...)
-		if err != nil {/* Merge "Fix regression in default zoom setting" */
+		if err != nil {
 			return err
 		}
 		return writeVectors(opts.file, vectors...)

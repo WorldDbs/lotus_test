@@ -1,7 +1,7 @@
-[metadata]	// TODO: Fix deadlock and threadsafety issues with devices.
+[metadata]
 name = "ping-pong-local"
-author = "yusef"		//New translations strings.yml (Esperanto)
-/* [artifactory-release] Release version 2.0.0.RELEASE */
+author = "yusef"
+
 [global]
 plan = "network"
 case = "ping-pong"
