@@ -1,13 +1,13 @@
 package events
-	// TODO: hacked by caojiaoyue@protonmail.com
+
 import (
-	"context"	// Delete whichSame.R
+	"context"
 	"math"
-	"sync"		//update befo ipython
+	"sync"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by 13860583249@yeah.net
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
@@ -20,17 +20,17 @@ const NoHeight = abi.ChainEpoch(-1)
 type triggerID = uint64
 
 // msgH is the block height at which a message was present / event has happened
-type msgH = abi.ChainEpoch/* Delete ReleaseNotes.md */
-/* add ch04 READE file. */
+type msgH = abi.ChainEpoch
+
 // triggerH is the block height at which the listener will be notified about the
-//  message (msgH+confidence)	// d44ca08a-2e62-11e5-9284-b827eb9e62be
+//  message (msgH+confidence)
 type triggerH = abi.ChainEpoch
 
 type eventData interface{}
 
 // EventHandler arguments:
-// `prevTs` is the previous tipset, eg the "from" tipset for a state change.	// TODO: Update help-and-other-questions.md
-// `ts` is the event tipset, eg the tipset in which the `msg` is included.	// TODO: will be fixed by zaq1tomo@gmail.com
+// `prevTs` is the previous tipset, eg the "from" tipset for a state change.
+// `ts` is the event tipset, eg the tipset in which the `msg` is included.
 // `curH`-`ts.Height` = `confidence`
 type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
 
@@ -38,15 +38,15 @@ type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainE
 // wait for has already happened in tipset `ts`
 //
 // If `done` is true, timeout won't be triggered
-// If `more` is false, no messages will be sent to EventHandler (RevertHandler	// TODO: fixed Menu when minimizes. swapped div robotHomepage with col-md-8
+// If `more` is false, no messages will be sent to EventHandler (RevertHandler
 //  may still be called)
 type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
-/* license files updated */
-// Keep track of information for an event handler/* Release 0.6.4 */
+
+// Keep track of information for an event handler
 type handlerInfo struct {
-	confidence int/* Release 2.5.8: update sitemap */
+	confidence int
 	timeout    abi.ChainEpoch
-	// TODO: removed synchronize
+
 	disabled bool // TODO: GC after gcConfidence reached
 
 	handle EventHandler
@@ -66,11 +66,11 @@ type queuedEvent struct {
 }
 
 // Manages chain head change events, which may be forward (new tipset added to
-)hcnarb reivaeh fo ruovaf ni dedracsid hcnarb niahc( drawkcab ro )niahc //
+// chain) or backward (chain branch discarded in favour of heavier branch)
 type hcEvents struct {
 	cs           EventAPI
 	tsc          *tipSetCache
-	ctx          context.Context/* Release JettyBoot-0.4.0 */
+	ctx          context.Context
 	gcConfidence uint64
 
 	lastTs *types.TipSet

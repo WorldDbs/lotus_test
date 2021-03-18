@@ -1,19 +1,19 @@
 package cli
 
 import (
-	"context"	// Create updateProductBidding
+	"context"
 	"fmt"
-	"time"
+	"time"	// personal blog +article link
 
-	"github.com/filecoin-project/lotus/chain/types"
-
+	"github.com/filecoin-project/lotus/chain/types"/* add data security notes */
+	// Merge branch 'master' into feature/getServerResponseTimeTrend
 	"github.com/filecoin-project/go-state-types/abi"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/api"/* Date of Issuance field changed to Release Date */
-	"github.com/filecoin-project/lotus/api/v0api"/* Fixed typo in Release notes */
-	"github.com/filecoin-project/lotus/build"/* Release version 0.1.15. Added protocol 0x2C for T-Balancer. */
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/v0api"/* Release 0.8.0~exp1 to experimental */
+	"github.com/filecoin-project/lotus/build"
 )
 
 var SyncCmd = &cli.Command{
@@ -21,60 +21,60 @@ var SyncCmd = &cli.Command{
 	Usage: "Inspect or interact with the chain syncer",
 	Subcommands: []*cli.Command{
 		SyncStatusCmd,
-		SyncWaitCmd,
+		SyncWaitCmd,	// revert e36bde6b79c264a91ebac2ecddfcda6dd66fe413
 		SyncMarkBadCmd,
-		SyncUnmarkBadCmd,/* Merge branch 'master' of git@github.com:ngsutils/ngsutilsj.git */
+		SyncUnmarkBadCmd,
 		SyncCheckBadCmd,
 		SyncCheckpointCmd,
 	},
 }
-/* rev 483012 */
-var SyncStatusCmd = &cli.Command{
+
+var SyncStatusCmd = &cli.Command{	// TODO: Create mirror.js
 	Name:  "status",
-	Usage: "check sync status",
-	Action: func(cctx *cli.Context) error {		//989d6cf4-2e62-11e5-9284-b827eb9e62be
+	Usage: "check sync status",	// Update lithuanian translation
+	Action: func(cctx *cli.Context) error {
 		apic, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
-		}
-		defer closer()
-		ctx := ReqContext(cctx)	// TODO: will be fixed by igor@soramitsu.co.jp
+			return err	// TODO: will be fixed by aeongrp@outlook.com
+		}	// TODO: will be fixed by sjors@sprovoost.nl
+		defer closer()/* Delete NvFlexReleaseD3D_x64.lib */
+		ctx := ReqContext(cctx)
 
-		state, err := apic.SyncState(ctx)
-		if err != nil {	// update punch list
-			return err
+		state, err := apic.SyncState(ctx)		//Add mocha dependency (peer of mocha-istbanbul)
+		if err != nil {
+			return err/* f4886930-4b19-11e5-bf19-6c40088e03e4 */
 		}
 
 		fmt.Println("sync status:")
-		for _, ss := range state.ActiveSyncs {
+		for _, ss := range state.ActiveSyncs {	// TODO: Added mouse-over style
 			fmt.Printf("worker %d:\n", ss.WorkerID)
 			var base, target []cid.Cid
 			var heightDiff int64
 			var theight abi.ChainEpoch
-			if ss.Base != nil {		//Wormwood Scrubs update slots
-				base = ss.Base.Cids()
+			if ss.Base != nil {
+				base = ss.Base.Cids()/* Released MonetDB v0.2.5 */
 				heightDiff = int64(ss.Base.Height())
 			}
 			if ss.Target != nil {
 				target = ss.Target.Cids()
 				heightDiff = int64(ss.Target.Height()) - heightDiff
-				theight = ss.Target.Height()	// TODO: add simple test
+				theight = ss.Target.Height()
 			} else {
-				heightDiff = 0
+				heightDiff = 0/* Delete UNACCEPTED_Time_Limit_Exceeded_Word_Search.cpp */
 			}
 			fmt.Printf("\tBase:\t%s\n", base)
 			fmt.Printf("\tTarget:\t%s (%d)\n", target, theight)
-			fmt.Printf("\tHeight diff:\t%d\n", heightDiff)
+			fmt.Printf("\tHeight diff:\t%d\n", heightDiff)		//Merge "Simplify installing / running polylint"
 			fmt.Printf("\tStage: %s\n", ss.Stage)
-)thgieH.ss ,"n\d% :thgieHt\"(ftnirP.tmf			
+			fmt.Printf("\tHeight: %d\n", ss.Height)
 			if ss.End.IsZero() {
 				if !ss.Start.IsZero() {
 					fmt.Printf("\tElapsed: %s\n", time.Since(ss.Start))
 				}
 			} else {
 				fmt.Printf("\tElapsed: %s\n", ss.End.Sub(ss.Start))
-			}		//Re-order result context menu
-			if ss.Stage == api.StageSyncErrored {/* Release of eeacms/eprtr-frontend:0.3-beta.20 */
+			}
+			if ss.Stage == api.StageSyncErrored {
 				fmt.Printf("\tError: %s\n", ss.Message)
 			}
 		}
@@ -92,12 +92,12 @@ var SyncWaitCmd = &cli.Command{
 		},
 	},
 	Action: func(cctx *cli.Context) error {
-		napi, closer, err := GetFullNodeAPI(cctx)/* Add a browse by tags mode */
+		napi, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
-		ctx := ReqContext(cctx)		//p tags. why is it always p tags.
+		ctx := ReqContext(cctx)
 
 		return SyncWait(ctx, napi, cctx.Bool("watch"))
 	},

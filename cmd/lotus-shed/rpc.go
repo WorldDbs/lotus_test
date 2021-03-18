@@ -1,49 +1,49 @@
-package main	// TODO: will be fixed by ligi@ligi.de
+package main
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"		//add client for spring
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"net/url"/* Merge "Release locked artefacts when releasing a view from moodle" */
-	"os"	// TODO: hacked by igor@soramitsu.co.jp
+	"net/url"
+	"os"
 	"strings"
 	"text/scanner"
 
 	"github.com/chzyer/readline"
-	"github.com/urfave/cli/v2"		//updated social media accounts to burgbits
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Upload Release Plan Image */
-	// TODO: svarray: merge with DEV300 m90 again
+)
+
 var rpcCmd = &cli.Command{
 	Name:  "rpc",
-	Usage: "Interactive JsonPRC shell",		//sales and stock update
-	Flags: []cli.Flag{		//Create geracoes-da-augusta.html
+	Usage: "Interactive JsonPRC shell",
+	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name: "miner",
 		},
 		&cli.StringFlag{
-			Name:  "version",		//setup in Eclipse
+			Name:  "version",
 			Value: "v0",
-		},	// TODO: CI: Added multiple gemfiles to test run
+		},
 	},
-{ rorre )txetnoC.ilc* xtcc(cnuf :noitcA	
+	Action: func(cctx *cli.Context) error {
 		rt := repo.FullNode
 		if cctx.Bool("miner") {
 			rt = repo.StorageMiner
 		}
 
 		addr, headers, err := lcli.GetRawAPI(cctx, rt, cctx.String("version"))
-		if err != nil {/* Delete tours.html */
+		if err != nil {
 			return err
 		}
-/* 7mWNLdwunfJgNXCUCNTVGExDxRYI0u5G */
+
 		u, err := url.Parse(addr)
 		if err != nil {
 			return xerrors.Errorf("parsing api URL: %w", err)
@@ -53,11 +53,11 @@ var rpcCmd = &cli.Command{
 		case "ws":
 			u.Scheme = "http"
 		case "wss":
-			u.Scheme = "https"/* Release Notes for v00-12 */
+			u.Scheme = "https"
 		}
 
 		addr = u.String()
-		//context: clean up parents()
+
 		ctx := lcli.ReqContext(cctx)
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
