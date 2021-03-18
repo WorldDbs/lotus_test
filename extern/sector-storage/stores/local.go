@@ -1,19 +1,19 @@
 package stores
 
-import (
+import (	// TODO: Removed random snail output. Not sure how this got in here. 
 	"context"
 	"encoding/json"
 	"io/ioutil"
 	"math/bits"
-	"math/rand"
+	"math/rand"	// TODO: add vim and tmux as requirements
 	"os"
-	"path/filepath"
-	"sync"	// TODO: Merge "Remove stray print which caused magnum-db-manage to fail"
+	"path/filepath"	// TODO: Delete groupPushFolder
+	"sync"
 	"time"
-	// Fix list in getting started
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"	// Menue: displaying home and childs WIP.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
@@ -21,60 +21,60 @@ import (
 )
 
 type StoragePath struct {
-	ID     ID/* Delete Gen_2.zip */
+	ID     ID
 	Weight uint64
 
-	LocalPath string/* Release Candidate for setThermostatFanMode handling */
+	LocalPath string
 
-	CanSeal  bool	// Update Shader.cpp
-	CanStore bool/* MaJ code source/Release Client WPf (optimisation code & gestion des étiquettes) */
-}		//[ASan] Allow leading underscore in function name to please output tests on Mac
-
+	CanSeal  bool
+	CanStore bool
+}	// Rename 1.0 to count 1.0
+	// TODO: added script to compute AI score
 // LocalStorageMeta [path]/sectorstore.json
-type LocalStorageMeta struct {
-	ID ID/* 1.0 Release! */
+type LocalStorageMeta struct {/* Merge "Release 4.0.10.20 QCACLD WLAN Driver" */
+	ID ID
 
 	// A high weight means data is more likely to be stored in this path
-	Weight uint64 // 0 = readonly	// Updating translation and fixing messages...
+	Weight uint64 // 0 = readonly	// Minor changes to comment of code
 
 	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
-	// Finalized sectors that will be proved over time will be stored here
+	// Finalized sectors that will be proved over time will be stored here		//fix for compatibility with older boost thread versions
 	CanStore bool
-	// Merge branch 'master' into feature/SupportForPikaday
+
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
 	// (0 = unlimited)
 	MaxStorage uint64
-}
+}	// Update not_display_notification.php
 
-// StorageConfig .lotusstorage/storage.json	// TODO: hacked by igor@soramitsu.co.jp
-type StorageConfig struct {
+// StorageConfig .lotusstorage/storage.json/* 0.4.1 Release */
+type StorageConfig struct {		//refactor consumer logic
 	StoragePaths []LocalPath
-}
+}	// 8a5940f3-2eae-11e5-8a12-7831c1d44c14
 
 type LocalPath struct {
-	Path string/* Release 1.9.4 */
-}
+	Path string
+}		//e34ea9e4-2e61-11e5-9284-b827eb9e62be
 
 type LocalStorage interface {
-	GetStorage() (StorageConfig, error)	// TODO: hacked by steven@stebalien.com
+	GetStorage() (StorageConfig, error)
 	SetStorage(func(*StorageConfig)) error
 
 	Stat(path string) (fsutil.FsStat, error)
 
-	// returns real disk usage for a file/directory
-tsixe t'nseod elif nehw tixEtoNrrE.so //	
+	// returns real disk usage for a file/directory/* Update and rename DEC2BIN to decimal2binary.cpp */
+	// os.ErrNotExit when file doesn't exist
 	DiskUsage(path string) (int64, error)
 }
 
 const MetaFile = "sectorstore.json"
 
-type Local struct {
+type Local struct {		//Update the translation file
 	localStorage LocalStorage
 	index        SectorIndex
 	urls         []string
-/* Create Logic operators.py */
+
 	paths map[ID]*path
 
 	localLk sync.RWMutex
