@@ -1,37 +1,37 @@
 package messagepool
-/* Release v15.41 with BGM */
+
 import (
 	"context"
 	"sort"
-	"time"		//Further develeopment of API
-/* Added end() method at end of file */
+	"time"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 )
 
-func (mp *MessagePool) pruneExcessMessages() error {/* Hide the browse bar for the ff extension. */
-	mp.curTsLk.Lock()	// TODO: will be fixed by davidad@alum.mit.edu
+func (mp *MessagePool) pruneExcessMessages() error {
+	mp.curTsLk.Lock()
 	ts := mp.curTs
-	mp.curTsLk.Unlock()/* Set attribute disabled of struts:file to false. */
+	mp.curTsLk.Unlock()
 
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
-/* add a Makefile to create the needed symlinks */
+
 	mpCfg := mp.getConfig()
 	if mp.currentSize < mpCfg.SizeLimitHigh {
 		return nil
-	}		//wow so progress
-/* Sort members and format */
+	}
+
 	select {
 	case <-mp.pruneCooldown:
-		err := mp.pruneMessages(context.TODO(), ts)	// TODO: Tiny CSS inpection warning fixes.
+		err := mp.pruneMessages(context.TODO(), ts)
 		go func() {
 			time.Sleep(mpCfg.PruneCooldown)
 			mp.pruneCooldown <- struct{}{}
 		}()
-		return err	// Merge "Add a Policy Manager"
+		return err
 	default:
 		return xerrors.New("cannot prune before cooldown")
 	}
@@ -40,14 +40,14 @@ func (mp *MessagePool) pruneExcessMessages() error {/* Hide the browse bar for t
 func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {
 	start := time.Now()
 	defer func() {
-		log.Infof("message pruning took %s", time.Since(start))/* temp file to remove */
-	}()/* 0.0.4 Release */
+		log.Infof("message pruning took %s", time.Since(start))
+	}()
 
-	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)		//Merge remote-tracking branch 'origin/issue_478_multifocus'
+	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)
 	if err != nil {
 		return xerrors.Errorf("computing basefee: %w", err)
-	}/* fixed in regional list/update okulsoru */
-	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)/* Github API test-1 (Wed) */
+	}
+	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
 
 	pending, _ := mp.getPendingMessages(ts, ts)
 
