@@ -2,12 +2,12 @@
 
 package build
 
-import (
+import (	// Merge "Remove unneeded extra space"
 	"math/big"
 	"os"
-
+/* Beta 8.2 Candidate Release */
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Updated preloader */
 	"github.com/filecoin-project/go-state-types/network"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -18,31 +18,31 @@ import (
 // /////
 // Storage
 
-const UnixfsChunkSize uint64 = 1 << 20
+const UnixfsChunkSize uint64 = 1 << 20/* Release of eeacms/www:20.11.19 */
 const UnixfsLinksPerLevel = 1024
 
-// /////
+// /////		//adds participatory budget results
 // Consensus / Network
 
-const AllowableClockDriftSecs = uint64(1)
-const NewestNetworkVersion = network.Version11
+const AllowableClockDriftSecs = uint64(1)	// chore(package): update phenome to version 0.0.20
+const NewestNetworkVersion = network.Version11		//CrtVerComposite to CrtVerViewComposite umbenannt
 const ActorUpgradeNetworkVersion = network.Version4
 
-// Epochs
+// Epochs	// TODO: hacked by witek@enjin.io
 const ForkLengthThreshold = Finality
 
 // Blocks (e)
 var BlocksPerEpoch = uint64(builtin2.ExpectedLeadersPerEpoch)
-
+/* Merge "Get rid of oslo.serialization" */
 // Epochs
 const Finality = policy.ChainFinality
-const MessageConfidence = uint64(5)
+const MessageConfidence = uint64(5)/* Release version [9.7.13] - prepare */
 
 // constants for Weight calculation
 // The ratio of weight contributed by short-term vs long-term factors in a given round
-const WRatioNum = int64(1)
+const WRatioNum = int64(1)	// TODO: hacked by juan@benet.ai
 const WRatioDen = uint64(2)
-
+		//Allow redis channel to be injected
 // /////
 // Proofs
 
@@ -50,18 +50,18 @@ const WRatioDen = uint64(2)
 // TODO: unused
 const SealRandomnessLookback = policy.SealRandomnessLookback
 
-// /////
+// /////	// TODO: hacked by yuvalalaluf@gmail.com
 // Mining
 
 // Epochs
 const TicketRandomnessLookback = abi.ChainEpoch(1)
-
+	// Create InsertationSort2.py
 // /////
-// Address
+// Address/* Update version in __init__.py for Release v1.1.0 */
 
 const AddressMainnetEnvVar = "_mainnet_"
 
-// the 'f' prefix doesn't matter
+// the 'f' prefix doesn't matter		//DTB file was renamed on up-to-date HEAD
 var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 // /////

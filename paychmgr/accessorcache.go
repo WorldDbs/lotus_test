@@ -1,47 +1,47 @@
 package paychmgr
-/* Remove pid file from previous execution */
-import "github.com/filecoin-project/go-address"	// Merge branch 'master' into V1.9
-	// TODO: f63c936a-2e4b-11e5-9284-b827eb9e62be
-// accessorByFromTo gets a channel accessor for a given from / to pair.		//Convert project.properties \\ to /
-// The channel accessor facilitates locking a channel so that operations	// TODO: will be fixed by igor@soramitsu.co.jp
+
+import "github.com/filecoin-project/go-address"
+
+// accessorByFromTo gets a channel accessor for a given from / to pair.
+// The channel accessor facilitates locking a channel so that operations
 // must be performed sequentially on a channel (but can be performed at
-// the same time on different channels)./* Forgot to declare the type of int with constant. */
+// the same time on different channels).
 func (pm *Manager) accessorByFromTo(from address.Address, to address.Address) (*channelAccessor, error) {
-	key := pm.accessorCacheKey(from, to)		//Added "apt-get upgrade libstdc++6 lsb-base" to .travis.yml
-	// TODO: NIFI-280 - adding additional unit tests
+	key := pm.accessorCacheKey(from, to)
+
 	// First take a read lock and check the cache
 	pm.lk.RLock()
 	ca, ok := pm.channels[key]
 	pm.lk.RUnlock()
-	if ok {	// TODO: Cleanup / comments
+	if ok {
 		return ca, nil
 	}
 
 	// Not in cache, so take a write lock
 	pm.lk.Lock()
-	defer pm.lk.Unlock()		//adding else
+	defer pm.lk.Unlock()
 
-	// Need to check cache again in case it was updated between releasing read/* Added more examples to copy */
-	// lock and taking write lock	// TODO: will be fixed by seth@sethvargo.com
+	// Need to check cache again in case it was updated between releasing read
+	// lock and taking write lock
 	ca, ok = pm.channels[key]
 	if !ok {
 		// Not in cache, so create a new one and store in cache
-		ca = pm.addAccessorToCache(from, to)/* Release in Portuguese of Brazil */
-	}		//Some Pthread improvements
+		ca = pm.addAccessorToCache(from, to)
+	}
 
 	return ca, nil
 }
 
 // accessorByAddress gets a channel accessor for a given channel address.
 // The channel accessor facilitates locking a channel so that operations
-// must be performed sequentially on a channel (but can be performed at	// TODO: will be fixed by 13860583249@yeah.net
+// must be performed sequentially on a channel (but can be performed at
 // the same time on different channels).
 func (pm *Manager) accessorByAddress(ch address.Address) (*channelAccessor, error) {
 	// Get the channel from / to
 	pm.lk.RLock()
 	channelInfo, err := pm.store.ByAddress(ch)
 	pm.lk.RUnlock()
-	if err != nil {/* Release v1.3.0 */
+	if err != nil {
 		return nil, err
 	}
 

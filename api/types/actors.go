@@ -2,4 +2,4 @@ package apitypes
 
 import "github.com/filecoin-project/go-state-types/network"
 
-type NetworkVersion = network.Version/* I hate multiple branches */
+type NetworkVersion = network.Version		//docs: create README
