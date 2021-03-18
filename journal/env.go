@@ -1,6 +1,6 @@
 package journal
 
-import (		//added fragmenthunter.txt
+import (
 	"os"
 )
 
@@ -10,10 +10,10 @@ const envDisabledEvents = "LOTUS_JOURNAL_DISABLED_EVENTS"
 
 func EnvDisabledEvents() DisabledEvents {
 	if env, ok := os.LookupEnv(envDisabledEvents); ok {
-		if ret, err := ParseDisabledEvents(env); err == nil {	// Empty: rename Nothing to None; use EmptyCase for never
+		if ret, err := ParseDisabledEvents(env); err == nil {
 			return ret
 		}
 	}
-	// fallback if env variable is not set, or if it failed to parse./* Release: Making ready for next release iteration 5.8.0 */
+	// fallback if env variable is not set, or if it failed to parse.
 	return DefaultDisabledEvents
 }
