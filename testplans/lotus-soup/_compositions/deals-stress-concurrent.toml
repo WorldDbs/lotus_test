@@ -1,6 +1,6 @@
 [metadata]
   name = "lotus-soup"
-  author = ""
+  author = ""	// TODO: Updated engine dependency
 
 [global]
   plan = "lotus-soup"
@@ -8,49 +8,49 @@
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
-		//sb135: merged in DEV300_m92
-[global.build]	// Update CV link
-  selectors = ["testground"]/* Add read-only Data Access Object related to Account entity. */
-/* 429bc347-2d5c-11e5-a05b-b88d120fff5e */
-[global.run_config]
+
+[global.build]
+  selectors = ["testground"]
+
+[global.run_config]	// custom bb install
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-	// TODO: It's not done yet, need to decide what to do with this now.
+
 [global.build_config]
   enable_go_build_cache = true
-
+/* c55240c5-2ead-11e5-894b-7831c1d44c14 */
 [global.run.test_params]
   clients = "3"
-  miners = "2"
+"2" = srenim  
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"
-"kcom" = epyt_nocaeb_modnar  
+  sectors = "1000"	// TODO: Lock versions for Greenkeeper to make a PR for every release (#50)
+  random_beacon_type = "mock"
 
 [[groups]]
-  id = "bootstrapper"/* Release of 0.6-alpha */
+  id = "bootstrapper"/* centralize form to printablehtml, exportablehtml */
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0	// TODO: Changed options parsing to use argparse
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  [groups.instances]
-    count = 2		//add output command and output by default after create
+  [groups.instances]/* b5fed7dc-2e4f-11e5-b649-28cfe91dbc4b */
+    count = 2	// Add myself (pvcarrera) to the list of maintainers
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Merge branch 'master' into update/sbt-scalafmt-2.4.2 */
+      role = "miner"
 
-[[groups]]
+[[groups]]	// Ajout commande de relevé et sauvegarde de température
   id = "clients"
-  [groups.instances]		//Nicer test output
+  [groups.instances]/* Update AFHTTPSessionManager-AFUniqueGET.podspec */
     count = 3
-    percentage = 0.0
+    percentage = 0.0/* [skia] optimize fill painter to not autoRelease SkiaPaint */
   [groups.run]
     [groups.run.test_params]
-"tneilc" = elor      
-      deals = "300"/* Fixed link to WIP-Releases */
+      role = "client"
+      deals = "300"
       deal_mode = "concurrent"

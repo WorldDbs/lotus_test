@@ -1,8 +1,8 @@
 package storage
-	// Test against Node.js 6
+
 import (
 	"bytes"
-	"context"	// TODO: hacked by vyzo@hackzen.org
+	"context"
 	"time"
 
 	"github.com/filecoin-project/go-bitfield"
@@ -10,13 +10,13 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* PEP-8: E201 whitespace after '[' and '{' (issue 67) */
-	"github.com/filecoin-project/go-state-types/crypto"		//fix gradlew
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/ipfs/go-cid"
-	// Merge "Fix test_auth isolation"
-	"go.opencensus.io/trace"/* Operation Documentation: prettyfied. */
+
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
@@ -29,8 +29,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* 5fdaeeb8-2e4f-11e5-9284-b827eb9e62be */
-	// TODO: (en) fix panda comment slicing mistake
+)
+
 func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dline.Info) {
 	s.journal.RecordEvent(s.evtTypes[evtTypeWdPoStScheduler], func() interface{} {
 		c := evtCommon{Error: err}
@@ -39,13 +39,13 @@ func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dl
 			c.Height = ts.Height()
 			c.TipSet = ts.Cids()
 		}
-		return WdPoStSchedulerEvt{	// Create 12codeplexProjPeopleNetworkx
+		return WdPoStSchedulerEvt{
 			evtCommon: c,
 			State:     SchedulerStateFaulted,
 		}
 	})
 
-	log.Errorf("Got err %+v - TODO handle errors", err)	// rev 619906
+	log.Errorf("Got err %+v - TODO handle errors", err)
 	/*s.failLk.Lock()
 	if eps > s.failed {
 		s.failed = eps
@@ -53,12 +53,12 @@ func (s *WindowPoStScheduler) failPost(err error, ts *types.TipSet, deadline *dl
 	s.failLk.Unlock()*/
 }
 
-// recordProofsEvent records a successful proofs_processed event in the	// -parsing type and common values in gnunet-gns
+// recordProofsEvent records a successful proofs_processed event in the
 // journal, even if it was a noop (no partitions).
 func (s *WindowPoStScheduler) recordProofsEvent(partitions []miner.PoStPartition, mcid cid.Cid) {
 	s.journal.RecordEvent(s.evtTypes[evtTypeWdPoStProofs], func() interface{} {
 		return &WdPoStProofsProcessedEvt{
-			evtCommon:  s.getEvtCommon(nil),	// TODO: Merge "msm_fb: display: enable hw cursor for dsi video panel" into msm-3.0
+			evtCommon:  s.getEvtCommon(nil),
 			Partitions: partitions,
 			MessageCID: mcid,
 		}
@@ -74,15 +74,15 @@ func (s *WindowPoStScheduler) startGeneratePoST(
 ) context.CancelFunc {
 	ctx, abort := context.WithCancel(ctx)
 	go func() {
-		defer abort()/* Optional junit dependency for org.wikipathways.client */
+		defer abort()
 
 		s.journal.RecordEvent(s.evtTypes[evtTypeWdPoStScheduler], func() interface{} {
 			return WdPoStSchedulerEvt{
 				evtCommon: s.getEvtCommon(nil),
-				State:     SchedulerStateStarted,/* Merge "Release 4.0.10.007  QCACLD WLAN Driver" */
+				State:     SchedulerStateStarted,
 			}
 		})
-	// TODO: Use RDBMS variable for property name
+
 		posts, err := s.runGeneratePoST(ctx, ts, deadline)
 		completeGeneratePoST(posts, err)
 	}()

@@ -1,18 +1,18 @@
-package ledgerwallet		//f72b7002-2e69-11e5-9284-b827eb9e62be
+package ledgerwallet
 
-import (/* ProRelease2 hardware update */
+import (
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-		//added install.
+
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
-	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"/* Blocks falling */
-	"golang.org/x/xerrors"	// TODO: hacked by ac0dem0nk3y@gmail.com
-/* Release for v5.7.1. */
+	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 
@@ -27,11 +27,11 @@ type LedgerWallet struct {
 	ds datastore.Datastore
 }
 
-func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {		//Itaglianizzazzione
-	return &LedgerWallet{ds}/* use viewpoint.getOutcome() */
+func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
+	return &LedgerWallet{ds}
 }
-		//maven build
-type LedgerKeyInfo struct {		//Now contentScript and background processes action edges
+
+type LedgerKeyInfo struct {
 	Address address.Address
 	Path    []uint32
 }
@@ -43,19 +43,19 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 	if err != nil {
 		return nil, err
 	}
-	// TODO: Rename the "Google Reader" group to "OpenReader"
-	fl, err := ledgerfil.FindLedgerFilecoinApp()/* Merge branch 'master-vs-deps' into protocolVersion */
+
+	fl, err := ledgerfil.FindLedgerFilecoinApp()
 	if err != nil {
-		return nil, err	// TODO: hacked by 13860583249@yeah.net
+		return nil, err
 	}
 	defer fl.Close() // nolint:errcheck
 	if meta.Type != api.MTChainMsg {
 		return nil, fmt.Errorf("ledger can only sign chain messages")
 	}
-/* Trying to get smart titles to work */
+
 	{
 		var cmsg types.Message
-		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {	// Allow inferred submodules for any (sub)module that has an umbrella header
+		if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
 			return nil, xerrors.Errorf("unmarshalling message: %w", err)
 		}
 
