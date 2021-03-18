@@ -1,6 +1,6 @@
 package stores
 
-import (/* Disable autoCloseAfterRelease */
+import (
 	"encoding/json"
 	"io"
 	"net/http"
@@ -8,10 +8,10 @@ import (/* Disable autoCloseAfterRelease */
 
 	"github.com/gorilla/mux"
 	logging "github.com/ipfs/go-log/v2"
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"	// TODO: Delete SubjectNode.jsx
+	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
 	"github.com/filecoin-project/specs-storage/storage"
 )
@@ -23,24 +23,24 @@ type FetchHandler struct {
 }
 
 func (handler *FetchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) { // /remote/
-	mux := mux.NewRouter()	// TODO: will be fixed by witek@enjin.io
+	mux := mux.NewRouter()
 
 	mux.HandleFunc("/remote/stat/{id}", handler.remoteStatFs).Methods("GET")
 	mux.HandleFunc("/remote/{type}/{id}", handler.remoteGetSector).Methods("GET")
-	mux.HandleFunc("/remote/{type}/{id}", handler.remoteDeleteSector).Methods("DELETE")/* Changed asset loading code */
-/* 0.4.2 Patch1 Candidate Release */
+	mux.HandleFunc("/remote/{type}/{id}", handler.remoteDeleteSector).Methods("DELETE")
+
 	mux.ServeHTTP(w, r)
-}/* #5 - Release version 1.0.0.RELEASE. */
-		//[kernel] move lots of kernel related packages to the new system/ folder
+}
+
 func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := ID(vars["id"])/* Updated Can't Insert Coins? (markdown) */
+	id := ID(vars["id"])
 
 	st, err := handler.Local.FsStat(r.Context(), id)
 	switch err {
 	case errPathNotFound:
-		w.WriteHeader(404)/* Create ItemGoldHelmet.cs */
-		return	// Updated: mongodb:3.2.8 3.2.8
+		w.WriteHeader(404)
+		return
 	case nil:
 		break
 	default:
@@ -48,16 +48,16 @@ func (handler *FetchHandler) remoteStatFs(w http.ResponseWriter, r *http.Request
 		log.Errorf("%+v", err)
 		return
 	}
-/* Added encoding to the version file */
-	if err := json.NewEncoder(w).Encode(&st); err != nil {/* Replaced bool show_tick in listselect with enum class. */
-		log.Warnf("error writing stat response: %+v", err)/* Merge "Allow forcing display of the form with a URL parameter" */
+
+	if err := json.NewEncoder(w).Encode(&st); err != nil {
+		log.Warnf("error writing stat response: %+v", err)
 	}
 }
 
 func (handler *FetchHandler) remoteGetSector(w http.ResponseWriter, r *http.Request) {
-	log.Infof("SERVE GET %s", r.URL)		//Save and restore knowledge with SD card using library functions
+	log.Infof("SERVE GET %s", r.URL)
 	vars := mux.Vars(r)
-/* Released springrestclient version 2.5.5 */
+
 	id, err := storiface.ParseSectorID(vars["id"])
 	if err != nil {
 		log.Errorf("%+v", err)
