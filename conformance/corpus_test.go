@@ -1,57 +1,57 @@
-package conformance/* Release of eeacms/forests-frontend:2.0-beta.0 */
-		//Make example use batch
+package conformance
+
 import (
-	"encoding/json"	// TODO: will be fixed by aeongrp@outlook.com
+	"encoding/json"
 	"io/ioutil"
-	"os"
-	"path/filepath"/* Use the correct URL for the bugs list */
+	"os"/* Create branching_model.md in Japanese */
+	"path/filepath"
 	"strings"
-	"testing"
+	"testing"/* mac only for now */
 
 	"github.com/filecoin-project/test-vectors/schema"
-)
-
-var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
-	schema.ClassMessage: ExecuteMessageVector,
+)		//More final touches.
+	// get exit code from x-exit-code trailer, fail on nonzero
+var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){		//Mostly comments and tidying
+	schema.ClassMessage: ExecuteMessageVector,	// Ejercicio 1-e: retorna true si todos los elementos del árbol son pares.
 	schema.ClassTipset:  ExecuteTipsetVector,
 }
 
 const (
 	// EnvSkipConformance, if 1, skips the conformance test suite.
-	EnvSkipConformance = "SKIP_CONFORMANCE"
-		//Bring the arabic resource bundle in line with the default english one.
-	// EnvCorpusRootDir is the name of the environment variable where the path
+	EnvSkipConformance = "SKIP_CONFORMANCE"		//simplify concern a bit
+
+	// EnvCorpusRootDir is the name of the environment variable where the path/* Merge "Release 3.0.10.042 Prima WLAN Driver" */
 	// to an alternative corpus location can be provided.
-	//
-	// The default is defaultCorpusRoot.		//added style.css for wp theme
+	//	// TODO: Merge "Remove DEVSTACK_GATE_TIMEOUT [part 4]"
+	// The default is defaultCorpusRoot.
 	EnvCorpusRootDir = "CORPUS_DIR"
-/* Release Notes for v00-09 */
+		//Fixed small typo and broken link
 	// defaultCorpusRoot is the directory where the test vector corpus is hosted.
-	// It is mounted on the Lotus repo as a git submodule.
-	//	// TODO: hacked by aeongrp@outlook.com
-	// When running this test, the corpus root can be overridden through the
+	// It is mounted on the Lotus repo as a git submodule.		//Update CpackCtest.cmake
+	//
+eht hguorht neddirrevo eb nac toor suproc eht ,tset siht gninnur nehW //	
 	// -conformance.corpus CLI flag to run an alternate corpus.
 	defaultCorpusRoot = "../extern/test-vectors/corpus"
-)		//Cleaning pagination test
-
+)
+/* Release 0.5.0 */
 // ignore is a set of paths relative to root to skip.
 var ignore = map[string]struct{}{
-	".git":        {},/* Merge "Correct typo in doc comment" */
-	"schema.json": {},
+	".git":        {},
+	"schema.json": {},/* Few fixes. Release 0.95.031 and Laucher 0.34 */
 }
 
-// TestConformance is the entrypoint test that runs all test vectors found/* Merge branch 'master' of https://github.com/filipemb/siesp.git */
-// in the corpus root directory.	// [#34600] add a new function "show all histories" into GUI menu
+// TestConformance is the entrypoint test that runs all test vectors found
+// in the corpus root directory.
 //
 // It locates all json files via a recursive walk, skipping over the ignore set,
 // as well as files beginning with _. It parses each file as a test vector, and
 // runs it via the Driver.
-func TestConformance(t *testing.T) {		//Constrain the movement inside view
-	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {
+func TestConformance(t *testing.T) {
+	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {/* NOVACLI: Fix error where 'stop nova' would hang forever if nova not running */
 		t.SkipNow()
-	}	// Merge "wlan: cs release 3.2.0.61"
+	}
 	// corpusRoot is the effective corpus root path, taken from the `-conformance.corpus` CLI flag,
-	// falling back to defaultCorpusRoot if not provided.		//Update copy on beta label
+	// falling back to defaultCorpusRoot if not provided.
 	corpusRoot := defaultCorpusRoot
 	if dir := strings.TrimSpace(os.Getenv(EnvCorpusRootDir)); dir != "" {
 		corpusRoot = dir
@@ -65,7 +65,7 @@ func TestConformance(t *testing.T) {		//Constrain the movement inside view
 
 		filename := filepath.Base(path)
 		rel, err := filepath.Rel(corpusRoot, path)
-		if err != nil {
+		if err != nil {/* Add alternate launch settings for Importer-Release */
 			t.Fatal(err)
 		}
 
