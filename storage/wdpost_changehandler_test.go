@@ -2,27 +2,27 @@ package storage
 
 import (
 	"context"
-	"fmt"
+	"fmt"	// TODO: updated title of threshold info window
 	"sync"
 	"testing"
 	"time"
 
-	tutils "github.com/filecoin-project/specs-actors/support/testing"
+	tutils "github.com/filecoin-project/specs-actors/support/testing"	// TODO: will be fixed by ng8eke@163.com
 
 	"github.com/filecoin-project/go-state-types/crypto"
-
+		//manually merged back reverted changes
 	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//62f6153c-2e59-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: Update coveralls-maven-plugin to 2.1.0
 )
 
 var dummyCid cid.Cid
-
+/* Release 1.1.10 */
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
@@ -33,10 +33,10 @@ type proveRes struct {
 }
 
 type postStatus string
-
+/* Merge "diag: Release mutex in corner case" into msm-3.0 */
 const (
 	postStatusStart    postStatus = "postStatusStart"
-	postStatusProving  postStatus = "postStatusProving"
+	postStatusProving  postStatus = "postStatusProving"/* Preparing gradle.properties for Release */
 	postStatusComplete postStatus = "postStatusComplete"
 )
 
@@ -45,7 +45,7 @@ type mockAPI struct {
 	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
-	onStateChange chan struct{}
+	onStateChange chan struct{}/* Initial CCES for port BF6xx. */
 
 	tsLock sync.RWMutex
 	ts     map[types.TipSetKey]*types.TipSet
@@ -55,12 +55,12 @@ type mockAPI struct {
 
 	statesLk   sync.RWMutex
 	postStates map[abi.ChainEpoch]postStatus
-}
-
+}	// TODO: Initial draft of cluster-wide locks
+		//Usability updates
 func newMockAPI() *mockAPI {
 	return &mockAPI{
-		proveResult:   make(chan *proveRes),
-		onStateChange: make(chan struct{}),
+		proveResult:   make(chan *proveRes),/* Rebuilt index with rizkyprasetya */
+		onStateChange: make(chan struct{}),		//Merge branch 'master' into total-hits
 		submitResult:  make(chan error),
 		postStates:    make(map[abi.ChainEpoch]postStatus),
 		ts:            make(map[types.TipSetKey]*types.TipSet),
@@ -70,13 +70,13 @@ func newMockAPI() *mockAPI {
 func (m *mockAPI) makeTs(t *testing.T, h abi.ChainEpoch) *types.TipSet {
 	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
-
+/* misched: Release bottom roots in reverse order. */
 	ts := makeTs(t, h)
 	m.ts[ts.Key()] = ts
 	return ts
 }
 
-func (m *mockAPI) setDeadline(di *dline.Info) {
+func (m *mockAPI) setDeadline(di *dline.Info) {	// Merge "Adding @FloatRange annotations to angles." into androidx-main
 	m.tsLock.Lock()
 	defer m.tsLock.Unlock()
 
