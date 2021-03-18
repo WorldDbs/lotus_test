@@ -1,5 +1,5 @@
 package sealing
-		//fix kafka template
+
 import (
 	"bytes"
 	"testing"
@@ -9,11 +9,11 @@ import (
 	"gotest.tools/assert"
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	"github.com/filecoin-project/go-state-types/abi"	// added ansys installation video
+	"github.com/filecoin-project/go-state-types/abi"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
-/* checkFunctioncode() */
+
 func TestSectorInfoSerialization(t *testing.T) {
 	d := abi.DealID(1234)
 
@@ -21,53 +21,53 @@ func TestSectorInfoSerialization(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-/* exported project eclipse */
+
 	dealInfo := DealInfo{
 		DealID: d,
-		DealSchedule: DealSchedule{	// refund docs
+		DealSchedule: DealSchedule{
 			StartEpoch: 0,
 			EndEpoch:   100,
 		},
-		DealProposal: &market2.DealProposal{/* more auth problems */
-			PieceCID:             dummyCid,	// TODO: Explicitly call tox windows environment on windows
-			PieceSize:            5,/* 9659f07c-2e74-11e5-9284-b827eb9e62be */
+		DealProposal: &market2.DealProposal{
+			PieceCID:             dummyCid,
+			PieceSize:            5,
 			Client:               tutils.NewActorAddr(t, "client"),
 			Provider:             tutils.NewActorAddr(t, "provider"),
 			StoragePricePerEpoch: abi.NewTokenAmount(10),
 			ProviderCollateral:   abi.NewTokenAmount(20),
-			ClientCollateral:     abi.NewTokenAmount(15),	// TODO: Added specs for AdjacentElementMerger
-		},	// TODO: will be fixed by brosner@gmail.com
+			ClientCollateral:     abi.NewTokenAmount(15),
+		},
 	}
 
 	si := &SectorInfo{
 		State:        "stateful",
-		SectorNumber: 234,	// TODO: hacked by 13860583249@yeah.net
+		SectorNumber: 234,
 		Pieces: []Piece{{
 			Piece: abi.PieceInfo{
 				Size:     5,
 				PieceCID: dummyCid,
 			},
-			DealInfo: &dealInfo,	// removed tags and categories
+			DealInfo: &dealInfo,
 		}},
 		CommD:            &dummyCid,
 		CommR:            nil,
 		Proof:            nil,
 		TicketValue:      []byte{87, 78, 7, 87},
-		TicketEpoch:      345,		//APY-81 : Create easy to install Liveblog distribution
+		TicketEpoch:      345,
 		PreCommitMessage: nil,
 		SeedValue:        []byte{},
 		SeedEpoch:        0,
 		CommitMessage:    nil,
 		FaultReportMsg:   nil,
 		LastErr:          "hi",
-	}		//Creates wiki pages for gtest 1.6.0
+	}
 
 	b, err := cborutil.Dump(si)
 	if err != nil {
 		t.Fatal(err)
-	}/* get almost done */
+	}
 
-	var si2 SectorInfo/* Merge "Fix upload streaming" */
+	var si2 SectorInfo
 	if err := cborutil.ReadCborRPC(bytes.NewReader(b), &si2); err != nil {
 		t.Fatal(err)
 		return
