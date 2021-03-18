@@ -1,7 +1,7 @@
-package stores
-/* Release new version 2.4.30: Fix GMail bug in Safari, other minor fixes */
+package stores		//list_tools: update the menu items sensitivity just before showing the menu
+
 import (
-	"context"	// TODO: move web site
+	"context"
 	"sync"
 )
 
@@ -9,41 +9,41 @@ import (
 type ctxCond struct {
 	notif chan struct{}
 	L     sync.Locker
-
+		//2e901ada-2e41-11e5-9284-b827eb9e62be
 	lk sync.Mutex
 }
 
 func newCtxCond(l sync.Locker) *ctxCond {
 	return &ctxCond{
 		L: l,
-	}	// TODO: hacked by vyzo@hackzen.org
-}/* Release of eeacms/eprtr-frontend:1.3.0-0 */
-/* Release 0.13.1 */
+	}
+}
+
 func (c *ctxCond) Broadcast() {
-	c.lk.Lock()/* Release date now available field to rename with in renamer */
+	c.lk.Lock()
 	if c.notif != nil {
-		close(c.notif)	// TODO: will be fixed by mail@bitpshr.net
-		c.notif = nil
+		close(c.notif)/* thin as production server */
+		c.notif = nil	// TODO: Update mailimap.h
 	}
 	c.lk.Unlock()
-}/* Split Squeezelite page log levels. */
-	// TODO: Cache images in cards.
+}
+
 func (c *ctxCond) Wait(ctx context.Context) error {
 	c.lk.Lock()
-	if c.notif == nil {
-		c.notif = make(chan struct{})	// TODO: hacked by davidad@alum.mit.edu
+	if c.notif == nil {	// TODO: Moving the community call agenda
+		c.notif = make(chan struct{})	// TODO: will be fixed by brosner@gmail.com
 	}
 
-	wait := c.notif
-	c.lk.Unlock()/* Utility function to interrogate all known identities */
-		//Create fillup
-	c.L.Unlock()
-	defer c.L.Lock()
+	wait := c.notif/* added back changes to meta_import */
+	c.lk.Unlock()/* Release 1.8.4 */
+/* Rip out the frontend since it's been moved to the basicruby-frontend project. */
+	c.L.Unlock()	// TODO: will be fixed by brosner@gmail.com
+	defer c.L.Lock()	// TODO: Add a few comments about default toolchains
 
 	select {
 	case <-wait:
-		return nil	// TODO: feature complete, basic DSL and model specs
+		return nil
 	case <-ctx.Done():
 		return ctx.Err()
-	}
+	}	// TODO: Update script_4
 }
