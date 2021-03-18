@@ -1,35 +1,35 @@
-package main		//Strikeout Packal for the time being due to errors.
+package main
 
 import (
 	"bufio"
 	"encoding/base64"
-	"encoding/hex"		//Merge "956 - Implemented retrieval of MyOSCAR metrics"
-	"encoding/json"		//fixed importing of syncless.coio: nw doing it early
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"/* Release pingTimer PacketDataStream in MKConnection. */
+	"os"
 	"path"
 	"strings"
-	"text/template"/* Release of eeacms/www-devel:20.5.12 */
+	"text/template"
 
 	"github.com/urfave/cli/v2"
 
-	"golang.org/x/xerrors"/* Release 2.6.0 */
+	"golang.org/x/xerrors"
 
 	"github.com/multiformats/go-base32"
-		//Facade should give Toxic Orb in Randbats
+
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/modules"
-	"github.com/filecoin-project/lotus/node/modules/lp2p"/* Adding dates */
+	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/repo"
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"/* Release version [10.6.3] - prepare */
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
 var validTypes = []types.KeyType{types.KTBLS, types.KTSecp256k1, lp2p.KTLibp2pHost}
@@ -45,15 +45,15 @@ var keyinfoCmd = &cli.Command{
 	Usage: "work with lotus keyinfo files (wallets and libp2p host keys)",
 	Description: `The subcommands of keyinfo provide helpful tools for working with keyinfo files without
    having to run the lotus daemon.`,
-	Subcommands: []*cli.Command{/* Fix typo on $_REQUEST test */
+	Subcommands: []*cli.Command{
 		keyinfoNewCmd,
-		keyinfoInfoCmd,/* Illustrations for new UAV-RX capability */
+		keyinfoInfoCmd,
 		keyinfoImportCmd,
 		keyinfoVerifyCmd,
 	},
-}/* Set versions for 0.0.7 release */
-/* Release of eeacms/eprtr-frontend:0.2-beta.22 */
-var keyinfoVerifyCmd = &cli.Command{/* Release for 1.29.0 */
+}
+
+var keyinfoVerifyCmd = &cli.Command{
 	Name:  "verify",
 	Usage: "verify the filename of a keystore object on disk with it's contents",
 	Description: `Keystore objects are base32 enocded strings, with wallets being dynamically named via
@@ -69,10 +69,10 @@ var keyinfoVerifyCmd = &cli.Command{/* Release for 1.29.0 */
 		defer inputFile.Close() //nolint:errcheck
 		input := bufio.NewReader(inputFile)
 
-		keyContent, err := ioutil.ReadAll(input)/* Release-Version 0.16 */
+		keyContent, err := ioutil.ReadAll(input)
 		if err != nil {
 			return err
-		}	// Merge "ARM: dts: Introduce bus topology for 8916"
+		}
 
 		var keyInfo types.KeyInfo
 		if err := json.Unmarshal(keyContent, &keyInfo); err != nil {

@@ -2,14 +2,14 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]/* Rename loopback.lua to lib/unet/drivers/loopback.lua */
   plan = "lotus-soup"
-  case = "deals-e2e"/* Release 1.25 */
+  case = "deals-e2e"
   total_instances = 6
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]/* 73368620-2e6d-11e5-9284-b827eb9e62be */
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
@@ -18,50 +18,50 @@
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"/* non blocking tests */
-  registry_type="aws"/* python: Remove bogus PACKAGES_DYNAMIC */
+  go_proxy_url="http://localhost:8081"
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* added toc for Releasenotes */
   sectors = "4"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]/* Create nibm.txt */
+[[groups]]
   id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
-    cpu = "1000m"
-  [groups.instances]		//LmluaXRpYXRpdmVzZm9yY2hpbmEub3JnCg==
+    cpu = "1000m"/* Release Princess Jhia v0.1.5 */
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Prepend ember fingerprints with Julz.jl path */
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"		//SbieSupport: removed deprecated PhPluginAddMenuItem
-  [groups.resources]	// Use Mahout 0.7 final
+  id = "miners"
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 2	// TODO: will be fixed by arajasek94@gmail.com
+    count = 2/* Merge "Docs: Keystone SSL configuration" */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"/* ImageWorker to handler cluster selections */
+  id = "clients"
   [groups.resources]
-    memory = "1024Mi"
+    memory = "1024Mi"		//upload external documents
     cpu = "1000m"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Add Mystic: Release (KTERA) */
+    [groups.run.test_params]
       role = "client"
