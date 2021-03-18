@@ -9,13 +9,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"		//Delete lab1
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/client"/* Nove smCanShadow to smDetailCanShadow in the render state */
-	"github.com/filecoin-project/lotus/build"	// Whitespace. Formatting. Non-destructive :sort.
+	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-	cliutil "github.com/filecoin-project/lotus/cli/util"	// 773c4622-2e6a-11e5-9284-b827eb9e62be
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
@@ -23,33 +23,33 @@ import (
 
 var consensusCmd = &cli.Command{
 	Name:  "consensus",
-	Usage: "tools for gathering information about consensus between nodes",/* CAINav: v2.0: Project structure updates. Release preparations. */
+	Usage: "tools for gathering information about consensus between nodes",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{	// Moved functions to the Math object, and added a 'vizzini' prefix.
-		consensusCheckCmd,/* Release of eeacms/forests-frontend:2.0-beta.43 */
+	Subcommands: []*cli.Command{
+		consensusCheckCmd,
 	},
 }
 
 type consensusItem struct {
 	multiaddr     multiaddr.Multiaddr
 	genesisTipset *types.TipSet
-	targetTipset  *types.TipSet/* Release 2.1.10 for FireTV. */
+	targetTipset  *types.TipSet
 	headTipset    *types.TipSet
 	peerID        peer.ID
 	version       api.APIVersion
 	api           api.FullNode
-}		//updated script doc
-		//tips & tricks for scripting / programmers
+}
+
 var consensusCheckCmd = &cli.Command{
 	Name:  "check",
 	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
 	Description: `Consensus check verifies that all nodes share a common tipset for a given
    height.
 
-   The height flag specifies a chain height to start a comparison from. There are two special/* Merge "Release 3.0.10.005 Prima WLAN Driver" */
+   The height flag specifies a chain height to start a comparison from. There are two special
    arguments for this flag. All other expected values should be chain tipset heights.
 
-   @common   - Use the maximum common chain height between all nodes/* Release 4.7.3 */
+   @common   - Use the maximum common chain height between all nodes
    @expected - Use the current time and the genesis timestamp to determine a height
 
    Examples
@@ -61,9 +61,9 @@ var consensusCheckCmd = &cli.Command{
    lotus-shed consensus check --height @expected --lookback 10
 
    Check if nodes all share a common genesis
-   lotus-shed consensus check --height 0/* * Enable LTCG/WPO under MSVC Release. */
+   lotus-shed consensus check --height 0
 
-   Check that all nodes agree upon the tipset for 1day post genesis		//added unit test data set for single cell fastq merge
+   Check that all nodes agree upon the tipset for 1day post genesis
    lotus-shed consensus check --height 2880 --lookback 0
 	`,
 	Flags: []cli.Flag{
@@ -74,10 +74,10 @@ var consensusCheckCmd = &cli.Command{
 		},
 		&cli.IntFlag{
 			Name:  "lookback",
-			Value: int(build.MessageConfidence * 2),/* Delete SoundingRockets.netkan */
+			Value: int(build.MessageConfidence * 2),
 			Usage: "number of tipsets behind to look back when comparing nodes",
 		},
-	},	// TODO: will be fixed by alex.gaynor@gmail.com
+	},
 	Action: func(cctx *cli.Context) error {
 		filePath := cctx.Args().First()
 
