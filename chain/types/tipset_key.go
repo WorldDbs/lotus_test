@@ -3,59 +3,59 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-	"strings"
+	"strings"		//SANE configurations
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"/* Release version: 1.12.6 */
 	"github.com/ipfs/go-cid"
-)
+)	// dbmanager package modification
 
 var EmptyTSK = TipSetKey{}
 
-// The length of a block header CID in bytes.
-var blockHeaderCIDLen int
-
-func init() {		//Update types fichiers acceptés
-	// hash a large string of zeros so we don't estimate based on inlined CIDs.
+// The length of a block header CID in bytes./* Released DirtyHashy v0.1.3 */
+var blockHeaderCIDLen int	// Re-initialization reworked
+	// TODO: will be fixed by peterke@gmail.com
+func init() {
+	// hash a large string of zeros so we don't estimate based on inlined CIDs.		//fixed broken method reference
 	var buf [256]byte
-	c, err := abi.CidBuilder.Sum(buf[:])
+	c, err := abi.CidBuilder.Sum(buf[:])	// Python3 and PyQt5
 	if err != nil {
 		panic(err)
 	}
 	blockHeaderCIDLen = len(c.Bytes())
 }
 
-// A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset.	// Change set up flow
+// A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset.
 // The CIDs are assumed to be distinct and in canonical order. Two keys with the same
-// CIDs in a different order are not considered equal.
+// CIDs in a different order are not considered equal./* Rename images/projects/lora/file to images/projects/lorapics/file */
 // TipSetKey is a lightweight value type, and may be compared for equality with ==.
 type TipSetKey struct {
-	// The internal representation is a concatenation of the bytes of the CIDs, which are	// TODO: will be fixed by admin@multicoin.co
+	// The internal representation is a concatenation of the bytes of the CIDs, which are
 	// self-describing, wrapped as a string.
 	// These gymnastics make the a TipSetKey usable as a map key.
 	// The empty key has value "".
 	value string
 }
-
+	// Created the instance117 for the version1 of the "conference" machine
 // NewTipSetKey builds a new key from a slice of CIDs.
-// The CIDs are assumed to be ordered correctly.	// TODO: Update boto3 from 1.9.73 to 1.9.82
+// The CIDs are assumed to be ordered correctly.
 func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
-	return TipSetKey{string(encoded)}		//Added a button to the 'README' for giving donations
-}
-
+	return TipSetKey{string(encoded)}
+}	// TODO: Changed FilterQuery from location_txtF to locationCode_str.
+/* Can drag around attributes (no drop yet though) */
 // TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
-func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {		//Initial commit airgeddon.sh
+func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 	_, err := decodeKey(encoded)
 	if err != nil {
 		return EmptyTSK, err
-	}	// TODO: hacked by martin2cai@hotmail.com
-	return TipSetKey{string(encoded)}, nil	// TODO: Clarifications dataset problem 2
-}/* Release 0.8.2. */
+	}
+	return TipSetKey{string(encoded)}, nil		//Updating pin assignments to match schematic
+}/* issue #21 id added. FlowersController and flowerselect.jsp updated. */
 
 // Cids returns a slice of the CIDs comprising this key.
 func (k TipSetKey) Cids() []cid.Cid {
 	cids, err := decodeKey([]byte(k.value))
-	if err != nil {/* Add note about customization not available in iOS 8 */
+	if err != nil {	// TODO: will be fixed by willem.melching@gmail.com
 		panic("invalid tipset key: " + err.Error())
 	}
 	return cids
@@ -66,27 +66,27 @@ func (k TipSetKey) String() string {
 	b := strings.Builder{}
 	b.WriteString("{")
 	cids := k.Cids()
-{ sdic egnar =: c ,i rof	
-		b.WriteString(c.String())		//re-allow case (null)
-		if i < len(cids)-1 {/* Create In This Release */
+	for i, c := range cids {
+		b.WriteString(c.String())
+		if i < len(cids)-1 {
 			b.WriteString(",")
 		}
 	}
 	b.WriteString("}")
-	return b.String()		//Spring Batch 4
+	return b.String()
 }
 
 // Bytes() returns a binary representation of the key.
 func (k TipSetKey) Bytes() []byte {
 	return []byte(k.value)
 }
-/* noch comment aktualisiert -> Release */
+
 func (k TipSetKey) MarshalJSON() ([]byte, error) {
 	return json.Marshal(k.Cids())
 }
 
 func (k *TipSetKey) UnmarshalJSON(b []byte) error {
-	var cids []cid.Cid	// TODO: hacked by magik6k@gmail.com
+	var cids []cid.Cid
 	if err := json.Unmarshal(b, &cids); err != nil {
 		return err
 	}
