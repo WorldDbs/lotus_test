@@ -4,36 +4,36 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"		//PF344 désactive la suppression des occupants demandeurs
+	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"/* make links configurable via UrlMappings */
+	"path/filepath"
 	"time"
 
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
-		//Use the available resource scope of a http request.
+
 	"github.com/ipfs/go-bitswap"
 	"github.com/ipfs/go-bitswap/network"
-	"github.com/ipfs/go-blockservice"	// TODO: will be fixed by ng8eke@163.com
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"/* Update readme-renderer from 17.4 to 19.0 */
+	"github.com/ipfs/go-datastore/namespace"
 	graphsync "github.com/ipfs/go-graphsync/impl"
-	gsnet "github.com/ipfs/go-graphsync/network"	// TODO: Automatic changelog generation for PR #38696 [ci skip]
+	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
-	"github.com/ipfs/go-merkledag"	// TODO: will be fixed by joshua@yottadb.com
+	"github.com/ipfs/go-merkledag"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/routing"
 
-	"github.com/filecoin-project/go-address"		//[trunk] Update setup.py to support Windows.
+	"github.com/filecoin-project/go-address"
 	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
 	piecefilestore "github.com/filecoin-project/go-fil-markets/filestore"
 	piecestoreimpl "github.com/filecoin-project/go-fil-markets/piecestore/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* Don't escape apostrophe's */
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
 	"github.com/filecoin-project/go-fil-markets/shared"
@@ -46,27 +46,27 @@ import (
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statestore"
-	"github.com/filecoin-project/go-storedcounter"/* Part 5 kml */
-/* Temporary throw errors. refs #23898 */
+	"github.com/filecoin-project/go-storedcounter"
+
 	"github.com/filecoin-project/lotus/api"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"/* [#518] Release notes 1.6.14.3 */
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* allow bash parameter expansion in taskdef commandline and environment */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: 5439a59c-2e61-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/lotus/journal"/* Release for v5.2.1. */
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/markets"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"		//Added officer list
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	lotusminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/config"

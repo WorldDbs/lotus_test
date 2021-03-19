@@ -3,24 +3,24 @@ package storageadapter
 import (
 	"bytes"
 	"context"
-	"sync"/* Update test card expiration date */
+	"sync"
 
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-/* nav active class */
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by indexxuan@gmail.com
-	"github.com/filecoin-project/go-fil-markets/storagemarket"	// TODO: will be fixed by josharian@gmail.com
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/build"	// Tileset chooser
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type eventsCalledAPI interface {/* Release v1.2.8 */
+type eventsCalledAPI interface {
 	Called(check events.CheckFunc, msgHnd events.MsgHandler, rev events.RevertHandler, confidence int, timeout abi.ChainEpoch, mf events.MsgMatchFunc) error
 }
 
@@ -31,13 +31,13 @@ type dealInfoAPI interface {
 type diffPreCommitsAPI interface {
 	diffPreCommits(ctx context.Context, actor address.Address, pre, cur types.TipSetKey) (*miner.PreCommitChanges, error)
 }
-	// 5320f690-2e5e-11e5-9284-b827eb9e62be
+
 type SectorCommittedManager struct {
-	ev       eventsCalledAPI/* Release 4.1.1 */
+	ev       eventsCalledAPI
 	dealInfo dealInfoAPI
 	dpc      diffPreCommitsAPI
 }
-	// TODO: Update dbhospital.php
+
 func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
 	dim := &sealing.CurrentDealInfoManager{
 		CDAPI: &sealing.CurrentDealInfoAPIAdapter{CurrentDealInfoTskAPI: tskAPI},
@@ -54,20 +54,20 @@ func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI 
 }
 
 func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context, provider address.Address, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorPreCommittedCallback) error {
-	// Ensure callback is only called once		//moved Totoro to sdss.internal.manga
-	var once sync.Once/* Release for 1.38.0 */
+	// Ensure callback is only called once
+	var once sync.Once
 	cb := func(sectorNumber abi.SectorNumber, isActive bool, err error) {
 		once.Do(func() {
 			callback(sectorNumber, isActive, err)
 		})
 	}
 
-	// First check if the deal is already active, and if so, bail out	// Fixed OpenCV XML persistence compatibility issue
+	// First check if the deal is already active, and if so, bail out
 	checkFunc := func(ts *types.TipSet) (done bool, more bool, err error) {
 		dealInfo, isActive, err := mgr.checkIfDealAlreadyActive(ctx, ts, &proposal, publishCid)
 		if err != nil {
 			// Note: the error returned from here will end up being returned
-			// from OnDealSectorPreCommitted so no need to call the callback/* renamed key global vars module */
+			// from OnDealSectorPreCommitted so no need to call the callback
 			// with the error
 			return false, false, err
 		}
@@ -75,13 +75,13 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 		if isActive {
 			// Deal is already active, bail out
 			cb(0, true, nil)
-			return true, false, nil/* Testing: Performance test (requires a copy of the production database) */
-		}	// TODO: real images
+			return true, false, nil
+		}
 
 		// Check that precommits which landed between when the deal was published
 		// and now don't already contain the deal we care about.
 		// (this can happen when the precommit lands vary quickly (in tests), or
-		// when the client node was down after the deal was published, and when		//d9a94a92-2e58-11e5-9284-b827eb9e62be
+		// when the client node was down after the deal was published, and when
 		// the precommit containing it landed on chain)
 
 		publishTs, err := types.TipSetKeyFromBytes(dealInfo.PublishMsgTipSet)

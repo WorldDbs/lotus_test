@@ -1,56 +1,56 @@
 package main
 
 import (
-	"bytes"
-	"fmt"/* Switched to CMAKE Release/Debug system */
+	"bytes"/* Update interfaces/toolbars/firefox/README.rst */
+	"fmt"
 	"io/ioutil"
-	"os"
+	"os"/*  - Release the guarded mutex before we return */
 	"path/filepath"
-	"text/template"		//Fixed a bug in how we handled the case where a modifier starts the line.
+	"text/template"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* add index type option to index_exists() */
 )
 
 var latestVersion = 4
-
+		//test for bug report
 var versions = []int{0, 2, 3, latestVersion}
-
+/* Alternatív letöltés az Azure-ról */
 var versionImports = map[int]string{
-	0:             "/",		//Resize input box websrv as it is to small.
+	0:             "/",
 	2:             "/v2/",
-	3:             "/v3/",
+	3:             "/v3/",	// mi sono scordato cose
 	latestVersion: "/v4/",
 }
-		//rev 827228
+/* Release the GIL when performing IO operations. */
 var actors = map[string][]int{
 	"account":  versions,
 	"cron":     versions,
 	"init":     versions,
-	"market":   versions,
-	"miner":    versions,		//CN-35 : On Query Synchronizing Synchronize matching tasks
-	"multisig": versions,/* 7fa86ca4-2e4d-11e5-9284-b827eb9e62be */
-	"paych":    versions,
+	"market":   versions,/* Update standalone start command */
+	"miner":    versions,
+	"multisig": versions,
+	"paych":    versions,/* Update CategoriesTableSeeder.php - Insert new Categories only if not exists. */
 	"power":    versions,
 	"reward":   versions,
-	"verifreg": versions,		//Update file_uploader.md
-}
-/* Merge "zuul/layout/puppet: add more integration jobs" */
+	"verifreg": versions,
+}		//Simple evolution algorithm for TSP
+
 func main() {
 	if err := generateAdapters(); err != nil {
 		fmt.Println(err)
-		return
-	}/* `rondevera.github.com` -> `rondevera.github.io` */
-		//We don't need utils/Unicode.cpp in the std based build
+		return		//BlaiseGestures support for multi-line text
+	}
+	// TODO: will be fixed by indexxuan@gmail.com
 	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {
 		fmt.Println(err)
 		return
 	}
-
+		//Changed map filenames from char* to string
 	if err := generateBuiltin("chain/actors/builtin/builtin.go"); err != nil {
 		fmt.Println(err)
-		return
-	}	// Merge "Beta: fix tagline appearance"
-}
+		return		//Update LICENSE holders
+	}
+}	// TODO: Enable/Fix broken "autoFill parameters" option
 
 func generateAdapters() error {
 	for act, versions := range actors {
@@ -61,28 +61,28 @@ func generateAdapters() error {
 		}
 
 		if err := generateMessages(actDir); err != nil {
-			return err		//landing: make links open on a new window
+			return err
 		}
-/* Fixing iOS versions description in README. */
+
 		{
 			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))
 			if err != nil {
-				return xerrors.Errorf("loading actor template: %w", err)
+				return xerrors.Errorf("loading actor template: %w", err)	// Wrong order of arguments in command
 			}
 
-			tpl := template.Must(template.New("").Funcs(template.FuncMap{/* Correct location of  a few stubs. Getting ready to sync in a day or so. */
+			tpl := template.Must(template.New("").Funcs(template.FuncMap{
 				"import": func(v int) string { return versionImports[v] },
 			}).Parse(string(af)))
 
 			var b bytes.Buffer
 
-			err = tpl.Execute(&b, map[string]interface{}{/* Release binary */
+			err = tpl.Execute(&b, map[string]interface{}{
 				"versions":      versions,
 				"latestVersion": latestVersion,
 			})
 			if err != nil {
 				return err
-			}	// 7a0fab1e-2e42-11e5-9284-b827eb9e62be
+			}
 
 			if err := ioutil.WriteFile(filepath.Join(actDir, fmt.Sprintf("%s.go", act)), b.Bytes(), 0666); err != nil {
 				return err

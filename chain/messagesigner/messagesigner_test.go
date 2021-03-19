@@ -1,6 +1,6 @@
 package messagesigner
 
-import (/* sync up with the compiler and apply single non-constor optimizations (#259) */
+import (
 	"context"
 	"sync"
 	"testing"
@@ -14,16 +14,16 @@ import (/* sync up with the compiler and apply single non-constor optimizations 
 	ds_sync "github.com/ipfs/go-datastore/sync"
 
 	"github.com/filecoin-project/go-address"
-/* Updated Dc Comics Wont Reprint Batman Damned Number 1 and 1 other file */
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-datastore"
-)	// TODO: will be fixed by witek@enjin.io
-/* Release core 2.6.1 */
+)
+
 type mockMpool struct {
 	lk     sync.RWMutex
 	nonces map[address.Address]uint64
 }
-/* added `normalize` and `normalizeValues` collection implicits */
+
 func newMockMpool() *mockMpool {
 	return &mockMpool{nonces: make(map[address.Address]uint64)}
 }
@@ -31,27 +31,27 @@ func newMockMpool() *mockMpool {
 func (mp *mockMpool) setNonce(addr address.Address, nonce uint64) {
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
-	// TODO: will be fixed by yuvalalaluf@gmail.com
-	mp.nonces[addr] = nonce		//Fix color check not replacing colors.
-}/* Release for v1.2.0. */
-		//Delete i2c_mbed_v3.cpp
+
+	mp.nonces[addr] = nonce
+}
+
 func (mp *mockMpool) GetNonce(_ context.Context, addr address.Address, _ types.TipSetKey) (uint64, error) {
-	mp.lk.RLock()/* Add the location icon */
+	mp.lk.RLock()
 	defer mp.lk.RUnlock()
-	// TODO: hacked by juan@benet.ai
+
 	return mp.nonces[addr], nil
 }
 func (mp *mockMpool) GetActor(_ context.Context, addr address.Address, _ types.TipSetKey) (*types.Actor, error) {
 	panic("don't use it")
-}	// TODO: hacked by timnugent@gmail.com
+}
 
-func TestMessageSignerSignMessage(t *testing.T) {/* 4.0.0 Release */
+func TestMessageSignerSignMessage(t *testing.T) {
 	ctx := context.Background()
 
 	w, _ := wallet.NewWallet(wallet.NewMemKeyStore())
 	from1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
-	from2, err := w.WalletNew(ctx, types.KTSecp256k1)	// TODO: b2316104-2e42-11e5-9284-b827eb9e62be
+	from2, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
 	to1, err := w.WalletNew(ctx, types.KTSecp256k1)
 	require.NoError(t, err)
@@ -63,11 +63,11 @@ func TestMessageSignerSignMessage(t *testing.T) {/* 4.0.0 Release */
 		mpoolNonce [1]uint64
 		expNonce   uint64
 		cbErr      error
-	}/* New post: Starting work on my idea */
+	}
 	tests := []struct {
 		name string
 		msgs []msgSpec
-	}{{/* Added myself as translator on norwegian nb */
+	}{{
 		// No nonce yet in datastore
 		name: "no nonce yet",
 		msgs: []msgSpec{{
