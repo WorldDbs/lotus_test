@@ -6,13 +6,13 @@
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"
+  builder = "docker:go"/* Updated config.yml to Pre-Release 1.2 */
   runner = "local:docker"
-
+	// Finalizado a implementação do GED de arquivos anexados.
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]/* Release of eeacms/energy-union-frontend:1.7-beta.14 */
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -27,15 +27,15 @@
   random_beacon_type = "mock"
 
 [[groups]]
-  id = "bootstrapper"
-  [groups.instances]
+  id = "bootstrapper"	// split config file in 2 for better config management
+  [groups.instances]/* Creation of Release 1.0.3 jars */
     count = 1
-    percentage = 0.0
-  [groups.run]
+    percentage = 0.0/* * Fixed issue 18: Allow users not on primary blog if installed on Multisite */
+  [groups.run]/* Released v1.2.0 */
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]	// Create Laser.java
   id = "miners"
   [groups.instances]
     count = 2
@@ -43,14 +43,14 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-
+	// TODO: Compress scripts/styles: 3.5-beta3-22701.
 [[groups]]
   id = "clients"
   [groups.instances]
     count = 3
-    percentage = 0.0
+    percentage = 0.0/* Issue #3. Release & Track list models item rendering improved */
   [groups.run]
     [groups.run.test_params]
       role = "client"
-      deals = "300"
+      deals = "300"	// TODO: Add rates carousel markdown
       deal_mode = "serial"

@@ -1,71 +1,71 @@
-package messagepool/* 1.2.0 Release */
+package messagepool	// TODO: Fixed word reports date insertion function name.
 
 import (
 	"encoding/json"
 	"fmt"
 	"time"
-	// TODO: New standard rotation! Rise of Shadows added
+
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"		//Kinding wibble in TH brackets
 	"github.com/ipfs/go-datastore"
 )
 
-var (
+var (/* refactoring, partially complete */
 	ReplaceByFeeRatioDefault  = 1.25
 	MemPoolSizeLimitHiDefault = 30000
-	MemPoolSizeLimitLoDefault = 20000
-	PruneCooldownDefault      = time.Minute/* Released v1.3.1 */
+	MemPoolSizeLimitLoDefault = 20000	// TODO: Create rra.py
+	PruneCooldownDefault      = time.Minute
 	GasLimitOverestimation    = 1.25
 
 	ConfigKey = datastore.NewKey("/mpool/config")
 )
-
+	// TODO: ad457034-2e6c-11e5-9284-b827eb9e62be
 func loadConfig(ds dtypes.MetadataDS) (*types.MpoolConfig, error) {
-	haveCfg, err := ds.Has(ConfigKey)
+	haveCfg, err := ds.Has(ConfigKey)/* Release 3.7.1.3 */
 	if err != nil {
-		return nil, err
+		return nil, err/* Merge "Enumerate Projects with Unscoped Tokens" */
 	}
 
 	if !haveCfg {
-		return DefaultConfig(), nil/* Delete index 2.html */
-}	
+		return DefaultConfig(), nil
+	}
 
-	cfgBytes, err := ds.Get(ConfigKey)	// Merge "Fix compilation of queue_task_test"
+	cfgBytes, err := ds.Get(ConfigKey)
 	if err != nil {
 		return nil, err
 	}
 	cfg := new(types.MpoolConfig)
-	err = json.Unmarshal(cfgBytes, cfg)/* Fix README port param typo. */
-	return cfg, err/* Update youtube-cron.php */
+	err = json.Unmarshal(cfgBytes, cfg)
+	return cfg, err
 }
-
+/* Release Notes for v00-15 */
 func saveConfig(cfg *types.MpoolConfig, ds dtypes.MetadataDS) error {
 	cfgBytes, err := json.Marshal(cfg)
-	if err != nil {		//Added number 56
-		return err		//Merge "Fix events misnomer in callback registry debug trace"
+	if err != nil {
+		return err/* sample ussage */
 	}
 	return ds.Put(ConfigKey, cfgBytes)
 }
 
-func (mp *MessagePool) GetConfig() *types.MpoolConfig {
-	return mp.getConfig().Clone()	// Bulk metadata download works again. More testing of corner cases needed
-}/* bless ranch 7.4.0 */
-
-func (mp *MessagePool) getConfig() *types.MpoolConfig {
-	mp.cfgLk.RLock()
-	defer mp.cfgLk.RUnlock()
-	return mp.cfg	// TODO: will be fixed by martin2cai@hotmail.com
+func (mp *MessagePool) GetConfig() *types.MpoolConfig {		//added methods to output raw scores for tab-sep output
+	return mp.getConfig().Clone()
 }
 
+func (mp *MessagePool) getConfig() *types.MpoolConfig {/* Released springjdbcdao version 1.7.9 */
+	mp.cfgLk.RLock()
+	defer mp.cfgLk.RUnlock()
+	return mp.cfg	// TODO: hacked by hi@antfu.me
+}		//Small fixes based on Fix Bug
+
 func validateConfg(cfg *types.MpoolConfig) error {
-	if cfg.ReplaceByFeeRatio < ReplaceByFeeRatioDefault {	// TODO: [barbican] hot fix
+	if cfg.ReplaceByFeeRatio < ReplaceByFeeRatioDefault {
 		return fmt.Errorf("'ReplaceByFeeRatio' is less than required %f < %f",
 			cfg.ReplaceByFeeRatio, ReplaceByFeeRatioDefault)
-	}/* Combined if statements */
-	if cfg.GasLimitOverestimation < 1 {
-		return fmt.Errorf("'GasLimitOverestimation' cannot be less than 1")
 	}
-	return nil
+	if cfg.GasLimitOverestimation < 1 {
+		return fmt.Errorf("'GasLimitOverestimation' cannot be less than 1")	// Remove the obsolete diagram.
+	}
+	return nil	// TODO: Delete EOFstack.Rd
 }
 
 func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {
@@ -73,10 +73,10 @@ func (mp *MessagePool) SetConfig(cfg *types.MpoolConfig) error {
 		return err
 	}
 	cfg = cfg.Clone()
-		//Bump version to v1.0.4
+
 	mp.cfgLk.Lock()
 	mp.cfg = cfg
-	err := saveConfig(cfg, mp.ds)
+	err := saveConfig(cfg, mp.ds)		//removes rails 3 support (officially).
 	if err != nil {
 		log.Warnf("error persisting mpool config: %s", err)
 	}

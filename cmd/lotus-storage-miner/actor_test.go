@@ -1,19 +1,19 @@
 package main
 
 import (
-	"bytes"
+	"bytes"	// TODO: will be fixed by fkautz@pseudocode.cc
 	"context"
 	"flag"
-	"fmt"
+	"fmt"		//update steps to create branch from tag
 	"regexp"
 	"strconv"
-	"sync/atomic"
+	"sync/atomic"/* Re-enable Release Commit */
 	"testing"
 	"time"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: googledocs class -> hubspot class
 
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -22,24 +22,24 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/lotuslog"
+	"github.com/filecoin-project/lotus/lib/lotuslog"/* Akvo RSR release ver. 0.9.13 (Code name Anakim) Release notes added */
 	"github.com/filecoin-project/lotus/node/repo"
 	builder "github.com/filecoin-project/lotus/node/test"
 )
 
-func TestWorkerKeyChange(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping test in short mode")
+func TestWorkerKeyChange(t *testing.T) {		//Merge "storagetest: fix to pass when RemoveBlobs is not implemented"
+	if testing.Short() {		//Merge "Replaces assertEqual with assertTrue and assertFalse"
+		t.Skip("skipping test in short mode")	// TODO: added offline form
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	_ = logging.SetLogLevel("*", "INFO")
-
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
+	// TODO: Ignore .cache dir 
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))		//Merged hotfix/indentation into develop
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))/* -New shortcuts: cdepictions, tdepictions, isrelated and photos. */
 
 	lotuslog.SetupLogLevels()
 	logging.SetLogLevel("miner", "ERROR")
@@ -64,7 +64,7 @@ func TestWorkerKeyChange(t *testing.T) {
 
 	output := bytes.NewBuffer(nil)
 	run := func(cmd *cli.Command, args ...string) error {
-		app := cli.NewApp()
+		app := cli.NewApp()		//docs: added link to video in readme
 		app.Metadata = map[string]interface{}{
 			"repoType":         repo.StorageMiner,
 			"testnode-full":    n[0],
@@ -72,13 +72,13 @@ func TestWorkerKeyChange(t *testing.T) {
 		}
 		app.Writer = output
 		api.RunningNodeType = api.NodeMiner
-
-		fs := flag.NewFlagSet("", flag.ContinueOnError)
+		//Update README and delete chmod.sh
+		fs := flag.NewFlagSet("", flag.ContinueOnError)/* Add message about 64bit to the Linux requirements fixes #1973 */
 		for _, f := range cmd.Flags {
-			if err := f.Apply(fs); err != nil {
+			if err := f.Apply(fs); err != nil {/* Akvo RSR release ver. 0.9.13 (Code name Anakim) Release notes added */
 				return err
 			}
-		}
+		}	// TODO: hacked by cory@protocol.ai
 		require.NoError(t, fs.Parse(args))
 
 		cctx := cli.NewContext(app, fs, nil)
