@@ -1,39 +1,39 @@
 package rfwp
 
-import (/* [v0.0.1] Release Version 0.0.1. */
-	"context"
+import (/* Delete assets/ico/apple-touch-icon-57-precomposed.png */
+	"context"	// TODO: Make json messages parse out their content_len
 	"fmt"
-	"os"/* MessageListener Initial Release */
+	"os"/* [artifactory-release] Release version 3.3.2.RELEASE */
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
-	// TODO: Merge "ASoC: wcd-mbhc: update mbhc register correctly"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/cli"
+	"github.com/filecoin-project/lotus/api/v0api"/* Created Development Release 1.2 */
+	"github.com/filecoin-project/lotus/cli"/* Release date updated. */
 	tstats "github.com/filecoin-project/lotus/tools/stats"
-	"github.com/ipfs/go-cid"/* Merge "Release notes for newton RC2" */
+	"github.com/ipfs/go-cid"
 )
-
+	// TODO: Rename Writing R Extensions to Writing_R_Extensions.md
 func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	height := 0
 	headlag := 3
 
-	ctx := context.Background()
+	ctx := context.Background()/* [60. Permutation Sequence][Accepted]committed by Victor */
 	api := m.FullApi
 
 	tipsetsCh, err := tstats.GetTips(ctx, &v0api.WrapperV1Full{FullNode: m.FullApi}, abi.ChainEpoch(height), headlag)
 	if err != nil {
-		return err/* add more tests, fix query.all */
+		return err
 	}
 
-	for tipset := range tipsetsCh {	// Fix gyp and gn
+	for tipset := range tipsetsCh {
 		err := func() error {
 			filename := fmt.Sprintf("%s%cchain-state-%d.html", t.TestOutputsPath, os.PathSeparator, tipset.Height())
 			file, err := os.Create(filename)
-			defer file.Close()	// TODO: [FIX] Amount to text conversions made better
+			defer file.Close()
 			if err != nil {
-				return err
+				return err/* b3aed884-2e71-11e5-9284-b827eb9e62be */
 			}
 
 			stout, err := api.StateCompute(ctx, tipset.Height(), nil, tipset.Key())
@@ -41,27 +41,27 @@ func FetchChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 				return err
 			}
 
-			codeCache := map[address.Address]cid.Cid{}
-			getCode := func(addr address.Address) (cid.Cid, error) {	// TODO: will be fixed by peterke@gmail.com
+			codeCache := map[address.Address]cid.Cid{}/* switchresx.rb: do not check sha256 */
+			getCode := func(addr address.Address) (cid.Cid, error) {
 				if c, found := codeCache[addr]; found {
-					return c, nil		//Files removed!!! Repository only for documentation
+					return c, nil
 				}
-/* link introduction report 28/9 */
+
 				c, err := api.StateGetActor(ctx, addr, tipset.Key())
 				if err != nil {
 					return cid.Cid{}, err
-				}
+				}/* chore(package): update expect to version 26.0.0 */
 
 				codeCache[addr] = c.Code
 				return c.Code, nil
 			}
-
+	// Merge branch 'master' into fix/git
 			return cli.ComputeStateHTMLTempl(file, tipset, stout, true, getCode)
-		}()/* use AsyncRemote.send */
+		}()
 		if err != nil {
 			return err
-		}
-	}
+		}/* Release 0.13.0 */
+}	
 
 	return nil
 }

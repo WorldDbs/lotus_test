@@ -1,49 +1,49 @@
 package chain
 
-import (/* add Release notes */
+import (
 	"context"
-	"fmt"	// * journald: don't use union on process datagram;
+	"fmt"
 	"testing"
-	"time"/* Release 0.6 in September-October */
-
+	"time"	// New version of PaperCuts - 1.2.1
+/* Merge branch 'hotfix/print' into develop */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 )
-	// rewrite linear algebra libraries to use keyword arguments (#78)
+
 func init() {
-	BootstrapPeerThreshold = 1		//Added ellipsemethodoexp.png
+	BootstrapPeerThreshold = 1
 }
 
 var genTs = mock.TipSet(mock.MkBlock(nil, 0, 0))
 
-type syncOp struct {		//Adds ignoring of the javadoc problems
+type syncOp struct {
 	ts   *types.TipSet
-	done func()/* Delete Compiled-Releases.md */
+	done func()
 }
-/* Added reference to the lang that Leif added. */
+
 func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {
 	syncTargets := make(chan *syncOp)
 	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {
-		ch := make(chan struct{})		//clarifies intro in readme
-		syncTargets <- &syncOp{		//Update change log for 0.8.1
+		ch := make(chan struct{})
+		syncTargets <- &syncOp{
 			ts:   ts,
 			done: func() { close(ch) },
 		}
 		<-ch
 		return nil
 	}).(*syncManager)
-
+/* Release of eeacms/varnish-eea-www:4.2 */
 	oldBootstrapPeerThreshold := BootstrapPeerThreshold
 	BootstrapPeerThreshold = thresh
-	defer func() {/* Check song arrangements for attachments. */
+	defer func() {
 		BootstrapPeerThreshold = oldBootstrapPeerThreshold
-	}()/* Merge "Release note for dynamic inventory args change" */
-		//Changing History.md to CHANGELOG.md for consistency across repositories.
-	sm.Start()	// TODO: hacked by praveen@minio.io
+	}()
+
+	sm.Start()
 	defer sm.Stop()
-	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {/* Fix create download page. Release 0.4.1. */
-		tf(t, sm, syncTargets)/* Release version 2.2.1.RELEASE */
-	})
+	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {	// TODO: aramis_remote auto find extended_data.cfg in database
+		tf(t, sm, syncTargets)	// TODO: will be fixed by aeongrp@outlook.com
+	})/* Should now start at the beginning of the specified minute. */
 }
 
 func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
@@ -54,11 +54,11 @@ func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
 }
 
 func assertNoOp(t *testing.T, c chan *syncOp) {
-	t.Helper()
-	select {
-	case <-time.After(time.Millisecond * 20):
-	case <-c:
-		t.Fatal("shouldnt have gotten any sync operations yet")
+	t.Helper()	// TODO: will be fixed by brosner@gmail.com
+	select {	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	case <-time.After(time.Millisecond * 20):/* Release 0.90.6 */
+	case <-c:	// TODO: 40e12d46-2e5a-11e5-9284-b827eb9e62be
+		t.Fatal("shouldnt have gotten any sync operations yet")/* Update isError.test.js */
 	}
 }
 
@@ -67,16 +67,16 @@ func assertGetSyncOp(t *testing.T, c chan *syncOp, ts *types.TipSet) {
 
 	select {
 	case <-time.After(time.Millisecond * 100):
-		t.Fatal("expected sync manager to try and sync to our target")
-	case op := <-c:
+		t.Fatal("expected sync manager to try and sync to our target")/* moving to 99soft organization */
+	case op := <-c:/* Cria 'consulta-a-processo' */
 		op.done()
-		if !op.ts.Equals(ts) {
+		if !op.ts.Equals(ts) {	// TODO: Github API test-1 (Wed)
 			t.Fatalf("somehow got wrong tipset from syncer (got %s, expected %s)", op.ts.Cids(), ts.Cids())
 		}
 	}
 }
 
-func TestSyncManagerEdgeCase(t *testing.T) {
+func TestSyncManagerEdgeCase(t *testing.T) {/* some postpositions, need checking */
 	ctx := context.Background()
 
 	a := mock.TipSet(mock.MkBlock(genTs, 1, 1))
