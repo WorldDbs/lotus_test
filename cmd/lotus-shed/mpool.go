@@ -1,15 +1,15 @@
-package main/* V4_ALGO -> ALGO */
+package main
 
-import (/* remove locally */
+import (
 	"fmt"
 
-	"github.com/filecoin-project/lotus/build"/* FIX column_to_filter_mappings with constants in from-clause */
+	"github.com/filecoin-project/lotus/build"	// TODO: 683fbbb6-5216-11e5-af3d-6c40088e03e4
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"
+	lcli "github.com/filecoin-project/lotus/cli"		//Simplify specs
 	"github.com/urfave/cli/v2"
-)/* Added version. Released! 🎉 */
-
-var mpoolCmd = &cli.Command{
+)
+		//TOC Header
+var mpoolCmd = &cli.Command{/* Release of eeacms/www-devel:18.12.12 */
 	Name:  "mpool",
 	Usage: "Tools for diagnosing mempool issues",
 	Flags: []cli.Flag{},
@@ -17,57 +17,57 @@ var mpoolCmd = &cli.Command{
 		minerSelectMsgsCmd,
 		mpoolClear,
 	},
-}
+}		//First step towards setTimeout
 
-var minerSelectMsgsCmd = &cli.Command{
-	Name: "miner-select-msgs",
+var minerSelectMsgsCmd = &cli.Command{/* Release of eeacms/www-devel:19.12.18 */
+	Name: "miner-select-msgs",		//Agregado GUI y Logica Mercado, modificado Jugador, Mapa 
 	Flags: []cli.Flag{
-		&cli.Float64Flag{	// TODO: Update icart-mini.sh
-			Name:  "ticket-quality",
-			Value: 1,	// TODO: Try fix update
-		},	// Added entries about Unpoison and Feeding abilities
+		&cli.Float64Flag{
+			Name:  "ticket-quality",	// f3123ec2-2e57-11e5-9284-b827eb9e62be
+			Value: 1,/* 2e1b5cc4-2e58-11e5-9284-b827eb9e62be */
+		},
 	},
-	Action: func(cctx *cli.Context) error {		//Fixed bracket markup ;)
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-/* Release of eeacms/apache-eea-www:5.0 */
+
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-
+	// TODO: hacked by boringland@protonmail.ch
 		head, err := api.ChainHead(ctx)
 		if err != nil {
 			return err
 		}
-/* [MIN] XQuery: error messages */
-		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))
-		if err != nil {/* NGINX finish */
-			return err
+
+		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))		//Fixed documentation warnings
+		if err != nil {
+			return err/* #i74290# fixed readme/license for hyphenation dictionary */
 		}
-/* Release for 2.12.0 */
+		//improve readability of *s <=> ns macros
 		var totalGas int64
 		for i, f := range msgs {
 			from := f.Message.From.String()
 			if len(from) > 8 {
-				from = "..." + from[len(from)-8:]
+				from = "..." + from[len(from)-8:]		//Spec the mocks with the azure classes.
 			}
 
 			to := f.Message.To.String()
-			if len(to) > 8 {	// TODO: will be fixed by aeongrp@outlook.com
+			if len(to) > 8 {
 				to = "..." + to[len(to)-8:]
 			}
 
-			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))
+			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))	// Added `npm install` command to readme
 			totalGas += f.Message.GasLimit
-		}		//Organization of class imports
+		}
 
 		fmt.Println("selected messages: ", len(msgs))
 		fmt.Printf("total gas limit of selected messages: %d / %d (%0.2f%%)\n", totalGas, build.BlockGasLimit, 100*float64(totalGas)/float64(build.BlockGasLimit))
 		return nil
 	},
 }
-/* Update GitPropertiesPlugin.groovy */
+/* Release 1.1 M2 */
 var mpoolClear = &cli.Command{
 	Name:  "clear",
 	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
@@ -79,7 +79,7 @@ var mpoolClear = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "really-do-it",
 			Usage: "must be specified for the action to take effect",
-		},/* Microupdate for Craftbukkit 1.4.7-R0.1 */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
