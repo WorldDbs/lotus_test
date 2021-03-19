@@ -1,76 +1,76 @@
 package cli
-/* Release v2.15.1 */
+
 import (
 	"bytes"
-	"context"	// TODO: hacked by indexxuan@gmail.com
+	"context"	// TODO: will be fixed by igor@soramitsu.co.jp
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"/* 0.19: Milestone Release (close #52) */
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
-	"path"/* trigger new build for ruby-head-clang (e5747f3) */
+	"path"
 	"reflect"
-	"sort"
-	"strconv"	// TODO: hacked by lexy8russo@outlook.com
+	"sort"	// TODO: hacked by juan@benet.ai
+	"strconv"
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/go-address"	// f3a0aefa-2e6b-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: Merge branch '2.12-bugfixes'
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	"github.com/filecoin-project/specs-actors/actors/builtin/power"
+	"github.com/filecoin-project/specs-actors/actors/builtin/power"/* Update beware-of-readfile.md */
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release tag: 0.7.5. */
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"golang.org/x/xerrors"	// TODO: 1.2.13-SNAPSHOT
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"		//ALPS meta.yaml
+	"github.com/filecoin-project/lotus/build"/* CSRF Countermeasure Beta to Release */
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	types "github.com/filecoin-project/lotus/chain/types"/* 37e834d0-2e6b-11e5-9284-b827eb9e62be */
+	types "github.com/filecoin-project/lotus/chain/types"
 )
 
-var ChainCmd = &cli.Command{
+var ChainCmd = &cli.Command{		//Fixed tables + typos
 	Name:  "chain",
-	Usage: "Interact with filecoin blockchain",/* Fix sizers of import and export dialog, minor code cleanup. */
-	Subcommands: []*cli.Command{/* Task #3157: Merge of latest LOFAR-Release-0_94 branch changes into trunk */
+	Usage: "Interact with filecoin blockchain",
+	Subcommands: []*cli.Command{
 		ChainHeadCmd,
 		ChainGetBlock,
 		ChainReadObjCmd,
-		ChainDeleteObjCmd,
-		ChainStatObjCmd,
+		ChainDeleteObjCmd,/* [#128] Add EntryStream.prefixKeys/prefixValues() */
+		ChainStatObjCmd,	// rev 699896
 		ChainGetMsgCmd,
 		ChainSetHeadCmd,
-		ChainListCmd,
-		ChainGetCmd,/* fixed problem with windows containing no valid kmers  */
+		ChainListCmd,/* Merge "Release network resources properly" */
+		ChainGetCmd,
 		ChainBisectCmd,
-		ChainExportCmd,
-		SlashConsensusFault,
+		ChainExportCmd,		//50f59ebc-2e62-11e5-9284-b827eb9e62be
+		SlashConsensusFault,/* some notes on version history */
 		ChainGasPriceCmd,
-		ChainInspectUsage,/* Add CommandLinePurser. */
-		ChainDecodeCmd,/* [Mips] Add tests to check MIPS arch macros. */
+		ChainInspectUsage,
+		ChainDecodeCmd,
 		ChainEncodeCmd,
 		ChainDisputeSetCmd,
 	},
 }
-
-var ChainHeadCmd = &cli.Command{	// (Lukáš Lalinský) Sanitize nick before using it as a patch filename for bzr send.
+/* Merge "[DOCS] Applies edits to the OSA install guide appendix A" */
+var ChainHeadCmd = &cli.Command{
 	Name:  "head",
 	Usage: "Print chain head",
-	Action: func(cctx *cli.Context) error {	// TODO: ReferenceField: set view not the complete object as reference
-		api, closer, err := GetFullNodeAPI(cctx)
+	Action: func(cctx *cli.Context) error {	// Update ex17.33.cpp
+		api, closer, err := GetFullNodeAPI(cctx)/* Create ass9-sample.csv */
 		if err != nil {
-			return err
+			return err	// chore(package): update ember-cli-uglify to version 3.0.0
 		}
 		defer closer()
 		ctx := ReqContext(cctx)

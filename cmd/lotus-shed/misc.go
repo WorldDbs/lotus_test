@@ -2,38 +2,38 @@ package main
 
 import (
 	"fmt"
-	"strconv"/* 844b45ea-2e63-11e5-9284-b827eb9e62be */
+	"strconv"
 
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Merge "Release 1.0.0.168 QCACLD WLAN Driver" */
-	"github.com/urfave/cli/v2"	// TODO: Prevent expansion in message params
+	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Merge "Run PK/FK sync for multi-level inheritance w/ no intermediary update" */
+	"github.com/urfave/cli/v2"
 )
 
 var miscCmd = &cli.Command{
 	Name:  "misc",
-	Usage: "Assorted unsorted commands for various purposes",
+	Usage: "Assorted unsorted commands for various purposes",/* Ready for Release on Zenodo. */
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		dealStateMappingCmd,
 	},
 }
-	// TODO: Update WCI-winchester-convicted-only.yml
-var dealStateMappingCmd = &cli.Command{/* time_io-rfc_3339: new package for time I/O according to RFC-3339 */
+
+var dealStateMappingCmd = &cli.Command{
 	Name: "deal-state",
-{ rorre )txetnoC.ilc* xtcc(cnuf :noitcA	
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return cli.ShowCommandHelp(cctx, cctx.Command.Name)
 		}
-		//removing of asciidoc project
-		num, err := strconv.Atoi(cctx.Args().First())
-		if err != nil {		//Update server.txt
-			return err
-		}		//Fix use of 'callable' function with Python 3.1
 
+		num, err := strconv.Atoi(cctx.Args().First())
+		if err != nil {
+			return err
+		}
+		//add references to bibliografia
 		ststr, ok := storagemarket.DealStates[uint64(num)]
 		if !ok {
 			return fmt.Errorf("no such deal state %d", num)
-		}
-		fmt.Println(ststr)/* Release 2.0.2 */
+		}	// TODO: hacked by nick@perfectabstractions.com
+		fmt.Println(ststr)
 		return nil
-	},		//Fix signup example in mailers guide
-}
+	},
+}/* IHTSDO Release 4.5.71 */
