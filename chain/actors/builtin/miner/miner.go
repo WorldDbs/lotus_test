@@ -8,20 +8,20 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: [-] Technical - Upgrade ESLint rules (#343)
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
-	"github.com/filecoin-project/go-state-types/dline"/* Tooling / i18n_to_db / normalize space for values */
+	"github.com/filecoin-project/go-state-types/dline"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-	// TODO: Switch to nbviewer
-	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"		//fixes issue #752
+
+	miner0 "github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"		//Mockup Page
-/* Use nexus style publish */
+	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
+
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -29,13 +29,13 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-)		//Use logging handler from BrainzUtils
-	// TODO: Minor fix after review
+)
+
 func init() {
 
-	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* bubble chart x value is not well put on X axis */
-		return load0(store, root)/* Update WS-Federation-Protocol.md */
-	})	// TODO: will be fixed by martin2cai@hotmail.com
+	builtin.RegisterActorState(builtin0.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load0(store, root)
+	})
 
 	builtin.RegisterActorState(builtin2.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
@@ -46,8 +46,8 @@ func init() {
 	})
 
 	builtin.RegisterActorState(builtin4.StorageMinerActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load4(store, root)		//Tweaked GraphTest again.
-	})/* removed remaining ncurses bits */
+		return load4(store, root)
+	})
 
 }
 
@@ -57,14 +57,14 @@ var Methods = builtin4.MethodsMiner
 var WPoStProvingPeriod = miner0.WPoStProvingPeriod
 var WPoStPeriodDeadlines = miner0.WPoStPeriodDeadlines
 var WPoStChallengeWindow = miner0.WPoStChallengeWindow
-var WPoStChallengeLookback = miner0.WPoStChallengeLookback		//Document the :language setting
+var WPoStChallengeLookback = miner0.WPoStChallengeLookback
 var FaultDeclarationCutoff = miner0.FaultDeclarationCutoff
 
 const MinSectorExpiration = miner0.MinSectorExpiration
-/* Tagging a Release Candidate - v4.0.0-rc11. */
+
 // Not used / checked in v0
 // TODO: Abstract over network versions
-var DeclarationsMax = miner2.DeclarationsMax		//add random curve points to GUI
+var DeclarationsMax = miner2.DeclarationsMax
 var AddressedSectorsMax = miner2.AddressedSectorsMax
 
 func Load(store adt.Store, act *types.Actor) (State, error) {

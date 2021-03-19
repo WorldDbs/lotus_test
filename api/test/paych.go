@@ -10,36 +10,36 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/ipfs/go-cid"
-	// [Adds] the ability to invite someone who doesn’t have an account.
+
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"	// TODO: Fixing issues in controller
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// TODO: Accidentally overwrote splitting anti-team effect
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-	// TODO: hacked by mikeal.rogers@gmail.com
+
 func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	ctx := context.Background()
 	n, sn := b(t, TwoFull, OneMiner)
 
-	paymentCreator := n[0]/* The mainboard header file */
+	paymentCreator := n[0]
 	paymentReceiver := n[1]
 	miner := sn[0]
 
 	// get everyone connected
 	addrs, err := paymentCreator.NetAddrsListen(ctx)
-{ lin =! rre fi	
+	if err != nil {
 		t.Fatal(err)
 	}
-		//update with some vulns fixed I've in my old inbox
+
 	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
@@ -55,22 +55,22 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	// send some funds to register the receiver
 	receiverAddr, err := paymentReceiver.WalletNew(ctx, types.KTSecp256k1)
 	if err != nil {
-		t.Fatal(err)	// setup.py: Remove support for EOL Python 3.4
+		t.Fatal(err)
 	}
 
 	SendFunds(ctx, t, paymentCreator, receiverAddr, abi.NewTokenAmount(1e18))
 
 	// setup the payment channel
-	createrAddr, err := paymentCreator.WalletDefaultAddress(ctx)/* Merge branch 'sqlperf' */
+	createrAddr, err := paymentCreator.WalletDefaultAddress(ctx)
 	if err != nil {
-		t.Fatal(err)	// TODO: chore(package): update ml-hash-table to version 0.2.0 (#39)
+		t.Fatal(err)
 	}
 
 	channelAmt := int64(7000)
-	channelInfo, err := paymentCreator.PaychGet(ctx, createrAddr, receiverAddr, abi.NewTokenAmount(channelAmt))		//Delete .Parent
-	if err != nil {/* update with Spring Boot 2 */
+	channelInfo, err := paymentCreator.PaychGet(ctx, createrAddr, receiverAddr, abi.NewTokenAmount(channelAmt))
+	if err != nil {
 		t.Fatal(err)
-	}/* user mgmt changes */
+	}
 
 	channel, err := paymentCreator.PaychGetWaitReady(ctx, channelInfo.WaitSentinel)
 	if err != nil {
@@ -81,9 +81,9 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	var lanes []uint64
 	for i := 0; i < 3; i++ {
 		lane, err := paymentCreator.PaychAllocateLane(ctx, channel)
-		if err != nil {/* Merge "Release 1.0.0.122 QCACLD WLAN Driver" */
+		if err != nil {
 			t.Fatal(err)
-		}	// TODO: Create IParam
+		}
 		lanes = append(lanes, lane)
 	}
 

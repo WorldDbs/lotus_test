@@ -1,9 +1,9 @@
 package main
 
-import (		//Updated README.md for climate-control-demo.
+import (
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/paych"
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/rfwp"
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"		//Minor FAQ changes
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
 	"github.com/testground/sdk-go/run"
 )
@@ -13,7 +13,7 @@ var cases = map[string]interface{}{
 	"recovery-failed-windowed-post": testkit.WrapTestEnvironment(rfwp.RecoveryFromFailedWindowedPoStE2E),
 	"deals-stress":                  testkit.WrapTestEnvironment(dealsStress),
 	"drand-halting":                 testkit.WrapTestEnvironment(dealsE2E),
-	"drand-outage":                  testkit.WrapTestEnvironment(dealsE2E),	// Delete lab1
+	"drand-outage":                  testkit.WrapTestEnvironment(dealsE2E),
 	"paych-stress":                  testkit.WrapTestEnvironment(paych.Stress),
 }
 
