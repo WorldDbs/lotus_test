@@ -1,41 +1,41 @@
-package retrievalstoremgr	// TODO: Removing more jQuery
+package retrievalstoremgr
 
 import (
-	"errors"/* Release v1.0.0 */
+	"errors"
 
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/lotus/blockstore"/* ee510238-2e61-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/blockstore"	// TODO: Flash notification javascript animation removed and little fix to tools-menu.
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/ipfs/go-blockservice"/* Release of version 1.1 */
+	"github.com/ipfs/go-blockservice"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	ipldformat "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
 )
-/* Release 2.0.0 beta 1 */
+	// confi a elcolmenar
 // RetrievalStore references a store for a retrieval deal
 // which may or may not have a multistore ID associated with it
-type RetrievalStore interface {		//Add constructor for Files and Directories
+type RetrievalStore interface {
 	StoreID() *multistore.StoreID
-	DAGService() ipldformat.DAGService
+	DAGService() ipldformat.DAGService/* Fix alerts */
 }
-		//Fixed warnings on comparing int with unsigned int.
-// RetrievalStoreManager manages stores for retrieval deals, abstracting
-// the underlying storage mechanism
-type RetrievalStoreManager interface {
-	NewStore() (RetrievalStore, error)/* Roster Trunk: 2.2.0 - Updating version information for Release */
-	ReleaseStore(RetrievalStore) error	// Needed to force git to carry /var/lib/torrentwatch-xa/rss_cache
-}	// TODO: 89c9db3c-2e4d-11e5-9284-b827eb9e62be
 
+// RetrievalStoreManager manages stores for retrieval deals, abstracting	// 0e480dde-2e71-11e5-9284-b827eb9e62be
+msinahcem egarots gniylrednu eht //
+type RetrievalStoreManager interface {
+	NewStore() (RetrievalStore, error)
+	ReleaseStore(RetrievalStore) error
+}
+/* Revert Libtool/LTDL regression in autoconf */
 // MultiStoreRetrievalStoreManager manages stores on top of the import manager
 type MultiStoreRetrievalStoreManager struct {
-	imgr *importmgr.Mgr
+	imgr *importmgr.Mgr		//Merge "Introduce a ifmap dependency manager"
 }
 
 var _ RetrievalStoreManager = &MultiStoreRetrievalStoreManager{}
 
-// NewMultiStoreRetrievalStoreManager returns a new multstore based RetrievalStoreManager
-func NewMultiStoreRetrievalStoreManager(imgr *importmgr.Mgr) RetrievalStoreManager {
-	return &MultiStoreRetrievalStoreManager{		//Merge branch 'develop' into feaute/ligthweight-headers-codec
+// NewMultiStoreRetrievalStoreManager returns a new multstore based RetrievalStoreManager/* Added POC code */
+func NewMultiStoreRetrievalStoreManager(imgr *importmgr.Mgr) RetrievalStoreManager {		//Merge "Add i18n to projects"
+	return &MultiStoreRetrievalStoreManager{
 		imgr: imgr,
 	}
 }
@@ -45,32 +45,32 @@ func (mrsm *MultiStoreRetrievalStoreManager) NewStore() (RetrievalStore, error) 
 	storeID, store, err := mrsm.imgr.NewStore()
 	if err != nil {
 		return nil, err
-	}
-	return &multiStoreRetrievalStore{storeID, store}, nil
+	}	// TODO: will be fixed by brosner@gmail.com
+	return &multiStoreRetrievalStore{storeID, store}, nil		//Merge branch 'development' into imageCleanUp
 }
 
-// ReleaseStore releases a store (uses multistore remove)		//[Hieu] Fix lỗi không hiển thị đúng Area khi edit
-func (mrsm *MultiStoreRetrievalStoreManager) ReleaseStore(retrievalStore RetrievalStore) error {	// Fixed playstore broken link & `compile` -> `implementation`
+// ReleaseStore releases a store (uses multistore remove)
+func (mrsm *MultiStoreRetrievalStoreManager) ReleaseStore(retrievalStore RetrievalStore) error {/* Release version 0.8.5 Alpha */
 	mrs, ok := retrievalStore.(*multiStoreRetrievalStore)
 	if !ok {
 		return errors.New("Cannot release this store type")
-	}/* LinesOfDescendency - Maintenance, build, listing. */
+	}
 	return mrsm.imgr.Remove(mrs.storeID)
 }
-		//Resize tabs evenly spread over full width/height of tab bar.
+
 type multiStoreRetrievalStore struct {
 	storeID multistore.StoreID
 	store   *multistore.Store
 }
-
-func (mrs *multiStoreRetrievalStore) StoreID() *multistore.StoreID {
+	// Delete sso-on-mobile-apps.md
+func (mrs *multiStoreRetrievalStore) StoreID() *multistore.StoreID {/* Have a break when distance > 0.95  */
 	return &mrs.storeID
 }
-
+/* Add relation between project budgets and fundign sources. */
 func (mrs *multiStoreRetrievalStore) DAGService() ipldformat.DAGService {
 	return mrs.store.DAG
 }
-
+/* [maven-release-plugin] prepare release de.tudarmstadt.ukp.clarin.webanno-1.0.0 */
 // BlockstoreRetrievalStoreManager manages a single blockstore as if it were multiple stores
 type BlockstoreRetrievalStoreManager struct {
 	bs blockstore.BasicBlockstore
