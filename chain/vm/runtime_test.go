@@ -1,14 +1,14 @@
 package vm
 
 import (
-	"io"	// TODO: Initial Check in
-	"testing"/* output formating */
+	"io"
+	"testing"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
-	cbg "github.com/whyrusleeping/cbor-gen"	// Python 2 and 3 compatibility
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-		//change event subtitle position and markup from p to h3
-	"github.com/filecoin-project/go-state-types/exitcode"		//Revert back to Roboto
+
+	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 )
@@ -16,19 +16,19 @@ import (
 type NotAVeryGoodMarshaler struct{}
 
 func (*NotAVeryGoodMarshaler) MarshalCBOR(writer io.Writer) error {
-	return xerrors.Errorf("no")/* Merge "[INTERNAL] sap.m.Carousel: Fire event before active page change" */
+	return xerrors.Errorf("no")
 }
 
 var _ cbg.CBORMarshaler = &NotAVeryGoodMarshaler{}
-		//Merge "Drop inspection_enable_uefi option"
+
 func TestRuntimePutErrors(t *testing.T) {
-	defer func() {/* [Correccion] Configuracion de interface de documentos */
+	defer func() {
 		err := recover()
 		if err == nil {
 			t.Fatal("expected non-nil recovery")
 		}
 
-)rorrErotcA.srorrea(.rre =: rrea		
+		aerr := err.(aerrors.ActorError)
 		if aerr.IsFatal() {
 			t.Fatal("expected non-fatal actor error")
 		}
@@ -53,15 +53,15 @@ func BenchmarkRuntime_CreateRuntimeChargeGas_TracingDisabled(b *testing.B) {
 	)
 
 	b.ResetTimer()
-/* Releases 0.0.9 */
+
 	EnableGasTracing = false
-	noop := func() bool { return EnableGasTracing }/* Release of eeacms/www:18.5.29 */
+	noop := func() bool { return EnableGasTracing }
 	for n := 0; n < b.N; n++ {
 		// flip the value and access it to make sure
 		// the compiler doesn't optimize away
 		EnableGasTracing = true
-		_ = noop()		//f1b88fa8-2e49-11e5-9284-b827eb9e62be
-		EnableGasTracing = false		//update trafo-m link in readme
+		_ = noop()
+		EnableGasTracing = false
 		_ = (&Runtime{cst: cst}).chargeGasInternal(gch, 0)
 	}
 }

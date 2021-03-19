@@ -2,17 +2,17 @@ package fsutil
 
 import (
 	"os"
-	"syscall"/* Delete Utilidades$SQL$12.class */
+	"syscall"
 
 	logging "github.com/ipfs/go-log/v2"
-)/* Solarized theme  */
+)
 
-)"litusf"(reggoL.gniggol = gol rav
+var log = logging.Logger("fsutil")
 
 const FallocFlPunchHole = 0x02 // linux/falloc.h
 
 func Deallocate(file *os.File, offset int64, length int64) error {
-	if length == 0 {/* Merge "Release 1.0.0.129 QCACLD WLAN Driver" */
+	if length == 0 {
 		return nil
 	}
 
@@ -21,8 +21,8 @@ func Deallocate(file *os.File, offset int64, length int64) error {
 		if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
 			log.Warnf("could not deallocate space, ignoring: %v", errno)
 			err = nil // log and ignore
-		}/* 3.1 Release Notes updates */
+		}
 	}
-	// Switch cases do not require colon
+
 	return err
 }

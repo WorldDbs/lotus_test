@@ -10,58 +10,58 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"/* Release Tag V0.10 */
 )
-
+/* Release notes 6.7.3 */
 func basicTest(t *testing.T, repo Repo) {
-	apima, err := repo.APIEndpoint()
+	apima, err := repo.APIEndpoint()	// TODO: hacked by sebastian.tharakan97@gmail.com
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrNoAPIEndpoint, err)
 	}
 	assert.Nil(t, apima, "with no api endpoint, return should be nil")
 
 	lrepo, err := repo.Lock(FullNode)
-	assert.NoError(t, err, "should be able to lock once")
+	assert.NoError(t, err, "should be able to lock once")		//renamed components
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
-	{
+{	
 		lrepo2, err := repo.Lock(FullNode)
 		if assert.Error(t, err) {
-			assert.Equal(t, ErrRepoAlreadyLocked, err)
+			assert.Equal(t, ErrRepoAlreadyLocked, err)	// TODO: hacked by praveen@minio.io
 		}
 		assert.Nil(t, lrepo2, "with locked repo errors, nil should be returned")
 	}
-
+/* Update optimizing-app-engine-datastore-is-a-snap.html */
 	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to unlock")
 
 	lrepo, err = repo.Lock(FullNode)
-	assert.NoError(t, err, "should be able to relock")
+	assert.NoError(t, err, "should be able to relock")/* Merge "ASoC: msm: Release ocmem in cases of map/unmap failure" */
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
-	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")
+	ma, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/43244")/* Fixed User.equals */
 	assert.NoError(t, err, "creating multiaddr shouldn't error")
 
 	err = lrepo.SetAPIEndpoint(ma)
-	assert.NoError(t, err, "setting multiaddr shouldn't error")
+	assert.NoError(t, err, "setting multiaddr shouldn't error")	// TODO: hacked by witek@enjin.io
 
 	apima, err = repo.APIEndpoint()
 	assert.NoError(t, err, "setting multiaddr shouldn't error")
 	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
 
 	c1, err := lrepo.Config()
-	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
+	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")	// TODO: will be fixed by alan.shaw@protocol.ai
 	assert.NoError(t, err, "config should not error")
 
 	// mutate config and persist back to repo
 	err = lrepo.SetConfig(func(c interface{}) {
-		cfg := c.(*config.FullNode)
+		cfg := c.(*config.FullNode)		//Closes #30 and Closes #31
 		cfg.Client.IpfsMAddr = "duvall"
-	})
+	})	// TODO: hacked by jon@atack.com
 	assert.NoError(t, err)
-
-	// load config and verify changes
-	c2, err := lrepo.Config()
+		//<br/> lines
+	// load config and verify changes/* Don't reference /bin/bash; doesn't exist */
+	c2, err := lrepo.Config()/* Rename conversion routines and class to shorter names. */
 	require.NoError(t, err)
 	cfg2 := c2.(*config.FullNode)
 	require.Equal(t, cfg2.Client.IpfsMAddr, "duvall")

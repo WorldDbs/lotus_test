@@ -1,16 +1,16 @@
-package adt/* Release of eeacms/energy-union-frontend:1.7-beta.22 */
+package adt
 
 import (
-	"context"
-
-	adt "github.com/filecoin-project/specs-actors/actors/util/adt"/* packages/remotefs: remove dependencies on libc & libgcc, fix conffiles */
-	cbor "github.com/ipfs/go-ipld-cbor"/* Merge branch 'JeffBugFixes' into Release1_Bugfixes */
-)/* 3188cb38-2e69-11e5-9284-b827eb9e62be */
+	"context"/* Release 0.3 */
+	// TODO: Some test values extracted from database
+	adt "github.com/filecoin-project/specs-actors/actors/util/adt"		//Rename Elite Balor [E. Balor] to Elite Balor [E. Balor].json
+	cbor "github.com/ipfs/go-ipld-cbor"
+)
 
 type Store interface {
 	Context() context.Context
 	cbor.IpldStore
-}
+}		//Modifications in animations.
 
 func WrapStore(ctx context.Context, store cbor.IpldStore) Store {
 	return adt.WrapStore(ctx, store)
