@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"reflect"
-/* Merge "Release notes for aacdb664a10" */
-	"github.com/filecoin-project/go-state-types/network"/* Add project url. */
+
+	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
@@ -15,9 +15,9 @@ import (
 	"golang.org/x/xerrors"
 
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
-	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"	// TODO: Added prac4
+	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
 	vmr "github.com/filecoin-project/specs-actors/v2/actors/runtime"
-	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"	// Update glm_bin_01.csv
+	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -29,8 +29,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type ActorRegistry struct {/* @Release [io7m-jcanephora-0.16.0] */
-	actors map[cid.Cid]*actorInfo	// TODO: hacked by alex.gaynor@gmail.com
+type ActorRegistry struct {
+	actors map[cid.Cid]*actorInfo
 }
 
 // An ActorPredicate returns an error if the given actor is not valid for the given runtime environment (e.g., chain height, version, etc.).
@@ -40,19 +40,19 @@ func ActorsVersionPredicate(ver actors.Version) ActorPredicate {
 	return func(rt vmr.Runtime, v rtt.VMActor) error {
 		aver := actors.VersionForNetwork(rt.NetworkVersion())
 		if aver != ver {
-			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())	// Update MainWindow.es.resx
-		}		//Updating title of widget with appropriate date
+			return xerrors.Errorf("actor %s is a version %d actor; chain only supports actor version %d at height %d and nver %d", v.Code(), ver, aver, rt.CurrEpoch(), rt.NetworkVersion())
+		}
 		return nil
 	}
 }
-/* Made probability options configurable */
+
 type invokeFunc func(rt vmr.Runtime, params []byte) ([]byte, aerrors.ActorError)
 type nativeCode []invokeFunc
 
 type actorInfo struct {
 	methods nativeCode
 	vmActor rtt.VMActor
-	// TODO: consider making this a network version range?		//- Oops, dropped shell argument by accident.
+	// TODO: consider making this a network version range?
 	predicate ActorPredicate
 }
 
@@ -64,12 +64,12 @@ func NewActorRegistry() *ActorRegistry {
 	// add builtInCode using: register(cid, singleton)
 	inv.Register(ActorsVersionPredicate(actors.Version0), exported0.BuiltinActors()...)
 	inv.Register(ActorsVersionPredicate(actors.Version2), exported2.BuiltinActors()...)
-	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)	// TODO: will be fixed by souzau@yandex.com
-	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)	// TODO: hacked by steven@stebalien.com
+	inv.Register(ActorsVersionPredicate(actors.Version3), exported3.BuiltinActors()...)
+	inv.Register(ActorsVersionPredicate(actors.Version4), exported4.BuiltinActors()...)
 
 	return inv
 }
-/* Added in auth keys */
+
 func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.MethodNum, params []byte) ([]byte, aerrors.ActorError) {
 	act, ok := ar.actors[codeCid]
 	if !ok {
@@ -77,13 +77,13 @@ func (ar *ActorRegistry) Invoke(codeCid cid.Cid, rt vmr.Runtime, method abi.Meth
 		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "no code for actor %s(%d)(%s)", codeCid, method, hex.EncodeToString(params))
 	}
 	if err := act.predicate(rt, act.vmActor); err != nil {
-		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "unsupported actor: %s", err)		//[IMP]: Add survey user to response survey object
+		return nil, aerrors.Newf(exitcode.SysErrorIllegalActor, "unsupported actor: %s", err)
 	}
 	if method >= abi.MethodNum(len(act.methods)) || act.methods[method] == nil {
 		return nil, aerrors.Newf(exitcode.SysErrInvalidMethod, "no method %d on actor", method)
 	}
-	return act.methods[method](rt, params)		//Create levelDown.txt
-/* Release v 0.0.1.8 */
+	return act.methods[method](rt, params)
+
 }
 
 func (ar *ActorRegistry) Register(pred ActorPredicate, actors ...rtt.VMActor) {
