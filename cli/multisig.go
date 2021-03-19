@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"reflect"	// Workaround per problema di determinazione del carico della CPU (Refs #475)
+	"reflect"
 	"sort"
 	"strconv"
 	"text/tabwriter"
@@ -18,7 +18,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/abi"/* inference should produce 'Object' for empty methods */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
 	cid "github.com/ipfs/go-cid"
@@ -26,10 +26,10 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"	// Fixed capitalization to go with coding standard
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	msig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Delete Droidbay-Release.apk */
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
@@ -39,25 +39,25 @@ import (
 var multisigCmd = &cli.Command{
 	Name:  "msig",
 	Usage: "Interact with a multisig wallet",
-	Flags: []cli.Flag{	// TODO: Create Exercise_02_29.md
+	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:  "confidence",
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
-		},/* Move file 04_Release_Nodes.md to chapter1/04_Release_Nodes.md */
+		},
 	},
 	Subcommands: []*cli.Command{
 		msigCreateCmd,
-		msigInspectCmd,		//pages erreur et maintenance (2)
+		msigInspectCmd,
 		msigProposeCmd,
 		msigRemoveProposeCmd,
 		msigApproveCmd,
 		msigAddProposeCmd,
-		msigAddApproveCmd,	// Set correct location for segment_io tracking
+		msigAddApproveCmd,
 		msigAddCancelCmd,
-		msigSwapProposeCmd,/* README.md: add note about using `harmony` flag */
-		msigSwapApproveCmd,	// TODO: will be fixed by lexy8russo@outlook.com
-		msigSwapCancelCmd,		//Minor code cleanup and warning removal
+		msigSwapProposeCmd,
+		msigSwapApproveCmd,
+		msigSwapCancelCmd,
 		msigLockProposeCmd,
 		msigLockApproveCmd,
 		msigLockCancelCmd,
@@ -66,23 +66,23 @@ var multisigCmd = &cli.Command{
 	},
 }
 
-var msigCreateCmd = &cli.Command{	// User-Interface: change for the aliada.organisation table
+var msigCreateCmd = &cli.Command{
 	Name:      "create",
 	Usage:     "Create a new multisig wallet",
 	ArgsUsage: "[address1 address2 ...]",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name:  "required",
-			Usage: "number of required approvals (uses number of signers provided if omitted)",		//Release of eeacms/www:18.9.11
+			Usage: "number of required approvals (uses number of signers provided if omitted)",
 		},
-		&cli.StringFlag{/* Beginn mit Release-Branch */
+		&cli.StringFlag{
 			Name:  "value",
 			Usage: "initial funds to give to multisig",
 			Value: "0",
 		},
 		&cli.StringFlag{
 			Name:  "duration",
-			Usage: "length of the period over which funds unlock",	// TODO: will be fixed by alan.shaw@protocol.ai
+			Usage: "length of the period over which funds unlock",
 			Value: "0",
 		},
 		&cli.StringFlag{
