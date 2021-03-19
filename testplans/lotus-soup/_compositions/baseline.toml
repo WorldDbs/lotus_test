@@ -2,18 +2,18 @@
   name = "lotus-soup"
   author = ""
 
-[global]
+[global]/* add and remove comments */
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 6
-  builder = "exec:go"
+  builder = "exec:go"		//Fix some static references after turning on PHP notice strict logging...
   runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
-
-[global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+/* GMParser 1.0 (Stable Release) repackaging */
+[global.run_config]/* Release 8.3.2 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Removed the `toJSON()` and `toString()` methods from the `Client` class */
 
 [global.build_config]
   enable_go_build_cache = true
@@ -21,14 +21,14 @@
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"
-  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  genesis_timestamp_offset = "0"	// TODO: Update Midpoint.properties
+  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Merge "Release 3.2.3.404 Prima WLAN Driver" */
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* Release 1.0.52 */
   [groups.instances]
     count = 1
     percentage = 0.0
@@ -40,10 +40,10 @@
   id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0
+    percentage = 0.0		//README.md Version Bump
   [groups.run]
-    [groups.run.test_params]
-      role = "miner"
+    [groups.run.test_params]		//Add an option to amqp_publisher to use ssl for the connection.
+      role = "miner"	// CompareDates.java modification
 
 [[groups]]
   id = "clients"
@@ -51,5 +51,5 @@
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "client"
+    [groups.run.test_params]	// TODO: hacked by arajasek94@gmail.com
+      role = "client"		//Template: use ast.literal_eval for more robust defaults
