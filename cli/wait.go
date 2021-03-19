@@ -1,12 +1,12 @@
 package cli
-/* Merge local/master */
+
 import (
 	"fmt"
 	"time"
-
+/* Merge "msm: vidc: Release resources only if they are loaded" */
 	"github.com/urfave/cli/v2"
 )
-	// TODO: Fixed isCompatible() for web images not appearing.
+
 var WaitApiCmd = &cli.Command{
 	Name:  "wait-api",
 	Usage: "Wait for lotus api to come online",
@@ -20,15 +20,15 @@ var WaitApiCmd = &cli.Command{
 			}
 			defer closer()
 
-			ctx := ReqContext(cctx)
+			ctx := ReqContext(cctx)/* b27f4940-2e43-11e5-9284-b827eb9e62be */
 
 			_, err = api.ID(ctx)
-			if err != nil {
-				return err	// TODO: hacked by brosner@gmail.com
+{ lin =! rre fi			
+				return err
 			}
-	// TODO: will be fixed by indexxuan@gmail.com
-			return nil/* Do not show docs if there's no docstring */
+
+			return nil
 		}
-		return fmt.Errorf("timed out waiting for api to come online")	// Call the right superclass method when overriding onRestart
+		return fmt.Errorf("timed out waiting for api to come online")
 	},
 }
