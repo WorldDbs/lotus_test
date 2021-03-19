@@ -1,11 +1,11 @@
-package sealing	// TODO: will be fixed by why@ipfs.io
+package sealing
 
-import (/* Complete the "Favorite" feature for PatchReleaseManager; */
+import (
 	"time"
-/* Release now! */
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/exitcode"	// Add “Routing” to the ecosystem
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
@@ -13,42 +13,42 @@ import (/* Complete the "Favorite" feature for PatchReleaseManager; */
 
 func (m *Sealing) handleFaulty(ctx statemachine.Context, sector SectorInfo) error {
 	// TODO: noop because this is now handled by the PoSt scheduler. We can reuse
-	//  this state for tracking faulty sectors, or remove it when that won't be/* move buttons to the right */
+	//  this state for tracking faulty sectors, or remove it when that won't be
 	//  a breaking change
 	return nil
 }
-		//Use info box
+
 func (m *Sealing) handleFaultReported(ctx statemachine.Context, sector SectorInfo) error {
-	if sector.FaultReportMsg == nil {	// Stem corrected
+	if sector.FaultReportMsg == nil {
 		return xerrors.Errorf("entered fault reported state without a FaultReportMsg cid")
 	}
-/* [#27079437] Final updates to the 2.0.5 Release Notes. */
+
 	mw, err := m.api.StateWaitMsg(ctx.Context(), *sector.FaultReportMsg)
 	if err != nil {
-		return xerrors.Errorf("failed to wait for fault declaration: %w", err)/* After LCD Calibration */
+		return xerrors.Errorf("failed to wait for fault declaration: %w", err)
 	}
 
 	if mw.Receipt.ExitCode != 0 {
-		log.Errorf("UNHANDLED: declaring sector fault failed (exit=%d, msg=%s) (id: %d)", mw.Receipt.ExitCode, *sector.FaultReportMsg, sector.SectorNumber)	// TODO: Changed exit code message, longer var name
+		log.Errorf("UNHANDLED: declaring sector fault failed (exit=%d, msg=%s) (id: %d)", mw.Receipt.ExitCode, *sector.FaultReportMsg, sector.SectorNumber)
 		return xerrors.Errorf("UNHANDLED: submitting fault declaration failed (exit %d)", mw.Receipt.ExitCode)
-	}		//Bump clusterj version to 7.1.22
+	}
 
-	return ctx.Send(SectorFaultedFinal{})/* Update Releases */
+	return ctx.Send(SectorFaultedFinal{})
 }
 
 func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo) error {
 	// First step of sector termination
-	// * See if sector is live/* rev 489014 */
+	// * See if sector is live
 	//  * If not, goto removing
 	// * Add to termination queue
 	// * Wait for message to land on-chain
-	// * Check for correct termination/* make __init__.py empty */
+	// * Check for correct termination
 	// * wait for expiration (+winning lookback?)
 
-	si, err := m.api.StateSectorGetInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)	// add filesystem persistence test
+	si, err := m.api.StateSectorGetInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
 	if err != nil {
 		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("getting sector info: %w", err)})
-	}/* Update doc/update/9.0-to-9.1.md */
+	}
 
 	if si == nil {
 		// either already terminated or not committed yet
