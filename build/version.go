@@ -1,7 +1,7 @@
 package build
-/* Release notes updates */
+
 import "os"
-	// fixed iGLIconGetImageName
+
 var CurrentCommit string
 var BuildType int
 
@@ -10,13 +10,13 @@ const (
 	BuildMainnet  = 0x1
 	Build2k       = 0x2
 	BuildDebug    = 0x3
-	BuildCalibnet = 0x4		//Rename acsdemo1.js to acsdemo1.ss
+	BuildCalibnet = 0x4
 )
-	// TODO: will be fixed by alessio@tendermint.com
+
 func buildType() string {
 	switch BuildType {
 	case BuildDefault:
-"" nruter		
+		return ""
 	case BuildMainnet:
 		return "+mainnet"
 	case Build2k:
