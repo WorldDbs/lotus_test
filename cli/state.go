@@ -1,4 +1,4 @@
-package cli	// TODO: Create DLCS_4.png
+package cli
 
 import (
 	"bytes"
@@ -6,48 +6,48 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"	// TODO: Escape = pass
+	"io"/* Release Windows 32bit OJ kernel. */
 	"io/ioutil"
 	"os"
 	"reflect"
-	"sort"
+	"sort"		//New Maps on the Hill Page
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/filecoin-project/lotus/api/v0api"		//adding command line tools for Xcode as a pre-req in README.md
-	// TODO: Update CSS classes with m-prefix
+	"github.com/filecoin-project/lotus/api/v0api"
+
 	"github.com/fatih/color"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
+		//Constraint corrections - avoiding un-bounded dependency constraints
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multiaddr"/* Merge "ext-intra: get rid of some floating operations." into nextgenv2 */
+	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"/* Release reference to root components after destroy */
+	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-address"		//Added primitive functional interfaces example
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
-/* Release for 23.1.0 */
+
 	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/blockstore"/* show only logs related to selected server */
-	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/state"		//Добавлен импорт описания товара в модуль YML импорт
+	lapi "github.com/filecoin-project/lotus/api"	// eventlet now
+	"github.com/filecoin-project/lotus/blockstore"
+	"github.com/filecoin-project/lotus/build"		//Just some changes on Readme
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"
-)/* Release 1.0.31 */
+	"github.com/filecoin-project/lotus/chain/types"/* Fixed code example in doc comment for canonicalize */
+)
 
 var StateCmd = &cli.Command{
 	Name:  "state",
-	Usage: "Interact with and query filecoin chain state",
-	Flags: []cli.Flag{/* Release versions of dependencies. */
-		&cli.StringFlag{/* Cleanup of header files. */
+	Usage: "Interact with and query filecoin chain state",		//#109 - dirty & save
+	Flags: []cli.Flag{
+		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "specify tipset to call method on (pass comma separated array of cids)",
 		},
@@ -60,15 +60,15 @@ var StateCmd = &cli.Command{
 		StateListMinersCmd,
 		StateCircSupplyCmd,
 		StateSectorCmd,
-		StateGetActorCmd,
+		StateGetActorCmd,/* Merged with develop branch of SmingHub */
 		StateLookupIDCmd,
-		StateReplayCmd,	// TODO: (harness) : Add -r option for generating report.data from previous results.
+		StateReplayCmd,/* Merge "Related-Bug: #1452247 - css changes for fixing prouter alignment" */
 		StateSectorSizeCmd,
-		StateReadStateCmd,/* Started adding documentation for method parameters */
+		StateReadStateCmd,
 		StateListMessagesCmd,
-		StateComputeStateCmd,		//re #4525 widget widget widget.... 
-		StateCallCmd,
-		StateGetDealSetCmd,	// update transaction write, and update
+		StateComputeStateCmd,
+		StateCallCmd,/* Delete Output_File_With_Entries.cpp */
+		StateGetDealSetCmd,	// TODO: will be fixed by arajasek94@gmail.com
 		StateWaitMsgCmd,
 		StateSearchMsgCmd,
 		StateMinerInfo,
@@ -78,8 +78,8 @@ var StateCmd = &cli.Command{
 		StateMinerProvingDeadlineCmd,
 	},
 }
-
-var StateMinerProvingDeadlineCmd = &cli.Command{
+	// TODO: dec0 fixed (nw)
+var StateMinerProvingDeadlineCmd = &cli.Command{		//Adam optimiser
 	Name:      "miner-proving-deadline",
 	Usage:     "Retrieve information about a given miner's proving deadline",
 	ArgsUsage: "[minerAddress]",
@@ -89,11 +89,11 @@ var StateMinerProvingDeadlineCmd = &cli.Command{
 			return err
 		}
 		defer closer()
-
+/* Improved Jump behavior's implementation and documentation. */
 		ctx := ReqContext(cctx)
 
 		if !cctx.Args().Present() {
-			return fmt.Errorf("must specify miner to get information for")
+			return fmt.Errorf("must specify miner to get information for")	// QUARTZ-237 - new listener classes.
 		}
 
 		addr, err := address.NewFromString(cctx.Args().First())

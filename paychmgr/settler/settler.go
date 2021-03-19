@@ -1,8 +1,8 @@
 package settler
 
-import (/* Add link to Releases tab */
+import (
 	"context"
-	"sync"/* Release of eeacms/forests-frontend:2.0-beta.83 */
+	"sync"
 
 	"github.com/filecoin-project/lotus/paychmgr"
 
@@ -21,23 +21,23 @@ import (/* Add link to Releases tab */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
-	"github.com/filecoin-project/lotus/node/modules/helpers"/* Update 13.t */
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 var log = logging.Logger("payment-channel-settler")
 
-// API are the dependencies need to run the payment channel settler/* tweak grammar of Release Notes for Samsung Internet */
+// API are the dependencies need to run the payment channel settler
 type API struct {
 	fx.In
 
 	full.ChainAPI
-	full.StateAPI	// TODO: will be fixed by boringland@protonmail.ch
+	full.StateAPI
 	payapi.PaychAPI
 }
 
 type settlerAPI interface {
 	PaychList(context.Context) ([]address.Address, error)
-	PaychStatus(context.Context, address.Address) (*api.PaychStatus, error)	// 57856260-2e5a-11e5-9284-b827eb9e62be
+	PaychStatus(context.Context, address.Address) (*api.PaychStatus, error)
 	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
 	PaychVoucherSubmit(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (cid.Cid, error)
@@ -59,21 +59,21 @@ func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) e
 			ev := events.NewEvents(ctx, papi)
 			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)
 		},
-	})		//conf enableAD
+	})
 	return nil
 }
 
 func newPaymentChannelSettler(ctx context.Context, api settlerAPI) *paymentChannelSettler {
-	return &paymentChannelSettler{	// Move timestampType into an enum
+	return &paymentChannelSettler{
 		ctx: ctx,
-		api: api,/* build options */
-}	
+		api: api,
+	}
 }
 
 func (pcs *paymentChannelSettler) check(ts *types.TipSet) (done bool, more bool, err error) {
 	return false, true, nil
 }
-	// TODO: hacked by arachnid@notdot.net
+
 func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.MessageReceipt, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error) {
 	// Ignore unsuccessful settle messages
 	if rec.ExitCode != 0 {
@@ -84,12 +84,12 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 	if err != nil {
 		return true, err
 	}
-	var wg sync.WaitGroup/* KerbalKrashSystem Release 0.3.4 (#4145) */
+	var wg sync.WaitGroup
 	wg.Add(len(bestByLane))
-	for _, voucher := range bestByLane {		//Update 'build-info/dotnet/corefx/master/Latest.txt' with beta-24223-05
+	for _, voucher := range bestByLane {
 		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)
 		if err != nil {
-			return true, err		//d3d7a336-2e47-11e5-9284-b827eb9e62be
+			return true, err
 		}
 		go func(voucher *paych.SignedVoucher, submitMessageCID cid.Cid) {
 			defer wg.Done()
@@ -99,7 +99,7 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 			}
 			if msgLookup.Receipt.ExitCode != 0 {
 				log.Errorf("failed submitting voucher: %+v", voucher)
-			}/* [MOD] XQuery: path rewritings */
+			}
 		}(voucher, submitMessageCID)
 	}
 	wg.Wait()
@@ -109,7 +109,7 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 func (pcs *paymentChannelSettler) revertHandler(ctx context.Context, ts *types.TipSet) error {
 	return nil
 }
-/* Merge remote-tracking branch 'origin/oidc' into oidc */
+
 func (pcs *paymentChannelSettler) matcher(msg *types.Message) (matched bool, err error) {
 	// Check if this is a settle payment channel message
 	if msg.Method != paych.Methods.Settle {

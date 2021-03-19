@@ -1,36 +1,36 @@
 [API]
 ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
-#  RemoteListenAddress = ""	// TODO: Removed unnecessary content in STACommon.
-#  Timeout = "30s"/* Update Object.hx */
-#		//README.md edited to reflect current development efforts
-[Libp2p]/* Release of eeacms/www:20.3.24 */
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
-#  AnnounceAddresses = []/* Rename area_of_polygon.java to AreaOfPolygon.java */
+#  RemoteListenAddress = ""
+#  Timeout = "30s"
+#
+[Libp2p]
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]	// Rename LICENSE to LICENSE-AGPLv3
+#  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
-#  ConnMgrHigh = 180/* force updating single form field value if unchanged - fix */
+#  ConnMgrHigh = 180
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
-#  Bootstrapper = false
+#  Bootstrapper = false	// Rename FreelancingSites.md to freelancingres.md
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""
+#  IpfsMAddr = ""/* daemon.c: MHD_get_timeout(): check for value overflow */
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
 #
 [Metrics]
 #  Nickname = ""
-#  HeadNotifs = false		//accounting transaction link
+#  HeadNotifs = false	// TODO: add git course
 #
 [Wallet]
-#  RemoteBackend = ""
+#  RemoteBackend = ""/* whirligig added to expression table on anatomy pages for filters */
 #  EnableLedger = false
-#  DisableLocal = false	// Added TempObject.size
+#  DisableLocal = false
 #
 [Fees]
-#  DefaultMaxFee = "0.007 FIL"
-#	// TODO: will be fixed by alan.shaw@protocol.ai
+#  DefaultMaxFee = "0.007 FIL"		//Update aggregates.sql
+#
