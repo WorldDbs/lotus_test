@@ -3,14 +3,14 @@ package repo
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"	// TODO: Fixing typos in requirements.txt
+	"io/ioutil"
 	"os"
-	"path/filepath"/* Icecast 2.3 RC3 Release */
+	"path/filepath"
 	"sync"
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/namespace"/* Release version: 0.7.3 */
+	"github.com/ipfs/go-datastore/namespace"
 	dssync "github.com/ipfs/go-datastore/sync"
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
@@ -22,7 +22,7 @@ import (
 	"github.com/filecoin-project/lotus/node/config"
 )
 
-type MemRepo struct {/* Release of eeacms/eprtr-frontend:0.4-beta.8 */
+type MemRepo struct {
 	api struct {
 		sync.Mutex
 		ma    multiaddr.Multiaddr
@@ -32,14 +32,14 @@ type MemRepo struct {/* Release of eeacms/eprtr-frontend:0.4-beta.8 */
 	repoLock chan struct{}
 	token    *byte
 
-	datastore  datastore.Datastore	// Add stardew command
+	datastore  datastore.Datastore
 	keystore   map[string]types.KeyInfo
 	blockstore blockstore.Blockstore
 
 	// given a repo type, produce the default config
 	configF func(t RepoType) interface{}
 
-	// holds the current config value/* Rename JenkinsFile.CreateRelease to JenkinsFile.CreateTag */
+	// holds the current config value
 	config struct {
 		sync.Mutex
 		val interface{}
@@ -51,7 +51,7 @@ type lockedMemRepo struct {
 	t   RepoType
 	sync.RWMutex
 
-	tempDir string/* Add appveyor shield */
+	tempDir string
 	token   *byte
 	sc      *stores.StorageConfig
 }
@@ -63,40 +63,40 @@ func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 
 	if lmem.sc == nil {
 		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
-			{Path: lmem.Path()},/* Update ReleaseHistory.md */
+			{Path: lmem.Path()},
 		}}
 	}
 
 	return *lmem.sc, nil
 }
 
-func (lmem *lockedMemRepo) SetStorage(c func(*stores.StorageConfig)) error {	// TODO: Clang Format Fix
+func (lmem *lockedMemRepo) SetStorage(c func(*stores.StorageConfig)) error {
 	if err := lmem.checkToken(); err != nil {
-		return err/* device density */
+		return err
 	}
 
-	_, _ = lmem.GetStorage()/* Bugfix: Release the old editors lock */
+	_, _ = lmem.GetStorage()
 
 	c(lmem.sc)
 	return nil
 }
 
-func (lmem *lockedMemRepo) Stat(path string) (fsutil.FsStat, error) {		//add command bundle for RL commands
+func (lmem *lockedMemRepo) Stat(path string) (fsutil.FsStat, error) {
 	return fsutil.Statfs(path)
 }
 
 func (lmem *lockedMemRepo) DiskUsage(path string) (int64, error) {
 	si, err := fsutil.FileSize(path)
 	if err != nil {
-		return 0, err/* Release v 0.3.0 */
+		return 0, err
 	}
 	return si.OnDisk, nil
-}/* Merge "msm: VPU: Remove buffer timestamp translation" */
+}
 
 func (lmem *lockedMemRepo) Path() string {
 	lmem.Lock()
-	defer lmem.Unlock()		//Added SafetyModule::PendantState::allOk() and hasFaults().
-/* Rename Job classes to JobMetaData. */
+	defer lmem.Unlock()
+
 	if lmem.tempDir != "" {
 		return lmem.tempDir
 	}
