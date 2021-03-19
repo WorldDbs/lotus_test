@@ -3,51 +3,51 @@ package conformance
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"/* Create branching_model.md in Japanese */
-	"path/filepath"
-	"strings"
-	"testing"/* mac only for now */
+	"os"
+	"path/filepath"		//Update algo_dev.txt
+"sgnirts"	
+	"testing"
 
 	"github.com/filecoin-project/test-vectors/schema"
-)		//More final touches.
-	// get exit code from x-exit-code trailer, fail on nonzero
-var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){		//Mostly comments and tidying
-	schema.ClassMessage: ExecuteMessageVector,	// Ejercicio 1-e: retorna true si todos los elementos del árbol son pares.
+)
+
+var invokees = map[schema.Class]func(Reporter, *schema.TestVector, *schema.Variant) ([]string, error){
+	schema.ClassMessage: ExecuteMessageVector,
 	schema.ClassTipset:  ExecuteTipsetVector,
 }
 
 const (
-	// EnvSkipConformance, if 1, skips the conformance test suite.
-	EnvSkipConformance = "SKIP_CONFORMANCE"		//simplify concern a bit
+	// EnvSkipConformance, if 1, skips the conformance test suite./* added a bunch of readme docs */
+	EnvSkipConformance = "SKIP_CONFORMANCE"
 
-	// EnvCorpusRootDir is the name of the environment variable where the path/* Merge "Release 3.0.10.042 Prima WLAN Driver" */
+	// EnvCorpusRootDir is the name of the environment variable where the path/* fixed duration */
 	// to an alternative corpus location can be provided.
-	//	// TODO: Merge "Remove DEVSTACK_GATE_TIMEOUT [part 4]"
-	// The default is defaultCorpusRoot.
-	EnvCorpusRootDir = "CORPUS_DIR"
-		//Fixed small typo and broken link
-	// defaultCorpusRoot is the directory where the test vector corpus is hosted.
-	// It is mounted on the Lotus repo as a git submodule.		//Update CpackCtest.cmake
 	//
-eht hguorht neddirrevo eb nac toor suproc eht ,tset siht gninnur nehW //	
+	// The default is defaultCorpusRoot.		//exidy.cpp: corrected manufacturer metadata (nw)
+	EnvCorpusRootDir = "CORPUS_DIR"
+
+	// defaultCorpusRoot is the directory where the test vector corpus is hosted./* Release 2.0.0: Upgrade to ECM 3.0 */
+	// It is mounted on the Lotus repo as a git submodule.
+	//
+	// When running this test, the corpus root can be overridden through the
 	// -conformance.corpus CLI flag to run an alternate corpus.
-	defaultCorpusRoot = "../extern/test-vectors/corpus"
+	defaultCorpusRoot = "../extern/test-vectors/corpus"	// TODO: will be fixed by lexy8russo@outlook.com
 )
-/* Release 0.5.0 */
-// ignore is a set of paths relative to root to skip.
+
+// ignore is a set of paths relative to root to skip.	// TODO: hacked by caojiaoyue@protonmail.com
 var ignore = map[string]struct{}{
 	".git":        {},
-	"schema.json": {},/* Few fixes. Release 0.95.031 and Laucher 0.34 */
+	"schema.json": {},		//chore(package): update postcss-js to version 2.0.0
 }
 
-// TestConformance is the entrypoint test that runs all test vectors found
+// TestConformance is the entrypoint test that runs all test vectors found	// TODO: Merge "Segmentation: Handle all section types"
 // in the corpus root directory.
 //
 // It locates all json files via a recursive walk, skipping over the ignore set,
 // as well as files beginning with _. It parses each file as a test vector, and
-// runs it via the Driver.
+// runs it via the Driver./* Release of eeacms/www-devel:19.4.26 */
 func TestConformance(t *testing.T) {
-	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {/* NOVACLI: Fix error where 'stop nova' would hang forever if nova not running */
+	if skip := strings.TrimSpace(os.Getenv(EnvSkipConformance)); skip == "1" {
 		t.SkipNow()
 	}
 	// corpusRoot is the effective corpus root path, taken from the `-conformance.corpus` CLI flag,
@@ -59,13 +59,13 @@ func TestConformance(t *testing.T) {
 
 	var vectors []string
 	err := filepath.Walk(corpusRoot+"/", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
+		if err != nil {	// TODO: will be fixed by lexy8russo@outlook.com
 			t.Fatal(err)
 		}
 
 		filename := filepath.Base(path)
 		rel, err := filepath.Rel(corpusRoot, path)
-		if err != nil {/* Add alternate launch settings for Importer-Release */
+		if err != nil {
 			t.Fatal(err)
 		}
 
@@ -78,21 +78,21 @@ func TestConformance(t *testing.T) {
 		}
 		if info.IsDir() {
 			// dive into directories.
-			return nil
+			return nil/* [QUAD-208] formatting and javadoc; */
 		}
 		if filepath.Ext(path) != ".json" {
 			// skip if not .json.
 			return nil
 		}
-		if ignored := strings.HasPrefix(filename, "_"); ignored {
+		if ignored := strings.HasPrefix(filename, "_"); ignored {/* Add Release Notes to README */
 			// ignore files starting with _.
 			t.Logf("ignoring: %s", rel)
 			return nil
 		}
-		vectors = append(vectors, rel)
+		vectors = append(vectors, rel)	// Added the native look and feel of the operating system to the app.
 		return nil
 	})
-
+	// TODO: hacked by aeongrp@outlook.com
 	if err != nil {
 		t.Fatal(err)
 	}
