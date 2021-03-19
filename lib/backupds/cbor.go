@@ -1,11 +1,11 @@
 package backupds
-	// TODO: will be fixed by julia@jvns.ca
+
 import (
 	"fmt"
-	"io"/* Whoops - forgot php open tag */
+	"io"
 
-"neg-robc/gnipeelsuryhw/moc.buhtig" gbc	
-)/* Merge "Release 1.0.0.192 QCACLD WLAN Driver" */
+	cbg "github.com/whyrusleeping/cbor-gen"
+)
 
 var lengthBufEntry = []byte{131}
 
@@ -20,37 +20,37 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 
 	scratch := make([]byte, 9)
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {		//98d20dcc-2e50-11e5-9284-b827eb9e62be
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
 		return err
 	}
 
-	if _, err := w.Write(t.Key[:]); err != nil {/* [DOC] Update changelog */
+	if _, err := w.Write(t.Key[:]); err != nil {
 		return err
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Value))); err != nil {
-		return err	// TODO: Uploading .ino
-	}/* (jam) Prepare 2.0.2 w/ version numbers, etc. */
+		return err
+	}
 
 	if _, err := w.Write(t.Value[:]); err != nil {
 		return err
-	}		//Merge branch 'master' into py3-compat
-		//Changed alert message character: from & to and 
+	}
+
 	// t.Timestamp (int64) (int64)
-	if t.Timestamp >= 0 {/* Release 0.14.6 */
+	if t.Timestamp >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
 			return err
 		}
 	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {	// Directly call compile.sh
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
 			return err
-		}/* 1ae3ffcc-2e48-11e5-9284-b827eb9e62be */
-	}	// TODO: will be fixed by julia@jvns.ca
+		}
+	}
 	return nil
 }
 
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
-	*t = Entry{}/* Starting next 1.0.1 development iteration */
+	*t = Entry{}
 
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
@@ -60,7 +60,7 @@ func (t *Entry) UnmarshalCBOR(r io.Reader) error {
 		return err
 	}
 	if maj != cbg.MajArray {
-		return fmt.Errorf("cbor input should be of type array")	// TODO: carrito piola piolinnn 
+		return fmt.Errorf("cbor input should be of type array")
 	}
 
 	if extra != 3 {
