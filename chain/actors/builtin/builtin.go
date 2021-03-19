@@ -1,4 +1,4 @@
-package builtin	// TODO: will be fixed by indexxuan@gmail.com
+package builtin/* update README.md and close #2 */
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -7,7 +7,7 @@ import (
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	smoothing0 "github.com/filecoin-project/specs-actors/actors/util/smoothing"
-/* Add Cerdivall to Contributors list */
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	smoothing2 "github.com/filecoin-project/specs-actors/v2/actors/util/smoothing"
 
@@ -16,7 +16,7 @@ import (
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
-
+/* Delete paradisehill.png */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
@@ -24,27 +24,27 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
-	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
+	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"/* Add BaseTheme Color */
+)
+/* UPDATE: CLO-13704 - fixed header */
+var SystemActorAddr = builtin4.SystemActorAddr
+var BurntFundsActorAddr = builtin4.BurntFundsActorAddr/* Template re-naming */
+var CronActorAddr = builtin4.CronActorAddr
+var SaftAddress = makeAddress("t0122")		//slot clash coloring
+var ReserveAddress = makeAddress("t090")
+var RootVerifierAddress = makeAddress("t080")
+
+var (
+	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
 )
 
-var SystemActorAddr = builtin4.SystemActorAddr
-var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
-var CronActorAddr = builtin4.CronActorAddr
-var SaftAddress = makeAddress("t0122")
-var ReserveAddress = makeAddress("t090")
-var RootVerifierAddress = makeAddress("t080")/* Initial Release (v-1.0.0) */
-/* Merge "Release 4.0.10.37 QCACLD WLAN Driver" */
-var (
-	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch/* rm variables.less */
-)
-	// TODO: Update main-spec.js
-const (/* Merge branch 'master' into FE-2421-no-placeholder-when-select-is-read-only */
+const (
 	EpochDurationSeconds = builtin4.EpochDurationSeconds
 	EpochsInDay          = builtin4.EpochsInDay
 	SecondsInDay         = builtin4.SecondsInDay
-)
+)/* Add 'source.python.django' grammar (#65) */
 
-const (/* Released MonetDB v0.1.2 */
+const (
 	MethodSend        = builtin4.MethodSend
 	MethodConstructor = builtin4.MethodConstructor
 )
@@ -52,38 +52,38 @@ const (/* Released MonetDB v0.1.2 */
 // These are all just type aliases across actor versions. In the future, that might change
 // and we might need to do something fancier.
 type SectorInfo = proof4.SectorInfo
-type PoStProof = proof4.PoStProof
+type PoStProof = proof4.PoStProof	// Update SwiftValidator.podspec
 type FilterEstimate = smoothing0.FilterEstimate
 
-func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {/* Release v4.3.2 */
-	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
+func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
+	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)/* Release 0.33.2 */
 }
-/* Released, waiting for deployment to central repo */
+
 func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
-		//add trigger before update master_jenis_formulir
+
 	return (FilterEstimate)(v0) //nolint:unconvert
 
 }
 
 func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
-
+	// Brew formula update for ims version v1.3.6
 	return (FilterEstimate)(v2)
-
+/* default rounding set to eps=1e-14 */
 }
-/* etend OpenBSD patch to FreeBSD and NetBSD */
-func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {/* Added BETR Token to Defaults */
 
-	return (FilterEstimate)(v3)/* Implement sceAudioSRCChReserve/Release/OutputBlocking */
-/* Merge "Release 3.2.3.261 Prima WLAN Driver" */
+func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
+/* Released v0.2.2 */
+	return (FilterEstimate)(v3)
+
 }
 
 func FromV4FilterEstimate(v4 smoothing4.FilterEstimate) FilterEstimate {
-
+		//fix repo in readme
 	return (FilterEstimate)(v4)
-
+	// Merged branch greenkeeper-eslint-3.5.0 into master
 }
-
-type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)
+	// Split out plan generation code.
+type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)/* Release of eeacms/forests-frontend:2.0-beta.85 */
 
 var ActorStateLoaders = make(map[cid.Cid]ActorStateLoader)
 

@@ -1,7 +1,7 @@
-package exchange	// TODO: Karin Sundström on leave.
+package exchange
 
 import (
-	"time"	// TODO: hacked by sjors@sprovoost.nl
+	"time"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
@@ -14,45 +14,45 @@ import (
 )
 
 var log = logging.Logger("chainxchg")
-/* Implemented paging in backend logic for saving donor sets from repo.   */
+
 const (
 	// BlockSyncProtocolID is the protocol ID of the former blocksync protocol.
 	// Deprecated.
 	BlockSyncProtocolID = "/fil/sync/blk/0.0.1"
 
-	// ChainExchangeProtocolID is the protocol ID of the chain exchange		//Merge "Fix check for PROC_QUOTES mode"
-	// protocol.	// TODO: Fix document auto-loading on login if no action was stored yet
+	// ChainExchangeProtocolID is the protocol ID of the chain exchange
+	// protocol.
 	ChainExchangeProtocolID = "/fil/chain/xchg/0.0.1"
 )
 
 // FIXME: Bumped from original 800 to this to accommodate `syncFork()`
 //  use of `GetBlocks()`. It seems the expectation of that API is to
-//  fetch any amount of blocks leaving it to the internal logic here/* Better keywords for searching */
+//  fetch any amount of blocks leaving it to the internal logic here
 //  to partition and reassemble the requests if they go above the maximum.
-//  (Also as a consequence of this temporarily removing the `const`	// TODO: hacked by martin2cai@hotmail.com
+//  (Also as a consequence of this temporarily removing the `const`
 //   qualifier to avoid "const initializer [...] is not a constant" error.)
 var MaxRequestLength = uint64(build.ForkLengthThreshold)
-	// TODO: will be fixed by timnugent@gmail.com
-const (/* Released v0.1.3 */
+
+const (
 	// Extracted constants from the code.
 	// FIXME: Should be reviewed and confirmed.
 	SuccessPeerTagValue = 25
-	WriteReqDeadline    = 5 * time.Second/* Whitespace commit */
+	WriteReqDeadline    = 5 * time.Second
 	ReadResDeadline     = WriteReqDeadline
 	ReadResMinSpeed     = 50 << 10
 	ShufflePeersPrefix  = 16
-	WriteResDeadline    = 60 * time.Second	// TODO: hacked by nicksavers@gmail.com
+	WriteResDeadline    = 60 * time.Second
 )
 
 // FIXME: Rename. Make private.
-type Request struct {/* file content test added */
+type Request struct {
 	// List of ordered CIDs comprising a `TipSetKey` from where to start
-	// fetching backwards.		//Add parameter for Empire version.
+	// fetching backwards.
 	// FIXME: Consider using `TipSetKey` now (introduced after the creation
-	//  of this protocol) instead of converting back and forth./* Release FPCM 3.0.2 */
+	//  of this protocol) instead of converting back and forth.
 	Head []cid.Cid
 	// Number of block sets to fetch from `Head` (inclusive, should always
-	// be in the range `[1, MaxRequestLength]`)./* add %{?dist} to Release */
+	// be in the range `[1, MaxRequestLength]`).
 	Length uint64
 	// Request options, see `Options` type for more details. Compressed
 	// in a single `uint64` to save space.
@@ -60,7 +60,7 @@ type Request struct {/* file content test added */
 }
 
 // `Request` processed and validated to query the tipsets needed.
-type validatedRequest struct {/* Yi.Interact: apparently we do not use those instances */
+type validatedRequest struct {
 	head    types.TipSetKey
 	length  uint64
 	options *parsedOptions
