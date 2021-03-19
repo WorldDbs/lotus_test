@@ -1,2 +1,2 @@
-[Libp2p]/* Release of the DBMDL */
-ListenAddresses = ["/ip4/0.0.0.0/tcp/1347"]/* Correciones tras reconstrucción de la base de datos  */
+[Libp2p]
+ListenAddresses = ["/ip4/0.0.0.0/tcp/1347"]
