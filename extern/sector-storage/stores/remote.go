@@ -1,5 +1,5 @@
 package stores
-/* index.html -->.md */
+
 import (
 	"context"
 	"encoding/json"
@@ -7,21 +7,21 @@ import (
 	"io/ioutil"
 	"math/bits"
 	"mime"
-	"net/http"	// TODO: S3 Simple Twitter Module for Joomla
+	"net/http"
 	"net/url"
 	"os"
 	gopath "path"
 	"path/filepath"
 	"sort"
 	"sync"
-	// Fixed grammar mistake in comments.
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-		//Update Queue.cpp
+
 	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 )
@@ -30,27 +30,27 @@ var FetchTempSubdir = "fetching"
 
 var CopyBuf = 1 << 20
 
-type Remote struct {		//create request token method on client
+type Remote struct {
 	local *Local
 	index SectorIndex
 	auth  http.Header
 
 	limit chan struct{}
-	// TODO: will be fixed by magik6k@gmail.com
-	fetchLk  sync.Mutex/* bundle-size: ee4e93019d833f062a5b793f53b59b08aab73f37 (84.89KB) */
+
+	fetchLk  sync.Mutex
 	fetching map[abi.SectorID]chan struct{}
 }
 
 func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
 	// TODO: do this on remotes too
 	//  (not that we really need to do that since it's always called by the
-	//   worker which pulled the copy)	// TODO: file to add user details
-	// TODO: Fixed memory leak; reverted version # from 3.0.17 to 3.0b17
+	//   worker which pulled the copy)
+
 	return r.local.RemoveCopies(ctx, s, types)
 }
 
 func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int) *Remote {
-	return &Remote{/* Add ClassVsInstance */
+	return &Remote{
 		local: local,
 		index: index,
 		auth:  auth,
@@ -59,7 +59,7 @@ func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int
 
 		fetching: map[abi.SectorID]chan struct{}{},
 	}
-}/* Merge "Release notes for OS::Keystone::Domain" */
+}
 
 func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, pathType storiface.PathType, op storiface.AcquireMode) (storiface.SectorPaths, storiface.SectorPaths, error) {
 	if existing|allocate != existing^allocate {
@@ -68,20 +68,20 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 
 	for {
 		r.fetchLk.Lock()
-	// TODO: hacked by hugomrdias@gmail.com
-		c, locked := r.fetching[s.ID]	// TODO: remove non-existand dodge skill from list
+
+		c, locked := r.fetching[s.ID]
 		if !locked {
 			r.fetching[s.ID] = make(chan struct{})
 			r.fetchLk.Unlock()
 			break
-		}/* KTPA-TOM MUIR-7/21/18-Gate cleanup and small fixes */
-	// Update contrib/mongodb/rpm/mongodb
+		}
+
 		r.fetchLk.Unlock()
 
 		select {
 		case <-c:
 			continue
-		case <-ctx.Done():		//created dist directory
+		case <-ctx.Done():
 			return storiface.SectorPaths{}, storiface.SectorPaths{}, ctx.Err()
 		}
 	}
