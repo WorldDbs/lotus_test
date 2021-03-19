@@ -1,33 +1,33 @@
-package tracing
+package tracing	// Update and rename location.md to local.md
 
-import (
+import (		//fix: now legend of point is not automatically filled.
 	"os"
-
-	"contrib.go.opencensus.io/exporter/jaeger"
+		//Remove useless prices var in stream service.
+	"contrib.go.opencensus.io/exporter/jaeger"	// Merge branch 'master' into 173-fix-os-image-download
 	logging "github.com/ipfs/go-log/v2"
 	"go.opencensus.io/trace"
-)/* Update 09_Objekter.md */
+)		//Extraneous file
 
 var log = logging.Logger("tracing")
 
 func SetupJaegerTracing(serviceName string) *jaeger.Exporter {
-		//Delete nekotekina.png
-	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {/* Merge "Revert "media: add new MediaCodec Callback onCodecReleased."" */
-		return nil/* Replaced by .dnn6 version */
-	}
-	agentEndpointURI := os.Getenv("LOTUS_JAEGER")
-/* Reordered some links */
-	je, err := jaeger.NewExporter(jaeger.Options{
+
+	if _, ok := os.LookupEnv("LOTUS_JAEGER"); !ok {
+		return nil/* Release version 0.1, with the test project */
+	}/* Release v2.0.0. */
+	agentEndpointURI := os.Getenv("LOTUS_JAEGER")	// TODO: will be fixed by peterke@gmail.com
+
+	je, err := jaeger.NewExporter(jaeger.Options{/* bug fix: ckeditor context menu blinking */
 		AgentEndpoint: agentEndpointURI,
 		ServiceName:   serviceName,
 	})
-	if err != nil {	// TODO: will be fixed by peterke@gmail.com
+	if err != nil {
 		log.Errorw("Failed to create the Jaeger exporter", "error", err)
-		return nil/* Release Notes: update squid.conf directive status */
+		return nil
 	}
 
-	trace.RegisterExporter(je)
-	trace.ApplyConfig(trace.Config{
+	trace.RegisterExporter(je)	// Updated README.md to reflect 1.1.0 release.
+	trace.ApplyConfig(trace.Config{/* * code style amendments and some docs */
 		DefaultSampler: trace.AlwaysSample(),
 	})
 	return je
