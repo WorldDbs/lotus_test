@@ -1,9 +1,9 @@
-[metadata]		//Merge branch 'master' into er-sr
+[metadata]
   name = "lotus-soup"
-  author = ""/* Release 3.3.1 vorbereitet */
+  author = ""
 
 [global]
-  plan = "lotus-soup"		//Created sublime-text-panel-9.md
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
@@ -18,38 +18,38 @@
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Merge "msm: kgsl: Release all memory entries at process close" */
-  clients = "1"/* - latex2html.py überarbeitet */
+[global.run.test_params]
+  clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"/* [artifactory-release] Release version 0.8.19.RELEASE */
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0/* Improving README to fit Callisto Release */
-  [groups.run]/* Release queue in dealloc */
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1	// TODO: update for release 1.3.2
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Redis module added to config.rb by default.
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"		//Euronext plugin : URL to get IdInstrument was changed
+  id = "clients"
   [groups.instances]
     count = 1
-    percentage = 0.0		//rev 731529
-  [groups.run]		//Add old `dist` script to be updated 🍩
-    [groups.run.test_params]		//Save changes to origin URL
-      role = "client"	// TODO: hacked by mail@overlisted.net
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
+      role = "client"
