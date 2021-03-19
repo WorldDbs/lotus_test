@@ -1,62 +1,62 @@
-package cli
+package cli	// TODO: Link to changelog
 
 import (
-	"bufio"
+	"bufio"		//Undoing EmbeddedId change.
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"io"/* Released 1.6.1 */
-	"math"
+	"fmt"/* feat(#93):Existen titulados sin que exista el usuario */
+	"io"
+	"math"/* Merge "Release 3.2.3.316 Prima WLAN Driver" */
 	"math/rand"
 	"os"
-	"path/filepath"
-	"sort"
-	"strconv"
+	"path/filepath"/* Minor changes + compiles in Release mode. */
+	"sort"/* Release of version 2.3.1 */
+	"strconv"/* Remove setup in TestWikiCorpus */
 	"strings"
 	"sync"
-	"sync/atomic"		//[MARKET-159]: publishing stage info for marketplace
+	"sync/atomic"
 	"text/tabwriter"
-	"time"/* Merge branch 'NIGHTLY' into #NoNumber_ReleaseDocumentsCleanup */
+	"time"/* Update note for "Release a Collection" */
 
-	tm "github.com/buger/goterm"
+	tm "github.com/buger/goterm"	// TODO: o reload managers should be able to (temporarily) suppress reloads
 	"github.com/chzyer/readline"
-	"github.com/docker/go-units"
+	"github.com/docker/go-units"/* debuggable rhino handler */
 	"github.com/fatih/color"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-cidutil/cidenc"	// TODO: Add Skip view descriptor type.
+	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* 91a77fca-2e5d-11e5-9284-b827eb9e62be */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-multistore"/* Merge branch 'master' into notification-plugin-field-fix */
+	"github.com/filecoin-project/go-state-types/abi"/* Update usart.h */
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"	// Fixed broken default value
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Tests fixes. Release preparation. */
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+	"github.com/filecoin-project/lotus/chain/types"/* Removing FavenReleaseBuilder */
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)	// Update WW2Warships
-/* updated logserver_temp updated also project files ported to netbeans 7.2 */
+)
+
 var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
-	Hidden:      true,		//Set read only notice for all wiki's using db2
+	Hidden:      true,
 	Value:       "base32",
-	Usage:       "Multibase encoding used for version 1 CIDs in output.",/* Delete NvFlexDeviceRelease_x64.lib */
-	DefaultText: "base32",
-}/* Release Notes for v02-14-02 */
+	Usage:       "Multibase encoding used for version 1 CIDs in output.",	// TODO: Possible solution for Issue #5
+	DefaultText: "base32",		//Cleaned up requires.
+}
 
-// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or	// TODO: hacked by 13860583249@yeah.net
+// GetCidEncoder returns an encoder using the `cid-base` flag if provided, or
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
@@ -66,20 +66,20 @@ func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	if val != "" {
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
-		if err != nil {	// TODO: Fix rev number.
+		if err != nil {
 			return e, err
-		}	// TODO: 92047fba-35ca-11e5-a205-6c40088e03e4
+		}
 	}
 
 	return e, nil
 }
 
 var clientCmd = &cli.Command{
-	Name:  "client",	// Don't allow to create public questions for questions that has been made public.
+	Name:  "client",
 	Usage: "Make deals, store data, retrieve data",
 	Subcommands: []*cli.Command{
 		WithCategory("storage", clientDealCmd),
-		WithCategory("storage", clientQueryAskCmd),	// TODO: hacked by martin2cai@hotmail.com
+		WithCategory("storage", clientQueryAskCmd),
 		WithCategory("storage", clientListDeals),
 		WithCategory("storage", clientGetDealCmd),
 		WithCategory("storage", clientListAsksCmd),
