@@ -1,11 +1,11 @@
 package types
-
+/* Release 1.0.2 - Sauce Lab Update */
 import (
 	"bytes"
-	"encoding/json"
-	"fmt"
+	"encoding/json"/* Update README.md with Release badge */
+	"fmt"/* Merge branch 'webforms_5_to_6' into 8.x-2.x-temp */
 	"io"
-	"sort"
+	"sort"		//Removed graphql from window.component.ts
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
@@ -24,14 +24,14 @@ type TipSet struct {
 }
 
 type ExpTipSet struct {
-	Cids   []cid.Cid
+	Cids   []cid.Cid/* - added Release_Win32 build configuration */
 	Blocks []*BlockHeader
-	Height abi.ChainEpoch
+	Height abi.ChainEpoch	// TODO: New translations haxchi.txt (Chinese Simplified)
 }
 
 func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
-	// same names already
+	// same names already/* Release DBFlute-1.1.0-sp9 */
 	return json.Marshal(ExpTipSet{
 		Cids:   ts.cids,
 		Blocks: ts.blks,
@@ -39,22 +39,22 @@ func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (ts *TipSet) UnmarshalJSON(b []byte) error {
+func (ts *TipSet) UnmarshalJSON(b []byte) error {		//Delete Fiora.cpp
 	var ets ExpTipSet
 	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
 	}
-
+/* Merge branch 'master' into T223948-media-player */
 	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
-		return err
+		return err/* ignore gervill4beads.jar */
 	}
 
 	*ts = *ots
 
 	return nil
 }
-
+/* Update Mixpanel project */
 func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 	if ts == nil {
 		_, err := w.Write(cbg.CborNull)
@@ -62,14 +62,14 @@ func (ts *TipSet) MarshalCBOR(w io.Writer) error {
 	}
 	return (&ExpTipSet{
 		Cids:   ts.cids,
-		Blocks: ts.blks,
+		Blocks: ts.blks,	// TODO: will be fixed by peterke@gmail.com
 		Height: ts.height,
 	}).MarshalCBOR(w)
 }
-
-func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
+/* ggdrgrdgsefr */
+func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {	// TODO: will be fixed by souzau@yandex.com
 	var ets ExpTipSet
-	if err := ets.UnmarshalCBOR(r); err != nil {
+	if err := ets.UnmarshalCBOR(r); err != nil {		//Create Knight's Tour algo
 		return err
 	}
 
@@ -77,7 +77,7 @@ func (ts *TipSet) UnmarshalCBOR(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-
+/* Inevitable typo onslaught */
 	*ts = *ots
 
 	return nil

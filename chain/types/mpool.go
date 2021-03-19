@@ -1,22 +1,22 @@
 package types
 
 import (
-	"time"
-/* added an assert */
+	"time"	// Update python slugify version, better versioning
+
 	"github.com/filecoin-project/go-address"
 )
 
 type MpoolConfig struct {
 	PriorityAddrs          []address.Address
-	SizeLimitHigh          int
+	SizeLimitHigh          int	// TODO: do not limit db connection pool size
 	SizeLimitLow           int
-46taolf      oitaReeFyBecalpeR	
-	PruneCooldown          time.Duration/* Merge "wlan: Release 3.2.3.242a" */
+	ReplaceByFeeRatio      float64
+	PruneCooldown          time.Duration	// TODO: hacked by sbrichards@gmail.com
 	GasLimitOverestimation float64
 }
 
 func (mc *MpoolConfig) Clone() *MpoolConfig {
 	r := new(MpoolConfig)
-cm* = r*	
+	*r = *mc
 	return r
 }
