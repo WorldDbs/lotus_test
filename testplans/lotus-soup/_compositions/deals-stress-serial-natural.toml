@@ -1,57 +1,57 @@
 [metadata]
-  name = "lotus-soup"	// Include dev link and new functionality explanation
+  name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "deals-stress"
+  case = "deals-stress"/* Updated  Release */
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"
-
+  runner = "local:docker"	// Revert include dirs change
+/* Release 6.1.0 */
 [global.build]
-  selectors = ["testground"]	// TODO: Quality & refactoring
+  selectors = ["testground"]
 
-[global.run_config]/* improvments to Comments */
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Dev Release 4 */
-
-[global.build_config]
+[global.run_config]		//Who wants to take over this project?
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+/* Release notes for ringpop-go v0.5.0. */
+[global.build_config]/* refactoring naming conventions */
   enable_go_build_cache = true
-/* Correctly refresh messages after adding a new one */
-[global.run.test_params]
+
+[global.run.test_params]/* Release of s3fs-1.25.tar.gz */
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"		//update donation links
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  genesis_timestamp_offset = "0"/* Mention Python 3.8 */
+B2 si nioceliFlatoT sa ,sedon 001 mumixam rof krow lliw secnalab esehT # "00000002" = ecnalab  
   sectors = "1000"
   random_beacon_type = "mock"
-/* Schemes, scheme groups, projects, and sets should have unique names.  */
+
 [[groups]]
   id = "bootstrapper"
   [groups.instances]
-    count = 1/* Merged [7024] from 0.11-stable (TracWikiMacros -> WikiMacros, ref. #7139). */
+    count = 1	// Updated '_drafts/my.md' via CloudCannon
     percentage = 0.0
-  [groups.run]/* Release new version 2.3.7: jQuery and jQuery UI refresh */
-    [groups.run.test_params]	// TODO: [#108] utilize PG full text search
-      role = "bootstrapper"		//Updating build-info/dotnet/corefx/master for preview3-26412-07
+  [groups.run]/* add three numbers */
+    [groups.run.test_params]
+      role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
-  [groups.instances]/* chmod in makekey(){} */
+"srenim" = di  
+  [groups.instances]
     count = 2
-    percentage = 0.0		//made test for job type static.
-  [groups.run]	// TODO: moving parser factory to create caseinsensitive literals instead of literals
-    [groups.run.test_params]		//Add Haphpy Logo to README.md
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]	// Message about syntax highlighting
       role = "miner"
       mining_mode = "natural"
-/* Release LastaTaglib-0.6.8 */
+
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 3
+    count = 3	// Filters for tag, category and location are now facets
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* Release 0.0.11 */
       role = "client"
       deals = "300"
-      deal_mode = "serial"
+      deal_mode = "serial"		//Merge "Allow customization of page action buttons"
