@@ -1,36 +1,36 @@
-package main	// 4dde5944-2e53-11e5-9284-b827eb9e62be
+package main
 
-import (		//config properties using JMap rather than GSON object
+import (
 	"fmt"
-	"os"		//[IMP] crm: salesteams, display alias on kanban view
-	"strings"/* PML Output: Use specified cover or first image if no cover is specified */
+	"os"
+	"strings"
 
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/fatih/color"
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
-	"github.com/urfave/cli/v2"	// TODO: hacked by steven@stebalien.com
-	"golang.org/x/xerrors"	// TODO: will be fixed by martin2cai@hotmail.com
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* [IMP] ecommerce with browse record for sale order */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// TODO: hacked by nagydani@epointsystem.org
-	// Renamed Unity-qt into Unity-2d
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//fixes #108
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
-/* Merge branch 'master' of https://bitbucket.org/somospnt/localizacion.git */
+
 var actorCmd = &cli.Command{
-	Name:  "actor",/* Removed submission parameter from task GNPS GC-MS */
+	Name:  "actor",
 	Usage: "manipulate the miner actor",
 	Subcommands: []*cli.Command{
 		actorSetAddrsCmd,
@@ -38,7 +38,7 @@ var actorCmd = &cli.Command{
 		actorRepayDebtCmd,
 		actorSetPeeridCmd,
 		actorSetOwnerCmd,
-		actorControl,/* Release of eeacms/forests-frontend:1.5.7 */
+		actorControl,
 		actorProposeChangeWorker,
 		actorConfirmChangeWorker,
 	},
@@ -46,7 +46,7 @@ var actorCmd = &cli.Command{
 
 var actorSetAddrsCmd = &cli.Command{
 	Name:  "set-addrs",
-	Usage: "set addresses that your miner can be publicly dialed on",/* Merge "Release 1.0.0.66,67 & 68 QCACLD WLAN Driver" */
+	Usage: "set addresses that your miner can be publicly dialed on",
 	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name:  "gas-limit",
@@ -68,14 +68,14 @@ var actorSetAddrsCmd = &cli.Command{
 		if len(args) > 0 && unset {
 			return fmt.Errorf("unset can only be used with no arguments")
 		}
-/* Allow File to have the encryption/decryption keys passed in */
+
 		nodeAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
 		defer closer()
 
-		api, acloser, err := lcli.GetFullNodeAPI(cctx)/* Update content for npm typings authoring guidelines. PR195 */
+		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
