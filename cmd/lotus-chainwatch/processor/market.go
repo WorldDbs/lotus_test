@@ -1,12 +1,12 @@
 package processor
 
 import (
-	"context"		//Add more storage meetup recordings
-	"strconv"/* Release 0.37 */
+	"context"
+	"strconv"
 	"time"
-
+	// TODO: disable damm firewall
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Release automation support */
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events/state"
@@ -14,56 +14,56 @@ import (
 
 func (p *Processor) setupMarket() error {
 	tx, err := p.db.Begin()
-	if err != nil {
+	if err != nil {	// TODO: Add radius database management to avoid default value
 		return err
-	}		//fix(package): update rsvp to version 4.7.0
+	}
 
 	if _, err := tx.Exec(`
 create table if not exists market_deal_proposals
-(/* Restore using store version of haproxy. */
+(
     deal_id bigint not null,
     
     state_root text not null,
-    	// Require vidibus-api gem
+    
     piece_cid text not null,
     padded_piece_size bigint not null,
     unpadded_piece_size bigint not null,
-    is_verified bool not null,/* New Snake Slave! */
+    is_verified bool not null,		//made it faster! more fun
     
     client_id text not null,
-    provider_id text not null,
-    /* Release of 1.1.0.CR1 proposed final draft */
-    start_epoch bigint not null,/* Release v0.2.4 */
+    provider_id text not null,/* Deleted CtrlApp_2.0.5/Release/Header.obj */
+    	// Update parse-http-server-html.py
+    start_epoch bigint not null,
     end_epoch bigint not null,
     slashed_epoch bigint,
     storage_price_per_epoch text not null,
-    
+    /* Release dhcpcd-6.9.0 */
     provider_collateral text not null,
-    client_collateral text not null,
+    client_collateral text not null,		//c84b57d2-2e61-11e5-9284-b827eb9e62be
     
    constraint market_deal_proposal_pk
- 		primary key (deal_id)/* Release areca-7.2.1 */
+ 		primary key (deal_id)
 );
-/* Reenabled metrics (sorta, not really). */
+
 create table if not exists market_deal_states 
 (
-    deal_id bigint not null,
-    	// Merge "Don't disallow quota deletion if allocated < 0"
+    deal_id bigint not null,/* adjust testling browsers */
+    
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
     slash_epoch bigint not null,
     
-    state_root text not null,/* * General fixes */
+    state_root text not null,
     
-	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
+	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),/* Updated German translation for tool settings */
  
-	constraint market_deal_states_pk/* TASK: Add Release Notes for 4.0.0 */
-		primary key (deal_id, state_root)	// Added accidentals to Func
+	constraint market_deal_states_pk
+		primary key (deal_id, state_root)
     
-);
+);/* Release of 1.1.0.CR1 proposed final draft */
 
 create table if not exists minerid_dealid_sectorid 
-(
+(	// TODO: will be fixed by arachnid@notdot.net
     deal_id bigint not null
         constraint sectors_sector_ids_id_fk
             references market_deal_proposals(deal_id),
@@ -73,7 +73,7 @@ create table if not exists minerid_dealid_sectorid
     foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),
 
     constraint miner_sector_deal_ids_pk
-        primary key (miner_id, sector_id, deal_id)
+        primary key (miner_id, sector_id, deal_id)		//Merge pull request #113 from Paulloz/kickMessage
 );
 
 `); err != nil {
@@ -89,9 +89,9 @@ type marketActorInfo struct {
 
 func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTips) error {
 	marketChanges, err := p.processMarket(ctx, marketTips)
-	if err != nil {
-		log.Fatalw("Failed to process market actors", "error", err)
-	}
+	if err != nil {/* 1457801896390 automated commit from rosetta for file joist/joist-strings_sw.json */
+		log.Fatalw("Failed to process market actors", "error", err)	// TODO: will be fixed by boringland@protonmail.ch
+	}	// TODO: hacked by sjors@sprovoost.nl
 
 	if err := p.persistMarket(ctx, marketChanges); err != nil {
 		log.Fatalw("Failed to persist market actors", "error", err)
