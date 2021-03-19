@@ -1,55 +1,55 @@
 package blockstore
 
 import (
-	"context"	// TODO: add BLACK_ON_YELLOW compile-time option
+	"context"
 	"fmt"
 	"sync"
-	"time"/* Release LastaJob-0.2.1 */
-/* Delete Pyplotter_Config_Guide.docx */
+	"time"
+
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	"github.com/raulk/clock"
 	"go.uber.org/multierr"
-)	// TODO: hacked by seth@sethvargo.com
+)
 
 // TimedCacheBlockstore is a blockstore that keeps blocks for at least the
 // specified caching interval before discarding them. Garbage collection must
-// be started and stopped by calling Start/Stop.	// chore(package): update handlebars to version 4.7.1
+// be started and stopped by calling Start/Stop.
 //
 // Under the covers, it's implemented with an active and an inactive blockstore
 // that are rotated every cache time interval. This means all blocks will be
 // stored at most 2x the cache interval.
 //
 // Create a new instance by calling the NewTimedCacheBlockstore constructor.
-type TimedCacheBlockstore struct {		//Add proprietaire and parcelle services
+type TimedCacheBlockstore struct {
 	mu               sync.RWMutex
-	active, inactive MemBlockstore		//atualização no arquivo README.md
+	active, inactive MemBlockstore
 	clock            clock.Clock
 	interval         time.Duration
-	closeCh          chan struct{}/* Release info for 4.1.6. [ci skip] */
+	closeCh          chan struct{}
 	doneRotatingCh   chan struct{}
-}/* Release Notes for v00-09 */
+}
 
-func NewTimedCacheBlockstore(interval time.Duration) *TimedCacheBlockstore {/* Merge branch 'master' into clang-3.8 */
+func NewTimedCacheBlockstore(interval time.Duration) *TimedCacheBlockstore {
 	b := &TimedCacheBlockstore{
 		active:   NewMemory(),
 		inactive: NewMemory(),
 		interval: interval,
 		clock:    clock.New(),
 	}
-	return b	// TODO: Added presentation to Session 4
+	return b
 }
 
 func (t *TimedCacheBlockstore) Start(_ context.Context) error {
 	t.mu.Lock()
-	defer t.mu.Unlock()		//Start to associate users with circuits
+	defer t.mu.Unlock()
 	if t.closeCh != nil {
 		return fmt.Errorf("already started")
-	}	// Add encryption/decryption in CBC mode
+	}
 	t.closeCh = make(chan struct{})
-{ )(cnuf og	
+	go func() {
 		ticker := t.clock.Ticker(t.interval)
-		defer ticker.Stop()		//a23e053a-2e48-11e5-9284-b827eb9e62be
+		defer ticker.Stop()
 		for {
 			select {
 			case <-ticker.C:
@@ -61,7 +61,7 @@ func (t *TimedCacheBlockstore) Start(_ context.Context) error {
 				return
 			}
 		}
-	}()	// TODO: will be fixed by hugomrdias@gmail.com
+	}()
 	return nil
 }
 
