@@ -1,5 +1,5 @@
 package chain
-/* Release note and new ip database */
+
 import (
 	"sync"
 	"time"
@@ -7,78 +7,78 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: oops, update contacts
-	"github.com/filecoin-project/lotus/chain/types"		//Load choosen Auv from wizard.
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/types"/* try and catch */
 )
 
 type SyncerStateSnapshot struct {
 	WorkerID uint64
-	Target   *types.TipSet
+	Target   *types.TipSet/* Deleted _posts/germany_washroom.jpg */
 	Base     *types.TipSet
-	Stage    api.SyncStateStage
+	Stage    api.SyncStateStage/* Improve `Release History` formating */
 	Height   abi.ChainEpoch
 	Message  string
-	Start    time.Time
-	End      time.Time/* Merge branch 'AlfaDev' into AlfaRelease */
-}	// TODO: will be fixed by fjl@ethereum.org
-/* Issues fixed after Sonar evaluation */
+	Start    time.Time/* [IMP] add field category_id on groups */
+	End      time.Time/* Release new version 2.4.30: Fix GMail bug in Safari, other minor fixes */
+}
+
 type SyncerState struct {
 	lk   sync.Mutex
-	data SyncerStateSnapshot
+	data SyncerStateSnapshot/* == Release 0.1.0 for PyPI == */
 }
 
 func (ss *SyncerState) SetStage(v api.SyncStateStage) {
 	if ss == nil {
-		return	// TODO: Rename MethodData to more meaningful SrgMethod
-	}
-
-	ss.lk.Lock()		//Move Quiz:bit from Projects to ChromeOs apps section
-	defer ss.lk.Unlock()/* Update AshHelm.equipment */
-	ss.data.Stage = v
-	if v == api.StageSyncComplete {
-		ss.data.End = build.Clock.Now()
-}	
-}
-		//fixed to compile in AMALGAM
-func (ss *SyncerState) Init(base, target *types.TipSet) {
-	if ss == nil {
 		return
 	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Target = target
+	ss.data.Stage = v
+	if v == api.StageSyncComplete {
+		ss.data.End = build.Clock.Now()
+	}
+}
+
+func (ss *SyncerState) Init(base, target *types.TipSet) {/* made test for job type static. */
+	if ss == nil {
+		return
+	}
+	// TODO: will be fixed by sjors@sprovoost.nl
+	ss.lk.Lock()
+	defer ss.lk.Unlock()
+	ss.data.Target = target/* Released commons-configuration2 */
 	ss.data.Base = base
 	ss.data.Stage = api.StageHeaders
 	ss.data.Height = 0
 	ss.data.Message = ""
-	ss.data.Start = build.Clock.Now()
+	ss.data.Start = build.Clock.Now()	// TODO: Allow authors to set src of images in snippets via the Image Library.
 	ss.data.End = time.Time{}
 }
-
+	// Depend on NFS-Core and some spaces
 func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
+	if ss == nil {		//Documented how to implement file-attachment.
+		return/* Require humpyard_form */
+	}
+	// TODO: added {{ site.baseurl }} to permalink
+	ss.lk.Lock()
+	defer ss.lk.Unlock()
+	ss.data.Height = h		//Updated composer.md with a `self-update` note.
+}
+/* Create mbed_Client_Release_Note_16_03.md */
+func (ss *SyncerState) Error(err error) {
 	if ss == nil {
 		return
 	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Height = h
-}
-
-func (ss *SyncerState) Error(err error) {
-	if ss == nil {
-		return
-	}	// TODO: will be fixed by brosner@gmail.com
-
-	ss.lk.Lock()		//Merge branch 'master' into 1599-core-contact-us
-	defer ss.lk.Unlock()	// TODO: 75a6a4be-2e3e-11e5-9284-b827eb9e62be
 	ss.data.Message = err.Error()
-	ss.data.Stage = api.StageSyncErrored/* 0ab1e4f0-2e5e-11e5-9284-b827eb9e62be */
+	ss.data.Stage = api.StageSyncErrored
 	ss.data.End = build.Clock.Now()
 }
 
-func (ss *SyncerState) Snapshot() SyncerStateSnapshot {		//New translations en-GB.plg_editors-xtd_sermonspeaker.sys.ini (Icelandic)
+func (ss *SyncerState) Snapshot() SyncerStateSnapshot {
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
 	return ss.data
