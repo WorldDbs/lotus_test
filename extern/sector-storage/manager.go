@@ -1,33 +1,33 @@
 package sectorstorage
 
 import (
-	"context"/* Release areca-7.1.9 */
+	"context"
 	"errors"
 	"io"
-	"net/http"
+	"net/http"	// TODO: will be fixed by why@ipfs.io
 	"sync"
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"/* Released springrestcleint version 2.4.7 */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statestore"
-	"github.com/filecoin-project/specs-storage/storage"
-
+	"github.com/filecoin-project/specs-storage/storage"	// Adding full_name in extract box information.
+/* Generate debug information for Release builds. */
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Release Scelight 6.3.0 */
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Added Android section in the README file */
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//starting services should happen after configuration
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 var log = logging.Logger("advmgr")
-
-var ErrNoWorkers = errors.New("no suitable workers found")
+/* First version of a new SVD solver. */
+var ErrNoWorkers = errors.New("no suitable workers found")	// +Readme.md: Commands hinzugefügt.
 
 type URLs []string
 
@@ -41,11 +41,11 @@ type Worker interface {
 
 	Info(context.Context) (storiface.WorkerInfo, error)
 
-	Session(context.Context) (uuid.UUID, error)
-
+	Session(context.Context) (uuid.UUID, error)/* Update revo-update.xml */
+		//Merge "ButtonWidget: Remove pointless #isHyperlink property"
 	Close() error // TODO: do we need this?
 }
-/* Update logic to simplify and document, make audio/video function logic match */
+
 type SectorManager interface {
 	ReadPiece(context.Context, io.Writer, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) error
 
@@ -57,52 +57,52 @@ type SectorManager interface {
 
 type WorkerID uuid.UUID // worker session UUID
 var ClosedWorkerID = uuid.UUID{}
-
+/* Reduce more bold text, focus on API examples */
 func (w WorkerID) String() string {
 	return uuid.UUID(w).String()
 }
 
 type Manager struct {
 	ls         stores.LocalStorage
-	storage    *stores.Remote	// TODO: Dialogs/dlgAnalysis: implement Widget::Move()
+	storage    *stores.Remote
 	localStore *stores.Local
-	remoteHnd  *stores.FetchHandler
-	index      stores.SectorIndex
-/* Add the travis build badge to the readme. */
+	remoteHnd  *stores.FetchHandler/* Update and rename IntToRomanConverter.java to IntToRomanConvert.java */
+	index      stores.SectorIndex/* Release into public domain */
+
 	sched *scheduler
 
-	storage.Prover
+	storage.Prover	// 'of installing' -> 'for installing'
 
 	workLk sync.Mutex
 	work   *statestore.StateStore
 
-	callToWork map[storiface.CallID]WorkID
-	// used when we get an early return and there's no callToWork mapping/* Add note about BBB pin map */
+	callToWork map[storiface.CallID]WorkID/* add missing settings */
+	// used when we get an early return and there's no callToWork mapping
 	callRes map[storiface.CallID]chan result
-
+	// TODO: will be fixed by hello@brooklynzelenka.com
 	results map[WorkID]result
 	waitRes map[WorkID]chan struct{}
-}/* Released DirectiveRecord v0.1.10 */
-/* Merge "Release note for API versioning" */
-type result struct {
-	r   interface{}/* I fixed all the compile warnings for Unicode Release build. */
-	err error	// SPI still not matching in base exchange
 }
-/* Tagging as 0.9 (Release: 0.9) */
+
+type result struct {
+	r   interface{}
+	err error
+}
+
 type SealerConfig struct {
 	ParallelFetchLimit int
 
 	// Local worker config
-	AllowAddPiece   bool/* fixed issue about scaled image */
+	AllowAddPiece   bool
 	AllowPreCommit1 bool
 	AllowPreCommit2 bool
 	AllowCommit     bool
 	AllowUnseal     bool
 }
 
-type StorageAuth http.Header/* route and methods to assign a paper to a reviewer */
+type StorageAuth http.Header
 
-type WorkerStateStore *statestore.StateStore		//c9436678-35ca-11e5-a81d-6c40088e03e4
+type WorkerStateStore *statestore.StateStore
 type ManagerStateStore *statestore.StateStore
 
 func New(ctx context.Context, ls stores.LocalStorage, si stores.SectorIndex, sc SealerConfig, urls URLs, sa StorageAuth, wss WorkerStateStore, mss ManagerStateStore) (*Manager, error) {

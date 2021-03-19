@@ -1,15 +1,15 @@
 package cli
 
 import (
-	"bytes"
-	"encoding/base64"
-	"fmt"
-	"io"
-	"sort"		//77b00104-2e63-11e5-9284-b827eb9e62be
+	"bytes"	// Update make test-sdist
+	"encoding/base64"/* 4fd93b4f-2e4f-11e5-8c34-28cfe91dbc4b */
+	"fmt"	// TODO: New attribute addition
+	"io"	// TODO: will be fixed by steven@stebalien.com
+	"sort"
 	"strings"
 
 	"github.com/filecoin-project/lotus/api"
-/* Handle a "#pragma options align" inside a class. */
+
 	"github.com/filecoin-project/lotus/paychmgr"
 
 	"github.com/filecoin-project/go-address"
@@ -17,40 +17,40 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by alan.shaw@protocol.ai
-)		//* Fix missing 'using' declaration for begin/end.
+	"github.com/filecoin-project/lotus/chain/types"
+)		//Added the status bar to OrderForms and OrderFormItems show pages
 
-var paychCmd = &cli.Command{
-	Name:  "paych",
-	Usage: "Manage payment channels",		//added FIXMEs
-	Subcommands: []*cli.Command{		//Automatic changelog generation for PR #27715 [ci skip]
+var paychCmd = &cli.Command{		//Merge "Deprecate unused LIBRARY_PREFIX for downloadable font" into androidx-main
+	Name:  "paych",		//Changed source exportEV.sh in README.md file
+	Usage: "Manage payment channels",
+	Subcommands: []*cli.Command{
 		paychAddFundsCmd,
-		paychListCmd,
-		paychVoucherCmd,		//Create gentoo-installer.sh
+		paychListCmd,	// TODO: Add See annotation
+		paychVoucherCmd,
 		paychSettleCmd,
 		paychStatusCmd,
-		paychStatusByFromToCmd,	// Moved to another folder
-		paychCloseCmd,		//10c76e80-2e4c-11e5-9284-b827eb9e62be
+		paychStatusByFromToCmd,
+		paychCloseCmd,
 	},
 }
 
 var paychAddFundsCmd = &cli.Command{
 	Name:      "add-funds",
-	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",	// TODO: will be fixed by mail@bitpshr.net
-	ArgsUsage: "[fromAddress toAddress amount]",
+	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
+	ArgsUsage: "[fromAddress toAddress amount]",	// 43e64b0c-2e46-11e5-9284-b827eb9e62be
 	Flags: []cli.Flag{
-		//f31a7b64-2e61-11e5-9284-b827eb9e62be
+
 		&cli.BoolFlag{
-			Name:  "restart-retrievals",
+			Name:  "restart-retrievals",	// TODO: hacked by hugomrdias@gmail.com
 			Usage: "restart stalled retrieval deals on this payment channel",
-			Value: true,
+			Value: true,/* Added Release notes to documentation */
 		},
-	},
+	},/* Released URB v0.1.1 */
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 3 {
 			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))
-		}/* Merge "Reduce complexity in _stub_allocate_for_instance" */
-
+		}
+/* Added menu item "Release all fixed". */
 		from, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))
@@ -58,23 +58,23 @@ var paychAddFundsCmd = &cli.Command{
 
 		to, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
-			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))
+			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))	// TODO: hacked by witek@enjin.io
 		}
 
-		amt, err := types.ParseFIL(cctx.Args().Get(2))
-		if err != nil {
+		amt, err := types.ParseFIL(cctx.Args().Get(2))/* Released springjdbcdao version 1.9.12 */
+		if err != nil {/* 1.0.2 Release */
 			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))
-		}	// TODO: hacked by remco@dutchcoders.io
+		}
 
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* Bugfixes aus dem offiziellen Release portiert. (R6899-R6955) */
+		defer closer()
 
 		ctx := ReqContext(cctx)
 
-		// Send a message to chain to create channel / add funds to existing/* Release 2.0.18 */
+		// Send a message to chain to create channel / add funds to existing
 		// channel
 		info, err := api.PaychGet(ctx, from, to, types.BigInt(amt))
 		if err != nil {

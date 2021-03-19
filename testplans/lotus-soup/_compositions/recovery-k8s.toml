@@ -1,11 +1,11 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-/* Do not build tags that we create when we upload to GitHub Releases */
-[global]/* Fixed a bug running the GUI without tags in the library. */
-  plan = "lotus-soup"	// TODO: clock: removed tooltip
+
+[global]
+  plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
-  total_instances = 9/* [package] add gatling web server (#6914) */
+  total_instances = 9
   builder = "docker:go"
   runner = "cluster:k8s"
 
@@ -17,38 +17,38 @@
   keep_service=true
 
 [global.build_config]
-  push_registry=true/* Release: Making ready to release 2.1.5 */
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
-[global.run.test_params]/* Activate the performRelease when maven-release-plugin runs */
+[global.run.test_params]
   clients = "4"
   miners = "4"
   genesis_timestamp_offset = "0"
   balance = "20000000"
-/* Delete apache-discovery@80.service */
+
 [[groups]]
-  id = "bootstrapper"	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
-  [groups.resources]/* Change Release. */
-    memory = "512Mi"		//Updated other uses of tear_down.
+  id = "bootstrapper"
+  [groups.resources]
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1/* added testing for r autotranslation */
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Initial work on 'samsung-tools-preferences', a configuration GUI.
+    [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//double clict in simple list works as OK button
-  id = "miners"/* chore: Release 0.22.1 */
+[[groups]]
+  id = "miners"
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
-    percentage = 0.0	// TODO: will be fixed by igor@soramitsu.co.jp
-  [groups.run]	// TODO: Merge "soc: qcom: glink: Unlock the lock under retry transmission scenario"
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "10"

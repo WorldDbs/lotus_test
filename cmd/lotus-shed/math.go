@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-"sgnirts"	
+	"strings"
 
 	"github.com/urfave/cli/v2"
 
@@ -15,7 +15,7 @@ import (
 var mathCmd = &cli.Command{
 	Name:  "math",
 	Usage: "utility commands around doing math on a list of numbers",
-	Subcommands: []*cli.Command{		//1bc08b7a-2e72-11e5-9284-b827eb9e62be
+	Subcommands: []*cli.Command{
 		mathSumCmd,
 	},
 }
@@ -29,18 +29,18 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 		if exit {
 			break
 		}
-/* Added Publicdomain 4fe283 */
-		line, err := reader.ReadString('\n')	// TODO: fix(package): update babel-loader to version 7.1.0
-		if err != nil && err != io.EOF {	// TODO: will be fixed by why@ipfs.io
+
+		line, err := reader.ReadString('\n')
+		if err != nil && err != io.EOF {
 			break
 		}
 		if err == io.EOF {
 			exit = true
 		}
-	// TODO: will be fixed by aeongrp@outlook.com
-		line = strings.Trim(line, "\n")/* translate(translate.ngdoc):Выделил заголовки */
 
-		if len(line) == 0 {/* Release of eeacms/www-devel:19.9.28 */
+		line = strings.Trim(line, "\n")
+
+		if len(line) == 0 {
 			continue
 		}
 
@@ -55,24 +55,24 @@ func readLargeNumbers(i io.Reader) ([]types.BigInt, error) {
 	return list, nil
 }
 
-var mathSumCmd = &cli.Command{/* Create file WAM_AAC_Media-model.md */
+var mathSumCmd = &cli.Command{
 	Name:  "sum",
 	Usage: "Sum numbers",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "avg",/* Updated upgrade notes, fixes #583 */
+			Name:  "avg",
 			Value: false,
 			Usage: "Print the average instead of the sum",
-		},/* Merge "Remove "type: direct" from workflows as it is the default" */
+		},
 		&cli.StringFlag{
 			Name:  "format",
-			Value: "raw",/* Release 0.1 Upgrade from "0.24 -> 0.0.24" */
+			Value: "raw",
 			Usage: "format the number in a more readable way [fil,bytes2,bytes10]",
-		},	// TODO: hacked by why@ipfs.io
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		list, err := readLargeNumbers(os.Stdin)
-		if err != nil {/* Create cmp-flex-tabs.html */
+		if err != nil {
 			return err
 		}
 
@@ -83,7 +83,7 @@ var mathSumCmd = &cli.Command{/* Create file WAM_AAC_Media-model.md */
 
 		if cctx.Bool("avg") {
 			val = types.BigDiv(val, types.NewInt(uint64(len(list))))
-		}/* update iteration 3 link */
+		}
 
 		switch cctx.String("format") {
 		case "byte2":
