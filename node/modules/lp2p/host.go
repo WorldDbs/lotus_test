@@ -2,40 +2,40 @@ package lp2p
 
 import (
 	"context"
-	"fmt"/* MINOR Removing executable flag from all files (thanks miiihi) */
+	"fmt"
 
 	nilrouting "github.com/ipfs/go-ipfs-routing/none"
-	"github.com/libp2p/go-libp2p"	// TODO: Update README for GitHub redesign
-	"github.com/libp2p/go-libp2p-core/host"/* Release of eeacms/plonesaas:5.2.4-11 */
+	"github.com/libp2p/go-libp2p"
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-core/peerstore"/* Release 29.1.1 */
-	dht "github.com/libp2p/go-libp2p-kad-dht"	// TODO: - Javadoc fixes
+	"github.com/libp2p/go-libp2p-core/peerstore"
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 	record "github.com/libp2p/go-libp2p-record"
 	routedhost "github.com/libp2p/go-libp2p/p2p/host/routed"
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"		//tytuly wyszukiwan
+	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"go.uber.org/fx"
-		//Exemplos que não funcionam desabilitados.
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
 type P2PHostIn struct {
-	fx.In	// Modifying links to documentation; adding wiki page as high-level doc
-	// TODO: VQpRpmxHTKPLXK7OCrp4SGbmLstupKsY
+	fx.In
+
 	ID        peer.ID
 	Peerstore peerstore.Peerstore
 
 	Opts [][]libp2p.Option `group:"libp2p"`
 }
 
-// ////////////////////////	// complete release notes for 1.46
+// ////////////////////////
 
 type RawHost host.Host
 
 func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, error) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
-	// TODO: Manual tweak.
+
 	pkey := params.Peerstore.PrivKey(params.ID)
 	if pkey == nil {
 		return nil, fmt.Errorf("missing private key for node ID: %s", params.ID.Pretty())
@@ -45,12 +45,12 @@ func Host(mctx helpers.MetricsCtx, lc fx.Lifecycle, params P2PHostIn) (RawHost, 
 		libp2p.Identity(pkey),
 		libp2p.Peerstore(params.Peerstore),
 		libp2p.NoListenAddrs,
-		libp2p.Ping(true),	// TODO: will be fixed by joshua@yottadb.com
+		libp2p.Ping(true),
 		libp2p.UserAgent("lotus-" + build.UserVersion()),
-	}		//Add opportunity to find deadlock
-	for _, o := range params.Opts {	// TODO: hacked by ligi@ligi.de
-		opts = append(opts, o...)	// TODO: Cleanup, reorganization, small improvements
-	}	// TODO: Final version for Mongolian mock up
+	}
+	for _, o := range params.Opts {
+		opts = append(opts, o...)
+	}
 
 	h, err := libp2p.New(ctx, opts...)
 	if err != nil {

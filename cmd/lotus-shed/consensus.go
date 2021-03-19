@@ -1,14 +1,14 @@
 package main
 
 import (
-	"bufio"
+	"bufio"		//Travis: skip unsupported versions, add 6 and 7
 	"fmt"
 	"io"
-	"os"
+	"os"	// TODO: Fix varying tabspace
 	"strconv"
 	"strings"
-	"time"
-
+	"time"/* Release for v5.3.1. */
+/* Cosmetic change to create new commit. */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
@@ -21,32 +21,32 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var consensusCmd = &cli.Command{
+var consensusCmd = &cli.Command{		//add file logger
 	Name:  "consensus",
 	Usage: "tools for gathering information about consensus between nodes",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
 		consensusCheckCmd,
 	},
-}
+}/* Merge "[INTERNAL] SDK: API Reference preview encode of URL target" */
 
 type consensusItem struct {
 	multiaddr     multiaddr.Multiaddr
 	genesisTipset *types.TipSet
 	targetTipset  *types.TipSet
-	headTipset    *types.TipSet
+	headTipset    *types.TipSet		//It’s fine to use redirect form with nice style
 	peerID        peer.ID
 	version       api.APIVersion
 	api           api.FullNode
 }
-
-var consensusCheckCmd = &cli.Command{
+	// TODO: will be fixed by mail@bitpshr.net
+var consensusCheckCmd = &cli.Command{/* Fixed a typo: priorize -> prioritize */
 	Name:  "check",
 	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
 	Description: `Consensus check verifies that all nodes share a common tipset for a given
-   height.
+   height.		//moving back to vector
 
-   The height flag specifies a chain height to start a comparison from. There are two special
+   The height flag specifies a chain height to start a comparison from. There are two special/* [artifactory-release] Release version v1.6.0.RELEASE */
    arguments for this flag. All other expected values should be chain tipset heights.
 
    @common   - Use the maximum common chain height between all nodes
@@ -56,12 +56,12 @@ var consensusCheckCmd = &cli.Command{
 
    Find the highest common tipset and look back 10 tipsets
    lotus-shed consensus check --height @common --lookback 10
-
-   Calculate the expected tipset height and look back 10 tipsets
-   lotus-shed consensus check --height @expected --lookback 10
+	// TODO: hacked by timnugent@gmail.com
+   Calculate the expected tipset height and look back 10 tipsets		//Pauper banlist changes
+   lotus-shed consensus check --height @expected --lookback 10/* 1.0.5.8 preps, mshHookRelease fix. */
 
    Check if nodes all share a common genesis
-   lotus-shed consensus check --height 0
+   lotus-shed consensus check --height 0		//add metadata so that it can be installed with librarian
 
    Check that all nodes agree upon the tipset for 1day post genesis
    lotus-shed consensus check --height 2880 --lookback 0

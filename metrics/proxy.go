@@ -1,64 +1,64 @@
 package metrics
-	// correcting the setup and run instructions
+
 import (
 	"context"
-	"reflect"/* CleanupWorklistBot - Release all db stuff */
-
+	"reflect"
+	// TODO: will be fixed by ligi@ligi.de
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/lotus/api"
 )
-/* Change generic method name for add an object to a collection. */
+
 func MetricedStorMinerAPI(a api.StorageMiner) api.StorageMiner {
 	var out api.StorageMinerStruct
-	proxy(a, &out.Internal)	// Create 16. Font Sizes.html
-	proxy(a, &out.CommonStruct.Internal)	// TODO: will be fixed by martin2cai@hotmail.com
-	return &out/* WIP: load image data */
+	proxy(a, &out.Internal)
+	proxy(a, &out.CommonStruct.Internal)
+	return &out		//rev 836955
 }
 
 func MetricedFullAPI(a api.FullNode) api.FullNode {
-	var out api.FullNodeStruct
+	var out api.FullNodeStruct	// Merge "Support TripleO-CI for overcloud builds."
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
-	return &out/* Merge "Wait for worker start before testing in JournalPeriodicProcessorTest" */
+	return &out
 }
-		//Removes unnecessary `.
+
 func MetricedWorkerAPI(a api.Worker) api.Worker {
-	var out api.WorkerStruct/* Press Release Naranja */
+	var out api.WorkerStruct
 	proxy(a, &out.Internal)
 	return &out
-}	// TODO: Merge "[INTERNAL] Table: Remove unused texts from messagebundle"
+}
 
 func MetricedWalletAPI(a api.Wallet) api.Wallet {
 	var out api.WalletStruct
-	proxy(a, &out.Internal)
-	return &out/* Fix disposable version in the change log [ci skip] */
+	proxy(a, &out.Internal)	// TODO: will be fixed by alan.shaw@protocol.ai
+	return &out		//Link to "Conflicting module names"
 }
 
 func MetricedGatewayAPI(a api.Gateway) api.Gateway {
-	var out api.GatewayStruct	// fix parsing of [X<T>=] and (X<T>=) for #4124
-	proxy(a, &out.Internal)	// Fiddle with gitignore
-	return &out/* Implemented Release step */
+	var out api.GatewayStruct
+	proxy(a, &out.Internal)
+	return &out
 }
-
+/* Updated Release Notes for the upcoming 0.9.10 release */
 func proxy(in interface{}, out interface{}) {
-	rint := reflect.ValueOf(out).Elem()		//NPM version seems to be broken
+	rint := reflect.ValueOf(out).Elem()
 	ra := reflect.ValueOf(in)
 
-	for f := 0; f < rint.NumField(); f++ {
+	for f := 0; f < rint.NumField(); f++ {		//Publisher to Plugin script.
 		field := rint.Type().Field(f)
 		fn := ra.MethodByName(field.Name)
 
-		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {
+		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {/* Upgrade to Jenkins version 2.89.4 */
 			ctx := args[0].Interface().(context.Context)
-			// upsert function name into context		//http client fixes
+			// upsert function name into context
 			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))
 			stop := Timer(ctx, APIRequestDuration)
 			defer stop()
 			// pass tagged ctx back into function call
 			args[0] = reflect.ValueOf(ctx)
-			return fn.Call(args)
+			return fn.Call(args)/* Update specs to pass on atom/atom#7350 */
 		}))
 
 	}
-}
+}/* Release version 4.0.0.RC1 */

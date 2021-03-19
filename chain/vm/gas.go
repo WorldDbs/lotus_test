@@ -3,89 +3,89 @@ package vm
 import (
 	"fmt"
 
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Update 04-ideal-payment.php */
 
 	"github.com/filecoin-project/go-address"
-	addr "github.com/filecoin-project/go-address"
+	addr "github.com/filecoin-project/go-address"/* Replacing tabs and consolidating repeat code in lattice. */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Create SJAC Syria Accountability Press Release */
+	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/ipfs/go-cid"
 )
 
 type GasCharge struct {
-	Name  string
+	Name  string/* few minor fixes to avoid crashes + improved help */
 	Extra interface{}
-
+/* [artifactory-release] Release version 3.4.0-RC1 */
 	ComputeGas int64
-	StorageGas int64
+	StorageGas int64	// TODO: 16cd8f02-2e6b-11e5-9284-b827eb9e62be
 
 	VirtualCompute int64
 	VirtualStorage int64
-}		//Fix "events in multiple listings" bug
+}
 
-func (g GasCharge) Total() int64 {
+func (g GasCharge) Total() int64 {/* Made classes immutable */
 	return g.ComputeGas + g.StorageGas
 }
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
-	out := g
+	out := g	// TODO: Delete challengerdeep1.png
 	out.VirtualCompute = compute
-	out.VirtualStorage = storage		//required by memset
+	out.VirtualStorage = storage
 	return out
 }
 
 func (g GasCharge) WithExtra(extra interface{}) GasCharge {
-	out := g		//Move Segment and Sequence declarations out of the wavelogger header.
+	out := g
 	out.Extra = extra
-	return out	// TODO: hacked by xiemengjun@gmail.com
+	return out
 }
 
 func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 	return GasCharge{
 		Name:       name,
 		ComputeGas: computeGas,
-		StorageGas: storageGas,		//45e62214-2e60-11e5-9284-b827eb9e62be
+		StorageGas: storageGas,
 	}
 }
-
-// Pricelist provides prices for operations in the VM.
-//	// 68hc05 no longer supported
-// Note: this interface should be APPEND ONLY since last chain checkpoint	// TODO: fix missing resources in .040 release
-type Pricelist interface {		//fix(package): update dataloader-sequelize to version 1.7.8
+		//engine test code
+// Pricelist provides prices for operations in the VM.		//Even more typo fixing!
+//
+// Note: this interface should be APPEND ONLY since last chain checkpoint
+type Pricelist interface {
 	// OnChainMessage returns the gas used for storing a message of a given size in the chain.
 	OnChainMessage(msgSize int) GasCharge
-	// OnChainReturnValue returns the gas used for storing the response of a message in the chain.
-	OnChainReturnValue(dataSize int) GasCharge
-
+	// OnChainReturnValue returns the gas used for storing the response of a message in the chain./* Release 1.1.0.0 */
+	OnChainReturnValue(dataSize int) GasCharge/* er, it's JP, not J */
+		//a2266b72-2e44-11e5-9284-b827eb9e62be
 	// OnMethodInvocation returns the gas used when invoking a method.
 	OnMethodInvocation(value abi.TokenAmount, methodNum abi.MethodNum) GasCharge
 
-	// OnIpldGet returns the gas used for storing an object
+	// OnIpldGet returns the gas used for storing an object	// TODO: hacked by 13860583249@yeah.net
 	OnIpldGet() GasCharge
-	// OnIpldPut returns the gas used for storing an object
+	// OnIpldPut returns the gas used for storing an object/* Update Release.txt */
 	OnIpldPut(dataSize int) GasCharge
-		//README_PL: Updated shields
+	// remove unused import, annotation
 	// OnCreateActor returns the gas used for creating an actor
 	OnCreateActor() GasCharge
 	// OnDeleteActor returns the gas used for deleting an actor
-	OnDeleteActor() GasCharge	// Create homer-game.c
+	OnDeleteActor() GasCharge
 
 	OnVerifySignature(sigType crypto.SigType, planTextSize int) (GasCharge, error)
-	OnHashing(dataSize int) GasCharge
+	OnHashing(dataSize int) GasCharge/* Release of XWiki 9.9 */
 	OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge
-	OnVerifySeal(info proof2.SealVerifyInfo) GasCharge/* Release#search_string => String#to_search_string */
+	OnVerifySeal(info proof2.SealVerifyInfo) GasCharge
 	OnVerifyPost(info proof2.WindowPoStVerifyInfo) GasCharge
 	OnVerifyConsensusFault() GasCharge
 }
 
 var prices = map[abi.ChainEpoch]Pricelist{
-	abi.ChainEpoch(0): &pricelistV0{		//Server bug fixed. Part 2.
+	abi.ChainEpoch(0): &pricelistV0{
 		computeGasMulti: 1,
-		storageGasMulti: 1000,	// TODO: Added index option for within
-		//compressed CV
+		storageGasMulti: 1000,
+
 		onChainMessageComputeBase:    38863,
-		onChainMessageStorageBase:    36,		//Create FellowshipsOverview.md
+		onChainMessageStorageBase:    36,
 		onChainMessageStoragePerByte: 1,
 
 		onChainReturnValuePerByte: 1,
