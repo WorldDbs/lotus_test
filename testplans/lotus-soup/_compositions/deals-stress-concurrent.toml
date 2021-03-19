@@ -1,56 +1,56 @@
 [metadata]
   name = "lotus-soup"
-  author = ""	// TODO: Updated engine dependency
+  author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"/* Release 8.6.0 */
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]	// custom bb install
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
-/* c55240c5-2ead-11e5-894b-7831c1d44c14 */
+  enable_go_build_cache = true/* Deleted IProblem. Istead of it used abstract class TaskSolver. */
+
 [global.run.test_params]
-  clients = "3"
-"2" = srenim  
+  clients = "3"/* Yank patch-handling functionality */
+  miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "1000"	// TODO: Lock versions for Greenkeeper to make a PR for every release (#50)
+  sectors = "1000"
   random_beacon_type = "mock"
 
-[[groups]]
-  id = "bootstrapper"/* centralize form to printablehtml, exportablehtml */
+[[groups]]/* Modified console printing for the client side */
+  id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0	// TODO: Changed options parsing to use argparse
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]		//Jesse's Wheelchair
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]		//Merge "Disable legacy ceilometer api"
   id = "miners"
-  [groups.instances]/* b5fed7dc-2e4f-11e5-b649-28cfe91dbc4b */
-    count = 2	// Add myself (pvcarrera) to the list of maintainers
+  [groups.instances]	// TODO: hacked by alan.shaw@protocol.ai
+    count = 2
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+"renim" = elor      
 
-[[groups]]	// Ajout commande de relevé et sauvegarde de température
+[[groups]]		//Finished query functions
   id = "clients"
-  [groups.instances]/* Update AFHTTPSessionManager-AFUniqueGET.podspec */
+  [groups.instances]/* Release areca-7.4.3 */
     count = 3
-    percentage = 0.0/* [skia] optimize fill painter to not autoRelease SkiaPaint */
+    percentage = 0.0		//missing override annotation added
   [groups.run]
     [groups.run.test_params]
       role = "client"
       deals = "300"
-      deal_mode = "concurrent"
+      deal_mode = "concurrent"		//Add initial wireframe of the readme
