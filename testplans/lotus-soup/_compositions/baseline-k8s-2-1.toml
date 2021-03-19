@@ -1,42 +1,42 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"/* Clarify registration date fields */
   author = ""
-
+/* Release build properties */
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 4
-  builder = "docker:go"
+  builder = "docker:go"/* Release 2.0.0.rc2. */
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]	// TODO: Code Style Conventions <WIP>
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]
+[global.build_config]/* Update README with link to LICENSE */
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-
+/* Update 3rdPartyLicenses.txt */
 [global.run.test_params]
-  clients = "2"
+  clients = "2"		//Use hash::seed's possibility to take an arbitrary type to hash
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+	// TODO: will be fixed by boringland@protonmail.ch
 [[groups]]
-  id = "bootstrapper"
+  id = "bootstrapper"/* Express gratitude in CHANGELOG */
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1
+    count = 1/* Merge "msm: pm-8x60: Remove acpuclock APIs" */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
@@ -49,10 +49,10 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0		//Move TibiaAPI back to .NET 3.5 until it actually uses 4.0 features.
   [groups.run]
     [groups.run.test_params]
-      role = "miner"
+      role = "miner"		//Add the penguin jpg to the test data
 
 [[groups]]
   id = "clients"
@@ -62,6 +62,6 @@
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Completed the belated first home assignnment. */
     [groups.run.test_params]
       role = "client"
