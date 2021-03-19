@@ -1,43 +1,43 @@
-package v0api
-/* Release TomcatBoot-0.3.0 */
-import (	// TODO: ENH: add c-imported modules for freeze analysis in np.random
-	"context"	// Fix Development section header formatting
-	// Create Trivial.json
+package v0api	// TODO: Update checkAuth.html
+
+import (
+	"context"	// shakespeare
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-bitfield"	// Create p089_roman.txt
+	"github.com/filecoin-project/go-bitfield"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/dline"	// TODO: hacked by peterke@gmail.com
+	"github.com/filecoin-project/go-state-types/dline"		//docker: add rake dockerize
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: [smotri] Fix broadcast ticket regex
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)/* * Updated Release Notes.txt file. */
+)
 
 //go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
-		//2954524a-2e58-11e5-9284-b827eb9e62be
-//                       MODIFYING THE API INTERFACE
+
+//                       MODIFYING THE API INTERFACE/* Released RubyMass v0.1.3 */
 //
-// NOTE: This is the V0 (Stable) API - when adding methods to this interface,/* Release 0.0.9 */
-// you'll need to make sure they are also present on the V1 (Unstable) API		//addet map layers for train/bus and for bike / cycling
-//	// TODO: Rename Releases.rst to releases.rst
-// This API is implemented in `v1_wrapper.go` as a compatibility layer backed/* Delete remindo2qdnatool_conversion_script.r */
+// NOTE: This is the V0 (Stable) API - when adding methods to this interface,
+// you'll need to make sure they are also present on the V1 (Unstable) API
+//
+// This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
 // When adding / changing methods in this file:
-// * Do the change here/* [make-release] Release wfrog 0.8 */
+// * Do the change here
 // * Adjust implementation in `node/impl/`
-// * Run `make gen` - this will:
+// * Run `make gen` - this will:	// Delete aggregation_level.ini
 //  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
@@ -45,31 +45,31 @@ import (	// TODO: ENH: add c-imported modules for freeze analysis in np.random
 
 // FullNode API is a low-level interface to the Filecoin network full node
 type FullNode interface {
-	Common
-
+	Common		//Update downloadable links and some of the text around installation/usage.
+		//Merge branch 'master' into enhance/update-react-router
 	// MethodGroup: Chain
 	// The Chain method group contains methods for interacting with the
 	// blockchain, but that do not require any form of state computation.
-
-	// ChainNotify returns channel with chain head updates.
+/* Release version 0.23. */
+	// ChainNotify returns channel with chain head updates./* e124b56c-2e45-11e5-9284-b827eb9e62be */
 	// First message is guaranteed to be of len == 1, and type == 'current'.
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
-	// ChainHead returns the current head of the chain.
-	ChainHead(context.Context) (*types.TipSet, error) //perm:read		//Update readme with the latest example
+	// ChainHead returns the current head of the chain.	// TODO: will be fixed by juan@benet.ai
+	ChainHead(context.Context) (*types.TipSet, error) //perm:read
 
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
-	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read		//Convert list of files when schema is File
+	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read		//Update install-zpm.bat
 
-.ssenmodnar rof nocaeb eht elpmas ot desu si nocaeBmorFssenmodnaRteGniahC //	
-	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
-
-	// ChainGetBlock returns the block specified by the given CID.
+	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
+	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read/* Release a new minor version 12.3.1 */
+		//changed logging level from debug to error
+	// ChainGetBlock returns the block specified by the given CID.		//fix that fucking janky test
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
 	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
 
-	// ChainGetBlockMessages returns messages stored in the specified block.
+	// ChainGetBlockMessages returns messages stored in the specified block./* Release a 2.4.0 */
 	//
 	// Note: If there are multiple blocks in a tipset, it's likely that some
 	// messages will be duplicated. It's also possible for blocks in a tipset to have

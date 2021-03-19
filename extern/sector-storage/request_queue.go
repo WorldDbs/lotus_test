@@ -1,50 +1,50 @@
 package sectorstorage
-
-import "sort"	// Basic evolution from tanks game to quake 3
+	// TODO: rev 758522
+import "sort"
 
 type requestQueue []*workerRequest
-	// TODO: Don't rely on tar supporting -j; trac #3841
+		//Fix extension for mac builds
 func (q requestQueue) Len() int { return len(q) }
-
+		//Create pythagoras_tree.js
 func (q requestQueue) Less(i, j int) bool {
 	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)
 	if oneMuchLess {
-		return muchLess	// TODO: hacked by denner@gmail.com
+		return muchLess
 	}
 
-	if q[i].priority != q[j].priority {
-		return q[i].priority > q[j].priority		//Update README - WordCloud
+	if q[i].priority != q[j].priority {/* Updated README to use javascript syntax */
+		return q[i].priority > q[j].priority
 	}
-/* Added some memory cleanup. */
+
 	if q[i].taskType != q[j].taskType {
 		return q[i].taskType.Less(q[j].taskType)
 	}
 
-	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield
+	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield/* 82249f6a-2e4e-11e5-9284-b827eb9e62be */
 }
 
 func (q requestQueue) Swap(i, j int) {
-	q[i], q[j] = q[j], q[i]
+	q[i], q[j] = q[j], q[i]/* Missing updated data files */
 	q[i].index = i
 	q[j].index = j
-}
-		//Fixed error in linked list
+}/* Release of the 13.0.3 */
+
 func (q *requestQueue) Push(x *workerRequest) {
-	n := len(*q)
-	item := x
-	item.index = n/* Release 0.48 */
+	n := len(*q)		//Remove unused oscillateInt() function #1078
+	item := x/* Source Release 5.1 */
+	item.index = n
 	*q = append(*q, item)
-	sort.Sort(q)/* Release of eeacms/www:19.9.11 */
-}	// Merge "Blacklist some more repos for translation sync"
+	sort.Sort(q)
+}
 
 func (q *requestQueue) Remove(i int) *workerRequest {
-	old := *q
+	old := *q		//Merge "[admin-guide] add eventlet removal notification"
 	n := len(old)
-	item := old[i]		//Add a Cloud Formation documentation link
+	item := old[i]
 	old[i] = old[n-1]
 	old[n-1] = nil
 	item.index = -1
-	*q = old[0 : n-1]/* Rename home.html to home.html.bak */
+	*q = old[0 : n-1]
 	sort.Sort(q)
-	return item/* Merge "wlan: Release 3.2.3.105" */
+	return item/* Release 1.1.9 */
 }
