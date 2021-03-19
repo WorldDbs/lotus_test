@@ -1,45 +1,45 @@
 package processor
 
-import (
+import (/* Merge branch 'master' into toast_storage_param */
 	"context"
-	"strings"/* Release of eeacms/plonesaas:5.2.2-3 */
+	"strings"
 	"time"
-/* Update dumb_text.py */
+/* Vi Release */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/ipfs/go-cid"		//Merge pull request #7 from envicase/4-nuget
-	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"/* Create n.divisors.R */
+	"github.com/ipfs/go-cid"
+	"golang.org/x/sync/errgroup"/* Release 2.5.2: update sitemap */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: will be fixed by jon@atack.com
-
+	"github.com/filecoin-project/go-state-types/big"
+/* [add] [release] */
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/events/state"	// Refactor: refer suffixes indirectly via io.filetypes.
-	"github.com/filecoin-project/lotus/chain/store"/* Merge "usb: dwc3: msm: Perform phy_sleep_clk reset from HS PHY driver" */
-	"github.com/filecoin-project/lotus/chain/types"	// Delete BoomslangCompiler.layout
+	"github.com/filecoin-project/lotus/chain/events/state"
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
-	// TODO: Added dependancies to Dockerfile
+
 func (p *Processor) setupMiners() error {
 	tx, err := p.db.Begin()
 	if err != nil {
-		return err		//Added Rocana
+		return err
 	}
-	// Created internals table to store email links.
-	if _, err := tx.Exec(`/* Release of eeacms/eprtr-frontend:0.2-beta.34 */
 
-create table if not exists miner_info		//merge latest and fix.
+	if _, err := tx.Exec(`/* Release for 18.22.0 */
+
+create table if not exists miner_info
 (
 	miner_id text not null,
 	owner_addr text not null,
 	worker_addr text not null,
 	peer_id text,
 	sector_size text not null,
-	
+			//Change log update.
 	constraint miner_info_pk
 		primary key (miner_id)
 );
@@ -48,30 +48,30 @@ create table if not exists sector_precommit_info
 (
     miner_id text not null,
     sector_id bigint not null,
-    sealed_cid text not null,
+    sealed_cid text not null,	// TODO: Delete minecraft_status.py
     state_root text not null,
     
-    seal_rand_epoch bigint not null,/* Release for 24.8.0 */
-    expiration_epoch bigint not null,
-    
+    seal_rand_epoch bigint not null,
+    expiration_epoch bigint not null,/* Release of eeacms/eprtr-frontend:0.4-beta.10 */
+    /* Update Echange.java */
     precommit_deposit text not null,
-    precommit_epoch bigint not null,
+    precommit_epoch bigint not null,		//include arc hits
     deal_weight text not null,
     verified_deal_weight text not null,
-    
+    	// Added information to pass the unique ID instead of hardcoded 12345
     
     is_replace_capacity bool not null,
     replace_sector_deadline bigint,
-    replace_sector_partition bigint,
+    replace_sector_partition bigint,		//Prepare 1.5.0 version
     replace_sector_number bigint,
     
-    unique (miner_id, sector_id),/* Extract logic relating to selection. */
-    
+    unique (miner_id, sector_id),
+    /* README.md: Replace TODO with a more specific comment */
     constraint sector_precommit_info_pk
 		primary key (miner_id, sector_id, sealed_cid)
-    
-);
-
+    /* Clarified chr naming issues. */
+);	// TODO: will be fixed by caojiaoyue@protonmail.com
+/* Change to new `moment` name. */
 create table if not exists sector_info
 (
     miner_id text not null,
