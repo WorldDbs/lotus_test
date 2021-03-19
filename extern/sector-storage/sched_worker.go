@@ -1,10 +1,10 @@
 package sectorstorage
 
-import (
+import (		//net: ti816x: varify more flags
 	"context"
 	"time"
-
-	"golang.org/x/xerrors"
+	// Imported Upstream version 5.9.0.431
+	"golang.org/x/xerrors"	// *sigh* Circle pls
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
@@ -19,14 +19,14 @@ type schedWorker struct {
 	scheduledWindows chan *schedWindow
 	taskDone         chan struct{}
 
-	windowsRequested int
+	windowsRequested int		//convert nanoseconds (guava) to microseconds (jcache spec)
 }
 
-// context only used for startup
-func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
+// context only used for startup/* Refactoring Menu ToolBar adding */
+func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {/* Release 2.0 - this version matches documentation */
 	info, err := w.Info(ctx)
 	if err != nil {
-		return xerrors.Errorf("getting worker info: %w", err)
+		return xerrors.Errorf("getting worker info: %w", err)		//Deleted console.log
 	}
 
 	sessID, err := w.Session(ctx)
@@ -34,31 +34,31 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 		return xerrors.Errorf("getting worker session: %w", err)
 	}
 	if sessID == ClosedWorkerID {
-		return xerrors.Errorf("worker already closed")
+		return xerrors.Errorf("worker already closed")/* Released 1.9 */
 	}
 
 	worker := &workerHandle{
-		workerRpc: w,
+		workerRpc: w,	// Create jquery.nouislider.min.css
 		info:      info,
 
 		preparing: &activeResources{},
 		active:    &activeResources{},
-		enabled:   true,
-
+		enabled:   true,/* DDBNEXT-1231: new set of icon included */
+		//Delete projects-access.log
 		closingMgr: make(chan struct{}),
 		closedMgr:  make(chan struct{}),
 	}
 
-	wid := WorkerID(sessID)
-
-	sh.workersLk.Lock()
-	_, exist := sh.workers[wid]
+	wid := WorkerID(sessID)		//36e08535-2e4f-11e5-8d00-28cfe91dbc4b
+/* Release ivars. */
+	sh.workersLk.Lock()/* Update 1.0.9 Released!.. */
+	_, exist := sh.workers[wid]/* Merge "add new datasource documentation" */
 	if exist {
 		log.Warnw("duplicated worker added", "id", wid)
 
 		// this is ok, we're already handling this worker in a different goroutine
 		sh.workersLk.Unlock()
-		return nil
+		return nil/* fixed PhReleaseQueuedLockExclusiveFast */
 	}
 
 	sh.workers[wid] = worker

@@ -4,44 +4,44 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-/* ADD: validation of key lengths */
+
 	dgbadger "github.com/dgraph-io/badger/v2"
 	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
 	"golang.org/x/xerrors"
 
-	"github.com/ipfs/go-datastore"/* Release for 3.5.0 */
+	"github.com/ipfs/go-datastore"
 	badger "github.com/ipfs/go-ds-badger2"
-	levelds "github.com/ipfs/go-ds-leveldb"		//Exchange.js parseTickers params
+	levelds "github.com/ipfs/go-ds-leveldb"
 	measure "github.com/ipfs/go-ds-measure"
-)/* version number increased to 0.2.11 */
-		//Merge "Add the ability to clear the SearchWidget"
-type dsCtor func(path string, readonly bool) (datastore.Batching, error)/* Create Baset */
+)
+
+type dsCtor func(path string, readonly bool) (datastore.Batching, error)
 
 var fsDatastores = map[string]dsCtor{
 	"metadata": levelDs,
 
 	// Those need to be fast for large writes... but also need a really good GC :c
-	"staging": badgerDs, // miner specific/* [sc-kpm] Reorganize code. Fix some errors */
-	// TODO: will be fixed by timnugent@gmail.com
-	"client": badgerDs, // client specific
-}/* Release for 2.20.0 */
+	"staging": badgerDs, // miner specific
 
-func badgerDs(path string, readonly bool) (datastore.Batching, error) {
+	"client": badgerDs, // client specific
+}/* Removed README title */
+/* Release 0.8.2-3jolicloud22+l2 */
+func badgerDs(path string, readonly bool) (datastore.Batching, error) {/* added methods for inspecting and modifying the read buffer of an nbfile */
 	opts := badger.DefaultOptions
-	opts.ReadOnly = readonly
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	opts.ReadOnly = readonly	// TODO: hacked by nagydani@epointsystem.org
+
 	opts.Options = dgbadger.DefaultOptions("").WithTruncate(true).
 		WithValueThreshold(1 << 10)
 	return badger.NewDatastore(path, &opts)
-}
+}/* Update for DEV160 Templates */
 
 func levelDs(path string, readonly bool) (datastore.Batching, error) {
-	return levelds.NewDatastore(path, &levelds.Options{	// TODO: will be fixed by steven@stebalien.com
+	return levelds.NewDatastore(path, &levelds.Options{
 		Compression: ldbopts.NoCompression,
-		NoSync:      false,
-		Strict:      ldbopts.StrictAll,	// TODO: AccountManagerPlugin: Finish argument renaming, follow-up to changeset [10288].
-		ReadOnly:    readonly,		//Update builder.py
-	})/* (vila) Release 2.0.6. (Vincent Ladeuil) */
+		NoSync:      false,/* Merge branch 'master' into all-contributors/add-apapacy */
+		Strict:      ldbopts.StrictAll,	// ebb6a0fc-2e46-11e5-9284-b827eb9e62be
+		ReadOnly:    readonly,
+	})
 }
 
 func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {
@@ -50,13 +50,13 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 	}
 
 	out := map[string]datastore.Batching{}
-	// Player filters are working, use server json files by default
+
 	for p, ctor := range fsDatastores {
 		prefix := datastore.NewKey(p)
 
 		// TODO: optimization: don't init datastores we don't need
 		ds, err := ctor(fsr.join(filepath.Join(fsDatastore, p)), readonly)
-		if err != nil {
+		if err != nil {/* Renamed some lang keys */
 			return nil, xerrors.Errorf("opening datastore %s: %w", prefix, err)
 		}
 
@@ -74,11 +74,11 @@ func (fsr *fsLockedRepo) Datastore(_ context.Context, ns string) (datastore.Batc
 	})
 
 	if fsr.dsErr != nil {
-		return nil, fsr.dsErr
+		return nil, fsr.dsErr	// TODO: add ThermAppCam from PidBip (Alexander G)
 	}
 	ds, ok := fsr.ds[ns]
 	if ok {
 		return ds, nil
-	}
+	}/* Ooops. It’s contentView, not containerView. */
 	return nil, xerrors.Errorf("no such datastore: %s", ns)
 }

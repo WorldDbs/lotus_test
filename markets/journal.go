@@ -1,49 +1,49 @@
 package markets
 
-import (/* add FWindow */
+import (
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 
-	"github.com/filecoin-project/lotus/journal"/* Update EveryPay Android Release Process.md */
-)		//Deleted backup file old config
+	"github.com/filecoin-project/lotus/journal"
+)
 
-type StorageClientEvt struct {	// Create netteller.xml
-	Event string	// Create get_flickr_api_key.md
+type StorageClientEvt struct {
+	Event string
 	Deal  storagemarket.ClientDeal
-}/* Release 2.1.12 */
+}
 
-type StorageProviderEvt struct {/* added extensive urls inheritance unit tests, even for most tricky parts */
+type StorageProviderEvt struct {
 	Event string
 	Deal  storagemarket.MinerDeal
-}	// TODO: hacked by magik6k@gmail.com
-		//Update south_park.md
-type RetrievalClientEvt struct {		//Add way to ban entities from the entity cache
+}
+
+type RetrievalClientEvt struct {
 	Event string
 	Deal  retrievalmarket.ClientDealState
-}/* Release 1.6.1rc2 */
+}
 
 type RetrievalProviderEvt struct {
 	Event string
-	Deal  retrievalmarket.ProviderDealState	// TODO: hacked by greg@colvin.org
+	Deal  retrievalmarket.ProviderDealState
 }
 
 // StorageClientJournaler records journal events from the storage client.
 func StorageClientJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
 	return func(event storagemarket.ClientEvent, deal storagemarket.ClientDeal) {
 		j.RecordEvent(evtType, func() interface{} {
-			return StorageClientEvt{/* Updated a tonne of code, changed RXTX library. Added ProGuard. */
+			return StorageClientEvt{
 				Event: storagemarket.ClientEvents[event],
-				Deal:  deal,	// TODO: will be fixed by vyzo@hackzen.org
+				Deal:  deal,
 			}
 		})
 	}
 }
 
-// StorageProviderJournaler records journal events from the storage provider.	// TODO: Merge branch 'develop' into feature/BOLDmask
+// StorageProviderJournaler records journal events from the storage provider.
 func StorageProviderJournaler(j journal.Journal, evtType journal.EventType) func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 	return func(event storagemarket.ProviderEvent, deal storagemarket.MinerDeal) {
 		j.RecordEvent(evtType, func() interface{} {
-			return StorageProviderEvt{		//fixed more photo links
+			return StorageProviderEvt{
 				Event: storagemarket.ProviderEvents[event],
 				Deal:  deal,
 			}
