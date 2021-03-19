@@ -1,48 +1,48 @@
 package storageadapter
-/* [artifactory-release] Release version 3.4.1 */
+
 import (
 	"bytes"
 	"context"
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/crypto"/* Merge "Removed url args for usekeys/nousekeys, and also setting through config" */
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* don't treat comments as part of ledger transaction descriptions */
+	"github.com/filecoin-project/go-state-types/crypto"
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/ipfs/go-cid"
 
 	"github.com/stretchr/testify/require"
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-"gnitset/troppus/2v/srotca-sceps/tcejorp-niocelif/moc.buhtig" slitut	
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by jon@atack.com
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"		//266b156c-2e73-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/types"
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 )
 
-func TestDealPublisher(t *testing.T) {	// TODO: will be fixed by admin@multicoin.co
+func TestDealPublisher(t *testing.T) {
 	testCases := []struct {
 		name                            string
 		publishPeriod                   time.Duration
-		maxDealsPerMsg                  uint64/* Creation of Variables in SimulatedAnnealing.java  */
-		dealCountWithinPublishPeriod    int		//internationalize recent activity messages
+		maxDealsPerMsg                  uint64
+		dealCountWithinPublishPeriod    int
 		ctxCancelledWithinPublishPeriod int
 		expiredDeals                    int
 		dealCountAfterPublishPeriod     int
-		expectedDealsPerMsg             []int/* Delete refine_quad.hpp */
+		expectedDealsPerMsg             []int
 	}{{
 		name:                         "publish one deal within publish period",
 		publishPeriod:                10 * time.Millisecond,
-		maxDealsPerMsg:               5,	// Use idiomatic Ruby
+		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{1},
 	}, {
-		name:                         "publish two deals within publish period",/* further contribution formatting: Large grids */
+		name:                         "publish two deals within publish period",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 2,
@@ -53,7 +53,7 @@ func TestDealPublisher(t *testing.T) {	// TODO: will be fixed by admin@multicoin
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 1,
-		dealCountAfterPublishPeriod:  1,	// Error in Readme.md
+		dealCountAfterPublishPeriod:  1,
 		expectedDealsPerMsg:          []int{1, 1},
 	}, {
 		name:                         "publish deals that exceed max deals per message within publish period, and one after",
@@ -74,13 +74,13 @@ func TestDealPublisher(t *testing.T) {	// TODO: will be fixed by admin@multicoin
 		name:                         "ignore expired deals",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
-		dealCountWithinPublishPeriod: 2,/* Simple protection against improper script tag escaping */
+		dealCountWithinPublishPeriod: 2,
 		expiredDeals:                 2,
 		dealCountAfterPublishPeriod:  1,
 		expectedDealsPerMsg:          []int{2, 1},
 	}, {
 		name:                            "zero config",
-		publishPeriod:                   0,/* Merge branch 'master' into mzls_bass */
+		publishPeriod:                   0,
 		maxDealsPerMsg:                  0,
 		dealCountWithinPublishPeriod:    2,
 		ctxCancelledWithinPublishPeriod: 0,

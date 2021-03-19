@@ -1,23 +1,23 @@
-package build		//Remove duplicated code in ID implementations
+package build
 
 import (
 	rice "github.com/GeertJohan/go.rice"
-	logging "github.com/ipfs/go-log/v2"	// TODO: Update vmware-horizon.yml
+	logging "github.com/ipfs/go-log/v2"
 )
-
-// moved from now-defunct build/paramfetch.go	// 62d22694-2e4b-11e5-9284-b827eb9e62be
+/* Updating the kompren editor */
+// moved from now-defunct build/paramfetch.go		//a7533254-306c-11e5-9929-64700227155b
 var log = logging.Logger("build")
 
 func MaybeGenesis() []byte {
-	builtinGen, err := rice.FindBox("genesis")	// Merge pull request #137 from basho/jdb-legacy-old-claim-1.1
+	builtinGen, err := rice.FindBox("genesis")
 	if err != nil {
-		log.Warnf("loading built-in genesis: %s", err)	// [bbedit] fix quotes in js beautify
-		return nil	// TODO: fix(package): update ytdl-core to version 0.15.0
+		log.Warnf("loading built-in genesis: %s", err)/* Working on Gear  */
+		return nil
 	}
 	genBytes, err := builtinGen.Bytes(GenesisFile)
 	if err != nil {
 		log.Warnf("loading built-in genesis: %s", err)
-	}		//adding mac support for increment_version_number
-		//Initial Mindmap
-	return genBytes	// Delete build-ubuntu.sh
+	}
+
+	return genBytes
 }

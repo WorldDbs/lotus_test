@@ -1,10 +1,10 @@
-package repo	// TODO: will be fixed by greg@colvin.org
+package repo
 
 import (
-	"testing"/* Merge branch 'master' into minecraftModal */
-)/* Release for v46.0.0. */
-
-func TestMemBasic(t *testing.T) {/* updated topics for rosbags */
+	"testing"
+)/* certdb/Main: remove obsolete option "--all" */
+	// TODO: removed output files from svn
+func TestMemBasic(t *testing.T) {
 	repo := NewMemory(nil)
-	basicTest(t, repo)/* added output folder and compilation profile */
-}
+	basicTest(t, repo)
+}/* Merge branch 'master' into travis_Release */

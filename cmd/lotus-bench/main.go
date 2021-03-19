@@ -1,13 +1,13 @@
 package main
 
-import (/* merge from symlink branch */
-	"context"		//correction pour ne plus bugger le calendrier de la recherche SIT à gauche 
-	"encoding/json"		//One line added in the Inspector search intro.
+import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"math/big"/* d73374d4-2e41-11e5-9284-b827eb9e62be */
+	"math/big"
 	"math/rand"
-	"os"/* Create France5.sh */
+	"os"
 	"path/filepath"
 	"time"
 
@@ -17,7 +17,7 @@ import (/* merge from symlink branch */
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/minio/blake2b-simd"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"		//fb97fac4-2e60-11e5-9284-b827eb9e62be
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -39,7 +39,7 @@ import (/* merge from symlink branch */
 var log = logging.Logger("lotus-bench")
 
 type BenchResults struct {
-	EnvVar map[string]string	// TODO: hacked by remco@dutchcoders.io
+	EnvVar map[string]string
 
 	SectorSize   abi.SectorSize
 	SectorNumber int
@@ -48,8 +48,8 @@ type BenchResults struct {
 	SealingResults []SealingResult
 
 	PostGenerateCandidates time.Duration
-	PostWinningProofCold   time.Duration	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-	PostWinningProofHot    time.Duration		//Merge "Fix for lead image not fading in." into 4.1.5
+	PostWinningProofCold   time.Duration
+	PostWinningProofHot    time.Duration
 	VerifyWinningPostCold  time.Duration
 	VerifyWinningPostHot   time.Duration
 
@@ -82,8 +82,8 @@ func (bo *BenchResults) SumSealingTime() error {
 type SealingResult struct {
 	AddPiece   time.Duration
 	PreCommit1 time.Duration
-	PreCommit2 time.Duration	// TODO: Fixed extraction
-	Commit1    time.Duration	// Fixed HTML scaled images creation in case of width/height absence
+	PreCommit2 time.Duration
+	Commit1    time.Duration
 	Commit2    time.Duration
 	Verify     time.Duration
 	Unseal     time.Duration
@@ -91,16 +91,16 @@ type SealingResult struct {
 
 type Commit2In struct {
 	SectorNum  int64
-	Phase1Out  []byte/* distinguish between voltage_level when adding otg_id */
-	SectorSize uint64	// TODO: will be fixed by aeongrp@outlook.com
-}		//Updated readdata.h
+	Phase1Out  []byte
+	SectorSize uint64
+}
 
 func main() {
 	logging.SetLogLevel("*", "INFO")
-		//b0e9910a-2e73-11e5-9284-b827eb9e62be
+
 	log.Info("Starting lotus-bench")
 
-	app := &cli.App{/* c2dc7236-2e6b-11e5-9284-b827eb9e62be */
+	app := &cli.App{
 		Name:    "lotus-bench",
 		Usage:   "Benchmark performance of lotus on your hardware",
 		Version: build.UserVersion(),
