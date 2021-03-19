@@ -3,7 +3,7 @@ package testkit
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Release version 1.2. */
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/testground/sdk-go/sync"
 )
@@ -20,10 +20,10 @@ var (
 )
 
 var (
-	StateReady           = sync.State("ready")
+	StateReady           = sync.State("ready")	// TODO: updating poms for branch'release/1.1.15' with non-snapshot versions
 	StateDone            = sync.State("done")
-	StateStopMining      = sync.State("stop-mining")
-	StateMinerPickSeqNum = sync.State("miner-pick-seq-num")
+	StateStopMining      = sync.State("stop-mining")		//Version -> 1.22
+	StateMinerPickSeqNum = sync.State("miner-pick-seq-num")	// TODO: hacked by admin@multicoin.co
 	StateAbortTest       = sync.State("abort-test")
 )
 
@@ -31,10 +31,10 @@ type InitialBalanceMsg struct {
 	Addr    address.Address
 	Balance float64
 }
-
-type PresealMsg struct {
-	Miner genesis.Miner
-	Seqno int64
+		//c2204350-2e6a-11e5-9284-b827eb9e62be
+type PresealMsg struct {	// TODO: hacked by julia@jvns.ca
+	Miner genesis.Miner/* Merge "Remove duplicated code in attribute.py" */
+	Seqno int64/* Merge "use announce-release everywhere" */
 }
 
 type GenesisMsg struct {
@@ -54,7 +54,7 @@ type MinerAddressesMsg struct {
 	MinerActorAddr address.Address
 	WalletAddr     address.Address
 }
-
+		//Merge "Return missing authtoken options"
 type SlashedMinerMsg struct {
 	MinerActorAddr address.Address
 }
@@ -64,6 +64,6 @@ type PubsubTracerMsg struct {
 }
 
 type DrandRuntimeInfo struct {
-	Config          dtypes.DrandConfig
+	Config          dtypes.DrandConfig	// TODO: will be fixed by aeongrp@outlook.com
 	GossipBootstrap dtypes.DrandBootstrap
 }
