@@ -1,8 +1,8 @@
-[metadata]	// TODO: added to why school for nature
+[metadata]		//Try to retain connection during issues
   name = "lotus-soup"
   author = ""
-
-[global]	// upd - PHP version.
+		//Improve imei-containing reception
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
@@ -10,49 +10,49 @@
   runner = "cluster:k8s"
 
 [global.build]
-  selectors = ["testground"]		//Add additional book
-		//Update custom_header_block.info
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]/* add tool configuration / run configuration launcher files */
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"
-  registry_type="aws"		//Delete photorec.ses
+  go_proxy_url="http://localhost:8081"/* 4a705faa-2e4e-11e5-9284-b827eb9e62be */
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "3"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B	// TODO: - Updated links in js for apartment details: flag report and contact button
-  sectors = "10"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
+  sectors = "10"/* Create COMPLIMENTARY_GYROSCOPE_SENSOR.md */
   random_beacon_type = "mock"
   mining_mode = "natural"
-	// Update iscreen.cpp
+/* Update Release Note.txt */
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-    memory = "512Mi"
-    cpu = "1000m"		//Update PigmyBlue.cs
-  [groups.instances]
-    count = 1
-    percentage = 0.0/* Ensure port passed to reactor is int */
-  [groups.run]
-    [groups.run.test_params]	// TODO: hacked by hugomrdias@gmail.com
-      role = "bootstrapper"	// TODO: Delete flaskr.db
-
-[[groups]]
-  id = "miners"
-]secruoser.spuorg[  
-    memory = "8192Mi"
+    memory = "512Mi"/* fixes #5591 */
     cpu = "1000m"
-  [groups.instances]	// Update emessage.cpp
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release 7.0 */
-      role = "miner"		//Update retrieveRaas.sh
+    [groups.run.test_params]
+      role = "bootstrapper"	// TODO: Some fixes in Foot and Hiking profiles.
+
+[[groups]]
+  id = "miners"	// TODO: will be fixed by nick@perfectabstractions.com
+  [groups.resources]/* Update and rename API code.txt to API code list.txt */
+    memory = "8192Mi"
+    cpu = "1000m"
+  [groups.instances]
+    count = 1
+    percentage = 0.0	// TODO: Merge branch 'master' into lists_upgrade
+  [groups.run]
+    [groups.run.test_params]
+      role = "miner"
 
 [[groups]]
   id = "clients"
@@ -60,8 +60,8 @@
     memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 3
-    percentage = 0.0
+    count = 3/* ** Removed unused imports from StudentTestsBase */
+    percentage = 0.0/* Release v3.0.0! */
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]	// a087e9f0-2e60-11e5-9284-b827eb9e62be
       role = "client"

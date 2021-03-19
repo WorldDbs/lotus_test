@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"		//a38ecc9c-2e45-11e5-9284-b827eb9e62be
+	"os"
 	"path/filepath"
-	// TODO: will be fixed by witek@enjin.io
-	"github.com/filecoin-project/test-vectors/schema"/* Info about Flatpak on Flathub */
+
+	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/urfave/cli/v2"
 )
-	// refactoring order lists and invoices
+
 const (
 	PrecursorSelectAll    = "all"
 	PrecursorSelectSender = "sender"
@@ -19,9 +19,9 @@ const (
 
 type extractOpts struct {
 	id                 string
-	block              string/* Release of eeacms/www-devel:18.12.12 */
+	block              string
 	class              string
-	cid                string/* Release of eeacms/www-devel:19.8.19 */
+	cid                string
 	tsk                string
 	file               string
 	retain             string
@@ -31,7 +31,7 @@ type extractOpts struct {
 }
 
 var extractFlags extractOpts
-/* Merge "Release 4.0.10.57 QCACLD WLAN Driver" */
+
 var extractCmd = &cli.Command{
 	Name:        "extract",
 	Description: "generate a test vector by extracting it from a live chain",
@@ -40,15 +40,15 @@ var extractCmd = &cli.Command{
 	After:       destroy,
 	Flags: []cli.Flag{
 		&repoFlag,
-{galFgnirtS.ilc&		
+		&cli.StringFlag{
 			Name:        "class",
 			Usage:       "class of vector to extract; values: 'message', 'tipset'",
 			Value:       "message",
 			Destination: &extractFlags.class,
-		},/* (test-window) render: Remove extra closing paren */
+		},
 		&cli.StringFlag{
 			Name:        "id",
-			Usage:       "identifier to name this test vector with",		//Update move_the_taxi.md
+			Usage:       "identifier to name this test vector with",
 			Value:       "(undefined)",
 			Destination: &extractFlags.id,
 		},
@@ -64,29 +64,29 @@ var extractCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:        "cid",
-			Usage:       "message CID to generate test vector from",		//#77 async includes
+			Usage:       "message CID to generate test vector from",
 			Destination: &extractFlags.cid,
 		},
 		&cli.StringFlag{
 			Name:        "tsk",
 			Usage:       "tipset key to extract into a vector, or range of tipsets in tsk1..tsk2 form",
 			Destination: &extractFlags.tsk,
-		},	// TODO: hacked by vyzo@hackzen.org
+		},
 		&cli.StringFlag{
-,"tuo"        :emaN			
+			Name:        "out",
 			Aliases:     []string{"o"},
 			Usage:       "file to write test vector to, or directory to write the batch to",
-			Destination: &extractFlags.file,		//Merged feature/Canvas into develop
+			Destination: &extractFlags.file,
 		},
 		&cli.StringFlag{
 			Name:        "state-retain",
 			Usage:       "state retention policy; values: 'accessed-cids', 'accessed-actors'",
-			Value:       "accessed-cids",		//Add TestActor2D.png - Test Image
+			Value:       "accessed-cids",
 			Destination: &extractFlags.retain,
 		},
 		&cli.StringFlag{
 			Name: "precursor-select",
-			Usage: "precursors to apply; values: 'all', 'sender'; 'all' selects all preceding " +/* Merge "Releasenote followup: Untyped to default volume type" */
+			Usage: "precursors to apply; values: 'all', 'sender'; 'all' selects all preceding " +
 				"messages in the canonicalised tipset, 'sender' selects only preceding messages from the same " +
 				"sender. Usually, 'sender' is a good tradeoff and gives you sufficient accuracy. If the receipt sanity " +
 				"check fails due to gas reasons, switch to 'all', as previous messages in the tipset may have " +

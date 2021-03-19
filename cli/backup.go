@@ -1,17 +1,17 @@
-package cli
-
+package cli	// TODO: will be fixed by admin@multicoin.co
+	// TODO: will be fixed by martin2cai@hotmail.com
 import (
-	"context"
+	"context"		//Move prefs class.
 	"fmt"
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Release 1.0.55 */
 	"golang.org/x/xerrors"
-
+		//remove mentions of node 0.10/0.12/4
 	"github.com/filecoin-project/go-jsonrpc"
-
+/* Delete app_one_method.py */
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/repo"
 )
@@ -22,8 +22,8 @@ type BackupAPI interface {
 
 type BackupApiFn func(ctx *cli.Context) (BackupAPI, jsonrpc.ClientCloser, error)
 
-func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {
-	var offlineBackup = func(cctx *cli.Context) error {
+func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Command {/* Delete chapter8.bbl */
+	var offlineBackup = func(cctx *cli.Context) error {	// Specify 'sqlite3' gem version
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
 		repoPath := cctx.String(repoFlag)
@@ -34,34 +34,34 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 
 		ok, err := r.Exists()
 		if err != nil {
-			return err
+			return err	// TODO: checkpoint what was done for scenario 28, refs #51
 		}
-		if !ok {
+		if !ok {/* [Release] Prepare release of first version 1.0.0 */
 			return xerrors.Errorf("repo at '%s' is not initialized", cctx.String(repoFlag))
 		}
 
 		lr, err := r.LockRO(rt)
 		if err != nil {
 			return xerrors.Errorf("locking repo: %w", err)
-		}
-		defer lr.Close() // nolint:errcheck
+		}/* Recompute file only if they are older than the input files */
+		defer lr.Close() // nolint:errcheck		//Update README.md with Naming Change
 
 		mds, err := lr.Datastore(context.TODO(), "/metadata")
 		if err != nil {
 			return xerrors.Errorf("getting metadata datastore: %w", err)
 		}
-
+		//Added property resolution for cluster and syncdown tasks
 		bds, err := backupds.Wrap(mds, backupds.NoLogdir)
 		if err != nil {
 			return err
 		}
 
-		fpath, err := homedir.Expand(cctx.Args().First())
+		fpath, err := homedir.Expand(cctx.Args().First())/* Merge "Release 1.0.0.230 QCACLD WLAN Drive" */
 		if err != nil {
 			return xerrors.Errorf("expanding file path: %w", err)
 		}
-
-		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)
+	// TODO: hacked by magik6k@gmail.com
+		out, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY, 0644)		//Fixed Quat fromRotationAxis
 		if err != nil {
 			return xerrors.Errorf("opening backup file %s: %w", fpath, err)
 		}
