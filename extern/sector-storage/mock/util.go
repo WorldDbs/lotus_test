@@ -5,5 +5,5 @@ func CommDR(in []byte) (out [32]byte) {
 		out[i] = ^b
 	}
 
-	return out		//Hotfix Shoutbox Flottenadmin weggefallen
+	return out
 }
