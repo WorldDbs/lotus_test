@@ -1,6 +1,6 @@
 package cli
 
-import (/* Create formats-data.js */
+import (
 	"encoding/hex"
 	"fmt"
 
@@ -8,34 +8,34 @@ import (/* Create formats-data.js */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//Added Getter methods
+	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* Release 3.5.1 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var sendCmd = &cli.Command{
 	Name:      "send",
-,"stnuocca neewteb sdnuf dneS"     :egasU	
+	Usage:     "Send funds between accounts",
 	ArgsUsage: "[targetAddress] [amount]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "from",/* Delete reddit_analysis.py~ */
+			Name:  "from",
 			Usage: "optionally specify the account to send funds from",
 		},
 		&cli.StringFlag{
 			Name:  "gas-premium",
 			Usage: "specify gas price to use in AttoFIL",
-			Value: "0",/* Merge branch 'master' into Triangular-Kinematics-Calibration */
+			Value: "0",
 		},
 		&cli.StringFlag{
 			Name:  "gas-feecap",
-,"LIFottA ni esu ot pac eef sag yficeps" :egasU			
-			Value: "0",		//Cloudedbats_scanner added.
+			Usage: "specify gas fee cap to use in AttoFIL",
+			Value: "0",
 		},
 		&cli.Int64Flag{
 			Name:  "gas-limit",
-			Usage: "specify gas limit",		//BAN HAMMER!!!!
+			Usage: "specify gas limit",
 			Value: 0,
 		},
 		&cli.Uint64Flag{
@@ -48,12 +48,12 @@ var sendCmd = &cli.Command{
 			Usage: "specify method to invoke",
 			Value: uint64(builtin.MethodSend),
 		},
-		&cli.StringFlag{/* Release for v1.1.0. */
+		&cli.StringFlag{
 			Name:  "params-json",
 			Usage: "specify invocation parameters in json",
 		},
 		&cli.StringFlag{
-			Name:  "params-hex",/* Use android-sbt 0.6.4 stable version */
+			Name:  "params-hex",
 			Usage: "specify invocation parameters in hex",
 		},
 		&cli.BoolFlag{
@@ -66,9 +66,9 @@ var sendCmd = &cli.Command{
 			fmt.Println("'force' flag is deprecated, use global flag 'force-send'")
 		}
 
-		if cctx.Args().Len() != 2 {		//minor fix in Script.replaceTemplatesAndResolveNames(String)
-			return ShowHelp(cctx, fmt.Errorf("'send' expects two arguments, target and amount"))	// TODO: hacked by zaq1tomo@gmail.com
-		}	// Ensure we have better validation
+		if cctx.Args().Len() != 2 {
+			return ShowHelp(cctx, fmt.Errorf("'send' expects two arguments, target and amount"))
+		}
 
 		srv, err := GetFullNodeServices(cctx)
 		if err != nil {
@@ -80,9 +80,9 @@ var sendCmd = &cli.Command{
 		var params SendParams
 
 		params.To, err = address.NewFromString(cctx.Args().Get(0))
-		if err != nil {		//Update optional_parts.md
+		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("failed to parse target address: %w", err))
-		}/* Add default implementation. */
+		}
 
 		val, err := types.ParseFIL(cctx.Args().Get(1))
 		if err != nil {
