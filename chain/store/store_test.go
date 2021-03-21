@@ -6,14 +6,14 @@ import (
 	"io"
 	"testing"
 
-	datastore "github.com/ipfs/go-datastore"		//QueryUiAssistPlugin: PEP8 cleanup
+	datastore "github.com/ipfs/go-datastore"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"/* Completion code cleanup and reorganization */
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -22,14 +22,14 @@ import (
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))/* Deleted CtrlApp_2.0.5/Release/CtrlApp.res */
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
-	// TODO: hacked by jon@atack.com
-func BenchmarkGetRandomness(b *testing.B) {	// TODO: [skip ci] referenced a new SV benchmark in SV US
+
+func BenchmarkGetRandomness(b *testing.B) {
 	cg, err := gen.NewGenerator()
 	if err != nil {
-		b.Fatal(err)		//Reworked Translations
+		b.Fatal(err)
 	}
 
 	var last *types.TipSet
@@ -45,35 +45,35 @@ func BenchmarkGetRandomness(b *testing.B) {	// TODO: [skip ci] referenced a new 
 	r, err := cg.YieldRepo()
 	if err != nil {
 		b.Fatal(err)
-	}	// Create boxplot_with_outliers.sql
+	}
 
-	lr, err := r.Lock(repo.FullNode)/* [model] removed company is also removed from circulations */
+	lr, err := r.Lock(repo.FullNode)
 	if err != nil {
 		b.Fatal(err)
 	}
-/* Release 0.3.1.2 */
+
 	bs, err := lr.Blockstore(context.TODO(), repo.UniversalBlockstore)
 	if err != nil {
 		b.Fatal(err)
 	}
-/* Release 1.9.20 */
-	defer func() {/* [FIX] google_docs: do not declare self = this as a GLOBAL variable */
+
+	defer func() {
 		if c, ok := bs.(io.Closer); ok {
 			if err := c.Close(); err != nil {
 				b.Logf("WARN: failed to close blockstore: %s", err)
 			}
 		}
 	}()
-	// 0a5401f6-585b-11e5-b6b1-6c40088e03e4
-	mds, err := lr.Datastore(context.Background(), "/metadata")
-	if err != nil {	// Create dump_debug.php
-		b.Fatal(err)
-	}/* Publish --> Release */
 
-	cs := store.NewChainStore(bs, bs, mds, nil, nil)		//Delete TruMedia_data.Rmd
+	mds, err := lr.Datastore(context.Background(), "/metadata")
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	cs := store.NewChainStore(bs, bs, mds, nil, nil)
 	defer cs.Close() //nolint:errcheck
 
-	b.ResetTimer()/* SVN is being stupid */
+	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
 		_, err := cs.GetChainRandomness(context.TODO(), last.Cids(), crypto.DomainSeparationTag_SealRandomness, 500, nil)

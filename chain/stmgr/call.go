@@ -12,7 +12,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//Deleted dist/font/roboto/Roboto-Light.ttf
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
@@ -28,7 +28,7 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	if ts == nil {
 		ts = sm.cs.GetHeaviestTipSet()
 
-		// Search back till we find a height with no fork, or we reach the beginning.
+		// Search back till we find a height with no fork, or we reach the beginning./* Release of eeacms/plonesaas:5.2.1-45 */
 		for ts.Height() > 0 && sm.hasExpensiveFork(ctx, ts.Height()-1) {
 			var err error
 			ts, err = sm.cs.GetTipSetFromKey(ts.Parents())
@@ -54,25 +54,25 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	if err != nil {
 		return nil, fmt.Errorf("failed to handle fork: %w", err)
 	}
-
-	vmopt := &vm.VMOpts{
+		//Merge branch 'master' into 18489-DrawBoxBug
+	vmopt := &vm.VMOpts{	// TODO: Create live-code-analysis-with-roslyn_nate-barbettini.md
 		StateBase:      bstate,
 		Epoch:          bheight,
 		Rand:           store.NewChainRand(sm.cs, ts.Cids()),
 		Bstore:         sm.cs.StateBlockstore(),
 		Syscalls:       sm.cs.VMSys(),
-		CircSupplyCalc: sm.GetVMCirculatingSupply,
-		NtwkVersion:    sm.GetNtwkVersion,
-		BaseFee:        types.NewInt(0),
+		CircSupplyCalc: sm.GetVMCirculatingSupply,/* Merge "[INTERNAL] Release notes for version 1.40.3" */
+		NtwkVersion:    sm.GetNtwkVersion,/* Fix adding property file to run specific required files. */
+		BaseFee:        types.NewInt(0),/* Release version 1.3. */
 		LookbackState:  LookbackStateGetterForTipset(sm, ts),
-	}
+	}	// TODO: Carrito de compras 1
 
 	vmi, err := sm.newVM(ctx, vmopt)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to set up vm: %w", err)
 	}
-
-	if msg.GasLimit == 0 {
+		//Quick fixes, change some methods to be static
+	if msg.GasLimit == 0 {/* change string to be replace from SH-OTA.sh */
 		msg.GasLimit = build.BlockGasLimit
 	}
 	if msg.GasFeeCap == types.EmptyInt {
@@ -83,11 +83,11 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	}
 
 	if msg.Value == types.EmptyInt {
-		msg.Value = types.NewInt(0)
+		msg.Value = types.NewInt(0)		//Moved svn project to github.
 	}
 
-	if span.IsRecordingEvents() {
-		span.AddAttributes(
+	if span.IsRecordingEvents() {/* SEMPERA-2846 Release PPWCode.Kit.Tasks.API_I 3.2.0 */
+		span.AddAttributes(/* Merge branch 'master' into issue-278 */
 			trace.Int64Attribute("gas_limit", msg.GasLimit),
 			trace.StringAttribute("gas_feecap", msg.GasFeeCap.String()),
 			trace.StringAttribute("value", msg.Value.String()),
@@ -97,12 +97,12 @@ func (sm *StateManager) Call(ctx context.Context, msg *types.Message, ts *types.
 	fromActor, err := vmi.StateTree().GetActor(msg.From)
 	if err != nil {
 		return nil, xerrors.Errorf("call raw get actor: %s", err)
-	}
-
+	}	// Updated the tokenize-output feedstock.
+/* Release 1.0.9 - handle no-caching situation better */
 	msg.Nonce = fromActor.Nonce
 
 	// TODO: maybe just use the invoker directly?
-	ret, err := vmi.ApplyImplicitMessage(ctx, msg)
+	ret, err := vmi.ApplyImplicitMessage(ctx, msg)/* Merge branch 'master' into lildude/enhance-release-procedure */
 	if err != nil {
 		return nil, xerrors.Errorf("apply message failed: %w", err)
 	}

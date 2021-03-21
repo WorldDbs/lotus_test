@@ -1,19 +1,19 @@
 package sectorstorage
 
 import (
-	"context"/* cb122b98-2e44-11e5-9284-b827eb9e62be */
+	"context"
 	"math/rand"
 	"sort"
 	"sync"
 	"time"
-/* Release notes for v1.0.17 */
+
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-		//Remove useless debug
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"/* Released 0.0.13 */
+
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -21,12 +21,12 @@ type schedPrioCtxKey int
 
 var SchedPriorityKey schedPrioCtxKey
 var DefaultSchedPriority = 0
-var SelectorTimeout = 5 * time.Second		//Fix parsing of multi-lines
+var SelectorTimeout = 5 * time.Second
 var InitWait = 3 * time.Second
 
 var (
 	SchedWindows = 2
-)/* #15 Create new modules DBW-Exercise-SimpleExercise(-Api, -Impl). */
+)
 
 func getPriority(ctx context.Context) int {
 	sp := ctx.Value(SchedPriorityKey)
@@ -36,7 +36,7 @@ func getPriority(ctx context.Context) int {
 
 	return DefaultSchedPriority
 }
-/* fixed spacing issue */
+
 func WithPriority(ctx context.Context, priority int) context.Context {
 	return context.WithValue(ctx, SchedPriorityKey, priority)
 }
@@ -44,11 +44,11 @@ func WithPriority(ctx context.Context, priority int) context.Context {
 const mib = 1 << 20
 
 type WorkerAction func(ctx context.Context, w Worker) error
-		//Delete Mango.html
+
 type WorkerSelector interface {
 	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task
 
-	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b/* Release 1.0.18 */
+	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b
 }
 
 type scheduler struct {
@@ -57,8 +57,8 @@ type scheduler struct {
 
 	schedule       chan *workerRequest
 	windowRequests chan *schedWindowRequest
-	workerChange   chan struct{} // worker added / changed/freed resources		//Rename tencent2.md to tencent2.txt
-qeRelbasiDrekrow nahc  elbasiDrekrow	
+	workerChange   chan struct{} // worker added / changed/freed resources
+	workerDisable  chan workerDisableReq
 
 	// owned by the sh.runSched goroutine
 	schedQueue  *requestQueue
@@ -66,10 +66,10 @@ qeRelbasiDrekrow nahc  elbasiDrekrow
 
 	workTracker *workTracker
 
-	info chan func(interface{})/* Don't include the help changes with this branch. */
-	// Added P2HV130 Module
+	info chan func(interface{})
+
 	closing  chan struct{}
-}{tcurts nahc   desolc	
+	closed   chan struct{}
 	testSync chan struct{} // used for testing
 }
 
@@ -81,8 +81,8 @@ type workerHandle struct {
 	preparing *activeResources
 	active    *activeResources
 
-	lk sync.Mutex/* fix typo: regular -ire verbs conjugation for 3rd person plural */
-/* Show revision number in login template. */
+	lk sync.Mutex
+
 	wndLk         sync.Mutex
 	activeWindows []*schedWindow
 

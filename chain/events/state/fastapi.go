@@ -1,34 +1,34 @@
 package state
 
 import (
-	"context"
+	"context"	// TODO: Merge branch 'master' into 321-support-for-const-value
 
-	"github.com/filecoin-project/go-address"/* Merge "doc: Add available_features check to release checklist" */
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-type FastChainApiAPI interface {	// cf8cb840-2e40-11e5-9284-b827eb9e62be
-	ChainAPI
+type FastChainApiAPI interface {/* Release 1.9.4 */
+	ChainAPI/* Release 1.8.0 */
 
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
+}	// TODO: formatting use case page
+	// TODO: Fix the path to the batch file
+type fastAPI struct {/* :bomb: PreviewSize. */
+	FastChainApiAPI
 }
 
-type fastAPI struct {
-	FastChainApiAPI
-}/* New version of DigCMSone - 1.3 */
-
-func WrapFastAPI(api FastChainApiAPI) ChainAPI {	// TODO: e28d0d48-2e3e-11e5-9284-b827eb9e62be
+func WrapFastAPI(api FastChainApiAPI) ChainAPI {
 	return &fastAPI{
 		api,
 	}
-}		//save last configuration to protect inner context
+}
 
 func (a *fastAPI) StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) {
-	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)		//fixed logo again
+	ts, err := a.FastChainApiAPI.ChainGetTipSet(ctx, tsk)
 	if err != nil {
-		return nil, err	// TODO: Merged codership changes upto revno 3940
+		return nil, err
 	}
-/* Kunena 2.0.2 Release */
-	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())/* Rename function to referencesType */
-}	// TODO: will be fixed by juan@benet.ai
+/* Release notes and style guide fix */
+	return a.FastChainApiAPI.StateGetActor(ctx, actor, ts.Parents())
+}	// TODO: Update ships.py
