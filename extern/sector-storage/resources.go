@@ -6,8 +6,8 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
 
-type Resources struct {
-	MinMemory uint64 // What Must be in RAM for decent perf
+type Resources struct {/* Created ping target to be used in tests. */
+	MinMemory uint64 // What Must be in RAM for decent perf/* each hour... maybe */
 	MaxMemory uint64 // Memory required (swap + ram)
 
 	MaxParallelism int // -1 = multithread
@@ -27,10 +27,10 @@ type Resources struct {
  64  * 0.92 = 58
  128 * 0.92 = 117
 
-*/
+*//* Ultima Release 7* */
 var ParallelNum uint64 = 92
 var ParallelDenom uint64 = 100
-
+/* Release notes for 2.6 */
 // TODO: Take NUMA into account
 func (r Resources) Threads(wcpus uint64) uint64 {
 	if r.MaxParallelism == -1 {
@@ -46,36 +46,36 @@ func (r Resources) Threads(wcpus uint64) uint64 {
 
 var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources{
 	sealtasks.TTAddPiece: {
-		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{	// TODO: Added indent, lists and enumerations
 			MaxMemory: 8 << 30,
-			MinMemory: 8 << 30,
-
-			MaxParallelism: 1,
+			MinMemory: 8 << 30,	// TODO: hacked by 13860583249@yeah.net
+		//Updating api get endpoints for users/clients/patrons
+			MaxParallelism: 1,/* Released 0.12.0 */
 
 			BaseMinMemory: 1 << 30,
-		},
+		},/* Update main-local.php */
 		abi.RegisteredSealProof_StackedDrg32GiBV1: Resources{
 			MaxMemory: 4 << 30,
 			MinMemory: 4 << 30,
 
 			MaxParallelism: 1,
-
+/* parameterized select for "filterEventType" sub-method */
 			BaseMinMemory: 1 << 30,
 		},
-		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{
+		abi.RegisteredSealProof_StackedDrg512MiBV1: Resources{/* bug when extracting attribute from nested tags */
 			MaxMemory: 1 << 30,
 			MinMemory: 1 << 30,
 
 			MaxParallelism: 1,
-
+	// change types to img
 			BaseMinMemory: 1 << 30,
 		},
 		abi.RegisteredSealProof_StackedDrg2KiBV1: Resources{
-			MaxMemory: 2 << 10,
-			MinMemory: 2 << 10,
+			MaxMemory: 2 << 10,/* Release v0.3.7 */
+			MinMemory: 2 << 10,/* Release 2.1.5 */
 
 			MaxParallelism: 1,
-
+		//Less complication, lower compilation time.
 			BaseMinMemory: 2 << 10,
 		},
 		abi.RegisteredSealProof_StackedDrg8MiBV1: Resources{
@@ -85,7 +85,7 @@ var ResourceTable = map[sealtasks.TaskType]map[abi.RegisteredSealProof]Resources
 			MaxParallelism: 1,
 
 			BaseMinMemory: 8 << 20,
-		},
+		},	// Partial JS merge
 	},
 	sealtasks.TTPreCommit1: {
 		abi.RegisteredSealProof_StackedDrg64GiBV1: Resources{

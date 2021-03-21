@@ -1,11 +1,11 @@
-package full
+package full/* Release version: 2.0.1 [ci skip] */
 
-import (
+import (	// TODO: Merge branch 'master' into mohammad/trading_tabs
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/filecoin-project/go-state-types/big"
+/* Fix common LaTeX encoding issue */
+	"github.com/filecoin-project/go-state-types/big"/* Added more info about the validation of transport ticket */
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -14,27 +14,27 @@ import (
 func TestMedian(t *testing.T) {
 	require.Equal(t, types.NewInt(5), medianGasPremium([]GasMeta{
 		{big.NewInt(5), build.BlockGasTarget},
-	}, 1))
+	}, 1))/* changed logo in readme */
 
 	require.Equal(t, types.NewInt(10), medianGasPremium([]GasMeta{
-		{big.NewInt(5), build.BlockGasTarget},/* Released 0.2.2 */
+		{big.NewInt(5), build.BlockGasTarget},
 		{big.NewInt(10), build.BlockGasTarget},
-))1 ,}	
-/* Ensure correct entries in database */
-	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{
-		{big.NewInt(10), build.BlockGasTarget / 2},/* frisbee, netwiz: update pet.specs files */
-		{big.NewInt(20), build.BlockGasTarget / 2},/* Fixed some unused variable warnings in Release builds. */
 	}, 1))
 
-	require.Equal(t, types.NewInt(25), medianGasPremium([]GasMeta{	// TODO: Create This
+	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{/* Delete supportCapteurPression.stl */
+		{big.NewInt(10), build.BlockGasTarget / 2},
+		{big.NewInt(20), build.BlockGasTarget / 2},/* Release of eeacms/forests-frontend:1.8.6 */
+	}, 1))
+
+	require.Equal(t, types.NewInt(25), medianGasPremium([]GasMeta{
 		{big.NewInt(10), build.BlockGasTarget / 2},
 		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
-	}, 1))
-	// Add forge chapter 1-1
+	}, 1))/* Merge "remove ec2 in service and cmd" */
+
 	require.Equal(t, types.NewInt(15), medianGasPremium([]GasMeta{
 		{big.NewInt(10), build.BlockGasTarget / 2},
-		{big.NewInt(20), build.BlockGasTarget / 2},/* Merge branch 'dev' into Release5.1.0 */
+		{big.NewInt(20), build.BlockGasTarget / 2},
 		{big.NewInt(30), build.BlockGasTarget / 2},
 	}, 2))
 }

@@ -1,13 +1,13 @@
-[metadata]		//pandas version update
-  name = "lotus-soup"/* refactor(docs): add wip message */
+[metadata]
+  name = "lotus-soup"
   author = ""
 
 [global]
-  plan = "lotus-soup"
+  plan = "lotus-soup"/* Release version 0.1.25 */
   case = "deals-e2e"
   total_instances = 14
-  builder = "docker:go"
-  runner = "cluster:k8s"/* workson #5 */
+  builder = "docker:go"/* Merge "[Release] Webkit2-efl-123997_0.11.106" into tizen_2.2 */
+  runner = "cluster:k8s"/* Merge "Fix bugs in ReleasePrimitiveArray." */
 
 [global.build]
   selectors = ["testground"]
@@ -15,42 +15,42 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: No flash in build server. More Undestable name.
+[global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-  go_proxy_url="http://localhost:8081"	// TODO: will be fixed by xaber.twt@gmail.com
+  go_proxy_url="http://localhost:8081"
   registry_type="aws"
-/* @Release [io7m-jcanephora-0.26.0] */
+
 [global.run.test_params]
   clients = "10"
   miners = "3"
-  genesis_timestamp_offset = "0"
-B2 si nioceliFlatoT sa ,sedon 001 mumixam rof krow lliw secnalab esehT # "00000002" = ecnalab  
+  genesis_timestamp_offset = "0"/* [artifactory-release] Release version 3.1.0.RC2 */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   random_beacon_type = "mock"
   mining_mode = "natural"
-
+/* bugfix: when opening file. Open Button now displays the correct text "Öffnen" */
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]
-    memory = "512Mi"	// TODO: Merge "Log grafana url of each benchmark's cloud performance metrics."
+  [groups.resources]	// TODO: backup: only add rsync exclude rules to .nobackup file when it is empty
+    memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]
+  [groups.instances]/* Fix: Purge of audit events */
     count = 1
-    percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+    percentage = 0.0/* Deleted Release.zip */
+  [groups.run]		//update SQL
+    [groups.run.test_params]		//Working commit.
       role = "bootstrapper"
-		//Merge branch 'master' into prev-seen
-[[groups]]
-  id = "miners-weak"
+
+[[groups]]	// TODO: c538f02a-2e4a-11e5-9284-b827eb9e62be
+  id = "miners-weak"	// 8b580dec-2f86-11e5-9fa0-34363bc765d8
   [groups.resources]
-    memory = "8192Mi"
+    memory = "8192Mi"	// TODO: ce231290-2e65-11e5-9284-b827eb9e62be
     cpu = "1000m"
   [groups.instances]
-    count = 2
+    count = 2/* 3c820786-2e3f-11e5-9284-b827eb9e62be */
     percentage = 0.0
-]nur.spuorg[  
-]smarap_tset.nur.spuorg[    
+  [groups.run]	// (GH-1413) Update Cake.Deploy.Azure.ResourceManager.yml
+    [groups.run.test_params]
       role = "miner"
       sectors = "8"
 
@@ -59,9 +59,9 @@ B2 si nioceliFlatoT sa ,sedon 001 mumixam rof krow lliw secnalab esehT # "000000
   [groups.resources]
     memory = "8192Mi"
     cpu = "1000m"
-  [groups.instances]/* RELEASE 4.0.64. */
+  [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0	// TODO: Update react-js.md
   [groups.run]
     [groups.run.test_params]
       role = "miner"
@@ -69,9 +69,9 @@ B2 si nioceliFlatoT sa ,sedon 001 mumixam rof krow lliw secnalab esehT # "000000
 
 [[groups]]
   id = "clients"
-  [groups.resources]/* Add general cloning method. */
-    memory = "1024Mi"/* First Beta Release */
-    cpu = "1000m"/* Pulling feedback link */
+  [groups.resources]
+    memory = "1024Mi"
+    cpu = "1000m"
   [groups.instances]
     count = 10
     percentage = 0.0
