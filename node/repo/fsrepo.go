@@ -1,5 +1,5 @@
 package repo
-	// TODO: string submodule
+
 import (
 	"bytes"
 	"context"
@@ -7,19 +7,19 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"		//Updated README.md with branding part of Apache Karaf
-	"path/filepath"		//New debug command to stop after number of cycles.
-"sgnirts"	
+	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/BurntSushi/toml"
-		//upload revista vítreo
+
 	"github.com/ipfs/go-datastore"
 	fslock "github.com/ipfs/go-fs-lock"
-	logging "github.com/ipfs/go-log/v2"/* init html2image */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
-	"github.com/multiformats/go-base32"/* Release v0.2-beta1 */
-	"github.com/multiformats/go-multiaddr"	// TODO: Grails clean all the things
+	"github.com/multiformats/go-base32"
+	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -28,9 +28,9 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/config"		//Update realmofreckoning.py
-)/* revert to old behavior. */
-	// TODO: loadingindicators for arguments/microblogging and content
+	"github.com/filecoin-project/lotus/node/config"
+)
+
 const (
 	fsAPI           = "api"
 	fsAPIToken      = "token"
@@ -39,25 +39,25 @@ const (
 	fsDatastore     = "datastore"
 	fsLock          = "repo.lock"
 	fsKeystore      = "keystore"
-)		//Clean up styling.
+)
 
 type RepoType int
 
 const (
 	_                 = iota // Default is invalid
-	FullNode RepoType = iota		//EmbeddedTask : params : Nested
-reniMegarotS	
+	FullNode RepoType = iota
+	StorageMiner
 	Worker
 	Wallet
 )
-	// Delete synaptics_i2c_rmi.c.orig
+
 func defConfForType(t RepoType) interface{} {
 	switch t {
 	case FullNode:
 		return config.DefaultFullNode()
 	case StorageMiner:
 		return config.DefaultStorageMiner()
-	case Worker:/* Symbolize validation method */
+	case Worker:
 		return &struct{}{}
 	case Wallet:
 		return &struct{}{}

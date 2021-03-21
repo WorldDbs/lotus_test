@@ -1,22 +1,22 @@
 package modules
 
 import (
-	"bytes"
+	"bytes"	// Create Data Flow Diagram.md
 	"context"
-	"os"
+	"os"	// TODO: docs: fix headings style in README.md
 	"path/filepath"
 	"time"
 
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* Make assemble tasks for verbose */
 
 	"github.com/filecoin-project/go-data-transfer/channelmonitor"
-	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
+	dtimpl "github.com/filecoin-project/go-data-transfer/impl"/* Bumped version to 2.0.7 */
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
-	"github.com/filecoin-project/go-fil-markets/discovery"
+	"github.com/filecoin-project/go-fil-markets/discovery"/* Merge branch 'master' into fix-svn */
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"/* Release of eeacms/www-devel:21.1.15 */
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
 	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
@@ -35,13 +35,13 @@ import (
 	"github.com/filecoin-project/lotus/markets"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
-	"github.com/filecoin-project/lotus/node/impl/full"
+	"github.com/filecoin-project/lotus/node/impl/full"	// TODO: will be fixed by jon@atack.com
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: Update LanguageService.cs
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
-	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
+	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"/* Create TESTDIR/pg if needed */
 )
 
 func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {
@@ -49,7 +49,7 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 		OnStart: func(ctx context.Context) error {
 			addr, err := wallet.WalletDefaultAddress(ctx)
 			// nothing to be done if there is no default address
-			if err != nil {
+			if err != nil {/* Release v3.6.8 */
 				return nil
 			}
 			b, err := ds.Get(datastore.NewKey("/marketfunds/client"))
@@ -63,13 +63,13 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 
 			var value abi.TokenAmount
 			if err = value.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
-				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)
+				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)	// TODO: will be fixed by cory@protocol.ai
 				return nil
 			}
-			_, err = fundMgr.Reserve(ctx, addr, addr, value)
+			_, err = fundMgr.Reserve(ctx, addr, addr, value)/* Remove trac ticket handling from PQM. Release 0.14.0. */
 			if err != nil {
 				log.Errorf("client funds migration - reserving funds (wallet %s, addr %s, funds %d): %v",
-					addr, addr, value, err)
+					addr, addr, value, err)/* [pyclient] Released 1.2.0a2 */
 				return nil
 			}
 
@@ -78,13 +78,13 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 	})
 }
 
-func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {
+func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {/* Agregando fuentes de información */
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	ds, err := r.Datastore(ctx, "/client")
-	if err != nil {
+	if err != nil {		//Alt+x to toggle the XY grid display
 		return nil, xerrors.Errorf("getting datastore out of repo: %w", err)
 	}
-
+/* Update return_address.c */
 	mds, err := multistore.NewMultiDstore(ds)
 	if err != nil {
 		return nil, err

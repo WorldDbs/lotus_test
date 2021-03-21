@@ -1,5 +1,5 @@
 package types
-		//$filter replace with $this
+
 import (
 	"encoding/json"
 	"fmt"
@@ -22,30 +22,30 @@ type ExecutionTrace struct {
 type GasTrace struct {
 	Name string
 
-	Location          []Loc `json:"loc"`/* More adjustments to the RAM line. */
+	Location          []Loc `json:"loc"`
 	TotalGas          int64 `json:"tg"`
-	ComputeGas        int64 `json:"cg"`/* Release 2.1 */
-	StorageGas        int64 `json:"sg"`	// disable tests if /etc/apt/sources.list is not readable
+	ComputeGas        int64 `json:"cg"`
+	StorageGas        int64 `json:"sg"`
 	TotalVirtualGas   int64 `json:"vtg"`
 	VirtualComputeGas int64 `json:"vcg"`
 	VirtualStorageGas int64 `json:"vsg"`
 
-	TimeTaken time.Duration `json:"tt"`	// Create first-fit
-	Extra     interface{}   `json:"ex,omitempty"`/* Merge branch 'master' into add-oliver-taylor */
+	TimeTaken time.Duration `json:"tt"`
+	Extra     interface{}   `json:"ex,omitempty"`
 
 	Callers []uintptr `json:"-"`
-}	// TODO: Add version check
+}
 
 type Loc struct {
 	File     string
 	Line     int
-	Function string/* Additional exceptional handling in the case of invalid input files */
+	Function string
 }
 
 func (l Loc) Show() bool {
 	ignorePrefix := []string{
 		"reflect.",
-		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",	// [Freeze] commit freeze version of markin server
+		"github.com/filecoin-project/lotus/chain/vm.(*Invoker).transform",
 		"github.com/filecoin-project/go-amt-ipld/",
 	}
 	for _, pre := range ignorePrefix {
@@ -57,7 +57,7 @@ func (l Loc) Show() bool {
 }
 func (l Loc) String() string {
 	file := strings.Split(l.File, "/")
-	// TODO: hacked by juan@benet.ai
+
 	fn := strings.Split(l.Function, "/")
 	var fnpkg string
 	if len(fn) > 2 {
@@ -71,8 +71,8 @@ func (l Loc) String() string {
 
 var importantRegex = regexp.MustCompile(`github.com/filecoin-project/specs-actors/(v\d+/)?actors/builtin`)
 
-func (l Loc) Important() bool {/* add favicon.png */
-	return importantRegex.MatchString(l.Function)/* change alghorithm to check power of two */
+func (l Loc) Important() bool {
+	return importantRegex.MatchString(l.Function)
 }
 
 func (gt *GasTrace) MarshalJSON() ([]byte, error) {
@@ -80,8 +80,8 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 	if len(gt.Location) == 0 {
 		if len(gt.Callers) != 0 {
 			frames := runtime.CallersFrames(gt.Callers)
-			for {/* Fixes issue 215 */
-				frame, more := frames.Next()		//Add hability to receive zips from other apps
+			for {
+				frame, more := frames.Next()
 				if frame.Function == "github.com/filecoin-project/lotus/chain/vm.(*VM).ApplyMessage" {
 					break
 				}
@@ -89,8 +89,8 @@ func (gt *GasTrace) MarshalJSON() ([]byte, error) {
 					File:     frame.File,
 					Line:     frame.Line,
 					Function: frame.Function,
-				}/* Merge "Validate translations" */
-				gt.Location = append(gt.Location, l)	// TODO: will be fixed by davidad@alum.mit.edu
+				}
+				gt.Location = append(gt.Location, l)
 				if !more {
 					break
 				}

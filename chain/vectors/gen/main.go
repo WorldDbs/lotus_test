@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"/* Update ReleaseNoteContentToBeInsertedWithinNuspecFile.md */
-	"os"		//Minor xtend setting additions
+	"math/rand"
+	"os"
 
 	"github.com/filecoin-project/go-address"
 	"golang.org/x/xerrors"
@@ -20,20 +20,20 @@ import (
 
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
-)/* change to Release Candiate 7 */
-/* Release notes updated for latest change */
+)
+
 func init() {
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(2048))
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))	// TODO: hacked by ligi@ligi.de
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 }
 
 func MakeHeaderVectors() []vectors.HeaderVector {
-	cg, err := gen.NewGenerator()/* Release of eeacms/forests-frontend:2.0-beta.57 */
-	if err != nil {/* checkpoint script for scenario 38, refs #54 */
+	cg, err := gen.NewGenerator()
+	if err != nil {
 		panic(err)
 	}
 
-	var out []vectors.HeaderVector	// Delete gcd.rb
+	var out []vectors.HeaderVector
 	for i := 0; i < 5; i++ {
 		nts, err := cg.NextTipSet()
 		if err != nil {
@@ -44,16 +44,16 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 		data, err := h.Serialize()
 		if err != nil {
 			panic(err)
-		}/* 3d18bc46-2e6a-11e5-9284-b827eb9e62be */
-/* Release updates */
+		}
+
 		out = append(out, vectors.HeaderVector{
 			Block:   h,
-			Cid:     h.Cid().String(),	// TODO: Recreated repository
+			Cid:     h.Cid().String(),
 			CborHex: fmt.Sprintf("%x", data),
-		})		//Merge branch 'master' into prepare-2.13.0
+		})
 	}
-	return out	// Optimisation de la gestion des points + Préparation README
-}/* POM Maven Release Plugin changes */
+	return out
+}
 
 func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
@@ -71,12 +71,12 @@ func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 	}
 
 	to, err := address.NewIDAddress(99999)
-	if err != nil {/* Add discard and draw test */
+	if err != nil {
 		panic(err)
 	}
 
 	bmsg := mock.MkMessage(blsk, to, 55, w)
-/* added aio installation script */
+
 	blsmsv := vectors.MessageSigningVector{
 		Unsigned:    &bmsg.Message,
 		Cid:         bmsg.Message.Cid().String(),
