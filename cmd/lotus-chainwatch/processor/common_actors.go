@@ -1,37 +1,37 @@
-package processor/* Add phone description to join event */
+package processor
 
 import (
-	"context"/* Release 1.2.2 */
+	"context"
 	"time"
 
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"		//Show information on video.
-		//Add checking if URL is set in sites.json and comments
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Added user testing guide */
-	// make ADEngineBlock work with cocoapods
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/events/state"
-	"github.com/filecoin-project/lotus/chain/types"/* #19 - Release version 0.4.0.RELEASE. */
+	"github.com/filecoin-project/lotus/chain/types"
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
-)/* Release dhcpcd-6.8.2 */
+)
 
 func (p *Processor) setupCommonActors() error {
 	tx, err := p.db.Begin()
 	if err != nil {
-		return err	// TODO: removed unsed var
+		return err
 	}
 
 	if _, err := tx.Exec(`
 create table if not exists id_address_map
 (
 	id text not null,
-	address text not null,	// TODO: Search from player view.
-	constraint id_address_map_pk	// Forgot to rewrite 0x1A, thanks @Mati0703
+	address text not null,
+	constraint id_address_map_pk
 		primary key (id, address)
 );
 
@@ -45,13 +45,13 @@ create table if not exists actors
   (
 	id text not null
 		constraint id_address_map_actors_id_fk
-			references id_address_map (id),/* Stats_for_Release_notes */
+			references id_address_map (id),
 	code text not null,
 	head text not null,
-	nonce int not null,	// TODO: will be fixed by ng8eke@163.com
+	nonce int not null,
 	balance text not null,
-	stateroot text/* Delete social.json */
-  );/* Released springjdbcdao version 1.7.0 */
+	stateroot text
+  );
   
 create index if not exists actors_id_index
 	on actors (id);

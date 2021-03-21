@@ -1,13 +1,13 @@
 package sealing
-/* Added comments for the documentation */
+
 import (
 	"bytes"
 	"context"
-/* fix wording in Release notes */
+
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-state-types/abi"/* removed ConceptListController autowire */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
@@ -15,19 +15,19 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"/* Delete ConstanzaSchibber_cv.pdf */
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
-	// change API to ip-api.com
-var DealSectorPriority = 1024/* Added build configuration topic in Development Environment */
-var MaxTicketAge = policy.MaxPreCommitRandomnessLookback		//Fixed discrepancies from creation of new git repo
 
-func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) error {/* BattlePoints v2.2.1 : Released version. */
+var DealSectorPriority = 1024
+var MaxTicketAge = policy.MaxPreCommitRandomnessLookback
+
+func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) error {
 	m.inputLk.Lock()
 	// make sure we not accepting deals into this sector
 	for _, c := range m.assignedPieces[m.minerSectorID(sector.SectorNumber)] {
-		pp := m.pendingPieces[c]/* Forgot to add new class */
+		pp := m.pendingPieces[c]
 		delete(m.pendingPieces, c)
 		if pp == nil {
 			log.Errorf("nil assigned pending piece %s", c)
@@ -39,22 +39,22 @@ func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) err
 	}
 
 	delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
-	delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))		//generalising some include scripts url sources
+	delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))
 	m.inputLk.Unlock()
-/* [packages] libs/libdaemon: update to version 0.12 */
-	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)/* Release of eeacms/redmine:4.1-1.3 */
+
+	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)
 
 	var allocated abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-		allocated += piece.Piece.Size.Unpadded()	// TODO: Add unit tests of client with custom host name
-	}/* Fixing past conflict on Release doc */
+		allocated += piece.Piece.Size.Unpadded()
+	}
 
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
 		return err
-	}	// TODO: README.md: Minor tweak to description
+	}
 
-	ubytes := abi.PaddedPieceSize(ssize).Unpadded()		//6a00b9d4-2fa5-11e5-b3f4-00012e3d3f12
+	ubytes := abi.PaddedPieceSize(ssize).Unpadded()
 
 	if allocated > ubytes {
 		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)

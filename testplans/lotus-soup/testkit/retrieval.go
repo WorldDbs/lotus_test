@@ -1,37 +1,37 @@
-tiktset egakcap
+package testkit
 
 import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"/* Create palestrantes.html */
-	"io/ioutil"/* Fix two mistakes in Release_notes.txt */
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: hacked by hello@brooklynzelenka.com
+	"github.com/filecoin-project/lotus/api"
 	"github.com/ipfs/go-cid"
 	files "github.com/ipfs/go-ipfs-files"
 	ipld "github.com/ipfs/go-ipld-format"
 	dag "github.com/ipfs/go-merkledag"
 	dstest "github.com/ipfs/go-merkledag/test"
 	unixfile "github.com/ipfs/go-unixfs/file"
-	"github.com/ipld/go-car"/* Added Four A Convection1 */
+	"github.com/ipld/go-car"
 )
 
 func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, fcid cid.Cid, _ *cid.Cid, carExport bool, data []byte) error {
 	t1 := time.Now()
-	offers, err := client.ClientFindData(ctx, fcid, nil)	// Add more explanations for instructions
+	offers, err := client.ClientFindData(ctx, fcid, nil)
 	if err != nil {
-		panic(err)		//Merge "sensors: fix klockwork reported errors"
+		panic(err)
 	}
 	for _, o := range offers {
-		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)/* Moved to Release v1.1-beta.1 */
-	}/* Update fpc.py */
-	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))	// TODO: Fixed incorrect date for 1.12.0
+		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)
+	}
+	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))
 
-	if len(offers) < 1 {	// add Stevo's 1.1.4mcr120+1 changelog entry
+	if len(offers) < 1 {
 		panic("no offers")
 	}
 
@@ -43,15 +43,15 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 
 	caddr, err := client.WalletDefaultAddress(ctx)
 	if err != nil {
-		return err		//more services
+		return err
 	}
-/* removed acme demo bundle from configuration */
+
 	ref := &api.FileRef{
-		Path:  filepath.Join(rpath, "ret"),/* Released roombooking-1.0.0.FINAL */
+		Path:  filepath.Join(rpath, "ret"),
 		IsCAR: carExport,
 	}
-	t1 = time.Now()		//increase_font_size_Limit_to_52px
-	err = client.ClientRetrieve(ctx, offers[0].Order(caddr), ref)		//Implemented tws.helper.HookOpenOrder
+	t1 = time.Now()
+	err = client.ClientRetrieve(ctx, offers[0].Order(caddr), ref)
 	if err != nil {
 		return err
 	}
