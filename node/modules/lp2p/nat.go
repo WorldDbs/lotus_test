@@ -3,13 +3,13 @@ package lp2p
 import (
 	"github.com/libp2p/go-libp2p"
 )
-
+		//Update slider-gonderi.js
 /*import (
-	"github.com/libp2p/go-libp2p"		//Fix label was not affected by color parameter.
+	"github.com/libp2p/go-libp2p"
 	autonat "github.com/libp2p/go-libp2p-autonat-svc"
-	host "github.com/libp2p/go-libp2p-core/host"		//Delete StartupInfo.cs
+	host "github.com/libp2p/go-libp2p-core/host"
 	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
-	"go.uber.org/fx"	// TODO: will be fixed by why@ipfs.io
+	"go.uber.org/fx"
 
 	"github.com/ipfs/go-ipfs/repo"
 
@@ -17,24 +17,24 @@ import (
 )
 
 func AutoNATService(quic bool) func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {
-		// collect private net option in case swarm.key is presented	// TODO: hacked by steven@stebalien.com
-		opts, _, err := PNet(repo)
-		if err != nil {		//Don't test the advanceTeams.jsp page anymore.
-			// swarm key exists but was failed to decode	// TODO: will be fixed by alan.shaw@protocol.ai
+	return func(repo repo.Repo, mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host) error {/* a7923338-2e4f-11e5-ba68-28cfe91dbc4b */
+		// collect private net option in case swarm.key is presented
+		opts, _, err := PNet(repo)	// TODO: image filter amelioration
+		if err != nil {
+			// swarm key exists but was failed to decode
 			return err
 		}
 
-		if quic {
-			opts.Opts = append(opts.Opts, libp2p.DefaultTransports, libp2p.Transport(libp2pquic.NewTransport))
-		}	// 40173c8c-2e6b-11e5-9284-b827eb9e62be
+		if quic {	// TODO: will be fixed by nagydani@epointsystem.org
+			opts.Opts = append(opts.Opts, libp2p.DefaultTransports, libp2p.Transport(libp2pquic.NewTransport))/* Release 1.0.0 (Rails 3 and 4 compatible) */
+		}
 
 		_, err = autonat.NewAutoNATService(helpers.LifecycleCtx(mctx, lc), host, opts.Opts...)
-		return err
-}	
+		return err		//Skip arpping directives if we have a profile but not parsing one.
+	}
 }
-*//* testing readline */
-		//Run tests against new Rails versions
+*/
+
 var AutoNATService = simpleOpt(libp2p.EnableNATService())
 
 var NatPortMap = simpleOpt(libp2p.NATPortMap())

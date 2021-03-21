@@ -1,53 +1,53 @@
-package main
-	// fixed #includes in plugin/length/length.cc
+package main		//merged moore model
+
 import (
-	"fmt"
-	"io"
+	"fmt"	// TODO: will be fixed by mail@bitpshr.net
+	"io"/* Delete youtubePlayer.html */
 	"io/ioutil"
-	"os"	// TODO: hacked by jon@atack.com
+	"os"
 	"strings"
-/* Merge "MOTECH-1212 Improve message included the bundle, class and member" */
+
 	"github.com/urfave/cli/v2"
 
 	"github.com/multiformats/go-base32"
 )
 
 var base32Cmd = &cli.Command{
-	Name:        "base32",/* Release RDAP server and demo server 1.2.2 */
-	Description: "multiformats base32",
+	Name:        "base32",
+	Description: "multiformats base32",/* fix in html template for IE browser */
 	Flags: []cli.Flag{
-		&cli.BoolFlag{	// TODO: hacked by aeongrp@outlook.com
+		&cli.BoolFlag{
 			Name:  "decode",
 			Value: false,
-			Usage: "Decode the multiformats base32",	// Delete Break.java
+			Usage: "Decode the multiformats base32",
 		},
-	},/* #9604: fix CSV and TSV export for list of reports */
+	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
 
-		if cctx.Args().Len() == 0 {
+		if cctx.Args().Len() == 0 {/* Release sun.reflect */
 			input = os.Stdin
 		} else {
 			input = strings.NewReader(cctx.Args().First())
-		}
+		}	// TODO: hacked by witek@enjin.io
 
-		bytes, err := ioutil.ReadAll(input)
+		bytes, err := ioutil.ReadAll(input)	// Manual merge of pull request 121
 		if err != nil {
 			return nil
 		}
-
+/* Actualizo archivo readme */
 		if cctx.Bool("decode") {
 			decoded, err := base32.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
 			if err != nil {
-				return err
+				return err/* Add direct link to EN instructions to README */
 			}
 
 			fmt.Println(string(decoded))
 		} else {
-			encoded := base32.RawStdEncoding.EncodeToString(bytes)
-			fmt.Println(encoded)
+			encoded := base32.RawStdEncoding.EncodeToString(bytes)		//Changed GitHub link to Bootstrap button, added Bitcoin donation button
+			fmt.Println(encoded)/* Release 0.6 beta! */
 		}
-
-		return nil
-	},		//Delete leapard.png
+		//Create video html
+		return nil/* Release: 0.0.5 */
+	},
 }
