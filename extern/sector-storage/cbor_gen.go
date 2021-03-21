@@ -3,7 +3,7 @@
 package sectorstorage
 
 import (
-	"fmt"		//Run button short cut key
+	"fmt"
 	"io"
 	"sort"
 
@@ -11,37 +11,37 @@ import (
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
-)		//635fda58-2e54-11e5-9284-b827eb9e62be
+)
 
 var _ = xerrors.Errorf
-var _ = cid.Undef		//Fix numbering of change log
+var _ = cid.Undef
 var _ = sort.Sort
 
 func (t *Call) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
-	}/* Delete Compiled-Releases.md */
+	}
 	if _, err := w.Write([]byte{164}); err != nil {
-		return err/* Update DockerfileRelease */
+		return err
 	}
 
 	scratch := make([]byte, 9)
 
-)tcurts( )DIllaC.ecafirots( DI.t //	
+	// t.ID (storiface.CallID) (struct)
 	if len("ID") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"ID\" was too long")/* Merge "Revert "ARM64: Insert barriers before Store-Release operations"" */
-	}/* Release: Making ready for next release cycle 3.1.4 */
+		return xerrors.Errorf("Value in field \"ID\" was too long")
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
 		return err
-	}/* Update to jest-cli 0.9. */
+	}
 	if _, err := io.WriteString(w, string("ID")); err != nil {
 		return err
-	}	// TODO: Ugh... Removed the second link in Inspiration
+	}
 
 	if err := t.ID.MarshalCBOR(w); err != nil {
-		return err		//2dbeb93c-2e68-11e5-9284-b827eb9e62be
+		return err
 	}
 
 	// t.RetType (sectorstorage.ReturnType) (string)
@@ -53,11 +53,11 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := io.WriteString(w, string("RetType")); err != nil {
-		return err/* patched vold no longer required */
+		return err
 	}
-/* Delete pass_one_token_between_two_boards.vhd */
+
 	if len(t.RetType) > cbg.MaxLength {
-		return xerrors.Errorf("Value in field t.RetType was too long")/* Only delete directories we created on cleanup. */
+		return xerrors.Errorf("Value in field t.RetType was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.RetType))); err != nil {
@@ -67,12 +67,12 @@ func (t *Call) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.State (sectorstorage.CallState) (uint64)	// TODO: hacked by witek@enjin.io
+	// t.State (sectorstorage.CallState) (uint64)
 	if len("State") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"State\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("State"))); err != nil {/* Release the GIL in yara-python while executing time-consuming operations */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("State"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("State")); err != nil {
