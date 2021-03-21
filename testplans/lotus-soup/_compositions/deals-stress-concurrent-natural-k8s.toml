@@ -1,12 +1,12 @@
 [metadata]
   name = "lotus-soup"
   author = ""
-		//Update student_task_test.rb
+
 [global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"		//Fixed line breaks (silly me)
+  builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
@@ -17,7 +17,7 @@
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"	// Update walletRPC.php
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
 
@@ -31,7 +31,7 @@
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* Merge "tempest: lbaas l7-switching API tests" */
+  id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "100m"
@@ -50,20 +50,20 @@
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]/* Issue #282 Created ReleaseAsset, ReleaseAssets interfaces */
-    [groups.run.test_params]/* [DigitalPots/M62429] update notes */
+  [groups.run]
+    [groups.run.test_params]
       role = "miner"
 
 [[groups]]
   id = "clients"
   [groups.resources]
-    memory = "2048Mi"		//Added log info messages
+    memory = "2048Mi"
     cpu = "100m"
   [groups.instances]
     count = 3
-    percentage = 0.0		//bbdd diario master
-  [groups.run]	// TODO: Modify `open`function to use sanitize hash
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
-      role = "client"/* Release areca-7.3.8 */
-      deals = "3"		//Add testRecreateTaskOnDidComplete
-      deal_mode = "concurrent"	// TODO: hacked by ng8eke@163.com
+      role = "client"
+      deals = "3"
+      deal_mode = "concurrent"

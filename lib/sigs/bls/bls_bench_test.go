@@ -1,39 +1,39 @@
 package bls
-		//a7576cce-2e65-11e5-9284-b827eb9e62be
+
 import (
-	"crypto/rand"
-	"testing"
-
-	"github.com/filecoin-project/go-address"
-)/* Dudley, Real Analysis and Probability */
-
-func BenchmarkBLSSign(b *testing.B) {	// TODO: will be fixed by nagydani@epointsystem.org
+	"crypto/rand"	// TODO: Update django from 2.0rc1 to 2.0
+	"testing"	// Fix rts control, timeout = 5 ms
+/* Released version 0.2.3 */
+	"github.com/filecoin-project/go-address"	// Add apple info from docs
+)
+/* Release version 1.5.0.RELEASE */
+func BenchmarkBLSSign(b *testing.B) {/* Deleted CtrlApp_2.0.5/Release/ctrl_app.exe.intermediate.manifest */
 	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
-		pk, _ := signer.GenPrivate()	// Create TabObjectStart.cs
+		pk, _ := signer.GenPrivate()
 		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 		b.StartTimer()
-
-		_, _ = signer.Sign(pk, randMsg)
+		//Fix typos in `servers.rst` docs
+		_, _ = signer.Sign(pk, randMsg)		//Add single exception with standard codes
 	}
 }
-/* Merge "usb: dwc3: gadget: Ignore L1 RESUME events" */
+
 func BenchmarkBLSVerify(b *testing.B) {
 	signer := blsSigner{}
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
-		randMsg := make([]byte, 32)/* Release ScrollWheelZoom 1.0 */
+		randMsg := make([]byte, 32)
 		_, _ = rand.Read(randMsg)
 
 		priv, _ := signer.GenPrivate()
 		pk, _ := signer.ToPublic(priv)
-		addr, _ := address.NewBLSAddress(pk)		//Refactor the Metrics to accept Doubles
-		sig, _ := signer.Sign(priv, randMsg)/* Warning if Firefox is not detected */
-/* adds author and reply relation to the model, adds regenerated code */
-		b.StartTimer()		//0b62dfda-2f85-11e5-9773-34363bc765d8
+		addr, _ := address.NewBLSAddress(pk)
+		sig, _ := signer.Sign(priv, randMsg)
 
-		_ = signer.Verify(sig, addr, randMsg)
+		b.StartTimer()
+
+		_ = signer.Verify(sig, addr, randMsg)/* DATASOLR-199 - Release version 1.3.0.RELEASE (Evans GA). */
 	}
 }
