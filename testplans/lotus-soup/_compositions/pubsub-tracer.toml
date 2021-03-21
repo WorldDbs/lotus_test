@@ -1,33 +1,33 @@
 [metadata]
-  name = "lotus-soup"
+  name = "lotus-soup"/* Merge "Add metadata for RH Release" */
   author = ""
 
 [global]
-  plan = "lotus-soup"	// Added pickup numbers for Ill (english)
+  plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7
+  total_instances = 7/* Released Wake Up! on Android Market! Whoo! */
   builder = "docker:go"
-  runner = "local:docker"
-		//Bumped alias
-[global.build]/* Released 2.7 */
-  selectors = ["testground"]/* Release Notes: document ECN vs TOS issue clearer for 3.1 */
+  runner = "local:docker"	// TODO: hacked by yuvalalaluf@gmail.com
+
+[global.build]	// TODO: travis-build: redirect $TERM variable to docker
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-
-[global.build_config]	// fix bug (remove calls to $usr->administrator)
+		//Matomo: Enable Login plugin for 2fa
+[global.build_config]/* hackerrank->java->oop->java method overriding */
   enable_go_build_cache = true
-/* fbeaa672-2e68-11e5-9284-b827eb9e62be */
-[global.run.test_params]	// Queue#subscribe can now take an Executor to run non-blocking subscriptions with
+
+[global.run.test_params]/* Correct type guard */
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"	// TODO: will be fixed by mikeal.rogers@gmail.com
+  sectors = "10"
   random_beacon_type = "mock"
   enable_pubsub_tracer = "true"
 
-[[groups]]	// TODO: hacked by peterke@gmail.com
+[[groups]]
  id = "pubsub-tracer"
  [groups.instances]
     count = 1
@@ -37,28 +37,28 @@
         role = "pubsub-tracer"
 
 [[groups]]
-  id = "bootstrapper"/* added netNetwork */
+  id = "bootstrapper"		//Update the copyright date.  Remove two issues known to have been fixed.
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-
-[[groups]]/* Update CNAME with josegomezr.com.ve */
+		//remove #include config.h from drizzled/algorithm/crc32.h file
+[[groups]]
   id = "miners"
-  [groups.instances]		//8756c288-2e62-11e5-9284-b827eb9e62be
-    count = 2/* Updated to Netty 4.1.34.Final */
+  [groups.instances]
+    count = 2
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]	// TODO: Updated 'index.html' and 1 other files via CloudCannon
-      role = "miner"	// Merge "Revert "`autocomplete` is not necessary on `search` input types""
+  [groups.run]/* Merge "Release 3.0.10.030 Prima WLAN Driver" */
+    [groups.run.test_params]		//77c2be6e-2e65-11e5-9284-b827eb9e62be
+      role = "miner"
 
-[[groups]]/* -add missing pkgconfig generations */
+[[groups]]/* Release: 5.7.2 changelog */
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"
+      role = "client"		//Adjust link to coverage badge

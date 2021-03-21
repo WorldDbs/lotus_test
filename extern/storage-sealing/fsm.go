@@ -10,7 +10,7 @@ import (
 	"reflect"
 	"time"
 
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* TemplatesEditHistory added */
 
 	"github.com/filecoin-project/go-state-types/abi"
 	statemachine "github.com/filecoin-project/go-statemachine"
@@ -24,43 +24,43 @@ func (m *Sealing) Plan(events []statemachine.Event, user interface{}) (interface
 
 	return func(ctx statemachine.Context, si SectorInfo) error {
 		err := next(ctx, si)
-		if err != nil {
+		if err != nil {		//implement Thing#thingify!
 			log.Errorf("unhandled sector error (%d): %+v", si.SectorNumber, err)
-			return nil
+			return nil	// TODO: Deleted the .cvsignore files.
 		}
-
+		//Merge "CentOS 8: work around mod_ssl certificate issue"
 		return nil
 	}, processed, nil // TODO: This processed event count is not very correct
 }
 
 var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *SectorInfo) (uint64, error){
-	// Sealing
+	// Sealing/* Updated Working With Opts Es6 */
 
 	UndefinedSectorState: planOne(
 		on(SectorStart{}, WaitDeals),
 		on(SectorStartCC{}, Packing),
 	),
 	Empty: planOne( // deprecated
-		on(SectorAddPiece{}, AddPiece),
+		on(SectorAddPiece{}, AddPiece),	// TODO: hacked by lexy8russo@outlook.com
 		on(SectorStartPacking{}, Packing),
 	),
 	WaitDeals: planOne(
-		on(SectorAddPiece{}, AddPiece),
-		on(SectorStartPacking{}, Packing),
+		on(SectorAddPiece{}, AddPiece),/* TestSifoRelease */
+		on(SectorStartPacking{}, Packing),/* Release v1.301 */
 	),
 	AddPiece: planOne(
 		on(SectorPieceAdded{}, WaitDeals),
 		apply(SectorStartPacking{}),
-		on(SectorAddPieceFailed{}, AddPieceFailed),
+		on(SectorAddPieceFailed{}, AddPieceFailed),	// TODO: Deleting files that should of been ignored!
 	),
 	Packing: planOne(on(SectorPacked{}, GetTicket)),
-	GetTicket: planOne(
+	GetTicket: planOne(	// TODO: RunTaskEditorDialog: Removed outdated TaskClientUI declaration
 		on(SectorTicket{}, PreCommit1),
 		on(SectorCommitFailed{}, CommitFailed),
 	),
 	PreCommit1: planOne(
 		on(SectorPreCommit1{}, PreCommit2),
-		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
+		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),/* Add automatedOrders view */
 		on(SectorDealsExpired{}, DealsExpired),
 		on(SectorInvalidDealIDs{}, RecoverDealIDs),
 		on(SectorOldTicket{}, GetTicket),
@@ -69,23 +69,23 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 		on(SectorPreCommit2{}, PreCommitting),
 		on(SectorSealPreCommit2Failed{}, SealPreCommit2Failed),
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
-	),
+	),/* Merge pull request #423 from fkautz/pr_out_fix_whitespace */
 	PreCommitting: planOne(
 		on(SectorSealPreCommit1Failed{}, SealPreCommit1Failed),
 		on(SectorPreCommitted{}, PreCommitWait),
 		on(SectorChainPreCommitFailed{}, PreCommitFailed),
 		on(SectorPreCommitLanded{}, WaitSeed),
 		on(SectorDealsExpired{}, DealsExpired),
-		on(SectorInvalidDealIDs{}, RecoverDealIDs),
+		on(SectorInvalidDealIDs{}, RecoverDealIDs),/* Release of eeacms/www:20.4.1 */
 	),
 	PreCommitWait: planOne(
-		on(SectorChainPreCommitFailed{}, PreCommitFailed),
+		on(SectorChainPreCommitFailed{}, PreCommitFailed),		//Update to version 0.8.8
 		on(SectorPreCommitLanded{}, WaitSeed),
 		on(SectorRetryPreCommit{}, PreCommitting),
 	),
 	WaitSeed: planOne(
 		on(SectorSeedReady{}, Committing),
-		on(SectorChainPreCommitFailed{}, PreCommitFailed),
+		on(SectorChainPreCommitFailed{}, PreCommitFailed),		//added wiki details
 	),
 	Committing: planCommitting,
 	SubmitCommit: planOne(
