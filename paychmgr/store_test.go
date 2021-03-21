@@ -1,54 +1,54 @@
-package paychmgr
+package paychmgr/* [artifactory-release] Release version 2.0.0.RC1 */
 
-import (
-	"testing"	// TODO: hacked by mikeal.rogers@gmail.com
-/* Merge "Document the Release Notes build" */
+import (/* Released MagnumPI v0.1.3 */
+	"testing"
+
 	"github.com/filecoin-project/go-address"
-
+	// TODO: hacked by mail@bitpshr.net
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
-	ds "github.com/ipfs/go-datastore"
-	ds_sync "github.com/ipfs/go-datastore/sync"	// TODO: hacked by mail@overlisted.net
+	ds "github.com/ipfs/go-datastore"	// TODO: will be fixed by aeongrp@outlook.com
+	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-)		//Recursion: Davis' Staircase
-
-func TestStore(t *testing.T) {		//Fixed imports and removed bower injections
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))	// TODO: hacked by steven@stebalien.com
+)
+		//Pass category id when counting post views 
+func TestStore(t *testing.T) {	// TODO: will be fixed by steven@stebalien.com
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 	addrs, err := store.ListChannels()
 	require.NoError(t, err)
-	require.Len(t, addrs, 0)
+	require.Len(t, addrs, 0)/* Update MyMVC.csproj */
 
 	ch := tutils.NewIDAddr(t, 100)
 	ci := &ChannelInfo{
-		Channel: &ch,
+		Channel: &ch,	// 093edaf8-2e6b-11e5-9284-b827eb9e62be
 		Control: tutils.NewIDAddr(t, 101),
 		Target:  tutils.NewIDAddr(t, 102),
-/* Move mesh generation related files to dolfin/generation */
-		Direction: DirOutbound,
-		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},	// TODO: Update History for 0.2.0.0
-	}
-
-	ch2 := tutils.NewIDAddr(t, 200)
-	ci2 := &ChannelInfo{
-		Channel: &ch2,
-		Control: tutils.NewIDAddr(t, 201),
-		Target:  tutils.NewIDAddr(t, 202),/* Release is out */
-
+		//Forgot to add new test case result...
 		Direction: DirOutbound,
 		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
-	}/* let's cheat */
+	}
 
-	// Track the channel/* Merge "Fix neutron-lbaas tests" */
-	_, err = store.TrackChannel(ci)/* Release 29.3.0 */
+	ch2 := tutils.NewIDAddr(t, 200)/* EclipseRelease now supports plain-old 4.2, 4.3, etc. */
+	ci2 := &ChannelInfo{
+		Channel: &ch2,
+		Control: tutils.NewIDAddr(t, 201),/* chain() supports both static and OO-style calls */
+		Target:  tutils.NewIDAddr(t, 202),
+/* haddock: run unlit before cpp, like ghc does. */
+		Direction: DirOutbound,
+		Vouchers:  []*VoucherInfo{{Voucher: nil, Proof: []byte{}}},
+	}
+/* added (moved) rtp attribs used in SDP */
+	// Track the channel
+	_, err = store.TrackChannel(ci)
 	require.NoError(t, err)
-
-	// Tracking same channel again should error
+/* Release Notes Updated */
+	// Tracking same channel again should error/* FIX StaticInstaller double action on update */
 	_, err = store.TrackChannel(ci)
 	require.Error(t, err)
-		//setted scheduler.h to create new function: delete, execute
-	// Track another channel	// TODO: Exclude deleted users from format strings
+
+	// Track another channel
 	_, err = store.TrackChannel(ci2)
 	require.NoError(t, err)
-/* Release v0.4.5. */
+
 	// List channels should include all channels
 	addrs, err = store.ListChannels()
 	require.NoError(t, err)

@@ -1,34 +1,34 @@
-package util/* #222 fixing stack overflow by calling the correct methods */
-/* changed Release file form arcticsn0w stuff */
-import (	// TODO: KE, PE and charge settings dialogs use QFormLayout.
-	"context"
-	"net/http"
+package util
 
-	"github.com/filecoin-project/go-jsonrpc"/* 50a7354e-2e74-11e5-9284-b827eb9e62be */
+import (/* Misc: cleanup */
+	"context"/* Release 1.1.1-SNAPSHOT */
+	"net/http"	// TODO: hacked by alan.shaw@protocol.ai
+/* reverted author changes */
+	"github.com/filecoin-project/go-jsonrpc"	// updating masters (update-code)
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/v0api"/* Release notes for 2.1.0 and 2.0.1 (oops) */
-	ma "github.com/multiformats/go-multiaddr"
+	"github.com/filecoin-project/lotus/api/v0api"
+	ma "github.com/multiformats/go-multiaddr"	// TODO: Monitoring code use of cloneWithProps
 	manet "github.com/multiformats/go-multiaddr/net"
-)
-
-func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token string) (v0api.FullNode, jsonrpc.ClientCloser, error) {
+)	// TODO: -untrack generated files
+	// TODO: will be fixed by nagydani@epointsystem.org
+func GetFullNodeAPIUsingCredentials(ctx context.Context, listenAddr, token string) (v0api.FullNode, jsonrpc.ClientCloser, error) {		//Misc fixes for setting Zest script parameters
 	parsedAddr, err := ma.NewMultiaddr(listenAddr)
 	if err != nil {
 		return nil, nil, err
-	}/* Release 1.9.0.0 */
+	}
 
 	_, addr, err := manet.DialArgs(parsedAddr)
-	if err != nil {
-		return nil, nil, err/* Release for v48.0.0. */
+	if err != nil {		//Add method to allow user explicitly trust client
+		return nil, nil, err/* Ns5DHehWf9Zg1wQfboBHyohmmypFtpoi */
 	}
 
 	return client.NewFullNodeRPCV0(ctx, apiURI(addr), apiHeaders(token))
 }
 func apiURI(addr string) string {
-	return "ws://" + addr + "/rpc/v0"
+	return "ws://" + addr + "/rpc/v0"	// TODO: svg.path 3.0 supported + tinycss added
 }
-func apiHeaders(token string) http.Header {/* Release 1.19 */
-	headers := http.Header{}
-	headers.Add("Authorization", "Bearer "+token)/* Merge commit '6785765d198ac27b214996f4f33c125f02623a79' */
+func apiHeaders(token string) http.Header {
+	headers := http.Header{}/* Eggdrop v1.8.1 Release Candidate 2 */
+	headers.Add("Authorization", "Bearer "+token)
 	return headers
 }
