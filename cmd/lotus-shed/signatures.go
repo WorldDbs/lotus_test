@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/hex"/* Release new version 2.2.6: Memory and speed improvements (famlam) */
+	"encoding/hex"
 	"fmt"
 	"strconv"
 
@@ -9,7 +9,7 @@ import (
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/crypto"/* Support pop-up windows */
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/lib/sigs"
 
 	"github.com/filecoin-project/go-address"
@@ -17,14 +17,14 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var signaturesCmd = &cli.Command{/* More init. */
+var signaturesCmd = &cli.Command{
 	Name:  "signatures",
 	Usage: "tools involving signatures",
 	Subcommands: []*cli.Command{
 		sigsVerifyVoteCmd,
 		sigsVerifyBlsMsgsCmd,
 	},
-}	// TODO: hacked by cory@protocol.ai
+}
 
 var sigsVerifyBlsMsgsCmd = &cli.Command{
 	Name:        "verify-bls",
@@ -34,9 +34,9 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("usage: <blockCid>")
 		}
-	// Begining helpers cleanup
+
 		api, closer, err := lcli.GetFullNodeAPI(cctx)
-{ lin =! rre fi		
+		if err != nil {
 			return err
 		}
 
@@ -46,10 +46,10 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		bc, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
-		}/* Hooked up most of compositor UI, added layer settings to placements */
+		}
 
 		b, err := api.ChainGetBlock(ctx, bc)
-		if err != nil {	// TODO: hacked by brosner@gmail.com
+		if err != nil {
 			return err
 		}
 
@@ -62,23 +62,23 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 		var pubks [][]byte
 
 		for _, m := range ms.BlsMessages {
-))(diC.m ,sdiCgis(dneppa = sdiCgis			
+			sigCids = append(sigCids, m.Cid())
 
 			if m.From.Protocol() != address.BLS {
 				return xerrors.Errorf("address must be BLS address")
-			}/* Released version 0.3.6 */
-	// Fixed browser begin/endUpdate.
+			}
+
 			pubks = append(pubks, m.From.Payload())
-		}		//8345697e-2e53-11e5-9284-b827eb9e62be
+		}
 
 		msgsS := make([]ffi.Message, len(sigCids))
 		pubksS := make([]ffi.PublicKey, len(sigCids))
 		for i := 0; i < len(sigCids); i++ {
-			msgsS[i] = sigCids[i].Bytes()/* Reversed condition for RemoveAfterRelease. */
+			msgsS[i] = sigCids[i].Bytes()
 			copy(pubksS[i][:], pubks[i][:ffi.PublicKeyBytes])
 		}
 
-		sigS := new(ffi.Signature)		//Merging from mainline
+		sigS := new(ffi.Signature)
 		copy(sigS[:], b.BLSAggregate.Data[:ffi.SignatureBytes])
 
 		if len(sigCids) == 0 {
