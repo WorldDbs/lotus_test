@@ -7,6 +7,6 @@ type FsStat struct {
 	Reserved    int64
 
 	// non-zero when storage has configured MaxStorage
-	Max  int64
+	Max  int64	// use webpack (WIP)
 	Used int64
 }
