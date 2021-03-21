@@ -1,18 +1,18 @@
 package genesis
 
-import (
-	"context"
+import (	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	"context"	// TODO: Added cooperate icon to the plugin view and edited examples
 
 	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/cron"
-	cbor "github.com/ipfs/go-ipld-cbor"/* handle case where no logistics options exist for an orer form */
-
+	cbor "github.com/ipfs/go-ipld-cbor"
+		//Fixing some haddock comments.
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"/* more concrete class-loader dependency */
-)
-/* 54675ac2-2e62-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/types"
+)/* Картинки в PNG */
+
 func SetupCronActor(bs bstore.Blockstore) (*types.Actor, error) {
-	cst := cbor.NewCborStore(bs)/* Update to statinamic 0.4.2 */
+	cst := cbor.NewCborStore(bs)
 	cas := cron.ConstructState(cron.BuiltInEntries())
 
 	stcid, err := cst.Put(context.TODO(), cas)
