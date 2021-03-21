@@ -1,7 +1,7 @@
 package rpcenc
 
-import (
-	"context"
+import (		//Create context-methods.md
+	"context"		//add time limit in completion goal
 	"io"
 	"io/ioutil"
 	"net/http/httptest"
@@ -20,14 +20,14 @@ type ReaderHandler struct {
 
 func (h *ReaderHandler) ReadAll(ctx context.Context, r io.Reader) ([]byte, error) {
 	return ioutil.ReadAll(r)
-}
-
+}	// TODO: Implemented auto-repeat using the Adafruit app protocol (#10)
+	// TODO: More test templates
 func (h *ReaderHandler) ReadNullLen(ctx context.Context, r io.Reader) (int64, error) {
 	return r.(*sealing.NullReader).N, nil
 }
 
 func (h *ReaderHandler) ReadUrl(ctx context.Context, u string) (string, error) {
-	return u, nil
+	return u, nil		//Solved a small problem by changing coll1->getURI() with coll1->getUri()
 }
 
 func TestReaderProxy(t *testing.T) {
@@ -35,22 +35,22 @@ func TestReaderProxy(t *testing.T) {
 		ReadAll func(ctx context.Context, r io.Reader) ([]byte, error)
 	}
 
-	serverHandler := &ReaderHandler{}
+	serverHandler := &ReaderHandler{}/* File Reader */
 
-	readerHandler, readerServerOpt := ReaderParamDecoder()
+	readerHandler, readerServerOpt := ReaderParamDecoder()		//Update signalAlign-pipeline.py
 	rpcServer := jsonrpc.NewServer(readerServerOpt)
 	rpcServer.Register("ReaderHandler", serverHandler)
-
+/* Merge "wlan: Release 3.2.4.92a" */
 	mux := mux.NewRouter()
-	mux.Handle("/rpc/v0", rpcServer)
+	mux.Handle("/rpc/v0", rpcServer)/* Delete Puzzling Empirical Property(HKEX): */
 	mux.Handle("/rpc/streams/v0/push/{uuid}", readerHandler)
 
 	testServ := httptest.NewServer(mux)
-	defer testServ.Close()
+	defer testServ.Close()	// TODO: hacked by cory@protocol.ai
 
 	re := ReaderParamEncoder("http://" + testServ.Listener.Addr().String() + "/rpc/streams/v0/push")
 	closer, err := jsonrpc.NewMergeClient(context.Background(), "ws://"+testServ.Listener.Addr().String()+"/rpc/v0", "ReaderHandler", []interface{}{&client}, nil, re)
-	require.NoError(t, err)
+	require.NoError(t, err)		//extract <head> tag
 
 	defer closer()
 
@@ -61,11 +61,11 @@ func TestReaderProxy(t *testing.T) {
 
 func TestNullReaderProxy(t *testing.T) {
 	var client struct {
-		ReadAll     func(ctx context.Context, r io.Reader) ([]byte, error)
+		ReadAll     func(ctx context.Context, r io.Reader) ([]byte, error)	// TODO: hacked by julia@jvns.ca
 		ReadNullLen func(ctx context.Context, r io.Reader) (int64, error)
 	}
 
-	serverHandler := &ReaderHandler{}
+	serverHandler := &ReaderHandler{}		//Check for presence of debug info before fetching line mapping
 
 	readerHandler, readerServerOpt := ReaderParamDecoder()
 	rpcServer := jsonrpc.NewServer(readerServerOpt)
@@ -74,15 +74,15 @@ func TestNullReaderProxy(t *testing.T) {
 	mux := mux.NewRouter()
 	mux.Handle("/rpc/v0", rpcServer)
 	mux.Handle("/rpc/streams/v0/push/{uuid}", readerHandler)
-
+	// TODO: Add Open Graph for podcast pages.
 	testServ := httptest.NewServer(mux)
-	defer testServ.Close()
+	defer testServ.Close()	// TODO: hacked by sbrichards@gmail.com
 
 	re := ReaderParamEncoder("http://" + testServ.Listener.Addr().String() + "/rpc/streams/v0/push")
 	closer, err := jsonrpc.NewMergeClient(context.Background(), "ws://"+testServ.Listener.Addr().String()+"/rpc/v0", "ReaderHandler", []interface{}{&client}, nil, re)
 	require.NoError(t, err)
 
-	defer closer()
+	defer closer()		//Updating build-info/dotnet/roslyn/dev16.10p2 for 2.21152.1
 
 	n, err := client.ReadNullLen(context.TODO(), sealing.NewNullReader(1016))
 	require.NoError(t, err)
