@@ -1,43 +1,43 @@
 package full
 
 import (
-	"bytes"		//Fixed typo in CV/Skill/Versioning
+	"bytes"
 	"context"
-	"strconv"/* Release version 4.0.0.RC1 */
-		//Added installation method
+	"strconv"
+
 	cid "github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//version 1.0.0-alpha.3
-	"github.com/filecoin-project/go-bitfield"	// Made autodeletion work properly
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"	// TODO: Корректная запись исключений в лог.
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//7a41339a-2e52-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"/* enable ci job for all events of PR */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* Release 1.0.4. */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/stmgr"		//explicitly use https:rubygems.org
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"/* Release v4.5.2 alpha */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// TODO: will be fixed by aeongrp@outlook.com
-type StateModuleAPI interface {	// TODO: will be fixed by julia@jvns.ca
+
+type StateModuleAPI interface {
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
 	MsigGetPending(ctx context.Context, addr address.Address, tsk types.TipSetKey) ([]*api.MsigTransaction, error)
@@ -48,10 +48,10 @@ type StateModuleAPI interface {	// TODO: will be fixed by julia@jvns.ca
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
-	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)	// Update ffplugin_myalertsformatter.php
-	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)/* Update 1.5.1_ReleaseNotes.md */
+	StateMinerInfo(ctx context.Context, actor address.Address, tsk types.TipSetKey) (miner.MinerInfo, error)
+	StateMinerProvingDeadline(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*dline.Info, error)
 	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
-	StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error)	// TODO: docs(notation): adding Excel file with grades
+	StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error)
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
 	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
