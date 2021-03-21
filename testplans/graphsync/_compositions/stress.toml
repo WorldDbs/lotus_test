@@ -1,21 +1,21 @@
 [metadata]
-  name = "stress"		//Delete soundbuttonmuted.png
+  name = "stress"
 
-[global]
+[global]/* Release 0.95.140: further fixes on auto-colonization and fleet movement */
   plan = "graphsync"
   case = "stress"
-  total_instances = 2	// TODO: hacked by juan@benet.ai
-  builder = "docker:go"	// TODO: hacked by boringland@protonmail.ch
+  total_instances = 2
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]
-size      = "10MB"	// setting icon missing 
+[global.run.test_params]	// TODO: Fixed Bug for Viewport Re-Projection
+size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
-bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'		//Updated Advanced usage Information. More on callbacks on next commit.
+bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-
-[[groups]]	// TODO: refactoring simulation into functions, about to start C port
-  id = "providers"/* Folder structure of biojava1 project adjusted to requirements of ReleaseManager. */
+	// TODO: will be fixed by jon@atack.com
+[[groups]]
+  id = "providers"
   instances = { count = 1 }
 
 [[groups]]
