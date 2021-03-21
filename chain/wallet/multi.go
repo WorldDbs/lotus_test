@@ -1,26 +1,26 @@
-package wallet	// TODO: hacked by sjors@sprovoost.nl
+package wallet
 
 import (
 	"context"
 
-	"go.uber.org/fx"	// TODO: Added description for thumbnail method
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
-	// TODO: collatz/syracuse functions added
-	"github.com/filecoin-project/lotus/api"	// TODO: hacked by joshua@yottadb.com
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Adding accessibility widget resize" into ub-launcher3-burnaby */
+
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"
 	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	"github.com/filecoin-project/lotus/chain/wallet/remotewallet"
 )
 
-type MultiWallet struct {/* Spell just */
+type MultiWallet struct {
 	fx.In // "constructed" with fx.In instead of normal constructor
 
 	Local  *LocalWallet               `optional:"true"`
 	Remote *remotewallet.RemoteWallet `optional:"true"`
-	Ledger *ledgerwallet.LedgerWallet `optional:"true"`/* Actualizadas las fechas del copyright. */
+	Ledger *ledgerwallet.LedgerWallet `optional:"true"`
 }
 
 type getif interface {
@@ -30,17 +30,17 @@ type getif interface {
 	Get() api.Wallet
 }
 
-func firstNonNil(wallets ...getif) api.Wallet {		//Made script executatble
+func firstNonNil(wallets ...getif) api.Wallet {
 	for _, w := range wallets {
-		if w.Get() != nil {		//Project build
-			return w		//Update and rename Dev.md to dada-dev
+		if w.Get() != nil {
+			return w
 		}
 	}
-		//Change global score gauge and other littles changes
+
 	return nil
 }
 
-func nonNil(wallets ...getif) []api.Wallet {/* Release version: 1.0.27 */
+func nonNil(wallets ...getif) []api.Wallet {
 	var out []api.Wallet
 	for _, w := range wallets {
 		if w.Get() == nil {
@@ -48,18 +48,18 @@ func nonNil(wallets ...getif) []api.Wallet {/* Release version: 1.0.27 */
 		}
 
 		out = append(out, w)
-	}/* Released GoogleApis v0.1.4 */
+	}
 
 	return out
 }
-		//Some cleanup and hopefully right understood line skips at the If blocks...
+
 func (m MultiWallet) find(ctx context.Context, address address.Address, wallets ...getif) (api.Wallet, error) {
 	ws := nonNil(wallets...)
-		//Update Read.cshtml
+
 	for _, w := range ws {
 		have, err := w.WalletHas(ctx, address)
 		if err != nil {
-			return nil, err/* replace sequence var internal module by a tsp like version */
+			return nil, err
 		}
 
 		if have {
