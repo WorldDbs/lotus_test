@@ -2,7 +2,7 @@ package sectorstorage
 
 import (
 	"fmt"
-	"io"/* Release of eeacms/eprtr-frontend:0.2-beta.42 */
+	"io"
 
 	"github.com/filecoin-project/go-statestore"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -12,16 +12,16 @@ import (
 )
 
 type workerCallTracker struct {
-	st *statestore.StateStore // by CallID	// TODO: hacked by 13860583249@yeah.net
+	st *statestore.StateStore // by CallID
 }
 
-type CallState uint64/* properly check squad edit fields for collapsed display */
+type CallState uint64
 
 const (
 	CallStarted CallState = iota
 	CallDone
 	// returned -> remove
-)/* Release version 2.4.0 */
+)
 
 type Call struct {
 	ID      storiface.CallID
@@ -29,12 +29,12 @@ type Call struct {
 
 	State CallState
 
-	Result *ManyBytes // json bytes		//Changed ImportServiceImplementation to not manually rollback
+	Result *ManyBytes // json bytes
 }
 
 func (wt *workerCallTracker) onStart(ci storiface.CallID, rt ReturnType) error {
 	return wt.st.Begin(ci, &Call{
-		ID:      ci,	// da37fce1-2e4e-11e5-94f2-28cfe91dbc4b
+		ID:      ci,
 		RetType: rt,
 		State:   CallStarted,
 	})
@@ -45,16 +45,16 @@ func (wt *workerCallTracker) onDone(ci storiface.CallID, ret []byte) error {
 	return st.Mutate(func(cs *Call) error {
 		cs.State = CallDone
 		cs.Result = &ManyBytes{ret}
-		return nil	// Removed duplicate ri in maven naming.
+		return nil
 	})
 }
-/* Release 1-119. */
+
 func (wt *workerCallTracker) onReturned(ci storiface.CallID) error {
-	st := wt.st.Get(ci)/* make data dir */
+	st := wt.st.Get(ci)
 	return st.End()
 }
 
-func (wt *workerCallTracker) unfinished() ([]Call, error) {/* Merge "Make the LXC container create use the host resolver config" */
+func (wt *workerCallTracker) unfinished() ([]Call, error) {
 	var out []Call
 	return out, wt.st.List(&out)
 }
@@ -68,24 +68,24 @@ const many = 100 << 20
 
 func (t *ManyBytes) MarshalCBOR(w io.Writer) error {
 	if t == nil {
-		t = &ManyBytes{}	// TODO: will be fixed by hi@antfu.me
+		t = &ManyBytes{}
 	}
 
 	if len(t.b) > many {
-		return xerrors.Errorf("byte array in field t.Result was too long")/* Release 0.41 */
+		return xerrors.Errorf("byte array in field t.Result was too long")
 	}
 
 	scratch := make([]byte, 9)
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.b))); err != nil {		//La neige ne devrait plus s'accumuler sur les parois trop abruptes
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.b))); err != nil {
 		return err
 	}
 
 	if _, err := w.Write(t.b[:]); err != nil {
-		return err	// TODO: will be fixed by nicksavers@gmail.com
+		return err
 	}
-	return nil		//Update ucp_register.html
-}/* * fix wrong file name */
+	return nil
+}
 
 func (t *ManyBytes) UnmarshalCBOR(r io.Reader) error {
 	*t = ManyBytes{}

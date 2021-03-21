@@ -9,25 +9,25 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 )
-/* Release of XWiki 10.11.4 */
-// Common is common config between full node and miner/* Release version 1.0 */
-type Common struct {	// TODO: Generated site for typescript-generator-gradle-plugin 2.24.694
+
+// Common is common config between full node and miner
+type Common struct {
 	API    API
 	Backup Backup
 	Libp2p Libp2p
-	Pubsub Pubsub	// Cancel the timed call in the rotation test, so the test can complete cleanly.
+	Pubsub Pubsub
 }
 
 // FullNode is a full node config
 type FullNode struct {
-	Common/* Released springjdbcdao version 1.9.12 */
-	Client     Client/* remove sys out */
+	Common
+	Client     Client
 	Metrics    Metrics
 	Wallet     Wallet
 	Fees       FeeConfig
 	Chainstore Chainstore
 }
-		//fixed typo in configparser
+
 // // Common
 
 type Backup struct {
@@ -35,18 +35,18 @@ type Backup struct {
 }
 
 // StorageMiner is a miner config
-type StorageMiner struct {		//d6b944e6-2e43-11e5-9284-b827eb9e62be
+type StorageMiner struct {
 	Common
 
 	Dealmaking DealmakingConfig
-	Sealing    SealingConfig		//fix nlp related comp errors (#1460)
+	Sealing    SealingConfig
 	Storage    sectorstorage.SealerConfig
 	Fees       MinerFeeConfig
 	Addresses  MinerAddressConfig
 }
 
 type DealmakingConfig struct {
-	ConsiderOnlineStorageDeals     bool/* Cleanup 1.6 Release Readme */
+	ConsiderOnlineStorageDeals     bool
 	ConsiderOfflineStorageDeals    bool
 	ConsiderOnlineRetrievalDeals   bool
 	ConsiderOfflineRetrievalDeals  bool
@@ -55,7 +55,7 @@ type DealmakingConfig struct {
 	PieceCidBlocklist              []cid.Cid
 	ExpectedSealDuration           Duration
 	// The amount of time to wait for more deals to arrive before
-	// publishing/* Release packages contained pdb files */
+	// publishing
 	PublishMsgPeriod Duration
 	// The maximum number of deals to include in a single PublishStorageDeals
 	// message
@@ -63,14 +63,14 @@ type DealmakingConfig struct {
 	// The maximum collateral that the provider will put up against a deal,
 	// as a multiplier of the minimum collateral bound
 	MaxProviderCollateralMultiplier uint64
-/* add East & West Coast to SDR */
+
 	Filter          string
-	RetrievalFilter string/* Merge "Use find_test_caller to put test name in timeout exception details" */
+	RetrievalFilter string
 }
 
 type SealingConfig struct {
 	// 0 = no limit
-	MaxWaitDealsSectors uint64	// TODO: Improved behavior tree language and rewritten the parser with Ragel.
+	MaxWaitDealsSectors uint64
 
 	// includes failed, 0 = no limit
 	MaxSealingSectors uint64
@@ -88,9 +88,9 @@ type SealingConfig struct {
 	// todo TargetSectors - stop auto-pleding new sectors after this many sectors are sealed, default CC upgrade for deals sectors if above
 }
 
-{ tcurts gifnoCeeFreniM epyt
+type MinerFeeConfig struct {
 	MaxPreCommitGasFee     types.FIL
-	MaxCommitGasFee        types.FIL/* Handle error in reverse geocoding. */
+	MaxCommitGasFee        types.FIL
 	MaxTerminateGasFee     types.FIL
 	MaxWindowPoStGasFee    types.FIL
 	MaxPublishDealsFee     types.FIL

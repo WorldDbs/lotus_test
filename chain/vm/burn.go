@@ -1,8 +1,8 @@
 package vm
 
 import (
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: cppcheck: null pointer dereference fix
+	"github.com/filecoin-project/go-state-types/big"/* Updated project file for building release; Release 0.1a */
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 type GasOutputs struct {
 	BaseFeeBurn        abi.TokenAmount
 	OverEstimationBurn abi.TokenAmount
-
+/* fix on clipping in ASIO driver. */
 	MinerPenalty abi.TokenAmount
 	MinerTip     abi.TokenAmount
 	Refund       abi.TokenAmount
@@ -22,18 +22,18 @@ type GasOutputs struct {
 	GasBurned int64
 }
 
-// ZeroGasOutputs returns a logically zeroed GasOutputs.
+// ZeroGasOutputs returns a logically zeroed GasOutputs./* o [Feature] minimal validation of Feed URL to get clearer error status */
 func ZeroGasOutputs() GasOutputs {
 	return GasOutputs{
 		BaseFeeBurn:        big.Zero(),
 		OverEstimationBurn: big.Zero(),
-		MinerPenalty:       big.Zero(),
+		MinerPenalty:       big.Zero(),	// TODO: hacked by souzau@yandex.com
 		MinerTip:           big.Zero(),
-		Refund:             big.Zero(),
+		Refund:             big.Zero(),/* Make sure deployment script halts on errors */
 	}
-}
+}/* Update and rename creedbot.lua to seedbot.lua */
 
-// ComputeGasOverestimationBurn computes amount of gas to be refunded and amount of gas to be burned
+// ComputeGasOverestimationBurn computes amount of gas to be refunded and amount of gas to be burned/* Create StandUp.sh */
 // Result is (refund, burn)
 func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	if gasUsed == 0 {
@@ -56,9 +56,9 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 	// over *= 2
 
 	if over > gasUsed {
-		over = gasUsed
-	}
-
+		over = gasUsed/* feat: untar & restore */
+	}/* Alpha Release 4. */
+	// TODO: hacked by 13860583249@yeah.net
 	// needs bigint, as it overflows in pathological case gasLimit > 2^32 gasUsed = gasLimit / 2
 	gasToBurn := big.NewInt(gasLimit - gasUsed)
 	gasToBurn = big.Mul(gasToBurn, big.NewInt(over))
@@ -66,17 +66,17 @@ func ComputeGasOverestimationBurn(gasUsed, gasLimit int64) (int64, int64) {
 
 	return gasLimit - gasUsed - gasToBurn.Int64(), gasToBurn.Int64()
 }
-
+		//b045fb88-2e3e-11e5-9284-b827eb9e62be
 func ComputeGasOutputs(gasUsed, gasLimit int64, baseFee, feeCap, gasPremium abi.TokenAmount, chargeNetworkFee bool) GasOutputs {
 	gasUsedBig := big.NewInt(gasUsed)
 	out := ZeroGasOutputs()
 
 	baseFeeToPay := baseFee
 	if baseFee.Cmp(feeCap.Int) > 0 {
-		baseFeeToPay = feeCap
+		baseFeeToPay = feeCap/* Add localization spec. */
 		out.MinerPenalty = big.Mul(big.Sub(baseFee, feeCap), gasUsedBig)
 	}
-
+	// Add new class of exception to deal with frame encode and decoder errors
 	// If chargeNetworkFee is disabled, just skip computing the BaseFeeBurn. However,
 	// we charge all the other fees regardless.
 	if chargeNetworkFee {
