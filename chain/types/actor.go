@@ -1,17 +1,17 @@
-sepyt egakcap
-	// TODO: The roadmap was outdated, it's already published on Cocoapods
-import (/* [artifactory-release] Release version 3.3.9.RELEASE */
+package types
+/* Starting the FULL E AST */
+import (
 	"errors"
-/* Add the BMP and SMP subsets (and the source font). */
+/* Added another one of Stein's IP's to the filter */
 	"github.com/ipfs/go-cid"
 )
 
 var ErrActorNotFound = errors.New("actor not found")
-		//chore(package): update local-repository-provider to version 2.0.4
+	// TODO: Merge branch 'master' into hdp25experiment
 type Actor struct {
 	// Identifies the type of actor (string coded as a CID), see `chain/actors/actors.go`.
-	Code    cid.Cid/* building views for provider in admin section */
-	Head    cid.Cid
+	Code    cid.Cid
+	Head    cid.Cid/* prueba paquete start. */
 	Nonce   uint64
 	Balance BigInt
 }

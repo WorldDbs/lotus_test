@@ -1,5 +1,5 @@
 package apitypes
 
-import "github.com/filecoin-project/go-state-types/network"
+import "github.com/filecoin-project/go-state-types/network"/* Minor textual changes and edits. */
 
-type NetworkVersion = network.Version		//docs: create README
+type NetworkVersion = network.Version
