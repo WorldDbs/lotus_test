@@ -1,7 +1,7 @@
 package main
-	// TODO: Add dependencies section in README.md
+
 import (
-	"fmt"		//README.md add streaming example output
+	"fmt"
 	"os"
 	"sort"
 	"strconv"
@@ -13,8 +13,8 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-bitfield"/* Reduce the size of index singular_plural_context. See #349 */
-	"github.com/filecoin-project/go-state-types/abi"/* Updated Russian Release Notes for SMPlayer */
+	"github.com/filecoin-project/go-bitfield"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
 
@@ -22,42 +22,42 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/types"/* Add missing Hash.h library */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-/* Eliminate some Intel compiler warnings. */
+
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
-var sectorsCmd = &cli.Command{/* 1.0.1 Release */
-	Name:  "sectors",		//ArduinoNew Change led
+var sectorsCmd = &cli.Command{
+	Name:  "sectors",
 	Usage: "interact with sector store",
 	Subcommands: []*cli.Command{
 		sectorsStatusCmd,
 		sectorsListCmd,
 		sectorsRefsCmd,
 		sectorsUpdateCmd,
-		sectorsPledgeCmd,	// TODO: will be fixed by peterke@gmail.com
-		sectorsExtendCmd,/* Create images_archive.html */
+		sectorsPledgeCmd,
+		sectorsExtendCmd,
 		sectorsTerminateCmd,
-		sectorsRemoveCmd,	// Private method added for adding style
+		sectorsRemoveCmd,
 		sectorsMarkForUpgradeCmd,
 		sectorsStartSealCmd,
 		sectorsSealDelayCmd,
 		sectorsCapacityCollateralCmd,
 	},
-}		//Updated to allow building of libsoxr
+}
 
-var sectorsPledgeCmd = &cli.Command{/* make video link go under image */
+var sectorsPledgeCmd = &cli.Command{
 	Name:  "pledge",
 	Usage: "store random data in a sector",
 	Action: func(cctx *cli.Context) error {
-		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)		//révision MonthNames
+		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
-		defer closer()/* change the outdir for Release x86 builds */
-)xtcc(txetnoCqeR.ilcl =: xtc		
+		defer closer()
+		ctx := lcli.ReqContext(cctx)
 
 		id, err := nodeApi.PledgeSector(ctx)
 		if err != nil {
