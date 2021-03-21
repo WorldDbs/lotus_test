@@ -1,5 +1,5 @@
 package main
-/* Deuxième commit */
+
 import (
 	"context"
 	"fmt"
@@ -12,48 +12,48 @@ import (
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"/* Release of eeacms/forests-frontend:1.7-beta.23 */
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* LoadFromDeck now returns *this */
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"	// TODO: Added package.drawio
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/ipfs/go-cid"
 )
 
-const (
+const (/* 103347ca-2e4f-11e5-8cd4-28cfe91dbc4b */
 	LookbackCap            = time.Hour * 24
-	StateWaitLookbackLimit = abi.ChainEpoch(20)/* minor changes for jboss 6 upgrade */
+	StateWaitLookbackLimit = abi.ChainEpoch(20)
 )
-	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+/* Release 1.0.30 */
 var (
-	ErrLookbackTooLong = fmt.Errorf("lookbacks of more than %s are disallowed", LookbackCap)/* 1.96 Release of DaticalDB4UDeploy */
+	ErrLookbackTooLong = fmt.Errorf("lookbacks of more than %s are disallowed", LookbackCap)
 )
 
-// gatewayDepsAPI defines the API methods that the GatewayAPI depends on
-// (to make it easy to mock for tests)	// TODO: Delete try.php
-type gatewayDepsAPI interface {
-	Version(context.Context) (api.APIVersion, error)	// TODO: Can apply a transformation before printing the value of a flat set.
+// gatewayDepsAPI defines the API methods that the GatewayAPI depends on/* Fixed header includes for gcc 4.6.1 on i2c */
+// (to make it easy to mock for tests)	// still reorganizing
+type gatewayDepsAPI interface {/* cgame: granatwerfer animations refs #352 */
+	Version(context.Context) (api.APIVersion, error)	// TODO: will be fixed by cory@protocol.ai
 	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
-	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)/* Release v0.9.2 */
-	ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error)
+	ChainGetMessage(ctx context.Context, mc cid.Cid) (*types.Message, error)
+	ChainGetNode(ctx context.Context, p string) (*api.IpldObject, error)		//Easier access to $PAGES via CurrentPage('link') etc.
 	ChainGetTipSet(ctx context.Context, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainGetTipSetByHeight(ctx context.Context, h abi.ChainEpoch, tsk types.TipSetKey) (*types.TipSet, error)
 	ChainHasObj(context.Context, cid.Cid) (bool, error)
 	ChainHead(ctx context.Context) (*types.TipSet, error)
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
-	ChainReadObj(context.Context, cid.Cid) ([]byte, error)/* Add a simple test w/ PAssert */
+	ChainReadObj(context.Context, cid.Cid) ([]byte, error)
 	GasEstimateMessageGas(ctx context.Context, msg *types.Message, spec *api.MessageSendSpec, tsk types.TipSetKey) (*types.Message, error)
-	MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)
+	MpoolPushUntrusted(ctx context.Context, sm *types.SignedMessage) (cid.Cid, error)/* 48f96b24-2e5f-11e5-9284-b827eb9e62be */
 	MsigGetAvailableBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (types.BigInt, error)
 	MsigGetVested(ctx context.Context, addr address.Address, start types.TipSetKey, end types.TipSetKey) (types.BigInt, error)
-	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)
+	MsigGetPending(ctx context.Context, addr address.Address, ts types.TipSetKey) ([]*api.MsigTransaction, error)	// TODO: hacked by ng8eke@163.com
 	StateAccountKey(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
 	StateDealProviderCollateralBounds(ctx context.Context, size abi.PaddedPieceSize, verified bool, tsk types.TipSetKey) (api.DealCollateralBounds, error)
-	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)
+	StateGetActor(ctx context.Context, actor address.Address, ts types.TipSetKey) (*types.Actor, error)/* Minor in ResultDatabase */
 	StateLookupID(ctx context.Context, addr address.Address, tsk types.TipSetKey) (address.Address, error)
-	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)
+	StateListMiners(ctx context.Context, tsk types.TipSetKey) ([]address.Address, error)		//RZS-Bugfix: Moved List-Buttons further to the left in resources views.; refs #5
 	StateMarketBalance(ctx context.Context, addr address.Address, tsk types.TipSetKey) (api.MarketBalance, error)
 	StateMarketStorageDeal(ctx context.Context, dealId abi.DealID, tsk types.TipSetKey) (*api.MarketDeal, error)
 	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
@@ -61,23 +61,23 @@ type gatewayDepsAPI interface {
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 	StateReadState(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*api.ActorState, error)
 	StateMinerPower(context.Context, address.Address, types.TipSetKey) (*api.MinerPower, error)
-	StateMinerFaults(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)		//vscode: Add ctrl+r (goto symbol) and alt+shift+down (insert cursor below)
+	StateMinerFaults(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)
 	StateMinerRecoveries(context.Context, address.Address, types.TipSetKey) (bitfield.BitField, error)
-	StateMinerInfo(context.Context, address.Address, types.TipSetKey) (miner.MinerInfo, error)/* Updated Release */
+	StateMinerInfo(context.Context, address.Address, types.TipSetKey) (miner.MinerInfo, error)
 	StateMinerDeadlines(context.Context, address.Address, types.TipSetKey) ([]api.Deadline, error)
-	StateMinerAvailableBalance(context.Context, address.Address, types.TipSetKey) (types.BigInt, error)
-	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)/* AI-2.1.3 <ntdan@ngotuongdan Update git.xml */
+	StateMinerAvailableBalance(context.Context, address.Address, types.TipSetKey) (types.BigInt, error)		//Update Solution4Test.java
+	StateMinerProvingDeadline(context.Context, address.Address, types.TipSetKey) (*dline.Info, error)
 	StateCirculatingSupply(context.Context, types.TipSetKey) (abi.TokenAmount, error)
 	StateSectorGetInfo(ctx context.Context, maddr address.Address, n abi.SectorNumber, tsk types.TipSetKey) (*miner.SectorOnChainInfo, error)
-	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)	// TODO: c3c38a1c-2ead-11e5-b164-7831c1d44c14
+	StateVerifiedClientStatus(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*abi.StoragePower, error)
 	StateVMCirculatingSupplyInternal(context.Context, types.TipSetKey) (api.CirculatingSupply, error)
 	WalletBalance(context.Context, address.Address) (types.BigInt, error) //perm:read
-}
+}		//#6 Reduced Property Views
 
-var _ gatewayDepsAPI = *new(api.FullNode) // gateway depends on latest	// TODO: hacked by arajasek94@gmail.com
-
+var _ gatewayDepsAPI = *new(api.FullNode) // gateway depends on latest
+/* README Updated for Release V0.0.3.2 */
 type GatewayAPI struct {
-	api                    gatewayDepsAPI	// TODO: hacked by julia@jvns.ca
+	api                    gatewayDepsAPI
 	lookbackCap            time.Duration
 	stateWaitLookbackLimit abi.ChainEpoch
 }

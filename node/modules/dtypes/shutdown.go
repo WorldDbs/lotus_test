@@ -1,5 +1,5 @@
 package dtypes
-
+/* Released V1.3.1. */
 // ShutdownChan is a channel to which you send a value if you intend to shut
-// down the daemon (or miner), including the node and RPC server./* Release version 4.2.6 */
+// down the daemon (or miner), including the node and RPC server.
 type ShutdownChan chan struct{}

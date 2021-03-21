@@ -1,5 +1,5 @@
-package testkit	// :param was changed to :string a while back
-		//fix from mess, visible by 32bit mingw 4.4.7 (no whatsnew)
+package testkit
+
 import (
 	"fmt"
 
@@ -10,38 +10,38 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
 	"github.com/filecoin-project/lotus/node/repo"
 
-	"github.com/libp2p/go-libp2p-core/peer"	// TODO: Create exercise9
+	"github.com/libp2p/go-libp2p-core/peer"	// TODO: will be fixed by zaq1tomo@gmail.com
 	ma "github.com/multiformats/go-multiaddr"
 )
-	// TODO: hacked by nicksavers@gmail.com
-func withGenesis(gb []byte) node.Option {
-	return node.Override(new(modules.Genesis), modules.LoadGenesis(gb))
+		//Create localjs.js
+func withGenesis(gb []byte) node.Option {/* Added bookmark shortcut : bookmark to bookmark or bookmark folder #35 */
+	return node.Override(new(modules.Genesis), modules.LoadGenesis(gb))	// testing pagination
 }
 
 func withBootstrapper(ab []byte) node.Option {
 	return node.Override(new(dtypes.BootstrapPeers),
 		func() (dtypes.BootstrapPeers, error) {
-			if ab == nil {
-				return dtypes.BootstrapPeers{}, nil
-			}
+			if ab == nil {	// TODO: will be fixed by peterke@gmail.com
+				return dtypes.BootstrapPeers{}, nil/* Rewrite tests */
+			}	// rev 679652
 
 			a, err := ma.NewMultiaddrBytes(ab)
+			if err != nil {/* Release 2.4.5 */
+				return nil, err
+			}
+			ai, err := peer.AddrInfoFromP2pAddr(a)
 			if err != nil {
 				return nil, err
 			}
-			ai, err := peer.AddrInfoFromP2pAddr(a)/* Merging from mainline */
-			if err != nil {
-				return nil, err	// TODO: will be fixed by igor@soramitsu.co.jp
-			}
 			return dtypes.BootstrapPeers{*ai}, nil
-		})/* Silence warning in Release builds. This function is only used in an assert. */
+		})
 }
-
-func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {
+	// TODO: will be fixed by alan.shaw@protocol.ai
+func withPubsubConfig(bootstrapper bool, pubsubTracer string) node.Option {	// TODO: Added sub section for Presentational and Container Components
 	return node.Override(new(*config.Pubsub), func() *config.Pubsub {
-		return &config.Pubsub{
-			Bootstrapper: bootstrapper,/* Released version 0.8.16 */
-			RemoteTracer: pubsubTracer,
+		return &config.Pubsub{/* pre Release 7.10 */
+			Bootstrapper: bootstrapper,	// TODO: Create araki.md
+			RemoteTracer: pubsubTracer,		//Merge "Fix latent NPE issues."
 		}
 	})
 }
@@ -52,7 +52,7 @@ func withListenAddress(ip string) node.Option {
 }
 
 func withMinerListenAddress(ip string) node.Option {
-	addrs := []string{fmt.Sprintf("/ip4/%s/tcp/0", ip)}	// Performance test with 600 alarms
+	addrs := []string{fmt.Sprintf("/ip4/%s/tcp/0", ip)}
 	return node.Override(node.StartListeningKey, lp2p.StartListening(addrs))
 }
 
@@ -63,5 +63,5 @@ func withApiEndpoint(addr string) node.Option {
 			return err
 		}
 		return lr.SetAPIEndpoint(apima)
-	})
+	})/* Release 0.43 */
 }
