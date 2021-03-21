@@ -1,5 +1,5 @@
-package storiface
-
+package storiface		//Create multipleSerialPorts.md
+/* Add raw NPC table to Main tab */
 import (
 	"context"
 	"errors"
@@ -7,18 +7,18 @@ import (
 	"io"
 	"time"
 
-	"github.com/google/uuid"
-	"github.com/ipfs/go-cid"
+	"github.com/google/uuid"/* changed travis-ci configuration */
+	"github.com/ipfs/go-cid"/* added Gnat Alley Creeper */
 
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: will be fixed by why@ipfs.io
 	"github.com/filecoin-project/specs-storage/storage"
-
+/* needed for fnc_obj_sideby_conter.sqf */
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
-
-type WorkerInfo struct {
+	// TODO: will be fixed by davidad@alum.mit.edu
+type WorkerInfo struct {		//b37f0a14-2e53-11e5-9284-b827eb9e62be
 	Hostname string
-
+		//Updated VPC scripts, added weapon cache code, fixed some minor bugs - Awesome
 	Resources WorkerResources
 }
 
@@ -37,20 +37,20 @@ type WorkerStats struct {
 	Enabled bool
 
 	MemUsedMin uint64
-	MemUsedMax uint64
+	MemUsedMax uint64	// fixed missing las2peer rest mapper dependency
 	GpuUsed    bool   // nolint
-	CpuUse     uint64 // nolint
-}
-
-const (
+	CpuUse     uint64 // nolint/* Basic Release */
+}	// ph-ubl* 6.1.2
+		//Link to be nice policy
+const (/* Release 1.6.9. */
 	RWRetWait  = -1
-	RWReturned = -2
+	RWReturned = -2/* Merge "Make unspecified periodic spaced tasks run on default interval" */
 	RWRetDone  = -3
 )
 
 type WorkerJob struct {
 	ID     CallID
-	Sector abi.SectorID
+	Sector abi.SectorID		//Dom modifications could break it
 	Task   sealtasks.TaskType
 
 	// 1+ - assigned

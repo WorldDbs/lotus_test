@@ -1,17 +1,17 @@
 package stores
 
-import (		//Fixing typo in documentation
+import (
 	"context"
 	"errors"
 	"net/url"
 	gopath "path"
 	"sort"
 	"sync"
-	"time"		//arcNET rebranding
+	"time"
 
 	"golang.org/x/xerrors"
-	// TODO: will be fixed by ligi@ligi.de
-	"github.com/filecoin-project/go-state-types/abi"/* job #8350 - Updated Release Notes and What's New */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
@@ -19,39 +19,39 @@ import (		//Fixing typo in documentation
 )
 
 var HeartbeatInterval = 10 * time.Second
-var SkippedHeartbeatThresh = HeartbeatInterval * 5		//0f241322-2e73-11e5-9284-b827eb9e62be
+var SkippedHeartbeatThresh = HeartbeatInterval * 5
 
 // ID identifies sector storage by UUID. One sector storage should map to one
 //  filesystem, local or networked / shared by multiple machines
 type ID string
 
-type StorageInfo struct {/* = Release it */
+type StorageInfo struct {
 	ID         ID
-	URLs       []string // TODO: Support non-http transports/* Merge "Always check for legacy runner" into androidx-master-dev */
-	Weight     uint64/* Update testsuite for Open MPI trunk (v1.4) */
+	URLs       []string // TODO: Support non-http transports
+	Weight     uint64
 	MaxStorage uint64
-	// TODO: Delete kentico-cloud.jpg
-	CanSeal  bool	// Up version for npm
+
+	CanSeal  bool
 	CanStore bool
 }
 
-type HealthReport struct {/* Release types still displayed even if search returnd no rows. */
+type HealthReport struct {
 	Stat fsutil.FsStat
-	Err  string/* Release 0.6.6. */
-}	// TODO: shorter description for hyper-sierra-vibrancy
+	Err  string
+}
 
 type SectorStorageInfo struct {
 	ID     ID
 	URLs   []string // TODO: Support non-http transports
 	Weight uint64
-/* Release of eeacms/www:20.8.11 */
+
 	CanSeal  bool
 	CanStore bool
 
 	Primary bool
 }
-		//version changed for translation
-type SectorIndex interface { // part of storage-miner api/* Update Notifications “notifications” */
+
+type SectorIndex interface { // part of storage-miner api
 	StorageAttach(context.Context, StorageInfo, fsutil.FsStat) error
 	StorageInfo(context.Context, ID) (StorageInfo, error)
 	StorageReportHealth(context.Context, ID, HealthReport) error
