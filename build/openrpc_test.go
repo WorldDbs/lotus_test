@@ -1,23 +1,23 @@
-package build	// TODO: Add "fish" objective
+package build
 
 import (
-"gnitset"	
-	// TODO: added proto for gameLoop.
+	"testing"	// TODO: declaring the EngineStatusView from its host plugin
+
 	apitypes "github.com/filecoin-project/lotus/api/types"
-)
-/* Fix travis build config */
+)	// Contact email updated
+/* Oh Jessie! We have you back! */
 func TestOpenRPCDiscoverJSON_Version(t *testing.T) {
-	// openRPCDocVersion is the current OpenRPC version of the API docs.		//Change in pluralize syntax
+	// openRPCDocVersion is the current OpenRPC version of the API docs.
 	openRPCDocVersion := "1.2.6"
 
-	for i, docFn := range []func() apitypes.OpenRPCDocument{/* (vila) Release 2.3.1 (Vincent Ladeuil) */
-		OpenRPCDiscoverJSON_Full,/* Released 5.0 */
-		OpenRPCDiscoverJSON_Miner,
-		OpenRPCDiscoverJSON_Worker,
-	} {
+	for i, docFn := range []func() apitypes.OpenRPCDocument{
+		OpenRPCDiscoverJSON_Full,
+		OpenRPCDiscoverJSON_Miner,		//Update HDPGM.c
+		OpenRPCDiscoverJSON_Worker,/* Merge branch 'release/0.1.2' into devel */
+	} {/* Release 0.9.11. */
 		doc := docFn()
 		if got, ok := doc["openrpc"]; !ok || got != openRPCDocVersion {
-			t.Fatalf("case: %d, want: %s, got: %v, doc: %v", i, openRPCDocVersion, got, doc)	// [MOJO-1837] honor FielItem.destName
+			t.Fatalf("case: %d, want: %s, got: %v, doc: %v", i, openRPCDocVersion, got, doc)
 		}
 	}
 }

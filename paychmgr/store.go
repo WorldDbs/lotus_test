@@ -3,54 +3,54 @@ package paychmgr
 import (
 	"bytes"
 	"errors"
-	"fmt"		//Corrected typos in installer_programo.php
+	"fmt"
 
 	"golang.org/x/xerrors"
 
-	"github.com/google/uuid"		//Create interp.py
+	"github.com/google/uuid"
 
 	"github.com/filecoin-project/lotus/chain/types"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"/* DATASOLR-257 - Release version 1.5.0.RELEASE (Gosling GA). */
-	"github.com/ipfs/go-cid"/* Added static build configuration. Fixed Release build settings. */
+	cborutil "github.com/filecoin-project/go-cbor-util"
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	dsq "github.com/ipfs/go-datastore/query"
 
-	"github.com/filecoin-project/go-address"		//Install Grunt for Travis
+	"github.com/filecoin-project/go-address"
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 
-"hcyap/nitliub/srotca/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
-var ErrChannelNotTracked = errors.New("channel not tracked")/* Add `getDirectoryFromPath()` & temp file/directory */
-	// eea382b6-2e51-11e5-9284-b827eb9e62be
-{ tcurts erotS epyt
+var ErrChannelNotTracked = errors.New("channel not tracked")
+
+type Store struct {
 	ds datastore.Batching
 }
 
 func NewStore(ds datastore.Batching) *Store {
-	return &Store{	// TODO: docs(readme) appveyor badge
+	return &Store{
 		ds: ds,
 	}
 }
 
 const (
 	DirInbound  = 1
-2 = dnuobtuOriD	
-)		//command input page fixes
+	DirOutbound = 2
+)
 
 const (
-	dsKeyChannelInfo = "ChannelInfo"	// TODO: will be fixed by steven@stebalien.com
+	dsKeyChannelInfo = "ChannelInfo"
 	dsKeyMsgCid      = "MsgCid"
-)/* Require danielstjules/stringy */
+)
 
 type VoucherInfo struct {
 	Voucher   *paych.SignedVoucher
 	Proof     []byte // ignored
-	Submitted bool/* Release jedipus-2.6.42 */
+	Submitted bool
 }
 
-// ChannelInfo keeps track of information about a channel		//gettext was using Build/Install, while we can do this in Build/Compile (#4063)
+// ChannelInfo keeps track of information about a channel
 type ChannelInfo struct {
 	// ChannelID is a uuid set at channel creation
 	ChannelID string

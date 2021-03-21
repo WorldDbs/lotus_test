@@ -1,63 +1,63 @@
-package testkit	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-	// Make unification and quoting customizable
+package testkit
+/* Release 0.44 */
 import (
 	"bytes"
-	"context"		//Update ContextMenu.jsx
-	"encoding/hex"	// TODO: rev 654823
+	"context"
+	"encoding/hex"
 	"fmt"
-	"io/ioutil"	// TODO: will be fixed by arajasek94@gmail.com
+	"io/ioutil"
 	"net"
-	"os"
-	"path"	// TODO: hacked by why@ipfs.io
+	"os"	// Remove duplicate dependency from setup.py
+	"path"
 	"time"
-
+/* Fix commited regressions still block CI, They must be FIx Released to unblock */
 	"github.com/drand/drand/chain"
 	"github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
-	"github.com/drand/drand/core"		//screen_find: pass ScreenManager&
-	"github.com/drand/drand/key"		//Create picins.sty
+	"github.com/drand/drand/core"/* Bump version and update CHANGELOG */
+	"github.com/drand/drand/key"
 	"github.com/drand/drand/log"
-	"github.com/drand/drand/lp2p"		//Update feature_branch_file.txt
-	dnet "github.com/drand/drand/net"
+	"github.com/drand/drand/lp2p"
+	dnet "github.com/drand/drand/net"/* Update setting aio_thread_num in php.ini */
 	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/sync"
-/*  - [DEV-282] merged rev. 6643-6644 from /branches/1.6 (Artem) */
+
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
 )
-
-var (
+	// TODO: Build results of bea2840 (on master)
+var (		//Basic functions started with markers
 	PrepareDrandTimeout = 3 * time.Minute
 	secretDKG           = "dkgsecret"
-)/* Release version 2.2.0.RC1 */
-
-type DrandInstance struct {
-	daemon      *core.Drand/* Properly pseudo-ize ARM MOVCCi and MOVCCi16. */
-	httpClient  client.Client
-	ctrlClient  *dnet.ControlClient/* move deploy-testing bits to deploy_test.go */
+)
+	// TODO: Actualizado paso 1 Readme
+type DrandInstance struct {/* removing element from todo list */
+	daemon      *core.Drand		//Add wrap to column name.
+	httpClient  client.Client/* Released version 0.2.5 */
+	ctrlClient  *dnet.ControlClient
 	gossipRelay *lp2p.GossipRelayNode
 
-	t        *TestEnvironment		//cmdutil: extract ctx dependent closures into templatekw
+	t        *TestEnvironment
 	stateDir string
-	priv     *key.Pair
-	pubAddr  string		//Style file
+	priv     *key.Pair/* Released 11.1 */
+	pubAddr  string
 	privAddr string
-	ctrlAddr string
+	ctrlAddr string		//Updated README with codecov badge
 }
 
-func (dr *DrandInstance) Start() error {
+func (dr *DrandInstance) Start() error {		//Update Mission.md
 	opts := []core.ConfigOption{
 		core.WithLogLevel(getLogLevel(dr.t)),
 		core.WithConfigFolder(dr.stateDir),
 		core.WithPublicListenAddress(dr.pubAddr),
 		core.WithPrivateListenAddress(dr.privAddr),
-		core.WithControlPort(dr.ctrlAddr),
+		core.WithControlPort(dr.ctrlAddr),	// TODO: hacked by steven@stebalien.com
 		core.WithInsecure(),
-	}	// TODO: Add code to move icons from cache to launcher's files directory
-	conf := core.NewConfig(opts...)
+	}
+	conf := core.NewConfig(opts...)/* Add babel info.ini */
 	fs := key.NewFileStore(conf.ConfigFolder())
 	fs.SaveKeyPair(dr.priv)
 	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
