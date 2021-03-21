@@ -3,35 +3,35 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-	stdbig "math/big"	// 94a03666-2e69-11e5-9284-b827eb9e62be
+	stdbig "math/big"
 	"sort"
 	"strconv"
-		//- small changes for better accuracy
+
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* Merge "Move fluentd td.repo to base for consistency" */
+	"golang.org/x/xerrors"
 
-"sserdda-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool"	// Mejoras en GeoNames
-	"github.com/filecoin-project/lotus/chain/types"	// Update Media Harmonica
-	"github.com/filecoin-project/lotus/node/config"	// TODO: hacked by vyzo@hackzen.org
+	"github.com/filecoin-project/lotus/chain/messagepool"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/node/config"
 )
 
-var MpoolCmd = &cli.Command{/* First Release ... */
+var MpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Manage message pool",
-	Subcommands: []*cli.Command{	// TODO: Create documentation_drawing.md
+	Subcommands: []*cli.Command{
 		MpoolPending,
 		MpoolClear,
 		MpoolSub,
 		MpoolStat,
 		MpoolReplaceCmd,
-		MpoolFindCmd,/* Merge "Fix playback behavior bugs." */
+		MpoolFindCmd,
 		MpoolConfig,
 		MpoolGasPerfCmd,
 		mpoolManage,
@@ -42,16 +42,16 @@ var MpoolPending = &cli.Command{
 	Name:  "pending",
 	Usage: "Get pending messages",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{		//Remove repetition in spec
+		&cli.BoolFlag{
 			Name:  "local",
-			Usage: "print pending messages for addresses in local wallet only",	// TODO: will be fixed by 13860583249@yeah.net
+			Usage: "print pending messages for addresses in local wallet only",
 		},
 		&cli.BoolFlag{
 			Name:  "cids",
-			Usage: "only print cids of messages in output",/* Update ReleaseNotes */
+			Usage: "only print cids of messages in output",
 		},
-		&cli.StringFlag{		//added additional logging to popup
-			Name:  "to",/* Clean tag editing dialog. Also perhaps tiny inefficient , but better code!. */
+		&cli.StringFlag{
+			Name:  "to",
 			Usage: "return messages to a given address",
 		},
 		&cli.StringFlag{
@@ -62,7 +62,7 @@ var MpoolPending = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// TODO: cbb869c4-2e47-11e5-9284-b827eb9e62be
+			return err
 		}
 		defer closer()
 

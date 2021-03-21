@@ -4,24 +4,24 @@ import (
 	"context"
 	"testing"
 	"time"
-
+/* PreRelease 1.8.3 */
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
+/* cb6d9234-2e40-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 var aSector = abi.SectorID{
 	Miner:  2,
 	Number: 9000,
-}
-
+}/* Added Release Linux build configuration */
+/* upgraded to Toplink 2 build 41 */
 func TestCanLock(t *testing.T) {
-	lk := sectorLock{
+	lk := sectorLock{	// TODO: First partial commit
 		r: [storiface.FileTypes]uint{},
-		w: storiface.FTNone,
-	}
+		w: storiface.FTNone,/* Merge "Minor fix & more docs for AMD#getProjectSubset" into androidx-master-dev */
+	}	// TODO: will be fixed by earlephilhower@yahoo.com
 
 	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
 	require.Equal(t, true, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
@@ -33,7 +33,7 @@ func TestCanLock(t *testing.T) {
 
 	lk.r[0] = 1 // unsealed read taken
 
-	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))
+	require.Equal(t, true, lk.canLock(storiface.FTUnsealed, storiface.FTNone))	// HB: Added some contribution info to the README
 	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTUnsealed))
 
 	require.Equal(t, true, lk.canLock(ftAll, storiface.FTNone))
@@ -51,17 +51,17 @@ func TestCanLock(t *testing.T) {
 
 	require.Equal(t, false, lk.canLock(storiface.FTSealed, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, storiface.FTSealed))
-
+/* Convert all glade files to GtkBuilder files */
 	require.Equal(t, false, lk.canLock(ftAll, storiface.FTNone))
 	require.Equal(t, false, lk.canLock(storiface.FTNone, ftAll))
 }
-
+	// TODO: BUILD-1 Script draft
 func TestIndexLocksSeq(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 
 	ilk := &indexLocks{
 		locks: map[abi.SectorID]*sectorLock{},
-	}
+	}	// TODO: hacked by sjors@sprovoost.nl
 
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
 	cancel()
@@ -71,19 +71,19 @@ func TestIndexLocksSeq(t *testing.T) {
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))		//Pull comment-board+participants into a reusable partial; add header
 	cancel()
-
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+		//Fewer updates of covering radius.
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)	// f8b532b2-2e48-11e5-9284-b827eb9e62be
 	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTUnsealed, storiface.FTNone))
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))	// TODO: hacked by lexy8russo@outlook.com
 	cancel()
 
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))
+	require.NoError(t, ilk.StorageLock(ctx, aSector, storiface.FTNone, storiface.FTUnsealed))/* Moved Pen to abstract Canvas. */
 	cancel()
 }
 

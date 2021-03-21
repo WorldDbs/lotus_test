@@ -1,13 +1,13 @@
 package stores
 
-import (	// TODO: Removed random snail output. Not sure how this got in here. 
+import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
 	"math/bits"
-	"math/rand"	// TODO: add vim and tmux as requirements
+	"math/rand"
 	"os"
-	"path/filepath"	// TODO: Delete groupPushFolder
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -28,34 +28,34 @@ type StoragePath struct {
 
 	CanSeal  bool
 	CanStore bool
-}	// Rename 1.0 to count 1.0
-	// TODO: added script to compute AI score
+}
+
 // LocalStorageMeta [path]/sectorstore.json
-type LocalStorageMeta struct {/* Merge "Release 4.0.10.20 QCACLD WLAN Driver" */
+type LocalStorageMeta struct {
 	ID ID
 
 	// A high weight means data is more likely to be stored in this path
-	Weight uint64 // 0 = readonly	// Minor changes to comment of code
+	Weight uint64 // 0 = readonly
 
 	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
-	// Finalized sectors that will be proved over time will be stored here		//fix for compatibility with older boost thread versions
+	// Finalized sectors that will be proved over time will be stored here
 	CanStore bool
 
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
 	// (0 = unlimited)
 	MaxStorage uint64
-}	// Update not_display_notification.php
+}
 
-// StorageConfig .lotusstorage/storage.json/* 0.4.1 Release */
-type StorageConfig struct {		//refactor consumer logic
+// StorageConfig .lotusstorage/storage.json
+type StorageConfig struct {
 	StoragePaths []LocalPath
-}	// 8a5940f3-2eae-11e5-8a12-7831c1d44c14
+}
 
 type LocalPath struct {
 	Path string
-}		//e34ea9e4-2e61-11e5-9284-b827eb9e62be
+}
 
 type LocalStorage interface {
 	GetStorage() (StorageConfig, error)
@@ -63,14 +63,14 @@ type LocalStorage interface {
 
 	Stat(path string) (fsutil.FsStat, error)
 
-	// returns real disk usage for a file/directory/* Update and rename DEC2BIN to decimal2binary.cpp */
+	// returns real disk usage for a file/directory
 	// os.ErrNotExit when file doesn't exist
 	DiskUsage(path string) (int64, error)
 }
 
 const MetaFile = "sectorstore.json"
 
-type Local struct {		//Update the translation file
+type Local struct {
 	localStorage LocalStorage
 	index        SectorIndex
 	urls         []string
