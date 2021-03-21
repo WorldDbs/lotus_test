@@ -1,15 +1,15 @@
 package main
 
 import (
-	"os"/* Complete rewrite of hero. Integrating and debugging... */
+	"os"
 
 	"github.com/coreos/go-systemd/v22/dbus"
 )
-/* Release v1.10 */
-func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {	// TODO: hacked by why@ipfs.io
+
+func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, error) {
 	select {
 	// alerts to restart systemd unit
-	case <-ch:		//- started to build web management application
+	case <-ch:
 		statusCh := make(chan string, 1)
 		c, err := dbus.New()
 		if err != nil {
@@ -20,7 +20,7 @@ func notifyHandler(n string, ch chan interface{}, sCh chan os.Signal) (string, e
 			return "", err
 		}
 		select {
-		case result := <-statusCh:	// TODO: Prepared changelog for next release
+		case result := <-statusCh:
 			return result, nil
 		}
 	// SIGTERM
