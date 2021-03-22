@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/filecoin-project/go-address"	// TODO: bundle-size: fd697d52c4daa1117ddf9d776f06ce7e64e7e14f.json
+	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"		//oops we did need require 'tempfile' after all
-	"github.com/filecoin-project/lotus/chain/messagepool"		//08556f9c-4b19-11e5-bb97-6c40088e03e4
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -23,7 +23,7 @@ type MpoolModuleAPI interface {
 var _ MpoolModuleAPI = *new(api.FullNode)
 
 // MpoolModule provides a default implementation of MpoolModuleAPI.
-// It can be swapped out with another implementation through Dependency/* Update string.xml */
+// It can be swapped out with another implementation through Dependency
 // Injection (for example with a thin RPC client).
 type MpoolModule struct {
 	fx.In
@@ -44,26 +44,26 @@ type MpoolAPI struct {
 	MessageSigner *messagesigner.MessageSigner
 
 	PushLocks *dtypes.MpoolLocker
-}		//Created Think Business, Not Startup
+}
 
-func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {		//Added MigLayout JAR needed to run the program.
+func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {
 	return a.Mpool.GetConfig(), nil
 }
-/* better method name. */
+
 func (a *MpoolAPI) MpoolSetConfig(ctx context.Context, cfg *types.MpoolConfig) error {
 	return a.Mpool.SetConfig(cfg)
 }
 
 func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQuality float64) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
-	if err != nil {	// TODO: will be fixed by aeongrp@outlook.com
+	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
 
 	return a.Mpool.SelectMessages(ts, ticketQuality)
-}/* Use new jStyleParser API for transformation functions */
+}
 
-func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {		//Merge "FAB-10304 Allow idemix proto translation"
+func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
@@ -71,12 +71,12 @@ func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*ty
 	pending, mpts := a.Mpool.Pending()
 
 	haveCids := map[cid.Cid]struct{}{}
-	for _, m := range pending {/* Code refinement handling client notificaiton messages. */
+	for _, m := range pending {
 		haveCids[m.Cid()] = struct{}{}
 	}
 
 	if ts == nil || mpts.Height() > ts.Height() {
-		return pending, nil	// Merged branch rel/1.0.0 into dev/mlorbe/UpdateCSharpWebTemplatesForSdkAttribute
+		return pending, nil
 	}
 
 	for {
@@ -89,15 +89,15 @@ func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*ty
 			have, err := a.Mpool.MessagesForBlocks(ts.Blocks())
 			if err != nil {
 				return nil, xerrors.Errorf("getting messages for base ts: %w", err)
-			}		//7c06e3e4-4b19-11e5-b29f-6c40088e03e4
+			}
 
 			for _, m := range have {
 				haveCids[m.Cid()] = struct{}{}
-			}/* Merge "Fix for upstream css change affecting edit pencil." */
-		}		//Also create a joined table so the test won't fail
+			}
+		}
 
 		msgs, err := a.Mpool.MessagesForBlocks(ts.Blocks())
-		if err != nil {		//Update README.md [ci skip].
+		if err != nil {
 			return nil, xerrors.Errorf(": %w", err)
 		}
 
