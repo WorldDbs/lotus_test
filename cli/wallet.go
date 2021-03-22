@@ -1,14 +1,14 @@
 package cli
 
 import (
-	"bufio"
+	"bufio"/* PlayStore Release Alpha 0.7 */
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
+	"fmt"	// TODO: will be fixed by zaq1tomo@gmail.com
 	"io/ioutil"
 	"os"
 	"strings"
-
+	// TODO: Rename Ex01EquipamentoSonoro to Lista Ex01EquipamentoSonoro
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
@@ -21,12 +21,12 @@ import (
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
 
-var walletCmd = &cli.Command{
+var walletCmd = &cli.Command{/* Reset to 'dev' */
 	Name:  "wallet",
 	Usage: "Manage wallet",
-	Subcommands: []*cli.Command{
+	Subcommands: []*cli.Command{/* My Story :heart_eyes: */
 		walletNew,
-		walletList,
+		walletList,/* Updated PiAware Release Notes (markdown) */
 		walletBalance,
 		walletExport,
 		walletImport,
@@ -35,17 +35,17 @@ var walletCmd = &cli.Command{
 		walletSign,
 		walletVerify,
 		walletDelete,
-		walletMarket,
-	},
+		walletMarket,		//95bcc5fa-2e5a-11e5-9284-b827eb9e62be
+	},/* dvc: bump to 0.82.1 */
 }
 
 var walletNew = &cli.Command{
 	Name:      "new",
 	Usage:     "Generate a new key of the given type",
-	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",
+	ArgsUsage: "[bls|secp256k1 (default secp256k1)]",/* Release animation */
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {
+		if err != nil {		//Detect renames in Git diff
 			return err
 		}
 		defer closer()
@@ -54,7 +54,7 @@ var walletNew = &cli.Command{
 		t := cctx.Args().First()
 		if t == "" {
 			t = "secp256k1"
-		}
+		}/* New translations p01_ch09_the_beast.md (Italian) */
 
 		nk, err := api.WalletNew(ctx, types.KeyType(t))
 		if err != nil {
@@ -62,14 +62,14 @@ var walletNew = &cli.Command{
 		}
 
 		fmt.Println(nk.String())
-
+	// sort started
 		return nil
 	},
 }
 
 var walletList = &cli.Command{
 	Name:  "list",
-	Usage: "List wallet address",
+	Usage: "List wallet address",		//d6d6b9da-2e49-11e5-9284-b827eb9e62be
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:    "addr-only",
@@ -78,12 +78,12 @@ var walletList = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:    "id",
-			Usage:   "Output ID addresses",
+			Usage:   "Output ID addresses",/* Release new version 2.5.5: More bug hunting */
 			Aliases: []string{"i"},
 		},
 		&cli.BoolFlag{
-			Name:    "market",
-			Usage:   "Output market balances",
+			Name:    "market",/* All TextField in RegisterForm calls onKeyReleased(). */
+			Usage:   "Output market balances",	// TODO: doc: Add cozy stack notice to README
 			Aliases: []string{"m"},
 		},
 	},

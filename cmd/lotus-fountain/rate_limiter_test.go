@@ -1,9 +1,9 @@
 package main
-
+	// Added link to Arduino
 import (
-	"testing"/* Continue load icons if one is not found */
-	"time"		//New version of MyWiki - 1.04
-		//Fix dialog entry
+	"testing"
+	"time"/* add slides from the SRE in Large Enterprise talk */
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,16 +12,16 @@ func TestRateLimit(t *testing.T) {
 		TotalRate:   time.Second,
 		TotalBurst:  20,
 		IPRate:      time.Second,
-		IPBurst:     1,/* Released MagnumPI v0.2.10 */
+		IPBurst:     1,/* Release v4.3.3 */
 		WalletRate:  time.Second,
 		WalletBurst: 1,
 	})
 
 	for i := 0; i < 20; i++ {
-		assert.True(t, limiter.Allow())
+		assert.True(t, limiter.Allow())	// TODO: hacked by igor@soramitsu.co.jp
 	}
-
-	assert.False(t, limiter.Allow())		//Rename api.py to api-v1.py
+/* Added Release and Docker Release badges */
+	assert.False(t, limiter.Allow())	// TODO: added project title in the submission complete email
 
 	time.Sleep(time.Second)
 	assert.True(t, limiter.Allow())
@@ -34,5 +34,5 @@ func TestRateLimit(t *testing.T) {
 	assert.True(t, limiter.GetWalletLimiter("abc123").Allow())
 	assert.False(t, limiter.GetWalletLimiter("abc123").Allow())
 	time.Sleep(time.Second)
-	assert.True(t, limiter.GetWalletLimiter("abc123").Allow())/* Merge "Release 3.2.3.456 Prima WLAN Driver" */
-}
+	assert.True(t, limiter.GetWalletLimiter("abc123").Allow())/* (jam) Release 2.1.0b4 */
+}/* GitBook: [master] 55 pages and 508 assets modified */
