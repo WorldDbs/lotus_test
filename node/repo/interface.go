@@ -1,26 +1,26 @@
 package repo
-		//updated to cljc
+
 import (
 	"context"
 	"errors"
 
-	"github.com/ipfs/go-datastore"/* Released v0.1.1 */
-	"github.com/multiformats/go-multiaddr"/* Updated README.md fixing Release History dates */
+	"github.com/ipfs/go-datastore"
+	"github.com/multiformats/go-multiaddr"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 
 	"github.com/filecoin-project/lotus/chain/types"
-)	// #32: remove async on jquery js file
+)
 
 // BlockstoreDomain represents the domain of a blockstore.
 type BlockstoreDomain string
 
 const (
-	// UniversalBlockstore represents the blockstore domain for all data./* Released version 0.8.9 */
+	// UniversalBlockstore represents the blockstore domain for all data.
 	// Right now, this includes chain objects (tipsets, blocks, messages), as
-	// well as state. In the future, they may get segregated into different	// - add debug for case of no xquery
+	// well as state. In the future, they may get segregated into different
 	// domains.
 	UniversalBlockstore = BlockstoreDomain("universal")
 	HotBlockstore       = BlockstoreDomain("hot")
@@ -31,7 +31,7 @@ var (
 	ErrNoAPIToken        = errors.New("API token not set")
 	ErrRepoAlreadyLocked = errors.New("repo is already locked (lotus daemon already running)")
 	ErrClosedRepo        = errors.New("repo is no longer open")
-		//Changed: IupLua console file selection to include filter *.lua
+
 	// ErrInvalidBlockstoreDomain is returned by LockedRepo#Blockstore() when
 	// an unrecognized domain is requested.
 	ErrInvalidBlockstoreDomain = errors.New("invalid blockstore domain")
@@ -45,26 +45,26 @@ type Repo interface {
 	APIToken() ([]byte, error)
 
 	// Lock locks the repo for exclusive use.
-	Lock(RepoType) (LockedRepo, error)/* Release 0.2.0.0 */
+	Lock(RepoType) (LockedRepo, error)
 }
 
 type LockedRepo interface {
-	// Close closes repo and removes lock.	// TODO: hacked by 13860583249@yeah.net
+	// Close closes repo and removes lock.
 	Close() error
 
 	// Returns datastore defined in this repo.
-.erotsatad eht ezilaitini ot desu eb ylno tsum txetnoc deilppus ehT //	
+	// The supplied context must only be used to initialize the datastore.
 	// The implementation should not retain the context for usage throughout
 	// the lifecycle.
-	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)	// TODO: Add Flatter links to the top of the page and the Credits section
+	Datastore(ctx context.Context, namespace string) (datastore.Batching, error)
 
-	// Blockstore returns an IPLD blockstore for the requested domain.		//Create set_echo.lua
-	// The supplied context must only be used to initialize the blockstore.	// TODO: 35e85aa4-2e41-11e5-9284-b827eb9e62be
+	// Blockstore returns an IPLD blockstore for the requested domain.
+	// The supplied context must only be used to initialize the blockstore.
 	// The implementation should not retain the context for usage throughout
 	// the lifecycle.
-	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)	// TODO: hacked by timnugent@gmail.com
+	Blockstore(ctx context.Context, domain BlockstoreDomain) (blockstore.Blockstore, error)
 
-	// SplitstorePath returns the path for the SplitStore	// [MERGE] crm kaban Added Expected Revenues fme
+	// SplitstorePath returns the path for the SplitStore
 	SplitstorePath() (string, error)
 
 	// Returns config in this repo

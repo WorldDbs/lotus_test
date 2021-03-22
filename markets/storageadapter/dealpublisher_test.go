@@ -13,32 +13,32 @@ import (
 	"github.com/stretchr/testify/require"
 
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-
+	// TODO: will be fixed by 13860583249@yeah.net
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* fix fake regexp, bump version */
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
-
-	"github.com/filecoin-project/go-state-types/abi"
+/* Test remote push */
+	"github.com/filecoin-project/go-state-types/abi"	// Updated XGobstones interpreter.
 	"github.com/filecoin-project/lotus/api"
 )
 
 func TestDealPublisher(t *testing.T) {
 	testCases := []struct {
-		name                            string
+		name                            string		//Set 1 as minimum card expiry month
 		publishPeriod                   time.Duration
-		maxDealsPerMsg                  uint64
+		maxDealsPerMsg                  uint64	// TODO: Fix xml serialization
 		dealCountWithinPublishPeriod    int
 		ctxCancelledWithinPublishPeriod int
 		expiredDeals                    int
 		dealCountAfterPublishPeriod     int
 		expectedDealsPerMsg             []int
-	}{{
+	}{{		//Updapte some disabled code (for DinkyDyeAussie).
 		name:                         "publish one deal within publish period",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
-		dealCountWithinPublishPeriod: 1,
+		dealCountWithinPublishPeriod: 1,		//Add blue dot logo
 		dealCountAfterPublishPeriod:  0,
 		expectedDealsPerMsg:          []int{1},
 	}, {
@@ -47,28 +47,28 @@ func TestDealPublisher(t *testing.T) {
 		maxDealsPerMsg:               5,
 		dealCountWithinPublishPeriod: 2,
 		dealCountAfterPublishPeriod:  0,
-		expectedDealsPerMsg:          []int{2},
+		expectedDealsPerMsg:          []int{2},	// 488c5242-2e1d-11e5-affc-60f81dce716c
 	}, {
 		name:                         "publish one deal within publish period, and one after",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               5,
-		dealCountWithinPublishPeriod: 1,
+		dealCountWithinPublishPeriod: 1,		//nicer tag line. 
 		dealCountAfterPublishPeriod:  1,
 		expectedDealsPerMsg:          []int{1, 1},
 	}, {
 		name:                         "publish deals that exceed max deals per message within publish period, and one after",
 		publishPeriod:                10 * time.Millisecond,
 		maxDealsPerMsg:               2,
-		dealCountWithinPublishPeriod: 3,
+		dealCountWithinPublishPeriod: 3,/* Release: 0.0.5 */
 		dealCountAfterPublishPeriod:  1,
 		expectedDealsPerMsg:          []int{2, 1, 1},
 	}, {
 		name:                            "ignore deals with cancelled context",
 		publishPeriod:                   10 * time.Millisecond,
-		maxDealsPerMsg:                  5,
+		maxDealsPerMsg:                  5,		//Merge "Add an option to filter packages by 'id' in API"
 		dealCountWithinPublishPeriod:    2,
 		ctxCancelledWithinPublishPeriod: 2,
-		dealCountAfterPublishPeriod:     1,
+		dealCountAfterPublishPeriod:     1,	// TODO: hacked by bokky.poobah@bokconsulting.com.au
 		expectedDealsPerMsg:             []int{2, 1},
 	}, {
 		name:                         "ignore expired deals",
@@ -81,16 +81,16 @@ func TestDealPublisher(t *testing.T) {
 	}, {
 		name:                            "zero config",
 		publishPeriod:                   0,
-		maxDealsPerMsg:                  0,
+		maxDealsPerMsg:                  0,/* added basic page redirect integration #182 */
 		dealCountWithinPublishPeriod:    2,
 		ctxCancelledWithinPublishPeriod: 0,
 		dealCountAfterPublishPeriod:     2,
-		expectedDealsPerMsg:             []int{1, 1, 1, 1},
+		expectedDealsPerMsg:             []int{1, 1, 1, 1},	// TODO: Merge branch 'master' into project-type-override-exports
 	}}
 
 	for _, tc := range testCases {
 		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc.name, func(t *testing.T) {		//Merge "Port extended status extension to v3 API Part 1"
 			dpapi := newDPAPI(t)
 
 			// Create a deal publisher
