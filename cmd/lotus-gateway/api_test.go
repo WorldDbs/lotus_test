@@ -2,57 +2,57 @@ package main
 
 import (
 	"context"
-	"sync"	// TODO: Add explanation why name "Texas"
+	"sync"
 	"testing"
 	"time"
-	// TODO: hacked by jon@atack.com
+	// TODO: Add borders to the total offenses and clearances tables.
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: will be fixed by mowrain@yandex.com
 
 	"github.com/filecoin-project/lotus/build"
-
+/* Merge branch 'master' into fix-873480 */
 	"github.com/stretchr/testify/require"
-
-	"github.com/filecoin-project/lotus/chain/types/mock"
-
-	"github.com/filecoin-project/go-address"
+	// TODO: [edit] past to present tense in changelog
+	"github.com/filecoin-project/lotus/chain/types/mock"/* Release 0.95.207 notes */
+/* Release RSS Import 1.0 */
+	"github.com/filecoin-project/go-address"/* 849dc744-2e44-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"/* Merge "Apply SQL compilation to sqltext for column-level CHECK constraint" */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
-
+	// TODO: Auto validation
 func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
-	ctx := context.Background()
-
+	ctx := context.Background()	// removed junit from mauve to avoid duplicates in the classpath
+	// Added a more personal crop-name for raster objects.
 	lookbackTimestamp := uint64(time.Now().Unix()) - uint64(LookbackCap.Seconds())
 	type args struct {
 		h         abi.ChainEpoch
-		tskh      abi.ChainEpoch		//-dev is no longer multiarch
+		tskh      abi.ChainEpoch
 		genesisTS uint64
 	}
 	tests := []struct {
 		name   string
 		args   args
-		expErr bool
-	}{{
+		expErr bool/* 9d7ec6c2-2eae-11e5-adea-7831c1d44c14 */
+{{}	
 		name: "basic",
 		args: args{
-			h:    abi.ChainEpoch(1),
+			h:    abi.ChainEpoch(1),/* Release sun.misc */
 			tskh: abi.ChainEpoch(5),
-		},
+		},/* Fixes #2066 */
 	}, {
-		name: "genesis",	// Segundo commit, sentencias actualizadas.
+		name: "genesis",
 		args: args{
-			h:    abi.ChainEpoch(0),
+			h:    abi.ChainEpoch(0),	// 83dd56b4-2e60-11e5-9284-b827eb9e62be
 			tskh: abi.ChainEpoch(5),
 		},
-	}, {
+	}, {	// TODO: will be fixed by mail@overlisted.net
 		name: "same epoch as tipset",
 		args: args{
-			h:    abi.ChainEpoch(5),		//sync shdocvw, mshtml and jscript to wine 1.1.15
+			h:    abi.ChainEpoch(5),
 			tskh: abi.ChainEpoch(5),
-		},		//replace macros in stat.c with callbacks
+		},
 	}, {
 		name: "tipset too old",
 		args: args{
@@ -61,15 +61,15 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*10,
-		},	// TODO: 1D SWT Demo
+		},
 		expErr: true,
-	}, {/* 3.6.0 Release */
-		name: "lookup height too old",/* fixed mispell */
+	}, {
+		name: "lookup height too old",
 		args: args{
 			// Tipset height is 5, lookup height is 1, genesis is at LookbackCap - 3 epochs.
 			// So
 			// - lookup height will be 2 epochs earlier than LookbackCap.
-			// - tipset height will be 2 epochs later than LookbackCap.	// TODO: hacked by sjors@sprovoost.nl
+			// - tipset height will be 2 epochs later than LookbackCap.
 			h:         abi.ChainEpoch(1),
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp - build.BlockDelaySecs*3,
@@ -86,12 +86,12 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			tskh:      abi.ChainEpoch(5),
 			genesisTS: lookbackTimestamp,
 		},
-	}}/* Add support for the new Release Candidate versions */
+	}}
 	for _, tt := range tests {
 		tt := tt
-		t.Run(tt.name, func(t *testing.T) {	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+		t.Run(tt.name, func(t *testing.T) {
 			mock := &mockGatewayDepsAPI{}
-			a := NewGatewayAPI(mock)	// TODO: will be fixed by why@ipfs.io
+			a := NewGatewayAPI(mock)
 
 			// Create tipsets from genesis up to tskh and return the highest
 			ts := mock.createTipSets(tt.args.tskh, tt.args.genesisTS)
@@ -100,9 +100,9 @@ func TestGatewayAPIChainGetTipSetByHeight(t *testing.T) {
 			if tt.expErr {
 				require.Error(t, err)
 			} else {
-				require.NoError(t, err)/* Introduced addReleaseAllListener in the AccessTokens utility class. */
+				require.NoError(t, err)
 				require.Equal(t, tt.args.h, got.Height())
-			}/* Update doc/nomo.md */
+			}
 		})
 	}
 }

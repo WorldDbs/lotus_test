@@ -1,30 +1,30 @@
-[metadata]		//Create rust.yml
-  name = "lotus-soup"
+[metadata]
+  name = "lotus-soup"		//Drop github prefix from variable name
   author = ""
 
-[global]
-  plan = "lotus-soup"/* 1.1.5o-SNAPSHOT Released */
+[global]		//Formatter: Make parseObjCUntilAtEnd() actually work.
+  plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"	// TODO: we can list properly
+  builder = "docker:go"	// TODO: common errors mentioned in docs
   runner = "local:docker"
-/* Release 1.0.0-rc0 */
-[global.build]		//Merge "Avoid ConcurrentModificationException on providers"
-  selectors = ["testground"]
 
-[global.run_config]	// TODO: hacked by magik6k@gmail.com
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* 4d77ceec-2e42-11e5-9284-b827eb9e62be */
+[global.build]		//Merge branch 'master' into remove-file-from-test-target
+  selectors = ["testground"]	// TODO: Delete S3_data.md
+
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]	// Corrected `crn tree` description
+[global.run.test_params]
   clients = "3"
-  miners = "2"/* Release a hotfix to npm (v2.1.1) */
-  genesis_timestamp_offset = "0"		//[release] prepare for next development iteration
+  miners = "2"
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"	// TODO: integer serde
 
 [[groups]]
   id = "bootstrapper"
@@ -32,25 +32,25 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* add HIve Conf */
-      role = "bootstrapper"
+    [groups.run.test_params]
+      role = "bootstrapper"		//Merge "Remove FloatingIPChecker from network_basic_ops"
 
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 2
-    percentage = 0.0/* Add -R/--output-fw-rules flag and lint fixes */
-  [groups.run]/* Update PALMPMPT.txt */
-    [groups.run.test_params]
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]	// 1eddb1bd-2e9c-11e5-941d-a45e60cdfd11
       role = "miner"
       mining_mode = "natural"
 
 [[groups]]
-  id = "clients"
+  id = "clients"/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
   [groups.instances]
-    count = 3
+    count = 3	// Fixed validation errors in Capabilities document
     percentage = 0.0
-  [groups.run]	// netloan-webapp ChangeCSS
+  [groups.run]/* test/t_uri_{escape,extract}: migrate to GTest */
     [groups.run.test_params]
       role = "client"
       deals = "300"

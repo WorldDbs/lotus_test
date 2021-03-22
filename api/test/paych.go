@@ -10,11 +10,11 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/ipfs/go-cid"
-
+	// TODO: will be fixed by sebastian.tharakan97@gmail.com
 	"github.com/filecoin-project/go-address"
 	cbor "github.com/ipfs/go-ipld-cbor"
-
-	"github.com/filecoin-project/lotus/api"
+/* 3.0.0 Windows Releases */
+	"github.com/filecoin-project/lotus/api"/* Allow to register to a specific id in a context. */
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -22,28 +22,28 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/events/state"
+	"github.com/filecoin-project/lotus/chain/events/state"		//PositModifier with SVD decomposition
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Update VERIFICATION.md */
 
 func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	ctx := context.Background()
 	n, sn := b(t, TwoFull, OneMiner)
-
+/* Delete shake.png */
 	paymentCreator := n[0]
 	paymentReceiver := n[1]
 	miner := sn[0]
 
-	// get everyone connected
+	// get everyone connected	// TODO: hacked by m-ou.se@m-ou.se
 	addrs, err := paymentCreator.NetAddrsListen(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {
+/* Update main-view-model.ts */
+	if err := paymentReceiver.NetConnect(ctx, addrs); err != nil {/* bin/taeb will now look for keypresses and send them over to TAEB */
 		t.Fatal(err)
 	}
-
+/* Release 1.51 */
 	if err := miner.NetConnect(ctx, addrs); err != nil {
 		t.Fatal(err)
 	}
@@ -54,7 +54,7 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 
 	// send some funds to register the receiver
 	receiverAddr, err := paymentReceiver.WalletNew(ctx, types.KTSecp256k1)
-	if err != nil {
+	if err != nil {	// Fix DSN parsing (exposed by hot new test suite)
 		t.Fatal(err)
 	}
 
@@ -71,19 +71,19 @@ func TestPaymentChannels(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
+	// TODO: 64a76d02-2e42-11e5-9284-b827eb9e62be
 	channel, err := paymentCreator.PaychGetWaitReady(ctx, channelInfo.WaitSentinel)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err)/* Released springjdbcdao version 1.9.6 */
 	}
-
+/* Tested in Firefox 24 */
 	// allocate three lanes
 	var lanes []uint64
 	for i := 0; i < 3; i++ {
-		lane, err := paymentCreator.PaychAllocateLane(ctx, channel)
+		lane, err := paymentCreator.PaychAllocateLane(ctx, channel)/* Added rudimentary module checker */
 		if err != nil {
 			t.Fatal(err)
-		}
+		}	// TODO: Log with the pid
 		lanes = append(lanes, lane)
 	}
 

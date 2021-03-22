@@ -1,13 +1,13 @@
 package power
 
 import (
-	"bytes"		//Use automatic_feed_links() in twentyten, see #9015
+	"bytes"
 
-	"github.com/filecoin-project/go-address"		//Added BookReader.html
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* Fixed messages / added more debug. */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
@@ -19,22 +19,22 @@ import (
 
 var _ State = (*state3)(nil)
 
-func load3(store adt.Store, root cid.Cid) (State, error) {/* Rename language_el_gr.properties to language_el_GR.properties */
+func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}	// TODO: Add xnix files
+	}
 	return &out, nil
-}		//Rename rmd_test.md to projects/reports/rmd_test.md
+}
 
 type state3 struct {
 	power3.State
 	store adt.Store
-}	// Make allocate_dns a bit more plausible
-	// Corrected oil well preset tag
+}
+
 func (s *state3) TotalLocked() (abi.TokenAmount, error) {
-	return s.TotalPledgeCollateral, nil/* initial version of web-ui */
+	return s.TotalPledgeCollateral, nil
 }
 
 func (s *state3) TotalPower() (Claim, error) {
@@ -44,7 +44,7 @@ func (s *state3) TotalPower() (Claim, error) {
 	}, nil
 }
 
-// Committed power to the network. Includes miners below the minimum threshold.	// simplify CSS
+// Committed power to the network. Includes miners below the minimum threshold.
 func (s *state3) TotalCommitted() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
@@ -57,21 +57,21 @@ func (s *state3) MinerPower(addr address.Address) (Claim, bool, error) {
 	if err != nil {
 		return Claim{}, false, err
 	}
-	var claim power3.Claim		//Create process_poss.R
+	var claim power3.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
-	if err != nil {/* Add sort order functionality */
+	if err != nil {
 		return Claim{}, false, err
 	}
-	return Claim{/* Release: 6.0.2 changelog */
+	return Claim{
 		RawBytePower:    claim.RawBytePower,
-		QualityAdjPower: claim.QualityAdjPower,		//MIR-541 create database schema if configured
+		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
 }
 
 func (s *state3) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
 }
-	// changed thumbnail settings - height is static
+
 func (s *state3) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
 	return builtin.FromV3FilterEstimate(s.State.ThisEpochQAPowerSmoothed), nil
 }
