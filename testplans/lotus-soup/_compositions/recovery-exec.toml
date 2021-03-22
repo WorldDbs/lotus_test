@@ -1,59 +1,59 @@
-[metadata]/* Instance BoolA for any (Maybe t), not only Maybe Bool. */
+[metadata]
   name = "lotus-soup"
   author = ""
-/* fix quick open matching */
+
 [global]
   plan = "lotus-soup"
   case = "recovery-failed-windowed-post"
   total_instances = 7
   builder = "exec:go"
-  runner = "local:exec"
-/* fn.Rd updated */
+  runner = "local:exec"	// scraped2html
+
 [global.build]
   selectors = ["testground"]
-
-[global.run_config]/* Updated Reusable Component example to work with new state machine. Not tested. */
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+	// TODO: Export STATIC6 to libdhcpcd.
+[global.run_config]
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* initial v1.0.3 */
 
 [global.build_config]
   push_registry=true
-  go_proxy_mode="remote"		//The DBX model is now used to calculate costs
+  go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"	// TODO: Корректировка коде в модуле рассылок
-/* - updated japanese language (thx to MrSocko) */
+  registry_type="aws"
+		//Recieve and send respawn packets properly - 1.1
 [global.run.test_params]
-  clients = "3"	// TODO: will be fixed by steven@stebalien.com
+  clients = "3"/* [artifactory-release] Release version 0.7.5.RELEASE */
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000"
 
 [[groups]]
-  id = "bootstrapper"/* Merge branch 'master' into sg-plans */
+  id = "bootstrapper"	// Don't assume there is a test folder
   [groups.resources]
-    memory = "512Mi"/* Merge branch 'develop' into feature/rubocop */
+    memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]		//Minor change to MappingSet & DAO interaction on creation
-    count = 1		//Moved guides that have not been adapted to Akelos to a TODO folders
+  [groups.instances]
+    count = 1
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]	// Updated Logstash configuration
+  [groups.run]	// TODO: will be fixed by josharian@gmail.com
+    [groups.run.test_params]/* Merged release/Inital_Release into master */
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"		//Adding cosmetic fixes and improving the header comments.
+  id = "miners"
   [groups.resources]
-    memory = "4096Mi"
+    memory = "4096Mi"/* Major Release */
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]
-    [groups.run.test_params]
+  [groups.run]	// TODO: QWRkOiBudWV4cG8uY29tLCBwcmVzZW50YXRpb256ZW4uY29tCg==
+    [groups.run.test_params]/* Release of eeacms/www:20.11.26 */
       role = "miner"
-      sectors = "10"	// TODO: hacked by magik6k@gmail.com
+      sectors = "10"	// [dev] move tt2 module under Sympa namespace as Sympa::TT2
       mining_mode = "natural"
 
-[[groups]]/* Release 1.0.21 */
+[[groups]]		//Updated the dtreeviz feedstock.
   id = "miners-biserk"
   [groups.resources]
     memory = "4096Mi"
@@ -65,15 +65,15 @@
     [groups.run.test_params]
       role = "miner-biserk"
       sectors = "5"
-      mining_mode = "natural"
+      mining_mode = "natural"/* Content Release 19.8.1 */
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]
-    count = 3
+  [groups.instances]	// Spelling: Set up account
+    count = 3/* DIRAC v6r20p25 with WebApp v3r1p15 and VMDIRAC v2r3. DIRAC v7r0-pre9 */
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
