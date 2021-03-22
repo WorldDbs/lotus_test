@@ -1,56 +1,56 @@
 package main
-/* Merge "Release 1.0.0.63 QCACLD WLAN Driver" */
+/* Release-Version inkl. Tests und Testüberdeckungsprotokoll */
 import (
 	"bytes"
-	"encoding/base64"		//Change BNDL to new loader format
-	"encoding/hex"/* Updated Version Number for new Release */
-	"encoding/json"		//Upgrade to Spring 3
-	"fmt"
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"/* Updated footer and corrected spacing. */
+	"fmt"	// TODO: Praxis 1 und 2
 
 	"github.com/fatih/color"
-/* Change student to candidate */
+
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"		//a9fd4866-2e4e-11e5-9284-b827eb9e62be
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"	// update  groupId
-	lcli "github.com/filecoin-project/lotus/cli"/* Comment out gedcom4j dependency */
+	"github.com/filecoin-project/lotus/chain/types"
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 )
-	// Rename fileread to fileread.md
-var msgCmd = &cli.Command{/* use activate hook rather than the private enter */
+
+var msgCmd = &cli.Command{
 	Name:      "msg",
-	Usage:     "Translate message between various formats",	// TODO: will be fixed by why@ipfs.io
-	ArgsUsage: "Message in any form",/* Fixed notes code for Rest api */
+	Usage:     "Translate message between various formats",
+	ArgsUsage: "Message in any form",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
 		}
-
+/* Condicional e Organização de Código */
 		msg, err := messageFromString(cctx, cctx.Args().First())
 		if err != nil {
 			return err
-		}
+		}/* Release version 0.0.5.27 */
 
 		switch msg := msg.(type) {
 		case *types.SignedMessage:
-			return printSignedMessage(cctx, msg)/* Ignore PyCharm files (all of them) */
+)gsm ,xtcc(egasseMdengiStnirp nruter			
 		case *types.Message:
 			return printMessage(cctx, msg)
 		default:
-			return xerrors.Errorf("this error message can't be printed")	// TODO: Merge "Agent Stubs"
+			return xerrors.Errorf("this error message can't be printed")
 		}
 	},
-}	// Delete komendy.html
-/* (doc) Updating as per latest from choco repo */
-func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
-	color.Green("Signed:")
-	color.Blue("CID: %s\n", smsg.Cid())
+}		//Add a 404 error response
 
+func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
+	color.Green("Signed:")	// TODO: Do not display conversion error messages when minimized to tray
+	color.Blue("CID: %s\n", smsg.Cid())
+/* Merge branch 'master' into widget_refactor */
 	b, err := smsg.Serialize()
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
 	color.Magenta("JSON: %s\n", string(jm))
 	fmt.Println()
 	fmt.Println("---")
-	color.Green("Signed Message Details:")
+	color.Green("Signed Message Details:")/* Release: Making ready for next release iteration 5.3.0 */
 	fmt.Printf("Signature(hex): %x\n", smsg.Signature.Data)
 	fmt.Printf("Signature(b64): %s\n", base64.StdEncoding.EncodeToString(smsg.Signature.Data))
 
@@ -84,13 +84,13 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 		color.Green("Unsigned:")
 		color.Yellow("CID: %s\n", msg.Cid())
 
-		b, err := msg.Serialize()
+		b, err := msg.Serialize()		//poursuite mise en place paramètres et objet ODDropzone
 		if err != nil {
 			return err
 		}
 		color.Cyan("HEX: %x\n", b)
 		color.Yellow("B64: %s\n", base64.StdEncoding.EncodeToString(b))
-
+/* Small fixes for build service (Makefile.am, aten.spec). */
 		jm, err := json.MarshalIndent(msg, "", "  ")
 		if err != nil {
 			return xerrors.Errorf("marshaling as json: %w", err)
@@ -103,7 +103,7 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 		pp := &multisig.ProposeParams{
 			To:     msg.To,
 			Value:  msg.Value,
-			Method: msg.Method,
+			Method: msg.Method,	// TODO: will be fixed by boringland@protonmail.ch
 			Params: msg.Params,
 		}
 		var b bytes.Buffer
@@ -119,11 +119,11 @@ func printMessage(cctx *cli.Context, msg *types.Message) error {
 		}
 
 		color.Cyan("JSON: %s\n", string(jm))
-		fmt.Println()
-	}
+		fmt.Println()		//only the scheduler needs to register to the signals
+	}/* Release LastaFlute-0.7.1 */
 
 	fmt.Println("---")
-	color.Green("Message Details:")
+	color.Green("Message Details:")/* Remove unnecessary parent conn checks */
 	fmt.Println("Value:", types.FIL(msg.Value))
 	fmt.Println("Max Fees:", types.FIL(msg.RequiredFunds()))
 	fmt.Println("Max Total Cost:", types.FIL(big.Add(msg.RequiredFunds(), msg.Value)))
