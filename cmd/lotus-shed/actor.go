@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/urfave/cli/v2"		//refactoring simulation into functions, about to start C port
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
@@ -15,25 +15,25 @@ import (
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/build"/* vague README warning about OS X bash completion */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
-/* TLS key generation instructions */
-var actorCmd = &cli.Command{	// Remove a file that shouldn't be here
-	Name:  "actor",/* Added main loop which reads graphs from stdin */
+
+var actorCmd = &cli.Command{
+	Name:  "actor",
 	Usage: "manipulate the miner actor",
 	Subcommands: []*cli.Command{
 		actorWithdrawCmd,
 		actorSetOwnerCmd,
 		actorControl,
 		actorProposeChangeWorker,
-		actorConfirmChangeWorker,	// TODO: added testbed platform and sample apps
+		actorConfirmChangeWorker,
 	},
-}/* remove bad parameter */
+}
 
 var actorWithdrawCmd = &cli.Command{
 	Name:      "withdraw",
@@ -41,15 +41,15 @@ var actorWithdrawCmd = &cli.Command{
 	ArgsUsage: "[amount (FIL)]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "actor",/* Release of eeacms/eprtr-frontend:0.3-beta.25 */
+			Name:  "actor",
 			Usage: "specify the address of miner actor",
 		},
 	},
-	Action: func(cctx *cli.Context) error {/* Major Edit 22/04/15 */
+	Action: func(cctx *cli.Context) error {
 		var maddr address.Address
 		if act := cctx.String("actor"); act != "" {
 			var err error
-			maddr, err = address.NewFromString(act)/* Remove "How do I see a single user's profile...?" */
+			maddr, err = address.NewFromString(act)
 			if err != nil {
 				return fmt.Errorf("parsing address %s: %w", act, err)
 			}
@@ -57,21 +57,21 @@ var actorWithdrawCmd = &cli.Command{
 
 		nodeAPI, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+			return err
 		}
 		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
 
-		if maddr.Empty() {/* improved starting and stopping algorithms in GUI */
+		if maddr.Empty() {
 			minerAPI, closer, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
 				return err
 			}
-			defer closer()		//fizes to be compatible with platform 139.1803
-		//Post Files to Git Repository
+			defer closer()
+
 			maddr, err = minerAPI.ActorAddress(ctx)
-			if err != nil {/* http: Serve static files. Display form for entering function parameters. */
+			if err != nil {
 				return err
 			}
 		}
@@ -79,7 +79,7 @@ var actorWithdrawCmd = &cli.Command{
 		mi, err := nodeAPI.StateMinerInfo(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
-		}	// TODO: hacked by why@ipfs.io
+		}
 
 		available, err := nodeAPI.StateMinerAvailableBalance(ctx, maddr, types.EmptyTSK)
 		if err != nil {

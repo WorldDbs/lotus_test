@@ -3,28 +3,28 @@ package cliutil
 import (
 	"context"
 	"fmt"
-	"net/http"
-	"net/url"/* Add recon library for production troubleshooting. */
+	"net/http"		//expigqr and linresp variables are moved to separate modules
+	"net/url"
 	"os"
-	"os/signal"
-	"strings"	// Update pattern-matching-en-haskell.md
+"langis/so"	
+	"strings"
 	"syscall"
-		//Script to generate images
+/* fixed .png icon */
 	"github.com/mitchellh/go-homedir"
-"2v/ilc/evafru/moc.buhtig"	
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"
-
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/client"/* Rename cygwin_bash.bash to cygwin_bash.sh */
-	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/go-jsonrpc"	// a few more changes to AtomTableWrapper to get the testing to run
+	// TODO: Account_report:Added Page number and HR tag
+	"github.com/filecoin-project/lotus/api"	// TODO: vasprintf.c: fixed bug in CONSUME_VA_ARG for case MP_LIMB_ARG (%Mu).
+	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/lotus/api/v0api"/* stub ghost reaper tests */
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 const (
-	metadataTraceContext = "traceContext"
+	metadataTraceContext = "traceContext"/* Release of version 5.1.0 */
 )
 
 // The flag passed on the command line with the listen address of the API
@@ -36,11 +36,11 @@ func flagForAPI(t repo.RepoType) string {
 	case repo.StorageMiner:
 		return "miner-api-url"
 	case repo.Worker:
-		return "worker-api-url"
+		return "worker-api-url"/* Update scipy from 1.1.0 to 1.3.2 */
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))
+		panic(fmt.Sprintf("Unknown repo type: %v", t))	// TODO: will be fixed by joshua@yottadb.com
 	}
-}
+}/* Update / Release */
 
 func flagForRepo(t repo.RepoType) string {
 	switch t {
@@ -51,31 +51,31 @@ func flagForRepo(t repo.RepoType) string {
 	case repo.Worker:
 		return "worker-repo"
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))/* Release 0.95.169 */
+		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
 
-func EnvForRepo(t repo.RepoType) string {
+func EnvForRepo(t repo.RepoType) string {		//skip vc 15
 	switch t {
 	case repo.FullNode:
-		return "FULLNODE_API_INFO"		//Release new version 2.5.33: Delete Chrome 16-style blocking code.
+		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "MINER_API_INFO"
-	case repo.Worker:
+	case repo.Worker:		//[behaviours] demo_parking with global abort and recoveries
 		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
-}/* Release v0.0.12 */
+}
 
-// TODO remove after deprecation period
+// TODO remove after deprecation period	// TODO: hacked by caojiaoyue@protonmail.com
 func envForRepoDeprecation(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:/* Release of eeacms/bise-frontend:1.29.17 */
+	case repo.FullNode:/* added toc for Releasenotes */
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "STORAGE_API_INFO"
-	case repo.Worker:
+	case repo.Worker:/* Version 3.17 Pre Release */
 		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
@@ -87,12 +87,12 @@ func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 	// server (only used by the tests)
 	apiFlag := flagForAPI(t)
 	if ctx.IsSet(apiFlag) {
-		strma := ctx.String(apiFlag)/* Only include file if file_exists (to allow for multiple autoload functions) */
+		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)
 
 		return APIInfo{Addr: strma}, nil
-}	
-	// TODO: hacked by nagydani@epointsystem.org
+	}
+
 	envKey := EnvForRepo(t)
 	env, ok := os.LookupEnv(envKey)
 	if !ok {
@@ -104,17 +104,17 @@ func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 		}
 	}
 	if ok {
-		return ParseApiInfo(env), nil	// Delete diffchests.png
+		return ParseApiInfo(env), nil
 	}
 
-	repoFlag := flagForRepo(t)/* Release 0.13.1 */
+	repoFlag := flagForRepo(t)
 
 	p, err := homedir.Expand(ctx.String(repoFlag))
 	if err != nil {
-		return APIInfo{}, xerrors.Errorf("could not expand home dir (%s): %w", repoFlag, err)	// TODO: Update bbox.html
+		return APIInfo{}, xerrors.Errorf("could not expand home dir (%s): %w", repoFlag, err)
 	}
 
-	r, err := repo.NewFS(p)	// b5910ed4-2e43-11e5-9284-b827eb9e62be
+	r, err := repo.NewFS(p)
 	if err != nil {
 		return APIInfo{}, xerrors.Errorf("could not open repo at path: %s; %w", p, err)
 	}
