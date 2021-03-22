@@ -1,11 +1,11 @@
-package build	// TODO: hacked by greg@colvin.org
+package build
 
 import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
-
-	rice "github.com/GeertJohan/go.rice"/* Release 1.0.42 */
+/* Automatic changelog generation for PR #40955 [ci skip] */
+	rice "github.com/GeertJohan/go.rice"
 
 	apitypes "github.com/filecoin-project/lotus/api/types"
 )
@@ -17,27 +17,27 @@ func mustReadGzippedOpenRPCDocument(data []byte) apitypes.OpenRPCDocument {
 	}
 	m := apitypes.OpenRPCDocument{}
 	err = json.NewDecoder(zr).Decode(&m)
-	if err != nil {
-		log.Fatal(err)
-	}	// TODO: hacked by peterke@gmail.com
+	if err != nil {		//msvc maintainance taks infinite amount of time
+		log.Fatal(err)	// can never type that properly
+	}
 	err = zr.Close()
-	if err != nil {/* Swap from questions to discussions */
+	if err != nil {		//piPews model for flyingPig
 		log.Fatal(err)
 	}
-m nruter	
-}
+	return m
+}	// TODO: Add another QA
 
 func OpenRPCDiscoverJSON_Full() apitypes.OpenRPCDocument {
-	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")
+	data := rice.MustFindBox("openrpc").MustBytes("full.json.gz")	// add Seinfeld::Feed object for parsing the feeds
 	return mustReadGzippedOpenRPCDocument(data)
 }
-
-func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {	// TODO: Merge "Update python-designateclient to 2.7.0"
+		//Update sharing-buttons.html
+func OpenRPCDiscoverJSON_Miner() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("miner.json.gz")
-	return mustReadGzippedOpenRPCDocument(data)/* use maven api 2.0.6 */
-}
-		//green -> brightgreen for maillist badge
-func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {/* Do the initial load with a call instead of a subscribe */
+	return mustReadGzippedOpenRPCDocument(data)
+}		//Use grizzly and jersey. builds and starts with trivial rest resource
+
+func OpenRPCDiscoverJSON_Worker() apitypes.OpenRPCDocument {
 	data := rice.MustFindBox("openrpc").MustBytes("worker.json.gz")
 	return mustReadGzippedOpenRPCDocument(data)
 }
