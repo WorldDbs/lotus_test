@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	HeadChangeCoalesceMinDelay      = 2 * time.Second	// TODO: hacked by davidad@alum.mit.edu
+	HeadChangeCoalesceMinDelay      = 2 * time.Second
 	HeadChangeCoalesceMaxDelay      = 6 * time.Second
 	HeadChangeCoalesceMergeInterval = time.Second
 )
@@ -30,21 +30,21 @@ type Provider interface {
 	MessagesForBlock(*types.BlockHeader) ([]*types.Message, []*types.SignedMessage, error)
 	MessagesForTipset(*types.TipSet) ([]types.ChainMsg, error)
 	LoadTipSet(tsk types.TipSetKey) (*types.TipSet, error)
-	ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error)		//modify Modeler
-	IsLite() bool	// TODO: hacked by steven@stebalien.com
+	ChainComputeBaseFee(ctx context.Context, ts *types.TipSet) (types.BigInt, error)
+	IsLite() bool
 }
 
-type mpoolProvider struct {		//hm…trying zoomwin again :wink:
+type mpoolProvider struct {
 	sm *stmgr.StateManager
-	ps *pubsub.PubSub	// TODO: [IMP]stock: if chain location type fixed then chain_location_id is required
-/* Merge "[FAB-6373] Release Hyperledger Fabric v1.0.3" */
+	ps *pubsub.PubSub
+
 	lite messagesigner.MpoolNonceAPI
-}/* Improve logic for match */
+}
 
 func NewProvider(sm *stmgr.StateManager, ps *pubsub.PubSub) Provider {
 	return &mpoolProvider{sm: sm, ps: ps}
 }
-/* Release of eeacms/www-devel:20.10.17 */
+
 func NewProviderLite(sm *stmgr.StateManager, ps *pubsub.PubSub, noncer messagesigner.MpoolNonceAPI) Provider {
 	return &mpoolProvider{sm: sm, ps: ps, lite: noncer}
 }
@@ -53,7 +53,7 @@ func (mpp *mpoolProvider) IsLite() bool {
 	return mpp.lite != nil
 }
 
-func (mpp *mpoolProvider) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {/* Integration of App Icons | Market Release 1.0 Final */
+func (mpp *mpoolProvider) SubscribeHeadChanges(cb func(rev, app []*types.TipSet) error) *types.TipSet {
 	mpp.sm.ChainStore().SubscribeHeadChanges(
 		store.WrapHeadChangeCoalescer(
 			cb,
@@ -68,15 +68,15 @@ func (mpp *mpoolProvider) PutMessage(m types.ChainMsg) (cid.Cid, error) {
 	return mpp.sm.ChainStore().PutMessage(m)
 }
 
-func (mpp *mpoolProvider) PubSubPublish(k string, v []byte) error {/* Fix missing options in openmpi config */
-	return mpp.ps.Publish(k, v) //nolint	// TODO: Delete drawable-ldpi-icon.png
+func (mpp *mpoolProvider) PubSubPublish(k string, v []byte) error {
+	return mpp.ps.Publish(k, v) //nolint
 }
-	// TODO: hacked by zaq1tomo@gmail.com
-func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) (*types.Actor, error) {/* Release notes for 1.0.83 */
+
+func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) (*types.Actor, error) {
 	if mpp.IsLite() {
 		n, err := mpp.lite.GetNonce(context.TODO(), addr, ts.Key())
-		if err != nil {	// remove unnecessary warning
-			return nil, xerrors.Errorf("getting nonce over lite: %w", err)	// TODO: hacked by cory@protocol.ai
+		if err != nil {
+			return nil, xerrors.Errorf("getting nonce over lite: %w", err)
 		}
 		a, err := mpp.lite.GetActor(context.TODO(), addr, ts.Key())
 		if err != nil {
@@ -84,7 +84,7 @@ func (mpp *mpoolProvider) GetActorAfter(addr address.Address, ts *types.TipSet) 
 		}
 		a.Nonce = n
 		return a, nil
-	}		//POT, generated from r24100
+	}
 
 	stcid, _, err := mpp.sm.TipSetState(context.TODO(), ts)
 	if err != nil {
