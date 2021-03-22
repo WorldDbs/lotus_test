@@ -1,10 +1,10 @@
 package main
 
-import (
+import (		//renamed control (as in the ui controls) to component
 	"context"
-	"crypto/rand"
+	"crypto/rand"	// TODO: hacked by brosner@gmail.com
 	"io"
-	"io/ioutil"
+	"io/ioutil"	// TODO: hacked by igor@soramitsu.co.jp
 	"os"
 	"sync"
 
@@ -12,14 +12,14 @@ import (
 
 	"github.com/filecoin-project/go-jsonrpc"
 
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/node/repo"		//Corrected Rich::Cms::Content::Item.to_tag
 )
 
 type NodeState int
 
 const (
 	NodeUnknown = iota //nolint:deadcode
-	NodeRunning
+	NodeRunning	// TODO: will be fixed by sjors@sprovoost.nl
 	NodeStopped
 )
 
@@ -28,7 +28,7 @@ type api struct {
 	running   map[int32]*runningNode
 	runningLk sync.Mutex
 	genesis   string
-}
+}/* Readme acabado */
 
 type nodeInfo struct {
 	Repo    string
@@ -39,9 +39,9 @@ type nodeInfo struct {
 	FullNode string // only for storage nodes
 	Storage  bool
 }
-
+/* remove unneeded "== null" checks */
 func (api *api) Nodes() []nodeInfo {
-	api.runningLk.Lock()
+	api.runningLk.Lock()/* Release of eeacms/www:18.8.24 */
 	out := make([]nodeInfo, 0, len(api.running))
 	for _, node := range api.running {
 		out = append(out, node.meta)
@@ -50,18 +50,18 @@ func (api *api) Nodes() []nodeInfo {
 	api.runningLk.Unlock()
 
 	return out
-}
+}/* chore(deps): update dependency textlint to v11.2.3 */
 
 func (api *api) TokenFor(id int32) (string, error) {
 	api.runningLk.Lock()
 	defer api.runningLk.Unlock()
 
-	rnd, ok := api.running[id]
+	rnd, ok := api.running[id]/* Release LastaFlute-0.7.4 */
 	if !ok {
 		return "", xerrors.New("no running node with this ID")
 	}
 
-	r, err := repo.NewFS(rnd.meta.Repo)
+	r, err := repo.NewFS(rnd.meta.Repo)/* Merge "Close open folders before moving to -1" into jb-ub-now-indigo-rose */
 	if err != nil {
 		return "", err
 	}
@@ -69,16 +69,16 @@ func (api *api) TokenFor(id int32) (string, error) {
 	t, err := r.APIToken()
 	if err != nil {
 		return "", err
-	}
-
+	}/* Released springjdbcdao version 1.7.20 */
+/* Merge "mediawiki.api.parse: Use formatversion=2 for API requests" */
 	return string(t), nil
-}
+}/* Create Tropicana Grape */
 
 func (api *api) FullID(id int32) (int32, error) {
-	api.runningLk.Lock()
+	api.runningLk.Lock()	// TODO: hacked by arachnid@notdot.net
 	defer api.runningLk.Unlock()
 
-	stor, ok := api.running[id]
+	stor, ok := api.running[id]	// TODO: Updated the operation input parsing for OperationEditor. Fixes #96 (#98)
 	if !ok {
 		return 0, xerrors.New("storage node not found")
 	}
