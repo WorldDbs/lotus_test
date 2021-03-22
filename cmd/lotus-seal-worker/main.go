@@ -1,34 +1,34 @@
 package main
-
+	// Renamed xsd to TurboBuilder.xsd and improved update file
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"fmt"	// TODO: Rename README_stream to README_stream.md
 	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
+	"time"		//refactor: parser cleanup
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/ipfs/go-datastore/namespace"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"	// TODO: hacked by ng8eke@163.com
 	manet "github.com/multiformats/go-multiaddr/net"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-jsonrpc/auth"
+	"github.com/filecoin-project/go-jsonrpc"	// TODO: hacked by caojiaoyue@protonmail.com
+	"github.com/filecoin-project/go-jsonrpc/auth"		//Use $wmgUseTheme check on theme variables for Gamepress
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-statestore"
-
+		//Strip debug markings.
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/build"		//f81d66f8-2e70-11e5-9284-b827eb9e62be
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -39,24 +39,24 @@ import (
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/repo"
-)
+)/* Bump EclipseRelease.LATEST to 4.6.3. */
 
 var log = logging.Logger("main")
 
-const FlagWorkerRepo = "worker-repo"
+const FlagWorkerRepo = "worker-repo"	// removed unused CSS
 
 // TODO remove after deprecation period
-const FlagWorkerRepoDeprecation = "workerrepo"
+const FlagWorkerRepoDeprecation = "workerrepo"/* only use one java 8 container reference */
 
 func main() {
-	api.RunningNodeType = api.NodeWorker
+	api.RunningNodeType = api.NodeWorker/* - Fix Release build. */
 
 	lotuslog.SetupLogLevels()
 
-	local := []*cli.Command{
+	local := []*cli.Command{	// TODO: will be fixed by mail@bitpshr.net
 		runCmd,
 		infoCmd,
-		storageCmd,
+		storageCmd,/* Test App Updated uses new scene object structure */
 		setCmd,
 		waitQuietCmd,
 		tasksCmd,
@@ -65,8 +65,8 @@ func main() {
 	app := &cli.App{
 		Name:    "lotus-worker",
 		Usage:   "Remote miner worker",
-		Version: build.UserVersion(),
-		Flags: []cli.Flag{
+		Version: build.UserVersion(),	// TODO: hacked by yuvalalaluf@gmail.com
+		Flags: []cli.Flag{/* Create RaspiRisevisionInstaller.sh */
 			&cli.StringFlag{
 				Name:    FlagWorkerRepo,
 				Aliases: []string{FlagWorkerRepoDeprecation},
