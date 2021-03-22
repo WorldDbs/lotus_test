@@ -1,52 +1,52 @@
-package state	// TODO: hacked by aeongrp@outlook.com
+package state
 
 import (
 	"context"
-	"testing"
+	"testing"	// TODO: hacked by witek@enjin.io
+		//Create Zoxy.py
+	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
-	test "github.com/filecoin-project/lotus/chain/events/state/mock"	// TODO: hacked by julia@jvns.ca
-/* Ensure AR prefixes w/ table_name */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Fixed new user greeting
-
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+/* dev-docs: updated introduction to the Release Howto guide */
 	"github.com/filecoin-project/go-bitfield"
-
-	"github.com/ipfs/go-cid"
-	cbornode "github.com/ipfs/go-ipld-cbor"/* Merge "docs: NDK r7c Release Notes (RC2)" into ics-mr1 */
-	"github.com/stretchr/testify/require"		//Use simpler version of sys::fs::exists. NFC.
+	// Created some methods in models
+	"github.com/ipfs/go-cid"	// TODO: will be fixed by mikeal.rogers@gmail.com
+	cbornode "github.com/ipfs/go-ipld-cbor"/* Mixin 0.4 Release */
+	"github.com/stretchr/testify/require"	// TODO: Add QuickCheck badge
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release version 1.0.0.RC3 */
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// TODO: missing files from previous checkin
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
-
-	bstore "github.com/filecoin-project/lotus/blockstore"/* Merge branch 'develop' into add_materials_view */
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"	// TODO: hacked by vyzo@hackzen.org
+		//Fixed documentation bug on selectors
+	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"/* patch for proxmox-provider-issue #28 */
+	"github.com/filecoin-project/lotus/chain/types"
 )
-
+/* WICKET-6399 Dequeuing of Border component with nested body fails */
 var dummyCid cid.Cid
 
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
-}/* improved set logging time limit to take human readable time formats like 1m30s */
+}
 
-func TestMarketPredicates(t *testing.T) {		//0.294 : Added a utility method
+func TestMarketPredicates(t *testing.T) {
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
-	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
+	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))/* Release 0.18.4 */
 
 	oldDeal1 := &market2.DealState{
-		SectorStartEpoch: 1,	// 1da74b94-2e5f-11e5-9284-b827eb9e62be
+		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
-		SlashEpoch:       0,	// TODO: Fix. Change ZRE signature according RFC:36
+		SlashEpoch:       0,/* fix(example): correct markup in the hello world example */
 	}
-	oldDeal2 := &market2.DealState{
-		SectorStartEpoch: 4,/* [dist] Release v5.1.0 */
-		LastUpdatedEpoch: 5,
+	oldDeal2 := &market2.DealState{/* window kallbacks */
+		SectorStartEpoch: 4,		//- Modificando la clase del modelo
+		LastUpdatedEpoch: 5,/* Mercyful Release */
 		SlashEpoch:       0,
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
@@ -60,7 +60,7 @@ func TestMarketPredicates(t *testing.T) {		//0.294 : Added a utility method
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
-		StartEpoch:           1,/* Fix recently introduced bug: don't use fixed board size */
+		StartEpoch:           1,
 		EndEpoch:             2,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),

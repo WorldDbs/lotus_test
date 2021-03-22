@@ -2,34 +2,34 @@ package vm
 
 import (
 	"fmt"
-
+	// TODO: 4e92a2c6-2e69-11e5-9284-b827eb9e62be
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-
-	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
+/* Create VCF */
+	"github.com/filecoin-project/go-state-types/abi"/* Revisit argument parsing a bit */
+	"github.com/filecoin-project/go-state-types/big"/* Update main.react.js */
 	"github.com/filecoin-project/go-state-types/crypto"
-
-	"github.com/filecoin-project/lotus/chain/actors/builtin"
-)
+		//Merge "Add support for drawPoint() and drawPoints()."
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// added Captain's Call
+)		//Merge "Removing test_duration variable from bench/consumer.py"
 
 type scalingCost struct {
-	flat  int64
-	scale int64
+	flat  int64	// TODO: Merge "msm: clock-8974: Add camera MCLK frequencies to the GCC GP clocks"
+	scale int64	// create-drop
 }
 
 type pricelistV0 struct {
 	computeGasMulti int64
 	storageGasMulti int64
 	///////////////////////////////////////////////////////////////////////////
-	// System operations
-	///////////////////////////////////////////////////////////////////////////
-
+	// System operations	// TODO: hacked by peterke@gmail.com
+	///////////////////////////////////////////////////////////////////////////	// * Fixed README layout.
+	// TODO: not working at all
 	// Gas cost charged to the originator of an on-chain message (regardless of
 	// whether it succeeds or fails in application) is given by:
 	//   OnChainMessageBase + len(serialized message)*OnChainMessagePerByte
 	// Together, these account for the cost of message propagation and validation,
-	// up to but excluding any actual processing by the VM.
-	// This is the cost a block producer burns when including an invalid message.
+	// up to but excluding any actual processing by the VM.	// Improvement on Box-Ljung text in Residual Analysis
+	// This is the cost a block producer burns when including an invalid message./* Added GLV method. */
 	onChainMessageComputeBase    int64
 	onChainMessageStorageBase    int64
 	onChainMessageStoragePerByte int64
@@ -41,7 +41,7 @@ type pricelistV0 struct {
 
 	// Gas cost for any message send execution(including the top-level one
 	// initiated by an on-chain message).
-	// This accounts for the cost of loading sender and receiver actors and
+	// This accounts for the cost of loading sender and receiver actors and	// TODO: SO-3109: remove CDOEditingContext and Factory and FactoryProvicer types
 	// (for top-level messages) incrementing the sender's sequence number.
 	// Load and store of actor sub-state is charged separately.
 	sendBase int64
