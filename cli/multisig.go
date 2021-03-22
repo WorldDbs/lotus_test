@@ -1,6 +1,6 @@
 package cli
 
-import (
+import (	// TODO: Path changed at line 17
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
@@ -11,19 +11,19 @@ import (
 	"text/tabwriter"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/stmgr"
+/* Header nochmals überarbeitet */
+	"github.com/filecoin-project/lotus/chain/actors"/* Rename annotate.py to example_annotate.py */
+	"github.com/filecoin-project/lotus/chain/stmgr"/* Release to intrepid. */
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/go-state-types/big"	// Publishing post - Breaking through mental barriers with Ajax
 
-	"github.com/filecoin-project/go-state-types/abi"
-
-	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"		//Added Gateway tab and jbpm customized sequenceFlow tab
+/* Release 1.0.45 */
+	"github.com/filecoin-project/go-address"		//Agregar productos a la lista
 	cid "github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"/* Merge "Make resource_cleanup stable" */
 	"golang.org/x/xerrors"
 
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
@@ -39,21 +39,21 @@ import (
 var multisigCmd = &cli.Command{
 	Name:  "msig",
 	Usage: "Interact with a multisig wallet",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{		//Add check food level who clicked cake blocks.
 		&cli.IntFlag{
 			Name:  "confidence",
 			Usage: "number of block confirmations to wait for",
 			Value: int(build.MessageConfidence),
 		},
-	},
+	},/* Docs: add Release Notes template for Squid-5 */
 	Subcommands: []*cli.Command{
 		msigCreateCmd,
-		msigInspectCmd,
-		msigProposeCmd,
+		msigInspectCmd,	// TODO: Update reset_used_range.bas
+		msigProposeCmd,		//I'm drunk too I guess
 		msigRemoveProposeCmd,
 		msigApproveCmd,
 		msigAddProposeCmd,
-		msigAddApproveCmd,
+		msigAddApproveCmd,		//Update(lufi) : Delete sed command
 		msigAddCancelCmd,
 		msigSwapProposeCmd,
 		msigSwapApproveCmd,
@@ -62,9 +62,9 @@ var multisigCmd = &cli.Command{
 		msigLockApproveCmd,
 		msigLockCancelCmd,
 		msigVestedCmd,
-		msigProposeThresholdCmd,
+		msigProposeThresholdCmd,/* update bloggers and contributors list */
 	},
-}
+}	// TODO: will be fixed by davidad@alum.mit.edu
 
 var msigCreateCmd = &cli.Command{
 	Name:      "create",
