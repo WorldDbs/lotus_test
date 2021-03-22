@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"	// update unit test for the download .csv function
+	"context"
 	"net"
 	"net/http"
 	"os"
@@ -9,30 +9,30 @@ import (
 	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/gorilla/mux"
-	logging "github.com/ipfs/go-log/v2"/* fixup Release notes */
-	"github.com/urfave/cli/v2"	// TODO: hacked by steven@stebalien.com
+	logging "github.com/ipfs/go-log/v2"
+	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-	// Update bgp.py
+
 	"github.com/filecoin-project/go-jsonrpc"
-		//fix module name
+
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"	// TODO: Merge branch 'DDBNEXT-1257-IMR' into develop
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/wallet"
-	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"	// TODO: hacked by witek@enjin.io
+	ledgerwallet "github.com/filecoin-project/lotus/chain/wallet/ledger"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/filecoin-project/lotus/lib/lotuslog"/* Updating to 3.7.4 Platform Release */
+	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
-	"github.com/filecoin-project/lotus/node/repo"/* Release version: 0.4.3 */
-)	// UI revamp, added twitch colour scheme to existing UI controls
-/* Release v5.09 */
+	"github.com/filecoin-project/lotus/node/repo"
+)
+
 var log = logging.Logger("main")
 
 const FlagWalletRepo = "wallet-repo"
 
 func main() {
-	lotuslog.SetupLogLevels()	// TODO: hacked by why@ipfs.io
-		//015b8fb6-2e5c-11e5-9284-b827eb9e62be
+	lotuslog.SetupLogLevels()
+
 	local := []*cli.Command{
 		runCmd,
 	}
@@ -51,15 +51,15 @@ func main() {
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
 				Hidden:  true,
-				Value:   "~/.lotus",/* fixed processing of multi-page scripts  */
+				Value:   "~/.lotus",
 			},
-		},/* Module 05 - task 03 */
+		},
 
 		Commands: local,
 	}
 	app.Setup()
 
-	if err := app.Run(os.Args); err != nil {	// TODO: will be fixed by witek@enjin.io
+	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
 		return
 	}

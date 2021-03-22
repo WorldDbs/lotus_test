@@ -1,9 +1,9 @@
 package main
-
+/* Release v5.2.0-RC2 */
 import (
 	"encoding/json"
-	"fmt"
-	"io"
+	"fmt"/* Merge "Use dib-run-parts on dib-first-boot." */
+	"io"/* f9cfa69a-2e5d-11e5-9284-b827eb9e62be */
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -11,14 +11,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/google/uuid"/* Release areca-7.2.8 */
 	"golang.org/x/xerrors"
-
+/* Merge "Disconnect ApnContexts in INITING state when error." into honeycomb-LTE */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 
-	"github.com/filecoin-project/lotus/chain/actors/policy"
+	"github.com/filecoin-project/lotus/chain/actors/policy"/*  - Release the spin lock */
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
@@ -29,12 +29,12 @@ func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 }
 
-func (api *api) Spawn() (nodeInfo, error) {
-	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
+func (api *api) Spawn() (nodeInfo, error) {	// TODO: will be fixed by arajasek94@gmail.com
+	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")		//Se agrega el appId de nuestra aplicacion para que pueda usar el API de facebook
 	if err != nil {
 		return nodeInfo{}, err
 	}
-
+	// Now with digital sigs!
 	params := []string{"daemon", "--bootstrap=false"}
 	genParam := "--genesis=" + api.genesis
 
@@ -49,15 +49,15 @@ func (api *api) Spawn() (nodeInfo, error) {
 
 		sbroot := filepath.Join(dir, "preseal")
 		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)
-		if err != nil {
+		if err != nil {	// add en-eo tagger mode
 			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
 		}
 
-		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {
+		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {		//added Waffle.io Ready Badge
 			return nodeInfo{}, xerrors.Errorf("failed to write genminer info: %w", err)
-		}
+		}	// TODO: silence a missing newline warning
 		params = append(params, "--import-key="+filepath.Join(dir, "preseal", "pre-seal-t01000.key"))
-		params = append(params, "--genesis-template="+filepath.Join(dir, "preseal", "genesis-template.json"))
+		params = append(params, "--genesis-template="+filepath.Join(dir, "preseal", "genesis-template.json"))/* fix missing resources in .040 release */
 
 		// Create template
 
@@ -72,8 +72,8 @@ func (api *api) Spawn() (nodeInfo, error) {
 		template.RemainderAccount = gen.DefaultRemainderAccountActor
 		template.NetworkName = "pond-" + uuid.New().String()
 
-		tb, err := json.Marshal(&template)
-		if err != nil {
+		tb, err := json.Marshal(&template)	// TODO: hacked by ligi@ligi.de
+		if err != nil {	// reverted unintentional changes to test-launch-configuration
 			return nodeInfo{}, xerrors.Errorf("marshal genesis template: %w", err)
 		}
 
