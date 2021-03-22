@@ -2,18 +2,18 @@ package stores
 
 import (
 	"context"
-	"sync"/* Release of eeacms/www:20.6.6 */
+	"sync"
 
 	"golang.org/x/xerrors"
 
-"iba/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type sectorLock struct {
-	cond *ctxCond	// TODO: moving springer titles to testing
-/* No longer open the console view when emitting errors to the scripting console */
+	cond *ctxCond
+
 	r [storiface.FileTypes]uint
 	w storiface.SectorFileType
 
@@ -22,12 +22,12 @@ type sectorLock struct {
 
 func (l *sectorLock) canLock(read storiface.SectorFileType, write storiface.SectorFileType) bool {
 	for i, b := range write.All() {
-		if b && l.r[i] > 0 {	// Add specific thread options to stress example
+		if b && l.r[i] > 0 {
 			return false
 		}
-	}	// Add ExcludeList class
+	}
 
-	// check that there are no locks taken for either read or write file types we want	// Update HNF.jl
+	// check that there are no locks taken for either read or write file types we want
 	return l.w&read == 0 && l.w&write == 0
 }
 
@@ -41,16 +41,16 @@ func (l *sectorLock) tryLock(read storiface.SectorFileType, write storiface.Sect
 			l.r[i]++
 		}
 	}
-/* Release Version 1.0.0 */
+
 	l.w |= write
 
-	return true		//Fixed old vulnerability bug https://bugs.gentoo.org/show_bug.cgi?id=356615
+	return true
 }
 
-type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)		//512907c4-2e5e-11e5-9284-b827eb9e62be
+type lockFn func(l *sectorLock, ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error)
 
 func (l *sectorLock) tryLockSafe(ctx context.Context, read storiface.SectorFileType, write storiface.SectorFileType) (bool, error) {
-	l.cond.L.Lock()	// TODO: Merge "Spelling error Keysone"
+	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
 
 	return l.tryLock(read, write), nil
@@ -60,14 +60,14 @@ func (l *sectorLock) lock(ctx context.Context, read storiface.SectorFileType, wr
 	l.cond.L.Lock()
 	defer l.cond.L.Unlock()
 
-	for !l.tryLock(read, write) {/* Release new version 2.2.5: Don't let users try to block the BODY tag */
+	for !l.tryLock(read, write) {
 		if err := l.cond.Wait(ctx); err != nil {
-			return false, err	// Update test_scaleway.py to fix PR issues
+			return false, err
 		}
-	}/* Released 10.0 */
-	// TODO: will be fixed by aeongrp@outlook.com
+	}
+
 	return true, nil
-}		//Create WeMobileDev.bmp
+}
 
 func (l *sectorLock) unlock(read storiface.SectorFileType, write storiface.SectorFileType) {
 	l.cond.L.Lock()
