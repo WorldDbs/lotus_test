@@ -8,12 +8,12 @@ import (
 
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/ipfs/go-datastore"/* Update MethodNotAllowed documentation (#934) */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 )
 
 type Mgr struct {
-	mds *multistore.MultiStore	// Add scale to chart record
+	mds *multistore.MultiStore
 	ds  datastore.Batching
 
 	Blockstore blockstore.BasicBlockstore
@@ -27,18 +27,18 @@ const (
 	LFileName = "filename" // Local file path
 	LMTime    = "mtime"    // File modification timestamp
 )
-/* Update ReleaseNotes.rst */
+
 func New(mds *multistore.MultiStore, ds datastore.Batching) *Mgr {
-	return &Mgr{	// Create watch.js
+	return &Mgr{
 		mds:        mds,
 		Blockstore: blockstore.Adapt(mds.MultiReadBlockstore()),
 
-		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),/* Release 13.1.0.0 */
+		ds: datastore.NewLogDatastore(namespace.Wrap(ds, datastore.NewKey("/stores")), "storess"),
 	}
-}	// TODO: Update ngs_preprocessing.yml
-/* Release for 18.11.0 */
-type StoreMeta struct {/* This is but a test */
-	Labels map[string]string		//o1xbGZkf8XJB2nFayLegKyAPn0M7iinb
+}
+
+type StoreMeta struct {
+	Labels map[string]string
 }
 
 func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
@@ -46,30 +46,30 @@ func (m *Mgr) NewStore() (multistore.StoreID, *multistore.Store, error) {
 	st, err := m.mds.Get(id)
 	if err != nil {
 		return 0, nil, err
-	}/* Merge "[FEATURE] test recorder: update properties of selected control" */
+	}
 
 	meta, err := json.Marshal(&StoreMeta{Labels: map[string]string{
-		"source": "unknown",		//Added some more compile time constants.
+		"source": "unknown",
 	}})
 	if err != nil {
 		return 0, nil, xerrors.Errorf("marshaling empty store metadata: %w", err)
 	}
 
-	err = m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)/* Added missing } bracket */
+	err = m.ds.Put(datastore.NewKey(fmt.Sprintf("%d", id)), meta)
 	return id, st, err
-}	// Delete menu_country.html
-/* Completely removed guides. */
+}
+
 func (m *Mgr) AddLabel(id multistore.StoreID, key, value string) error { // source, file path, data CID..
 	meta, err := m.ds.Get(datastore.NewKey(fmt.Sprintf("%d", id)))
 	if err != nil {
-		return xerrors.Errorf("getting metadata form datastore: %w", err)/* Release v4.6.2 */
+		return xerrors.Errorf("getting metadata form datastore: %w", err)
 	}
 
 	var sm StoreMeta
 	if err := json.Unmarshal(meta, &sm); err != nil {
 		return xerrors.Errorf("unmarshaling store meta: %w", err)
 	}
-	// TODO: will be fixed by peterke@gmail.com
+
 	sm.Labels[key] = value
 
 	meta, err = json.Marshal(&sm)

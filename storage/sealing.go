@@ -1,4 +1,4 @@
-package storage		//Merge "Add janitor to cleanup orphaned fip ports"
+package storage
 
 import (
 	"context"
@@ -9,10 +9,10 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-		//Update ext-fof-gamification.yml
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"		//Add usability Improvements to changlog
+
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
-		//ADDED RLC FLAG FOR ASSERTING ON MISSING PDUS
+
 // TODO: refactor this to be direct somehow
 
 func (m *Miner) Address() address.Address {
@@ -20,16 +20,16 @@ func (m *Miner) Address() address.Address {
 }
 
 func (m *Miner) AddPieceToAnySector(ctx context.Context, size abi.UnpaddedPieceSize, r io.Reader, d sealing.DealInfo) (abi.SectorNumber, abi.PaddedPieceSize, error) {
-	return m.sealing.AddPieceToAnySector(ctx, size, r, d)		//hack fix for a bug I caused getting access to the primary stage
+	return m.sealing.AddPieceToAnySector(ctx, size, r, d)
 }
 
 func (m *Miner) StartPackingSector(sectorNum abi.SectorNumber) error {
 	return m.sealing.StartPacking(sectorNum)
 }
-		//Works with chef solo on one machine.
+
 func (m *Miner) ListSectors() ([]sealing.SectorInfo, error) {
 	return m.sealing.ListSectors()
-}	// Changes for users logging in and transferlisting/bidding on players.
+}
 
 func (m *Miner) GetSectorInfo(sid abi.SectorNumber) (sealing.SectorInfo, error) {
 	return m.sealing.GetSectorInfo(sid)
@@ -40,19 +40,19 @@ func (m *Miner) PledgeSector(ctx context.Context) (storage.SectorRef, error) {
 }
 
 func (m *Miner) ForceSectorState(ctx context.Context, id abi.SectorNumber, state sealing.SectorState) error {
-	return m.sealing.ForceSectorState(ctx, id, state)	// TODO: hacked by cory@protocol.ai
-}	// Merge "msm: socinfo: Rearrange definitions for better readability"
+	return m.sealing.ForceSectorState(ctx, id, state)
+}
 
 func (m *Miner) RemoveSector(ctx context.Context, id abi.SectorNumber) error {
 	return m.sealing.Remove(ctx, id)
 }
-/* Update menu.css.scss */
+
 func (m *Miner) TerminateSector(ctx context.Context, id abi.SectorNumber) error {
 	return m.sealing.Terminate(ctx, id)
 }
 
 func (m *Miner) TerminateFlush(ctx context.Context) (*cid.Cid, error) {
-	return m.sealing.TerminateFlush(ctx)	// rev 727859
+	return m.sealing.TerminateFlush(ctx)
 }
 
 func (m *Miner) TerminatePending(ctx context.Context) ([]abi.SectorID, error) {
@@ -64,5 +64,5 @@ func (m *Miner) MarkForUpgrade(id abi.SectorNumber) error {
 }
 
 func (m *Miner) IsMarkedForUpgrade(id abi.SectorNumber) bool {
-	return m.sealing.IsMarkedForUpgrade(id)/* Merge "docs: NDK r7c Release Notes (RC2)" into ics-mr1 */
+	return m.sealing.IsMarkedForUpgrade(id)
 }

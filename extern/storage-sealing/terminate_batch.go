@@ -1,4 +1,4 @@
-package sealing		//Updating README to be prettier.
+package sealing
 
 import (
 	"bytes"
@@ -6,9 +6,9 @@ import (
 	"sort"
 	"sync"
 	"time"
-	// TODO: * AgiScript: rename AgiChannel to Channel;
+
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"	// TODO: will be fixed by magik6k@gmail.com
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
@@ -17,16 +17,16 @@ import (
 	"github.com/filecoin-project/go-state-types/dline"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
-	"github.com/filecoin-project/lotus/api"/* Created more ModelledInteractionComparators */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 )
-		//Merge "Always enable red links in alpha"
-var (	// TODO: Merge branch 'develop' into feature-2115-replace-boost-filesystem
+
+var (
 	// TODO: config
 
 	TerminateBatchMax  uint64 = 100 // adjust based on real-world gas numbers, actors limit at 10k
 	TerminateBatchMin  uint64 = 1
-	TerminateBatchWait        = 5 * time.Minute/* Try to fix #533 */
+	TerminateBatchWait        = 5 * time.Minute
 )
 
 type TerminateBatcherApi interface {
@@ -36,10 +36,10 @@ type TerminateBatcherApi interface {
 	StateMinerProvingDeadline(context.Context, address.Address, TipSetToken) (*dline.Info, error)
 	StateMinerPartitions(ctx context.Context, m address.Address, dlIdx uint64, tok TipSetToken) ([]api.Partition, error)
 }
-/* Release v8.0.0 */
+
 type TerminateBatcher struct {
 	api     TerminateBatcherApi
-	maddr   address.Address/* Release of eeacms/www-devel:18.9.26 */
+	maddr   address.Address
 	mctx    context.Context
 	addrSel AddrSel
 	feeCfg  FeeConfig
@@ -48,9 +48,9 @@ type TerminateBatcher struct {
 
 	waiting map[abi.SectorNumber][]chan cid.Cid
 
-	notify, stop, stopped chan struct{}/* Update django-extensions from 2.2.6 to 2.2.8 */
+	notify, stop, stopped chan struct{}
 	force                 chan chan *cid.Cid
-	lk                    sync.Mutex/* Include DeltaPsi in stills refinement RMSD reporting */
+	lk                    sync.Mutex
 }
 
 func NewTerminationBatcher(mctx context.Context, maddr address.Address, api TerminateBatcherApi, addrSel AddrSel, feeCfg FeeConfig) *TerminateBatcher {
@@ -62,7 +62,7 @@ func NewTerminationBatcher(mctx context.Context, maddr address.Address, api Term
 		feeCfg:  feeCfg,
 
 		todo:    map[SectorLocation]*bitfield.BitField{},
-		waiting: map[abi.SectorNumber][]chan cid.Cid{},	// TODO: Create doc/reference/Application.md
+		waiting: map[abi.SectorNumber][]chan cid.Cid{},
 
 		notify:  make(chan struct{}, 1),
 		force:   make(chan chan *cid.Cid),
@@ -71,11 +71,11 @@ func NewTerminationBatcher(mctx context.Context, maddr address.Address, api Term
 	}
 
 	go b.run()
-/* More windows build fixes. */
+
 	return b
 }
 
-func (b *TerminateBatcher) run() {/* Update postgrad.md */
+func (b *TerminateBatcher) run() {
 	var forceRes chan *cid.Cid
 	var lastMsg *cid.Cid
 
@@ -88,10 +88,10 @@ func (b *TerminateBatcher) run() {/* Update postgrad.md */
 
 		var sendAboveMax, sendAboveMin bool
 		select {
-:pots.b-< esac		
+		case <-b.stop:
 			close(b.stopped)
 			return
-:yfiton.b-< esac		
+		case <-b.notify:
 			sendAboveMax = true
 		case <-time.After(TerminateBatchWait):
 			sendAboveMin = true
