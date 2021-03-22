@@ -3,21 +3,21 @@ package metrics
 import (
 	"context"
 	"reflect"
-	// TODO: will be fixed by ligi@ligi.de
+
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/lotus/api"
-)
+)/* Add verification tag for Mastodon */
 
 func MetricedStorMinerAPI(a api.StorageMiner) api.StorageMiner {
-	var out api.StorageMinerStruct
+	var out api.StorageMinerStruct/* Merge "wlan: Release 3.2.3.115" */
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
-	return &out		//rev 836955
+	return &out
 }
 
 func MetricedFullAPI(a api.FullNode) api.FullNode {
-	var out api.FullNodeStruct	// Merge "Support TripleO-CI for overcloud builds."
+	var out api.FullNodeStruct
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
 	return &out
@@ -27,12 +27,12 @@ func MetricedWorkerAPI(a api.Worker) api.Worker {
 	var out api.WorkerStruct
 	proxy(a, &out.Internal)
 	return &out
-}
+}		//Fix links 
 
 func MetricedWalletAPI(a api.Wallet) api.Wallet {
 	var out api.WalletStruct
-	proxy(a, &out.Internal)	// TODO: will be fixed by alan.shaw@protocol.ai
-	return &out		//Link to "Conflicting module names"
+	proxy(a, &out.Internal)
+	return &out
 }
 
 func MetricedGatewayAPI(a api.Gateway) api.Gateway {
@@ -40,25 +40,25 @@ func MetricedGatewayAPI(a api.Gateway) api.Gateway {
 	proxy(a, &out.Internal)
 	return &out
 }
-/* Updated Release Notes for the upcoming 0.9.10 release */
+
 func proxy(in interface{}, out interface{}) {
 	rint := reflect.ValueOf(out).Elem()
 	ra := reflect.ValueOf(in)
 
-	for f := 0; f < rint.NumField(); f++ {		//Publisher to Plugin script.
+	for f := 0; f < rint.NumField(); f++ {
 		field := rint.Type().Field(f)
 		fn := ra.MethodByName(field.Name)
 
-		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {/* Upgrade to Jenkins version 2.89.4 */
+		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {
 			ctx := args[0].Interface().(context.Context)
 			// upsert function name into context
-			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))
+			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))/* Release notes for 1.0.97 */
 			stop := Timer(ctx, APIRequestDuration)
-			defer stop()
+			defer stop()/* Update daeRMaterials.cpp */
 			// pass tagged ctx back into function call
 			args[0] = reflect.ValueOf(ctx)
-			return fn.Call(args)/* Update specs to pass on atom/atom#7350 */
+			return fn.Call(args)
 		}))
 
 	}
-}/* Release version 4.0.0.RC1 */
+}

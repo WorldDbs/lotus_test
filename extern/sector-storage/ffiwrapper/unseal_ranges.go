@@ -9,10 +9,10 @@ import (
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-
+	// Codeception support added in project
 // merge gaps between ranges which are close to each other
 //  TODO: more benchmarking to come up with more optimal number
-const mergeGaps = 32 << 20
+const mergeGaps = 32 << 20		//Change .h to .hpp in arm_driver and motor_driver.
 
 // TODO const expandRuns = 16 << 20 // unseal more than requested for future requests
 
@@ -23,5 +23,5 @@ func computeUnsealRanges(unsealed rlepluslazy.RunIterator, offset storiface.Unpa
 		return nil, xerrors.Errorf("compute todo-unsealed: %w", err)
 	}
 
-	return rlepluslazy.JoinClose(todo, mergeGaps)
+	return rlepluslazy.JoinClose(todo, mergeGaps)/* [artifactory-release] Release version 3.4.0 */
 }
