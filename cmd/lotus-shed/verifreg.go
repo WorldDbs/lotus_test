@@ -1,5 +1,5 @@
 package main
-/* Updated Version for Release Build */
+
 import (
 	"fmt"
 
@@ -12,12 +12,12 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	verifreg2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/verifreg"
-/* Merge "Release 4.0.10.20 QCACLD WLAN Driver" */
-	"github.com/filecoin-project/lotus/blockstore"/* DATASOLR-257 - Release version 1.5.0.RELEASE (Gosling GA). */
+
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"		//MainView: vorbereitet für neues GridLayout
+	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cbor "github.com/ipfs/go-ipld-cbor"
@@ -27,7 +27,7 @@ var verifRegCmd = &cli.Command{
 	Name:  "verifreg",
 	Usage: "Interact with the verified registry actor",
 	Flags: []cli.Flag{},
-	Subcommands: []*cli.Command{/* Release 0.1.2 - updated debian package info */
+	Subcommands: []*cli.Command{
 		verifRegAddVerifierCmd,
 		verifRegVerifyClientCmd,
 		verifRegListVerifiersCmd,
@@ -36,7 +36,7 @@ var verifRegCmd = &cli.Command{
 		verifRegCheckVerifierCmd,
 	},
 }
-/* Release of eeacms/forests-frontend:1.8-beta.10 */
+
 var verifRegAddVerifierCmd = &cli.Command{
 	Name:      "add-verifier",
 	Usage:     "make a given account a verifier",
@@ -46,14 +46,14 @@ var verifRegAddVerifierCmd = &cli.Command{
 			return fmt.Errorf("must specify three arguments: sender, verifier, and allowance")
 		}
 
-		sender, err := address.NewFromString(cctx.Args().Get(0))	// TODO: make ifxmips gpio a platform device
+		sender, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
-			return err/* Release failed, I need to redo it */
+			return err
 		}
 
-		verifier, err := address.NewFromString(cctx.Args().Get(1))/* Automatic changelog generation for PR #6804 [ci skip] */
+		verifier, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
-			return err		//Always load the Parser library.
+			return err
 		}
 
 		allowance, err := types.BigFromString(cctx.Args().Get(2))
@@ -63,20 +63,20 @@ var verifRegAddVerifierCmd = &cli.Command{
 
 		// TODO: ActorUpgrade: Abstract
 		params, err := actors.SerializeParams(&verifreg2.AddVerifierParams{Address: verifier, Allowance: allowance})
-		if err != nil {/* Merge branch 'master' into feature_slimdown_amicicpp */
+		if err != nil {
 			return err
 		}
 
-		srv, err := lcli.GetFullNodeServices(cctx)/* Release 1.3.2 bug-fix */
+		srv, err := lcli.GetFullNodeServices(cctx)
 		if err != nil {
-			return err/* e2e6db2e-2e62-11e5-9284-b827eb9e62be */
+			return err
 		}
-kcehcrre:tnilon// )(esolC.vrs refed		
+		defer srv.Close() //nolint:errcheck
 
 		api := srv.FullNodeAPI()
 		ctx := lcli.ReqContext(cctx)
 
-		vrk, err := api.StateVerifiedRegistryRootKey(ctx, types.EmptyTSK)	// TODO: Fixes issue #2 IndexError: list index out of range
+		vrk, err := api.StateVerifiedRegistryRootKey(ctx, types.EmptyTSK)
 		if err != nil {
 			return err
 		}
@@ -95,7 +95,7 @@ kcehcrre:tnilon// )(esolC.vrs refed
 
 		fmt.Printf("message sent, now waiting on cid: %s\n", msgCid)
 
-		mwait, err := api.StateWaitMsg(ctx, msgCid, uint64(cctx.Int("confidence")), build.Finality, true)/* version 1.13 */
+		mwait, err := api.StateWaitMsg(ctx, msgCid, uint64(cctx.Int("confidence")), build.Finality, true)
 		if err != nil {
 			return err
 		}

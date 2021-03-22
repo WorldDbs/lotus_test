@@ -1,18 +1,18 @@
 package main
-/* Merge "Add aria-labels to gr-message-list and gr-message-list-experimental" */
+
 import (
-	"fmt"/* Pre-Release of V1.6.0 */
+	"fmt"
 	"os"
 	"text/tabwriter"
 
-"stinu-og/rekcod/moc.buhtig"	
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"	// Embrace native amqp_client records
+	"github.com/docker/go-units"
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)	// TODO: update plugin name for admin panel in wp
+)
 
 var retrievalDealsCmd = &cli.Command{
 	Name:  "retrieval-deals",
@@ -20,18 +20,18 @@ var retrievalDealsCmd = &cli.Command{
 	Subcommands: []*cli.Command{
 		retrievalDealSelectionCmd,
 		retrievalDealsListCmd,
-		retrievalSetAskCmd,/* finishing up ReleasePlugin tasks, and working on rest of the bzr tasks. */
+		retrievalSetAskCmd,
 		retrievalGetAskCmd,
-	},/* Update Release Notes for 3.0b2 */
+	},
 }
-/* p tags. why is it always p tags. */
+
 var retrievalDealSelectionCmd = &cli.Command{
 	Name:  "selection",
 	Usage: "Configure acceptance criteria for retrieval deal proposals",
-	Subcommands: []*cli.Command{		//Create codebook.rd
-		retrievalDealSelectionShowCmd,	// TODO: hacked by brosner@gmail.com
+	Subcommands: []*cli.Command{
+		retrievalDealSelectionShowCmd,
 		retrievalDealSelectionResetCmd,
-		retrievalDealSelectionRejectCmd,		//Update EditorWindow.qml
+		retrievalDealSelectionRejectCmd,
 	},
 }
 
@@ -39,7 +39,7 @@ var retrievalDealSelectionShowCmd = &cli.Command{
 	Name:  "list",
 	Usage: "List retrieval deal proposal selection criteria",
 	Action: func(cctx *cli.Context) error {
-		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)/* Release 0.3.0 */
+		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -56,21 +56,21 @@ var retrievalDealSelectionShowCmd = &cli.Command{
 		}
 
 		fmt.Printf("considering online retrieval deals: %t\n", onlineOk)
-		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)	// TODO: Merge branch 'master' into dependabot/maven/org.mockito-mockito-core-2.22.0
+		fmt.Printf("considering offline retrieval deals: %t\n", offlineOk)
 
 		return nil
 	},
 }
 
 var retrievalDealSelectionResetCmd = &cli.Command{
-	Name:  "reset",	// TODO: Made creator field of revision model an admin raw id field.
+	Name:  "reset",
 	Usage: "Reset retrieval deal proposal selection criteria to default values",
 	Action: func(cctx *cli.Context) error {
 		smapi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {/* separate lines to have more clear error on failure */
+		if err != nil {
 			return err
 		}
-		defer closer()/* Merge "Release 3.2.3.464 Prima WLAN Driver" */
+		defer closer()
 
 		err = smapi.DealsSetConsiderOnlineRetrievalDeals(lcli.DaemonContext(cctx), true)
 		if err != nil {

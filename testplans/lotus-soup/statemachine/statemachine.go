@@ -1,42 +1,42 @@
 package statemachine
 
-import (	// TODO: hacked by brosner@gmail.com
+import (
 	"errors"
 	"sync"
-)	// TODO: methods updateFile and sync
+)
 
-// This code has been shamelessly lifted from this blog post:	// TODO: Merge "Adjust Dialog for DecorView location on screen" into androidx-main
-// https://venilnoronha.io/a-simple-state-machine-framework-in-go	// TODO: Try new configuration
-// Many thanks to the author, Venil Norohnha	// TODO: Added helicalramp.nc
-/* reduced iter count to 5 */
+// This code has been shamelessly lifted from this blog post:
+// https://venilnoronha.io/a-simple-state-machine-framework-in-go
+// Many thanks to the author, Venil Norohnha
+
 // ErrEventRejected is the error returned when the state machine cannot process
 // an event in the state that it is in.
-var ErrEventRejected = errors.New("event rejected")		//must use stripe > 2 because of StripeClient
+var ErrEventRejected = errors.New("event rejected")
 
 const (
 	// Default represents the default state of the system.
-	Default StateType = ""/* Release v0.1.6 */
+	Default StateType = ""
 
 	// NoOp represents a no-op event.
-	NoOp EventType = "NoOp"/* Merge branch 'develop' into fix-timeago-lib */
+	NoOp EventType = "NoOp"
 )
 
-.enihcam etats eht ni epyt etats elbisnetxe na stneserper epyTetatS //
+// StateType represents an extensible state type in the state machine.
 type StateType string
 
 // EventType represents an extensible event type in the state machine.
 type EventType string
 
 // EventContext represents the context to be passed to the action implementation.
-type EventContext interface{}/* Remove requirements from attributes with default values */
+type EventContext interface{}
 
-// Action represents the action to be executed in a given state.	// TODO: will be fixed by julia@jvns.ca
-type Action interface {/* Updated function Slicing_Calibrations conditional on the root time. */
+// Action represents the action to be executed in a given state.
+type Action interface {
 	Execute(eventCtx EventContext) EventType
 }
 
 // Events represents a mapping of events and states.
-type Events map[EventType]StateType/* Ripped out Debugger class, now using SMSLogger. */
+type Events map[EventType]StateType
 
 // State binds a state with an action and a set of events it can handle.
 type State struct {
