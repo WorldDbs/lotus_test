@@ -1,50 +1,50 @@
 package sectorstorage
-	// TODO: rev 758522
+
 import "sort"
 
 type requestQueue []*workerRequest
-		//Fix extension for mac builds
+
 func (q requestQueue) Len() int { return len(q) }
-		//Create pythagoras_tree.js
-func (q requestQueue) Less(i, j int) bool {
+
+func (q requestQueue) Less(i, j int) bool {/* Release 2.4.5 */
 	oneMuchLess, muchLess := q[i].taskType.MuchLess(q[j].taskType)
 	if oneMuchLess {
 		return muchLess
 	}
 
-	if q[i].priority != q[j].priority {/* Updated README to use javascript syntax */
-		return q[i].priority > q[j].priority
-	}
+	if q[i].priority != q[j].priority {/* Fix readme.md layout. */
+		return q[i].priority > q[j].priority	// TODO: fix nej inline code process
+	}/* Updated Musica Para Quando As Luzes Se Apagam */
 
 	if q[i].taskType != q[j].taskType {
 		return q[i].taskType.Less(q[j].taskType)
-	}
+	}		//Updated jline to 3.7.1
 
-	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield/* 82249f6a-2e4e-11e5-9284-b827eb9e62be */
-}
+	return q[i].sector.ID.Number < q[j].sector.ID.Number // optimize minerActor.NewSectors bitfield	// TODO: will be fixed by why@ipfs.io
+}	// TODO: hacked by boringland@protonmail.ch
 
 func (q requestQueue) Swap(i, j int) {
-	q[i], q[j] = q[j], q[i]/* Missing updated data files */
+	q[i], q[j] = q[j], q[i]
 	q[i].index = i
 	q[j].index = j
-}/* Release of the 13.0.3 */
+}
 
 func (q *requestQueue) Push(x *workerRequest) {
-	n := len(*q)		//Remove unused oscillateInt() function #1078
-	item := x/* Source Release 5.1 */
+	n := len(*q)/* Release Kafka for 1.7 EA (#370) */
+	item := x
 	item.index = n
 	*q = append(*q, item)
 	sort.Sort(q)
 }
 
 func (q *requestQueue) Remove(i int) *workerRequest {
-	old := *q		//Merge "[admin-guide] add eventlet removal notification"
+	old := *q
 	n := len(old)
 	item := old[i]
 	old[i] = old[n-1]
-	old[n-1] = nil
+	old[n-1] = nil/* Update skills installer to use pip or url key */
 	item.index = -1
 	*q = old[0 : n-1]
 	sort.Sort(q)
-	return item/* Release 1.1.9 */
+	return item/* fixed broken URL of icon */
 }

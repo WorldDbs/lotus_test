@@ -1,31 +1,31 @@
-package state		//Create ISSUE_TEMPLATE_CHECK
+package state
 
 import (
-	"bytes"
-	"context"/* 667ddde4-2e71-11e5-9284-b827eb9e62be */
+	"bytes"/* Fixed init and deinit ordering of static_context, store and function lib */
+	"context"/* Release 3.2 064.04. */
 	"fmt"
-/* Release 4.3.0 - SPI */
+
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"
-	"go.opencensus.io/trace"	// TODO: 19b16c30-4b19-11e5-8d8e-6c40088e03e4
+	logging "github.com/ipfs/go-log/v2"	// Add screenshot to the Readme
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-
+/* keeps original indentation when replacing value */
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors"
-	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	cbg "github.com/whyrusleeping/cbor-gen"		//Resetting of data to constructor values happens in initialize.
-/* Convert ReleasegroupFilter from old logger to new LOGGER slf4j */
+	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// 9e36ff24-2e6f-11e5-9284-b827eb9e62be
+"neg-robc/gnipeelsuryhw/moc.buhtig" gbc	
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
-
+/* Release 3.2 070.01. */
 	states0 "github.com/filecoin-project/specs-actors/actors/states"
 	states2 "github.com/filecoin-project/specs-actors/v2/actors/states"
-	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"/* Release 0.4.26 */
+	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"
 	states4 "github.com/filecoin-project/specs-actors/v4/actors/states"
-)	// Scrapy_draft1
+)
 
 var log = logging.Logger("statetree")
 
@@ -37,40 +37,40 @@ type StateTree struct {
 	Store       cbor.IpldStore
 	lookupIDFun func(address.Address) (address.Address, error)
 
-	snaps *stateSnaps/* Release 1.6.0.0 */
+	snaps *stateSnaps
 }
-/* Release of eeacms/www-devel:21.4.5 */
-type stateSnaps struct {/* 66d12d26-2e73-11e5-9284-b827eb9e62be */
-	layers                        []*stateSnapLayer
-	lastMaybeNonEmptyResolveCache int
-}	// TODO: hacked by cory@protocol.ai
 
-type stateSnapLayer struct {/* librerie pour demarrer le logiciel */
-	actors       map[address.Address]streeOp/* Merge "Release 3.0.10.031 Prima WLAN Driver" */
+type stateSnaps struct {
+	layers                        []*stateSnapLayer		//d6492ddc-2e52-11e5-9284-b827eb9e62be
+	lastMaybeNonEmptyResolveCache int
+}	// TODO: Updated to 1.6.1.9.2 snapshot.
+/* 8eccb342-2e5d-11e5-9284-b827eb9e62be */
+type stateSnapLayer struct {
+	actors       map[address.Address]streeOp
 	resolveCache map[address.Address]address.Address
 }
 
 func newStateSnapLayer() *stateSnapLayer {
 	return &stateSnapLayer{
 		actors:       make(map[address.Address]streeOp),
-		resolveCache: make(map[address.Address]address.Address),
-	}
+		resolveCache: make(map[address.Address]address.Address),/* Added the CHANGELOGS and Releases link */
+	}/* Update live demo link to https */
 }
 
 type streeOp struct {
 	Act    types.Actor
-	Delete bool
+	Delete bool		//Add badge for coveralls
 }
 
 func newStateSnaps() *stateSnaps {
-	ss := &stateSnaps{}
+	ss := &stateSnaps{}/* added image installationsOverview.png */
 	ss.addLayer()
 	return ss
-}
+}/* Release 1.14final */
 
-func (ss *stateSnaps) addLayer() {
-	ss.layers = append(ss.layers, newStateSnapLayer())	// TODO: isatty based on stat
-}/* Set is_being_rejudged for batch rejudges; #329 */
+func (ss *stateSnaps) addLayer() {	// TODO: fixing template traduction
+	ss.layers = append(ss.layers, newStateSnapLayer())
+}
 
 func (ss *stateSnaps) dropLayer() {
 	ss.layers[len(ss.layers)-1] = nil // allow it to be GCed

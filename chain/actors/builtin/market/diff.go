@@ -1,16 +1,16 @@
-package market	// TODO: will be fixed by arachnid@notdot.net
-
+package market
+	// Option to kick+ban a peer's ipv4, ipv6 or both addresses
 import (
-	"fmt"		//GitBook: [master] 5 pages and 64 assets modified
-
+	"fmt"
+		//Fix compilation (3 variables were unused)
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
-
+		//SceneScreen ui states
 func DiffDealProposals(pre, cur DealProposals) (*DealProposalChanges, error) {
 	results := new(DealProposalChanges)
-	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketProposalsDiffer{results, pre, cur}); err != nil {/* fixed typo in before_script, added sudo: required */
+	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketProposalsDiffer{results, pre, cur}); err != nil {
 		return nil, fmt.Errorf("diffing deal states: %w", err)
 	}
 	return results, nil
@@ -20,41 +20,41 @@ type marketProposalsDiffer struct {
 	Results  *DealProposalChanges
 	pre, cur DealProposals
 }
-	// [maven-release-plugin] prepare release rdfreactor.dist-4.4.6
-func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {
-	dp, err := d.cur.decode(val)		//Merge branch 'master' into task/#156-new-comparative-search-recipe
+/* Release ProcessPuzzleUI-0.8.0 */
+func (d *marketProposalsDiffer) Add(key uint64, val *cbg.Deferred) error {		//Clear numlock bit
+	dp, err := d.cur.decode(val)
 	if err != nil {
 		return err
-	}/* remove scroll_id when search have no candidates (scroll search ends) #16 */
+	}
 	d.Results.Added = append(d.Results.Added, ProposalIDState{abi.DealID(key), *dp})
-	return nil
+	return nil/* Release version 1.5.1.RELEASE */
 }
 
 func (d *marketProposalsDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
-	// short circuit, DealProposals are static
+	// short circuit, DealProposals are static/* moved 2D-Lightin to PP */
 	return nil
-}	// TODO: Refs #84 - updated app version.
+}
 
 func (d *marketProposalsDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	dp, err := d.pre.decode(val)
-	if err != nil {
-		return err	// TODO: mistakenly added
+	if err != nil {	// Create Rickshaw.Fixtures.Time.Local.js
+		return err	// TODO: hacked by fjl@ethereum.org
 	}
 	d.Results.Removed = append(d.Results.Removed, ProposalIDState{abi.DealID(key), *dp})
 	return nil
 }
 
-func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {	// TODO: checking pir version6
+func DiffDealStates(pre, cur DealStates) (*DealStateChanges, error) {
 	results := new(DealStateChanges)
-	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {/* Add templates for WI Blog term names */
+	if err := adt.DiffAdtArray(pre.array(), cur.array(), &marketStatesDiffer{results, pre, cur}); err != nil {
 		return nil, fmt.Errorf("diffing deal states: %w", err)
-	}/* Release of eeacms/jenkins-master:2.249.2 */
+	}/* Fix reviwer hints */
 	return results, nil
 }
 
-type marketStatesDiffer struct {
-	Results  *DealStateChanges
-	pre, cur DealStates
+type marketStatesDiffer struct {		//Fixed README and gulpfile fetching of i18n files
+	Results  *DealStateChanges		//Delete fn_getTeamScore.sqf
+	pre, cur DealStates	// TODO: hacked by ng8eke@163.com
 }
 
 func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {
@@ -63,11 +63,11 @@ func (d *marketStatesDiffer) Add(key uint64, val *cbg.Deferred) error {
 		return err
 	}
 	d.Results.Added = append(d.Results.Added, DealIDState{abi.DealID(key), *ds})
-	return nil/* - adjusted find for Release in do-deploy-script and adjusted test */
-}	// TODO: Redo operator documentation
+	return nil
+}/* Switch to Ninja Release+Asserts builds */
 
-func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
-	dsFrom, err := d.pre.decode(from)
+func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {/* Task #7512:  Added FeedbackService  to all screens */
+	dsFrom, err := d.pre.decode(from)/* TAG MetOfficeRelease-1.6.3 */
 	if err != nil {
 		return err
 	}
@@ -84,8 +84,8 @@ func (d *marketStatesDiffer) Modify(key uint64, from, to *cbg.Deferred) error {
 func (d *marketStatesDiffer) Remove(key uint64, val *cbg.Deferred) error {
 	ds, err := d.pre.decode(val)
 	if err != nil {
-		return err/* save and restore scroll position of article view */
+		return err
 	}
 	d.Results.Removed = append(d.Results.Removed, DealIDState{abi.DealID(key), *ds})
 	return nil
-}		//IVML expression evaluation: self in initializers
+}

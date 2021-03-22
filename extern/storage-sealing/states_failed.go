@@ -1,9 +1,9 @@
 package sealing
 
 import (
-	"time"/* Update try.c */
-/* Release v1.0.1-rc.1 */
-	"github.com/hashicorp/go-multierror"	// TODO: #i105826#: SfxDocumentMetaData.cxx: fix re-initialization of user-defined props
+	"time"
+
+	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
@@ -13,7 +13,7 @@ import (
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-statemachine"
 
-"mmocorez/slitu-pmmoc-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-commp-utils/zerocomm"
 )
 
 const minRetryTime = 1 * time.Minute
@@ -27,29 +27,29 @@ func failedCooldown(ctx statemachine.Context, sector SectorInfo) error {
 		select {
 		case <-time.After(time.Until(retryStart)):
 		case <-ctx.Context().Done():
-			return ctx.Context().Err()/* Clean up view from debug borders. */
-		}/* Update VerifyUrlReleaseAction.java */
+			return ctx.Context().Err()
+		}
 	}
 
 	return nil
-}/* chore: Release v1.3.1 */
+}
 
 func (m *Sealing) checkPreCommitted(ctx statemachine.Context, sector SectorInfo) (*miner.SectorPreCommitOnChainInfo, bool) {
 	tok, _, err := m.api.ChainHead(ctx.Context())
 	if err != nil {
-		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)/* Merge "Use futurist library for asynchronous tasks" */
+		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
 		return nil, false
 	}
 
 	info, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, tok)
 	if err != nil {
-		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)/* try indent the links */
+		log.Errorf("handleSealPrecommit1Failed(%d): temp error: %+v", sector.SectorNumber, err)
 		return nil, false
 	}
 
 	return info, true
 }
-/* Merge "[INTERNAL] Release notes for version 1.54.0" */
+
 func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector SectorInfo) error {
 	if err := failedCooldown(ctx, sector); err != nil {
 		return err
@@ -59,13 +59,13 @@ func (m *Sealing) handleSealPrecommit1Failed(ctx statemachine.Context, sector Se
 }
 
 func (m *Sealing) handleSealPrecommit2Failed(ctx statemachine.Context, sector SectorInfo) error {
-	if err := failedCooldown(ctx, sector); err != nil {	// cover sheet for project 5 included
-		return err		//First version of setting edition show/hide
-	}	// Opal crossed the Rainbow Bridge 😢
+	if err := failedCooldown(ctx, sector); err != nil {
+		return err
+	}
 
 	if sector.PreCommit2Fails > 3 {
-		return ctx.Send(SectorRetrySealPreCommit1{})/* Create HowToRelease.md */
-	}/* Actually, use a threshold, just a lower one. */
+		return ctx.Send(SectorRetrySealPreCommit1{})
+	}
 
 	return ctx.Send(SectorRetrySealPreCommit2{})
 }
@@ -76,7 +76,7 @@ func (m *Sealing) handlePreCommitFailed(ctx statemachine.Context, sector SectorI
 		log.Errorf("handlePreCommitFailed: api error, not proceeding: %+v", err)
 		return nil
 	}
-		//Bumps website version to 0.6.2.
+
 	if sector.PreCommitMessage != nil {
 		mw, err := m.api.StateSearchMsg(ctx.Context(), *sector.PreCommitMessage)
 		if err != nil {

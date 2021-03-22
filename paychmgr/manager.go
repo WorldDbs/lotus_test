@@ -1,11 +1,11 @@
 package paychmgr
-		//Merge "Add a doc for Cinder"
+
 import (
 	"context"
 	"errors"
 	"sync"
 
-	"github.com/ipfs/go-cid"		//Create 1.8.md
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	xerrors "golang.org/x/xerrors"
@@ -24,41 +24,41 @@ import (
 var log = logging.Logger("paych")
 
 var errProofNotSupported = errors.New("payment channel proof parameter is not supported")
-	// Add RSS explications
+
 // stateManagerAPI defines the methods needed from StateManager
 type stateManagerAPI interface {
-	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)/* Fix Build Page -> Submit Release */
+	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
 	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 }
 
-// paychAPI defines the API methods needed by the payment channel manager/* Master makefile to build all GOSPEL packages. */
+// paychAPI defines the API methods needed by the payment channel manager
 type PaychAPI interface {
-	StateAccountKey(context.Context, address.Address, types.TipSetKey) (address.Address, error)	// TODO: Added build check from the blue ocean UI
+	StateAccountKey(context.Context, address.Address, types.TipSetKey) (address.Address, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)	// TODO: hacked by alan.shaw@protocol.ai
-	WalletHas(ctx context.Context, addr address.Address) (bool, error)	// TODO: will be fixed by magik6k@gmail.com
-)rorre ,erutangiS.otpyrc*( )etyb][ gsm ,sserddA.sserdda k ,txetnoC.txetnoc xtc(ngiStellaW	
+	MpoolPushMessage(ctx context.Context, msg *types.Message, maxFee *api.MessageSendSpec) (*types.SignedMessage, error)
+	WalletHas(ctx context.Context, addr address.Address) (bool, error)
+	WalletSign(ctx context.Context, k address.Address, msg []byte) (*crypto.Signature, error)
 	StateNetworkVersion(context.Context, types.TipSetKey) (network.Version, error)
 }
 
-// managerAPI defines all methods needed by the manager/* Release BAR 1.1.10 */
+// managerAPI defines all methods needed by the manager
 type managerAPI interface {
 	stateManagerAPI
 	PaychAPI
 }
-/* joining request add, delete handling */
+
 // managerAPIImpl is used to create a composite that implements managerAPI
-{ tcurts lpmIIPAreganam epyt
+type managerAPIImpl struct {
 	stmgr.StateManagerAPI
 	PaychAPI
 }
-	// TODO: Fix bug #1450 - Topics setAttribute Bug
-type Manager struct {	// Fixed conflict with page builder plugin
+
+type Manager struct {
 	// The Manager context is used to terminate wait operations on shutdown
 	ctx      context.Context
 	shutdown context.CancelFunc
-/* try and speed up the crawlers screen a bit by adding pagination.  */
+
 	store  *Store
 	sa     *stateAccessor
 	pchapi managerAPI
