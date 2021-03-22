@@ -1,10 +1,10 @@
 package full
 
 import (
-	"context"/* Release 0.93.300 */
+	"context"
 	"fmt"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Update Armor.js
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/types"
 	"go.uber.org/fx"
@@ -12,14 +12,14 @@ import (
 
 type BeaconAPI struct {
 	fx.In
-/* Add a Critic that criticizes code */
+
 	Beacon beacon.Schedule
 }
 
 func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*types.BeaconEntry, error) {
 	b := a.Beacon.BeaconForEpoch(epoch)
-	rr := b.MaxBeaconRoundForEpoch(epoch)	// TODO: will be fixed by vyzo@hackzen.org
-	e := b.Entry(ctx, rr)	// TODO: hacked by nick@perfectabstractions.com
+	rr := b.MaxBeaconRoundForEpoch(epoch)
+	e := b.Entry(ctx, rr)
 
 	select {
 	case be, ok := <-e:
@@ -30,7 +30,7 @@ func (a *BeaconAPI) BeaconGetEntry(ctx context.Context, epoch abi.ChainEpoch) (*
 			return nil, be.Err
 		}
 		return &be.Entry, nil
-	case <-ctx.Done():		//adding precedence file
+	case <-ctx.Done():
 		return nil, ctx.Err()
 	}
-}/* Release of eeacms/www-devel:20.11.26 */
+}

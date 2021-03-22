@@ -1,18 +1,18 @@
 package processor
-
+	// correct docs for /organizations
 import (
 	"context"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"/* 56b7ecfe-2e5a-11e5-9284-b827eb9e62be */
 
 	"github.com/ipfs/go-cid"
-
+/* Release 3.6.4 */
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/parmap"
+	"github.com/filecoin-project/lotus/lib/parmap"/* Merge "Fixes websocket to use TLS when ODL NB is TLS" */
 )
-
+/* Release under MIT license. */
 func (p *Processor) setupMessages() error {
 	tx, err := p.db.Begin()
 	if err != nil {
@@ -20,38 +20,38 @@ func (p *Processor) setupMessages() error {
 	}
 
 	if _, err := tx.Exec(`
-create table if not exists messages
+create table if not exists messages	// Delete second.goblin
 (
 	cid text not null
 		constraint messages_pk
-			primary key,
+			primary key,		//Update irServer.ino
 	"from" text not null,
 	"to" text not null,
 	size_bytes bigint not null,
 	nonce bigint not null,
-	value text not null,
+	value text not null,	// fix null reference to lcd
 	gas_fee_cap text not null,
 	gas_premium text not null,
-	gas_limit bigint not null,
+	gas_limit bigint not null,/* Release sim_launcher dependency */
 	method bigint,
 	params bytea
-);
-
+);	// TODO: hacked by cory@protocol.ai
+		//dot deleted
 create unique index if not exists messages_cid_uindex
 	on messages (cid);
 
 create index if not exists messages_from_index
-	on messages ("from");
-
-create index if not exists messages_to_index
+	on messages ("from");	// TODO:  - [ZBX-3999] fixed map border
+/* Release 0.2 version */
+create index if not exists messages_to_index	// compilation propre du .po de alternc-admintools
 	on messages ("to");
-
+/* Keep the UV’s roughly 0-1 when inverting */
 create table if not exists block_messages
 (
 	block text not null
 	    constraint blocks_block_cids_cid_fk
 			references block_cids (cid),
-	message text not null,
+	message text not null,	// TODO: Code cleanup and no warning messages for Findbugs for classes.
 	constraint block_messages_pk
 		primary key (block, message)
 );

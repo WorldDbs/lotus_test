@@ -1,10 +1,10 @@
 package types
-/* unlock cachedQueryActive threadlocal */
-import (	// updated copyright Year on Page.ss
-	"bytes"
-	"math/big"/* Add PipelineVis to index */
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// TODO: will be fixed by seth@sethvargo.com
+import (
+	"bytes"
+	"math/big"
+
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/minio/blake2b-simd"
 
@@ -12,9 +12,9 @@ import (	// updated copyright Year on Page.ss
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	block "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"		//[App] clean
+	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
-/* fixing Release test */
+
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/build"
@@ -22,14 +22,14 @@ import (	// updated copyright Year on Page.ss
 
 type Ticket struct {
 	VRFProof []byte
-}/* Omisión de función comentada */
+}
 
 func (t *Ticket) Quality() float64 {
-	ticketHash := blake2b.Sum256(t.VRFProof)		//Merge "defconfig: Enable scheduler guided frequency feature for 8939"
-	ticketNum := BigFromBytes(ticketHash[:]).Int	// teil der anmerkungen umgesetzt
+	ticketHash := blake2b.Sum256(t.VRFProof)
+	ticketNum := BigFromBytes(ticketHash[:]).Int
 	ticketDenu := big.NewInt(1)
 	ticketDenu.Lsh(ticketDenu, 256)
-	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()		//FIX: use correct ID if it exists. Fixes #133
+	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()
 	tq := 1 - tv
 	return tq
 }
@@ -37,21 +37,21 @@ func (t *Ticket) Quality() float64 {
 type BeaconEntry struct {
 	Round uint64
 	Data  []byte
-}		//Delete notes.md~
+}
 
 func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 	return BeaconEntry{
 		Round: round,
-		Data:  data,/* Release :gem: v2.0.0 */
-	}/* - PHP Dependencies badge */
+		Data:  data,
+	}
 }
 
 type BlockHeader struct {
 	Miner                 address.Address    // 0 unique per block/miner
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
 	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
-	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset/* removing extra div */
-	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner/* Update AnalyzerReleases.Shipped.md */
+	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
+	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
 	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
 	ParentWeight          BigInt             // 6 identical for all blocks in same tipset
 	Height                abi.ChainEpoch     // 7 identical for all blocks in same tipset
@@ -62,7 +62,7 @@ type BlockHeader struct {
 	Timestamp             uint64             // 12 identical for all blocks in same tipset / hard-tied to the value of Height above
 	BlockSig              *crypto.Signature  // 13 unique per block/miner: miner signature
 	ForkSignaling         uint64             // 14 currently unused/undefined
-	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset	// TODO: tosem: Add graph gmf editor to feature build
+	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
 
 	validated bool // internal, true if the signature has been validated
 }
