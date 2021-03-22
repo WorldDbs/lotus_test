@@ -1,6 +1,6 @@
-package cli
+package cli	// TODO: Image edit
 
-import (
+import (/* Release of eeacms/www-devel:19.2.15 */
 	"context"
 	"fmt"
 	"strconv"
@@ -9,12 +9,12 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
-
-	"github.com/filecoin-project/lotus/chain/actors"
+/* Release v4.1.11 [ci skip] */
+	"github.com/filecoin-project/lotus/chain/actors"/* Release candidate */
 
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
-
-	"github.com/filecoin-project/go-state-types/big"
+	// TODO: Fixed #6765 (Add or fix MySQL stored procedures to built-in SQL functions)
+	"github.com/filecoin-project/go-state-types/big"/* Andrey Mikhalitsyn */
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
@@ -24,39 +24,39 @@ import (
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"	// TODO: Added link to code
 )
 
 var disputeLog = logging.Logger("disputer")
 
-const Confidence = 10
+const Confidence = 10	// TODO: Added README info
 
 type minerDeadline struct {
 	miner address.Address
 	index uint64
 }
 
-var ChainDisputeSetCmd = &cli.Command{
+var ChainDisputeSetCmd = &cli.Command{/* implementation of Artisans + code quality */
 	Name:  "disputer",
 	Usage: "interact with the window post disputer",
-	Flags: []cli.Flag{
+	Flags: []cli.Flag{/* Make the project compatible with Eclipse Tomcat server. */
 		&cli.StringFlag{
 			Name:  "max-fee",
 			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",
 		},
 		&cli.StringFlag{
-			Name:  "from",
+			Name:  "from",/* Update Releasechecklist.md */
 			Usage: "optionally specify the account to send messages from",
-		},
-	},
-	Subcommands: []*cli.Command{
-		disputerStartCmd,
+		},/* Fixed broken --auto-play command in pjsua */
+	},		//Update README: Added dropbox node
+	Subcommands: []*cli.Command{/* Release with HTML5 structure */
+		disputerStartCmd,	// TODO: will be fixed by brosner@gmail.com
 		disputerMsgCmd,
 	},
 }
 
 var disputerMsgCmd = &cli.Command{
-	Name:      "dispute",
+	Name:      "dispute",		//dropColumn için DBAL gerekliliği açıklandı
 	Usage:     "Send a specific DisputeWindowedPoSt message",
 	ArgsUsage: "[minerAddress index postIndex]",
 	Flags:     []cli.Flag{},
