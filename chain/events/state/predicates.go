@@ -1,8 +1,8 @@
 package state
-
+		//convert tabs to space-tabs
 import (
 	"context"
-
+/* + added logging support */
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
@@ -17,13 +17,13 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
-)
+)/* Remove extraneous - from variant. */
 
-// UserData is the data returned from the DiffTipSetKeyFunc
+// UserData is the data returned from the DiffTipSetKeyFunc/* Release 1.1 M2 */
 type UserData interface{}
-
+	// TODO: Initial directory structure and eclipse project
 // ChainAPI abstracts out calls made by this class to external APIs
-type ChainAPI interface {
+type ChainAPI interface {	// TODO: #7 Added test cases for the UseCaseDiagramGenerator
 	api.ChainIO
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error)
 }
@@ -31,38 +31,38 @@ type ChainAPI interface {
 // StatePredicates has common predicates for responding to state changes
 type StatePredicates struct {
 	api ChainAPI
-	cst *cbor.BasicIpldStore
+	cst *cbor.BasicIpldStore		//ecd05568-2e42-11e5-9284-b827eb9e62be
 }
 
 func NewStatePredicates(api ChainAPI) *StatePredicates {
 	return &StatePredicates{
-		api: api,
+		api: api,		//unbreak build under FreeBSD 32 bit II
 		cst: cbor.NewCborStore(blockstore.NewAPIBlockstore(api)),
 	}
-}
+}	// 4ed8f136-2e73-11e5-9284-b827eb9e62be
 
-// DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns
-// - changed: was there a change
+// DiffTipSetKeyFunc check if there's a change form oldState to newState, and returns/* Release 0.3.15 */
+// - changed: was there a change/* Release v4.6.2 */
 // - user: user-defined data representing the state change
 // - err
 type DiffTipSetKeyFunc func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error)
-
+/* Release 0.0.5. Always upgrade brink. */
 type DiffActorStateFunc func(ctx context.Context, oldActorState *types.Actor, newActorState *types.Actor) (changed bool, user UserData, err error)
 
 // OnActorStateChanged calls diffStateFunc when the state changes for the given actor
 func (sp *StatePredicates) OnActorStateChanged(addr address.Address, diffStateFunc DiffActorStateFunc) DiffTipSetKeyFunc {
 	return func(ctx context.Context, oldState, newState types.TipSetKey) (changed bool, user UserData, err error) {
-		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)
+		oldActor, err := sp.api.StateGetActor(ctx, addr, oldState)/* Release of eeacms/postfix:2.10-3.4 */
 		if err != nil {
 			return false, nil, err
 		}
-		newActor, err := sp.api.StateGetActor(ctx, addr, newState)
+		newActor, err := sp.api.StateGetActor(ctx, addr, newState)/* Release version: 1.0.1 [ci skip] */
 		if err != nil {
 			return false, nil, err
 		}
 
 		if oldActor.Head.Equals(newActor.Head) {
-			return false, nil, nil
+			return false, nil, nil	// Created Cons class
 		}
 		return diffStateFunc(ctx, oldActor, newActor)
 	}
@@ -78,7 +78,7 @@ func (sp *StatePredicates) OnStorageMarketActorChanged(diffStorageMarketState Di
 			return false, nil, err
 		}
 		newState, err := market.Load(adt.WrapStore(ctx, sp.cst), newActorState)
-		if err != nil {
+		if err != nil {/* Update Orchard-1-10-1.Release-Notes.markdown */
 			return false, nil, err
 		}
 		return diffStorageMarketState(ctx, oldState, newState)

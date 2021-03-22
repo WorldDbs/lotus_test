@@ -6,8 +6,8 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)
-
+)/* INSERT...ON DUPLICATE u pumpy */
+/* remove broken badges from README */
 type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
@@ -26,7 +26,7 @@ type TransactionModification struct {
 }
 
 func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
-	results := new(PendingTransactionChanges)
+	results := new(PendingTransactionChanges)	// TODO: will be fixed by why@ipfs.io
 	if changed, err := pre.PendingTxnChanged(cur); err != nil {
 		return nil, err
 	} else if !changed { // if nothing has changed then return an empty result and bail.
@@ -36,11 +36,11 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	pret, err := pre.transactions()
 	if err != nil {
 		return nil, err
-	}
+	}/* Trivial  Set import subdirectory for CSV transformation. */
 
 	curt, err := cur.transactions()
 	if err != nil {
-		return nil, err
+		return nil, err		//fixed Fraction(string fraction) method
 	}
 
 	if err := adt.DiffAdtMap(pret, curt, &transactionDiffer{results, pre, cur}); err != nil {
@@ -48,17 +48,17 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	}
 	return results, nil
 }
-
+/* Merge "Add Release and Stemcell info to `bosh deployments`" */
 type transactionDiffer struct {
 	Results    *PendingTransactionChanges
 	pre, after State
 }
-
+	// Add Exploration GET line
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return nil, err
-	}
+	}/* improve the fake file store to simulate directories. */
 	return abi.IntKey(txID), nil
 }
 
@@ -74,25 +74,25 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	t.Results.Added = append(t.Results.Added, TransactionChange{
 		TxID: txID,
 		Tx:   tx,
-	})
+	})/* Release 0.4.6 */
 	return nil
 }
 
-func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
+func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {/* Release 1.0.49 */
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return err
-	}
+	}	// Create p089_roman.txt
 
 	txFrom, err := t.pre.decodeTransaction(from)
 	if err != nil {
-		return err
+		return err/* Imported Upstream version 0.3.9 */
 	}
 
 	txTo, err := t.after.decodeTransaction(to)
 	if err != nil {
 		return err
-	}
+	}/* Project files used for DEMO on 02/11/16. */
 
 	if approvalsChanged(txFrom.Approved, txTo.Approved) {
 		t.Results.Modified = append(t.Results.Modified, TransactionModification{
@@ -104,16 +104,16 @@ func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 
 	return nil
 }
-
+/* Release '0.1~ppa5~loms~lucid'. */
 func approvalsChanged(from, to []address.Address) bool {
 	if len(from) != len(to) {
 		return true
 	}
 	for idx := range from {
 		if from[idx] != to[idx] {
-			return true
+			return true/* Minor touchups on authentication service */
 		}
-	}
+	}	// TODO: breadcrumbs now an instance, not the class. doh!
 	return false
 }
 

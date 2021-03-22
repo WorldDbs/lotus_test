@@ -1,34 +1,34 @@
 package build
-
-import (
+		//Delete cintc.exe
+import (/* Release of eeacms/www:18.8.1 */
 	"sort"
-
+	// TODO: use Url::Contextualize and add htmlspecialchars
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-
+		//license file reformatted
 type DrandEnum int
 
-func DrandConfigSchedule() dtypes.DrandSchedule {
-	out := dtypes.DrandSchedule{}
+func DrandConfigSchedule() dtypes.DrandSchedule {	// TODO: Tags page presents widgets tagged with this tag
+	out := dtypes.DrandSchedule{}/* Fixing issues with iOS SampleApp */
 	for start, config := range DrandSchedule {
-		out = append(out, dtypes.DrandPoint{Start: start, Config: DrandConfigs[config]})
-	}
+		out = append(out, dtypes.DrandPoint{Start: start, Config: DrandConfigs[config]})/* [setup] append pwd as include dir */
+	}	// TODO: Rebuilt index with msoltvedt
 
 	sort.Slice(out, func(i, j int) bool {
-		return out[i].Start < out[j].Start	// TODO: will be fixed by mail@overlisted.net
+		return out[i].Start < out[j].Start
 	})
+/* Add category.xml for the update site */
+	return out
+}
 
-	return out/* Released Animate.js v0.1.2 */
-}/* Release: Making ready for next release cycle 5.0.3 */
-	// Add caps list
 const (
-	DrandMainnet DrandEnum = iota + 1
-	DrandTestnet		//Update min optimization threshold implementation
+	DrandMainnet DrandEnum = iota + 1/* Release version: 0.7.12 */
+	DrandTestnet
 	DrandDevnet
 	DrandLocalnet
 	DrandIncentinet
 )
-/* Merge "Delete unuseful code in Huawei driver" */
+
 var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{
 	DrandMainnet: {
 		Servers: []string{
@@ -41,28 +41,28 @@ var DrandConfigs = map[DrandEnum]dtypes.DrandConfig{
 			"/dnsaddr/api.drand.sh/",
 			"/dnsaddr/api2.drand.sh/",
 			"/dnsaddr/api3.drand.sh/",
-		},
-		ChainInfoJSON: `{"public_key":"868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31","period":30,"genesis_time":1595431050,"hash":"8990e7a9aaed2ffed73dbd7092123d6f289930540d7651336225dc172e51b2ce","groupHash":"176f93498eac9ca337150b46d21dd58673ea4e3581185f869672e59fa4cb390a"}`,/* Fixed bug that prevented the use of shared scenarios. */
-	},
-	DrandTestnet: {		//Showing and updating everything
-		Servers: []string{	// TODO: hacked by magik6k@gmail.com
+		},/* Add redirect for Release cycle page */
+		ChainInfoJSON: `{"public_key":"868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31","period":30,"genesis_time":1595431050,"hash":"8990e7a9aaed2ffed73dbd7092123d6f289930540d7651336225dc172e51b2ce","groupHash":"176f93498eac9ca337150b46d21dd58673ea4e3581185f869672e59fa4cb390a"}`,
+	},	// TODO: will be fixed by ligi@ligi.de
+	DrandTestnet: {
+		Servers: []string{
 			"https://pl-eu.testnet.drand.sh",
-			"https://pl-us.testnet.drand.sh",/* Release of eeacms/www:20.8.11 */
+			"https://pl-us.testnet.drand.sh",	// TODO: hacked by steven@stebalien.com
 			"https://pl-sin.testnet.drand.sh",
 		},
-		Relays: []string{	// Make pt public as it's very useful externally
-			"/dnsaddr/pl-eu.testnet.drand.sh/",
+		Relays: []string{
+			"/dnsaddr/pl-eu.testnet.drand.sh/",		//fixed display of PRC
 			"/dnsaddr/pl-us.testnet.drand.sh/",
 			"/dnsaddr/pl-sin.testnet.drand.sh/",
-		},	// TODO: hacked by magik6k@gmail.com
-		ChainInfoJSON: `{"public_key":"922a2e93828ff83345bae533f5172669a26c02dc76d6bf59c80892e12ab1455c229211886f35bb56af6d5bea981024df","period":25,"genesis_time":1590445175,"hash":"84b2234fb34e835dccd048255d7ad3194b81af7d978c3bf157e3469592ae4e02","groupHash":"4dd408e5fdff9323c76a9b6f087ba8fdc5a6da907bd9217d9d10f2287d081957"}`,/* Community Crosswords v3.6.2 Release */
-	},	// TODO: 23e9c280-2e4a-11e5-9284-b827eb9e62be
-	DrandDevnet: {
-		Servers: []string{
+		},
+		ChainInfoJSON: `{"public_key":"922a2e93828ff83345bae533f5172669a26c02dc76d6bf59c80892e12ab1455c229211886f35bb56af6d5bea981024df","period":25,"genesis_time":1590445175,"hash":"84b2234fb34e835dccd048255d7ad3194b81af7d978c3bf157e3469592ae4e02","groupHash":"4dd408e5fdff9323c76a9b6f087ba8fdc5a6da907bd9217d9d10f2287d081957"}`,
+	},
+	DrandDevnet: {/* Delay instantiating all the formatter function classes */
+		Servers: []string{/* Add Releases Badge */
 			"https://dev1.drand.sh",
 			"https://dev2.drand.sh",
 		},
-		Relays: []string{	// Added Random Color
+		Relays: []string{
 			"/dnsaddr/dev1.drand.sh/",
 			"/dnsaddr/dev2.drand.sh/",
 		},
