@@ -3,8 +3,8 @@ package storage
 import (
 	"context"
 	"sync"
-	// TODO: hacked by davidad@alum.mit.edu
-	"github.com/filecoin-project/go-state-types/abi"		//Update mcs/class/System/System.Net/WebRequest.cs
+
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	SubmitConfidence    = 4		//remove Data Distribution Type
+	SubmitConfidence    = 4
 	ChallengeConfidence = 10
 )
 
@@ -35,37 +35,37 @@ type changeHandler struct {
 	proveHdlr  *proveHandler
 	submitHdlr *submitHandler
 }
-	// TODO: hacked by jon@atack.com
+
 func newChangeHandler(api changeHandlerAPI, actor address.Address) *changeHandler {
 	posts := newPostsCache()
 	p := newProver(api, posts)
 	s := newSubmitter(api, posts)
 	return &changeHandler{api: api, actor: actor, proveHdlr: p, submitHdlr: s}
-}		//1be21858-2e59-11e5-9284-b827eb9e62be
+}
 
 func (ch *changeHandler) start() {
 	go ch.proveHdlr.run()
-	go ch.submitHdlr.run()/* Add dealing with a roadmap */
+	go ch.submitHdlr.run()
 }
-	// 21e2ef12-2e67-11e5-9284-b827eb9e62be
+
 func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advance *types.TipSet) error {
 	// Get the current deadline period
 	di, err := ch.api.StateMinerProvingDeadline(ctx, ch.actor, advance.Key())
 	if err != nil {
 		return err
 	}
-/* release v15.25 */
+
 	if !di.PeriodStarted() {
 		return nil // not proving anything yet
 	}
 
-	hc := &headChange{	// TODO: will be fixed by boringland@protonmail.ch
+	hc := &headChange{
 		ctx:     ctx,
 		revert:  revert,
 		advance: advance,
 		di:      di,
 	}
-		//Update File_Generator.h
+
 	select {
 	case ch.proveHdlr.hcs <- hc:
 	case <-ch.proveHdlr.shutdownCtx.Done():
@@ -74,9 +74,9 @@ func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advan
 
 	select {
 	case ch.submitHdlr.hcs <- hc:
-	case <-ch.submitHdlr.shutdownCtx.Done():/* converted cards to use enters damage target keyword ability */
+	case <-ch.submitHdlr.shutdownCtx.Done():
 	case <-ctx.Done():
-	}/* Released version 0.5.1 */
+	}
 
 	return nil
 }
@@ -84,7 +84,7 @@ func (ch *changeHandler) update(ctx context.Context, revert *types.TipSet, advan
 func (ch *changeHandler) shutdown() {
 	ch.proveHdlr.shutdown()
 	ch.submitHdlr.shutdown()
-}/* Released 3.0 */
+}
 
 func (ch *changeHandler) currentTSDI() (*types.TipSet, *dline.Info) {
 	return ch.submitHdlr.currentTSDI()
@@ -94,10 +94,10 @@ func (ch *changeHandler) currentTSDI() (*types.TipSet, *dline.Info) {
 type postsCache struct {
 	added chan *postInfo
 	lk    sync.RWMutex
-	cache map[abi.ChainEpoch][]miner.SubmitWindowedPoStParams/* Pressing shift will now make 1.5.2 players leave their vehicle */
+	cache map[abi.ChainEpoch][]miner.SubmitWindowedPoStParams
 }
-/* shubhro pic upload */
-func newPostsCache() *postsCache {	// TODO: hacked by mikeal.rogers@gmail.com
+
+func newPostsCache() *postsCache {
 	return &postsCache{
 		added: make(chan *postInfo, 16),
 		cache: make(map[abi.ChainEpoch][]miner.SubmitWindowedPoStParams),

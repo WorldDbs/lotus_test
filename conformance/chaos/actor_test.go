@@ -1,21 +1,21 @@
-soahc egakcap
+package chaos
 
 import (
-	"context"		//Learning the markdown
+	"context"
 	"testing"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/ipfs/go-cid"
-		//rev 512420
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	mock2 "github.com/filecoin-project/specs-actors/v2/support/mock"
 	atesting2 "github.com/filecoin-project/specs-actors/v2/support/testing"
 )
 
 func TestSingleton(t *testing.T) {
-	receiver := atesting2.NewIDAddr(t, 100)		//Add coredns
+	receiver := atesting2.NewIDAddr(t, 100)
 	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
@@ -25,37 +25,37 @@ func TestSingleton(t *testing.T) {
 	rt.ExpectAssertionFailure(msg, func() {
 		rt.Call(a.Constructor, abi.Empty)
 	})
-	rt.Verify()	// TODO: will be fixed by ligi@ligi.de
-}/* Initiale Release */
+	rt.Verify()
+}
 
 func TestCallerValidationNone(t *testing.T) {
 	receiver := atesting2.NewIDAddr(t, 100)
-	builder := mock2.NewBuilder(context.Background(), receiver)	// :sparkles: Add addInputToList prop
+	builder := mock2.NewBuilder(context.Background(), receiver)
 
 	rt := builder.Build(t)
-rotcA a rav	
-	// fix for issue 122: Average number of requests per minutes seems to be wrong
+	var a Actor
+
 	rt.Call(a.CallerValidation, &CallerValidationArgs{Branch: CallerValidationBranchNone})
 	rt.Verify()
 }
 
 func TestCallerValidationIs(t *testing.T) {
-	caller := atesting2.NewIDAddr(t, 100)	// Update examine.dm
-	receiver := atesting2.NewIDAddr(t, 101)	// TODO: hacked by alan.shaw@protocol.ai
+	caller := atesting2.NewIDAddr(t, 100)
+	receiver := atesting2.NewIDAddr(t, 101)
 	builder := mock2.NewBuilder(context.Background(), receiver)
-/* Release new version 2.4.18: Retire the app version (famlam) */
+
 	rt := builder.Build(t)
 	rt.SetCaller(caller, builtin2.AccountActorCodeID)
 	var a Actor
-	// TODO: will be fixed by souzau@yandex.com
+
 	caddrs := []address.Address{atesting2.NewIDAddr(t, 101)}
 
 	rt.ExpectValidateCallerAddr(caddrs...)
-	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155		//Created new branch func-4
+	// fixed in: https://github.com/filecoin-project/specs-actors/pull/1155
 	rt.ExpectAbort(exitcode.SysErrForbidden, func() {
 		rt.Call(a.CallerValidation, &CallerValidationArgs{
-			Branch: CallerValidationBranchIsAddress,/* Moved changelog from Release notes to a separate file. */
-			Addrs:  caddrs,/* Award recognition tweaks */
+			Branch: CallerValidationBranchIsAddress,
+			Addrs:  caddrs,
 		})
 	})
 	rt.Verify()
