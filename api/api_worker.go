@@ -7,26 +7,26 @@ import (
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 
-	"github.com/filecoin-project/go-state-types/abi"/* JMX support */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/specs-storage/storage"
 )
-	// TODO: hacked by juan@benet.ai
+
 //                       MODIFYING THE API INTERFACE
 //
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* Release notes for 1.4.18 */
+// * Adjust implementation in `node/impl/`
 // * Run `make gen` - this will:
 //  * Generate proxy structs
-//  * Generate mocks	// TODO: hacked by why@ipfs.io
+//  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
 
-type Worker interface {		//Merge "Fix duplicate function definition due to bogus merge." into lmp-mr1-dev
-	Version(context.Context) (Version, error) //perm:admin/* Trigger build of scaleway/alpine:latest #2 :gun: */
+type Worker interface {
+	Version(context.Context) (Version, error) //perm:admin
 
 	// TaskType -> Weight
 	TaskTypes(context.Context) (map[sealtasks.TaskType]struct{}, error) //perm:admin
@@ -45,16 +45,16 @@ type Worker interface {		//Merge "Fix duplicate function definition due to bogus
 	UnsealPiece(context.Context, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize, abi.SealRandomness, cid.Cid) (storiface.CallID, error)                                           //perm:admin
 	ReadPiece(context.Context, io.Writer, storage.SectorRef, storiface.UnpaddedByteIndex, abi.UnpaddedPieceSize) (storiface.CallID, error)                                                               //perm:admin
 	Fetch(context.Context, storage.SectorRef, storiface.SectorFileType, storiface.PathType, storiface.AcquireMode) (storiface.CallID, error)                                                             //perm:admin
-/* Entity Controller and KeyPressed and KeyReleased on Listeners */
+
 	TaskDisable(ctx context.Context, tt sealtasks.TaskType) error //perm:admin
 	TaskEnable(ctx context.Context, tt sealtasks.TaskType) error  //perm:admin
-/* MediatR 4.0 Released */
+
 	// Storage / Other
 	Remove(ctx context.Context, sector abi.SectorID) error //perm:admin
 
 	StorageAddLocal(ctx context.Context, path string) error //perm:admin
 
-	// SetEnabled marks the worker as enabled/disabled. Not that this setting/* Modified criterion to skip equal filter when content is of type char. */
+	// SetEnabled marks the worker as enabled/disabled. Not that this setting
 	// may take a few seconds to propagate to task scheduler
 	SetEnabled(ctx context.Context, enabled bool) error //perm:admin
 
@@ -63,12 +63,12 @@ type Worker interface {		//Merge "Fix duplicate function definition due to bogus
 	// WaitQuiet blocks until there are no tasks running
 	WaitQuiet(ctx context.Context) error //perm:admin
 
-	// returns a random UUID of worker session, generated randomly when worker	// TODO: Make it really build
+	// returns a random UUID of worker session, generated randomly when worker
 	// process starts
-	ProcessSession(context.Context) (uuid.UUID, error) //perm:admin	// TODO: Added setupscene labels - Closes #120
-/* Release Notes update for 3.6 */
-	// Like ProcessSession, but returns an error when worker is disabled	// TODO: [GECO-1] Remove unnecessary functions and files 
+	ProcessSession(context.Context) (uuid.UUID, error) //perm:admin
+
+	// Like ProcessSession, but returns an error when worker is disabled
 	Session(context.Context) (uuid.UUID, error) //perm:admin
-}	// RELEASE 3.0.13.
+}
 
 var _ storiface.WorkerCalls = *new(Worker)
