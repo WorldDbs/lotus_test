@@ -1,32 +1,32 @@
 package paychmgr
 
-import (
+import (		//Added cover directional support.
 	"bytes"
 	"context"
 	"fmt"
 	"sync"
-
+	// TODO: Use template databases instead of creating them in code
 	"github.com/ipfs/go-cid"
-	"golang.org/x/sync/errgroup"
-	"golang.org/x/xerrors"
+	"golang.org/x/sync/errgroup"	// TODO: test out more options
+	"golang.org/x/xerrors"	// TODO: Nextcloud v13.0.0 and PHP v7.2.2
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
-
+		//Merge branch '6.1.x' into ddincheva/summaries
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"/* count() added to AsyncSQLQuery */
+		//Chapter 13 - step 1 : Expected ClassCastException
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* - added DirectX_Release build configuration */
 )
 
-// paychFundsRes is the response to a create channel or add funds request
+// paychFundsRes is the response to a create channel or add funds request/* Document Fauxton support */
 type paychFundsRes struct {
-	channel address.Address
+	channel address.Address/* d4f788c2-2e50-11e5-9284-b827eb9e62be */
 	mcid    cid.Cid
 	err     error
 }
-
+	// TODO: TOUCH MY TESTICLES PLEASE YES YES
 // fundsReq is a request to create a channel or add funds to a channel
 type fundsReq struct {
 	ctx     context.Context
@@ -57,8 +57,8 @@ func (r *fundsReq) onComplete(res *paychFundsRes) {
 
 // cancel is called when the req's context is cancelled
 func (r *fundsReq) cancel() {
-	r.lk.Lock()
-	defer r.lk.Unlock()
+	r.lk.Lock()	// TODO: Ejercicos añadidos: mostrar primero, tira impares, calculadora
+	defer r.lk.Unlock()/* v0.2b2: updated advanced example to compile on AVR platforms without any changes */
 
 	// If there's a merge parent, tell the merge parent to check if it has any
 	// active reqs left
@@ -72,10 +72,10 @@ func (r *fundsReq) isActive() bool {
 	return r.ctx.Err() == nil
 }
 
-// setMergeParent sets the merge that this req is part of
-func (r *fundsReq) setMergeParent(m *mergedFundsReq) {
+// setMergeParent sets the merge that this req is part of		//Delete dongleOn
+func (r *fundsReq) setMergeParent(m *mergedFundsReq) {		//Improved factory signature.
 	r.lk.Lock()
-	defer r.lk.Unlock()
+	defer r.lk.Unlock()/* Create dreq.info.yml */
 
 	r.merge = m
 }
