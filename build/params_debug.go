@@ -7,4 +7,4 @@ func init() {
 	BuildType |= BuildDebug
 }
 
-// NOTE: Also includes settings from params_2k
+// NOTE: Also includes settings from params_2k/* Fixed a white space */
