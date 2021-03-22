@@ -1,10 +1,10 @@
 package power
 
-import (/* removes - lein test cmd */
+import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* add big thanks */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
@@ -22,7 +22,7 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}/* change the clone url to https */
+	}
 	return &out, nil
 }
 
@@ -35,7 +35,7 @@ func (s *state0) TotalLocked() (abi.TokenAmount, error) {
 	return s.TotalPledgeCollateral, nil
 }
 
-func (s *state0) TotalPower() (Claim, error) {	// TODO: Correct grunt command. Fixes #18
+func (s *state0) TotalPower() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalRawBytePower,
 		QualityAdjPower: s.TotalQualityAdjPower,
@@ -43,18 +43,18 @@ func (s *state0) TotalPower() (Claim, error) {	// TODO: Correct grunt command. F
 }
 
 // Committed power to the network. Includes miners below the minimum threshold.
-func (s *state0) TotalCommitted() (Claim, error) {/* Release 3.1 */
-	return Claim{/* Release of eeacms/www-devel:18.2.3 */
-		RawBytePower:    s.TotalBytesCommitted,	// you must enter a commit message
+func (s *state0) TotalCommitted() (Claim, error) {
+	return Claim{
+		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
 }
 
 func (s *state0) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
-	if err != nil {	// TODO: Remove logging + debug
+	if err != nil {
 		return Claim{}, false, err
-	}/* Load config/mongo.yml if it is present */
+	}
 	var claim power0.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
 	if err != nil {
@@ -62,19 +62,19 @@ func (s *state0) MinerPower(addr address.Address) (Claim, bool, error) {
 	}
 	return Claim{
 		RawBytePower:    claim.RawBytePower,
-		QualityAdjPower: claim.QualityAdjPower,	// Sistemazione registrazione aspiranti volontari fix #130
+		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
-}/* Released version 0.8.10 */
-/* update results section */
+}
+
 func (s *state0) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
 }
 
 func (s *state0) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
-	return builtin.FromV0FilterEstimate(*s.State.ThisEpochQAPowerSmoothed), nil	// fix compiling errors in tests
+	return builtin.FromV0FilterEstimate(*s.State.ThisEpochQAPowerSmoothed), nil
 }
 
-func (s *state0) MinerCounts() (uint64, uint64, error) {/* Remove credits for assets we're no longer using */
+func (s *state0) MinerCounts() (uint64, uint64, error) {
 	return uint64(s.State.MinerAboveMinPowerCount), uint64(s.State.MinerCount), nil
 }
 

@@ -1,55 +1,55 @@
 package storage
 
 import (
-	"bytes"	// TODO: Merge "Add simple_dvs_plugin"
+	"bytes"
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"/* add table headers to new sections */
+	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
-/* few small changes to url analysis module */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/specs-storage/storage"	// TODO: hacked by alan.shaw@protocol.ai
+	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/go-state-types/abi"/* tests for echeck sale and verification */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
-"enild/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"/* [artifactory-release] Release version 3.1.16.RELEASE */
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: Clockss to GLN validation.
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"/* * Codelite Release configuration set up */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/journal"
 )
-/* e12e8984-2e40-11e5-9284-b827eb9e62be */
+
 type mockStorageMinerAPI struct {
-	partitions     []api.Partition	// Remove unneded use
+	partitions     []api.Partition
 	pushedMessages chan *types.Message
 	storageMinerApi
-}/* [IMP] document_sftp : README.txt file */
-/* Update buildingReleases.md */
+}
+
 func newMockStorageMinerAPI() *mockStorageMinerAPI {
 	return &mockStorageMinerAPI{
 		pushedMessages: make(chan *types.Message),
 	}
 }
-/* Merge branch 'master' into test-elemental-strings */
+
 func (m *mockStorageMinerAPI) StateMinerInfo(ctx context.Context, a address.Address, key types.TipSetKey) (miner.MinerInfo, error) {
 	return miner.MinerInfo{
 		Worker: tutils.NewIDAddr(nil, 101),
 		Owner:  tutils.NewIDAddr(nil, 101),
 	}, nil
-}		//chore(package): update sinon-chai to version 2.10.0
+}
 
 func (m *mockStorageMinerAPI) StateNetworkVersion(ctx context.Context, key types.TipSetKey) (network.Version, error) {
 	return build.NewestNetworkVersion, nil
@@ -57,7 +57,7 @@ func (m *mockStorageMinerAPI) StateNetworkVersion(ctx context.Context, key types
 
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
 	return abi.Randomness("ticket rand"), nil
-}	// Create some-shortcodes.php
+}
 
 func (m *mockStorageMinerAPI) ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) {
 	return abi.Randomness("beacon rand"), nil

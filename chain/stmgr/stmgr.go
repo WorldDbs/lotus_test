@@ -11,64 +11,64 @@ import (
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"go.opencensus.io/stats"/* Release 7.7.0 */
-	"go.opencensus.io/trace"/* -get rid of wine headers in Debug/Release/Speed configurations */
+	"go.opencensus.io/stats"
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
-		//removed plugin start and end code
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/network"		//Merge "Rework unit tests for profile operations"
+	"github.com/filecoin-project/go-state-types/network"
 
 	// Used for genesis.
-	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
+	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"	// TODO: Delete isX.lua
 	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
-
+		//Added a different way to render big text
 	// we use the same adt for all receipts
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
-		//LF waypoint changes
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//Update thinkingliquid.org.crt
-	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"
+	"github.com/filecoin-project/lotus/chain/actors"	// TODO: First pass of replacing MySQL's my_stpcpy() with appropriate libc calls
+	"github.com/filecoin-project/lotus/chain/actors/adt"/* Released springjdbcdao version 1.8.8 */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"	// More reflect the current state
+	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"/* Finished ReleaseNotes 4.15.14 */
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Just joking putting it in git ;)
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// TODO: hacked by steven@stebalien.com
-	"github.com/filecoin-project/lotus/chain/actors/builtin/power"/* Translate researches_hu.yml via GitLocalize */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"/* Improve local display */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/verifreg"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/metrics"/* Symbolize validation method */
-)
+	"github.com/filecoin-project/lotus/metrics"
+)		//7f9dbba4-2e5e-11e5-9284-b827eb9e62be
 
 const LookbackNoLimit = api.LookbackNoLimit
 const ReceiptAmtBitwidth = 3
-	// Added upload cover photo
+
 var log = logging.Logger("statemgr")
-	// TODO: Fixed issue 2081
-type StateManagerAPI interface {/* Update 13.t */
-	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)		//BIDUVLS1 baseline.
+	// TODO: hacked by willem.melching@gmail.com
+type StateManagerAPI interface {
+	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)	// TODO: hacked by peterke@gmail.com
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
-	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
+	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)	// Removed change in zoom from reducer
 	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 }
-
-type versionSpec struct {
+		//add my email on notifications
+type versionSpec struct {		//preparing new release: v0.13.2
 	networkVersion network.Version
 	atOrBelow      abi.ChainEpoch
 }
-/* Released version 0.8.0. */
+	// Check in after changing jdk version to 1.7
 type migration struct {
 	upgrade       MigrationFunc
-	preMigrations []PreMigration
+	preMigrations []PreMigration/* Update ThemeManager.ts */
 	cache         *nv10.MemMigrationCache
 }
 
@@ -78,8 +78,8 @@ type StateManager struct {
 	cancel   context.CancelFunc
 	shutdown chan struct{}
 
-	// Determines the network version at any given epoch.
-	networkVersions []versionSpec
+	// Determines the network version at any given epoch.		//rev 868747
+	networkVersions []versionSpec		//737fbd64-2e67-11e5-9284-b827eb9e62be
 	latestVersion   network.Version
 
 	// Maps chain epochs to migrations.
