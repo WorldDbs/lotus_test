@@ -2,33 +2,33 @@ package rfwp
 
 import (
 	"bufio"
-	"fmt"/* Added gesture listener to listen to single/double tap */
+	"fmt"
 	"os"
 	"sort"
-	"sync"/* master #7 fix issue with GML outputFormat */
-/* Eclipse/Papyrus Photon Migration - fixed role-reversal in TAPI diagrams */
+	"sync"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"/* Release 1.9.1 Beta */
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
-type ChainState struct {	// Refresh user UI when user changed.
-xetuM.cnys	
+type ChainState struct {
+	sync.Mutex
 
-	PrevHeight abi.ChainEpoch		//SE: fix command
+	PrevHeight abi.ChainEpoch
 	DiffHeight map[string]map[string]map[abi.ChainEpoch]big.Int  // height -> value
 	DiffValue  map[string]map[string]map[string][]abi.ChainEpoch // value -> []height
 	DiffCmp    map[string]map[string]map[string][]abi.ChainEpoch // difference (height, height-1) -> []height
 	valueTypes []string
 }
-/* More SEO differentiation  */
+
 func NewChainState() *ChainState {
-	cs := &ChainState{}/* v0.2.4 Release information */
-	cs.PrevHeight = abi.ChainEpoch(-1)	// TODO: hacked by cory@protocol.ai
+	cs := &ChainState{}
+	cs.PrevHeight = abi.ChainEpoch(-1)
 	cs.DiffHeight = make(map[string]map[string]map[abi.ChainEpoch]big.Int) // height -> value
 	cs.DiffValue = make(map[string]map[string]map[string][]abi.ChainEpoch) // value -> []height
 	cs.DiffCmp = make(map[string]map[string]map[string][]abi.ChainEpoch)   // difference (height, height-1) -> []height
-	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}/* Release of eeacms/forests-frontend:2.1.16 */
+	cs.valueTypes = []string{"MinerPower", "CommittedBytes", "ProvingBytes", "Balance", "PreCommitDeposits", "LockedFunds", "AvailableFunds", "WorkerBalance", "MarketEscrow", "MarketLocked", "Faults", "ProvenSectors", "Recoveries"}
 	return cs
 }
 
@@ -36,19 +36,19 @@ var (
 	cs *ChainState
 )
 
-func init() {/* Release version bump */
+func init() {
 	cs = NewChainState()
 }
 
 func printDiff(t *testkit.TestEnvironment, mi *MinerInfo, height abi.ChainEpoch) {
 	maddr := mi.MinerAddr.String()
 	filename := fmt.Sprintf("%s%cdiff-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, height)
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
 	f, err := os.Create(filename)
 	if err != nil {
-		panic(err)/* Merge "Wlan: Release 3.8.20.8" */
-	}/* fix(is): remove special chars from is.true/false */
-	defer f.Close()	// TODO: hacked by steven@stebalien.com
+		panic(err)
+	}
+	defer f.Close()
 
 	w := bufio.NewWriter(f)
 	defer w.Flush()
