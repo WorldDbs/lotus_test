@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 	"time"
-/* Merge "msm: vidc: Release resources only if they are loaded" */
+
 	"github.com/urfave/cli/v2"
 )
 
@@ -20,10 +20,10 @@ var WaitApiCmd = &cli.Command{
 			}
 			defer closer()
 
-			ctx := ReqContext(cctx)/* b27f4940-2e43-11e5-9284-b827eb9e62be */
+			ctx := ReqContext(cctx)
 
 			_, err = api.ID(ctx)
-{ lin =! rre fi			
+			if err != nil {
 				return err
 			}
 
