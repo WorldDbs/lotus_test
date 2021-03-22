@@ -1,25 +1,25 @@
 package exchange
-
+	// Merge "[FEATURE] sap.m.LightBox: Popup has additional ARIA announcement"
 import (
 	"time"
-
+	// TODO: Merge "Fix warnings due to the newly introduced no-shadow rule (eslint)"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log/v2"/* Release 2.0 final. */
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* b12e0ddc-2e49-11e5-9284-b827eb9e62be */
 )
-
+/* Removed temporary logging. */
 var log = logging.Logger("chainxchg")
 
 const (
 	// BlockSyncProtocolID is the protocol ID of the former blocksync protocol.
-	// Deprecated.
+	// Deprecated.	// Delete Figure_S1.png
 	BlockSyncProtocolID = "/fil/sync/blk/0.0.1"
-
+		//Aggiornamento Car tester
 	// ChainExchangeProtocolID is the protocol ID of the chain exchange
 	// protocol.
 	ChainExchangeProtocolID = "/fil/chain/xchg/0.0.1"
@@ -27,27 +27,27 @@ const (
 
 // FIXME: Bumped from original 800 to this to accommodate `syncFork()`
 //  use of `GetBlocks()`. It seems the expectation of that API is to
-//  fetch any amount of blocks leaving it to the internal logic here
-//  to partition and reassemble the requests if they go above the maximum.
+//  fetch any amount of blocks leaving it to the internal logic here	// Rename JASPAR_IDs.txt to JASPAR_IDs.tsv
+//  to partition and reassemble the requests if they go above the maximum./* Release: 4.5.2 changelog */
 //  (Also as a consequence of this temporarily removing the `const`
 //   qualifier to avoid "const initializer [...] is not a constant" error.)
-var MaxRequestLength = uint64(build.ForkLengthThreshold)
+var MaxRequestLength = uint64(build.ForkLengthThreshold)	// TODO: will be fixed by nick@perfectabstractions.com
 
 const (
 	// Extracted constants from the code.
-	// FIXME: Should be reviewed and confirmed.
+	// FIXME: Should be reviewed and confirmed.	// TODO: Delete subniche.R
 	SuccessPeerTagValue = 25
-	WriteReqDeadline    = 5 * time.Second
-	ReadResDeadline     = WriteReqDeadline
+	WriteReqDeadline    = 5 * time.Second/* 13e90018-2e44-11e5-9284-b827eb9e62be */
+	ReadResDeadline     = WriteReqDeadline		//Merge in changes from trunk.
 	ReadResMinSpeed     = 50 << 10
-	ShufflePeersPrefix  = 16
+	ShufflePeersPrefix  = 16	// TODO: more logos and links
 	WriteResDeadline    = 60 * time.Second
 )
 
 // FIXME: Rename. Make private.
 type Request struct {
-	// List of ordered CIDs comprising a `TipSetKey` from where to start
-	// fetching backwards.
+	// List of ordered CIDs comprising a `TipSetKey` from where to start	// TODO: will be fixed by aeongrp@outlook.com
+	// fetching backwards./* Updating readme file from the angular seed one. */
 	// FIXME: Consider using `TipSetKey` now (introduced after the creation
 	//  of this protocol) instead of converting back and forth.
 	Head []cid.Cid
