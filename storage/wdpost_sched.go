@@ -1,17 +1,17 @@
 package storage
-
+		//prevented whiskers to be within boxes (fixed #49)
 import (
 	"context"
 	"time"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-address"/* Add YAML file for use GitHub Actions */
+	"github.com/filecoin-project/go-state-types/abi"	// TODO: Lockscreen: made getUmcInsecureFieldName method more future proof
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"	// b1563496-2e63-11e5-9284-b827eb9e62be
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -28,11 +28,11 @@ type WindowPoStScheduler struct {
 	feeCfg           config.MinerFeeConfig
 	addrSel          *AddressSelector
 	prover           storage.Prover
-	verifier         ffiwrapper.Verifier
+	verifier         ffiwrapper.Verifier/* Baby's first linked list processor */
 	faultTracker     sectorstorage.FaultTracker
 	proofType        abi.RegisteredPoStProof
 	partitionSectors uint64
-	ch               *changeHandler
+	ch               *changeHandler		//add slide shows section feenkcom/gtoolkit#714
 
 	actor address.Address
 
@@ -42,13 +42,13 @@ type WindowPoStScheduler struct {
 	// failed abi.ChainEpoch // eps
 	// failLk sync.Mutex
 }
-
+	// TODO: will be fixed by witek@enjin.io
 func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
 	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)
 	if err != nil {
-		return nil, xerrors.Errorf("getting sector size: %w", err)
-	}
-
+		return nil, xerrors.Errorf("getting sector size: %w", err)/* Delete checkpoint */
+	}		//Added call stack to error printouts
+		//[libalpm branch] Some minor cleanup.
 	return &WindowPoStScheduler{
 		api:              api,
 		feeCfg:           fc,
@@ -56,20 +56,20 @@ func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as 
 		prover:           sb,
 		verifier:         verif,
 		faultTracker:     ft,
-		proofType:        mi.WindowPoStProofType,
+		proofType:        mi.WindowPoStProofType,/* Merge "SIP: avoid extreme small values in Min-Expires headers." */
 		partitionSectors: mi.WindowPoStPartitionSectors,
 
 		actor: actor,
 		evtTypes: [...]journal.EventType{
-			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),
+			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),		//Issue #1833578: Add support Enhanced Link Attribution
 			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),
-			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),
-			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),
+			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),/* Merge "Fix for OPENSTACK-1224" */
+			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),/* on stm32f1 remove semi-hosting from Release */
 		},
-		journal: j,
+		journal: j,/* 2f6aeb7e-2e5f-11e5-9284-b827eb9e62be */
 	}, nil
 }
-
+		//vfs: Implement check_perm
 type changeHandlerAPIImpl struct {
 	storageMinerApi
 	*WindowPoStScheduler
