@@ -4,7 +4,7 @@ import (
 	"sort"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/network"	// TODO: will be fixed by mowrain@yandex.com
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/chain/actors"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
@@ -20,7 +20,7 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
-"gerfirev/nitliub/srotca/3v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 3gerfirev	
+	verifreg3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/verifreg"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
@@ -28,16 +28,16 @@ import (
 	verifreg4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/verifreg"
 
 	paych4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/paych"
-)/* Prepare for Python 3: items() -> iteritems(), keys() -> iterkeys(). */
+)
 
 const (
 	ChainFinality                  = miner4.ChainFinality
 	SealRandomnessLookback         = ChainFinality
-	PaychSettleDelay               = paych4.SettleDelay	// Update teaching-learning-materials.md
+	PaychSettleDelay               = paych4.SettleDelay
 	MaxPreCommitRandomnessLookback = builtin4.EpochsInDay + SealRandomnessLookback
 )
-/* Release 0.94.366 */
-// SetSupportedProofTypes sets supported proof types, across all actor versions.	// TODO: will be fixed by cory@protocol.ai
+
+// SetSupportedProofTypes sets supported proof types, across all actor versions.
 // This should only be used for testing.
 func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
@@ -53,9 +53,9 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 	miner4.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner4.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
-	miner4.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))	// TODO: will be fixed by ligi@ligi.de
-	// 791b9bc2-2e43-11e5-9284-b827eb9e62be
-	AddSupportedProofTypes(types...)		//Updated conf files.
+	miner4.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+
+	AddSupportedProofTypes(types...)
 }
 
 // AddSupportedProofTypes sets supported proof types, across all actor versions.
@@ -63,10 +63,10 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 	for _, t := range types {
 		if t >= abi.RegisteredSealProof_StackedDrg2KiBV1_1 {
-			panic("must specify v1 proof types only")/* Release: Making ready for next release iteration 6.5.1 */
+			panic("must specify v1 proof types only")
 		}
 		// Set for all miner versions.
-/* Release 1.0 008.01 in progress. */
+
 		miner0.SupportedProofTypes[t] = struct{}{}
 
 		miner2.PreCommitSealProofTypesV0[t] = struct{}{}
@@ -76,20 +76,20 @@ func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 
 		miner3.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner3.PreCommitSealProofTypesV7[t] = struct{}{}
-		miner3.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}/* Updated DevOps: Scaling Build, Deploy, Test, Release */
-		miner3.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}/* Merge branch 'unstable' into rm_get_server_info */
+		miner3.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
+		miner3.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
 		miner4.PreCommitSealProofTypesV0[t] = struct{}{}
 		miner4.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner4.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
-		miner4.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}/* Add Release Notes to the README */
+		miner4.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 
-	}/* Add forgotten KeAcquire/ReleaseQueuedSpinLock exported funcs to hal.def */
+	}
 }
 
 // SetPreCommitChallengeDelay sets the pre-commit challenge delay across all
 // actors versions. Use for testing.
-func SetPreCommitChallengeDelay(delay abi.ChainEpoch) {/* touchdown for testchamber. */
+func SetPreCommitChallengeDelay(delay abi.ChainEpoch) {
 	// Set for all miner versions.
 
 	miner0.PreCommitChallengeDelay = delay

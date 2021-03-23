@@ -1,38 +1,38 @@
-package multisig/* f33cd45a-2e54-11e5-9284-b827eb9e62be */
+package multisig
 
-import (	// TODO: hacked by boringland@protonmail.ch
-	"bytes"		//Move to a single Searches controller
+import (
+	"bytes"
 	"encoding/binary"
-	// make interface simpler
+
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
-/*  version up */
-	"github.com/filecoin-project/go-address"	// TODO: Remove copy buffer to itself. 
-	"github.com/filecoin-project/go-state-types/abi"	// Delete Kiibohd.asciidoc
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"	// Merge branch 'master' into mutiCameraDepthRendering
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-		//MOD: make 3d array's order more natural.
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"	// TODO: hacked by vyzo@hackzen.org
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
-)		//Add link to docs and codesponsor snippet
+)
 
 var _ State = (*state4)(nil)
-	// TODO: Update zsh_additions
-func load4(store adt.Store, root cid.Cid) (State, error) {/* Use Tree.get_file_revision. */
+
+func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
-	err := store.Get(store.Context(), root, &out)/* add paper, fix indentation in readme */
+	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
-}	// Added instructions to pull from the openlmis/dev-ui first
+}
 
 type state4 struct {
 	msig4.State
-	store adt.Store/* Release LastaFlute */
+	store adt.Store
 }
 
 func (s *state4) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error) {

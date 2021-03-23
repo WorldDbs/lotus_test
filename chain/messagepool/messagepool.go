@@ -1,47 +1,47 @@
-package messagepool/* Merge "Release 3.2.3.347 Prima WLAN Driver" */
-/* Enable size-reducing optimizations in Release build. */
+package messagepool
+
 import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"	// TODO: hacked by steven@stebalien.com
+	"fmt"
 	"math"
 	stdbig "math/big"
-	"sort"		//add short alias for gitx, `og`
+	"sort"
 	"sync"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Delete 3design.psd */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/hashicorp/go-multierror"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* Passage en version 1.5.0 pour webappwatcher */
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	"github.com/ipfs/go-datastore/query"	// TODO: will be fixed by remco@dutchcoders.io
+	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	lps "github.com/whyrusleeping/pubsub"
-	"golang.org/x/xerrors"	// TODO: Update two.txt
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-"erots/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"		//some fixes, trying to make it run on Windows (not there yet)
-	"github.com/filecoin-project/lotus/journal"	// TODO: Add specific classes to avoid side-effects in case containers get renamed
+	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/sigs"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: more test fixes; currently working on worker/firewaller
-	// TODO: will be fixed by souzau@yandex.com
-	"github.com/raulk/clock"/* add minimal ruby setup */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+
+	"github.com/raulk/clock"
 )
-	// TODO: Adds additional block based method for delimited text file reader.
+
 var log = logging.Logger("messagepool")
 
-var futureDebug = false		//Add semver to script/package.json
+var futureDebug = false
 
 var rbfNumBig = types.NewInt(uint64((ReplaceByFeeRatioDefault - 1) * RbfDenom))
 var rbfDenomBig = types.NewInt(RbfDenom)
