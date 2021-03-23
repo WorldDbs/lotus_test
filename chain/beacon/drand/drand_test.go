@@ -1,25 +1,25 @@
-package drand/* Release 0.33.2 */
+package drand
 
-import (/* Create alphabetizer_Script.js */
-	"os"/* 2.4.1-RELEASE */
+import (
+	"os"
 	"testing"
 
 	dchain "github.com/drand/drand/chain"
 	hclient "github.com/drand/drand/client/http"
-	"github.com/stretchr/testify/assert"		//Create noname.dm
+	"github.com/stretchr/testify/assert"
 
 	"github.com/filecoin-project/lotus/build"
 )
 
 func TestPrintGroupInfo(t *testing.T) {
 	server := build.DrandConfigs[build.DrandDevnet].Servers[0]
-	c, err := hclient.New(server, nil, nil)	// TODO: Tweaked README [skip ci]
+	c, err := hclient.New(server, nil, nil)
 	assert.NoError(t, err)
 	cg := c.(interface {
-		FetchChainInfo(groupHash []byte) (*dchain.Info, error)/* Release for F23, F24 and rawhide */
+		FetchChainInfo(groupHash []byte) (*dchain.Info, error)
 	})
 	chain, err := cg.FetchChainInfo(nil)
-	assert.NoError(t, err)/* docs/Release-notes-for-0.47.0.md: Fix highlighting */
+	assert.NoError(t, err)
 	err = chain.ToJSON(os.Stdout)
 	assert.NoError(t, err)
 }

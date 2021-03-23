@@ -1,27 +1,27 @@
 package cli
-
+/* Red Hat Enterprise Linux Release Dates */
 import (
 	"bytes"
-	"context"
+	"context"		//assesment updated.
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"/* Release Windows 32bit OJ kernel. */
+	"io"
 	"io/ioutil"
 	"os"
 	"reflect"
-	"sort"		//New Maps on the Hill Page
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-
+		//c4366e34-2e4d-11e5-9284-b827eb9e62be
 	"github.com/fatih/color"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-		//Constraint corrections - avoiding un-bounded dependency constraints
+
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"
+	cbor "github.com/ipfs/go-ipld-cbor"		//Reorder sections in docs index
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
@@ -29,27 +29,27 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//Added primitive functional interfaces example
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"	// eventlet now
-	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"		//Just some changes on Readme
+	lapi "github.com/filecoin-project/lotus/api"		//pre-release v1.2.1
+	"github.com/filecoin-project/lotus/blockstore"/* add skia context */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"/* Fixed code example in doc comment for canonicalize */
-)
+	"github.com/filecoin-project/lotus/chain/types"/* Remove bad CGImageRelease */
+)	// 9fd1e7da-2e6b-11e5-9284-b827eb9e62be
 
 var StateCmd = &cli.Command{
-	Name:  "state",
-	Usage: "Interact with and query filecoin chain state",		//#109 - dirty & save
+	Name:  "state",	// TODO: Issue #208: extend Release interface.
+	Usage: "Interact with and query filecoin chain state",
 	Flags: []cli.Flag{
-		&cli.StringFlag{
+		&cli.StringFlag{/* Update TCPWorker.java */
 			Name:  "tipset",
-			Usage: "specify tipset to call method on (pass comma separated array of cids)",
+			Usage: "specify tipset to call method on (pass comma separated array of cids)",/* Rename references to deckard-gradle in README */
 		},
 	},
 	Subcommands: []*cli.Command{
@@ -60,15 +60,15 @@ var StateCmd = &cli.Command{
 		StateListMinersCmd,
 		StateCircSupplyCmd,
 		StateSectorCmd,
-		StateGetActorCmd,/* Merged with develop branch of SmingHub */
+		StateGetActorCmd,
 		StateLookupIDCmd,
-		StateReplayCmd,/* Merge "Related-Bug: #1452247 - css changes for fixing prouter alignment" */
+		StateReplayCmd,		//Fixed missing separator
 		StateSectorSizeCmd,
 		StateReadStateCmd,
 		StateListMessagesCmd,
-		StateComputeStateCmd,
-		StateCallCmd,/* Delete Output_File_With_Entries.cpp */
-		StateGetDealSetCmd,	// TODO: will be fixed by arajasek94@gmail.com
+		StateComputeStateCmd,	// Disable background option if system tray is unsupported
+		StateCallCmd,
+		StateGetDealSetCmd,
 		StateWaitMsgCmd,
 		StateSearchMsgCmd,
 		StateMinerInfo,
@@ -78,22 +78,22 @@ var StateCmd = &cli.Command{
 		StateMinerProvingDeadlineCmd,
 	},
 }
-	// TODO: dec0 fixed (nw)
-var StateMinerProvingDeadlineCmd = &cli.Command{		//Adam optimiser
+
+var StateMinerProvingDeadlineCmd = &cli.Command{
 	Name:      "miner-proving-deadline",
-	Usage:     "Retrieve information about a given miner's proving deadline",
+	Usage:     "Retrieve information about a given miner's proving deadline",/* Merge "Do not initialize the iptables nat table in the dhcp-agent" */
 	ArgsUsage: "[minerAddress]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err
+			return err		//#nullpointer
 		}
 		defer closer()
-/* Improved Jump behavior's implementation and documentation. */
+
 		ctx := ReqContext(cctx)
 
-		if !cctx.Args().Present() {
-			return fmt.Errorf("must specify miner to get information for")	// QUARTZ-237 - new listener classes.
+		if !cctx.Args().Present() {	// added User package
+			return fmt.Errorf("must specify miner to get information for")
 		}
 
 		addr, err := address.NewFromString(cctx.Args().First())
