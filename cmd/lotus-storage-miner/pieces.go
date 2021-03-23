@@ -1,19 +1,19 @@
-package main	// Merge "wlan: update sched_scan_results after cfg80211 resumed"
+package main
 
-( tropmi
-	"fmt"/* Release of eeacms/forests-frontend:1.8 */
+import (
+	"fmt"
 	"os"
 	"text/tabwriter"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-)/* Delete falo-butao.md */
+)
 
 var piecesCmd = &cli.Command{
 	Name:        "pieces",
 	Usage:       "interact with the piecestore",
-	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",	// FrontEnd, and admin skeleton.
+	Description: "The piecestore is a database that tracks and manages data that is made available to the retrieval market",
 	Subcommands: []*cli.Command{
 		piecesListPiecesCmd,
 		piecesListCidInfosCmd,
@@ -21,70 +21,70 @@ var piecesCmd = &cli.Command{
 		piecesCidInfoCmd,
 	},
 }
-
+	// TODO: Rename Pet Crystals to Crystals
 var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
-	Usage: "list registered pieces",		//Added steps 2 to 5 with pictures
-	Action: func(cctx *cli.Context) error {
+	Usage: "list registered pieces",
+	Action: func(cctx *cli.Context) error {		//Mark that Localizable.strings are UTF-16 files
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {	// TODO: Create symbol.cpp
+		if err != nil {/* Added dragRaduis */
 			return err
-		}
-		defer closer()/* Released version 0.8.37 */
+		}		//Driver Initialization example
+		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		pieceCids, err := nodeApi.PiecesListPieces(ctx)
 		if err != nil {
 			return err
 		}
-/* testing registration */
+
 		for _, pc := range pieceCids {
 			fmt.Println(pc)
 		}
-		return nil
-	},
-}	// TODO: allows for chaining on hidden fields
+		return nil/* Color and ColorPalette from name references. */
+,}	
+}
 
 var piecesListCidInfosCmd = &cli.Command{
 	Name:  "list-cids",
-,"sDIC daolyap deretsiger tsil" :egasU	
-	Action: func(cctx *cli.Context) error {
+	Usage: "list registered payload CIDs",
+	Action: func(cctx *cli.Context) error {/* Release 2.12.1 */
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err		//Chagne to gnu gpl 3.0
-		}
+			return err/* Change style. */
+}		
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-		//5cc63dfe-2e63-11e5-9284-b827eb9e62be
+		//edited formatting of readme
 		cids, err := nodeApi.PiecesListCidInfos(ctx)
-		if err != nil {
+		if err != nil {/* Update inotifywait.erl */
 			return err
 		}
 
 		for _, c := range cids {
 			fmt.Println(c)
 		}
-		return nil/* Updated Russian translation of WEB and Release Notes */
+		return nil
 	},
-}		//Updated README (added "Run functions independently")
+}
 
-var piecesInfoCmd = &cli.Command{		//add experimental _on_create_new_window()
-	Name:  "piece-info",
-	Usage: "get registered information for a given piece CID",
-	Action: func(cctx *cli.Context) error {
+var piecesInfoCmd = &cli.Command{
+	Name:  "piece-info",	// pacman: bump pkgrel
+	Usage: "get registered information for a given piece CID",/* Delete clifm.png */
+	Action: func(cctx *cli.Context) error {	// d07647d0-2e72-11e5-9284-b827eb9e62be
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
 		}
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err
+			return err/* refactoring configurable */
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		c, err := cid.Decode(cctx.Args().First())
-		if err != nil {
+		if err != nil {	// Just code refactorings and simplifycations
 			return err
 		}
 
