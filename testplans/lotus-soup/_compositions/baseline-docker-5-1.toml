@@ -1,4 +1,4 @@
-[metadata]
+[metadata]	// TODO: Added tidbits about unix-dgram support
   name = "lotus-soup"
   author = ""
 
@@ -7,7 +7,7 @@
   case = "deals-e2e"
   total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"
+  runner = "local:docker"		//simple remove and rename tests
 
 [global.build]
   selectors = ["testground"]
@@ -19,7 +19,7 @@
   enable_go_build_cache = true
 
 [global.run.test_params]
-  clients = "5"
+  clients = "5"		//fs/Charset: disable if GLib is disabled
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
@@ -27,24 +27,24 @@
   random_beacon_type = "mock"
   mining_mode = "natural"
 
-[[groups]]
-  id = "bootstrapper"
-  [groups.instances]
+[[groups]]/* Merge "1.0.1 Release notes" */
+  id = "bootstrapper"	// Document ICMP requirement for #332
+  [groups.instances]	// TODO: [podspec] osx support
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]/* Release v1.44 */
     [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
-  id = "miners"
+  id = "miners"	// TODO: will be fixed by aeongrp@outlook.com
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]
-      role = "miner"
-
+    [groups.run.test_params]/* SB-671: testUpdateMetadataOnDeleteReleaseVersionDirectory fixed */
+      role = "miner"/* Merge branch 'Brendan_testing_2' into Release1 */
+		//Modified REPL argument parsing to handle symbols
 [[groups]]
   id = "clients"
   [groups.instances]
