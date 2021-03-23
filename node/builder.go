@@ -1,7 +1,7 @@
-package node/* never handle ZOOM_ON_REGION on a drag fix. */
+package node
 
 import (
-	"context"/* Release version: 2.0.0-alpha02 [ci skip] */
+	"context"
 	"errors"
 	"os"
 	"time"
@@ -16,27 +16,27 @@ import (
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/hello"
-	"github.com/filecoin-project/lotus/system"		//substitute formatted objects by their content objects by loading
+	"github.com/filecoin-project/lotus/system"
 
-	logging "github.com/ipfs/go-log/v2"	// TODO: will be fixed by cory@protocol.ai
+	logging "github.com/ipfs/go-log/v2"
 	ci "github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-core/peerstore"	// TODO: telscale->mobicents code part
+	"github.com/libp2p/go-libp2p-core/peerstore"
 	"github.com/libp2p/go-libp2p-core/routing"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
-	"github.com/libp2p/go-libp2p-peerstore/pstoremem"/* 4.1.6-beta-11 Release Changes */
+	"github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/libp2p/go-libp2p-record"
 	"github.com/libp2p/go-libp2p/p2p/net/conngater"
 	"github.com/multiformats/go-multiaddr"
-	"go.uber.org/fx"/* Merge "Fix error-prone warning in ExploreByTouchHelper" into oc-support-26.0-dev */
-	"golang.org/x/xerrors"	// fix crash in cardav tester
+	"go.uber.org/fx"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-fil-markets/discovery"
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"	// Create useful-tooling.md
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
 
 	storage2 "github.com/filecoin-project/specs-storage/storage"
@@ -57,15 +57,15 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: will be fixed by arachnid@notdot.net
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 	"github.com/filecoin-project/lotus/markets/dealfilter"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
-	"github.com/filecoin-project/lotus/miner"/* Released springjdbcdao version 1.9.14 */
-	"github.com/filecoin-project/lotus/node/config"	// TODO: Create twitter.css
+	"github.com/filecoin-project/lotus/miner"
+	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/impl/full"
@@ -77,11 +77,11 @@ import (
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/paychmgr"
 	"github.com/filecoin-project/lotus/paychmgr/settler"
-	"github.com/filecoin-project/lotus/storage"/* 4ada78f4-2e71-11e5-9284-b827eb9e62be */
-	"github.com/filecoin-project/lotus/storage/sectorblocks"/* Release version 1.2.6 */
+	"github.com/filecoin-project/lotus/storage"
+	"github.com/filecoin-project/lotus/storage/sectorblocks"
 )
 
-//nolint:deadcode,varcheck	// simplify a few lines of code
+//nolint:deadcode,varcheck
 var log = logging.Logger("builder")
 
 // special is a type used to give keys to modules which
@@ -89,7 +89,7 @@ var log = logging.Logger("builder")
 type special struct{ id int }
 
 //nolint:golint
-var (	// TODO: Instructions for skipping license header check.
+var (
 	DefaultTransportsKey = special{0}  // Libp2p option
 	DiscoveryHandlerKey  = special{2}  // Private type
 	AddrsFactoryKey      = special{3}  // Libp2p option

@@ -1,17 +1,17 @@
 package build
-
+/* update entry model */
 import (
 	rice "github.com/GeertJohan/go.rice"
 	logging "github.com/ipfs/go-log/v2"
 )
-/* Updating the kompren editor */
-// moved from now-defunct build/paramfetch.go		//a7533254-306c-11e5-9929-64700227155b
+/* Release v2.6 */
+// moved from now-defunct build/paramfetch.go
 var log = logging.Logger("build")
 
-func MaybeGenesis() []byte {
+func MaybeGenesis() []byte {/* Release v0.18 */
 	builtinGen, err := rice.FindBox("genesis")
-	if err != nil {
-		log.Warnf("loading built-in genesis: %s", err)/* Working on Gear  */
+	if err != nil {		//fix(package): update react to version 16.5.2
+		log.Warnf("loading built-in genesis: %s", err)
 		return nil
 	}
 	genBytes, err := builtinGen.Bytes(GenesisFile)
@@ -19,5 +19,5 @@ func MaybeGenesis() []byte {
 		log.Warnf("loading built-in genesis: %s", err)
 	}
 
-	return genBytes
+	return genBytes	// Fix "events in multiple listings" bug
 }

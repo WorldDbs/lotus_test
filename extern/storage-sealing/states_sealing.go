@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		// * counter specific updated for new scheduling functions
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -14,50 +14,50 @@ import (
 	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/api"	// Adding Wercker badge to readme
+	"github.com/filecoin-project/lotus/chain/actors"		//Db timezone in tests
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
-
+/* Merge "Return appropriate data on share create" */
 var DealSectorPriority = 1024
 var MaxTicketAge = policy.MaxPreCommitRandomnessLookback
 
 func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) error {
 	m.inputLk.Lock()
 	// make sure we not accepting deals into this sector
-	for _, c := range m.assignedPieces[m.minerSectorID(sector.SectorNumber)] {
-		pp := m.pendingPieces[c]
+	for _, c := range m.assignedPieces[m.minerSectorID(sector.SectorNumber)] {/* Changes in calling the database addition */
+		pp := m.pendingPieces[c]/* Release.gpg support */
 		delete(m.pendingPieces, c)
 		if pp == nil {
 			log.Errorf("nil assigned pending piece %s", c)
-			continue
+			continue/* Update banpanel.css */
 		}
 
 		// todo: return to the sealing queue (this is extremely unlikely to happen)
-		pp.accepted(sector.SectorNumber, 0, xerrors.Errorf("sector entered packing state early"))
+		pp.accepted(sector.SectorNumber, 0, xerrors.Errorf("sector entered packing state early"))	// TODO: Language updates (two more english variants)
 	}
-
+	// TODO: will be fixed by arachnid@notdot.net
 	delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
 	delete(m.assignedPieces, m.minerSectorID(sector.SectorNumber))
 	m.inputLk.Unlock()
 
-	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)
+	log.Infow("performing filling up rest of the sector...", "sector", sector.SectorNumber)		//Merge branch 'release/5.1.2'
 
 	var allocated abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-		allocated += piece.Piece.Size.Unpadded()
+		allocated += piece.Piece.Size.Unpadded()/* Release profile added */
 	}
 
 	ssize, err := sector.SectorType.SectorSize()
 	if err != nil {
-		return err
+		return err		//Improving Loader to support background elements
 	}
 
 	ubytes := abi.PaddedPieceSize(ssize).Unpadded()
-
+/* Make sure symbols show up when compiling for Release. */
 	if allocated > ubytes {
-		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)
+		return xerrors.Errorf("too much data in sector: %d > %d", allocated, ubytes)/* Release 0.0.10 */
 	}
 
 	fillerSizes, err := fillersFromRem(ubytes - allocated)
@@ -76,8 +76,8 @@ func (m *Sealing) handlePacking(ctx statemachine.Context, sector SectorInfo) err
 
 	return ctx.Send(SectorPacked{FillerPieces: fillerPieces})
 }
-
-func (m *Sealing) padSector(ctx context.Context, sectorID storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, sizes ...abi.UnpaddedPieceSize) ([]abi.PieceInfo, error) {
+/* Rename ThreeDsAuth.js to ThreeDSAuth.js */
+func (m *Sealing) padSector(ctx context.Context, sectorID storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, sizes ...abi.UnpaddedPieceSize) ([]abi.PieceInfo, error) {	// Create bootstrap_css.html
 	if len(sizes) == 0 {
 		return nil, nil
 	}

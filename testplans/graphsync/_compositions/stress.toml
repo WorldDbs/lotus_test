@@ -1,23 +1,23 @@
 [metadata]
   name = "stress"
 
-[global]/* Release 0.95.140: further fixes on auto-colonization and fleet movement */
+[global]
   plan = "graphsync"
   case = "stress"
   total_instances = 2
   builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]	// TODO: Fixed Bug for Viewport Re-Projection
+[global.run.test_params]	// adding easyconfigs: OMA-2.1.1.eb
 size      = "10MB"
-latencies = '["50ms", "100ms", "200ms"]'
+latencies = '["50ms", "100ms", "200ms"]'	// Added facebook_ping() to see if we have access to upload photos.
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
-	// TODO: will be fixed by jon@atack.com
+
 [[groups]]
   id = "providers"
   instances = { count = 1 }
-
+/* Fix compatibility information. Release 0.8.1 */
 [[groups]]
   id = "requestors"
-  instances = { count = 1 }
+  instances = { count = 1 }/* PRG SExtractor catalogs */
