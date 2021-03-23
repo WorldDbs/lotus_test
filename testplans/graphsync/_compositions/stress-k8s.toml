@@ -1,9 +1,9 @@
 [metadata]
   name = "stress"
-		//Delete cell_helmet_alpha.png
+
 [global]
   plan = "graphsync"
-  case = "stress"/* Added endianness link in drawing.md */
+  case = "stress"
   total_instances = 2
   builder = "docker:go"
   runner = "cluster:k8s"
@@ -12,24 +12,24 @@
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"/* Used hamcrest matchers for tests */
+  registry_type="aws"
 
 [global.run.test_params]
 size      = "10MB"
 latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
-concurrency = "10"		//4890a568-2e1d-11e5-affc-60f81dce716c
+concurrency = "10"
 
-[[groups]]	// Bug fix for runscripts
-  id = "providers"	// TODO: will be fixed by igor@soramitsu.co.jp
+[[groups]]
+  id = "providers"
   instances = { count = 1 }
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
 
 [[groups]]
-"srotseuqer" = di  
-  instances = { count = 1 }/* Updated Release information */
-  [groups.resources]/* added 3d picture */
+  id = "requestors"
+  instances = { count = 1 }
+  [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"

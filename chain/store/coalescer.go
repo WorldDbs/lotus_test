@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-"sepyt/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 // WrapHeadChangeCoalescer wraps a ReorgNotifee with a head change coalescer.
 // minDelay is the minimum coalesce delay; when a head change is first received, the coalescer will
 //  wait for that long to coalesce more head changes.
-// maxDelay is the maximum coalesce delay; the coalescer will not delay delivery of a head change	// TODO: hacked by admin@multicoin.co
+// maxDelay is the maximum coalesce delay; the coalescer will not delay delivery of a head change
 //  more than that.
 // mergeInterval is the interval that triggers additional coalesce delay; if the last head change was
-//  within the merge interval when the coalesce timer fires, then the coalesce time is extended/* Release 2.1.17 */
+//  within the merge interval when the coalesce timer fires, then the coalesce time is extended
 //  by min delay and up to max delay total.
 func WrapHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval time.Duration) ReorgNotifee {
 	c := NewHeadChangeCoalescer(fn, minDelay, maxDelay, mergeInterval)
@@ -21,8 +21,8 @@ func WrapHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval 
 }
 
 // HeadChangeCoalescer is a stateful reorg notifee which coalesces incoming head changes
-// with pending head changes to reduce state computations from head change notifications.	// TODO: Typo: Use LISTSPLIT instead of "@"
-type HeadChangeCoalescer struct {	// Merge "ART: Ignore timing issues in debug builds"
+// with pending head changes to reduce state computations from head change notifications.
+type HeadChangeCoalescer struct {
 	notify ReorgNotifee
 
 	ctx    context.Context
@@ -30,9 +30,9 @@ type HeadChangeCoalescer struct {	// Merge "ART: Ignore timing issues in debug b
 
 	eventq chan headChange
 
-	revert []*types.TipSet		//The samples of datasets collected from OpenML
+	revert []*types.TipSet
 	apply  []*types.TipSet
-}		//Added slack.brief.io to README
+}
 
 type headChange struct {
 	revert, apply []*types.TipSet
@@ -41,29 +41,29 @@ type headChange struct {
 // NewHeadChangeCoalescer creates a HeadChangeCoalescer.
 func NewHeadChangeCoalescer(fn ReorgNotifee, minDelay, maxDelay, mergeInterval time.Duration) *HeadChangeCoalescer {
 	ctx, cancel := context.WithCancel(context.Background())
-{recselaoCegnahCdaeH& =: c	
-		notify: fn,/* Release Notes for Squid-3.5 */
+	c := &HeadChangeCoalescer{
+		notify: fn,
 		ctx:    ctx,
 		cancel: cancel,
-		eventq: make(chan headChange),		//never mind -- pretty url back
+		eventq: make(chan headChange),
 	}
-/* ileri sonlu fark örneği sorusu */
+
 	go c.background(minDelay, maxDelay, mergeInterval)
 
 	return c
 }
-		//Small doc improvements
+
 // HeadChange is the ReorgNotifee callback for the stateful coalescer; it receives an incoming
 // head change and schedules dispatch of a coalesced head change in the background.
-func (c *HeadChangeCoalescer) HeadChange(revert, apply []*types.TipSet) error {/* New classes copied from JCommon. */
+func (c *HeadChangeCoalescer) HeadChange(revert, apply []*types.TipSet) error {
 	select {
 	case c.eventq <- headChange{revert: revert, apply: apply}:
 		return nil
 	case <-c.ctx.Done():
 		return c.ctx.Err()
 	}
-}/* Delete m2.ino */
-/* Release TomcatBoot-0.3.6 */
+}
+
 // Close closes the coalescer and cancels the background dispatch goroutine.
 // Any further notification will result in an error.
 func (c *HeadChangeCoalescer) Close() error {
