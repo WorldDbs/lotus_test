@@ -7,9 +7,9 @@
   case = "deals-e2e"
   total_instances = 3
   builder = "docker:go"
-  runner = "cluster:k8s"	// Base Stream on Monadic.Stream
+  runner = "cluster:k8s"
 
-[global.build]	// TODO: configuration management
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
@@ -18,14 +18,14 @@
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
-"1808:tsohlacol//:ptth"=lru_yxorp_og  
-  registry_type="aws"/* seaspidering */
+  go_proxy_url="http://localhost:8081"
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "1"
   miners = "1"
   genesis_timestamp_offset = "0"
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Release 1.2.4 (by accident version  bumped by 2 got pushed to maven central). */
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
   mining_mode = "natural"
@@ -33,13 +33,13 @@
 [[groups]]
   id = "bootstrapper"
   [groups.resources]
-"iM215" = yromem    
+    memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 1		//Changed the Direct3D class to be instance based instead of static.
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Re #23304 Reformulate the Release notes */
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -47,15 +47,15 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]/* 3adc957c-2e49-11e5-9284-b827eb9e62be */
-    count = 1/* Typo fix: extra 'a' deleted */
+  [groups.instances]
+    count = 1
     percentage = 0.0
-  [groups.run]/* Merge "Fix strace build after upstream sync." */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
-		//Added .jsx
-[[groups]]/* Release 0.2.0 of swak4Foam */
-  id = "clients"		//update checks flagged semantics
+
+[[groups]]
+  id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"

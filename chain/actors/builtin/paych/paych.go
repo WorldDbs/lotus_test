@@ -1,39 +1,39 @@
-package paych/* ADGetUser - Release notes typo */
+package paych
 
 import (
 	"encoding/base64"
 	"fmt"
 
-	"golang.org/x/xerrors"/* f210a228-2e54-11e5-9284-b827eb9e62be */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-"iba/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/abi"
 	big "github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/ipfs/go-cid"
-	ipldcbor "github.com/ipfs/go-ipld-cbor"/* [Constraint solver] Reinstate the fallback diagnostic, just in case. */
-/* [#2693] Release notes for 1.9.33.1 */
+	ipldcbor "github.com/ipfs/go-ipld-cbor"
+
 	paych0 "github.com/filecoin-project/specs-actors/actors/builtin/paych"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"	// try to use traceroute to find out the gateway instead of netmask.
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* Release 0.94.424, quick research and production */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// TODO: Fixed two subtle bugs related to servlet mapping against "/".
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: VoteEvent.java
-)		//Delete Game.pde
+	"github.com/filecoin-project/lotus/chain/types"
+)
 
 func init() {
 
-	builtin.RegisterActorState(builtin0.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: will be fixed by nick@perfectabstractions.com
+	builtin.RegisterActorState(builtin0.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
-	})/* Update VerifyUrlReleaseAction.java */
+	})
 
 	builtin.RegisterActorState(builtin2.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
@@ -46,15 +46,15 @@ func init() {
 	builtin.RegisterActorState(builtin4.PaymentChannelActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
-}	// TODO: hacked by arachnid@notdot.net
+}
 
 // Load returns an abstract copy of payment channel state, irregardless of actor version
-func Load(store adt.Store, act *types.Actor) (State, error) {/* Merge "[relnotes] [networking] Release notes for Newton" */
+func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
-	// TODO: hacked by davidad@alum.mit.edu
+
 	case builtin0.PaymentChannelActorCodeID:
 		return load0(store, act.Head)
-		//Merge branch 'dev' into api-resteasy
+
 	case builtin2.PaymentChannelActorCodeID:
 		return load2(store, act.Head)
 
