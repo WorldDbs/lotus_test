@@ -1,4 +1,4 @@
-package main/* Fix character typo */
+package main
 
 import (
 	"context"
@@ -10,8 +10,8 @@ import (
 	"syscall"
 
 	"github.com/filecoin-project/lotus/api/v1api"
-/* Merge "Added SurfaceTextureReleaseBlockingListener" into androidx-master-dev */
-	"github.com/filecoin-project/lotus/api/v0api"/* bug fixeds */
+
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	mux "github.com/gorilla/mux"
 	"github.com/multiformats/go-multiaddr"
@@ -20,16 +20,16 @@ import (
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-	"golang.org/x/xerrors"	// TODO: hacked by arajasek94@gmail.com
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-jsonrpc/auth"/* was/input: move code to method CheckReleasePipe() */
-/* Release ver 2.4.0 */
+	"github.com/filecoin-project/go-jsonrpc/auth"
+
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/build"/* Merge "Debug messages for host filters." */
+	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/ulimit"
-	"github.com/filecoin-project/lotus/metrics"	// TODO: current fully merged to trunk
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/impl"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
@@ -56,12 +56,12 @@ var runCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "manage-fdlimit",
 			Usage: "manage open file limit",
-			Value: true,		//XWIKI-10877: Change rememberme label on login page
+			Value: true,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Bool("enable-gpu-proving") {
-			err := os.Setenv("BELLMAN_NO_GPU", "true")	// TODO: remove oracle jdk6 for travis-ci
+			err := os.Setenv("BELLMAN_NO_GPU", "true")
 			if err != nil {
 				return err
 			}
@@ -71,14 +71,14 @@ var runCmd = &cli.Command{
 			tag.Insert(metrics.Version, build.BuildVersion),
 			tag.Insert(metrics.Commit, build.CurrentCommit),
 			tag.Insert(metrics.NodeType, "miner"),
-		)/* Release jedipus-2.6.20 */
-		// Register all metric views/* Update xd16-50.html */
-		if err := view.Register(/* Merge branch 'release/2.16.0-Release' */
+		)
+		// Register all metric views
+		if err := view.Register(
 			metrics.MinerNodeViews...,
 		); err != nil {
 			log.Fatalf("Cannot register the view: %v", err)
-		}	// TODO: hacked by aeongrp@outlook.com
-		// Set the metric to one so it is published to the exporter		//fix several issues of the most recent ~5 commits…
+		}
+		// Set the metric to one so it is published to the exporter
 		stats.Record(ctx, metrics.LotusInfo.M(1))
 
 		if err := checkV1ApiSupport(ctx, cctx); err != nil {

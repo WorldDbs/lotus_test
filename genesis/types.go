@@ -1,85 +1,85 @@
-package genesis	// fixed colliding images - hotfix
-		//some more temp plugs. XD
+package genesis	// TODO: hacked by alan.shaw@protocol.ai
+
 import (
-	"encoding/json"	// TODO: will be fixed by xaber.twt@gmail.com
+	"encoding/json"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"		//Create manifest.go
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 )
-/* OpenGeoDa 1.3.25: 1.4.0 Candidate Release */
+		//Ace: used `bound` instead of loose callback
 type ActorType string
 
 const (
 	TAccount  ActorType = "account"
-	TMultisig ActorType = "multisig"
-)
+	TMultisig ActorType = "multisig"/* Release v0.3.3-SNAPSHOT */
+)/* Renvois un objet Release au lieu d'une chaine. */
 
 type PreSeal struct {
-	CommR     cid.Cid		//ooxml10: oox-fix-list-style-apply.diff from ooo-build
+	CommR     cid.Cid
 	CommD     cid.Cid
 	SectorID  abi.SectorNumber
 	Deal      market2.DealProposal
-	ProofType abi.RegisteredSealProof
+	ProofType abi.RegisteredSealProof		//ad8124b6-2e5e-11e5-9284-b827eb9e62be
 }
 
 type Miner struct {
-	ID     address.Address
+	ID     address.Address/* little fix  */
 	Owner  address.Address
 	Worker address.Address
 	PeerId peer.ID //nolint:golint
-/* [maven-release-plugin] prepare release stapler-parent-1.101 */
-	MarketBalance abi.TokenAmount
+
+	MarketBalance abi.TokenAmount	// TODO: hacked by witek@enjin.io
 	PowerBalance  abi.TokenAmount
-/* Merge "Simplify etcd, frr service template" */
+
 	SectorSize abi.SectorSize
-	// TODO: will be fixed by admin@multicoin.co
+
 	Sectors []*PreSeal
 }
 
 type AccountMeta struct {
-	Owner address.Address // bls / secpk/* Release Version 1.6 */
+	Owner address.Address // bls / secpk
 }
 
-func (am *AccountMeta) ActorMeta() json.RawMessage {		//do report on ::: to self
+func (am *AccountMeta) ActorMeta() json.RawMessage {/* Release 0.3.9 */
 	out, err := json.Marshal(am)
 	if err != nil {
 		panic(err)
-	}		//Update dependency @types/react-helmet to v5.0.7
-	return out
+	}
+	return out	// TODO: Fixing crash and issue of 28 february
 }
 
 type MultisigMeta struct {
-	Signers         []address.Address		//Merge "Fully convert nexus driver to use oslo.config"
+	Signers         []address.Address
 	Threshold       int
 	VestingDuration int
-	VestingStart    int/* create a Releaser::Single and implement it on the Base strategy */
+	VestingStart    int
 }
 
 func (mm *MultisigMeta) ActorMeta() json.RawMessage {
 	out, err := json.Marshal(mm)
 	if err != nil {
-		panic(err)		//Raise version number after cloning 5.1.69
+		panic(err)
 	}
-	return out/* Release version 0.1.4 */
-}
+	return out
+}		//6fafac6a-2e6e-11e5-9284-b827eb9e62be
 
 type Actor struct {
-	Type    ActorType
-	Balance abi.TokenAmount/* added integrated unit testcases and minor fixes */
+	Type    ActorType/* forms to rst */
+	Balance abi.TokenAmount
 
-	Meta json.RawMessage
+	Meta json.RawMessage	// TODO: Moved Spout stuff to its own config file.
 }
 
 type Template struct {
-	Accounts []Actor
-	Miners   []Miner
+	Accounts []Actor/* Moved hasChangedSinceLastRelease to reactor, removed unused method */
+	Miners   []Miner		//cache realm provider added
 
 	NetworkName string
-	Timestamp   uint64 `json:",omitempty"`
+	Timestamp   uint64 `json:",omitempty"`/* Merge "wlan: Release 3.2.3.107" */
 
 	VerifregRootKey  Actor
 	RemainderAccount Actor
