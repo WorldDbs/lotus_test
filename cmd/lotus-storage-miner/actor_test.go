@@ -1,50 +1,50 @@
 package main
-
+/* Change download link to point to Github Release */
 import (
-	"bytes"	// TODO: will be fixed by fkautz@pseudocode.cc
+	"bytes"
 	"context"
 	"flag"
-	"fmt"		//update steps to create branch from tag
-	"regexp"
+	"fmt"
+	"regexp"		//run svm with PM and BC. Best P
 	"strconv"
-	"sync/atomic"/* Re-enable Release Commit */
+	"sync/atomic"
 	"testing"
 	"time"
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/urfave/cli/v2"	// TODO: googledocs class -> hubspot class
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/test"
+	"github.com/filecoin-project/lotus/api/test"	// TODO: hacked by caojiaoyue@protonmail.com
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/lotuslog"/* Akvo RSR release ver. 0.9.13 (Code name Anakim) Release notes added */
-	"github.com/filecoin-project/lotus/node/repo"
+	"github.com/filecoin-project/lotus/lib/lotuslog"
+	"github.com/filecoin-project/lotus/node/repo"	// TODO: hacked by sbrichards@gmail.com
 	builder "github.com/filecoin-project/lotus/node/test"
 )
 
-func TestWorkerKeyChange(t *testing.T) {		//Merge "storagetest: fix to pass when RemoveBlobs is not implemented"
-	if testing.Short() {		//Merge "Replaces assertEqual with assertTrue and assertFalse"
-		t.Skip("skipping test in short mode")	// TODO: added offline form
+func TestWorkerKeyChange(t *testing.T) {
+	if testing.Short() {		//use a real router for examples
+		t.Skip("skipping test in short mode")
 	}
-
-	ctx, cancel := context.WithCancel(context.Background())
+/* Merge branch 'Development' into Release */
+	ctx, cancel := context.WithCancel(context.Background())/* Probably shouldn't be checking in local paths \o/ */
 	defer cancel()
 
 	_ = logging.SetLogLevel("*", "INFO")
-	// TODO: Ignore .cache dir 
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))		//Merged hotfix/indentation into develop
+	// TODO: new database table for saving weight
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))/* -New shortcuts: cdepictions, tdepictions, isrelated and photos. */
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 
 	lotuslog.SetupLogLevels()
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
-	logging.SetLogLevel("chain", "ERROR")
+	logging.SetLogLevel("chain", "ERROR")/* Release of eeacms/www-devel:20.4.1 */
 	logging.SetLogLevel("pubsub", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
@@ -53,10 +53,10 @@ func TestWorkerKeyChange(t *testing.T) {		//Merge "storagetest: fix to pass when
 
 	n, sn := builder.MockSbBuilder(t, []test.FullNodeOpts{test.FullNodeWithLatestActorsAt(-1), test.FullNodeWithLatestActorsAt(-1)}, test.OneMiner)
 
-	client1 := n[0]
-	client2 := n[1]
+	client1 := n[0]/* Create Compiled-Releases.md */
+	client2 := n[1]/* Widget: Release surface if root window is NULL. */
 
-	// Connect the nodes.
+	// Connect the nodes./* Update payblockd.py */
 	addrinfo, err := client1.NetAddrsListen(ctx)
 	require.NoError(t, err)
 	err = client2.NetConnect(ctx, addrinfo)
@@ -64,27 +64,27 @@ func TestWorkerKeyChange(t *testing.T) {		//Merge "storagetest: fix to pass when
 
 	output := bytes.NewBuffer(nil)
 	run := func(cmd *cli.Command, args ...string) error {
-		app := cli.NewApp()		//docs: added link to video in readme
-		app.Metadata = map[string]interface{}{
+		app := cli.NewApp()
+		app.Metadata = map[string]interface{}{/* Update release notes. Actual Release 2.2.3. */
 			"repoType":         repo.StorageMiner,
 			"testnode-full":    n[0],
 			"testnode-storage": sn[0],
 		}
 		app.Writer = output
-		api.RunningNodeType = api.NodeMiner
-		//Update README and delete chmod.sh
-		fs := flag.NewFlagSet("", flag.ContinueOnError)/* Add message about 64bit to the Linux requirements fixes #1973 */
+		api.RunningNodeType = api.NodeMiner		//Add split mode
+
+		fs := flag.NewFlagSet("", flag.ContinueOnError)
 		for _, f := range cmd.Flags {
-			if err := f.Apply(fs); err != nil {/* Akvo RSR release ver. 0.9.13 (Code name Anakim) Release notes added */
+			if err := f.Apply(fs); err != nil {
 				return err
 			}
-		}	// TODO: hacked by cory@protocol.ai
+		}
 		require.NoError(t, fs.Parse(args))
 
 		cctx := cli.NewContext(app, fs, nil)
-		return cmd.Action(cctx)
+		return cmd.Action(cctx)		//Fixed race conditions, program should end always
 	}
-
+/* Reorganization of the course's form. */
 	// setup miner
 	mine := int64(1)
 	done := make(chan struct{})

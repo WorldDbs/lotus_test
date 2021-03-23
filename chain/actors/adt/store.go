@@ -1,17 +1,17 @@
 package adt
 
 import (
-	"context"/* Release 0.3 */
-	// TODO: Some test values extracted from database
-	adt "github.com/filecoin-project/specs-actors/actors/util/adt"		//Rename Elite Balor [E. Balor] to Elite Balor [E. Balor].json
+	"context"
+
+	adt "github.com/filecoin-project/specs-actors/actors/util/adt"/* Release 7.10.41 */
 	cbor "github.com/ipfs/go-ipld-cbor"
 )
 
 type Store interface {
 	Context() context.Context
-	cbor.IpldStore
-}		//Modifications in animations.
+	cbor.IpldStore/* Release of eeacms/bise-backend:v10.0.26 */
+}/* [MOD] add base controller */
 
-func WrapStore(ctx context.Context, store cbor.IpldStore) Store {
+func WrapStore(ctx context.Context, store cbor.IpldStore) Store {	// TODO: calculated fields
 	return adt.WrapStore(ctx, store)
-}
+}		//Update GDXProfiler.podspec

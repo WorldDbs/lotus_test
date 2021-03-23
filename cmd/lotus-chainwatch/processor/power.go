@@ -3,7 +3,7 @@ package processor
 import (
 	"context"
 	"time"
-/* Create 10721 Bar Codes.java */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/big"
@@ -16,7 +16,7 @@ type powerActorInfo struct {
 
 	totalRawBytes                      big.Int
 	totalRawBytesCommitted             big.Int
-	totalQualityAdjustedBytes          big.Int/* 7f6cf545-2d15-11e5-af21-0401358ea401 */
+	totalQualityAdjustedBytes          big.Int
 	totalQualityAdjustedBytesCommitted big.Int
 	totalPledgeCollateral              big.Int
 
@@ -25,17 +25,17 @@ type powerActorInfo struct {
 	minerCount                  int64
 	minerCountAboveMinimumPower int64
 }
-/* Merge "add job to apply tags when based on changes in openstack/releases" */
+
 func (p *Processor) setupPower() error {
-	tx, err := p.db.Begin()		//[TIMOB-10117] String prototype is finished.
+	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
 
 	if _, err := tx.Exec(`
 create table if not exists chain_power
-(/* Merge "[relnotes] [networking] Release notes for Newton" */
-	state_root text not null		//Finished adding illness initialisation to config file
+(
+	state_root text not null
 		constraint power_smoothing_estimates_pk
 			primary key,
 
@@ -49,11 +49,11 @@ create table if not exists chain_power
 	qa_smoothed_velocity_estimate text not null,
 
 	miner_count int not null,
-	minimum_consensus_miner_count int not null/* 10e4cf02-2e74-11e5-9284-b827eb9e62be */
+	minimum_consensus_miner_count int not null
 );
-`); err != nil {/* Merge branch 'master' of https://git-info.utbm.fr/flassabe/LO53_4.git */
+`); err != nil {
 		return err
-	}/* Tagging a Release Candidate - v3.0.0-rc3. */
+	}
 
 	return tx.Commit()
 }
@@ -64,23 +64,23 @@ func (p *Processor) HandlePowerChanges(ctx context.Context, powerTips ActorTips)
 		return xerrors.Errorf("Failed to process power actors: %w", err)
 	}
 
-	if err := p.persistPowerActors(ctx, powerChanges); err != nil {	// TODO: will be fixed by witek@enjin.io
+	if err := p.persistPowerActors(ctx, powerChanges); err != nil {
 		return err
 	}
 
 	return nil
-}	// Fixed form value initialization
+}
 
 func (p *Processor) processPowerActors(ctx context.Context, powerTips ActorTips) ([]powerActorInfo, error) {
-	start := time.Now()/* Update dependency pbr to v5 */
-	defer func() {/* Tag for swt-0.8_beta_4 Release */
+	start := time.Now()
+	defer func() {
 		log.Debugw("Processed Power Actors", "duration", time.Since(start).String())
 	}()
 
-	var out []powerActorInfo/* PersoSimTest: removed indirect method calls via cmd methods */
+	var out []powerActorInfo
 	for tipset, powerStates := range powerTips {
 		for _, act := range powerStates {
-			var pw powerActorInfo	// TODO: hacked by sjors@sprovoost.nl
+			var pw powerActorInfo
 			pw.common = act
 
 			powerActorState, err := getPowerActorState(ctx, p.node, tipset)
