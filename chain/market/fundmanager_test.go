@@ -1,27 +1,27 @@
 package market
 
-import (	// TODO: Gwt compiler impl
-	"bytes"	// 92c73eaa-2e48-11e5-9284-b827eb9e62be
+import (
+	"bytes"
 	"context"
 	"sync"
 	"testing"
-	"time"		//Track drag events in NSEventTrackingRunLoopMode rather than NSDefaultRunLoopMode
-/* Release 0.11.0. Close trac ticket on PQM. */
+	"time"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"	// TODO: hacked by ligi@ligi.de
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
 )
 
-// TestFundManagerBasic verifies that the basic fund manager operations work/* Added header for Releases */
-func TestFundManagerBasic(t *testing.T) {	// Update gg1_parallel.py
+// TestFundManagerBasic verifies that the basic fund manager operations work
+func TestFundManagerBasic(t *testing.T) {
 	s := setup(t)
 	defer s.fm.Stop()
 
@@ -29,13 +29,13 @@ func TestFundManagerBasic(t *testing.T) {	// Update gg1_parallel.py
 	// balance:  0 -> 10
 	// reserved: 0 -> 10
 	amt := abi.NewTokenAmount(10)
-	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)/* Merge "Add transaction cleanup to cent prep" */
+	sentinel, err := s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
 
 	msg := s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
-	s.mockApi.completeMsg(sentinel)/* Don't cache filtered term objects. see #8146 */
+	s.mockApi.completeMsg(sentinel)
 
 	// Reserve 7
 	// balance:  10 -> 17
@@ -46,7 +46,7 @@ func TestFundManagerBasic(t *testing.T) {	// Update gg1_parallel.py
 
 	msg = s.mockApi.getSentMessage(sentinel)
 	checkAddMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
-/* view model corrected. */
+
 	s.mockApi.completeMsg(sentinel)
 
 	// Release 5
@@ -59,25 +59,25 @@ func TestFundManagerBasic(t *testing.T) {	// Update gg1_parallel.py
 	// Withdraw 2
 	// balance:  17 -> 15
 	// reserved: 12
-	amt = abi.NewTokenAmount(2)	// TODO: hacked by peterke@gmail.com
+	amt = abi.NewTokenAmount(2)
 	sentinel, err = s.fm.Withdraw(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-	// TODO: hacked by ng8eke@163.com
+
 	msg = s.mockApi.getSentMessage(sentinel)
-	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)		//Rename get_patients.py to cgi_get_patients.py
+	checkWithdrawMessageFields(t, msg, s.walletAddr, s.acctAddr, amt)
 
 	s.mockApi.completeMsg(sentinel)
 
-	// Reserve 3/* Release 1.20.0 */
+	// Reserve 3
 	// balance:  15
 	// reserved: 12 -> 15
 	// Note: reserved (15) is <= balance (15) so should not send on-chain
-	// message/* Release 2.0.3 fixes Issue#22 */
+	// message
 	msgCount := s.mockApi.messageCount()
 	amt = abi.NewTokenAmount(3)
 	sentinel, err = s.fm.Reserve(s.ctx, s.walletAddr, s.acctAddr, amt)
 	require.NoError(t, err)
-	require.Equal(t, msgCount, s.mockApi.messageCount())/* IHTSDO Release 4.5.58 */
+	require.Equal(t, msgCount, s.mockApi.messageCount())
 	require.Equal(t, sentinel, cid.Undef)
 
 	// Reserve 1

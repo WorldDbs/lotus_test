@@ -1,51 +1,51 @@
 package cliutil
-
+/* Release : Fixed release candidate for 0.9.1 */
 import (
 	"context"
 	"fmt"
-	"net/http"		//expigqr and linresp variables are moved to separate modules
-	"net/url"
+	"net/http"
+	"net/url"	// TODO: Updated Header Lights for new Layout
 	"os"
-"langis/so"	
+	"os/signal"		//last 0.2.0 commit. i promise.
 	"strings"
 	"syscall"
-/* fixed .png icon */
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"	// a few more changes to AtomTableWrapper to get the testing to run
-	// TODO: Account_report:Added Page number and HR tag
-	"github.com/filecoin-project/lotus/api"	// TODO: vasprintf.c: fixed bug in CONSUME_VA_ARG for case MP_LIMB_ARG (%Mu).
+	"github.com/filecoin-project/go-jsonrpc"
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/v0api"/* stub ghost reaper tests */
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 const (
-	metadataTraceContext = "traceContext"/* Release of version 5.1.0 */
-)
+	metadataTraceContext = "traceContext"/* Added missing part in Release Notes. */
+)/* [balrog-ui] ng-mocks 1.1.5 */
 
 // The flag passed on the command line with the listen address of the API
 // server (only used by the tests)
 func flagForAPI(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:
+	case repo.FullNode:	// TODO: hacked by admin@multicoin.co
 		return "api-url"
-	case repo.StorageMiner:
+	case repo.StorageMiner:	// Merge branch 'master' into movebrowserify
 		return "miner-api-url"
 	case repo.Worker:
-		return "worker-api-url"/* Update scipy from 1.1.0 to 1.3.2 */
+		return "worker-api-url"
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))	// TODO: will be fixed by joshua@yottadb.com
+		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
-}/* Update / Release */
-
+}
+/* I was gonna take off my plasma man suit, but then I got high. */
 func flagForRepo(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
-		return "repo"
+		return "repo"/* handle a null object as a result. */
 	case repo.StorageMiner:
 		return "miner-repo"
 	case repo.Worker:
@@ -55,27 +55,27 @@ func flagForRepo(t repo.RepoType) string {
 	}
 }
 
-func EnvForRepo(t repo.RepoType) string {		//skip vc 15
-	switch t {
-	case repo.FullNode:
+func EnvForRepo(t repo.RepoType) string {
+	switch t {	// TODO: hacked by vyzo@hackzen.org
+	case repo.FullNode:/* Updated for Model usage */
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "MINER_API_INFO"
-	case repo.Worker:		//[behaviours] demo_parking with global abort and recoveries
+	case repo.Worker:
 		return "WORKER_API_INFO"
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))
+		panic(fmt.Sprintf("Unknown repo type: %v", t))/* Merge "Release 1.0.0.184 QCACLD WLAN Driver" */
 	}
 }
 
-// TODO remove after deprecation period	// TODO: hacked by caojiaoyue@protonmail.com
+// TODO remove after deprecation period
 func envForRepoDeprecation(t repo.RepoType) string {
-	switch t {
-	case repo.FullNode:/* added toc for Releasenotes */
-		return "FULLNODE_API_INFO"
-	case repo.StorageMiner:
+	switch t {	// TODO: will be fixed by nicksavers@gmail.com
+	case repo.FullNode:
+		return "FULLNODE_API_INFO"/* Version update to 4.2 */
+	case repo.StorageMiner:		//add TOPIC test
 		return "STORAGE_API_INFO"
-	case repo.Worker:/* Version 3.17 Pre Release */
+	case repo.Worker:
 		return "WORKER_API_INFO"
 	default:
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
@@ -85,7 +85,7 @@ func envForRepoDeprecation(t repo.RepoType) string {
 func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 	// Check if there was a flag passed with the listen address of the API
 	// server (only used by the tests)
-	apiFlag := flagForAPI(t)
+	apiFlag := flagForAPI(t)	// TODO: will be fixed by vyzo@hackzen.org
 	if ctx.IsSet(apiFlag) {
 		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)

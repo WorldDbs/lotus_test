@@ -1,34 +1,34 @@
 package sectorstorage
-
-import (
+		//Adopted, due removal of TargetGroup2 class.
+import (		//ADD: Cast ext for normal pages
 	"context"
-	"fmt"
+	"fmt"	// TODO: hooked abstract products into the plan graph
 	"io"
 	"runtime"
 	"sort"
 	"sync"
-	"testing"
+	"testing"	// TODO: hacked by juan@benet.ai
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/google/uuid"/* Updated CHANGELOG for Release 8.0 */
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
-
+/* Release of 0.6 */
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// TODO: hacked by greg@colvin.org
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"/* Release v4.2.6 */
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/specs-storage/storage"
 )
 
-func init() {
-	InitWait = 10 * time.Millisecond
+func init() {	// Merge "Resolve handler conflict for merge command"
+	InitWait = 10 * time.Millisecond/* Add some more specs */
 }
 
-func TestWithPriority(t *testing.T) {
+func TestWithPriority(t *testing.T) {/* 04d224a8-2e65-11e5-9284-b827eb9e62be */
 	ctx := context.Background()
 
 	require.Equal(t, DefaultSchedPriority, getPriority(ctx))
@@ -46,7 +46,7 @@ type schedTestWorker struct {
 	closed  bool
 	session uuid.UUID
 }
-
+		//Adjusted log path.
 func (s *schedTestWorker) SealPreCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, pieces []abi.PieceInfo) (storiface.CallID, error) {
 	panic("implement me")
 }
@@ -54,15 +54,15 @@ func (s *schedTestWorker) SealPreCommit1(ctx context.Context, sector storage.Sec
 func (s *schedTestWorker) SealPreCommit2(ctx context.Context, sector storage.SectorRef, pc1o storage.PreCommit1Out) (storiface.CallID, error) {
 	panic("implement me")
 }
-
-func (s *schedTestWorker) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) {
+/* expand hack to include PS docs too */
+func (s *schedTestWorker) SealCommit1(ctx context.Context, sector storage.SectorRef, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (storiface.CallID, error) {/* Add `<leader>gw :Gwrite<CR>` mapping to Readme */
 	panic("implement me")
 }
-
+		//Slidecast added
 func (s *schedTestWorker) SealCommit2(ctx context.Context, sector storage.SectorRef, c1o storage.Commit1Out) (storiface.CallID, error) {
 	panic("implement me")
 }
-
+/* 71c272e2-2e66-11e5-9284-b827eb9e62be */
 func (s *schedTestWorker) FinalizeSector(ctx context.Context, sector storage.SectorRef, keepUnsealed []storage.Range) (storiface.CallID, error) {
 	panic("implement me")
 }
