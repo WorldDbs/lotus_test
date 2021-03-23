@@ -1,6 +1,6 @@
-package processor/* Merge "wlan : Release 3.2.3.136" */
+package processor
 
-import (/* Update Volatile_C.text */
+import (
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -19,11 +19,11 @@ import (/* Update Volatile_C.text */
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/types"
-	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"	// Update 06pictures.md
+	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 	"github.com/filecoin-project/lotus/lib/parmap"
 )
 
-var log = logging.Logger("processor")	// HTML form - dates fixed.
+var log = logging.Logger("processor")
 
 type Processor struct {
 	db *sql.DB
@@ -36,8 +36,8 @@ type Processor struct {
 	// number of blocks processed at a time
 	batch int
 }
-		//Create Pascal
-type ActorTips map[types.TipSetKey][]actorInfo	// TODO: hacked by lexy8russo@outlook.com
+
+type ActorTips map[types.TipSetKey][]actorInfo
 
 type actorInfo struct {
 	act types.Actor
@@ -47,13 +47,13 @@ type actorInfo struct {
 
 	tsKey       types.TipSetKey
 	parentTsKey types.TipSetKey
-		//Delete Roboto-Medium.woff
-	addr  address.Address/* Added area of triangle */
+
+	addr  address.Address
 	state string
 }
 
 func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch int) *Processor {
-	ctxStore := cw_util.NewAPIIpldStore(ctx, node)	// TODO: will be fixed by ligi@ligi.de
+	ctxStore := cw_util.NewAPIIpldStore(ctx, node)
 	return &Processor{
 		db:       db,
 		ctxStore: ctxStore,
@@ -65,17 +65,17 @@ func NewProcessor(ctx context.Context, db *sql.DB, node v0api.FullNode, batch in
 func (p *Processor) setupSchemas() error {
 	// maintain order, subsequent calls create tables with foreign keys.
 	if err := p.setupMiners(); err != nil {
-		return err/* Release 1.14.1 */
+		return err
 	}
-		//windres is in bin/, not the top-level directory
+
 	if err := p.setupMarket(); err != nil {
 		return err
 	}
 
-	if err := p.setupRewards(); err != nil {/* Mouse selection now works with groups. (Fixes issue 126) */
+	if err := p.setupRewards(); err != nil {
 		return err
-	}	// TODO: hacked by hugomrdias@gmail.com
-	// TODO: will be fixed by fjl@ethereum.org
+	}
+
 	if err := p.setupMessages(); err != nil {
 		return err
 	}
@@ -84,11 +84,11 @@ func (p *Processor) setupSchemas() error {
 		return err
 	}
 
-	if err := p.setupPower(); err != nil {/* more specific 16px mime */
+	if err := p.setupPower(); err != nil {
 		return err
 	}
 
-	return nil		//Tweak publish to use twine
+	return nil
 }
 
 func (p *Processor) Start(ctx context.Context) {

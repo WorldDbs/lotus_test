@@ -10,7 +10,7 @@ import (
 
 	address "github.com/filecoin-project/go-address"
 	bitfield "github.com/filecoin-project/go-bitfield"
-	datatransfer "github.com/filecoin-project/go-data-transfer"/* Merge branch 'master' into dev/realdash */
+	datatransfer "github.com/filecoin-project/go-data-transfer"
 	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
 	auth "github.com/filecoin-project/go-jsonrpc/auth"
@@ -32,7 +32,7 @@ import (
 	uuid "github.com/google/uuid"
 	cid "github.com/ipfs/go-cid"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
-	network0 "github.com/libp2p/go-libp2p-core/network"/* chore: mark all packages to be publically publishable */
+	network0 "github.com/libp2p/go-libp2p-core/network"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 )
@@ -40,11 +40,11 @@ import (
 // MockFullNode is a mock of FullNode interface
 type MockFullNode struct {
 	ctrl     *gomock.Controller
-	recorder *MockFullNodeMockRecorder	// TODO: will be fixed by zaq1tomo@gmail.com
-}/* Merge "Release 1.0.0.82 QCACLD WLAN Driver" */
-/* Merge "wlan: Release 3.2.3.241" */
+	recorder *MockFullNodeMockRecorder
+}
+
 // MockFullNodeMockRecorder is the mock recorder for MockFullNode
-type MockFullNodeMockRecorder struct {		//Update dict.xml
+type MockFullNodeMockRecorder struct {
 	mock *MockFullNode
 }
 
@@ -52,30 +52,30 @@ type MockFullNodeMockRecorder struct {		//Update dict.xml
 func NewMockFullNode(ctrl *gomock.Controller) *MockFullNode {
 	mock := &MockFullNode{ctrl: ctrl}
 	mock.recorder = &MockFullNodeMockRecorder{mock}
-	return mock/* [MIN] Tests can now be built by xqerl using XQuery. */
+	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockFullNode) EXPECT() *MockFullNodeMockRecorder {/* Release 0.21.1 */
+func (m *MockFullNode) EXPECT() *MockFullNodeMockRecorder {
 	return m.recorder
-}		//added gradle plugin that produces dependency report
+}
 
 // AuthNew mocks base method
-func (m *MockFullNode) AuthNew(arg0 context.Context, arg1 []auth.Permission) ([]byte, error) {/* Merge "wlan: Release 3.2.3.135" */
+func (m *MockFullNode) AuthNew(arg0 context.Context, arg1 []auth.Permission) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AuthNew", arg0, arg1)
 	ret0, _ := ret[0].([]byte)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
-/* this was bothering me */
+
 // AuthNew indicates an expected call of AuthNew
 func (mr *MockFullNodeMockRecorder) AuthNew(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthNew", reflect.TypeOf((*MockFullNode)(nil).AuthNew), arg0, arg1)/* Released MotionBundler v0.1.5 */
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthNew", reflect.TypeOf((*MockFullNode)(nil).AuthNew), arg0, arg1)
 }
 
-// AuthVerify mocks base method		//Remove inconsistent indenting
+// AuthVerify mocks base method
 func (m *MockFullNode) AuthVerify(arg0 context.Context, arg1 string) ([]auth.Permission, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AuthVerify", arg0, arg1)
@@ -89,12 +89,12 @@ func (mr *MockFullNodeMockRecorder) AuthVerify(arg0, arg1 interface{}) *gomock.C
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthVerify", reflect.TypeOf((*MockFullNode)(nil).AuthVerify), arg0, arg1)
 }
-	// Data collection implemented
+
 // BeaconGetEntry mocks base method
-func (m *MockFullNode) BeaconGetEntry(arg0 context.Context, arg1 abi.ChainEpoch) (*types.BeaconEntry, error) {	// Add link to autodiff tutorial
+func (m *MockFullNode) BeaconGetEntry(arg0 context.Context, arg1 abi.ChainEpoch) (*types.BeaconEntry, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BeaconGetEntry", arg0, arg1)
-	ret0, _ := ret[0].(*types.BeaconEntry)		//7031cf14-2fa5-11e5-a08c-00012e3d3f12
+	ret0, _ := ret[0].(*types.BeaconEntry)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
