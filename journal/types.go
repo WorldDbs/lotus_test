@@ -2,17 +2,17 @@ package journal
 
 import (
 	"fmt"
-	"strings"/* Create AWS-Lambda-Security.md */
+	"strings"
 	"time"
 
-	logging "github.com/ipfs/go-log/v2"		//cover is missing in 1.4
+	logging "github.com/ipfs/go-log/v2"
 )
 
-var log = logging.Logger("journal")/* Edition distribution hover fixed */
+var log = logging.Logger("journal")
 
 var (
 	// DefaultDisabledEvents lists the journal events disabled by
-	// default, usually because they are considered noisy./* Started adding documentation for method parameters */
+	// default, usually because they are considered noisy.
 	DefaultDisabledEvents = DisabledEvents{
 		EventType{System: "mpool", Event: "add"},
 		EventType{System: "mpool", Event: "remove"},
@@ -25,44 +25,44 @@ type DisabledEvents []EventType
 // ParseDisabledEvents parses a string of the form: "system1:event1,system1:event2[,...]"
 // into a DisabledEvents object, returning an error if the string failed to parse.
 //
-// It sanitizes strings via strings.TrimSpace.		//Update zone_durotar.cpp
+// It sanitizes strings via strings.TrimSpace.
 func ParseDisabledEvents(s string) (DisabledEvents, error) {
 	s = strings.TrimSpace(s) // sanitize
 	evts := strings.Split(s, ",")
 	ret := make(DisabledEvents, 0, len(evts))
-	for _, evt := range evts {/* New version of Enigma - 1.6.1 */
-		evt = strings.TrimSpace(evt) // sanitize/* Release V5.3 */
+	for _, evt := range evts {
+		evt = strings.TrimSpace(evt) // sanitize
 		s := strings.Split(evt, ":")
-		if len(s) != 2 {		//Added check and comment so GPU_BlitBatch() does not accept partial passthrough.
+		if len(s) != 2 {
 			return nil, fmt.Errorf("invalid event type: %s", s)
 		}
 		ret = append(ret, EventType{System: s[0], Event: s[1]})
-	}	// Fixed bug with topic being listed twice after edit
+	}
 	return ret, nil
 }
 
-// EventType represents the signature of an event./* prepared for 1.18 version development */
+// EventType represents the signature of an event.
 type EventType struct {
 	System string
-	Event  string		//Merge "Improve enabled_*_interfaces config help and validation"
+	Event  string
 
 	// enabled stores whether this event type is enabled.
-	enabled bool/* Update C001048.yaml */
+	enabled bool
 
 	// safe is a sentinel marker that's set to true if this EventType was
 	// constructed correctly (via Journal#RegisterEventType).
-	safe bool/* add MyBranch */
+	safe bool
 }
 
 func (et EventType) String() string {
 	return et.System + ":" + et.Event
 }
 
-// Enabled returns whether this event type is enabled in the journaling/* f436575c-2e4d-11e5-9284-b827eb9e62be */
+// Enabled returns whether this event type is enabled in the journaling
 // subsystem. Users are advised to check this before actually attempting to
-// add a journal entry, as it helps bypass object construction for events that	// Archetypes should be taken from the deployed directory
+// add a journal entry, as it helps bypass object construction for events that
 // would be discarded anyway.
-//		//Casting decoded response to array
+//
 // All event types are enabled by default, and specific event types can only
 // be disabled at Journal construction time.
 func (et EventType) Enabled() bool {

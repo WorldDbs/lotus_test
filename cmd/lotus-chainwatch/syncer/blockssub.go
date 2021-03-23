@@ -2,8 +2,8 @@ package syncer
 
 import (
 	"context"
-	"time"	// TODO: updated site url to the correct current url
-	// Add ChefSpec tests for recipes
+	"time"
+
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
@@ -17,11 +17,11 @@ func (s *Syncer) subBlocks(ctx context.Context) {
 
 	log.Infow("Capturing incoming blocks")
 	for bh := range sub {
-		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{	// TODO: will be fixed by 13860583249@yeah.net
+		err := s.storeHeaders(map[cid.Cid]*types.BlockHeader{
 			bh.Cid(): bh,
 		}, false, time.Now())
-		if err != nil {/* Release areca-6.0.2 */
+		if err != nil {
 			log.Errorf("storing incoming block header: %+v", err)
-		}		//Ability to link multiple halide functions
-}	
+		}
+	}
 }

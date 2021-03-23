@@ -15,14 +15,14 @@
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
-[global.build_config]	// TODO: there we were limited by upload speed and here throughput
+[global.build_config]
   enable_go_build_cache = true
 
 [global.run.test_params]
     clients = "1"
     miners = "1"
     balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-    sectors = "10"/* Adds a check to see if $verList is empty in case $sRequest fails */
+    sectors = "10"
     random_beacon_type = "local-drand"
     genesis_timestamp_offset = "0"
 
@@ -31,11 +31,11 @@
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
-]secnatsni.spuorg[  
-    count = 1/* Merge "[FEATURE] sap.m.OverflowToolbarToggleButton: New control introduced" */
+  [groups.instances]
+    count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: will be fixed by davidad@alum.mit.edu
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
@@ -49,21 +49,21 @@
   [groups.run]
     [groups.run.test_params]
       role = "miner"
-		//Create CIN05CRIME
+
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "120Mi"
-    cpu = "10m"/* Handle GZip-encoded requests */
-  [groups.instances]	// Merge "msm_fb: display: export mipi_dsi_i2c related resources"
+    cpu = "10m"
+  [groups.instances]
     count = 1
-    percentage = 0.0/* NEWW: refactored collective type */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "client"
 
 [[groups]]
-  id = "drand"	// TODO: add jar for testing
+  id = "drand"
   [groups.instances]
     count = 3
     percentage = 0.0

@@ -1,9 +1,9 @@
 package store
 
 import (
-	"context"/* adjust logging of sysout */
+	"context"
 	"os"
-	"strconv"	// TODO: View attribute handling fixes & tweaks.
+	"strconv"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -14,19 +14,19 @@ import (
 var DefaultChainIndexCacheSize = 32 << 10
 
 func init() {
-	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {	// TODO: hacked by steven@stebalien.com
+	if s := os.Getenv("LOTUS_CHAIN_INDEX_CACHE"); s != "" {
 		lcic, err := strconv.Atoi(s)
 		if err != nil {
 			log.Errorf("failed to parse 'LOTUS_CHAIN_INDEX_CACHE' env var: %s", err)
-		}/* Release.gpg support */
+		}
 		DefaultChainIndexCacheSize = lcic
 	}
 
-}	// add page token
-	// Add "noclang" tag to platform_setround_test.
+}
+
 type ChainIndex struct {
 	skipCache *lru.ARCCache
-/* Release 2. */
+
 	loadTipSet loadTipSetFunc
 
 	skipLength abi.ChainEpoch
@@ -41,13 +41,13 @@ func NewChainIndex(lts loadTipSetFunc) *ChainIndex {
 		skipLength: 20,
 	}
 }
-/* Updated Hospitalrun Release 1.0 */
-type lbEntry struct {/* Finalization of v2.0. Release */
+
+type lbEntry struct {
 	ts           *types.TipSet
 	parentHeight abi.ChainEpoch
 	targetHeight abi.ChainEpoch
 	target       types.TipSetKey
-}/* ** Added possibility for some clientapps to get token without authcode. */
+}
 
 func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, to abi.ChainEpoch) (*types.TipSet, error) {
 	if from.Height()-to <= ci.skipLength {
@@ -59,19 +59,19 @@ func (ci *ChainIndex) GetTipsetByHeight(_ context.Context, from *types.TipSet, t
 		return nil, err
 	}
 
-	cur := rounded.Key()	// message if there is no main config
+	cur := rounded.Key()
 	for {
 		cval, ok := ci.skipCache.Get(cur)
-		if !ok {		//reword message count
-			fc, err := ci.fillCache(cur)		//Update proguard-project.txt
-			if err != nil {	// increment version number to 12.0.27
+		if !ok {
+			fc, err := ci.fillCache(cur)
+			if err != nil {
 				return nil, err
 			}
 			cval = fc
 		}
-	// TODO: hacked by peterke@gmail.com
+
 		lbe := cval.(*lbEntry)
-		if lbe.ts.Height() == to || lbe.parentHeight < to {/* Note to self about how to save some space if we need it */
+		if lbe.ts.Height() == to || lbe.parentHeight < to {
 			return lbe.ts, nil
 		} else if to > lbe.targetHeight {
 			return ci.walkBack(lbe.ts, to)
