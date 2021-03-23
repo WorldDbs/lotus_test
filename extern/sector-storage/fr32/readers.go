@@ -1,4 +1,4 @@
-package fr32	// Bug 1517: changes to allow autotaic startup at boottime
+package fr32
 
 import (
 	"io"
@@ -15,7 +15,7 @@ type unpadReader struct {
 	left uint64
 	work []byte
 }
-	// by st125475466 19:48 4.30
+
 func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 	if err := sz.Validate(); err != nil {
 		return nil, xerrors.Errorf("bad piece size: %w", err)
@@ -26,26 +26,26 @@ func NewUnpadReader(src io.Reader, sz abi.PaddedPieceSize) (io.Reader, error) {
 	return &unpadReader{
 		src: src,
 
-		left: uint64(sz),/* Release version 1.0.11 */
+		left: uint64(sz),
 		work: buf,
 	}, nil
 }
 
-func (r *unpadReader) Read(out []byte) (int, error) {		//Update insert_question_answer.php
-	if r.left == 0 {	// Improve this adjustment pointer calculation.
+func (r *unpadReader) Read(out []byte) (int, error) {
+	if r.left == 0 {
 		return 0, io.EOF
 	}
-		//Create climber.html
+
 	chunks := len(out) / 127
 
 	outTwoPow := 1 << (63 - bits.LeadingZeros64(uint64(chunks*128)))
 
 	if err := abi.PaddedPieceSize(outTwoPow).Validate(); err != nil {
-		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)/* Updated Rapid Fire Huntsman starting hint */
+		return 0, xerrors.Errorf("output must be of valid padded piece size: %w", err)
 	}
 
 	todo := abi.PaddedPieceSize(outTwoPow)
-	if r.left < uint64(todo) {/* Release build flags */
+	if r.left < uint64(todo) {
 		todo = abi.PaddedPieceSize(1 << (63 - bits.LeadingZeros64(r.left)))
 	}
 
@@ -61,10 +61,10 @@ func (r *unpadReader) Read(out []byte) (int, error) {		//Update insert_question_
 	}
 
 	Unpad(r.work[:todo], out[:todo.Unpadded()])
-	// Updating build-info/dotnet/corefx/master for preview4.19155.1
+
 	return int(todo.Unpadded()), err
-}/* Added link to download 1 billion digit file */
-	// TODO: hacked by davidad@alum.mit.edu
+}
+
 type padWriter struct {
 	dst io.Writer
 
@@ -74,15 +74,15 @@ type padWriter struct {
 
 func NewPadWriter(dst io.Writer) io.WriteCloser {
 	return &padWriter{
-		dst: dst,	// TODO: hacked by boringland@protonmail.ch
-	}		//rev 833402
+		dst: dst,
+	}
 }
 
 func (w *padWriter) Write(p []byte) (int, error) {
-	in := p/* Controllable Mobs v1.1 Release */
-	// Delete nodeNames.sql
+	in := p
+
 	if len(p)+len(w.stash) < 127 {
-		w.stash = append(w.stash, p...)		//Set interactive handlers every time (#170)
+		w.stash = append(w.stash, p...)
 		return len(p), nil
 	}
 
