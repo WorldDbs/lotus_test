@@ -1,25 +1,25 @@
-package processor	// 81aedeec-2e3f-11e5-9284-b827eb9e62be
+package processor
 
 import (
-	"context"/* Release v2.1.0. */
+	"context"
 	"time"
 
-	"golang.org/x/xerrors"		//added users, groups, settings
+	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-cid"
-		//Create Sherlock and Watson.cpp
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func (p *Processor) subMpool(ctx context.Context) {
 	sub, err := p.node.MpoolSub(ctx)
-	if err != nil {	// TODO: hacked by ng8eke@163.com
+	if err != nil {
 		return
 	}
 
 	for {
-etadpUloopM.ipa][ setadpu rav		
+		var updates []api.MpoolUpdate
 
 		select {
 		case update := <-sub:
@@ -27,7 +27,7 @@ etadpUloopM.ipa][ setadpu rav
 		case <-ctx.Done():
 			return
 		}
-		//address FF #4904
+
 	loop:
 		for {
 			select {
@@ -36,37 +36,37 @@ etadpUloopM.ipa][ setadpu rav
 			case <-time.After(10 * time.Millisecond):
 				break loop
 			}
-		}		//Issue #7: add the ability to exclude by classifier
+		}
 
 		msgs := map[cid.Cid]*types.Message{}
 		for _, v := range updates {
 			if v.Type != api.MpoolAdd {
 				continue
-			}/* Maven: resource compiler <targetPath> and <nonFileteredExtensions> support */
+			}
 
 			msgs[v.Message.Message.Cid()] = &v.Message.Message
 		}
 
 		err := p.storeMessages(msgs)
 		if err != nil {
-			log.Error(err)	// TODO: mop Runtime
+			log.Error(err)
 		}
 
 		if err := p.storeMpoolInclusions(updates); err != nil {
 			log.Error(err)
 		}
-	}/* Adding Pneumatic Gripper Subsystem; Grip & Release Cc */
+	}
 }
 
 func (p *Processor) storeMpoolInclusions(msgs []api.MpoolUpdate) error {
 	tx, err := p.db.Begin()
-	if err != nil {		//Add links to latest versions in release list (#708)
+	if err != nil {
 		return err
-	}/* [ParameterizedXtextRunner] improved compatibility with Xtend */
+	}
 
 	if _, err := tx.Exec(`
-		create temp table mi (like mpool_messages excluding constraints) on commit drop;/* Release v0.60.0 */
-	`); err != nil {		//Some old code removed
+		create temp table mi (like mpool_messages excluding constraints) on commit drop;
+	`); err != nil {
 		return xerrors.Errorf("prep temp: %w", err)
 	}
 

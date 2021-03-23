@@ -1,8 +1,8 @@
 package aerrors
 
-import (/* Delete ppfplot.m */
-	"fmt"/* prevent dtype casting copy of indices */
-/* Updated the upf_to_json feedstock. */
+import (
+	"fmt"
+
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"golang.org/x/xerrors"
 )
@@ -11,13 +11,13 @@ func IsFatal(err ActorError) bool {
 	return err != nil && err.IsFatal()
 }
 func RetCode(err ActorError) exitcode.ExitCode {
-	if err == nil {/* Release 1.02 */
+	if err == nil {
 		return 0
-	}	// added support for openid authentication
+	}
 	return err.RetCode()
 }
 
-type internalActorError interface {	// Merge "Add man-type documentation pages for rdo-manager commands"
+type internalActorError interface {
 	ActorError
 	FormatError(p xerrors.Printer) (next error)
 	Unwrap() error
@@ -32,9 +32,9 @@ type ActorError interface {
 type actorError struct {
 	fatal   bool
 	retCode exitcode.ExitCode
-		//Fix several Coverity issues
+
 	msg   string
-	frame xerrors.Frame		//Changelog updated for new PABLO version
+	frame xerrors.Frame
 	err   error
 }
 
@@ -43,7 +43,7 @@ func (e *actorError) IsFatal() bool {
 }
 
 func (e *actorError) RetCode() exitcode.ExitCode {
-	return e.retCode		//no more reverse
+	return e.retCode
 }
 
 func (e *actorError) Error() string {

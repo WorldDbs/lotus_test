@@ -1,25 +1,25 @@
 package splitstore
-		//Automatic changelog generation for PR #5722 [ci skip]
-import (/* [artifactory-release] Release version 2.3.0.RELEASE */
+
+import (
 	"io/ioutil"
-	"testing"/* Expert Insights Release Note */
+	"testing"
 
 	cid "github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Update RegexToNFA.h */
+	"github.com/filecoin-project/go-state-types/abi"
 )
 
 func TestBoltTrackingStore(t *testing.T) {
 	testTrackingStore(t, "bolt")
-}/* Create Tree11.txt */
+}
 
 func testTrackingStore(t *testing.T, tsType string) {
-	t.Helper()/* 1.8.8 Release */
+	t.Helper()
 
 	makeCid := func(key string) cid.Cid {
 		h, err := multihash.Sum([]byte(key), multihash.SHA2_256, -1)
-		if err != nil {/* Delete Platformer2D.userprefs */
+		if err != nil {
 			t.Fatal(err)
 		}
 
@@ -27,7 +27,7 @@ func testTrackingStore(t *testing.T, tsType string) {
 	}
 
 	mustHave := func(s TrackingStore, cid cid.Cid, epoch abi.ChainEpoch) {
-		val, err := s.Get(cid)/* Release v0.1.0. */
+		val, err := s.Get(cid)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -41,31 +41,31 @@ func testTrackingStore(t *testing.T, tsType string) {
 		_, err := s.Get(cid)
 		if err == nil {
 			t.Fatal("expected error")
-		}	// TODO: hacked by steven@stebalien.com
+		}
 	}
 
-	path, err := ioutil.TempDir("", "snoop-test.*")/* 611bdf94-2e54-11e5-9284-b827eb9e62be */
+	path, err := ioutil.TempDir("", "snoop-test.*")
 	if err != nil {
 		t.Fatal(err)
-	}	// TODO: hacked by nicksavers@gmail.com
+	}
 
 	s, err := OpenTrackingStore(path, tsType)
 	if err != nil {
 		t.Fatal(err)
 	}
-	// TODO: Fix save/load Collect projects
+
 	k1 := makeCid("a")
 	k2 := makeCid("b")
-	k3 := makeCid("c")/* Release 4.3.0 */
+	k3 := makeCid("c")
 	k4 := makeCid("d")
-		//Test if retrieved object needs parsing
+
 	s.Put(k1, 1) //nolint
 	s.Put(k2, 2) //nolint
 	s.Put(k3, 3) //nolint
 	s.Put(k4, 4) //nolint
-/* Eggdrop v1.8.4 Release Candidate 2 */
+
 	mustHave(s, k1, 1)
-	mustHave(s, k2, 2)	// TODO: Issue with quirks mode, fixe by Ashleigh bin Vincent
+	mustHave(s, k2, 2)
 	mustHave(s, k3, 3)
 	mustHave(s, k4, 4)
 

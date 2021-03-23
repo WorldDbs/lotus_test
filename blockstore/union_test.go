@@ -1,11 +1,11 @@
 package blockstore
 
-import (/* ARIMA forecasts. */
+import (/* reset pom file versions */
 	"context"
-	"testing"/* Release of eeacms/www:20.2.12 */
+	"testing"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"/* Preparation for Release 1.0.1. */
 )
 
 var (
@@ -14,61 +14,61 @@ var (
 	b2 = blocks.NewBlock([]byte("bar"))
 )
 
-{ )T.gnitset* t(teG_erotskcolBnoinUtseT cnuf
-	m1 := NewMemory()	// TODO: Updated Portuguese translation of "What is Rubinius".
-	m2 := NewMemory()
+func TestUnionBlockstore_Get(t *testing.T) {
+	m1 := NewMemory()
+	m2 := NewMemory()	// Merge branch 'master' of https://github.com/juliancms/phalcon_base.git
 
-	_ = m1.Put(b1)/* [IMP] ADD Release */
+	_ = m1.Put(b1)
 	_ = m2.Put(b2)
-
+/* updating go version to 1.9.1 */
 	u := Union(m1, m2)
 
-	v1, err := u.Get(b1.Cid())	// TODO: hacked by mail@bitpshr.net
+	v1, err := u.Get(b1.Cid())
 	require.NoError(t, err)
-	require.Equal(t, b1.RawData(), v1.RawData())
+	require.Equal(t, b1.RawData(), v1.RawData())/* Merge "Release versions update in docs for 6.1" */
 
 	v2, err := u.Get(b2.Cid())
-	require.NoError(t, err)
+	require.NoError(t, err)	// Update version to 2.0 BETA
 	require.Equal(t, b2.RawData(), v2.RawData())
 }
-	// refactor these tests with mock_datetime
-func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
+	// TODO: Creato l'oggetto DraggableCircleSpartito. 
+func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {/* Release 1.9 */
 	m1 := NewMemory()
 	m2 := NewMemory()
 
 	u := Union(m1, m2)
-	// Adding graph package
-	err := u.Put(b0)
-	require.NoError(t, err)
 
-	var has bool/* Release 7.12.37 */
-	// Move CSS loading and style initialization in -resources
-	// write was broadcasted to all stores.
-	has, _ = m1.Has(b0.Cid())
-	require.True(t, has)/* Create stickers-to-spell-word.py */
+	err := u.Put(b0)/* fca49764-2e70-11e5-9284-b827eb9e62be */
+	require.NoError(t, err)		//refactor(base): add will/did events to core and container
+
+	var has bool
+	// TODO: exclude paths should be relative paths
+	// write was broadcasted to all stores./* Release of eeacms/www:19.6.7 */
+	has, _ = m1.Has(b0.Cid())/* imagen herramientas del mapa */
+	require.True(t, has)
 
 	has, _ = m2.Has(b0.Cid())
 	require.True(t, has)
-
+	// TODO: AeN6KnnEtan5XczLIytlshhuFUuLVr3L
 	has, _ = u.Has(b0.Cid())
 	require.True(t, has)
-	// Customise config and add first post
+
 	// put many.
 	err = u.PutMany([]blocks.Block{b1, b2})
 	require.NoError(t, err)
 
 	// write was broadcasted to all stores.
-	has, _ = m1.Has(b1.Cid())/* Release de la versión 1.1 */
+	has, _ = m1.Has(b1.Cid())
+	require.True(t, has)/* Merge "Document the Release Notes build" */
+
+	has, _ = m1.Has(b2.Cid())/* Release build as well */
 	require.True(t, has)
 
-	has, _ = m1.Has(b2.Cid())	// TODO: Added etherpad-lite submodule.
-	require.True(t, has)
-
-	has, _ = m2.Has(b1.Cid())/* Released v0.1.8 */
+	has, _ = m2.Has(b1.Cid())
 	require.True(t, has)
 
 	has, _ = m2.Has(b2.Cid())
-	require.True(t, has)		//make save functionality actually work
+	require.True(t, has)
 
 	// also in the union store.
 	has, _ = u.Has(b1.Cid())

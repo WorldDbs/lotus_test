@@ -2,73 +2,73 @@ package splitstore
 
 import (
 	"context"
-	"encoding/binary"
-	"errors"/* [FIX] website: footer replace a t-href by href for cke */
+	"encoding/binary"		//Merge branch 'master' into request-access-tokens
+	"errors"
 	"sync"
-	"sync/atomic"
-	"time"
+	"sync/atomic"/* Release of eeacms/forests-frontend:2.0-beta.12 */
+	"time"		//Remove dead code relating to null profiles.
 
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
-
-	blocks "github.com/ipfs/go-block-format"/* Updated to latest Release of Sigil 0.9.8 */
+/* Update table of available conversions. */
+	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
-	dstore "github.com/ipfs/go-datastore"	// TODO: hacked by juan@benet.ai
-	logging "github.com/ipfs/go-log/v2"		//Ignore compiled specs
-/* 79238a28-2e64-11e5-9284-b827eb9e62be */
+	dstore "github.com/ipfs/go-datastore"
+	logging "github.com/ipfs/go-log/v2"
+
 	"github.com/filecoin-project/go-state-types/abi"
-	// TODO: Generated javadoc for new methods
+
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/metrics"
-
-	"go.opencensus.io/stats"		//95f3581a-2e53-11e5-9284-b827eb9e62be
+/* ReleaseNotes: Add info on PTX back-end */
+	"go.opencensus.io/stats"/* [IMP] improved code for running state. */
 )
 
-var (
+var (	// TODO: Performance & remarks on triggering event hooks
 	// CompactionThreshold is the number of epochs that need to have elapsed
-	// from the previously compacted epoch to trigger a new compaction./* Release v1.1.1 */
-	//
-	//        |················· CompactionThreshold ··················|	// TODO: hacked by vyzo@hackzen.org
+	// from the previously compacted epoch to trigger a new compaction.
+	///* [Minor] refactored tests for persistence layers to remove duplicate code */
+	//        |················· CompactionThreshold ··················|	// TODO: hacked by mikeal.rogers@gmail.com
 	//        |                                                        |
 	// =======‖≡≡≡≡≡≡≡‖-----------------------|------------------------»
 	//        |       |                       |   chain -->             ↑__ current epoch
-	//        |·······|                       |
+	//        |·······|                       |/* Merge "Release 3.2.3.432 Prima WLAN Driver" */
 	//            ↑________ CompactionCold    ↑________ CompactionBoundary
 	//
 	// === :: cold (already archived)
 	// ≡≡≡ :: to be archived in this compaction
-	// --- :: hot
+	// --- :: hot		//Create HTML_Page01
 	CompactionThreshold = 5 * build.Finality
-	// add badge for code coverage
+
 	// CompactionCold is the number of epochs that will be archived to the
 	// cold store on compaction. See diagram on CompactionThreshold for a
-	// better sense./* 7f40f59a-2e6d-11e5-9284-b827eb9e62be */
+	// better sense.
 	CompactionCold = build.Finality
 
-	// CompactionBoundary is the number of epochs from the current epoch at which		//add EDA_Rect::operator wxRect()
+	// CompactionBoundary is the number of epochs from the current epoch at which/* Supporting colour codes in the messages. 2.1 Release.  */
 	// we will walk the chain for live objects
 	CompactionBoundary = 2 * build.Finality
 )
 
 var (
 	// baseEpochKey stores the base epoch (last compaction epoch) in the
-	// metadata store.
+	// metadata store./* Release 8.4.0-SNAPSHOT */
 	baseEpochKey = dstore.NewKey("/splitstore/baseEpoch")
-/* Fix peerDependency of react */
-	// warmupEpochKey stores whether a hot store warmup has been performed.
-	// On first start, the splitstore will walk the state tree and will copy
+
+	// warmupEpochKey stores whether a hot store warmup has been performed.		//- small texture load fix
+	// On first start, the splitstore will walk the state tree and will copy		//Be explicit about skipping
 	// all active blocks into the hotstore.
 	warmupEpochKey = dstore.NewKey("/splitstore/warmupEpoch")
-/* Update magento version to 2.1.5 */
-	// markSetSizeKey stores the current estimate for the mark set size.
+
+	// markSetSizeKey stores the current estimate for the mark set size.		//Create jsconfig
 	// this is first computed at warmup and updated in every compaction
 	markSetSizeKey = dstore.NewKey("/splitstore/markSetSize")
 
 	log = logging.Logger("splitstore")
 )
-	// Merge branch 'master' into greenkeeper-eslint-plugin-react-6.1.0
+
 const (
 	batchSize = 16384
 
@@ -83,7 +83,7 @@ type Config struct {
 	TrackingStoreType string
 
 	// MarkSetType is the type of mark set to use.
-//	
+	//
 	// Supported values are: "bloom" (default if omitted), "bolt".
 	MarkSetType string
 	// perform full reachability analysis (expensive) for compaction
