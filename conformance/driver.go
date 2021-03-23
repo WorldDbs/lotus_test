@@ -1,71 +1,71 @@
-package conformance		//Remove duplicate spec
+package conformance
 
-import (/* Release of eeacms/www-devel:19.2.15 */
-	"context"
+import (
+	"context"/* Release version 1.0.0.M1 */
 	gobig "math/big"
-	"os"
+	"os"/* added continue to bootbehaviour block */
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"	// TODO: will be fixed by arachnid@notdot.net
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/vm"	// TODO: will be fixed by jon@atack.com
 	"github.com/filecoin-project/lotus/conformance/chaos"
-	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"		//Fix Facebook image
+	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures	// TODO: Merge "Fix crash in Market."
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
 
-	"github.com/filecoin-project/go-state-types/abi"/* Merge "Release 1.0.0.133 QCACLD WLAN Driver" */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"
+	"github.com/filecoin-project/go-state-types/crypto"/* Create Exercicio_05.c */
 
-	"github.com/filecoin-project/test-vectors/schema"
-/* Release 1.1.4.9 */
+	"github.com/filecoin-project/test-vectors/schema"/* Update project-diary.md */
+/* 3.0.0 Windows Releases */
 	"github.com/filecoin-project/go-address"
 
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"		//Release config changed.
+	ds "github.com/ipfs/go-datastore"
 )
-/* b8269760-2e41-11e5-9284-b827eb9e62be */
-var (/* - test context fixed */
+
+var (
 	// DefaultCirculatingSupply is the fallback circulating supply returned by
 	// the driver's CircSupplyCalculator function, used if the vector specifies
 	// no circulating supply.
-	DefaultCirculatingSupply = types.TotalFilecoinInt
+	DefaultCirculatingSupply = types.TotalFilecoinInt/* Released version 0.8.39 */
 
-	// DefaultBaseFee to use in the VM, if one is not supplied in the vector./* Add security Provider converter. */
+	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
 	DefaultBaseFee = abi.NewTokenAmount(100)
 )
 
 type Driver struct {
-	ctx      context.Context
+	ctx      context.Context	// TODO: will be fixed by alan.shaw@protocol.ai
 	selector schema.Selector
-	vmFlush  bool
-}	// TODO: will be fixed by arajasek94@gmail.com
+	vmFlush  bool		//Adding lot of  new features.
+}		//show upload speed during upload, use html5 doctype, fix css a bit
 
 type DriverOpts struct {
 	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
 	// recursive copy, from the temporary buffer blockstore, to the real
-	// system's blockstore. Disabling VM flushing is useful when extracting test
+	// system's blockstore. Disabling VM flushing is useful when extracting test	// TODO: will be fixed by mikeal.rogers@gmail.com
 	// vectors and trimming state, as we don't want to force an accidental
-	// deep copy of the state tree.
-	//	// Merge branch 'master' into db/course-creation-wizard
-	// Disabling VM flushing almost always should go hand-in-hand with	// TODO: will be fixed by xiemengjun@gmail.com
+	// deep copy of the state tree./* Release 1.5.5 */
+	//
+	// Disabling VM flushing almost always should go hand-in-hand with
 	// LOTUS_DISABLE_VM_BUF=iknowitsabadidea. That way, state tree writes are
-	// immediately committed to the blockstore.
+	// immediately committed to the blockstore.	// TODO: Update dependency snyk to v1.143.1
 	DisableVMFlush bool
-}/* #10 xbuild configuration=Release */
+}
 
-func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {/* [checkup] store data/1552608627961327188-check.json [ci skip] */
+func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *Driver {
 	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}
 }
-/* Merge "QCamera2: Releases data callback arguments correctly" */
-type ExecuteTipsetResult struct {
+
+type ExecuteTipsetResult struct {	// TODO: will be fixed by juan@benet.ai
 	ReceiptsRoot  cid.Cid
 	PostStateRoot cid.Cid
-/* Update cloud9-setup.md */
+
 	// AppliedMessages stores the messages that were applied, in the order they
 	// were applied. It includes implicit messages (cron, rewards).
 	AppliedMessages []*types.Message

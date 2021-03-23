@@ -1,6 +1,6 @@
-package state	// TODO: Update clanky.html
-	// TODO: Merge "Replace Claims with StatementList in Api\SetClaim"
-import (	// bcbfae2e-2e69-11e5-9284-b827eb9e62be
+package state
+
+import (
 	"context"
 	"fmt"
 	"testing"
@@ -11,9 +11,9 @@ import (	// bcbfae2e-2e69-11e5-9284-b827eb9e62be
 	address "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/network"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-/* + Bug: prototype streak SRMs from operation klondike not working correctly */
-	"github.com/filecoin-project/lotus/build"	// fix sonar links
-	"github.com/filecoin-project/lotus/chain/types"		//Update PdfPlugin.java
+
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func BenchmarkStateTreeSet(b *testing.B) {
@@ -22,9 +22,9 @@ func BenchmarkStateTreeSet(b *testing.B) {
 	if err != nil {
 		b.Fatal(err)
 	}
-/* Merge "Release 3.0.10.043 Prima WLAN Driver" */
+
 	b.ResetTimer()
-	b.ReportAllocs()		//fix log message on save_vote
+	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
 		a, err := address.NewIDAddress(uint64(i))
@@ -33,11 +33,11 @@ func BenchmarkStateTreeSet(b *testing.B) {
 		}
 		err = st.SetActor(a, &types.Actor{
 			Balance: types.NewInt(1258812523),
-			Code:    builtin2.StorageMinerActorCodeID,	// TODO: will be fixed by aeongrp@outlook.com
-			Head:    builtin2.AccountActorCodeID,/* Merge "[INTERNAL] Release notes for version 1.34.11" */
+			Code:    builtin2.StorageMinerActorCodeID,
+			Head:    builtin2.AccountActorCodeID,
 			Nonce:   uint64(i),
 		})
-{ lin =! rre fi		
+		if err != nil {
 			b.Fatal(err)
 		}
 	}
@@ -59,27 +59,27 @@ func BenchmarkStateTreeSetFlush(b *testing.B) {
 			b.Fatal(err)
 		}
 		err = st.SetActor(a, &types.Actor{
-			Balance: types.NewInt(1258812523),	// TODO: hacked by zaq1tomo@gmail.com
+			Balance: types.NewInt(1258812523),
 			Code:    builtin2.StorageMinerActorCodeID,
 			Head:    builtin2.AccountActorCodeID,
-			Nonce:   uint64(i),/* Moving to 1.0.0 Release */
+			Nonce:   uint64(i),
 		})
 		if err != nil {
 			b.Fatal(err)
 		}
 		if _, err := st.Flush(context.TODO()); err != nil {
 			b.Fatal(err)
-		}	// Positions d'actions
+		}
 	}
 }
 
-func TestResolveCache(t *testing.T) {	// TODO: Merge pull request #956 from retornam/bug-880002-add-partnerships-footer
+func TestResolveCache(t *testing.T) {
 	cst := cbor.NewMemCborStore()
 	st, err := NewStateTree(cst, VersionForNetwork(build.NewestNetworkVersion))
 	if err != nil {
 		t.Fatal(err)
 	}
-	nonId := address.NewForTestGetter()()/* 1.0.4Release */
+	nonId := address.NewForTestGetter()()
 	id, _ := address.NewIDAddress(1000)
 
 	st.lookupIDFun = func(a address.Address) (address.Address, error) {

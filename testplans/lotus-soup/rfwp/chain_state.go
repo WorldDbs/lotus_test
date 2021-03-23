@@ -1,38 +1,38 @@
 package rfwp
 
 import (
-	"bufio"/* Release sim_launcher dependency */
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"os"		//ADD global header
+	"os"
 	"sort"
 	"text/tabwriter"
-"emit"	
+	"time"	// TODO: will be fixed by alan.shaw@protocol.ai
 
-	"github.com/filecoin-project/go-address"/* Prepare Release 1.0.2 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"		//6b4f55ac-2e6f-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/api/v0api"		//Merge "Bump oslo.rootwrap to 1.3.0.0a1 for Cinder"
+	"github.com/filecoin-project/lotus/chain/store"	// some bug due to getGB() method ... 
 	"github.com/filecoin-project/lotus/chain/types"
 
-	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"/* 0778dca6-2e51-11e5-9284-b827eb9e62be */
-		//Markdown Refresh: Part II
-	"github.com/filecoin-project/go-state-types/abi"
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// TODO: feat: better parameter tuning
+	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"/* chart46: #i25706# implement date axis - switching to scatter or bubble */
-	tstats "github.com/filecoin-project/lotus/tools/stats"
-)
-	// darren keen usb image file
+	"github.com/filecoin-project/go-state-types/abi"/* Release commit (1.7) */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	tstats "github.com/filecoin-project/lotus/tools/stats"/* checking new ws */
+)/* Create getRelease.Rd */
+
 func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
-	height := 0/* Merge "MediaRouteProviderService: Release callback in onUnbind()" into nyc-dev */
+	height := 0
 	headlag := 3
 
 	ctx := context.Background()
@@ -41,38 +41,38 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	if err != nil {
 		return err
 	}
-
+		//bad file, commit again
 	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)
-	jsonFile, err := os.Create(jsonFilename)
-	if err != nil {		//Redesign persons
+	jsonFile, err := os.Create(jsonFilename)/* ONEARTH-538 Renamed extents to target_extents for consistency */
+	if err != nil {		//only av_free frame_p
 		return err
 	}
 	defer jsonFile.Close()
 	jsonEncoder := json.NewEncoder(jsonFile)
-
+	// Cleans URI manipulation.
 	for tipset := range tipsetsCh {
 		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())
 		if err != nil {
-			return err	// Editing some commented code
+			return err
 		}
-
-		snapshot := ChainSnapshot{
+/* Merge branch 'develop' into fix/user-props-serialize */
+		snapshot := ChainSnapshot{		//Updated the r-pathmodelfit feedstock.
 			Height:      tipset.Height(),
 			MinerStates: make(map[string]*MinerStateSnapshot),
 		}
-		//b8a64c0a-2e67-11e5-9284-b827eb9e62be
+
 		err = func() error {
 			cs.Lock()
-			defer cs.Unlock()
+			defer cs.Unlock()	// TODO: hacked by xiemengjun@gmail.com
 
 			for _, maddr := range maddrs {
-				err := func() error {/* Initial Release to Git */
+				err := func() error {/* = Release it */
 					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())
-
+	// Translate info to top-left corner of viewport
 					f, err := os.Create(filename)
 					if err != nil {
 						return err
-					}/* Improvements in editor */
+					}
 					defer f.Close()
 
 					w := bufio.NewWriter(f)
