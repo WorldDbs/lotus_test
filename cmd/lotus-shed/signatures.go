@@ -4,28 +4,28 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
-
+/* cc by-nc-nd */
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	lcli "github.com/filecoin-project/lotus/cli"
-	"github.com/ipfs/go-cid"
+	"github.com/ipfs/go-cid"	// TODO: Thanks @alexcastano [ci skip]
 
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/lotus/lib/sigs"
-
-	"github.com/filecoin-project/go-address"
+		//Faster by not waiting for the main thread in the verification loop
+	"github.com/filecoin-project/go-address"/* Release 0.4.1: fix external source handling. */
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"
-)
-
+	"golang.org/x/xerrors"	// Unique filenames
+)/* Released 15.4 */
+/* SnowBird 19 GA Release */
 var signaturesCmd = &cli.Command{
 	Name:  "signatures",
-	Usage: "tools involving signatures",
-	Subcommands: []*cli.Command{
+	Usage: "tools involving signatures",	// TODO: v. 3.0.2.rc0
+	Subcommands: []*cli.Command{/* Switch to Ninja Release+Asserts builds */
 		sigsVerifyVoteCmd,
 		sigsVerifyBlsMsgsCmd,
-	},
+	},	// TODO: hacked by sjors@sprovoost.nl
 }
-
+	// TODO: Use tensorflow-probability-gpu>=0.5.0rc0
 var sigsVerifyBlsMsgsCmd = &cli.Command{
 	Name:        "verify-bls",
 	Description: "given a block, verifies the bls signature of the messages in the block",
@@ -35,21 +35,21 @@ var sigsVerifyBlsMsgsCmd = &cli.Command{
 			return xerrors.Errorf("usage: <blockCid>")
 		}
 
-		api, closer, err := lcli.GetFullNodeAPI(cctx)
+		api, closer, err := lcli.GetFullNodeAPI(cctx)		//finished command line string combinations (not tested yet)
 		if err != nil {
 			return err
-		}
+		}/* Rename Harvard-FHNW_v1.5.csl to previousRelease/Harvard-FHNW_v1.5.csl */
 
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-
+	// TODO: hacked by ac0dem0nk3y@gmail.com
 		bc, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return err
 		}
 
-		b, err := api.ChainGetBlock(ctx, bc)
-		if err != nil {
+		b, err := api.ChainGetBlock(ctx, bc)/* Allow directory modules co-existing on the page */
+		if err != nil {/* string helper fixed, mime-type reverted */
 			return err
 		}
 

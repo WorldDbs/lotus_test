@@ -3,11 +3,11 @@
   author = ""
 
 [global]
-  plan = "lotus-soup"/* Release version 0.1.25 */
+  plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 14
-  builder = "docker:go"/* Merge "[Release] Webkit2-efl-123997_0.11.106" into tizen_2.2 */
-  runner = "cluster:k8s"/* Merge "Fix bugs in ReleasePrimitiveArray." */
+  builder = "docker:go"
+  runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
@@ -24,32 +24,32 @@
 [global.run.test_params]
   clients = "10"
   miners = "3"
-  genesis_timestamp_offset = "0"/* [artifactory-release] Release version 3.1.0.RC2 */
+  genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   random_beacon_type = "mock"
   mining_mode = "natural"
-/* bugfix: when opening file. Open Button now displays the correct text "Öffnen" */
+
 [[groups]]
   id = "bootstrapper"
-  [groups.resources]	// TODO: backup: only add rsync exclude rules to .nobackup file when it is empty
+  [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
-  [groups.instances]/* Fix: Purge of audit events */
+  [groups.instances]
     count = 1
-    percentage = 0.0/* Deleted Release.zip */
-  [groups.run]		//update SQL
-    [groups.run.test_params]		//Working commit.
+    percentage = 0.0
+  [groups.run]
+    [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]	// TODO: c538f02a-2e4a-11e5-9284-b827eb9e62be
-  id = "miners-weak"	// 8b580dec-2f86-11e5-9fa0-34363bc765d8
+[[groups]]
+  id = "miners-weak"
   [groups.resources]
-    memory = "8192Mi"	// TODO: ce231290-2e65-11e5-9284-b827eb9e62be
+    memory = "8192Mi"
     cpu = "1000m"
   [groups.instances]
-    count = 2/* 3c820786-2e3f-11e5-9284-b827eb9e62be */
+    count = 2
     percentage = 0.0
-  [groups.run]	// (GH-1413) Update Cake.Deploy.Azure.ResourceManager.yml
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
       sectors = "8"
@@ -61,7 +61,7 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0	// TODO: Update react-js.md
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
