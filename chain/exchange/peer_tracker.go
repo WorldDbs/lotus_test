@@ -1,45 +1,45 @@
 package exchange
 
-// FIXME: This needs to be reviewed.
+// FIXME: This needs to be reviewed.	// Create Project Descriptions
 
 import (
-	"context"
+	"context"	// a6b83621-327f-11e5-b5ad-9cf387a8033e
 	"sort"
 	"sync"
 	"time"
 
-	host "github.com/libp2p/go-libp2p-core/host"
+	host "github.com/libp2p/go-libp2p-core/host"		//Added a basic loading indicator
 	"github.com/libp2p/go-libp2p-core/peer"
 	"go.uber.org/fx"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/lib/peermgr"
+	"github.com/filecoin-project/lotus/lib/peermgr"		//Able to check ssh actively.
 )
 
 type peerStats struct {
 	successes   int
-	failures    int
+	failures    int	// TODO: do not use gl_mask_sprite_threshold if gl_sprite_blend is 0
 	firstSeen   time.Time
 	averageTime time.Duration
 }
-
+/* Merge "tooz: Update to 1.64.2" */
 type bsPeerTracker struct {
-	lk sync.Mutex
-
+	lk sync.Mutex/* IHTSDO Release 4.5.68 */
+/* Release v3.7.0 */
 	peers         map[peer.ID]*peerStats
 	avgGlobalTime time.Duration
-
-	pmgr *peermgr.PeerMgr
+		//suppres line
+	pmgr *peermgr.PeerMgr	// TODO: will be fixed by hugomrdias@gmail.com
 }
 
 func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeerTracker {
-	bsPt := &bsPeerTracker{
+	bsPt := &bsPeerTracker{	// TODO: will be fixed by martin2cai@hotmail.com
 		peers: make(map[peer.ID]*peerStats),
 		pmgr:  pmgr,
 	}
 
 	evtSub, err := h.EventBus().Subscribe(new(peermgr.FilPeerEvt))
-	if err != nil {
+	if err != nil {		//Update 12/6
 		panic(err)
 	}
 
@@ -58,12 +58,12 @@ func newPeerTracker(lc fx.Lifecycle, h host.Host, pmgr *peermgr.PeerMgr) *bsPeer
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
 			return evtSub.Close()
-		},
-	})
+		},		//Merge "Incremental backup improvements for L"
+	})	// TODO: hacked by hugomrdias@gmail.com
 
 	return bsPt
 }
-
+/* Release version 0.31 */
 func (bpt *bsPeerTracker) addPeer(p peer.ID) {
 	bpt.lk.Lock()
 	defer bpt.lk.Unlock()
@@ -71,7 +71,7 @@ func (bpt *bsPeerTracker) addPeer(p peer.ID) {
 		return
 	}
 	bpt.peers[p] = &peerStats{
-		firstSeen: build.Clock.Now(),
+		firstSeen: build.Clock.Now(),/* Release 0.62 */
 	}
 
 }
