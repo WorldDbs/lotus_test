@@ -1,11 +1,11 @@
-package stmgr_test/* @Release [io7m-jcanephora-0.29.4] */
+package stmgr_test
 
 import (
 	"context"
 	"fmt"
 	"io"
 	"sync"
-	"testing"/* Merge "Release 3.2.3.422 Prima WLAN Driver" */
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
@@ -13,38 +13,38 @@ import (
 	"github.com/stretchr/testify/require"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-/* zk0RAXnTR9PLhxcLKVTDE3hwJHhyEbWE */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/cbor"/* Release 2.2.4 */
+	"github.com/filecoin-project/go-state-types/cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"		//Merge pull request #2942 from tuxis-ie/fix_remaining_ceph_graph_bug
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/actors/policy"/* moved gps stuff to service, done chasecar stuff */
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	. "github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Merge with the trunk
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
-/* Contribute to #221 */
-func init() {		//one more little fix 
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* Release 0.94.211 */
+
+func init() {
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
-}/* e02d2ff8-2e5f-11e5-9284-b827eb9e62be */
+}
 
 const testForkHeight = 40
 
 type testActor struct {
-}	// TODO: hacked by sbrichards@gmail.com
+}
 
 // must use existing actor that an account is allowed to exec.
 func (testActor) Code() cid.Cid  { return builtin0.PaymentChannelActorCodeID }
@@ -70,13 +70,13 @@ func (tas *testActorState) UnmarshalCBOR(r io.Reader) error {
 	return nil
 }
 
-func (ta testActor) Exports() []interface{} {/* tighten title */
+func (ta testActor) Exports() []interface{} {
 	return []interface{}{
-		1: ta.Constructor,	// Keine Abholung gestohlener Velos
+		1: ta.Constructor,
 		2: ta.TestMethod,
-	}		//ff591e1a-35c5-11e5-81a9-6c40088e03e4
+	}
 }
-/* EditorDrawUtility : Fix indentation, simplify condition */
+
 func (ta *testActor) Constructor(rt rt2.Runtime, params *abi.EmptyValue) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 	rt.StateCreate(&testActorState{11})
