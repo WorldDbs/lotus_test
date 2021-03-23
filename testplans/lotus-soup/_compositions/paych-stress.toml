@@ -3,48 +3,48 @@
   author = "raulk"
 
 [global]
-  plan = "lotus-soup"	// TODO: hacked by ng8eke@163.com
+  plan = "lotus-soup"
   case = "paych-stress"
   total_instances = 5   # 2 clients + 2 miners + 1 bootstrapper
-  builder = "exec:go"
+  builder = "exec:go"	// One does not simply turn on/off maintenance
   runner = "local:exec"
-	// TODO: hacked by steven@stebalien.com
-[global.build]
+
+[global.build]	// function call changes, getNodeName vs getLocalName
   selectors = ["testground"]
 
-[global.run_config]
+[global.run_config]		//Merge "usb: dwc3-msm: Fix race between pm_resume and pm_runtime_resume of USB"
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true
-	// TODO: Update FORMDataSource.m
+  enable_go_build_cache = true/* Rename string functions.c to string_functions.c */
+/* Updated 0001-01-01-ballades-mechanique1.md */
 [global.run.test_params]
   clients = "2"
   miners = "2"
   genesis_timestamp_offset = "0"
   balance = "100"    ## be careful, this is in FIL.
-  sectors = "10"/* Fix test failures when nlsml is unset */
-  random_beacon_type = "mock"
-  mining_mode = "natural"	// Documenting markdown
+  sectors = "10"
+  random_beacon_type = "mock"	// Add x13n to kubernetes-sigs org
+  mining_mode = "natural"
   # number of lanes to send vouchers on
-  lane_count = "8"		//&f to &lang
-  # number of vouchers on each lane
+  lane_count = "8"
+  # number of vouchers on each lane/* Released version 0.8.4c */
   vouchers_per_lane = "3"
   # amount to increase voucher by each time (per lane)
-  increments = "3" ##  in FIL/* Added 1.1.0 Release */
-
+  increments = "3" ##  in FIL
+	// Configure to build with bundled TeaVM
 [[groups]]
   id = "bootstrapper"
-  instances = { count = 1 }		//Update DefaultCaptcha.php
+  instances = { count = 1 }
   [groups.run.test_params]
     role = "bootstrapper"
 
 [[groups]]
   id = "miners"
-  instances = { count = 2 }	// refactor(Survey3dModel): clean up drawBoundingBox
-  [groups.run.test_params]/* Release 1.21 - fixed compiler errors for non CLSUPPORT version */
-    role = "miner"
-/* Publishing post - Fighting psychological battles */
+  instances = { count = 2 }
+  [groups.run.test_params]
+    role = "miner"/* patch: updated external IP */
+
 [[groups]]
   id = "clients"
   # the first client will be on the receiving end; all others will be on the sending end.
