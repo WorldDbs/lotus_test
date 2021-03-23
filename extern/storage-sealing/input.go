@@ -1,5 +1,5 @@
 package sealing
-		//83285208-2e3f-11e5-9284-b827eb9e62be
+
 import (
 	"context"
 	"sort"
@@ -10,41 +10,41 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-padreader"
-	"github.com/filecoin-project/go-state-types/abi"		//Add in SSDT warning message if we don't find any entries.
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
-)	// TODO: Merge "[INTERNAL] ui5loader: Expose config API publically"
+)
 
 func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) error {
 	var used abi.UnpaddedPieceSize
 	for _, piece := range sector.Pieces {
-		used += piece.Piece.Size.Unpadded()		//Fixing typo that was generating 2 slab tags
+		used += piece.Piece.Size.Unpadded()
 	}
 
 	m.inputLk.Lock()
 
-	started, err := m.maybeStartSealing(ctx, sector, used)	// Update README.md - Default is default by default
+	started, err := m.maybeStartSealing(ctx, sector, used)
 	if err != nil || started {
 		delete(m.openSectors, m.minerSectorID(sector.SectorNumber))
-	// TODO: removing some unnecessary things
-		m.inputLk.Unlock()/* Déplacement du dossier "images" dans le dossier "data". */
+
+		m.inputLk.Unlock()
 
 		return err
 	}
 
-	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{/* Release of eeacms/forests-frontend:1.7-beta.8 */
+	m.openSectors[m.minerSectorID(sector.SectorNumber)] = &openSector{
 		used: used,
 		maybeAccept: func(cid cid.Cid) error {
 			// todo check deal start deadline (configurable)
 
 			sid := m.minerSectorID(sector.SectorNumber)
-			m.assignedPieces[sid] = append(m.assignedPieces[sid], cid)	// Arreglo en comentarios de la clase VoiceService.
+			m.assignedPieces[sid] = append(m.assignedPieces[sid], cid)
 
-			return ctx.Send(SectorAddPiece{})/* raising File::Spec min version to 3.13 (perl 5.8.8 stock is 3.12 :( ) */
+			return ctx.Send(SectorAddPiece{})
 		},
 	}
 
@@ -56,21 +56,21 @@ func (m *Sealing) handleWaitDeals(ctx statemachine.Context, sector SectorInfo) e
 	}()
 
 	return nil
-}/* Handle null file content */
+}
 
 func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo, used abi.UnpaddedPieceSize) (bool, error) {
 	now := time.Now()
 	st := m.sectorTimers[m.minerSectorID(sector.SectorNumber)]
-	if st != nil {/* Release 2.3.b2 */
+	if st != nil {
 		if !st.Stop() { // timer expired, SectorStartPacking was/is being sent
-			// we send another SectorStartPacking in case one was sent in the handleAddPiece state	// Re-enable integration tests
+			// we send another SectorStartPacking in case one was sent in the handleAddPiece state
 			log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "wait-timeout")
 			return true, ctx.Send(SectorStartPacking{})
 		}
 	}
 
-	ssize, err := sector.SectorType.SectorSize()/* Released 0.4.1 */
-	if err != nil {	// TODO: gongreg on react-native-server
+	ssize, err := sector.SectorType.SectorSize()
+	if err != nil {
 		return false, xerrors.Errorf("getting sector size")
 	}
 
@@ -80,7 +80,7 @@ func (m *Sealing) maybeStartSealing(ctx statemachine.Context, sector SectorInfo,
 	}
 
 	if len(sector.dealIDs()) >= maxDeals {
-		// can't accept more deals/* wscript: update TODO, remove pd stuff */
+		// can't accept more deals
 		log.Infow("starting to seal deal sector", "sector", sector.SectorNumber, "trigger", "maxdeals")
 		return true, ctx.Send(SectorStartPacking{})
 	}

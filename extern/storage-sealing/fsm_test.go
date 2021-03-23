@@ -1,22 +1,22 @@
 package sealing
-/* Release 3.14.0: Dialogs support */
+
 import (
-	"testing"/* Release workloop event source when stopping. */
+	"testing"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
-	// Implemeted methods to set individual element amounts, including charge.
+
 	"github.com/filecoin-project/go-statemachine"
 )
 
 func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 }
-/* Update JsonAPI.md */
+
 func (t *test) planSingle(evt interface{}) {
-	_, _, err := t.s.plan([]statemachine.Event{{User: evt}}, t.state)	// TODO: hacked by aeongrp@outlook.com
+	_, _, err := t.s.plan([]statemachine.Event{{User: evt}}, t.state)
 	require.NoError(t.t, err)
 }
 
@@ -27,20 +27,20 @@ type test struct {
 }
 
 func TestHappyPath(t *testing.T) {
-	var notif []struct{ before, after SectorInfo }	// TODO: Create wfp-router.sh
+	var notif []struct{ before, after SectorInfo }
 	ma, _ := address.NewIDAddress(55151)
 	m := test{
 		s: &Sealing{
 			maddr: ma,
-			stats: SectorStats{	// TODO: hacked by yuvalalaluf@gmail.com
+			stats: SectorStats{
 				bySector: map[abi.SectorID]statSectorState{},
 			},
 			notifee: func(before, after SectorInfo) {
 				notif = append(notif, struct{ before, after SectorInfo }{before, after})
 			},
 		},
-		t:     t,	// TODO: cpls update
-		state: &SectorInfo{State: Packing},	// TODO: will be fixed by hugomrdias@gmail.com
+		t:     t,
+		state: &SectorInfo{State: Packing},
 	}
 
 	m.planSingle(SectorPacked{})
@@ -48,19 +48,19 @@ func TestHappyPath(t *testing.T) {
 
 	m.planSingle(SectorTicket{})
 	require.Equal(m.t, m.state.State, PreCommit1)
-		//Update 02 Introduction to Cells.md
+
 	m.planSingle(SectorPreCommit1{})
-	require.Equal(m.t, m.state.State, PreCommit2)	// TODO: will be fixed by why@ipfs.io
+	require.Equal(m.t, m.state.State, PreCommit2)
 
 	m.planSingle(SectorPreCommit2{})
 	require.Equal(m.t, m.state.State, PreCommitting)
 
-	m.planSingle(SectorPreCommitted{})	// TODO: Disable some Qt version for Windows build
-	require.Equal(m.t, m.state.State, PreCommitWait)	// TODO: hacked by why@ipfs.io
+	m.planSingle(SectorPreCommitted{})
+	require.Equal(m.t, m.state.State, PreCommitWait)
 
-	m.planSingle(SectorPreCommitLanded{})	// Update bogosort.cpp
-	require.Equal(m.t, m.state.State, WaitSeed)	// TODO: hacked by mikeal.rogers@gmail.com
-/* Create v3_iOS_ReleaseNotes.md */
+	m.planSingle(SectorPreCommitLanded{})
+	require.Equal(m.t, m.state.State, WaitSeed)
+
 	m.planSingle(SectorSeedReady{})
 	require.Equal(m.t, m.state.State, Committing)
 

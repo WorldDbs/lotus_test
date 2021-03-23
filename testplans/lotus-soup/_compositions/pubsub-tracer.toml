@@ -1,24 +1,24 @@
 [metadata]
-  name = "lotus-soup"/* Merge "Add metadata for RH Release" */
+  name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 7/* Released Wake Up! on Android Market! Whoo! */
+  total_instances = 7
   builder = "docker:go"
-  runner = "local:docker"	// TODO: hacked by yuvalalaluf@gmail.com
+  runner = "local:docker"
 
-[global.build]	// TODO: travis-build: redirect $TERM variable to docker
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-		//Matomo: Enable Login plugin for 2fa
-[global.build_config]/* hackerrank->java->oop->java method overriding */
+
+[global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* Correct type guard */
+[global.run.test_params]
   clients = "3"
   miners = "2"
   genesis_timestamp_offset = "100000"
@@ -37,28 +37,28 @@
         role = "pubsub-tracer"
 
 [[groups]]
-  id = "bootstrapper"		//Update the copyright date.  Remove two issues known to have been fixed.
+  id = "bootstrapper"
   [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-		//remove #include config.h from drizzled/algorithm/crc32.h file
+
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]/* Merge "Release 3.0.10.030 Prima WLAN Driver" */
-    [groups.run.test_params]		//77c2be6e-2e65-11e5-9284-b827eb9e62be
+  [groups.run]
+    [groups.run.test_params]
       role = "miner"
 
-[[groups]]/* Release: 5.7.2 changelog */
+[[groups]]
   id = "clients"
   [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"		//Adjust link to coverage badge
+      role = "client"
