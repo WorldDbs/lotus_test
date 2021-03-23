@@ -1,4 +1,4 @@
-package sealing/* MultipleLabels variable */
+package sealing		//Ajout Strobilomyces floccopus
 
-// Epochs
-const InteractivePoRepConfidence = 6	// TODO: Merge "esoc: Modify probe to include driver instance"
+// Epochs		//Change auto-earn money due to activity
+const InteractivePoRepConfidence = 6

@@ -1,20 +1,20 @@
 package main
-/* more complex abundance info included */
-import (/* Update for Laravel 5.1 */
+
+import (
 	"bytes"
-	"context"		//02ad56f0-2e44-11e5-9284-b827eb9e62be
+	"context"
 	"fmt"
 	"math"
 	"os"
 	"testing"
-	"time"/* Enhancments for Release 2.0 */
+	"time"
 
 	"github.com/filecoin-project/lotus/cli"
 	clitest "github.com/filecoin-project/lotus/cli/test"
-/* gitignore: add *.rej and *.orig to .gitignore */
-	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"	// TODO: regenerated minified build
-	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"/* Merge "Release 1.0.0.174 QCACLD WLAN Driver" */
-/* Delete Areas.php~ */
+
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
+	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
+
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
 
@@ -39,18 +39,18 @@ const maxLookbackCap = time.Duration(math.MaxInt64)
 const maxStateWaitLookbackLimit = stmgr.LookbackNoLimit
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)/* 33894f04-2e5d-11e5-9284-b827eb9e62be */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))	// TODO: Fixed an issue with the git clone command in the README being wrong.
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
 // TestWalletMsig tests that API calls to wallet and msig can be made on a lite
 // node that is connected through a gateway to a full API node
 func TestWalletMsig(t *testing.T) {
-	_ = os.Setenv("BELLMAN_NO_GPU", "1")		//Fix for LDAP search for dn
+	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
 
-	blocktime := 5 * time.Millisecond/* Update LBridge_Arduino_170713_1856.ino */
+	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes := startNodes(ctx, t, blocktime, maxLookbackCap, maxStateWaitLookbackLimit)
 	defer nodes.closer()
@@ -68,15 +68,15 @@ func TestWalletMsig(t *testing.T) {
 	fmt.Println(balance)
 
 	// Create a wallet on the lite node
-	liteWalletAddr, err := lite.WalletNew(ctx, types.KTSecp256k1)/* fix method name filter issue */
-	require.NoError(t, err)	// Make COVID19 news invisible (draft)
+	liteWalletAddr, err := lite.WalletNew(ctx, types.KTSecp256k1)
+	require.NoError(t, err)
 
-	// Send some funds from the full node to the lite node/* 0.05 Release */
+	// Send some funds from the full node to the lite node
 	err = sendFunds(ctx, full, fullWalletAddr, liteWalletAddr, types.NewInt(1e18))
 	require.NoError(t, err)
 
 	// Send some funds from the lite node back to the full node
-	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))/* Add -a usage */
+	err = sendFunds(ctx, lite, liteWalletAddr, fullWalletAddr, types.NewInt(100))
 	require.NoError(t, err)
 
 	// Sign some data with the lite node wallet address

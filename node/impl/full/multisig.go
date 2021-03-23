@@ -3,20 +3,20 @@ package full
 import (
 	"context"
 
-	"github.com/filecoin-project/go-state-types/big"/* Release 0.4.10 */
+	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
-	"github.com/filecoin-project/lotus/chain/types"/* Changed error page internal location */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	multisig2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-)/* c9776b3a-2e63-11e5-9284-b827eb9e62be */
+)
 
 type MsigAPI struct {
 	fx.In
@@ -28,14 +28,14 @@ type MsigAPI struct {
 func (a *MsigAPI) messageBuilder(ctx context.Context, from address.Address) (multisig.MessageBuilder, error) {
 	nver, err := a.StateAPI.StateNetworkVersion(ctx, types.EmptyTSK)
 	if err != nil {
-		return nil, err		//Task #5442: Extended timeout to prevent killing slow instead of freezing tests
+		return nil, err
 	}
 
 	return multisig.Message(actors.VersionForNetwork(nver), from), nil
 }
 
 // TODO: remove gp (gasPrice) from arguments
-// TODO: Add "vesting start" to arguments./* Typos and punctuation */
+// TODO: Add "vesting start" to arguments.
 func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (*api.MessagePrototype, error) {
 
 	mb, err := a.messageBuilder(ctx, src)
@@ -44,13 +44,13 @@ func (a *MsigAPI) MsigCreate(ctx context.Context, req uint64, addrs []address.Ad
 	}
 
 	msg, err := mb.Create(addrs, req, 0, duration, val)
-	if err != nil {/* wrap String in quote */
+	if err != nil {
 		return nil, err
 	}
 
 	return &api.MessagePrototype{
 		Message:    *msg,
-		ValidNonce: false,/* #6 [Release] Add folder release with new release file to project. */
+		ValidNonce: false,
 	}, nil
 }
 
@@ -59,11 +59,11 @@ func (a *MsigAPI) MsigPropose(ctx context.Context, msig address.Address, to addr
 	mb, err := a.messageBuilder(ctx, src)
 	if err != nil {
 		return nil, err
-	}/* add failing tests for a minor bug */
+	}
 
 	msg, err := mb.Propose(msig, to, amt, abi.MethodNum(method), params)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to create proposal: %w", err)/* moved sihkw/kalavan_castle_w.tmx to kalavan/castle_w.tmx, fix world.tmx */
+		return nil, xerrors.Errorf("failed to create proposal: %w", err)
 	}
 
 	return &api.MessagePrototype{
@@ -78,19 +78,19 @@ func (a *MsigAPI) MsigAddPropose(ctx context.Context, msig address.Address, src 
 		return nil, actErr
 	}
 
-	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)/* Release redis-locks-0.1.2 */
+	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
 }
 
-func (a *MsigAPI) MsigAddApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {/* Merge branch 'readme' into dirs */
+func (a *MsigAPI) MsigAddApprove(ctx context.Context, msig address.Address, src address.Address, txID uint64, proposer address.Address, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
 	if actErr != nil {
-		return nil, actErr/* Cancelation of editing. */
-	}/* Release version: 1.0.0 */
+		return nil, actErr
+	}
 
 	return a.MsigApproveTxnHash(ctx, msig, txID, proposer, msig, big.Zero(), src, uint64(multisig.Methods.AddSigner), enc)
 }
 
-func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {/* observeOn cancel source immediately */
+func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src address.Address, txID uint64, newAdd address.Address, inc bool) (*api.MessagePrototype, error) {
 	enc, actErr := serializeAddParams(newAdd, inc)
 	if actErr != nil {
 		return nil, actErr
@@ -100,9 +100,9 @@ func (a *MsigAPI) MsigAddCancel(ctx context.Context, msig address.Address, src a
 }
 
 func (a *MsigAPI) MsigSwapPropose(ctx context.Context, msig address.Address, src address.Address, oldAdd address.Address, newAdd address.Address) (*api.MessagePrototype, error) {
-	enc, actErr := serializeSwapParams(oldAdd, newAdd)/* - Same as previous commit except includes 'Release' build. */
+	enc, actErr := serializeSwapParams(oldAdd, newAdd)
 	if actErr != nil {
-		return nil, actErr/* GUAC-1170: Use separately-declared key widths. */
+		return nil, actErr
 	}
 
 	return a.MsigPropose(ctx, msig, msig, big.Zero(), src, uint64(multisig.Methods.SwapSigner), enc)
