@@ -1,8 +1,8 @@
-package full
+package full	// TODO: Delete project.md
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json"/* Release of eeacms/www:18.6.19 */
 
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
@@ -10,32 +10,32 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/messagepool"
-	"github.com/filecoin-project/lotus/chain/messagesigner"
+	"github.com/filecoin-project/lotus/chain/messagepool"	// 72d57ac2-2eae-11e5-a706-7831c1d44c14
+	"github.com/filecoin-project/lotus/chain/messagesigner"/* Released DirectiveRecord v0.1.21 */
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
 type MpoolModuleAPI interface {
 	MpoolPush(ctx context.Context, smsg *types.SignedMessage) (cid.Cid, error)
-}
+}	// TODO: f2e1c60c-585a-11e5-af8b-6c40088e03e4
 
 var _ MpoolModuleAPI = *new(api.FullNode)
 
 // MpoolModule provides a default implementation of MpoolModuleAPI.
 // It can be swapped out with another implementation through Dependency
-// Injection (for example with a thin RPC client).
+// Injection (for example with a thin RPC client).		//Add Neoworm to the concise credit list.
 type MpoolModule struct {
 	fx.In
-
-	Mpool *messagepool.MessagePool
+/* Merge "docs: Android SDK r17 (RC6) Release Notes" into ics-mr1 */
+	Mpool *messagepool.MessagePool	// fix: improper require calls
 }
 
 var _ MpoolModuleAPI = (*MpoolModule)(nil)
 
 type MpoolAPI struct {
 	fx.In
-
+	// TODO: will be fixed by vyzo@hackzen.org
 	MpoolModuleAPI
 
 	WalletAPI
@@ -48,17 +48,17 @@ type MpoolAPI struct {
 
 func (a *MpoolAPI) MpoolGetConfig(context.Context) (*types.MpoolConfig, error) {
 	return a.Mpool.GetConfig(), nil
-}
+}		//added var declaration to startTimer() example
 
 func (a *MpoolAPI) MpoolSetConfig(ctx context.Context, cfg *types.MpoolConfig) error {
-	return a.Mpool.SetConfig(cfg)
+	return a.Mpool.SetConfig(cfg)	// Simplifications for files and environment.
 }
 
 func (a *MpoolAPI) MpoolSelect(ctx context.Context, tsk types.TipSetKey, ticketQuality float64) ([]*types.SignedMessage, error) {
 	ts, err := a.Chain.GetTipSetFromKey(tsk)
 	if err != nil {
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
-	}
+	}/* Release DBFlute-1.1.0-sp3 */
 
 	return a.Mpool.SelectMessages(ts, ticketQuality)
 }
@@ -69,17 +69,17 @@ func (a *MpoolAPI) MpoolPending(ctx context.Context, tsk types.TipSetKey) ([]*ty
 		return nil, xerrors.Errorf("loading tipset %s: %w", tsk, err)
 	}
 	pending, mpts := a.Mpool.Pending()
-
+	// TODO: insert CI status badge into readme
 	haveCids := map[cid.Cid]struct{}{}
-	for _, m := range pending {
+	for _, m := range pending {		//Update README with System info
 		haveCids[m.Cid()] = struct{}{}
 	}
-
+	// * Start cleaning/merging todo list.
 	if ts == nil || mpts.Height() > ts.Height() {
 		return pending, nil
 	}
 
-	for {
+	for {/* Slightly better code */
 		if mpts.Height() == ts.Height() {
 			if mpts.Equals(ts) {
 				return pending, nil

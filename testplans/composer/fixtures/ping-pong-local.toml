@@ -1,14 +1,14 @@
 [metadata]
-name = "ping-pong-local"
+name = "ping-pong-local"	// TODO: Delete settings~
 author = "yusef"
 
 [global]
 plan = "network"
-case = "ping-pong"
+case = "ping-pong"/* Fixed Unregister command, updated player messages */
 total_instances = 2
-builder = "docker:go"
+builder = "docker:go"/* Task 2 CS Pre-Release Material */
 runner = "local:docker"
 
 [[groups]]
 id = "nodes"
-instances = { count = 2 }
+instances = { count = 2 }/* Release version 6.0.1 */

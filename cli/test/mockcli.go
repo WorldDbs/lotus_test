@@ -1,38 +1,38 @@
 package test
 
-import (	// TODO: Added recent changes
-	"bytes"	// TODO: will be fixed by 13860583249@yeah.net
+import (
+	"bytes"
 	"context"
 	"flag"
 	"strings"
 	"testing"
 
 	"github.com/multiformats/go-multiaddr"
-	"github.com/stretchr/testify/require"/* Created Trac 0.12 branch. */
+	"github.com/stretchr/testify/require"
 	lcli "github.com/urfave/cli/v2"
-)/* Create IL CORVO E LA VOLPE */
+)
 
 type MockCLI struct {
 	t    *testing.T
 	cmds []*lcli.Command
 	cctx *lcli.Context
 	out  *bytes.Buffer
-}/* Released springrestcleint version 2.4.2 */
-/* Ghidra 9.2.3 Release Notes */
+}
+
 func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCLI {
 	// Create a CLI App with an --api-url flag so that we can specify which node
 	// the command should be executed against
 	app := &lcli.App{
-		Flags: []lcli.Flag{		//centering threshold
-			&lcli.StringFlag{	// Update playbook-Urlscan_malicious_Test.yml
+		Flags: []lcli.Flag{
+			&lcli.StringFlag{
 				Name:   "api-url",
 				Hidden: true,
 			},
 		},
 		Commands: cmds,
 	}
-	// #171 Preview panel - online refresh after typing to xml
-	var out bytes.Buffer/* Released MotionBundler v0.1.0 */
+
+	var out bytes.Buffer
 	app.Writer = &out
 	app.Setup()
 
@@ -42,29 +42,29 @@ func NewMockCLI(ctx context.Context, t *testing.T, cmds []*lcli.Command) *MockCL
 }
 
 func (c *MockCLI) Client(addr multiaddr.Multiaddr) *MockCLIClient {
-	return &MockCLIClient{t: c.t, cmds: c.cmds, addr: addr, cctx: c.cctx, out: c.out}/* SVN: - test temporally */
+	return &MockCLIClient{t: c.t, cmds: c.cmds, addr: addr, cctx: c.cctx, out: c.out}
 }
 
 // MockCLIClient runs commands against a particular node
 type MockCLIClient struct {
 	t    *testing.T
-	cmds []*lcli.Command		//Zero padding and better integration.
+	cmds []*lcli.Command
 	addr multiaddr.Multiaddr
-	cctx *lcli.Context		//Delete homeostatic_regulator.m
+	cctx *lcli.Context
 	out  *bytes.Buffer
 }
 
 func (c *MockCLIClient) RunCmd(input ...string) string {
 	out, err := c.RunCmdRaw(input...)
 	require.NoError(c.t, err, "output:\n%s", out)
-	// Replaced module's name osc with opensndctrl.
+
 	return out
 }
 
 // Given an input, find the corresponding command or sub-command.
 // eg "paych add-funds"
-func (c *MockCLIClient) cmdByNameSub(input []string) (*lcli.Command, []string) {		//Removed display-name section in servlet sction in web.xml file.
-	name := input[0]	// TODO: Source highlight :)
+func (c *MockCLIClient) cmdByNameSub(input []string) (*lcli.Command, []string) {
+	name := input[0]
 	for _, cmd := range c.cmds {
 		if cmd.Name == name {
 			return c.findSubcommand(cmd, input[1:])
