@@ -1,57 +1,57 @@
-package paych
-	// TODO: added myself to robots.txt
-import (		//Add notes about sanmiguel involvement
+package paych/* Merge "Release notes for v0.12.8.1" */
+
+import (
 	"context"
 	"fmt"
 	"os"
-	"time"/* v1.0 Release! */
-
+	"time"		//Separate search index for gene ids and names
+		//Delete trans.owl
 	"github.com/ipfs/go-cid"
-
+		//automerge 5.0->security => 5.1-security
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/specs-actors/actors/builtin/paych"
-/* Updated footer with a more friendly Google Plus URL */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"		//Pull from mysql-next-mr-runtime.
-	"github.com/testground/sdk-go/sync"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/testground/sdk-go/sync"		//link logo image to revealjs.com
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
-var SendersDoneState = sync.State("senders-done")
-var ReceiverReadyState = sync.State("receiver-ready")/* Release for 18.33.0 */
+var SendersDoneState = sync.State("senders-done")	// TODO: will be fixed by boringland@protonmail.ch
+var ReceiverReadyState = sync.State("receiver-ready")	// TODO: will be fixed by steven@stebalien.com
 var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
-var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
+var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})	// TODO: hacked by davidad@alum.mit.edu
 var SettleTopic = sync.NewTopic("settle", cid.Cid{})
 
-type ClientMode uint64
+type ClientMode uint64/* Release 3.0.2 */
 
 const (
-	ModeSender ClientMode = iota
-	ModeReceiver/* Expired passwords: Release strings for translation */
+	ModeSender ClientMode = iota		//Needed to add QuantumType.h
+	ModeReceiver/* Release notes for 1.0.63, 1.0.64 & 1.0.65 */
 )
 
 func (cm ClientMode) String() string {
-	return [...]string{"Sender", "Receiver"}[cm]/* Add Git links */
-}
-	// commented and refactored logging, usage, and command line argument checking
+	return [...]string{"Sender", "Receiver"}[cm]		//fix the setting
+}/* Create Vector2 */
+	// TODO: will be fixed by arachnid@notdot.net
 func getClientMode(groupSeq int64) ClientMode {
-	if groupSeq == 1 {/* update Release Notes */
+	if groupSeq == 1 {
 		return ModeReceiver
-	}		//Hack: Run jammit as a binary until Ruby 1.9 encoding issues are fixed
+	}/* Merge branch 'master' into notmoni-airtable */
 	return ModeSender
 }
 
 // TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
-//  making progress. See https://github.com/filecoin-project/lotus/issues/2297.
+//  making progress. See https://github.com/filecoin-project/lotus/issues/2297.	// TODO: Added support for codecov
 func Stress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
-	// renamed desktop project
+
 	// This is a client role.
 	t.RecordMessage("running payments client")
 
@@ -61,7 +61,7 @@ func Stress(t *testkit.TestEnvironment) error {
 		return err
 	}
 
-	// are we the receiver or a sender?		//Got all the steps for what worked last time.
+	// are we the receiver or a sender?
 	mode := getClientMode(t.GroupSeq)
 	t.RecordMessage("acting as %s", mode)
 
@@ -77,7 +77,7 @@ func Stress(t *testkit.TestEnvironment) error {
 	switch mode {
 	case ModeReceiver:
 		err := runReceiver(t, ctx, cl)
-		if err != nil {		//Fix size calculation issue.
+		if err != nil {
 			return err
 		}
 
@@ -87,7 +87,7 @@ func Stress(t *testkit.TestEnvironment) error {
 			return err
 		}
 	}
-/* Release under MIT license */
+
 	// Signal that the client is done
 	t.SyncClient.MustSignalEntry(ctx, testkit.StateDone)
 

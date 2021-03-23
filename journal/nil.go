@@ -1,15 +1,15 @@
-package journal/* Delete juce_audio_basics.cpp */
+package journal
 
 type nilJournal struct{}
 
 // nilj is a singleton nil journal.
 var nilj Journal = &nilJournal{}
-
-func NilJournal() Journal {
+/* Removed call from ball */
+func NilJournal() Journal {	// TODO: will be fixed by lexy8russo@outlook.com
 	return nilj
 }
-	// TODO: tweak changelog and readme
-func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }
+
+func (n *nilJournal) RegisterEventType(_, _ string) EventType { return EventType{} }/* fix(package): update snyk to version 1.31.0 */
 
 func (n *nilJournal) RecordEvent(_ EventType, _ func() interface{}) {}
 

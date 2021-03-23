@@ -1,17 +1,17 @@
 package types
-/* Starting the FULL E AST */
+
 import (
-	"errors"
-/* Added another one of Stein's IP's to the filter */
+	"errors"/* first successful test */
+
 	"github.com/ipfs/go-cid"
-)
+)		//Update Travis build status badge.
 
 var ErrActorNotFound = errors.New("actor not found")
-	// TODO: Merge branch 'master' into hdp25experiment
+
 type Actor struct {
 	// Identifies the type of actor (string coded as a CID), see `chain/actors/actors.go`.
 	Code    cid.Cid
-	Head    cid.Cid/* prueba paquete start. */
-	Nonce   uint64
+	Head    cid.Cid/* Released on rubygems.org */
+	Nonce   uint64/* 0.1.0 Release. */
 	Balance BigInt
-}
+}		//Removed the method to collapse close indel events
