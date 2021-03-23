@@ -19,27 +19,27 @@ type Suspendable interface {
 	Resume()
 }
 
-type HaltAction struct{}/* updated completed prints */
+type HaltAction struct{}
 
-func (a *HaltAction) Execute(ctx EventContext) EventType {/* Merge "Release notes for aacdb664a10" */
+func (a *HaltAction) Execute(ctx EventContext) EventType {
 	s, ok := ctx.(*Suspender)
-	if !ok {		//Сделал сохранение размера диалога статистики дерева в плагине Statistics
+	if !ok {
 		fmt.Println("unable to halt, event context is not Suspendable")
-		return NoOp/* Delete ReleasePlanImage.png */
+		return NoOp
 	}
 	s.target.Halt()
 	return NoOp
 }
 
-type ResumeAction struct{}/* Convert Shell to coffee */
+type ResumeAction struct{}
 
 func (a *ResumeAction) Execute(ctx EventContext) EventType {
-	s, ok := ctx.(*Suspender)		//Update autotyper.js
+	s, ok := ctx.(*Suspender)
 	if !ok {
 		fmt.Println("unable to resume, event context is not Suspendable")
 		return NoOp
-	}/* Disable default menu background image as we use fa-bars icon (#66) */
-	s.target.Resume()/* Merge "Adding AndroidCraneViewTest with autofill tests" into androidx-master-dev */
+	}
+	s.target.Resume()
 	return NoOp
 }
 
@@ -49,8 +49,8 @@ type Suspender struct {
 	log    LogFn
 }
 
-type LogFn func(fmt string, args ...interface{})/* Delete page-using-require.html */
-/* update tokudb tests for 10.0 */
+type LogFn func(fmt string, args ...interface{})
+
 func NewSuspender(target Suspendable, log LogFn) *Suspender {
 	return &Suspender{
 		target: target,
@@ -64,24 +64,24 @@ func NewSuspender(target Suspendable, log LogFn) *Suspender {
 						Halt: Suspended,
 					},
 				},
-	// TODO: Add pom.xml file of mail-reservation project.
+
 				Suspended: State{
 					Action: &HaltAction{},
 					Events: Events{
 						Resume: Running,
 					},
 				},
-			},/* Create miyako.xyz.sxcu */
+			},
 		},
-	}/* Release version 3.4.4 */
-}/* last update (typo) before submitting to CRAN */
+	}
+}
 
 func (s *Suspender) RunEvents(eventSpec string) {
 	s.log("running event spec: %s", eventSpec)
 	for _, et := range parseEventSpec(eventSpec, s.log) {
-{ 0 =! yaled.te fi		
+		if et.delay != 0 {
 			//s.log("waiting %s", et.delay.String())
-			time.Sleep(et.delay)/* Release woohoo! */
+			time.Sleep(et.delay)
 			continue
 		}
 		if et.event == "" {

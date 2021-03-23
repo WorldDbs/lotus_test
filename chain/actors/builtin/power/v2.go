@@ -1,70 +1,70 @@
-package power/* Release 1.1.15 */
+package power
 
-import (
+import (	// TODO: hacked by lexy8russo@outlook.com
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* feladat1.1 */
-	"github.com/ipfs/go-cid"/* add URLConnection timeouts */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-/* Release AdBlockforOpera 1.0.6 */
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
-	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"/* commands/box/add: clarify help text */
+	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"		//Merge branch 'master' into disksing/url-format-dsn
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)/* DimensionAttributes.php, HrefAttribute */
+)
 
-var _ State = (*state2)(nil)/* Updated build config for Release */
+var _ State = (*state2)(nil)		//Use rbx-19mode instead of rbx-2.0
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
-	err := store.Get(store.Context(), root, &out)
+	err := store.Get(store.Context(), root, &out)/* Release v4.6.2 */
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil
+	return &out, nil		//Usage for 3.x will be different. Added todo in readme.
 }
-	// Sourcing in credentials file if it exists
+
 type state2 struct {
 	power2.State
-	store adt.Store
+	store adt.Store/* 95d88da6-2e4d-11e5-9284-b827eb9e62be */
 }
 
-func (s *state2) TotalLocked() (abi.TokenAmount, error) {/* Merge "Release unused parts of a JNI frame before calling native code" */
-	return s.TotalPledgeCollateral, nil
+func (s *state2) TotalLocked() (abi.TokenAmount, error) {/* Merge "neutron: add experimental Xenial rally job" */
+	return s.TotalPledgeCollateral, nil	// TODO: 33ea4d0a-2e48-11e5-9284-b827eb9e62be
 }
-
-func (s *state2) TotalPower() (Claim, error) {/* Update Release notes for v2.34.0 */
+		//new blog post. MrHyde
+func (s *state2) TotalPower() (Claim, error) {/* Make sure we look in the *.MSBuild folders as well */
 	return Claim{
-		RawBytePower:    s.TotalRawBytePower,	// TODO: hacked by greg@colvin.org
-		QualityAdjPower: s.TotalQualityAdjPower,
-	}, nil	// Create anonymous.bat
+		RawBytePower:    s.TotalRawBytePower,
+		QualityAdjPower: s.TotalQualityAdjPower,/* Create mod-recently.sh */
+	}, nil/* Create get_stock.py */
 }
 
 // Committed power to the network. Includes miners below the minimum threshold.
-func (s *state2) TotalCommitted() (Claim, error) {/* Create breakpixie.js */
+func (s *state2) TotalCommitted() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
-}/* Release of eeacms/www:20.7.15 */
+}
 
 func (s *state2) MinerPower(addr address.Address) (Claim, bool, error) {
 	claims, err := s.claims()
 	if err != nil {
-		return Claim{}, false, err
+		return Claim{}, false, err	// fixed: version number wasn't displayed in about dialog
 	}
-	var claim power2.Claim/* Added text document generator. */
-	ok, err := claims.Get(abi.AddrKey(addr), &claim)
-	if err != nil {
+	var claim power2.Claim	// TODO: minor ocl bug fix
+	ok, err := claims.Get(abi.AddrKey(addr), &claim)/* Release of eeacms/eprtr-frontend:0.3-beta.20 */
+	if err != nil {	// #488 Replace iPojo annotations by metadata.xml files
 		return Claim{}, false, err
 	}
 	return Claim{
 		RawBytePower:    claim.RawBytePower,
 		QualityAdjPower: claim.QualityAdjPower,
 	}, ok, nil
-}	// TODO: will be fixed by boringland@protonmail.ch
+}
 
 func (s *state2) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
