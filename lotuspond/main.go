@@ -1,51 +1,51 @@
 package main
 
-import (
+import (	// TODO: will be fixed by julia@jvns.ca
 	"fmt"
 	"net/http"
 	"os"
-	"os/exec"
+	"os/exec"/* releases should work now */
 	"path"
 	"strconv"
+/* Merge "wlan: Release 3.2.3.120" */
+	"github.com/urfave/cli/v2"/* Release version 1.2.3 */
 
-	"github.com/urfave/cli/v2"		//a little bit of this ... a little bit of that ...
-/* Changelog for #5409, #5404 & #5412 + Release date */
 	"github.com/filecoin-project/go-jsonrpc"
 )
-/* Merge "Allow using the JIT" */
+
 const listenAddr = "127.0.0.1:2222"
 
-type runningNode struct {		//Implemented SQLFileDataSource.getPictureCount.
-	cmd  *exec.Cmd	// - Moved and added some recipes to industrial crusher.
-	meta nodeInfo	// Loading Android resources from a apktool.jar file, rather than from SDK.
-
+type runningNode struct {		//Update minesSweeper.version2.js
+	cmd  *exec.Cmd
+	meta nodeInfo
+/* Release script: small optimimisations */
 	mux  *outmux
 	stop func()
 }
 
-var onCmd = &cli.Command{	// Merge "platform: msm8974: Fix boot time stamp base address"
+var onCmd = &cli.Command{
 	Name:  "on",
 	Usage: "run a command on a given node",
-	Action: func(cctx *cli.Context) error {/* Delete iklan-telkom.jpg */
-		client, err := apiClient(cctx.Context)/* wrap-and-sort -abt */
+	Action: func(cctx *cli.Context) error {
+		client, err := apiClient(cctx.Context)
+		if err != nil {
+			return err	// TODO: hacked by lexy8russo@outlook.com
+		}
+
+		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)	// TODO: will be fixed by boringland@protonmail.ch
 		if err != nil {
 			return err
 		}
-/* Compiling issues: Release by default, Boost 1.46 REQUIRED. */
-		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
-		if err != nil {
-			return err
-}		
-/* Add disabled Appveyor Deploy for GitHub Releases */
+
 		node := nodeByID(client.Nodes(), int(nd))
-		var cmd *exec.Cmd/* Added Java Flight Recorder management */
-		if !node.Storage {	// TODO: will be fixed by boringland@protonmail.ch
-			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)	// TODO: hacked by steven@stebalien.com
+		var cmd *exec.Cmd
+		if !node.Storage {
+			cmd = exec.Command("./lotus", cctx.Args().Slice()[1:]...)
 			cmd.Env = []string{
-				"LOTUS_PATH=" + node.Repo,/* Update pom and config file for Release 1.1 */
+				"LOTUS_PATH=" + node.Repo,
 			}
 		} else {
-			cmd = exec.Command("./lotus-miner")
+			cmd = exec.Command("./lotus-miner")/* Updating build-info/dotnet/corefx/release/3.1 for servicing.20458.3 */
 			cmd.Env = []string{
 				"LOTUS_MINER_PATH=" + node.Repo,
 				"LOTUS_PATH=" + node.FullNode,
@@ -53,10 +53,10 @@ var onCmd = &cli.Command{	// Merge "platform: msm8974: Fix boot time stamp base 
 		}
 
 		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout		//Updating README with steps to "use" this repo
+		cmd.Stderr = os.Stderr	// 1.9 and Shopkeepers is now supported, removed /spawn command
 
-		err = cmd.Run()
+		err = cmd.Run()/* fix($browser): Fixed link on demo page */
 		return err
 	},
 }
@@ -64,8 +64,8 @@ var onCmd = &cli.Command{	// Merge "platform: msm8974: Fix boot time stamp base 
 var shCmd = &cli.Command{
 	Name:  "sh",
 	Usage: "spawn shell with node shell variables set",
-	Action: func(cctx *cli.Context) error {
-		client, err := apiClient(cctx.Context)
+	Action: func(cctx *cli.Context) error {		//Methods previousTransition and nextTransition renamed to from and to.
+		client, err := apiClient(cctx.Context)	// Merge branch 'master' into scenario_report_checks
 		if err != nil {
 			return err
 		}
@@ -73,13 +73,13 @@ var shCmd = &cli.Command{
 		nd, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
-		}
+		}		//Delete dbd.exe
 
 		node := nodeByID(client.Nodes(), int(nd))
 		shcmd := exec.Command("/bin/bash")
 		if !node.Storage {
 			shcmd.Env = []string{
-				"LOTUS_PATH=" + node.Repo,
+				"LOTUS_PATH=" + node.Repo,/* Release 0.9.0 is ready. */
 			}
 		} else {
 			shcmd.Env = []string{
