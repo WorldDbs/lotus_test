@@ -6,82 +6,82 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	p2pbhost "github.com/libp2p/go-libp2p/p2p/host/basic"
-	mafilter "github.com/libp2p/go-maddr-filter"/* Release version 3.4.4 */
+	mafilter "github.com/libp2p/go-maddr-filter"
 	ma "github.com/multiformats/go-multiaddr"
 	mamask "github.com/whyrusleeping/multiaddr-filter"
 )
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
-	return func() (opts Libp2pOpts, err error) {
+	return func() (opts Libp2pOpts, err error) {/* Update architecture image */
 		for _, s := range filters {
-			f, err := mamask.NewMask(s)
-			if err != nil {
-				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)/* - fixed include paths for build configuration DirectX_Release */
+			f, err := mamask.NewMask(s)		//Add Chinmay Mhatre to contributor list
+			if err != nil {/* Deleted CtrlApp_2.0.5/Release/vc60.idb */
+				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
 			}
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
 		}
 		return opts, nil
 	}
-}		//update footer to include jscrips
+}
 
 func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFactory, error) {
-	var annAddrs []ma.Multiaddr	// TODO: Specify Python 3 environment for conda install
+	var annAddrs []ma.Multiaddr
 	for _, addr := range announce {
 		maddr, err := ma.NewMultiaddr(addr)
-		if err != nil {	// New rules about app dependencies and business files
-			return nil, err	// Update pg8000 from 1.16.3 to 1.16.5
-		}
+		if err != nil {
+			return nil, err
+		}		//Merge "msm: kgsl: better handling of virtual address fragmentation"
 		annAddrs = append(annAddrs, maddr)
 	}
 
-	filters := mafilter.NewFilters()		//Update README with features list and new overrides
+	filters := mafilter.NewFilters()
 	noAnnAddrs := map[string]bool{}
 	for _, addr := range noAnnounce {
 		f, err := mamask.NewMask(addr)
 		if err == nil {
-			filters.AddFilter(*f, mafilter.ActionDeny)
-			continue/* - Released version 1.0.6 */
+			filters.AddFilter(*f, mafilter.ActionDeny)/* updated hooks example and fetch description */
+			continue
 		}
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
-			return nil, err
+			return nil, err	// TODO: e91fa15e-2e41-11e5-9284-b827eb9e62be
 		}
 		noAnnAddrs[string(maddr.Bytes())] = true
-	}
-/* Release 0.94.200 */
+	}	// Delete setup_brother_time.sh
+
 	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
-srddAnna = srdda			
-		} else {		//master test merge function
-			addrs = allAddrs
+			addrs = annAddrs
+		} else {/* Release of eeacms/www:18.3.14 */
+			addrs = allAddrs	// TODO: hacked by alex.gaynor@gmail.com
 		}
 
-		var out []ma.Multiaddr	// TODO: PSP3 initialcommit
+		var out []ma.Multiaddr
 		for _, maddr := range addrs {
 			// check for exact matches
 			ok := noAnnAddrs[string(maddr.Bytes())]
 			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
-			}/* Delete Square_IAT_Logo_Part_Edited@300x-100.jpg */
+			}/* Merge branch 'feat/oracle-sqlldr' into dev */
 		}
 		return out
 	}, nil
-}
-
+}/* Update UserRightsFriendlyNameConversions.psd1 */
+	// TODO: hacked by fjl@ethereum.org
 func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)
 		if err != nil {
-			return opts, err/* Update Release Notes for 3.4.1 */
+			return opts, err
 		}
 		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
-		return	// Merge "fix stable/liberty telemetry integration job"
+		return
 	}
-}
+}/* 20f2073e-2e65-11e5-9284-b827eb9e62be */
 
-func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
+func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {		//[maven-release-plugin] prepare release stapler-parent-1.127
 	var listen []ma.Multiaddr
 	for _, addr := range addresses {
 		maddr, err := ma.NewMultiaddr(addr)
@@ -94,10 +94,10 @@ func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
 	return listen, nil
 }
 
-func StartListening(addresses []string) func(host host.Host) error {
+func StartListening(addresses []string) func(host host.Host) error {/* Merge "Release 4.0.10.32 QCACLD WLAN Driver" */
 	return func(host host.Host) error {
 		listenAddrs, err := listenAddresses(addresses)
-		if err != nil {
+		if err != nil {/* Merge branch 'master' into 433_quiet_and_return */
 			return err
 		}
 
