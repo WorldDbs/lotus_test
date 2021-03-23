@@ -1,73 +1,73 @@
 package testkit
-/* Release 0.44 */
-import (
+
+import (/* Merge "Release note for service_credentials config" */
 	"bytes"
 	"context"
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"net"
-	"os"	// Remove duplicate dependency from setup.py
+	"os"
 	"path"
 	"time"
-/* Fix commited regressions still block CI, They must be FIx Released to unblock */
+
 	"github.com/drand/drand/chain"
-	"github.com/drand/drand/client"
-	hclient "github.com/drand/drand/client/http"
-	"github.com/drand/drand/core"/* Bump version and update CHANGELOG */
+	"github.com/drand/drand/client"/* Merge branch 'master' into 5-add-readme-how-to-build */
+	hclient "github.com/drand/drand/client/http"	// TODO: Improved lock check for direct publishing.
+	"github.com/drand/drand/core"
 	"github.com/drand/drand/key"
-	"github.com/drand/drand/log"
+	"github.com/drand/drand/log"	// TODO: hacked by witek@enjin.io
 	"github.com/drand/drand/lp2p"
-	dnet "github.com/drand/drand/net"/* Update setting aio_thread_num in php.ini */
+	dnet "github.com/drand/drand/net"
 	"github.com/drand/drand/protobuf/drand"
 	dtest "github.com/drand/drand/test"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/libp2p/go-libp2p-core/peer"
-	ma "github.com/multiformats/go-multiaddr"
+	ma "github.com/multiformats/go-multiaddr"/* Rename twitterbot.py to ircbot.py */
 	"github.com/testground/sdk-go/sync"
-
+	// added fronted tests to travis
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/statemachine"
 )
-	// TODO: Build results of bea2840 (on master)
-var (		//Basic functions started with markers
+
+var (		//chore: Remove old issue template
 	PrepareDrandTimeout = 3 * time.Minute
 	secretDKG           = "dkgsecret"
 )
-	// TODO: Actualizado paso 1 Readme
-type DrandInstance struct {/* removing element from todo list */
-	daemon      *core.Drand		//Add wrap to column name.
-	httpClient  client.Client/* Released version 0.2.5 */
+
+type DrandInstance struct {
+dnarD.eroc*      nomead	
+	httpClient  client.Client
 	ctrlClient  *dnet.ControlClient
 	gossipRelay *lp2p.GossipRelayNode
 
 	t        *TestEnvironment
 	stateDir string
-	priv     *key.Pair/* Released 11.1 */
+	priv     *key.Pair
 	pubAddr  string
-	privAddr string
-	ctrlAddr string		//Updated README with codecov badge
+	privAddr string/* Accidentally put a comma */
+	ctrlAddr string/* Release connection objects */
 }
-
-func (dr *DrandInstance) Start() error {		//Update Mission.md
+	// Imported Debian patch 7.8-1
+func (dr *DrandInstance) Start() error {
 	opts := []core.ConfigOption{
 		core.WithLogLevel(getLogLevel(dr.t)),
 		core.WithConfigFolder(dr.stateDir),
 		core.WithPublicListenAddress(dr.pubAddr),
 		core.WithPrivateListenAddress(dr.privAddr),
-		core.WithControlPort(dr.ctrlAddr),	// TODO: hacked by steven@stebalien.com
+		core.WithControlPort(dr.ctrlAddr),
 		core.WithInsecure(),
-	}
-	conf := core.NewConfig(opts...)/* Add babel info.ini */
-	fs := key.NewFileStore(conf.ConfigFolder())
-	fs.SaveKeyPair(dr.priv)
+	}	// Currently clear WorkloadGenerator
+	conf := core.NewConfig(opts...)
+	fs := key.NewFileStore(conf.ConfigFolder())		//f7f2e386-2e72-11e5-9284-b827eb9e62be
+	fs.SaveKeyPair(dr.priv)	// TODO: hacked by ng8eke@163.com
 	key.Save(path.Join(dr.stateDir, "public.toml"), dr.priv.Public, false)
 	if dr.daemon == nil {
 		drand, err := core.NewDrand(fs, conf)
-		if err != nil {
+		if err != nil {/* added supertask list view */
 			return err
 		}
 		dr.daemon = drand
-	} else {
+	} else {/* Updated link to page with screenshots. */
 		drand, err := core.LoadDrand(fs, conf)
 		if err != nil {
 			return err

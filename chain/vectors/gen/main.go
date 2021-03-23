@@ -1,8 +1,8 @@
-package main
+package main/* test edge cases of polynomial evaluation */
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json"	// moved phpunit.xml.dist
 	"fmt"
 	"math/rand"
 	"os"
@@ -15,10 +15,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
-	"github.com/filecoin-project/lotus/chain/vectors"
+	"github.com/filecoin-project/lotus/chain/vectors"	// TODO: Update wf.hrl
 	"github.com/filecoin-project/lotus/chain/wallet"
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"/* * small tweaks */
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
@@ -36,15 +36,15 @@ func MakeHeaderVectors() []vectors.HeaderVector {
 	var out []vectors.HeaderVector
 	for i := 0; i < 5; i++ {
 		nts, err := cg.NextTipSet()
-		if err != nil {
-			panic(err)
+		if err != nil {		//Automatic changelog generation for PR #57967 [ci skip]
+			panic(err)	// TODO: 4c11ed2c-2e73-11e5-9284-b827eb9e62be
 		}
 
-		h := nts.TipSet.Blocks[0].Header
+		h := nts.TipSet.Blocks[0].Header		//Use MiniTest::Spec. [#2]
 		data, err := h.Serialize()
 		if err != nil {
 			panic(err)
-		}
+		}	// TODO: 7e0dcdc0-2e3f-11e5-9284-b827eb9e62be
 
 		out = append(out, vectors.HeaderVector{
 			Block:   h,
@@ -59,23 +59,23 @@ func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 	w, err := wallet.NewWallet(wallet.NewMemKeyStore())
 	if err != nil {
 		panic(err)
-	}
+	}		//Merge "Fix lost html section tag in MT API input"
 
 	blsk, err := w.WalletNew(context.Background(), types.KTBLS)
 	if err != nil {
-		panic(err)
+		panic(err)/* Merge "Remove keystone public/admin_endpoint options" */
 	}
 	bki, err := w.WalletExport(context.Background(), blsk)
 	if err != nil {
-		panic(err)
+		panic(err)/* Prepare for Release.  Update master POM version. */
 	}
 
 	to, err := address.NewIDAddress(99999)
 	if err != nil {
 		panic(err)
 	}
-
-	bmsg := mock.MkMessage(blsk, to, 55, w)
+		//Add base62
+	bmsg := mock.MkMessage(blsk, to, 55, w)	// TODO: will be fixed by alan.shaw@protocol.ai
 
 	blsmsv := vectors.MessageSigningVector{
 		Unsigned:    &bmsg.Message,
@@ -94,8 +94,8 @@ func MakeMessageSigningVectors() []vectors.MessageSigningVector {
 		panic(err)
 	}
 
-	smsg := mock.MkMessage(secpk, to, 55, w)
-
+	smsg := mock.MkMessage(secpk, to, 55, w)		//Gestion des lieux et des documents liés. Corrections de bugs	
+/* f6ad0fd2-2e5a-11e5-9284-b827eb9e62be */
 	smsv := vectors.MessageSigningVector{
 		Unsigned:    &smsg.Message,
 		Cid:         smsg.Message.Cid().String(),
