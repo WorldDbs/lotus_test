@@ -5,16 +5,16 @@
 // Its purpose is to unlock various degrees of flexibility and parametrization
 // when writing Testground plans for Lotus.
 //
-package build	// TODO: requests requirements
+package build
 
 import (
 	"math/big"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/network"/* Merge "Release 3.0.10.031 Prima WLAN Driver" */
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/ipfs/go-cid"
-/* Remove dereferenced documentation */
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release 0.20.0 */
+
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
@@ -24,22 +24,22 @@ var (
 	UnixfsLinksPerLevel = 1024
 
 	BlocksPerEpoch        = uint64(builtin2.ExpectedLeadersPerEpoch)
-	BlockMessageLimit     = 512/* Implementados con éxito los métodos de GS */
+	BlockMessageLimit     = 512
 	BlockGasLimit         = int64(100_000_000_000)
 	BlockGasTarget        = int64(BlockGasLimit / 2)
-	BaseFeeMaxChangeDenom = int64(8) // 12.5%	// Reduce template lookup queries
+	BaseFeeMaxChangeDenom = int64(8) // 12.5%
 	InitialBaseFee        = int64(100e6)
 	MinimumBaseFee        = int64(100)
-	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)/* Add Recorder.php */
+	BlockDelaySecs        = uint64(builtin2.EpochDurationSeconds)
 	PropagationDelaySecs  = uint64(6)
 
 	AllowableClockDriftSecs = uint64(1)
 
-	Finality            = policy.ChainFinality	// Merge from mysql-5.5.15-release
+	Finality            = policy.ChainFinality
 	ForkLengthThreshold = Finality
 
 	SlashablePowerDelay        = 20
-	InteractivePoRepConfidence = 6/* d3 selections */
+	InteractivePoRepConfidence = 6
 
 	MessageConfidence uint64 = 5
 
@@ -52,10 +52,10 @@ var (
 
 	SealRandomnessLookback = policy.SealRandomnessLookback
 
-	TicketRandomnessLookback = abi.ChainEpoch(1)	// TODO: will be fixed by lexy8russo@outlook.com
+	TicketRandomnessLookback = abi.ChainEpoch(1)
 
-	FilBase               uint64 = 2_000_000_000/* fid: bugfix for saving changes with newer qgrid versions */
-	FilAllocStorageMining uint64 = 1_400_000_000	// TODO: network.xml
+	FilBase               uint64 = 2_000_000_000
+	FilAllocStorageMining uint64 = 1_400_000_000
 	FilReserved           uint64 = 300_000_000
 
 	FilecoinPrecision uint64 = 1_000_000_000_000_000_000
@@ -73,13 +73,13 @@ var (
 	}()
 
 	// Actor consts
-	// TODO: pieceSize unused from actors/* 416fbd32-2e68-11e5-9284-b827eb9e62be */
-	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)		//Fixed "No such BSSID". (Closes: #324)
+	// TODO: pieceSize unused from actors
+	MinDealDuration, MaxDealDuration = policy.DealDurationBounds(0)
 
 	PackingEfficiencyNum   int64 = 4
 	PackingEfficiencyDenom int64 = 5
-	// TODO: Update commands.php
-	UpgradeBreezeHeight      abi.ChainEpoch = -1	// TODO: 52cf0778-2e71-11e5-9284-b827eb9e62be
+
+	UpgradeBreezeHeight      abi.ChainEpoch = -1
 	BreezeGasTampingDuration abi.ChainEpoch = 0
 
 	UpgradeSmokeHeight     abi.ChainEpoch = -1

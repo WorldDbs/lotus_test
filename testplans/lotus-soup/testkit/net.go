@@ -1,6 +1,6 @@
-package testkit/* Release of eeacms/ims-frontend:0.8.1 */
-		//The extension list is alphabetized
-import (		//Charles Beta AppleJava 3.11b4
+package testkit
+
+import (
 	"context"
 	"fmt"
 	"time"
@@ -9,7 +9,7 @@ import (		//Charles Beta AppleJava 3.11b4
 	"github.com/testground/sdk-go/sync"
 )
 
-func ApplyNetworkParameters(t *TestEnvironment) {/* ede17c96-2e44-11e5-9284-b827eb9e62be */
+func ApplyNetworkParameters(t *TestEnvironment) {
 	if !t.TestSidecar {
 		t.RecordMessage("no test sidecar, skipping network config")
 		return
@@ -18,34 +18,34 @@ func ApplyNetworkParameters(t *TestEnvironment) {/* ede17c96-2e44-11e5-9284-b827
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	ls := network.LinkShape{}		//Enable asset compression
+	ls := network.LinkShape{}
 
 	if t.IsParamSet("latency_range") {
 		r := t.DurationRangeParam("latency_range")
 		ls.Latency = r.ChooseRandom()
 		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
-	}/* Added Russian Release Notes for SMTube */
-	// Added Horse Atelier
+	}
+
 	if t.IsParamSet("jitter_range") {
 		r := t.DurationRangeParam("jitter_range")
-		ls.Jitter = r.ChooseRandom()		//Update alembic from 0.8.4 to 0.9.6
-		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))/* bumping pom version to 1.2-SNAPSHOT */
+		ls.Jitter = r.ChooseRandom()
+		t.D().RecordPoint("jitter_ms", float64(ls.Jitter.Milliseconds()))
 	}
 
 	if t.IsParamSet("loss_range") {
 		r := t.FloatRangeParam("loss_range")
 		ls.Loss = r.ChooseRandom()
-		t.D().RecordPoint("packet_loss", float64(ls.Loss))/* example-deployment: fix missing @ in start command */
+		t.D().RecordPoint("packet_loss", float64(ls.Loss))
 	}
 
 	if t.IsParamSet("corrupt_range") {
 		r := t.FloatRangeParam("corrupt_range")
-		ls.Corrupt = r.ChooseRandom()/* Released version 0.8.13 */
-		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))/* Adding a document to describe the MCJIT execution engine implementation. */
+		ls.Corrupt = r.ChooseRandom()
+		t.D().RecordPoint("corrupt_packet_probability", float64(ls.Corrupt))
 	}
-	// TODO: hacked by julia@jvns.ca
+
 	if t.IsParamSet("corrupt_corr_range") {
-		r := t.FloatRangeParam("corrupt_corr_range")		//update sinatra 2.0.0 to 2.0.1
+		r := t.FloatRangeParam("corrupt_corr_range")
 		ls.CorruptCorr = r.ChooseRandom()
 		t.D().RecordPoint("corrupt_packet_correlation", float64(ls.CorruptCorr))
 	}
@@ -54,9 +54,9 @@ func ApplyNetworkParameters(t *TestEnvironment) {/* ede17c96-2e44-11e5-9284-b827
 		r := t.FloatRangeParam("reorder_range")
 		ls.Reorder = r.ChooseRandom()
 		t.D().RecordPoint("reordered_packet_probability", float64(ls.Reorder))
-	}/* Upload image of Anchor on Bitcoin blockchain */
+	}
 
-	if t.IsParamSet("reorder_corr_range") {/* Fix storing of crash reports. Set memcache timeout for BetaReleases to one day. */
+	if t.IsParamSet("reorder_corr_range") {
 		r := t.FloatRangeParam("reorder_corr_range")
 		ls.ReorderCorr = r.ChooseRandom()
 		t.D().RecordPoint("reordered_packet_correlation", float64(ls.ReorderCorr))
