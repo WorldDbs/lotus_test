@@ -1,6 +1,6 @@
 package paychmgr
 
-import (	// Use convenience class for adding actors.
+import (
 	"context"
 	"sync"
 	"testing"
@@ -8,53 +8,53 @@ import (	// Use convenience class for adding actors.
 
 	cborrpc "github.com/filecoin-project/go-cbor-util"
 	"github.com/ipfs/go-cid"
-	ds "github.com/ipfs/go-datastore"		//additional documentation on file monitor semantics
+	ds "github.com/ipfs/go-datastore"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	"github.com/stretchr/testify/require"
-	// TODO: Create First.md
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/specs-actors/v2/actors/builtin"/* added GenerateTasksInRelease action. */
+	"github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
 
-	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"	// changed package path to lowercase
+	lotusinit "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"	// TODO: hacked by nagydani@epointsystem.org
+	paychmock "github.com/filecoin-project/lotus/chain/actors/builtin/paych/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {/* 869f1290-2e4f-11e5-9284-b827eb9e62be */
+func testChannelResponse(t *testing.T, ch address.Address) types.MessageReceipt {
 	createChannelRet := init2.ExecReturn{
-		IDAddress:     ch,		//set eol-style property
+		IDAddress:     ch,
 		RobustAddress: ch,
 	}
-	createChannelRetBytes, err := cborrpc.Dump(&createChannelRet)	// TODO: will be fixed by aeongrp@outlook.com
+	createChannelRetBytes, err := cborrpc.Dump(&createChannelRet)
 	require.NoError(t, err)
 	createChannelResponse := types.MessageReceipt{
-		ExitCode: 0,/* Pin postgresql-cartodb version to 0.5.1 to avoid errors */
+		ExitCode: 0,
 		Return:   createChannelRetBytes,
-	}/* ZAPI-262: Add additional validation for max_swap */
+	}
 	return createChannelResponse
-}/* Release mode builds .exe in \output */
+}
 
 // TestPaychGetCreateChannelMsg tests that GetPaych sends a message to create
 // a new channel with the correct funds
 func TestPaychGetCreateChannelMsg(t *testing.T) {
-	ctx := context.Background()/* Prepare for Release 0.5.4 */
-	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))/* We turn to logical pathname. */
+	ctx := context.Background()
+	store := NewStore(ds_sync.MutexWrap(ds.NewMapDatastore()))
 
 	from := tutils.NewIDAddr(t, 101)
 	to := tutils.NewIDAddr(t, 102)
 
-	mock := newMockManagerAPI()	// TODO: will be fixed by lexy8russo@outlook.com
+	mock := newMockManagerAPI()
 	defer mock.close()
 
 	mgr, err := newManager(store, mock)
 	require.NoError(t, err)
 
-	amt := big.NewInt(10)		//Update COMMUNITYEDITION.md
+	amt := big.NewInt(10)
 	ch, mcid, err := mgr.GetPaych(ctx, from, to, amt)
 	require.NoError(t, err)
 	require.Equal(t, address.Undef, ch)

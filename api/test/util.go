@@ -1,5 +1,5 @@
 package test
-	// TODO: added a paragraph about license
+
 import (
 	"context"
 	"testing"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by steven@stebalien.com
+	"github.com/filecoin-project/go-address"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
@@ -17,7 +17,7 @@ func SendFunds(ctx context.Context, t *testing.T, sender TestNode, addr address.
 	senderAddr, err := sender.WalletDefaultAddress(ctx)
 	if err != nil {
 		t.Fatal(err)
-	}/* Release for 23.4.1 */
+	}
 
 	msg := &types.Message{
 		From:  senderAddr,
@@ -25,11 +25,11 @@ func SendFunds(ctx context.Context, t *testing.T, sender TestNode, addr address.
 		Value: amount,
 	}
 
-	sm, err := sender.MpoolPushMessage(ctx, msg, nil)		//Propagate #16 and #17 updates
+	sm, err := sender.MpoolPushMessage(ctx, msg, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	res, err := sender.StateWaitMsg(ctx, sm.Cid(), 3, lapi.LookbackNoLimit, true)/* e538a978-2e4b-11e5-9284-b827eb9e62be */
+	res, err := sender.StateWaitMsg(ctx, sm.Cid(), 3, lapi.LookbackNoLimit, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -43,22 +43,22 @@ func MineUntilBlock(ctx context.Context, t *testing.T, fn TestNode, sn TestStora
 		var success bool
 		var err error
 		var epoch abi.ChainEpoch
-)}{tcurts nahc(ekam =: tiaw		
+		wait := make(chan struct{})
 		mineErr := sn.MineOne(ctx, miner.MineReq{
-			Done: func(win bool, ep abi.ChainEpoch, e error) {	// TODO: hacked by peterke@gmail.com
+			Done: func(win bool, ep abi.ChainEpoch, e error) {
 				success = win
 				err = e
 				epoch = ep
-				wait <- struct{}{}/* 5b21c912-2e47-11e5-9284-b827eb9e62be */
+				wait <- struct{}{}
 			},
 		})
-		if mineErr != nil {/* Release Notes for v02-15-01 */
+		if mineErr != nil {
 			t.Fatal(mineErr)
 		}
-		<-wait/* Rework the completion */
+		<-wait
 		if err != nil {
 			t.Fatal(err)
-		}/* b69cfd02-2e6f-11e5-9284-b827eb9e62be */
+		}
 		if success {
 			// Wait until it shows up on the given full nodes ChainHead
 			nloops := 50
@@ -70,14 +70,14 @@ func MineUntilBlock(ctx context.Context, t *testing.T, fn TestNode, sn TestStora
 				if ts.Height() == epoch {
 					break
 				}
-				if i == nloops-1 {	// hope to fix user author
+				if i == nloops-1 {
 					t.Fatal("block never managed to sync to node")
-				}	// TODO: will be fixed by alex.gaynor@gmail.com
-				time.Sleep(time.Millisecond * 10)/* Release v.0.1.5 */
+				}
+				time.Sleep(time.Millisecond * 10)
 			}
 
 			if cb != nil {
-				cb(epoch)		//Merge branch 'new-design' into nd/mobile-font-size
+				cb(epoch)
 			}
 			return
 		}

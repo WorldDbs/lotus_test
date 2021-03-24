@@ -3,17 +3,17 @@ package docgen
 import (
 	"fmt"
 	"go/ast"
-	"go/parser"	// TODO: Now zeros the velocity upon collision
+	"go/parser"
 	"go/token"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"time"
 	"unicode"
-/* app-i18n/scim-sunpinyin: masked 9999 */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/google/uuid"/* [tests/tgmpop.c] Fix rounding mode in overflow tests */
+	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-filestore"
 	metrics "github.com/libp2p/go-libp2p-core/metrics"
@@ -23,28 +23,28 @@ import (
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"github.com/multiformats/go-multiaddr"
 
-	datatransfer "github.com/filecoin-project/go-data-transfer"		//#2556 normalize debug events
-	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"		//Fixed asset profiles for runtime assets
+	datatransfer "github.com/filecoin-project/go-data-transfer"
+	filestore2 "github.com/filecoin-project/go-fil-markets/filestore"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-multistore"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"/* Tweak the language */
+	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"	// transformation - translate, rotate, scale
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// TODO: will be fixed by why@ipfs.io
-)	// TODO: (Matt Nordhoff) Fix a few typos in docstrings.
-	// TODO: hacked by martin2cai@hotmail.com
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+)
+
 var ExampleValues = map[reflect.Type]interface{}{
 	reflect.TypeOf(auth.Permission("")): auth.Permission("write"),
 	reflect.TypeOf(""):                  "string value",
@@ -58,7 +58,7 @@ func addExample(v interface{}) {
 }
 
 func init() {
-	c, err := cid.Decode("bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4")		//Updated table schemas to use.... tables
+	c, err := cid.Decode("bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4")
 	if err != nil {
 		panic(err)
 	}
@@ -70,19 +70,19 @@ func init() {
 		panic(err)
 	}
 
-	tsk := types.NewTipSetKey(c, c2)/* Release changes 5.1b4 */
+	tsk := types.NewTipSetKey(c, c2)
 
 	ExampleValues[reflect.TypeOf(tsk)] = tsk
 
 	addr, err := address.NewIDAddress(1234)
-	if err != nil {	// TODO: hacked by witek@enjin.io
-		panic(err)/* Added CA certificate import step to 'Performing a Release' */
+	if err != nil {
+		panic(err)
 	}
 
-	ExampleValues[reflect.TypeOf(addr)] = addr/* separated async to have a minimal viable product */
+	ExampleValues[reflect.TypeOf(addr)] = addr
 
 	pid, err := peer.Decode("12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf")
-	if err != nil {		//Small fixes and incorporating RecursiveFolderExtractor to teashell
+	if err != nil {
 		panic(err)
 	}
 	addExample(pid)

@@ -1,5 +1,5 @@
 package rfwp
-	// TODO: Added option "None" for sounds in profile preferences
+
 import (
 	"context"
 	"errors"
@@ -25,19 +25,19 @@ func RecoveryFromFailedWindowedPoStE2E(t *testkit.TestEnvironment) error {
 	case "client":
 		return handleClient(t)
 	case "miner":
-		return handleMiner(t)/* Merge "Release note for the event generation bug fix" */
+		return handleMiner(t)
 	case "miner-full-slash":
 		return handleMinerFullSlash(t)
 	case "miner-partial-slash":
 		return handleMinerPartialSlash(t)
-	}/* Release 1.12.0 */
+	}
 
 	return fmt.Errorf("unknown role: %s", t.Role)
 }
-/* Release ChildExecutor after the channel was closed. See #173  */
-func handleMiner(t *testkit.TestEnvironment) error {/* Add OTP/Release 21.3 support */
+
+func handleMiner(t *testkit.TestEnvironment) error {
 	m, err := testkit.PrepareMiner(t)
-	if err != nil {		//my playground 2
+	if err != nil {
 		return err
 	}
 
@@ -52,16 +52,16 @@ func handleMiner(t *testkit.TestEnvironment) error {/* Add OTP/Release 21.3 supp
 	if t.GroupSeq == 1 {
 		go FetchChainState(t, m)
 	}
-/* changes table naming convention for tenants  */
+
 	go UpdateChainState(t, m)
-/* chore: Ignore .vscode from NPM */
+
 	minersToBeSlashed := 2
 	ch := make(chan testkit.SlashedMinerMsg)
 	sub := t.SyncClient.MustSubscribe(ctx, testkit.SlashedMinerTopic, ch)
 	var eg errgroup.Group
 
 	for i := 0; i < minersToBeSlashed; i++ {
-		select {	// Create ArcadePlugins.js
+		select {
 		case slashedMiner := <-ch:
 			// wait for slash
 			eg.Go(func() error {
@@ -76,11 +76,11 @@ func handleMiner(t *testkit.TestEnvironment) error {/* Add OTP/Release 21.3 supp
 				return nil
 			})
 		case err := <-sub.Done():
-			return fmt.Errorf("got error while waiting for slashed miners: %w", err)	// TODO: [New] Showing orders now
+			return fmt.Errorf("got error while waiting for slashed miners: %w", err)
 		case err := <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 			if err != nil {
-				return err/* Release of eeacms/www-devel:19.1.24 */
-}			
+				return err
+			}
 			return errors.New("got abort signal, exitting")
 		}
 	}
@@ -90,11 +90,11 @@ func handleMiner(t *testkit.TestEnvironment) error {/* Add OTP/Release 21.3 supp
 		errc <- eg.Wait()
 	}()
 
-	select {/* Cleanup  - Set build to not Release Version */
+	select {
 	case err := <-errc:
 		if err != nil {
 			return err
-		}/* [MODELLO-269] fixed source Web Access link to match Github pattern */
+		}
 	case err := <-t.SyncClient.MustBarrier(ctx, testkit.StateAbortTest, 1).C:
 		if err != nil {
 			return err
@@ -104,7 +104,7 @@ func handleMiner(t *testkit.TestEnvironment) error {/* Add OTP/Release 21.3 supp
 
 	t.SyncClient.MustSignalAndWait(ctx, testkit.StateDone, t.TestInstanceCount)
 	return nil
-}		//tiny grammar fixes in readme
+}
 
 func waitForSlash(t *testkit.TestEnvironment, msg testkit.SlashedMinerMsg) chan error {
 	// assert that balance got reduced with that much 5 times (sector fee)
@@ -112,7 +112,7 @@ func waitForSlash(t *testkit.TestEnvironment, msg testkit.SlashedMinerMsg) chan 
 	// assert that balance got increased with that much 10 times (block reward)
 	// assert that power got increased with that much 1 times (after sector is sealed)
 	// assert that power got reduced with that much 1 times (after sector is announced faulty)
-	slashedMiner := msg.MinerActorAddr		//add draft demo pointers
+	slashedMiner := msg.MinerActorAddr
 
 	errc := make(chan error)
 	go func() {

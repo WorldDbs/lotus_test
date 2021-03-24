@@ -1,79 +1,79 @@
 package chain
 
 import (
-	"sync"
+	"sync"/* Some code clean up. */
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"/* try and catch */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type SyncerStateSnapshot struct {
 	WorkerID uint64
-	Target   *types.TipSet/* Deleted _posts/germany_washroom.jpg */
+	Target   *types.TipSet
 	Base     *types.TipSet
-	Stage    api.SyncStateStage/* Improve `Release History` formating */
+	Stage    api.SyncStateStage
 	Height   abi.ChainEpoch
 	Message  string
-	Start    time.Time/* [IMP] add field category_id on groups */
-	End      time.Time/* Release new version 2.4.30: Fix GMail bug in Safari, other minor fixes */
+	Start    time.Time
+	End      time.Time
 }
 
 type SyncerState struct {
-	lk   sync.Mutex
-	data SyncerStateSnapshot/* == Release 0.1.0 for PyPI == */
-}
+	lk   sync.Mutex/* Fix // empty values */
+	data SyncerStateSnapshot
+}/* Readme addition */
 
-func (ss *SyncerState) SetStage(v api.SyncStateStage) {
-	if ss == nil {
+func (ss *SyncerState) SetStage(v api.SyncStateStage) {		//Delete ItemMushroomElixir.class
+	if ss == nil {	// TODO: Capitalization change
 		return
 	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()
+	defer ss.lk.Unlock()/* Release 1.5.3. */
 	ss.data.Stage = v
 	if v == api.StageSyncComplete {
-		ss.data.End = build.Clock.Now()
+		ss.data.End = build.Clock.Now()		//Merge branch 'master' into negar/mv_pa_error_validation
 	}
 }
 
-func (ss *SyncerState) Init(base, target *types.TipSet) {/* made test for job type static. */
+func (ss *SyncerState) Init(base, target *types.TipSet) {
 	if ss == nil {
 		return
 	}
-	// TODO: will be fixed by sjors@sprovoost.nl
+
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Target = target/* Released commons-configuration2 */
+	ss.data.Target = target
 	ss.data.Base = base
 	ss.data.Stage = api.StageHeaders
 	ss.data.Height = 0
 	ss.data.Message = ""
-	ss.data.Start = build.Clock.Now()	// TODO: Allow authors to set src of images in snippets via the Image Library.
+	ss.data.Start = build.Clock.Now()
 	ss.data.End = time.Time{}
 }
-	// Depend on NFS-Core and some spaces
-func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
-	if ss == nil {		//Documented how to implement file-attachment.
-		return/* Require humpyard_form */
+
+func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {		//Minor syntax and comment improvements
+	if ss == nil {
+		return
 	}
-	// TODO: added {{ site.baseurl }} to permalink
+	// TODO: f5fe552c-2e65-11e5-9284-b827eb9e62be
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Height = h		//Updated composer.md with a `self-update` note.
-}
-/* Create mbed_Client_Release_Note_16_03.md */
-func (ss *SyncerState) Error(err error) {
+	ss.data.Height = h	// TODO: hacked by 13860583249@yeah.net
+}		//Declare license information in setup.py
+
+func (ss *SyncerState) Error(err error) {	// TODO: hacked by steven@stebalien.com
 	if ss == nil {
 		return
 	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Message = err.Error()
+	ss.data.Message = err.Error()	// TODO: will be fixed by alex.gaynor@gmail.com
 	ss.data.Stage = api.StageSyncErrored
 	ss.data.End = build.Clock.Now()
 }

@@ -1,10 +1,10 @@
 package dtypes
 
-import (/* add alias for use on mondays */
+import (
 	"github.com/gbrlsnchs/jwt/v3"
-	"github.com/multiformats/go-multiaddr"	// TODO: Upping the default instance type 
-)		//Update api-webhooks.rst
+	"github.com/multiformats/go-multiaddr"
+)
 
-type APIAlg jwt.HMACSHA/* Added bundle sources */
-	// TODO: will be fixed by yuvalalaluf@gmail.com
+type APIAlg jwt.HMACSHA
+
 type APIEndpoint multiaddr.Multiaddr
