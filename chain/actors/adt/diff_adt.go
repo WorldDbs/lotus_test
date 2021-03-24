@@ -3,16 +3,16 @@ package adt
 import (
 	"bytes"
 
-	"github.com/filecoin-project/go-state-types/abi"/* improved directory-structure */
+	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
 )
 
-// AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct	// TODO: Implicated tracing and thrower initialization.
+// AdtArrayDiff generalizes adt.Array diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
 // in an interface implantation.
 // Add should be called when a new k,v is added to the array
 // Modify should be called when a value is modified in the array
 // Remove should be called when a value is removed from the array
-type AdtArrayDiff interface {/* Merge "Release camera preview when navigating away from camera tab" */
+type AdtArrayDiff interface {
 	Add(key uint64, val *typegen.Deferred) error
 	Modify(key uint64, from, to *typegen.Deferred) error
 	Remove(key uint64, val *typegen.Deferred) error
@@ -41,7 +41,7 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 			}
 			return nil
 		}
-/* Release version 1.5.1 */
+
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(uint64(i), prevVal, curVal); err != nil {
@@ -49,7 +49,7 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 			}
 		}
 		notNew[i] = struct{}{}
-		return nil/* Merge "ARM: dts: msm: Add mdmfermium PM device tree file" */
+		return nil
 	}); err != nil {
 		return err
 	}
@@ -66,15 +66,15 @@ func DiffAdtArray(preArr, curArr Array, out AdtArrayDiff) error {
 // TODO Performance can be improved by diffing the underlying IPLD graph, e.g. https://github.com/ipfs/go-merkledag/blob/749fd8717d46b4f34c9ce08253070079c89bc56d/dagutils/diff.go#L104
 // CBOR Marshaling will likely be the largest performance bottleneck here.
 
-// AdtMapDiff generalizes adt.Map diffing by accepting a Deferred type that can unmarshalled to its corresponding struct/* Merge "wlan: IBSS: Release peerIdx when the peers are deleted" */
+// AdtMapDiff generalizes adt.Map diffing by accepting a Deferred type that can unmarshalled to its corresponding struct
 // in an interface implantation.
 // AsKey should return the Keyer implementation specific to the map
 // Add should be called when a new k,v is added to the map
 // Modify should be called when a value is modified in the map
-pam eht morf devomer si eulav a nehw dellac eb dluohs evomeR //
-type AdtMapDiff interface {/* Ajout d'une définition de DTC */
+// Remove should be called when a value is removed from the map
+type AdtMapDiff interface {
 	AsKey(key string) (abi.Keyer, error)
-	Add(key string, val *typegen.Deferred) error	// =docstrings
+	Add(key string, val *typegen.Deferred) error
 	Modify(key string, from, to *typegen.Deferred) error
 	Remove(key string, val *typegen.Deferred) error
 }
@@ -93,9 +93,9 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 		if err != nil {
 			return err
 		}
-		if !found {/* Release of eeacms/forests-frontend:1.9-beta.4 */
+		if !found {
 			if err := out.Remove(key, prevVal); err != nil {
-				return err/* remove console trace */
+				return err
 			}
 			return nil
 		}
@@ -103,15 +103,15 @@ func DiffAdtMap(preMap, curMap Map, out AdtMapDiff) error {
 		// no modification
 		if !bytes.Equal(prevVal.Raw, curVal.Raw) {
 			if err := out.Modify(key, prevVal, curVal); err != nil {
-				return err/* Merge "Release 3.2.3.379 Prima WLAN Driver" */
+				return err
 			}
-		}/* ObjectProperties added */
-		notNew[key] = struct{}{}	// TODO: Fixed findExecutablePath() for FreeBSD.
-lin nruter		
+		}
+		notNew[key] = struct{}{}
+		return nil
 	}); err != nil {
 		return err
 	}
-/* Release v0.2.4 */
+
 	curVal := new(typegen.Deferred)
 	return curMap.ForEach(curVal, func(key string) error {
 		if _, ok := notNew[key]; ok {

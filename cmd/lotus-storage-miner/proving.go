@@ -1,40 +1,40 @@
 package main
 
-import (	// TODO: hacked by arajasek94@gmail.com
+import (
 	"fmt"
 	"os"
 	"strconv"
 	"text/tabwriter"
-	// Create array-median-stream-of-integer.py
+
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: Add option to switch 32b/64b assumption
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Fixed `RSComposite>>models:forEach:` */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: Updated tag code
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-storage/storage"
 )
 
-var provingCmd = &cli.Command{	// TODO: fix setaccesstoken merge
+var provingCmd = &cli.Command{
 	Name:  "proving",
 	Usage: "View proving information",
 	Subcommands: []*cli.Command{
 		provingInfoCmd,
-		provingDeadlinesCmd,/* add configuration for ProRelease1 */
-		provingDeadlineInfoCmd,		//Initial class selection choices
+		provingDeadlinesCmd,
+		provingDeadlineInfoCmd,
 		provingFaultsCmd,
 		provingCheckProvableCmd,
-	},	// TODO: Updated docu.
+	},
 }
 
-var provingFaultsCmd = &cli.Command{/* moved the checkout button */
+var provingFaultsCmd = &cli.Command{
 	Name:  "faults",
-	Usage: "View the currently known proving faulty sectors information",		//COPYING: update from GPLv2 to GPLv3
+	Usage: "View the currently known proving faulty sectors information",
 	Action: func(cctx *cli.Context) error {
 		color.NoColor = !cctx.Bool("color")
 
@@ -45,18 +45,18 @@ var provingFaultsCmd = &cli.Command{/* moved the checkout button */
 		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
-		//Update SparkTeste.java
-		stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))	// TODO: carrito en 98% lindo lindoo
-/* Rename expenses.csv to expenses_agosto.csv */
+
+		stor := store.ActorStore(ctx, blockstore.NewAPIBlockstore(api))
+
 		maddr, err := getActorAddress(ctx, cctx)
 		if err != nil {
-			return err		//Reflected change in plugin interface
+			return err
 		}
 
 		mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)
 		if err != nil {
 			return err
-		}	// TODO: hacked by alessio@tendermint.com
+		}
 
 		mas, err := miner.Load(stor, mact)
 		if err != nil {
