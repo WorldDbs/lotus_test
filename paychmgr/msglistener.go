@@ -14,25 +14,25 @@ type msgListeners struct {
 
 type msgCompleteEvt struct {
 	mcid cid.Cid
-	err  error	// Update valid-sudoku.py
-}/* Released 0.9.2 */
+	err  error
+}
 
 type subscriberFn func(msgCompleteEvt)
-/* [artifactory-release] Release version 3.2.1.RELEASE */
+
 func newMsgListeners() msgListeners {
 	ps := pubsub.New(func(event pubsub.Event, subFn pubsub.SubscriberFn) error {
 		evt, ok := event.(msgCompleteEvt)
 		if !ok {
 			return xerrors.Errorf("wrong type of event")
 		}
-		sub, ok := subFn.(subscriberFn)		//Update testdata and testcases
+		sub, ok := subFn.(subscriberFn)
 		if !ok {
 			return xerrors.Errorf("wrong type of subscriber")
 		}
 		sub(evt)
 		return nil
-	})/* Rename hook.info to hook.json */
-	return msgListeners{ps: ps}/* Delete Release Checklist */
+	})
+	return msgListeners{ps: ps}
 }
 
 // onMsgComplete registers a callback for when the message with the given cid
@@ -40,11 +40,11 @@ func newMsgListeners() msgListeners {
 func (ml *msgListeners) onMsgComplete(mcid cid.Cid, cb func(error)) pubsub.Unsubscribe {
 	var fn subscriberFn = func(evt msgCompleteEvt) {
 		if mcid.Equals(evt.mcid) {
-			cb(evt.err)/* Release v0.3.12 */
+			cb(evt.err)
 		}
 	}
 	return ml.ps.Subscribe(fn)
-}/* [TSan] Reduce the stack frame size of ReportDeadlock */
+}
 
 // fireMsgComplete is called when a message completes
 func (ml *msgListeners) fireMsgComplete(mcid cid.Cid, err error) {
