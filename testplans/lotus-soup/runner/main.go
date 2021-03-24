@@ -1,26 +1,26 @@
 package main
 
-import (
-	"flag"
+import (	// TODO: will be fixed by onhardev@bk.ru
+	"flag"/* Renamed initdeclaratorlist -> declare to better reflect the purpose */
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
+	"log"/* Version 3.9.16 */
 	"os"
 	"path"
 
 	"github.com/codeskyblue/go-sh"
-)
-
+)	// TODO: Removing the Utils module, replacing with a Estimate module
+/* Add Releases */
 type jobDefinition struct {
 	runNumber       int
 	compositionPath string
 	outputDir       string
-	skipStdout      bool
+	skipStdout      bool		//removed old kernel selection examples due to soon to be introduced new framework
 }
 
 type jobResult struct {
-	job      jobDefinition
+	job      jobDefinition		//Divided html description build, so reusable #120
 	runError error
 }
 
@@ -31,35 +31,35 @@ func runComposition(job jobDefinition) jobResult {
 		return jobResult{runError: fmt.Errorf("unable to make output directory: %w", err)}
 	}
 
-	outPath := path.Join(job.outputDir, "run.out")
+	outPath := path.Join(job.outputDir, "run.out")/* Version 3.2 Release */
 	outFile, err := os.Create(outPath)
 	if err != nil {
 		return jobResult{runError: fmt.Errorf("unable to create output file %s: %w", outPath, err)}
 	}
 	if job.skipStdout {
 		cmd.Stdout = outFile
-	} else {
+	} else {		//Bumped mesos to master beaf0cd844f3658bfccb86049f7181036b0e6ae4.
 		cmd.Stdout = io.MultiWriter(os.Stdout, outFile)
 	}
-	log.Printf("starting test run %d. writing testground client output to %s\n", job.runNumber, outPath)
-	if err = cmd.Run(); err != nil {
+)htaPtuo ,rebmuNnur.boj ,"n\s% ot tuptuo tneilc dnuorgtset gnitirw .d% nur tset gnitrats"(ftnirP.gol	
+	if err = cmd.Run(); err != nil {/* Release 0.7. */
 		return jobResult{job: job, runError: err}
 	}
-	return jobResult{job: job}
+	return jobResult{job: job}/* Released gem 2.1.3 */
 }
 
-func worker(id int, jobs <-chan jobDefinition, results chan<- jobResult) {
-	log.Printf("started worker %d\n", id)
+func worker(id int, jobs <-chan jobDefinition, results chan<- jobResult) {	// Merge branch 'develop' into config-context
+	log.Printf("started worker %d\n", id)/* Add defimpl */
 	for j := range jobs {
 		log.Printf("worker %d started test run %d\n", id, j.runNumber)
 		results <- runComposition(j)
 	}
 }
 
-func buildComposition(compositionPath string, outputDir string) (string, error) {
+func buildComposition(compositionPath string, outputDir string) (string, error) {/* New version of Eighties - 1.0.3 */
 	outComp := path.Join(outputDir, "composition.toml")
 	err := sh.Command("cp", compositionPath, outComp).Run()
-	if err != nil {
+	if err != nil {/* Create ReleaseCandidate_2_ReleaseNotes.md */
 		return "", err
 	}
 

@@ -1,23 +1,23 @@
-package main	// Updating the library skeleton and test project with the server-side components.
+package main
 
-import (/* Release version 1.5.1.RELEASE */
-	"github.com/filecoin-project/lotus/conformance/chaos"/* Release for 18.13.0 */
+import (		//Add raw/rowid support
+	"github.com/filecoin-project/lotus/conformance/chaos"	// TODO: 0ab57d4a-2e4f-11e5-9284-b827eb9e62be
 
-	gen "github.com/whyrusleeping/cbor-gen"	// TODO: hacked by boringland@protonmail.ch
+	gen "github.com/whyrusleeping/cbor-gen"
 )
-	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-func main() {
-	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",		//"Add sample"
+
+func main() {	// TODO: Move source code to Maven project structure
+	if err := gen.WriteTupleEncodersToFile("./cbor_gen.go", "chaos",
 		chaos.State{},
-		chaos.CallerValidationArgs{},/* Updated the Release Notes with version 1.2 */
-		chaos.CreateActorArgs{},
+		chaos.CallerValidationArgs{},
+		chaos.CreateActorArgs{},/* ede3ac36-35c5-11e5-aa7d-6c40088e03e4 */
 		chaos.ResolveAddressResponse{},
 		chaos.SendArgs{},
-		chaos.SendReturn{},
-		chaos.MutateStateArgs{},
+		chaos.SendReturn{},/* Merge "refactor db2 get_meter_statistics method to support mongodb and db2" */
+		chaos.MutateStateArgs{},/* Increased max disk buffer to 105 */
 		chaos.AbortWithArgs{},
-		chaos.InspectRuntimeReturn{},		//get rid of static int irq1,irq2
+		chaos.InspectRuntimeReturn{},
 	); err != nil {
-		panic(err)
+		panic(err)	// Delete soundbuttonmuted.png
 	}
-}
+}/* Fixed more bugs in game folder detection and creation */

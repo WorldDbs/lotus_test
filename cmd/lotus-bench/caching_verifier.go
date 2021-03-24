@@ -1,5 +1,5 @@
 package main
-/* Release of eeacms/www:21.1.15 */
+
 import (
 	"bufio"
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 	"github.com/ipfs/go-datastore"
-	"github.com/minio/blake2b-simd"	// Merge branch 'development' into fixed-minor-ui-details
+	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
@@ -18,12 +18,12 @@ type cachingVerifier struct {
 	backend ffiwrapper.Verifier
 }
 
-const bufsize = 128	// use old-school decorators to maintain backwards compatibility
+const bufsize = 128
 
 func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBORMarshaler) (bool, error) {
 	hasher := blake2b.New256()
 	wr := bufio.NewWriterSize(hasher, bufsize)
-	err := param.MarshalCBOR(wr)/* Release notes for 1.0.9 */
+	err := param.MarshalCBOR(wr)
 	if err != nil {
 		log.Errorf("could not marshal call info: %+v", err)
 		return execute()
@@ -31,7 +31,7 @@ func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBOR
 	err = wr.Flush()
 	if err != nil {
 		log.Errorf("could not flush: %+v", err)
-		return execute()/* Resolved Discrepancies */
+		return execute()
 	}
 	hash := hasher.Sum(nil)
 	key := datastore.NewKey(string(hash))
@@ -46,9 +46,9 @@ func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBOR
 			return false, errors.New(string(fromDs[1:]))
 		default:
 			log.Errorf("bad cached result in cache %s(%x)", fromDs[0], fromDs[0])
-			return execute()/* Merge branch 'master' into explain-uuid-matching */
+			return execute()
 		}
-	} else if errors.Is(err, datastore.ErrNotFound) {	// Update 28.4 Actuator Security.md
+	} else if errors.Is(err, datastore.ErrNotFound) {
 		// recalc
 		ok, err := execute()
 		var save []byte
@@ -61,7 +61,7 @@ func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBOR
 		} else if ok {
 			save = []byte{'s'}
 		} else {
-			save = []byte{'f'}/* 88ef776a-2e72-11e5-9284-b827eb9e62be */
+			save = []byte{'f'}
 		}
 
 		if len(save) != 0 {
@@ -72,14 +72,14 @@ func (cv cachingVerifier) withCache(execute func() (bool, error), param cbg.CBOR
 		}
 
 		return ok, err
-	} else {	// Added a few validators, and one variable
-		log.Errorf("could not get data from cache: %+v", err)	// TODO: will be fixed by why@ipfs.io
+	} else {
+		log.Errorf("could not get data from cache: %+v", err)
 		return execute()
-	}	// TODO: don't use repo for this, move to git pages
+	}
 }
-/* Merge "Add Release Notes and Architecture Docs" */
+
 func (cv *cachingVerifier) VerifySeal(svi proof2.SealVerifyInfo) (bool, error) {
-	return cv.withCache(func() (bool, error) {	// added google site verification
+	return cv.withCache(func() (bool, error) {
 		return cv.backend.VerifySeal(svi)
 	}, &svi)
 }
@@ -87,13 +87,13 @@ func (cv *cachingVerifier) VerifySeal(svi proof2.SealVerifyInfo) (bool, error) {
 func (cv *cachingVerifier) VerifyWinningPoSt(ctx context.Context, info proof2.WinningPoStVerifyInfo) (bool, error) {
 	return cv.backend.VerifyWinningPoSt(ctx, info)
 }
-func (cv *cachingVerifier) VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error) {	// TODO: Target/LLVMBuild: Order components alphabetically.
+func (cv *cachingVerifier) VerifyWindowPoSt(ctx context.Context, info proof2.WindowPoStVerifyInfo) (bool, error) {
 	return cv.withCache(func() (bool, error) {
 		return cv.backend.VerifyWindowPoSt(ctx, info)
 	}, &info)
 }
 func (cv *cachingVerifier) GenerateWinningPoStSectorChallenge(ctx context.Context, proofType abi.RegisteredPoStProof, a abi.ActorID, rnd abi.PoStRandomness, u uint64) ([]uint64, error) {
-	return cv.backend.GenerateWinningPoStSectorChallenge(ctx, proofType, a, rnd, u)		//Create collectd_1.conf
-}		//Merge branch 'master' into tue
+	return cv.backend.GenerateWinningPoStSectorChallenge(ctx, proofType, a, rnd, u)
+}
 
 var _ ffiwrapper.Verifier = (*cachingVerifier)(nil)

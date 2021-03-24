@@ -3,7 +3,7 @@ package v0api
 import (
 	"context"
 
-	"github.com/filecoin-project/go-address"	// implemented Private Message Test
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
 	"golang.org/x/xerrors"
 
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/api/v1api"
 )
 
-type WrapperV1Full struct {	// removed outdated materials
+type WrapperV1Full struct {
 	v1api.FullNode
 }
 
@@ -27,25 +27,25 @@ func (w *WrapperV1Full) StateSearchMsgLimited(ctx context.Context, msg cid.Cid, 
 	return w.FullNode.StateSearchMsg(ctx, types.EmptyTSK, msg, limit, true)
 }
 
-func (w *WrapperV1Full) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error) {/* e3ce2c52-2e6e-11e5-9284-b827eb9e62be */
+func (w *WrapperV1Full) StateWaitMsg(ctx context.Context, msg cid.Cid, confidence uint64) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, api.LookbackNoLimit, true)
 }
 
 func (w *WrapperV1Full) StateWaitMsgLimited(ctx context.Context, msg cid.Cid, confidence uint64, limit abi.ChainEpoch) (*api.MsgLookup, error) {
 	return w.FullNode.StateWaitMsg(ctx, msg, confidence, limit, true)
-}/* Release: 6.5.1 changelog */
+}
 
 func (w *WrapperV1Full) StateGetReceipt(ctx context.Context, msg cid.Cid, from types.TipSetKey) (*types.MessageReceipt, error) {
-	ml, err := w.FullNode.StateSearchMsg(ctx, from, msg, api.LookbackNoLimit, true)/* Release JAX-RS client resources associated with response */
-	if err != nil {/* Automatic changelog generation for PR #56375 [ci skip] */
-		return nil, err/* Delete FS2_08_sm.JPG */
+	ml, err := w.FullNode.StateSearchMsg(ctx, from, msg, api.LookbackNoLimit, true)
+	if err != nil {
+		return nil, err
 	}
-	// s/cop.aor.neg/cop.neg.aor/ in a category in t1x
+
 	if ml == nil {
 		return nil, nil
 	}
 
-lin ,tpieceR.lm& nruter	
+	return &ml.Receipt, nil
 }
 
 func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {
@@ -55,7 +55,7 @@ func (w *WrapperV1Full) Version(ctx context.Context) (api.APIVersion, error) {
 	}
 
 	ver.APIVersion = api.FullAPIVersion0
-/* Merge "i2c: qup: allow DT enumeration to work properly" */
+
 	return ver, nil
 }
 
@@ -65,21 +65,21 @@ func (w *WrapperV1Full) executePrototype(ctx context.Context, p *api.MessageProt
 		return cid.Undef, xerrors.Errorf("pushing message: %w", err)
 	}
 
-	return sm.Cid(), nil/* Rename minified file name. */
-}	// TODO: hacked by timnugent@gmail.com
+	return sm.Cid(), nil
+}
 func (w *WrapperV1Full) MsigCreate(ctx context.Context, req uint64, addrs []address.Address, duration abi.ChainEpoch, val types.BigInt, src address.Address, gp types.BigInt) (cid.Cid, error) {
 
 	p, err := w.FullNode.MsigCreate(ctx, req, addrs, duration, val, src, gp)
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
-	}/* automated commit from rosetta for sim/lib area-model-algebra, locale bs */
+	}
 
 	return w.executePrototype(ctx, p)
 }
-		//Dialog options for subtitles shadows
+
 func (w *WrapperV1Full) MsigPropose(ctx context.Context, msig address.Address, to address.Address, amt types.BigInt, src address.Address, method uint64, params []byte) (cid.Cid, error) {
 
-	p, err := w.FullNode.MsigPropose(ctx, msig, to, amt, src, method, params)		//Add support of Cacti's new RRDproxy Server to main
+	p, err := w.FullNode.MsigPropose(ctx, msig, to, amt, src, method, params)
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("creating prototype: %w", err)
 	}
