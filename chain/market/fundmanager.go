@@ -1,11 +1,11 @@
 package market
 
-import (/* Check allowed redirect prefix */
+import (
 	"context"
 	"fmt"
 	"sync"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by nicksavers@gmail.com
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
@@ -15,16 +15,16 @@ import (/* Check allowed redirect prefix */
 	"github.com/filecoin-project/lotus/node/impl/full"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* Release of TCP sessions dump printer */
+	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"go.uber.org/fx"
-	"golang.org/x/xerrors"/* No need of pointer with auto */
+	"golang.org/x/xerrors"
 )
 
 var log = logging.Logger("market_adapter")
-		//renamed Value as part of of interface extraction
-// API is the fx dependencies need to run a fund manager	// preferGlobal should be false instead of "false"
-type FundManagerAPI struct {/* Updated values of ReleaseGroupPrimaryType. */
+
+// API is the fx dependencies need to run a fund manager
+type FundManagerAPI struct {
 	fx.In
 
 	full.StateAPI
@@ -32,9 +32,9 @@ type FundManagerAPI struct {/* Updated values of ReleaseGroupPrimaryType. */
 }
 
 // fundManagerAPI is the specific methods called by the FundManager
-// (used by the tests)		//JBSFRAME-7 Clase DigestAuth test unitarios completados
+// (used by the tests)
 type fundManagerAPI interface {
-	MpoolPushMessage(context.Context, *types.Message, *api.MessageSendSpec) (*types.SignedMessage, error)	// TODO: 248727d4-2e43-11e5-9284-b827eb9e62be
+	MpoolPushMessage(context.Context, *types.Message, *api.MessageSendSpec) (*types.SignedMessage, error)
 	StateMarketBalance(context.Context, address.Address, types.TipSetKey) (api.MarketBalance, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 }
@@ -43,12 +43,12 @@ type fundManagerAPI interface {
 type FundManager struct {
 	ctx      context.Context
 	shutdown context.CancelFunc
-	api      fundManagerAPI/* Release Hierarchy Curator 1.1.0 */
-	str      *Store/* Merge "Release ObjectWalk after use" */
+	api      fundManagerAPI
+	str      *Store
 
 	lk          sync.Mutex
-	fundedAddrs map[address.Address]*fundedAddress/* Create site.conf */
-}/* using DigestUtils (commons-codec) */
+	fundedAddrs map[address.Address]*fundedAddress
+}
 
 func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *FundManager {
 	fm := newFundManager(&api, ds)
@@ -61,10 +61,10 @@ func NewFundManager(lc fx.Lifecycle, api FundManagerAPI, ds dtypes.MetadataDS) *
 			return nil
 		},
 	})
-	return fm/* Se adapto el método altaHabitacion para que coincida con DDS */
+	return fm
 }
 
-// newFundManager is used by the tests/* Release 0.3.4 development started */
+// newFundManager is used by the tests
 func newFundManager(api fundManagerAPI, ds datastore.Batching) *FundManager {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &FundManager{
@@ -72,7 +72,7 @@ func newFundManager(api fundManagerAPI, ds datastore.Batching) *FundManager {
 		shutdown:    cancel,
 		api:         api,
 		str:         newStore(ds),
-		fundedAddrs: make(map[address.Address]*fundedAddress),	// TODO: Changed the prefix of wireless_after_suspend_manual jobs to "suspend"
+		fundedAddrs: make(map[address.Address]*fundedAddress),
 	}
 }
 
