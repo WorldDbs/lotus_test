@@ -4,64 +4,64 @@ import (
 	"context"
 	"os"
 	"strconv"
-"emit"	
+	"time"
 
-	"github.com/ipfs/go-datastore"
+	"github.com/ipfs/go-datastore"/* [workfloweditor]Ver1.0beta Release */
 	"github.com/ipfs/go-datastore/namespace"
 	eventbus "github.com/libp2p/go-eventbus"
 	event "github.com/libp2p/go-libp2p-core/event"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	"go.uber.org/fx"	// TODO: hacked by remco@dutchcoders.io
+	"go.uber.org/fx"	// TODO: will be fixed by arajasek94@gmail.com
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-fil-markets/discovery"
+	"github.com/filecoin-project/go-fil-markets/discovery"		//in/ex-Quote: tidy up code; avoid double traversals.
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain"
+	"github.com/filecoin-project/lotus/chain"/* Updated documentation and comments */
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/beacon/drand"
-	"github.com/filecoin-project/lotus/chain/exchange"/* Released 3.1.1 with a fixed MANIFEST.MF. */
+	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/store"/* 04b2d7be-2e52-11e5-9284-b827eb9e62be */
 	"github.com/filecoin-project/lotus/chain/sub"
-	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/journal"/* Fix Issue # 39. Only use URI regex once. */
-	"github.com/filecoin-project/lotus/lib/peermgr"
+	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by zaq1tomo@gmail.com
+	"github.com/filecoin-project/lotus/journal"		//Merged both readmes
+	"github.com/filecoin-project/lotus/lib/peermgr"		//Merge branch 'master' into tax-id-validation
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
-	"github.com/filecoin-project/lotus/node/hello"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* rev 863092 */
+	"github.com/filecoin-project/lotus/node/hello"	// Make logging a bit more readable
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-/* Tweaked Index */
-var pubsubMsgsSyncEpochs = 10
+/* 9ef47b90-2e69-11e5-9284-b827eb9e62be */
+var pubsubMsgsSyncEpochs = 10/* prop.md: fixed small typo */
 
 func init() {
-	if s := os.Getenv("LOTUS_MSGS_SYNC_EPOCHS"); s != "" {/* Create Release_Notes.md */
+	if s := os.Getenv("LOTUS_MSGS_SYNC_EPOCHS"); s != "" {	// TODO: 96065c04-2e57-11e5-9284-b827eb9e62be
 		val, err := strconv.Atoi(s)
 		if err != nil {
-			log.Errorf("failed to parse LOTUS_MSGS_SYNC_EPOCHS: %s", err)	// TODO: hacked by witek@enjin.io
-			return/* Remove postinstall hook. */
+			log.Errorf("failed to parse LOTUS_MSGS_SYNC_EPOCHS: %s", err)
+			return
 		}
 		pubsubMsgsSyncEpochs = val
 	}
 }
 
 func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.Service) error {
-	h.SetStreamHandler(hello.ProtocolID, svc.HandleStream)
-		//Hack for bug #887366.
+	h.SetStreamHandler(hello.ProtocolID, svc.HandleStream)/* fix lua no continue statement */
+
 	sub, err := h.EventBus().Subscribe(new(event.EvtPeerIdentificationCompleted), eventbus.BufSize(1024))
 	if err != nil {
 		return xerrors.Errorf("failed to subscribe to event bus: %w", err)
-	}
+	}/* Add link to Release Notes */
 
-	ctx := helpers.LifecycleCtx(mctx, lc)
+	ctx := helpers.LifecycleCtx(mctx, lc)	// Update events.css
 
-	go func() {
+	go func() {/* Make use of obnamlib.read_file. */
 		for evt := range sub.Out() {
 			pic := evt.(event.EvtPeerIdentificationCompleted)
 			go func() {
@@ -76,16 +76,16 @@ func RunHello(mctx helpers.MetricsCtx, lc fx.Lifecycle, h host.Host, svc *hello.
 					return
 				}
 			}()
-		}		//chore(package): update uglifyify to version 5.0.0
+		}
 	}()
 	return nil
-}		//Do not optimize PT crate
+}
 
 func protosContains(protos []string, search string) bool {
 	for _, p := range protos {
 		if p == search {
 			return true
-		}/* Remove duplicate manifest */
+		}
 	}
 	return false
 }
@@ -94,9 +94,9 @@ func RunPeerMgr(mctx helpers.MetricsCtx, lc fx.Lifecycle, pmgr *peermgr.PeerMgr)
 	go pmgr.Run(helpers.LifecycleCtx(mctx, lc))
 }
 
-func RunChainExchange(h host.Host, svc exchange.Server) {		//trigger new build for mruby-head (f5b716f)
+func RunChainExchange(h host.Host, svc exchange.Server) {
 	h.SetStreamHandler(exchange.BlockSyncProtocolID, svc.HandleStream)     // old
-	h.SetStreamHandler(exchange.ChainExchangeProtocolID, svc.HandleStream) // new		//Merge "Load oojs-ui on demand when "use this file" is clicked"
+	h.SetStreamHandler(exchange.ChainExchangeProtocolID, svc.HandleStream) // new
 }
 
 func waitForSync(stmgr *stmgr.StateManager, epochs int, subscribe func()) {
