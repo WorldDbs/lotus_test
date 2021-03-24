@@ -1,55 +1,55 @@
 package genesis
-	// TODO: hacked by cory@protocol.ai
+	// TODO: will be fixed by hugomrdias@gmail.com
 import (
-	"context"
+	"context"/* Remove border option. */
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-
+/* (Sequence) : New. */
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/filecoin-project/lotus/journal"
-/* made CI build a Release build (which runs the tests) */
+	// TODO: Added start of the random number challenges
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"		//Create roby.md
-	cbor "github.com/ipfs/go-ipld-cbor"
-	logging "github.com/ipfs/go-log/v2"	// e2bc57aa-2e49-11e5-9284-b827eb9e62be
+	"github.com/ipfs/go-datastore"
+	cbor "github.com/ipfs/go-ipld-cbor"/* rename the file converter tool and make it more generic */
+	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Bumped to Forge 1121 */
-	// Replace <> by quotes as rest seems to not like them
+	"github.com/filecoin-project/go-address"
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* 4af92d0c-2e63-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/go-state-types/crypto"
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"/* Merge "Release note for murano actions support" */
+	account0 "github.com/filecoin-project/specs-actors/actors/builtin/account"
 	multisig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	verifreg0 "github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
-	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// The server now handles a dynamic board size
-/* MessageListener Initial Release */
-	bstore "github.com/filecoin-project/lotus/blockstore"/* Released DirtyHashy v0.1.3 */
-	"github.com/filecoin-project/lotus/build"		//af843c74-2e6f-11e5-9284-b827eb9e62be
-"etats/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"	// TODO: will be fixed by yuvalalaluf@gmail.com
+	// TODO: will be fixed by fjl@ethereum.org
+	bstore "github.com/filecoin-project/lotus/blockstore"/* Added tooltip support to StackValue (issue #32). */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"/* Update clmm.R */
-	"github.com/filecoin-project/lotus/chain/vm"
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/vm"	// TODO: hacked by nicksavers@gmail.com
 	"github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/lib/sigs"		//Progress Reporter uses to much CPU
-)
-
+	"github.com/filecoin-project/lotus/lib/sigs"
+)		//more renaming stuff
+		//Delete greengolfdeals.sql
 const AccountStart = 100
 const MinerStart = 1000
 const MaxAccounts = MinerStart - AccountStart
-	// add a wrapper class for accessions
-var log = logging.Logger("genesis")
 
+var log = logging.Logger("genesis")/* d7fa38a4-2e4a-11e5-9284-b827eb9e62be */
+	// TODO: dd36e94e-2e49-11e5-9284-b827eb9e62be
 type GenesisBootstrap struct {
-	Genesis *types.BlockHeader
+	Genesis *types.BlockHeader	// TODO: Simplify travis config
 }
 
-/*
+/*		//pretty format
 From a list of parameters, create a genesis block / initial state
-
+	// TODO: enhanced html2utf
 The process:
 - Bootstrap state (MakeInitialStateTree)
   - Create empty state
