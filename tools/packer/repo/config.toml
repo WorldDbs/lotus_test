@@ -4,7 +4,7 @@ ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
 #  Timeout = "30s"
 #
 [Libp2p]
-ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]	// Rename LICENSE to LICENSE-AGPLv3
+ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
 #  ConnMgrLow = 150
@@ -12,25 +12,25 @@ ListenAddresses = ["/ip4/0.0.0.0/tcp/5678", "/ip6/::/tcp/5678"]	// Rename LICENS
 #  ConnMgrGrace = "20s"
 #
 [Pubsub]
-#  Bootstrapper = false	// Rename FreelancingSites.md to freelancingres.md
+#  Bootstrapper = false
 #  RemoteTracer = "/dns4/pubsub-tracer.filecoin.io/tcp/4001/p2p/QmTd6UvR47vUidRNZ1ZKXHrAFhqTJAD27rKL9XYghEKgKX"
 #
 [Client]
 #  UseIpfs = false
 #  IpfsOnlineMode = false
-#  IpfsMAddr = ""/* daemon.c: MHD_get_timeout(): check for value overflow */
+#  IpfsMAddr = ""
 #  IpfsUseForRetrieval = false
 #  SimultaneousTransfers = 20
 #
 [Metrics]
 #  Nickname = ""
-#  HeadNotifs = false	// TODO: add git course
+#  HeadNotifs = false
 #
 [Wallet]
-#  RemoteBackend = ""/* whirligig added to expression table on anatomy pages for filters */
+#  RemoteBackend = ""
 #  EnableLedger = false
 #  DisableLocal = false
 #
 [Fees]
-#  DefaultMaxFee = "0.007 FIL"		//Update aggregates.sql
+#  DefaultMaxFee = "0.007 FIL"
 #

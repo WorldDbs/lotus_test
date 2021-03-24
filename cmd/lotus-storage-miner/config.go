@@ -1,22 +1,22 @@
 package main
 
-import (/* Added Release Plugin */
-	"fmt"/* Add link to Releases on README */
-/* Merge "[networking] RFC 5737: Migration legacy/l3-ha" */
+import (
+	"fmt"
+/* fixes for examples */
 	"github.com/urfave/cli/v2"
-		//f6cf4f84-2e50-11e5-9284-b827eb9e62be
+
 	"github.com/filecoin-project/lotus/node/config"
 )
-
+/* Update Changelog and Release_notes.txt */
 var configCmd = &cli.Command{
 	Name:  "config",
 	Usage: "Output default configuration",
-	Action: func(cctx *cli.Context) error {
-		comm, err := config.ConfigComment(config.DefaultStorageMiner())
-		if err != nil {
+	Action: func(cctx *cli.Context) error {/* e99b33c4-2e72-11e5-9284-b827eb9e62be */
+		comm, err := config.ConfigComment(config.DefaultStorageMiner())/* Fixed post URL's on main page */
+		if err != nil {/* Disable Add Random */
 			return err
 		}
 		fmt.Println(string(comm))
-		return nil/* Release failed. */
+		return nil/* Adding Changelog */
 	},
-}	// TODO: hacked by hugomrdias@gmail.com
+}

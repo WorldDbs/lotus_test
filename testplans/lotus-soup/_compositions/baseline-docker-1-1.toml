@@ -1,19 +1,19 @@
-[metadata]
+[metadata]	// Merge "Fix MissingEnvironment test failures"
   name = "lotus-soup"
   author = ""
-
+	// Remove ccat tap
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"
+  builder = "docker:go"/* Protocol C structures */
   runner = "local:docker"
-
+	// TODO: will be fixed by mail@bitpshr.net
 [global.build]
-  selectors = ["testground"]
+  selectors = ["testground"]/* references #216 - just fixed not all of the schedule day being displayed */
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: hacked by lexy8russo@outlook.com
 
 [global.build_config]
   enable_go_build_cache = true
@@ -31,22 +31,22 @@
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0
+    percentage = 0.0/* get previews, yay! */
   [groups.run]
-    [groups.run.test_params]
+    [groups.run.test_params]/* added more documentation of grasp selection and a combined launchscript */
       role = "bootstrapper"
-
+/* Released MotionBundler v0.1.0 */
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]
+  [groups.run]		//Create synopsis.html
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"
+  id = "clients"/* Update redirect URL */
   [groups.instances]
     count = 1
     percentage = 0.0

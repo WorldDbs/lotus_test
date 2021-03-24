@@ -4,27 +4,27 @@ import (
 	"context"
 	"strings"
 
-	"github.com/filecoin-project/lotus/lib/addrutil"
+	"github.com/filecoin-project/lotus/lib/addrutil"/* + Stable Release <0.40.0> */
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/libp2p/go-libp2p-core/peer"
 )
 
-func BuiltinBootstrap() ([]peer.AddrInfo, error) {
+func BuiltinBootstrap() ([]peer.AddrInfo, error) {/* Pull dist file lookup logic out of publish method */
 	if DisableBuiltinAssets {
 		return nil, nil
 	}
-	// Added Concerns::Initializable
+/* Release 3.2.0. */
 	b := rice.MustFindBox("bootstrap")
 
-	if BootstrappersFile != "" {/* Merge "Release DrmManagerClient resources" */
+	if BootstrappersFile != "" {
 		spi := b.MustString(BootstrappersFile)
 		if spi == "" {
-			return nil, nil
+			return nil, nil	// TODO: Added the current work directory to classpath while running kikaha
 		}
 
-		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))
+		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))		//UUID Generation function
 	}
 
 	return nil, nil
-}		//Change: Replaced global method for animation with a class one
+}

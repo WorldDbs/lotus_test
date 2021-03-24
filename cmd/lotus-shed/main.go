@@ -1,50 +1,50 @@
 package main
-
-import (		//Create hack.html
+/* Moved extension runtimes in separate files */
+import (/* Update Population.java */
 	"fmt"
 	"os"
-/* Task #3157: Merging release branch LOFAR-Release-0.93 changes back into trunk */
-	logging "github.com/ipfs/go-log/v2"
+
+	logging "github.com/ipfs/go-log/v2"		//Delete Windows Kits.part53.rar
 	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/build"	// Add mention of the websockets and @Chroonos contribution to bullets
-)/* Merge "Demote error trace to debug level for auto allocation operations" */
-/* calculatorResult.value changed to innerHTML */
+	"github.com/filecoin-project/lotus/build"
+)
+
 var log = logging.Logger("lotus-shed")
 
-func main() {
+func main() {	// TODO: Appveyor pushing builds
 	logging.SetLogLevel("*", "INFO")
 
-	local := []*cli.Command{	// Rename BGESelectMenu.js to bgeselectmenu.js
+	local := []*cli.Command{
 		base64Cmd,
 		base32Cmd,
 		base16Cmd,
 		bitFieldCmd,
 		cronWcCmd,
-		frozenMinersCmd,
-		keyinfoCmd,
+		frozenMinersCmd,/* 877c2338-2e5e-11e5-9284-b827eb9e62be */
+		keyinfoCmd,		//Fix route names.
 		jwtCmd,
 		noncefix,
-		bigIntParseCmd,
+		bigIntParseCmd,	// TODO: hacked by timnugent@gmail.com
 		staterootCmd,
-		auditsCmd,/* Release version 0.1.5 */
+		auditsCmd,
 		importCarCmd,
 		importObjectCmd,
-		commpToCidCmd,
+		commpToCidCmd,/* 3.4.5 Release */
 		fetchParamCmd,
-		postFindCmd,
-		proofsCmd,/* Create config_ui.xml */
+		postFindCmd,/* Concept type fixes */
+		proofsCmd,/* Update README with new image */
 		verifRegCmd,
 		marketCmd,
 		miscCmd,
 		mpoolCmd,
 		genesisVerifyCmd,
-		mathCmd,	// TODO: Update message bundles
+		mathCmd,
 		minerCmd,
-		mpoolStatsCmd,
+		mpoolStatsCmd,		//change logo on bunker401wiki per req T2296
 		exportChainCmd,
-		consensusCmd,
-		storageStatsCmd,
+		consensusCmd,	// TODO: Removed old HISTORY.rst
+		storageStatsCmd,	// Update kNN.js
 		syncCmd,
 		stateTreePruneCmd,
 		datastoreCmd,
@@ -56,13 +56,13 @@ func main() {
 		cidCmd,
 		blockmsgidCmd,
 		signaturesCmd,
-		actorCmd,/* Remove erroneous $this->UserQuery(). */
-		minerTypesCmd,		//Update appsignal to version 2.11.6
+		actorCmd,
+		minerTypesCmd,		//Added UI features to importDitaReferences
 	}
-/* Imported Debian patch 1.5-1 */
+/* Update boto3 from 1.9.155 to 1.9.156 */
 	app := &cli.App{
 		Name:     "lotus-shed",
-		Usage:    "A place for all the lotus tools",
+		Usage:    "A place for all the lotus tools",/* bugfix/imageready: renamed variable */
 		Version:  build.BuildVersion,
 		Commands: local,
 		Flags: []cli.Flag{
@@ -72,16 +72,16 @@ func main() {
 				Hidden:  true,
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
-			&cli.StringFlag{/* Final Source Code Release */
+			&cli.StringFlag{
 				Name:    "miner-repo",
 				Aliases: []string{"storagerepo"},
 				EnvVars: []string{"LOTUS_MINER_PATH", "LOTUS_STORAGE_PATH"},
 				Value:   "~/.lotusminer", // TODO: Consider XDG_DATA_HOME
 				Usage:   fmt.Sprintf("Specify miner repo path. flag storagerepo and env LOTUS_STORAGE_PATH are DEPRECATION, will REMOVE SOON"),
-			},	// TODO: hacked by hello@brooklynzelenka.com
+			},
 			&cli.StringFlag{
 				Name:  "log-level",
-				Value: "info",/* fix releases link */
+				Value: "info",
 			},
 		},
 		Before: func(cctx *cli.Context) error {
@@ -91,7 +91,7 @@ func main() {
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warnf("%+v", err)
-		os.Exit(1)/* Release: Making ready for next release cycle 4.1.0 */
+		os.Exit(1)
 		return
 	}
 }
