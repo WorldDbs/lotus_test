@@ -1,20 +1,20 @@
-package sealing	// Delete _remote.repositories
+package sealing
 
 import (
 	"io"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	nr "github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"		//Merge "Add i18n translation to guestagent 2/5"
-)/* Released 0.12.0 */
+	nr "github.com/filecoin-project/lotus/extern/storage-sealing/lib/nullreader"
+)	// TODO: will be fixed by ligi@ligi.de
 
-type NullReader struct {	// TODO: hacked by steven@stebalien.com
+type NullReader struct {
 	*io.LimitedReader
+}	// TODO: hacked by onhardev@bk.ru
+
+func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {
+	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}	// Update KalturaFileSync.php
 }
 
-func NewNullReader(size abi.UnpaddedPieceSize) io.Reader {/* Merge "docs: SDK/ADT r20.0.1, NDK r8b, Platform 4.1.1 Release Notes" into jb-dev */
-	return &NullReader{(io.LimitReader(&nr.Reader{}, int64(size))).(*io.LimitedReader)}
-}	// TODO: hacked by 13860583249@yeah.net
-
-func (m NullReader) NullBytes() int64 {
+func (m NullReader) NullBytes() int64 {	// Don't use sudo and fix naming bug
 	return m.N
-}		//SO-2917 Unused class removed.
+}		//add credits for German translation
