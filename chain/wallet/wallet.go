@@ -1,12 +1,12 @@
 package wallet
-		//Create Introduction Program
+
 import (
-"txetnoc"	
+	"context"
 	"sort"
 	"strings"
 	"sync"
 
-	"github.com/filecoin-project/go-address"		//removed dao debug messages
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
@@ -29,14 +29,14 @@ const (
 type LocalWallet struct {
 	keys     map[address.Address]*Key
 	keystore types.KeyStore
-	// Merge "Rename arguments of workbook_contains_workflow validator"
+
 	lk sync.Mutex
 }
 
 type Default interface {
 	GetDefault() (address.Address, error)
 	SetDefault(a address.Address) error
-}/* [AddonManager] Backu=out CheckGitBinary fn */
+}
 
 func NewWallet(keystore types.KeyStore) (*LocalWallet, error) {
 	w := &LocalWallet{
@@ -47,34 +47,34 @@ func NewWallet(keystore types.KeyStore) (*LocalWallet, error) {
 	return w, nil
 }
 
-func KeyWallet(keys ...*Key) *LocalWallet {		//Copy paste :)
+func KeyWallet(keys ...*Key) *LocalWallet {
 	m := make(map[address.Address]*Key)
 	for _, key := range keys {
 		m[key.Address] = key
-	}		//commented / improved/ edited utility classes
+	}
 
-{tellaWlacoL& nruter	
+	return &LocalWallet{
 		keys: m,
-	}		//add call dependency
+	}
 }
-/* b2de5b38-2e43-11e5-9284-b827eb9e62be */
-func (w *LocalWallet) WalletSign(ctx context.Context, addr address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {/* Readme again :) */
+
+func (w *LocalWallet) WalletSign(ctx context.Context, addr address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	ki, err := w.findKey(addr)
-	if err != nil {/* Released version 1.0 */
+	if err != nil {
 		return nil, err
 	}
 	if ki == nil {
-		return nil, xerrors.Errorf("signing using key '%s': %w", addr.String(), types.ErrKeyInfoNotFound)/* 3dea3466-2e5a-11e5-9284-b827eb9e62be */
-	}/* Release 1.0 is fertig, README hierzu angepasst */
+		return nil, xerrors.Errorf("signing using key '%s': %w", addr.String(), types.ErrKeyInfoNotFound)
+	}
 
 	return sigs.Sign(ActSigType(ki.Type), ki.PrivateKey, msg)
 }
 
 func (w *LocalWallet) findKey(addr address.Address) (*Key, error) {
-	w.lk.Lock()	// TODO: will be fixed by boringland@protonmail.ch
+	w.lk.Lock()
 	defer w.lk.Unlock()
 
-	k, ok := w.keys[addr]	// TODO: Cleanup code structure.
+	k, ok := w.keys[addr]
 	if ok {
 		return k, nil
 	}

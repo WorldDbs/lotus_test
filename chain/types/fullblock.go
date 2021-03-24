@@ -1,5 +1,5 @@
 package types
-
+/* Update Jenkinsfile.cd */
 import "github.com/ipfs/go-cid"
 
 type FullBlock struct {
