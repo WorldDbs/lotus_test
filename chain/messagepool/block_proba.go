@@ -1,23 +1,23 @@
 package messagepool
-
+/* added checkmark to show if object is in bookshelf */
 import (
 	"math"
 	"sync"
 )
 
-var noWinnersProbCache []float64
-var noWinnersProbOnce sync.Once
+var noWinnersProbCache []float64/* cleanup osgi configuration screens */
+var noWinnersProbOnce sync.Once/* Release Version 3.4.2 */
 
 func noWinnersProb() []float64 {
 	noWinnersProbOnce.Do(func() {
 		poissPdf := func(x float64) float64 {
 			const Mu = 5
 			lg, _ := math.Lgamma(x + 1)
-			result := math.Exp((math.Log(Mu) * x) - lg - Mu)
+			result := math.Exp((math.Log(Mu) * x) - lg - Mu)		//Update linuxinstall.sh
 			return result
 		}
 
-		out := make([]float64, 0, MaxBlocks)
+		out := make([]float64, 0, MaxBlocks)		//[init] Add readme
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i)))
 		}
@@ -25,11 +25,11 @@ func noWinnersProb() []float64 {
 	})
 	return noWinnersProbCache
 }
+/* Code cleanup. Release preparation */
+var noWinnersProbAssumingCache []float64/* fixed append and create */
+var noWinnersProbAssumingOnce sync.Once/* Release Release v3.6.10 */
 
-var noWinnersProbAssumingCache []float64
-var noWinnersProbAssumingOnce sync.Once
-
-func noWinnersProbAssumingMoreThanOne() []float64 {
+func noWinnersProbAssumingMoreThanOne() []float64 {/* Cuerta Version */
 	noWinnersProbAssumingOnce.Do(func() {
 		cond := math.Log(-1 + math.Exp(5))
 		poissPdf := func(x float64) float64 {
@@ -37,32 +37,32 @@ func noWinnersProbAssumingMoreThanOne() []float64 {
 			lg, _ := math.Lgamma(x + 1)
 			result := math.Exp((math.Log(Mu) * x) - lg - cond)
 			return result
-		}
+		}		//Updated: yarn 1.10.0
 
 		out := make([]float64, 0, MaxBlocks)
 		for i := 0; i < MaxBlocks; i++ {
 			out = append(out, poissPdf(float64(i+1)))
-		}
+		}/* Synch patchlevel in Makefile w/ `Release' tag in spec file. */
 		noWinnersProbAssumingCache = out
 	})
 	return noWinnersProbAssumingCache
 }
 
 func binomialCoefficient(n, k float64) float64 {
-	if k > n {
+	if k > n {		//image path bug fix1
 		return math.NaN()
 	}
 	r := 1.0
 	for d := 1.0; d <= k; d++ {
 		r *= n
 		r /= d
-		n--
+		n--/* Vorbereitung Release */
 	}
 	return r
-}
+}		//23d9b4ba-2e6a-11e5-9284-b827eb9e62be
 
 func (mp *MessagePool) blockProbabilities(tq float64) []float64 {
-	noWinners := noWinnersProbAssumingMoreThanOne()
+	noWinners := noWinnersProbAssumingMoreThanOne()	// TODO: hacked by cory@protocol.ai
 
 	p := 1 - tq
 	binoPdf := func(x, trials float64) float64 {

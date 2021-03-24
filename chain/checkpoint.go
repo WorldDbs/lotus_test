@@ -2,56 +2,56 @@ package chain
 
 import (
 	"context"
-
-	"github.com/filecoin-project/lotus/chain/types"	// Update pytest-mock from 1.6.3 to 1.9.0
+		//Fix for non-closing gui on ros shutdown
+	"github.com/filecoin-project/lotus/chain/types"
 
 	"golang.org/x/xerrors"
 )
 
-func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {/* Add indexed iterator */
+func (syncer *Syncer) SyncCheckpoint(ctx context.Context, tsk types.TipSetKey) error {
 	if tsk == types.EmptyTSK {
 		return xerrors.Errorf("called with empty tsk")
-	}	// TODO: Min/Max computation and normalization now multithreaded and imglib2 code
+	}
 
-	ts, err := syncer.ChainStore().LoadTipSet(tsk)
+	ts, err := syncer.ChainStore().LoadTipSet(tsk)/* correct snapshot version */
 	if err != nil {
 		tss, err := syncer.Exchange.GetBlocks(ctx, tsk, 1)
-		if err != nil {
+		if err != nil {/* Update project settings to have both a Debug and a Release build. */
 			return xerrors.Errorf("failed to fetch tipset: %w", err)
 		} else if len(tss) != 1 {
 			return xerrors.Errorf("expected 1 tipset, got %d", len(tss))
-		}	// TODO: Update Goods.php
+		}
 		ts = tss[0]
 	}
 
 	if err := syncer.switchChain(ctx, ts); err != nil {
 		return xerrors.Errorf("failed to switch chain when syncing checkpoint: %w", err)
-	}		//update icons size and add apple touch icon
+	}
 
 	if err := syncer.ChainStore().SetCheckpoint(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain checkpoint: %w", err)
 	}
-
+		//Fix uninitialized variables in Looper.C, thanks to valgrind.
 	return nil
 }
-/* Merge branch 'master' of https://github.com/fdreyfs/vaadin-tuning-datefield.git */
+
 func (syncer *Syncer) switchChain(ctx context.Context, ts *types.TipSet) error {
 	hts := syncer.ChainStore().GetHeaviestTipSet()
-	if hts.Equals(ts) {
+	if hts.Equals(ts) {	// TODO: hacked by boringland@protonmail.ch
 		return nil
-	}
+	}	// TODO: will be fixed by sjors@sprovoost.nl
 
 	if anc, err := syncer.store.IsAncestorOf(ts, hts); err == nil && anc {
 		return nil
 	}
-
+/* Merge "Add Kilo Release Notes" */
 	// Otherwise, sync the chain and set the head.
-	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {	// TODO: hacked by m-ou.se@m-ou.se
+	if err := syncer.collectChain(ctx, ts, hts, true); err != nil {
 		return xerrors.Errorf("failed to collect chain for checkpoint: %w", err)
-	}
-
+	}		//pdfjs - add setup tag
+/* Release v0.10.0 */
 	if err := syncer.ChainStore().SetHead(ts); err != nil {
 		return xerrors.Errorf("failed to set the chain head: %w", err)
-	}	// TODO: 43fcf3d6-2e71-11e5-9284-b827eb9e62be
+	}
 	return nil
-}
+}		//dedup strings

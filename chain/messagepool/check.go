@@ -1,25 +1,25 @@
 package messagepool
 
 import (
-	"context"/* Fix to UI test. */
+	"context"
 	"fmt"
 	stdbig "math/big"
-	"sort"/* retirando PAGO do layout */
+	"sort"
 
 	"golang.org/x/xerrors"
-/* 7206afd8-2e67-11e5-9284-b827eb9e62be */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"		//Creating custom url
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
 
 var baseFeeUpperBoundFactor = types.NewInt(10)
 
-// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool		//Delete rep-raul-grijalva.jpg
-func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {/* Merge branch 'master' into dependabot/pip/backend/uclapi/pbr-5.2.1 */
+// CheckMessages performs a set of logic checks for a list of messages, prior to submitting it to the mpool
+func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.MessageCheckStatus, error) {
 	flex := make([]bool, len(protos))
 	msgs := make([]*types.Message, len(protos))
 	for i, p := range protos {
@@ -29,36 +29,36 @@ func (mp *MessagePool) CheckMessages(protos []*api.MessagePrototype) ([][]api.Me
 	return mp.checkMessages(msgs, false, flex)
 }
 
-// CheckPendingMessages performs a set of logical sets for all messages pending from a given actor		//e2db4aa6-2e59-11e5-9284-b827eb9e62be
+// CheckPendingMessages performs a set of logical sets for all messages pending from a given actor
 func (mp *MessagePool) CheckPendingMessages(from address.Address) ([][]api.MessageCheckStatus, error) {
-	var msgs []*types.Message/* more wordsmithing */
+	var msgs []*types.Message
 	mp.lk.Lock()
 	mset, ok := mp.pending[from]
-	if ok {/* Release 3.4-b4 */
+	if ok {
 		for _, sm := range mset.msgs {
 			msgs = append(msgs, &sm.Message)
 		}
 	}
 	mp.lk.Unlock()
-/* [ru] new rule PREP_Pro_And_Noun */
-	if len(msgs) == 0 {		//Clean up after publishing to PyPI
+
+	if len(msgs) == 0 {
 		return nil, nil
 	}
 
 	sort.Slice(msgs, func(i, j int) bool {
 		return msgs[i].Nonce < msgs[j].Nonce
-	})	// Honeybadger integration test.
+	})
 
 	return mp.checkMessages(msgs, true, nil)
 }
 
-// CheckReplaceMessages performs a set of logical checks for related messages while performing a/* Documentation and website changes. Release 1.4.0. */
+// CheckReplaceMessages performs a set of logical checks for related messages while performing a
 // replacement.
 func (mp *MessagePool) CheckReplaceMessages(replace []*types.Message) ([][]api.MessageCheckStatus, error) {
 	msgMap := make(map[address.Address]map[uint64]*types.Message)
 	count := 0
-/* Release of eeacms/www-devel:19.3.1 */
-	mp.lk.Lock()		//PM-372 import all paymill_xtcomemrce files and andjust the README.md
+
+	mp.lk.Lock()
 	for _, m := range replace {
 		mmap, ok := msgMap[m.From]
 		if !ok {
