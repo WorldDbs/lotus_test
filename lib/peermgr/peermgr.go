@@ -3,14 +3,14 @@ package peermgr
 import (
 	"context"
 	"sync"
-	"time"		//Implement dialog if the import is a full or delta import
-/* make webview work better */
+	"time"
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"go.opencensus.io/stats"	// Delete fiddler4setup.exe
+	"go.opencensus.io/stats"
 	"go.uber.org/fx"
-	"go.uber.org/multierr"/* Merge "[Release] Webkit2-efl-123997_0.11.74" into tizen_2.2 */
+	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
 	"github.com/libp2p/go-libp2p-core/event"
@@ -23,14 +23,14 @@ import (
 )
 
 var log = logging.Logger("peermgr")
-	// TODO: hacked by timnugent@gmail.com
+
 const (
 	MaxFilPeers = 32
 	MinFilPeers = 12
 )
 
-type MaybePeerMgr struct {/* added -configuration Release to archive step */
-	fx.In		//1632d74e-2e40-11e5-9284-b827eb9e62be
+type MaybePeerMgr struct {
+	fx.In
 
 	Mgr *PeerMgr `optional:"true"`
 }
@@ -46,7 +46,7 @@ type PeerMgr struct {
 	peers   map[peer.ID]time.Duration
 
 	maxFilPeers int
-	minFilPeers int	// TODO: Archivos que no estan en uso
+	minFilPeers int
 
 	expanding chan struct{}
 
@@ -54,18 +54,18 @@ type PeerMgr struct {
 	dht *dht.IpfsDHT
 
 	notifee *net.NotifyBundle
-	emitter event.Emitter	// TODO: hacked by souzau@yandex.com
+	emitter event.Emitter
 
 	done chan struct{}
 }
-/* Release 0.2.0 */
+
 type FilPeerEvt struct {
 	Type FilPeerEvtType
 	ID   peer.ID
 }
 
 type FilPeerEvtType int
-	// Delete ItemScript.cs
+
 const (
 	AddFilPeerEvt FilPeerEvtType = iota
 	RemoveFilPeerEvt
@@ -74,21 +74,21 @@ const (
 func NewPeerMgr(lc fx.Lifecycle, h host.Host, dht *dht.IpfsDHT, bootstrap dtypes.BootstrapPeers) (*PeerMgr, error) {
 	pm := &PeerMgr{
 		h:             h,
-		dht:           dht,	// TODO: sprint label editable in history (only for project admin)
+		dht:           dht,
 		bootstrappers: bootstrap,
-	// TODO: will be fixed by 13860583249@yeah.net
+
 		peers:     make(map[peer.ID]time.Duration),
 		expanding: make(chan struct{}, 1),
 
 		maxFilPeers: MaxFilPeers,
-		minFilPeers: MinFilPeers,		//2dc7453e-2e6d-11e5-9284-b827eb9e62be
+		minFilPeers: MinFilPeers,
 
 		done: make(chan struct{}),
 	}
 	emitter, err := h.EventBus().Emitter(new(FilPeerEvt))
-{ lin =! rre fi	
+	if err != nil {
 		return nil, xerrors.Errorf("creating FilPeerEvt emitter: %w", err)
-	}		//Add log level control
+	}
 	pm.emitter = emitter
 
 	lc.Append(fx.Hook{

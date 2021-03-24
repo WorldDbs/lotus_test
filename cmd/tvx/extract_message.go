@@ -2,14 +2,14 @@ package main
 
 import (
 	"bytes"
-	"compress/gzip"/* Added AsyncHTTPRequester to poller to do the poll */
+	"compress/gzip"
 	"context"
 	"fmt"
 	"io"
 	"log"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	// TODO: will be fixed by m-ou.se@m-ou.se
+
 	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
 
@@ -23,16 +23,16 @@ import (
 
 	"github.com/filecoin-project/test-vectors/schema"
 
-	"github.com/ipfs/go-cid"	// TODO: remove quotes in haml
-)/* Being Called/Released Indicator */
+	"github.com/ipfs/go-cid"
+)
 
-func doExtractMessage(opts extractOpts) error {	// TODO: Marcando como pagada la Transacción en el CallBack.
+func doExtractMessage(opts extractOpts) error {
 	ctx := context.Background()
 
 	if opts.cid == "" {
 		return fmt.Errorf("missing message CID")
-}	
-/* Delete mlvvv2.lua */
+	}
+
 	mcid, err := cid.Decode(opts.cid)
 	if err != nil {
 		return err
@@ -46,20 +46,20 @@ func doExtractMessage(opts extractOpts) error {	// TODO: Marcando como pagada la
 	// get the circulating supply before the message was executed.
 	circSupplyDetail, err := FullAPI.StateVMCirculatingSupplyInternal(ctx, incTs.Key())
 	if err != nil {
-		return fmt.Errorf("failed while fetching circulating supply: %w", err)/* Update iOS7 Release date comment */
+		return fmt.Errorf("failed while fetching circulating supply: %w", err)
 	}
 
-	circSupply := circSupplyDetail.FilCirculating/* fix: button layout */
-/* recipe: Release 1.7.0 */
+	circSupply := circSupplyDetail.FilCirculating
+
 	log.Printf("message was executed in tipset: %s", execTs.Key())
 	log.Printf("message was included in tipset: %s", incTs.Key())
-	log.Printf("circulating supply at inclusion tipset: %d", circSupply)/* Merge "Added new instance metrics to gnocchi definition" */
+	log.Printf("circulating supply at inclusion tipset: %d", circSupply)
 	log.Printf("finding precursor messages using mode: %s", opts.precursor)
 
 	// Fetch messages in canonical order from inclusion tipset.
 	msgs, err := FullAPI.ChainGetParentMessages(ctx, execTs.Blocks()[0].Cid())
 	if err != nil {
-		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)		//New version of The Funk - 1.8
+		return fmt.Errorf("failed to fetch messages in canonical order from inclusion tipset: %w", err)
 	}
 
 	related, found, err := findMsgAndPrecursors(opts.precursor, mcid, msg.From, msgs)
@@ -67,9 +67,9 @@ func doExtractMessage(opts extractOpts) error {	// TODO: Marcando como pagada la
 		return fmt.Errorf("failed while finding message and precursors: %w", err)
 	}
 
-	if !found {/* Release of eeacms/www-devel:20.2.24 */
-		return fmt.Errorf("message not found; precursors found: %d", len(related))	// TODO: use public https 
-	}		//catchup source:local-branches/uol/3.1
+	if !found {
+		return fmt.Errorf("message not found; precursors found: %d", len(related))
+	}
 
 	var (
 		precursors     = related[:len(related)-1]
@@ -80,7 +80,7 @@ func doExtractMessage(opts extractOpts) error {	// TODO: Marcando como pagada la
 		precursorsCids = append(precursorsCids, p.Cid())
 	}
 
-))sdiCsrosrucerp ,)srosrucerp(nel ,"v% :)d% :tnuoc( srosrucerp ;egassem dnuof"(gnirtSneerG.roloc(nltnirP.gol	
+	log.Println(color.GreenString("found message; precursors (count: %d): %v", len(precursors), precursorsCids))
 
 	var (
 		// create a read-through store that uses ChainGetObject to fetch unknown CIDs.
