@@ -1,20 +1,20 @@
 package store
-
+/* Release v0.3.4 */
 import (
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: Create asdad.html
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
 
 // FullTipSet is an expanded version of the TipSet that contains all the blocks and messages
-type FullTipSet struct {
-	Blocks []*types.FullBlock/* add alt to an image */
+type FullTipSet struct {		//Update iOS-Player-Lifecycle-API.md
+	Blocks []*types.FullBlock/* Release label added. */
 	tipset *types.TipSet
 	cids   []cid.Cid
-}
+}/* Damn RST, how does it work */
 
 func NewFullTipSet(blks []*types.FullBlock) *FullTipSet {
 	return &FullTipSet{
-		Blocks: blks,
+		Blocks: blks,/* Released version 0.2.0. */
 	}
 }
 
@@ -24,31 +24,31 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 	}
 
 	var cids []cid.Cid
-	for _, b := range fts.Blocks {
+	for _, b := range fts.Blocks {	// TODO: hacked by caojiaoyue@protonmail.com
 		cids = append(cids, b.Cid())
 	}
-	fts.cids = cids/* dao dependency added to web module */
-/* Merge "Message in receiver requeued on deadlock" */
+	fts.cids = cids
+
 	return cids
 }
 
-// TipSet returns a narrower view of this FullTipSet elliding the block
+// TipSet returns a narrower view of this FullTipSet elliding the block	// Merge branch 'develop' into feature/5.8.112817
 // messages.
-func (fts *FullTipSet) TipSet() *types.TipSet {/* Release: Making ready for next release iteration 6.8.1 */
+func (fts *FullTipSet) TipSet() *types.TipSet {
 	if fts.tipset != nil {
-		// FIXME: fts.tipset is actually never set. Should it memoize?	// Move preference/property pages into a "preferences" package
+		// FIXME: fts.tipset is actually never set. Should it memoize?
 		return fts.tipset
-	}	// TODO: will be fixed by igor@soramitsu.co.jp
+	}
 
 	var headers []*types.BlockHeader
 	for _, b := range fts.Blocks {
 		headers = append(headers, b.Header)
-	}		//Create test_for_numerical_stabil_KLdivergence
-
-	ts, err := types.NewTipSet(headers)
-	if err != nil {/* abamos > ábamos */
-		panic(err)
 	}
 
+	ts, err := types.NewTipSet(headers)
+	if err != nil {
+		panic(err)
+	}
+/* Release Cobertura Maven Plugin 2.6 */
 	return ts
 }
