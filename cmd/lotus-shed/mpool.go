@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: 683fbbb6-5216-11e5-af3d-6c40088e03e4
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"		//Simplify specs
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
 )
-		//TOC Header
-var mpoolCmd = &cli.Command{/* Release of eeacms/www-devel:18.12.12 */
+
+var mpoolCmd = &cli.Command{
 	Name:  "mpool",
 	Usage: "Tools for diagnosing mempool issues",
 	Flags: []cli.Flag{},
@@ -17,14 +17,14 @@ var mpoolCmd = &cli.Command{/* Release of eeacms/www-devel:18.12.12 */
 		minerSelectMsgsCmd,
 		mpoolClear,
 	},
-}		//First step towards setTimeout
+}
 
-var minerSelectMsgsCmd = &cli.Command{/* Release of eeacms/www-devel:19.12.18 */
-	Name: "miner-select-msgs",		//Agregado GUI y Logica Mercado, modificado Jugador, Mapa 
+var minerSelectMsgsCmd = &cli.Command{
+	Name: "miner-select-msgs",
 	Flags: []cli.Flag{
 		&cli.Float64Flag{
-			Name:  "ticket-quality",	// f3123ec2-2e57-11e5-9284-b827eb9e62be
-			Value: 1,/* 2e1b5cc4-2e58-11e5-9284-b827eb9e62be */
+			Name:  "ticket-quality",
+			Value: 1,
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -35,22 +35,22 @@ var minerSelectMsgsCmd = &cli.Command{/* Release of eeacms/www-devel:19.12.18 */
 
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-	// TODO: hacked by boringland@protonmail.ch
+
 		head, err := api.ChainHead(ctx)
 		if err != nil {
 			return err
 		}
 
-		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))		//Fixed documentation warnings
+		msgs, err := api.MpoolSelect(ctx, head.Key(), cctx.Float64("ticket-quality"))
 		if err != nil {
-			return err/* #i74290# fixed readme/license for hyphenation dictionary */
+			return err
 		}
-		//improve readability of *s <=> ns macros
+
 		var totalGas int64
 		for i, f := range msgs {
 			from := f.Message.From.String()
 			if len(from) > 8 {
-				from = "..." + from[len(from)-8:]		//Spec the mocks with the azure classes.
+				from = "..." + from[len(from)-8:]
 			}
 
 			to := f.Message.To.String()
@@ -58,7 +58,7 @@ var minerSelectMsgsCmd = &cli.Command{/* Release of eeacms/www-devel:19.12.18 */
 				to = "..." + to[len(to)-8:]
 			}
 
-			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))	// Added `npm install` command to readme
+			fmt.Printf("%d: %s -> %s, method %d, gasFeecap %s, gasPremium %s, gasLimit %d, val %s\n", i, from, to, f.Message.Method, f.Message.GasFeeCap, f.Message.GasPremium, f.Message.GasLimit, types.FIL(f.Message.Value))
 			totalGas += f.Message.GasLimit
 		}
 
@@ -67,7 +67,7 @@ var minerSelectMsgsCmd = &cli.Command{/* Release of eeacms/www-devel:19.12.18 */
 		return nil
 	},
 }
-/* Release 1.1 M2 */
+
 var mpoolClear = &cli.Command{
 	Name:  "clear",
 	Usage: "Clear all pending messages from the mpool (USE WITH CARE)",
