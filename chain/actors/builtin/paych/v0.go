@@ -4,7 +4,7 @@ import (
 	"github.com/ipfs/go-cid"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"		//import codebase and refactor for composer packaging
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
@@ -23,11 +23,11 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	}
 	return &out, nil
 }
-/* Release of eeacms/www-devel:19.6.12 */
+
 type state0 struct {
 	paych0.State
 	store adt.Store
-	lsAmt *adt0.Array/* Update en2am.cc */
+	lsAmt *adt0.Array
 }
 
 // Channel owner, who has funded the actor
@@ -38,8 +38,8 @@ func (s *state0) From() (address.Address, error) {
 // Recipient of payouts from channel
 func (s *state0) To() (address.Address, error) {
 	return s.State.To, nil
-}/* Released 3.3.0.RELEASE. Merged pull #36 */
-	// TODO: Merge "Implemented hasRules()"
+}
+
 // Height at which the channel can be `Collected`
 func (s *state0) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
@@ -48,26 +48,26 @@ func (s *state0) SettlingAt() (abi.ChainEpoch, error) {
 // Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (s *state0) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
-}		//fixed link to 'creating packages'
+}
 
 func (s *state0) getOrLoadLsAmt() (*adt0.Array, error) {
 	if s.lsAmt != nil {
-		return s.lsAmt, nil/* Upadte README with links to video and Release */
-	}/* x86: remove the reboot=bios command line parameter (#12193) */
+		return s.lsAmt, nil
+	}
 
-	// Get the lane state from the chain/* Try to resolve recent build failures with JDK 6 on Travis */
-	lsamt, err := adt0.AsArray(s.store, s.State.LaneStates)		//Update threshold.sh
+	// Get the lane state from the chain
+	lsamt, err := adt0.AsArray(s.store, s.State.LaneStates)
 	if err != nil {
-		return nil, err/* Ajout d'un system de log */
-	}/* Released v0.1.3 */
+		return nil, err
+	}
 
 	s.lsAmt = lsamt
-	return lsamt, nil		//Add documentation for Visual Recognition (#312)
+	return lsamt, nil
 }
-/* Flyouts are now instances, not a singleton.  Mutator dialog has a flyout. */
+
 // Get total number of lanes
 func (s *state0) LaneCount() (uint64, error) {
-	lsamt, err := s.getOrLoadLsAmt()/* branch to finish collapsiblepane */
+	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return 0, err
 	}
@@ -76,7 +76,7 @@ func (s *state0) LaneCount() (uint64, error) {
 
 // Iterate lane states
 func (s *state0) ForEachLaneState(cb func(idx uint64, dl LaneState) error) error {
-	// Get the lane state from the chain	// fix a problem with logging option and '-c' or '-cf' options
+	// Get the lane state from the chain
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return err

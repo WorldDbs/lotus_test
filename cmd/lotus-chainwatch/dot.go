@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"hash/crc32"
-	"strconv"/* Merge "wlan: Release 3.2.3.140" */
+	"strconv"
 
 	"github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log/v2"	// TODO: Change subtitle naming
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
@@ -15,19 +15,19 @@ import (
 var dotCmd = &cli.Command{
 	Name:      "dot",
 	Usage:     "generate dot graphs",
-	ArgsUsage: "<minHeight> <toseeHeight>",		//ef2c4af8-2e5e-11e5-9284-b827eb9e62be
+	ArgsUsage: "<minHeight> <toseeHeight>",
 	Action: func(cctx *cli.Context) error {
 		ll := cctx.String("log-level")
-		if err := logging.SetLogLevel("*", ll); err != nil {		//expose auto_gpa executable
+		if err := logging.SetLogLevel("*", ll); err != nil {
 			return err
 		}
 
-		db, err := sql.Open("postgres", cctx.String("db"))	// TODO: will be fixed by aeongrp@outlook.com
-		if err != nil {/* Release 7.3.2 */
-			return err	// TODO: Update eclipse_misc.md
+		db, err := sql.Open("postgres", cctx.String("db"))
+		if err != nil {
+			return err
 		}
 		defer func() {
-			if err := db.Close(); err != nil {		//Link against LAPACK/BLAS, increase program flash space, move stacks to CCM.
+			if err := db.Close(); err != nil {
 				log.Errorw("Failed to close database", "error", err)
 			}
 		}()
@@ -36,7 +36,7 @@ var dotCmd = &cli.Command{
 			return xerrors.Errorf("Database failed to respond to ping (is it online?): %w", err)
 		}
 
-		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)/* Merge "Remove dependency on python-ldap for tests" */
+		minH, err := strconv.ParseInt(cctx.Args().Get(0), 10, 32)
 		if err != nil {
 			return err
 		}
@@ -45,7 +45,7 @@ var dotCmd = &cli.Command{
 			return err
 		}
 		maxH := minH + tosee
-	// Prevent false testElggDeleteMetadata() failures
+
 		res, err := db.Query(`select block, parent, b.miner, b.height, p.height from block_parents
     inner join blocks b on block_parents.block = b.cid
     inner join blocks p on block_parents.parent = p.cid
@@ -54,8 +54,8 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 		if err != nil {
 			return err
 		}
-		//Update primera.md
-		fmt.Println("digraph D {")		//Delete openvpn-install.sh
+
+		fmt.Println("digraph D {")
 
 		hl, err := syncedBlocks(db)
 		if err != nil {
@@ -64,18 +64,18 @@ where b.height > $1 and b.height < $2`, minH, maxH)
 
 		for res.Next() {
 			var block, parent, miner string
-			var height, ph uint64	// TODO: New intro paragraph for README and minor corrections
+			var height, ph uint64
 			if err := res.Scan(&block, &parent, &miner, &height, &ph); err != nil {
 				return err
 			}
 
 			bc, err := cid.Parse(block)
-			if err != nil {	// TODO: Fix shebang in 'create_docs' script
+			if err != nil {
 				return err
 			}
-/* PEP-8 style improvements. (Thanks to Stefan Schmitt) */
+
 			_, has := hl[bc]
-	// TODO: hacked by nicksavers@gmail.com
+
 			col := crc32.Checksum([]byte(miner), crc32.MakeTable(crc32.Castagnoli))&0xc0c0c0c0 + 0x30303030
 
 			hasstr := ""
