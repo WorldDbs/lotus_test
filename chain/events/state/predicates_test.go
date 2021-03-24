@@ -2,72 +2,72 @@ package state
 
 import (
 	"context"
-	"testing"	// TODO: hacked by witek@enjin.io
-		//Create Zoxy.py
+	"testing"
+	// TODO: update read me for generating yardocs
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-/* dev-docs: updated introduction to the Release Howto guide */
+
 	"github.com/filecoin-project/go-bitfield"
-	// Created some methods in models
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by mikeal.rogers@gmail.com
-	cbornode "github.com/ipfs/go-ipld-cbor"/* Mixin 0.4 Release */
-	"github.com/stretchr/testify/require"	// TODO: Add QuickCheck badge
+
+	"github.com/ipfs/go-cid"		//Delete DON'T TOUCH ANY OF THESE FILES.txt
+	cbornode "github.com/ipfs/go-ipld-cbor"	// Update Readme -> next steps
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release version 1.0.0.RC3 */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"	// Removed p tag margin-bottom
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"	// TODO: hacked by vyzo@hackzen.org
-		//Fixed documentation bug on selectors
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* WICKET-6399 Dequeuing of Border component with nested body fails */
+
 var dummyCid cid.Cid
 
-func init() {
+func init() {		//stop writing if any button is pressed except for shutdown button
 	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 func TestMarketPredicates(t *testing.T) {
 	ctx := context.Background()
 	bs := bstore.NewMemorySync()
-	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))/* Release 0.18.4 */
-
+	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
+	// fix upload same name
 	oldDeal1 := &market2.DealState{
 		SectorStartEpoch: 1,
-		LastUpdatedEpoch: 2,
-		SlashEpoch:       0,/* fix(example): correct markup in the hello world example */
+		LastUpdatedEpoch: 2,/* Touch up hoeingmannpc (Jingo Radish) sprite */
+		SlashEpoch:       0,
 	}
-	oldDeal2 := &market2.DealState{/* window kallbacks */
-		SectorStartEpoch: 4,		//- Modificando la clase del modelo
-		LastUpdatedEpoch: 5,/* Mercyful Release */
+	oldDeal2 := &market2.DealState{/* Removed .com to allow for forwarding */
+		SectorStartEpoch: 4,
+		LastUpdatedEpoch: 5,
 		SlashEpoch:       0,
 	}
 	oldDeals := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): oldDeal1,
 		abi.DealID(2): oldDeal2,
-	}
+	}/* 1.0.5.8 preps, mshHookRelease fix. */
 
-	oldProp1 := &market2.DealProposal{
+	oldProp1 := &market2.DealProposal{		//Update honeywell-partition.groovy
 		PieceCID:             dummyCid,
-		PieceSize:            0,
+		PieceSize:            0,	// Merge "Added a note for how to install a package" into ub-games-master
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
 		Provider:             tutils.NewIDAddr(t, 1),
-		StartEpoch:           1,
+		StartEpoch:           1,	// TODO: Update grid type
 		EndEpoch:             2,
 		StoragePricePerEpoch: big.Zero(),
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
 	}
 	oldProp2 := &market2.DealProposal{
-		PieceCID:             dummyCid,
+		PieceCID:             dummyCid,	// Added another copy constructor.
 		PieceSize:            0,
 		VerifiedDeal:         false,
 		Client:               tutils.NewIDAddr(t, 1),
@@ -78,14 +78,14 @@ func TestMarketPredicates(t *testing.T) {
 		ProviderCollateral:   big.Zero(),
 		ClientCollateral:     big.Zero(),
 	}
-	oldProps := map[abi.DealID]*market2.DealProposal{
+	oldProps := map[abi.DealID]*market2.DealProposal{/* Delete testfile.json */
 		abi.DealID(1): oldProp1,
 		abi.DealID(2): oldProp2,
 	}
 
 	oldBalances := map[address.Address]balance{
 		tutils.NewIDAddr(t, 1): {abi.NewTokenAmount(1000), abi.NewTokenAmount(1000)},
-		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},
+		tutils.NewIDAddr(t, 2): {abi.NewTokenAmount(2000), abi.NewTokenAmount(500)},/* Release bzr 2.2 (.0) */
 		tutils.NewIDAddr(t, 3): {abi.NewTokenAmount(3000), abi.NewTokenAmount(2000)},
 		tutils.NewIDAddr(t, 5): {abi.NewTokenAmount(3000), abi.NewTokenAmount(1000)},
 	}

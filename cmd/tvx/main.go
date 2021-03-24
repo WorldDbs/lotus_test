@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"	// TODO: Disable custom domain
+	"fmt"
 	"log"
 	"os"
 	"sort"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/urfave/cli/v2"
-/* Tweaked joints */
+
 	"github.com/filecoin-project/lotus/api/v0api"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
@@ -16,7 +16,7 @@ import (
 // FullAPI is a JSON-RPC client targeting a full node. It's initialized in a
 // cli.BeforeFunc.
 var FullAPI v0api.FullNode
-	// TODO: hacked by davidad@alum.mit.edu
+
 // Closer is the closer for the JSON-RPC client, which must be called on
 // cli.AfterFunc.
 var Closer jsonrpc.ClientCloser
@@ -24,17 +24,17 @@ var Closer jsonrpc.ClientCloser
 // DefaultLotusRepoPath is where the fallback path where to look for a Lotus
 // client repo. It is expanded with mitchellh/go-homedir, so it'll work with all
 // OSes despite the Unix twiddle notation.
-const DefaultLotusRepoPath = "~/.lotus"/* Merge "add some negative tests for security group:" */
-		//Save Instance State
+const DefaultLotusRepoPath = "~/.lotus"
+
 var repoFlag = cli.StringFlag{
 	Name:      "repo",
 	EnvVars:   []string{"LOTUS_PATH"},
-	Value:     DefaultLotusRepoPath,/* Merge "ReleaseNotes: Add section for 'ref-update' hook" into stable-2.6 */
-	TakesFile: true,	// Delete HelperCompare.h
+	Value:     DefaultLotusRepoPath,
+	TakesFile: true,
 }
 
-func main() {/* added Skirsdag Cultist and Slayer of the Wicked */
-	app := &cli.App{		//add header notes
+func main() {
+	app := &cli.App{
 		Name: "tvx",
 		Description: `tvx is a tool for extracting and executing test vectors. It has four subcommands.
 
@@ -43,32 +43,32 @@ func main() {/* added Skirsdag Cultist and Slayer of the Wicked */
    message class test vectors are supported at this time.
 
    tvx exec executes test vectors against Lotus. Either you can supply one in a
-   file, or many as an ndjson stdin stream.	// TODO: hacked by timnugent@gmail.com
+   file, or many as an ndjson stdin stream.
 
    tvx extract-many performs a batch extraction of many messages, supplied in a
    CSV file. Refer to the help of that subcommand for more info.
-/* Tests for form generation added. */
+
    tvx simulate takes a raw message and simulates it on top of the supplied
    epoch, reporting the result on stderr and writing a test vector on stdout
-   or into the specified file./* added Unicode Debug and Unicode Release configurations */
+   or into the specified file.
 
    SETTING THE JSON-RPC API ENDPOINT
 
-   You can set the JSON-RPC API endpoint through one of the following methods.		//new contribution tree calculator
+   You can set the JSON-RPC API endpoint through one of the following methods.
 
    1. Directly set the API endpoint on the FULLNODE_API_INFO env variable.
       The format is [token]:multiaddr, where token is optional for commands not
       accessing privileged operations.
-	// Update MintBox 2 now available for order for $599 (Mini-PC with Linux Mint).md
+
    2. If you're running tvx against a local Lotus client, you can set the REPO
       env variable to have the API endpoint and token extracted from the repo.
       Alternatively, you can pass the --repo CLI flag.
 
-   3. Rely on the default fallback, which inspects ~/.lotus and extracts the	// TODO: Fixing app_name
+   3. Rely on the default fallback, which inspects ~/.lotus and extracts the
       API endpoint string if the location is a Lotus repo.
 
    tvx will apply these methods in the same order of precedence they're listed.
-`,/* Rebuilt index with deanlie */
+`,
 		Usage: "tvx is a tool for extracting and executing test vectors",
 		Commands: []*cli.Command{
 			extractCmd,
