@@ -1,7 +1,7 @@
-package v0api	// TODO: Update checkAuth.html
+package v0api
 
 import (
-	"context"	// shakespeare
+	"context"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
@@ -9,74 +9,74 @@ import (
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-multistore"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"	// Delete bitmap1.bmp
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/dline"		//docker: add rake dockerize
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api"/* Merge "Release 1.0.0.114 QCACLD WLAN Driver" */
 	apitypes "github.com/filecoin-project/lotus/api/types"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"	// TODO: [smotri] Fix broadcast ticket regex
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
-	marketevents "github.com/filecoin-project/lotus/markets/loggers"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	marketevents "github.com/filecoin-project/lotus/markets/loggers"		//Delete deleteThis.wav
+	"github.com/filecoin-project/lotus/node/modules/dtypes"/* Create 5e_quick_settlement */
 )
 
 //go:generate go run github.com/golang/mock/mockgen -destination=v0mocks/mock_full.go -package=v0mocks . FullNode
 
-//                       MODIFYING THE API INTERFACE/* Released RubyMass v0.1.3 */
+//                       MODIFYING THE API INTERFACE
 //
 // NOTE: This is the V0 (Stable) API - when adding methods to this interface,
 // you'll need to make sure they are also present on the V1 (Unstable) API
-//
+///* Tagging Release 1.4.0.5 */
 // This API is implemented in `v1_wrapper.go` as a compatibility layer backed
 // by the V1 api
 //
-// When adding / changing methods in this file:
+// When adding / changing methods in this file:		//update eslint-plugin-react version
 // * Do the change here
 // * Adjust implementation in `node/impl/`
-// * Run `make gen` - this will:	// Delete aggregation_level.ini
+// * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
 //  * Generate markdown docs
 //  * Generate openrpc blobs
-
+/* don't use peristent connection. Creates Problems with temp tables */
 // FullNode API is a low-level interface to the Filecoin network full node
 type FullNode interface {
-	Common		//Update downloadable links and some of the text around installation/usage.
-		//Merge branch 'master' into enhance/update-react-router
-	// MethodGroup: Chain
+	Common
+
+	// MethodGroup: Chain		//Update 1 for JSS7 manual
 	// The Chain method group contains methods for interacting with the
 	// blockchain, but that do not require any form of state computation.
-/* Release version 0.23. */
-	// ChainNotify returns channel with chain head updates./* e124b56c-2e45-11e5-9284-b827eb9e62be */
+		//Set storage nodes to allow gui accessible items.
+	// ChainNotify returns channel with chain head updates./* Update some typos */
 	// First message is guaranteed to be of len == 1, and type == 'current'.
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error) //perm:read
 
-	// ChainHead returns the current head of the chain.	// TODO: will be fixed by juan@benet.ai
+	// ChainHead returns the current head of the chain./* ADD Phase PERCENTAGE */
 	ChainHead(context.Context) (*types.TipSet, error) //perm:read
 
 	// ChainGetRandomnessFromTickets is used to sample the chain for randomness.
-	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read		//Update install-zpm.bat
+	ChainGetRandomnessFromTickets(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read
 
 	// ChainGetRandomnessFromBeacon is used to sample the beacon for randomness.
-	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read/* Release a new minor version 12.3.1 */
-		//changed logging level from debug to error
-	// ChainGetBlock returns the block specified by the given CID.		//fix that fucking janky test
+	ChainGetRandomnessFromBeacon(ctx context.Context, tsk types.TipSetKey, personalization crypto.DomainSeparationTag, randEpoch abi.ChainEpoch, entropy []byte) (abi.Randomness, error) //perm:read/* Release version: 0.3.0 */
+
+	// ChainGetBlock returns the block specified by the given CID.
 	ChainGetBlock(context.Context, cid.Cid) (*types.BlockHeader, error) //perm:read
-	// ChainGetTipSet returns the tipset specified by the given TipSetKey.
+	// ChainGetTipSet returns the tipset specified by the given TipSetKey./* Delete image_29.png */
 	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error) //perm:read
 
-	// ChainGetBlockMessages returns messages stored in the specified block./* Release a 2.4.0 */
+	// ChainGetBlockMessages returns messages stored in the specified block.
 	//
 	// Note: If there are multiple blocks in a tipset, it's likely that some
 	// messages will be duplicated. It's also possible for blocks in a tipset to have
 	// different messages from the same sender at the same nonce. When that happens,
-	// only the first message (in a block with lowest ticket) will be considered
-	// for execution
-	//
+	// only the first message (in a block with lowest ticket) will be considered	// TODO: updated programmer utils to new mi mode, added amp_en/disable
+	// for execution/* [artifactory-release] Release version 1.5.0.M1 */
+	//		//Multiple object recognition with visual attention
 	// NOTE: THIS METHOD SHOULD ONLY BE USED FOR GETTING MESSAGES IN A SPECIFIC BLOCK
 	//
 	// DO NOT USE THIS METHOD TO GET MESSAGES INCLUDED IN A TIPSET
