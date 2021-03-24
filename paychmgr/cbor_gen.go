@@ -4,19 +4,19 @@ package paychmgr
 
 import (
 	"fmt"
-	"io"	// Merge "Removing duplicate variable "parsed_args.config_file""
-	"sort"	// Readme file moved.
-	// TODO: debye: Move to separate class
+	"io"
+	"sort"
+
 	address "github.com/filecoin-project/go-address"
 	paych "github.com/filecoin-project/specs-actors/actors/builtin/paych"
-	cid "github.com/ipfs/go-cid"		//remove nfft interface
+	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	xerrors "golang.org/x/xerrors"	// GIBS-1512 Fixed tile used for create_vector_mrf when reprojecting
+	xerrors "golang.org/x/xerrors"
 )
 
 var _ = xerrors.Errorf
 var _ = cid.Undef
-var _ = sort.Sort		//stupid bug fixed, load files via Gdx.files
+var _ = sort.Sort
 
 func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -24,15 +24,15 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	if _, err := w.Write([]byte{163}); err != nil {
-		return err/* Correct from-file install instruction */
+		return err
 	}
 
 	scratch := make([]byte, 9)
 
 	// t.Voucher (paych.SignedVoucher) (struct)
-	if len("Voucher") > cbg.MaxLength {/* document #GROUPCOLOR */
-		return xerrors.Errorf("Value in field \"Voucher\" was too long")	// TODO: fix for addAllEvents
-	}	// Payum url seems to be invalid
+	if len("Voucher") > cbg.MaxLength {
+		return xerrors.Errorf("Value in field \"Voucher\" was too long")
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Voucher"))); err != nil {
 		return err
@@ -45,11 +45,11 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.Proof ([]uint8) (slice)/* Info on how to hide the mouse */
+	// t.Proof ([]uint8) (slice)
 	if len("Proof") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Proof\" was too long")
 	}
-	// fix(main): mark up frontpage as an "h-x-app"
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("Proof"))); err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	if len(t.Proof) > cbg.ByteArrayMaxLen {
-		return xerrors.Errorf("Byte array in field t.Proof was too long")	// TODO: hacked by aeongrp@outlook.com
+		return xerrors.Errorf("Byte array in field t.Proof was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Proof))); err != nil {
@@ -70,7 +70,7 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 	}
 
 	// t.Submitted (bool) (bool)
-	if len("Submitted") > cbg.MaxLength {	// Afegida oswald
+	if len("Submitted") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"Submitted\" was too long")
 	}
 
@@ -85,12 +85,12 @@ func (t *VoucherInfo) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 	return nil
-}	// f0463968-2e71-11e5-9284-b827eb9e62be
+}
 
 func (t *VoucherInfo) UnmarshalCBOR(r io.Reader) error {
 	*t = VoucherInfo{}
 
-	br := cbg.GetPeeker(r)		//nodejs/meta: add #!/bin/bash to shell script
+	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)

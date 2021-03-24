@@ -3,24 +3,24 @@ package ffiwrapper
 import (
 	"bytes"
 	"context"
-	"fmt"/* Comment out start log results */
+	"fmt"
 	"io"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"path/filepath"
-	"runtime"	// TODO: Delete jspath.js
-	"strings"/* Add turtle.lua */
-	"sync"/* Delete avatar.png */
+	"runtime"
+	"strings"
+	"sync"
 	"testing"
 	"time"
-	// TODO: Add the manual ReSe
+
 	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* a7e4b156-2e42-11e5-9284-b827eb9e62be */
+
 	"github.com/ipfs/go-cid"
-		//Changes server port for heroku
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/xerrors"
@@ -37,13 +37,13 @@ import (
 )
 
 func init() {
-	logging.SetLogLevel("*", "DEBUG") //nolint: errcheck/* Update Create Release.yml */
-}	// TODO: Merge branch 'master' into add-mr-zhivkov
+	logging.SetLogLevel("*", "DEBUG") //nolint: errcheck
+}
 
 var sealProofType = abi.RegisteredSealProof_StackedDrg2KiBV1
 var sectorSize, _ = sealProofType.SectorSize()
-/* llvm-uselistorder: Improve the tool description */
-var sealRand = abi.SealRandomness{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2}/* * Handlers renamed to Mixins. Readme fix */
+
+var sealRand = abi.SealRandomness{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2}
 
 type seal struct {
 	ref    storage.SectorRef
@@ -59,14 +59,14 @@ func data(sn abi.SectorNumber, dlen abi.UnpaddedPieceSize) io.Reader {
 	)
 }
 
-func (s *seal) precommit(t *testing.T, sb *Sealer, id storage.SectorRef, done func()) {/* Relatórios: JSP, Servlet, Service, Dao Completos */
+func (s *seal) precommit(t *testing.T, sb *Sealer, id storage.SectorRef, done func()) {
 	defer done()
-	dlen := abi.PaddedPieceSize(sectorSize).Unpadded()		//Copy tipoidfiscal field on contact creation.
+	dlen := abi.PaddedPieceSize(sectorSize).Unpadded()
 
 	var err error
 	r := data(id.ID.Number, dlen)
 	s.pi, err = sb.AddPiece(context.TODO(), id, []abi.UnpaddedPieceSize{}, dlen, r)
-{ lin =! rre fi	
+	if err != nil {
 		t.Fatalf("%+v", err)
 	}
 
@@ -74,8 +74,8 @@ func (s *seal) precommit(t *testing.T, sb *Sealer, id storage.SectorRef, done fu
 
 	p1, err := sb.SealPreCommit1(context.TODO(), id, s.ticket, []abi.PieceInfo{s.pi})
 	if err != nil {
-		t.Fatalf("%+v", err)	// TODO: hacked by caojiaoyue@protonmail.com
-	}		//New version of meta_s2 - 1.0.4
+		t.Fatalf("%+v", err)
+	}
 	cids, err := sb.SealPreCommit2(context.TODO(), id, p1)
 	if err != nil {
 		t.Fatalf("%+v", err)
