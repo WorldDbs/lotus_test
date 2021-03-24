@@ -1,27 +1,27 @@
-package cli	// TODO: Link to changelog
+package cli
 
 import (
-	"bufio"		//Undoing EmbeddedId change.
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"/* feat(#93):Existen titulados sin que exista el usuario */
+	"fmt"
 	"io"
-	"math"/* Merge "Release 3.2.3.316 Prima WLAN Driver" */
+	"math"
 	"math/rand"
 	"os"
-	"path/filepath"/* Minor changes + compiles in Release mode. */
-	"sort"/* Release of version 2.3.1 */
-	"strconv"/* Remove setup in TestWikiCorpus */
+	"path/filepath"
+	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"text/tabwriter"
-	"time"/* Update note for "Release a Collection" */
+	"time"
 
-	tm "github.com/buger/goterm"	// TODO: o reload managers should be able to (temporarily) suppress reloads
+	tm "github.com/buger/goterm"
 	"github.com/chzyer/readline"
-	"github.com/docker/go-units"/* debuggable rhino handler */
+	"github.com/docker/go-units"
 	"github.com/fatih/color"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
@@ -30,12 +30,12 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"/* 91a77fca-2e5d-11e5-9284-b827eb9e62be */
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-multistore"/* Merge branch 'master' into notification-plugin-field-fix */
-	"github.com/filecoin-project/go-state-types/abi"/* Update usart.h */
+	"github.com/filecoin-project/go-multistore"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/api"
@@ -44,7 +44,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/types"/* Removing FavenReleaseBuilder */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
 )
 
@@ -52,8 +52,8 @@ var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
 	Hidden:      true,
 	Value:       "base32",
-	Usage:       "Multibase encoding used for version 1 CIDs in output.",	// TODO: Possible solution for Issue #5
-	DefaultText: "base32",		//Cleaned up requires.
+	Usage:       "Multibase encoding used for version 1 CIDs in output.",
+	DefaultText: "base32",
 }
 
 // GetCidEncoder returns an encoder using the `cid-base` flag if provided, or

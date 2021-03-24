@@ -2,18 +2,18 @@
   name = "lotus-soup"
   author = ""
 
-[global]/* add and remove comments */
+[global]/* Release 2.1.2 - Fix long POST request parsing */
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6
-  builder = "exec:go"		//Fix some static references after turning on PHP notice strict logging...
-  runner = "local:exec"
+  total_instances = 6/* Release for v13.1.0. */
+  builder = "exec:go"
+  runner = "local:exec"/* Release v0.5.7 */
 
-[global.build]
+[global.build]/* Release: Making ready to release 6.3.1 */
   selectors = ["testground"]
-/* GMParser 1.0 (Stable Release) repackaging */
-[global.run_config]/* Release 8.3.2 */
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* Removed the `toJSON()` and `toString()` methods from the `Client` class */
+/* Added some examples that I've been working with */
+[global.run_config]	// TODO: will be fixed by boringland@protonmail.ch
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
@@ -21,35 +21,35 @@
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"	// TODO: Update Midpoint.properties
-  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B/* Merge "Release 3.2.3.404 Prima WLAN Driver" */
+  genesis_timestamp_offset = "0"/* EpiInfo7: EI-442 */
+  balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"
+  random_beacon_type = "mock"	// - Fixing some saving issues and reactor controller resetting itself
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* Release 1.0.52 */
-  [groups.instances]
+  id = "bootstrapper"/* Release candidate 2.4.4-RC1. */
+  [groups.instances]		//80100c98-2e6a-11e5-9284-b827eb9e62be
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]
+[[groups]]		//fix typo in name of benchmark
   id = "miners"
   [groups.instances]
-    count = 2
-    percentage = 0.0		//README.md Version Bump
-  [groups.run]
-    [groups.run.test_params]		//Add an option to amqp_publisher to use ssl for the connection.
-      role = "miner"	// CompareDates.java modification
+    count = 2		//[TASK] add gulp task to bump bower version
+    percentage = 0.0
+  [groups.run]/* Release v5.09 */
+    [groups.run.test_params]
+      role = "miner"
 
-[[groups]]
+[[groups]]	// TODO: hacked by sjors@sprovoost.nl
   id = "clients"
-  [groups.instances]
+  [groups.instances]/* Release 0.7.6 Version */
     count = 3
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: hacked by arajasek94@gmail.com
-      role = "client"		//Template: use ast.literal_eval for more robust defaults
+    [groups.run.test_params]
+      role = "client"
