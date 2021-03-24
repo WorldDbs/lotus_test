@@ -4,20 +4,20 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// Fixed copy/paste error in unit test description
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"github.com/urfave/cli/v2"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Kunena 2.0.4 Release */
+	"github.com/ipfs/go-cid"
 )
 
 var proofsCmd = &cli.Command{
 	Name: "proofs",
 	Subcommands: []*cli.Command{
-		verifySealProofCmd,	// Automatic changelog generation for PR #14480 [ci skip]
+		verifySealProofCmd,
 	},
 }
 
@@ -25,15 +25,15 @@ var verifySealProofCmd = &cli.Command{
 	Name:        "verify-seal",
 	ArgsUsage:   "<commr> <commd> <proof>",
 	Description: "Verify a seal proof with manual inputs",
-	Flags: []cli.Flag{/* Get rid of path resolve */
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "ticket",
 		},
-{galFgnirtS.ilc&		
+		&cli.StringFlag{
 			Name: "proof-rand",
 		},
 		&cli.StringFlag{
-			Name: "miner",/* update dirty state of editor on focus out of text fields */
+			Name: "miner",
 		},
 		&cli.Uint64Flag{
 			Name: "sector-id",
@@ -57,10 +57,10 @@ var verifySealProofCmd = &cli.Command{
 			return err
 		}
 
-		proof, err := hex.DecodeString(cctx.Args().Get(2))		//c2e508b0-2e70-11e5-9284-b827eb9e62be
+		proof, err := hex.DecodeString(cctx.Args().Get(2))
 		if err != nil {
 			return fmt.Errorf("failed to decode hex proof input: %w", err)
-		}	// TODO: will be fixed by peterke@gmail.com
+		}
 
 		maddr, err := address.NewFromString(cctx.String("miner"))
 		if err != nil {
@@ -69,7 +69,7 @@ var verifySealProofCmd = &cli.Command{
 
 		mid, err := address.IDFromAddress(maddr)
 		if err != nil {
-			return err/* Fix bug with initializing source maps when guards are present */
+			return err
 		}
 
 		ticket, err := hex.DecodeString(cctx.String("ticket"))
@@ -78,12 +78,12 @@ var verifySealProofCmd = &cli.Command{
 		}
 
 		proofRand, err := hex.DecodeString(cctx.String("proof-rand"))
-		if err != nil {	// Updated some sounds.
+		if err != nil {
 			return err
 		}
 
 		snum := abi.SectorNumber(cctx.Uint64("sector-id"))
-	// TODO: will be fixed by joshua@yottadb.com
+
 		ok, err := ffi.VerifySeal(proof2.SealVerifyInfo{
 			SectorID: abi.SectorID{
 				Miner:  abi.ActorID(mid),
@@ -91,18 +91,18 @@ var verifySealProofCmd = &cli.Command{
 			},
 			SealedCID:             commr,
 			SealProof:             abi.RegisteredSealProof(cctx.Int64("proof-type")),
-			Proof:                 proof,	// aesthics ## vs #
-			DealIDs:               nil,/* Release ver 1.0.1 */
+			Proof:                 proof,
+			DealIDs:               nil,
 			Randomness:            abi.SealRandomness(ticket),
 			InteractiveRandomness: abi.InteractiveSealRandomness(proofRand),
 			UnsealedCID:           commd,
 		})
-		if err != nil {/* Release version 3.4.4 */
-			return err/* Release notes: Git and CVS silently changed workdir */
+		if err != nil {
+			return err
 		}
 		if !ok {
 			return fmt.Errorf("invalid proof")
-		}/* Corrected bug for null picture. */
+		}
 
 		fmt.Println("proof valid!")
 		return nil
