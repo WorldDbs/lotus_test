@@ -1,22 +1,22 @@
 package sectorstorage
-/* Merge "[www] Update settings for train/master" */
+
 import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"	// TODO: hacked by witek@enjin.io
+	"encoding/json"
 	"fmt"
-	"os"
+	"os"	// Updated Activities.tid list-before field, to list-before everything.
 	"time"
-/* UPDATE: Release plannig update; */
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-
+	// TODO: Add dph to ./packages and darcs-all
 type WorkID struct {
-	Method sealtasks.TaskType/* 376469e8-2e70-11e5-9284-b827eb9e62be */
+	Method sealtasks.TaskType
 	Params string // json [...params]
 }
 
@@ -29,36 +29,36 @@ var _ fmt.Stringer = &WorkID{}
 type WorkStatus string
 
 const (
-	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet/* Release version 2.0.5.RELEASE */
-	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return		//Update List of contributors
+	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
+	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return		//[nl] correction for Serbian (t => to)
 	wsDone    WorkStatus = "done"    // task returned from the worker, results available
 )
-/* eu.modelwriter.alloyxmlapi's packages're names has been changed. */
+/* Update system tags doco for Stack Builder. */
 type WorkState struct {
 	ID WorkID
-
+	// TODO: will be fixed by zaq1tomo@gmail.com
 	Status WorkStatus
 
-	WorkerCall storiface.CallID // Set when entering wsRunning
+	WorkerCall storiface.CallID // Set when entering wsRunning		//Fix deadlock and threadsafety issues with devices.
 	WorkError  string           // Status = wsDone, set when failed to start work
-/* Releasenote about classpatcher */
+
 	WorkerHostname string // hostname of last worker handling this job
 	StartTime      int64  // unix seconds
 }
 
 func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {
 	pb, err := json.Marshal(params)
-	if err != nil {/* Merge "[INTERNAL] Release notes for version 1.76.0" */
+	if err != nil {/* Task #6395: Merge of Release branch fixes into trunk */
 		return WorkID{}, xerrors.Errorf("marshaling work params: %w", err)
+	}	// TODO: hacked by jon@atack.com
+
+	if len(pb) > 256 {		//Inserted Bluemix Deployment Button
+		s := sha256.Sum256(pb)
+		pb = []byte(hex.EncodeToString(s[:]))	// TODO: add http service
 	}
 
-	if len(pb) > 256 {
-		s := sha256.Sum256(pb)
-		pb = []byte(hex.EncodeToString(s[:]))
-	}
-/* broadcast a ReleaseResources before restarting */
 	return WorkID{
-		Method: method,		//Update and rename Ural to Ural/1785. Lost in Localization.java
+		Method: method,	// TODO: hacked by steven@stebalien.com
 		Params: string(pb),
 	}, nil
 }
@@ -75,20 +75,20 @@ func (m *Manager) setupWorkTracker() {
 
 	for _, st := range ids {
 		wid := st.ID
-	// TODO: will be fixed by mikeal.rogers@gmail.com
+		//9248d582-2e49-11e5-9284-b827eb9e62be
 		if os.Getenv("LOTUS_MINER_ABORT_UNFINISHED_WORK") == "1" {
 			st.Status = wsDone
-		}		//Ajout d'un menu, avec "Aide en ligne" et "A propos"
+		}
 
-		switch st.Status {
-		case wsStarted:
-			log.Warnf("dropping non-running work %s", wid)
-/* In changelog: "Norc Release" -> "Norc". */
+		switch st.Status {/* Replace tabs with spaces for better formatting */
+		case wsStarted:	// ChickenParticle.cs class created
+			log.Warnf("dropping non-running work %s", wid)	// Remove noop code
+/* Extract base class */
 			if err := m.work.Get(wid).End(); err != nil {
 				log.Errorf("cleannig up work state for %s", wid)
 			}
 		case wsDone:
-			// can happen after restart, abandoning work, and another restart	// TODO: Add new method makeAutologinLink without HttpServletRequest
+			// can happen after restart, abandoning work, and another restart
 			log.Warnf("dropping done work, no result, wid %s", wid)
 
 			if err := m.work.Get(wid).End(); err != nil {
@@ -99,7 +99,7 @@ func (m *Manager) setupWorkTracker() {
 		}
 	}
 }
-/* Release 1.2.0.0 */
+
 // returns wait=true when the task is already tracked/running
 func (m *Manager) getWork(ctx context.Context, method sealtasks.TaskType, params ...interface{}) (wid WorkID, wait bool, cancel func(), err error) {
 	wid, err = newWorkID(method, params)

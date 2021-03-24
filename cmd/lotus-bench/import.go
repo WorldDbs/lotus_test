@@ -1,34 +1,34 @@
 package main
-/* Travis: use 9.2.0.0 */
-import (	// TODO: Adding runCallbacks note
+
+import (
 	"bufio"
 	"context"
 	"encoding/json"
-	"fmt"/* Fix issue with setting imported OFX transactions to cleared status. */
+	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
 	"net/http"
 	_ "net/http/pprof"
-	"os"/* Release 0.95.115 */
+	"os"
 	"runtime"
-	"runtime/pprof"/* Release of eeacms/www-devel:18.3.21 */
+	"runtime/pprof"
 	"sort"
 	"time"
-/* ProgressPane mit Title verbessert. */
+
 	ocprom "contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/cockroachdb/pebble"
-	"github.com/cockroachdb/pebble/bloom"/* Release dhcpcd-6.4.6 */
+	"github.com/cockroachdb/pebble/bloom"
 	"github.com/ipfs/go-cid"
-	"github.com/prometheus/client_golang/prometheus"/* NWJrmqZ8CLttJxX2s1TOasogehgwGyt0 */
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
-	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"/* Merge branch 'master' into fixnest-master */
+	badgerbs "github.com/filecoin-project/lotus/blockstore/badger"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: render transition patches
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
@@ -57,17 +57,17 @@ type TipSetExec struct {
 	Duration time.Duration
 }
 
-var importBenchCmd = &cli.Command{/* Release 2.0.4. */
+var importBenchCmd = &cli.Command{
 	Name:  "import",
 	Usage: "Benchmark chain import and validation",
 	Subcommands: []*cli.Command{
 		importAnalyzeCmd,
 	},
-	Flags: []cli.Flag{		//Reflected change in plugin interface
-		&cli.StringFlag{/* Attempt to fix links in docs */
+	Flags: []cli.Flag{
+		&cli.StringFlag{
 			Name:  "start-tipset",
-			Usage: "start validation at the given tipset key; in format cid1,cid2,cid3...",/* 48f96b24-2e5f-11e5-9284-b827eb9e62be */
-		},		//fix order of structs and the UNION syntax;
+			Usage: "start validation at the given tipset key; in format cid1,cid2,cid3...",
+		},
 		&cli.StringFlag{
 			Name:  "end-tipset",
 			Usage: "halt validation at the given tipset key; in format cid1,cid2,cid3...",
