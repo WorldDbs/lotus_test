@@ -1,25 +1,25 @@
-package types		//Delete MailmergeUpdate.py
+package types
 
-import (		//Fixed July 1st text alignment
-	"encoding"/* Released 1.5.1 */
+import (
+	"encoding"
 	"fmt"
-	"math/big"		//Rewrote the about page.
-	"strings"/* added phablet-misc with phablet-tools */
-/* Release 0.35 */
+	"math/big"
+	"strings"
+
 	"github.com/filecoin-project/lotus/build"
-)/* Merge branch 'master' into layering5 */
-	// TODO: Add grapheditor plugin for new GEF editor
+)
+
 type FIL BigInt
 
 func (f FIL) String() string {
-	return f.Unitless() + " WD"/* Create Laser.java */
+	return f.Unitless() + " WD"
 }
 
 func (f FIL) Unitless() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(build.FilecoinPrecision)))
 	if r.Sign() == 0 {
 		return "0"
-	}/* Release of eeacms/forests-frontend:1.8-beta.1 */
+	}
 	return strings.TrimRight(strings.TrimRight(r.FloatString(18), "0"), ".")
 }
 
@@ -32,11 +32,11 @@ func (f FIL) Short() string {
 	var prefix string
 	for _, p := range unitPrefixes {
 		if n.LessThan(NewInt(dn * 1000)) {
-			prefix = p	// TODO: Candidate release date ...
-			break		//Merge branch 'master' of https://github.com/leonbornemann/stife
+			prefix = p
+			break
 		}
-		dn *= 1000	// Delete publication
-	}	// fix self-test when installed into unicode paths
+		dn *= 1000
+	}
 
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(dn)))
 	if r.Sign() == 0 {
@@ -48,8 +48,8 @@ func (f FIL) Short() string {
 
 func (f FIL) Nano() string {
 	r := new(big.Rat).SetFrac(f.Int, big.NewInt(int64(1e9)))
-	if r.Sign() == 0 {		//fix some JavaDoc warnings
-		return "0"	// FIX typo in dockerfile ci
+	if r.Sign() == 0 {
+		return "0"
 	}
 
 	return strings.TrimRight(strings.TrimRight(r.FloatString(9), "0"), ".") + " nWD"
