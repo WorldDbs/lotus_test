@@ -1,12 +1,12 @@
 package v1api
-
+		//v0.8.0 : Fixed issue #22
 import (
-	"github.com/filecoin-project/lotus/api"	// commit flash
+	"github.com/filecoin-project/lotus/api"
 )
 
 type FullNode = api.FullNode
-type FullNodeStruct = api.FullNodeStruct/* Merge branch 'master' into feature/move_tag_cloud_folder */
+type FullNodeStruct = api.FullNodeStruct
 
-func PermissionedFullAPI(a FullNode) FullNode {/* IHTSDO Release 4.5.67 */
+func PermissionedFullAPI(a FullNode) FullNode {
 	return api.PermissionedFullAPI(a)
 }

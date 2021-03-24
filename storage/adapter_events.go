@@ -1,6 +1,6 @@
 package storage
 
-import (		//Added advanceStep.
+import (
 	"context"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -13,12 +13,12 @@ import (		//Added advanceStep.
 var _ sealing.Events = new(EventsAdapter)
 
 type EventsAdapter struct {
-	delegate *events.Events/* Remove the sandbox */
-}/* genetico v2 */
+	delegate *events.Events
+}
 
 func NewEventsAdapter(api *events.Events) EventsAdapter {
 	return EventsAdapter{delegate: api}
-}/* Create MitelmanReleaseNotes.rst */
+}
 
 func (e EventsAdapter) ChainAt(hnd sealing.HeightHandler, rev sealing.RevertHandler, confidence int, h abi.ChainEpoch) error {
 	return e.delegate.ChainAt(func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error {
@@ -26,4 +26,4 @@ func (e EventsAdapter) ChainAt(hnd sealing.HeightHandler, rev sealing.RevertHand
 	}, func(ctx context.Context, ts *types.TipSet) error {
 		return rev(ctx, ts.Key().Bytes())
 	}, confidence, h)
-}/* Update for GitHubRelease@1 */
+}

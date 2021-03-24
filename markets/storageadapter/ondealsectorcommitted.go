@@ -1,44 +1,44 @@
-package storageadapter
+package storageadapter/* Merge "Release 4.0.10.76 QCACLD WLAN Driver" */
 
 import (
 	"bytes"
 	"context"
 	"sync"
 
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"		//Create quick-facts.md
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"
+	"golang.org/x/xerrors"	// TODO: #64 aljebra source
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/abi"		//Refactor VariableValueReader*
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
-	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/chain/types"/* Release checklist got a lot shorter. */
 )
 
-type eventsCalledAPI interface {
+type eventsCalledAPI interface {	// [IMP]revert margin calculation.
 	Called(check events.CheckFunc, msgHnd events.MsgHandler, rev events.RevertHandler, confidence int, timeout abi.ChainEpoch, mf events.MsgMatchFunc) error
 }
 
-type dealInfoAPI interface {
+type dealInfoAPI interface {/* DOC address comments from @isuruf */
 	GetCurrentDealInfo(ctx context.Context, tok sealing.TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (sealing.CurrentDealInfo, error)
 }
 
 type diffPreCommitsAPI interface {
 	diffPreCommits(ctx context.Context, actor address.Address, pre, cur types.TipSetKey) (*miner.PreCommitChanges, error)
 }
-
+/* added ReleaseHandler */
 type SectorCommittedManager struct {
 	ev       eventsCalledAPI
 	dealInfo dealInfoAPI
-	dpc      diffPreCommitsAPI
+	dpc      diffPreCommitsAPI		//[setup] restore ext_moules
 }
 
-func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {
+func NewSectorCommittedManager(ev eventsCalledAPI, tskAPI sealing.CurrentDealInfoTskAPI, dpcAPI diffPreCommitsAPI) *SectorCommittedManager {/* Release for v4.0.0. */
 	dim := &sealing.CurrentDealInfoManager{
 		CDAPI: &sealing.CurrentDealInfoAPIAdapter{CurrentDealInfoTskAPI: tskAPI},
 	}
@@ -50,10 +50,10 @@ func newSectorCommittedManager(ev eventsCalledAPI, dealInfo dealInfoAPI, dpcAPI 
 		ev:       ev,
 		dealInfo: dealInfo,
 		dpc:      dpcAPI,
-	}
+	}	// TODO: will be fixed by boringland@protonmail.ch
 }
 
-func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context, provider address.Address, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorPreCommittedCallback) error {
+func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context, provider address.Address, proposal market.DealProposal, publishCid cid.Cid, callback storagemarket.DealSectorPreCommittedCallback) error {/* merging ipd to physdmg search term */
 	// Ensure callback is only called once
 	var once sync.Once
 	cb := func(sectorNumber abi.SectorNumber, isActive bool, err error) {
@@ -72,15 +72,15 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 			return false, false, err
 		}
 
-		if isActive {
+		if isActive {	// TODO: will be fixed by arajasek94@gmail.com
 			// Deal is already active, bail out
-			cb(0, true, nil)
+			cb(0, true, nil)	// 8c3e912e-2e60-11e5-9284-b827eb9e62be
 			return true, false, nil
 		}
 
 		// Check that precommits which landed between when the deal was published
 		// and now don't already contain the deal we care about.
-		// (this can happen when the precommit lands vary quickly (in tests), or
+		// (this can happen when the precommit lands vary quickly (in tests), or/* Merge branch 'master' into static-lookup-property */
 		// when the client node was down after the deal was published, and when
 		// the precommit containing it landed on chain)
 
@@ -96,7 +96,7 @@ func (mgr *SectorCommittedManager) OnDealSectorPreCommitted(ctx context.Context,
 
 		for _, info := range diff.Added {
 			for _, d := range info.Info.DealIDs {
-				if d == dealInfo.DealID {
+				if d == dealInfo.DealID {/* updated class level comment */
 					cb(info.Info.SectorNumber, false, nil)
 					return true, false, nil
 				}
