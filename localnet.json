@@ -1,0 +1,75 @@
+{
+  "NetworkVersion": 12,
+  "Accounts": [
+    {
+      "Type": "account",
+      "Balance": "500000000000000000000000",
+      "Meta": {
+        "Owner": "w3vgawz2vnod55d6ejy4qrhgsj6bwsquqvd4jz5oac4tri2bxow7jxjk7peg77ox7qan54cmmte35orxdh4faa"
+      }
+    }
+  ],
+  "Miners": [
+    {
+      "ID": "w01000",
+      "Owner": "w3vgawz2vnod55d6ejy4qrhgsj6bwsquqvd4jz5oac4tri2bxow7jxjk7peg77ox7qan54cmmte35orxdh4faa",
+      "Worker": "w3vgawz2vnod55d6ejy4qrhgsj6bwsquqvd4jz5oac4tri2bxow7jxjk7peg77ox7qan54cmmte35orxdh4faa",
+      "PeerId": "12D3KooWNZKubUomvuUhjhxSiqL43iYPrEJa6vxeMzxiSnigy4RN",
+      "MarketBalance": "0",
+      "PowerBalance": "0",
+      "SectorSize": 536870912,
+      "Sectors": [
+        {
+          "CommR": {
+            "/": "bagboea4b5abcbo3z7tt25mj46oevme2lcjqcasmml4ttj3h3265zf3rbywljbcsz"
+          },
+          "CommD": {
+            "/": "baga6ea4seaqdp5smyhvwx4rkpm7uu2jd7czjtw647kt6xjg2gv6vz2zucdmryda"
+          },
+          "SectorID": 0,
+          "Deal": {
+            "PieceCID": {
+              "/": "baga6ea4seaqdp5smyhvwx4rkpm7uu2jd7czjtw647kt6xjg2gv6vz2zucdmryda"
+            },
+            "PieceSize": 536870912,
+            "VerifiedDeal": false,
+            "Client": "w3vgawz2vnod55d6ejy4qrhgsj6bwsquqvd4jz5oac4tri2bxow7jxjk7peg77ox7qan54cmmte35orxdh4faa",
+            "Provider": "w01000",
+            "Label": "0",
+            "StartEpoch": 0,
+            "EndEpoch": 9001,
+            "StoragePricePerEpoch": "0",
+            "ProviderCollateral": "0",
+            "ClientCollateral": "0"
+          },
+          "ProofType": 7
+        }
+      ]
+    }
+  ],
+  "NetworkName": "localnet-69355dbb-9b18-452c-82dc-e8822e9d5f44",
+  "VerifregRootKey": {
+    "Type": "multisig",
+    "Balance": "0",
+    "Meta": {
+      "Signers": [
+        "w1ceb34gnsc6qk5dt6n7xg6ycwzasjhbxm3iylkiy"
+      ],
+      "Threshold": 1,
+      "VestingDuration": 0,
+      "VestingStart": 0
+    }
+  },
+  "RemainderAccount": {
+    "Type": "multisig",
+    "Balance": "0",
+    "Meta": {
+      "Signers": [
+        "w1ceb34gnsc6qk5dt6n7xg6ycwzasjhbxm3iylkiy"
+      ],
+      "Threshold": 1,
+      "VestingDuration": 0,
+      "VestingStart": 0
+    }
+  }
+}
