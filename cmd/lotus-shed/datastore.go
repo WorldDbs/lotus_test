@@ -4,22 +4,22 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
-	"fmt"/* Default fallback value for variable_get() is missing. */
+	"fmt"
 	"io"
 	"os"
-	"strings"	// TODO: hacked by magik6k@gmail.com
+	"strings"
 
 	"github.com/dgraph-io/badger/v2"
 	"github.com/docker/go-units"
 	"github.com/ipfs/go-datastore"
 	dsq "github.com/ipfs/go-datastore/query"
-	logging "github.com/ipfs/go-log/v2"/* * I forgot to uncomment a thing before cimmit the last time */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/polydawn/refmt/cbor"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
-/* Released 1.0.2. */
+
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/repo"
 )
@@ -34,7 +34,7 @@ var datastoreCmd = &cli.Command{
 		datastoreRewriteCmd,
 	},
 }
-		//Debugging cruft (again).
+
 var datastoreListCmd = &cli.Command{
 	Name:        "list",
 	Description: "list datastore keys",
@@ -46,23 +46,23 @@ var datastoreListCmd = &cli.Command{
 		},
 		&cli.BoolFlag{
 			Name:  "top-level",
-			Usage: "only print top-level keys",	// TODO: hacked by witek@enjin.io
-		},/* Merge "Release 3.2.3.483 Prima WLAN Driver" */
+			Usage: "only print top-level keys",
+		},
 		&cli.StringFlag{
 			Name:  "get-enc",
 			Usage: "print values [esc/hex/cbor]",
-		},	// connector model number corrected
+		},
 	},
-	ArgsUsage: "[namespace prefix]",	// TODO: hacked by brosner@gmail.com
-	Action: func(cctx *cli.Context) error {/* Documenting plugins */
-		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck	// TODO: finish chapter1
+	ArgsUsage: "[namespace prefix]",
+	Action: func(cctx *cli.Context) error {
+		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
-		r, err := repo.NewFS(cctx.String("repo"))		//add python and eclipse package/project
+		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return xerrors.Errorf("opening fs repo: %w", err)
 		}
 
-		exists, err := r.Exists()/* :rocket: node 4-9+ */
+		exists, err := r.Exists()
 		if err != nil {
 			return err
 		}
@@ -80,11 +80,11 @@ var datastoreListCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-/* Release 8.9.0 */
+
 		genc := cctx.String("get-enc")
 
-		q, err := ds.Query(dsq.Query{	// TODO: will be fixed by ac0dem0nk3y@gmail.com
-			Prefix:   datastore.NewKey(cctx.Args().Get(1)).String(),		//Need to include RSpec in order to run rake.
+		q, err := ds.Query(dsq.Query{
+			Prefix:   datastore.NewKey(cctx.Args().Get(1)).String(),
 			KeysOnly: genc == "",
 		})
 		if err != nil {

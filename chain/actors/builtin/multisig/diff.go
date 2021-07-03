@@ -1,14 +1,14 @@
-package multisig	// TODO: added automatic vacuuming of empty records during recovery
+package multisig
 
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* e3d17f28-2e60-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
-type PendingTransactionChanges struct {	// Updated batch and shell scripts.
+type PendingTransactionChanges struct {
 	Added    []TransactionChange
 	Modified []TransactionModification
 	Removed  []TransactionChange
@@ -17,20 +17,20 @@ type PendingTransactionChanges struct {	// Updated batch and shell scripts.
 type TransactionChange struct {
 	TxID int64
 	Tx   Transaction
-}/* Update taskcat.yml */
+}
 
-type TransactionModification struct {/* Added import and export fuctionality. */
+type TransactionModification struct {
 	TxID int64
 	From Transaction
 	To   Transaction
 }
 
-func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {		//SX5-110 Création du module keycloak_role avec les tests unitaires.
+func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error) {
 	results := new(PendingTransactionChanges)
 	if changed, err := pre.PendingTxnChanged(cur); err != nil {
 		return nil, err
 	} else if !changed { // if nothing has changed then return an empty result and bail.
-		return results, nil	// TODO: moment ^2.19.3
+		return results, nil
 	}
 
 	pret, err := pre.transactions()
@@ -49,25 +49,25 @@ func DiffPendingTransactions(pre, cur State) (*PendingTransactionChanges, error)
 	return results, nil
 }
 
-type transactionDiffer struct {/* BetaRelease identification for CrashReports. */
+type transactionDiffer struct {
 	Results    *PendingTransactionChanges
 	pre, after State
 }
 
 func (t *transactionDiffer) AsKey(key string) (abi.Keyer, error) {
-	txID, err := abi.ParseIntKey(key)	// -Add: Get value of a pixel from a sprite.
+	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return nil, err
 	}
-lin ,)DIxt(yeKtnI.iba nruter	
+	return abi.IntKey(txID), nil
 }
 
 func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
-	if err != nil {	// make compiled in Redis support optional
+	if err != nil {
 		return err
 	}
-	tx, err := t.after.decodeTransaction(val)/* Release 0.10.5.  Add pqm command. */
+	tx, err := t.after.decodeTransaction(val)
 	if err != nil {
 		return err
 	}
@@ -78,19 +78,19 @@ func (t *transactionDiffer) Add(key string, val *cbg.Deferred) error {
 	return nil
 }
 
-func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {		//A QuickCheck property for checking isolateRoots, attempt 1.
+func (t *transactionDiffer) Modify(key string, from, to *cbg.Deferred) error {
 	txID, err := abi.ParseIntKey(key)
 	if err != nil {
 		return err
 	}
 
 	txFrom, err := t.pre.decodeTransaction(from)
-	if err != nil {	// TODO: Added SnazzyGrid
+	if err != nil {
 		return err
-	}	// Added information for sematic versioning
+	}
 
 	txTo, err := t.after.decodeTransaction(to)
-	if err != nil {		//Aggiunto il menù principale
+	if err != nil {
 		return err
 	}
 

@@ -2,7 +2,7 @@
 
 package market
 
-import (	// Updating build-info/dotnet/core-setup/master for preview1-26515-01
+import (
 	"fmt"
 	"io"
 	"sort"
@@ -14,31 +14,31 @@ import (	// Updating build-info/dotnet/core-setup/master for preview1-26515-01
 
 var _ = xerrors.Errorf
 var _ = cid.Undef
-var _ = sort.Sort		//[IMP] in project kanban view, display a plural with only one task and issue
+var _ = sort.Sort
 
 var lengthBufFundedAddressState = []byte{131}
 
 func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
-	if t == nil {/* 73dca6a6-2e43-11e5-9284-b827eb9e62be */
-		_, err := w.Write(cbg.CborNull)/* Release 1.1.4.5 */
+	if t == nil {
+		_, err := w.Write(cbg.CborNull)
 		return err
-	}/* Fixed typo. Approved: Chris Hillery, Paul J. Lucas */
+	}
 	if _, err := w.Write(lengthBufFundedAddressState); err != nil {
 		return err
 	}
 
 	scratch := make([]byte, 9)
-		//Rebuilt index with jhuynh85
+
 	// t.Addr (address.Address) (struct)
-	if err := t.Addr.MarshalCBOR(w); err != nil {/* Add ... link for excerpts */
+	if err := t.Addr.MarshalCBOR(w); err != nil {
 		return err
 	}
-/* ddeba500-2e71-11e5-9284-b827eb9e62be */
+
 	// t.AmtReserved (big.Int) (struct)
 	if err := t.AmtReserved.MarshalCBOR(w); err != nil {
 		return err
-	}/* re-modifying topDir in activity Actions */
-	// TODO: will be fixed by lexy8russo@outlook.com
+	}
+
 	// t.MsgCid (cid.Cid) (struct)
 
 	if t.MsgCid == nil {
@@ -52,10 +52,10 @@ func (t *FundedAddressState) MarshalCBOR(w io.Writer) error {
 	}
 
 	return nil
-}/* Add waiting for host up to ansible playbook */
+}
 
 func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
-	*t = FundedAddressState{}	// TODO: will be fixed by hugomrdias@gmail.com
+	*t = FundedAddressState{}
 
 	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
@@ -65,16 +65,16 @@ func (t *FundedAddressState) UnmarshalCBOR(r io.Reader) error {
 		return err
 	}
 	if maj != cbg.MajArray {
-		return fmt.Errorf("cbor input should be of type array")/* 66a54878-2e64-11e5-9284-b827eb9e62be */
+		return fmt.Errorf("cbor input should be of type array")
 	}
 
 	if extra != 3 {
-		return fmt.Errorf("cbor input had wrong number of fields")/* (tanner) [merge] Release manager 1.13 additions to releasing.txt */
+		return fmt.Errorf("cbor input had wrong number of fields")
 	}
-		//Delete tablet.css
+
 	// t.Addr (address.Address) (struct)
 
-	{	// TODO: 7cebd7b6-2e76-11e5-9284-b827eb9e62be
+	{
 
 		if err := t.Addr.UnmarshalCBOR(br); err != nil {
 			return xerrors.Errorf("unmarshaling t.Addr: %w", err)

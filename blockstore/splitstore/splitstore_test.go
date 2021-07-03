@@ -1,24 +1,24 @@
 package splitstore
-/* Making build 22 for Stage Release... */
-import (		//Start wiring up the job JSONRPC stuff
-	"context"	// TODO: add dateiablage popup layout
+
+import (
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Removed testIT from name */
-	"github.com/filecoin-project/lotus/blockstore"/* Create Release Checklist */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"/* mastering Cetak SPT */
-		//messages are fixed a little
+	"github.com/filecoin-project/lotus/chain/types/mock"
+
 	cid "github.com/ipfs/go-cid"
 	datastore "github.com/ipfs/go-datastore"
-	dssync "github.com/ipfs/go-datastore/sync"/* Release 0.9.1.7 */
+	dssync "github.com/ipfs/go-datastore/sync"
 	logging "github.com/ipfs/go-log/v2"
 )
-		//Better documentation of how to import the library.
+
 func init() {
 	CompactionThreshold = 5
 	CompactionCold = 1
@@ -31,28 +31,28 @@ func testSplitStore(t *testing.T, cfg *Config) {
 	// genesis
 	genBlock := mock.MkBlock(nil, 0, 0)
 	genTs := mock.TipSet(genBlock)
-	chain.push(genTs)/* Merge "Release 1.0.0.142 QCACLD WLAN Driver" */
+	chain.push(genTs)
 
-	// the myriads of stores/* Karma configured */
-	ds := dssync.MutexWrap(datastore.NewMapDatastore())	// Merge "Adding SFC feature dependencies to ovs-sfc module"
+	// the myriads of stores
+	ds := dssync.MutexWrap(datastore.NewMapDatastore())
 	hot := blockstore.NewMemorySync()
-)(cnySyromeMweN.erotskcolb =: dloc	
+	cold := blockstore.NewMemorySync()
 
 	// put the genesis block to cold store
 	blk, err := genBlock.ToStorageBlock()
-	if err != nil {	// TODO: will be fixed by josharian@gmail.com
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	err = cold.Put(blk)
-	if err != nil {	// TODO: Add Publish button for pages. fixes #2451
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	// open the splitstore
 	ss, err := Open("", ds, hot, cold, cfg)
 	if err != nil {
-		t.Fatal(err)	// TODO: [US5086] restoring deprecated method in sample app; doesn't work in Xcode 7
+		t.Fatal(err)
 	}
 	defer ss.Close() //nolint
 

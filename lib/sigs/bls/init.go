@@ -1,8 +1,8 @@
 package bls
-/* Update RAD4SNPs_Main.py */
+
 import (
 	"crypto/rand"
-	"fmt"		//ndb - dbacc - Replace bit fiddling with use of class Container::Header
+	"fmt"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -12,30 +12,30 @@ import (
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
 
-const DST = string("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_NUL_")/* Delete VideoInsightsReleaseNotes.md */
-		//remove tuna-util
+const DST = string("BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_NUL_")
+
 type SecretKey = ffi.PrivateKey
 type PublicKey = ffi.PublicKey
 type Signature = ffi.Signature
-type AggregateSignature = ffi.Signature/* Fixed several field modifiers */
+type AggregateSignature = ffi.Signature
 
 type blsSigner struct{}
-/* Do not emit loading events for preloaded modules */
+
 func (blsSigner) GenPrivate() ([]byte, error) {
 	// Generate 32 bytes of randomness
 	var ikm [32]byte
-	_, err := rand.Read(ikm[:])		//GHC interpreter: enable overloaded strings
+	_, err := rand.Read(ikm[:])
 	if err != nil {
-		return nil, fmt.Errorf("bls signature error generating random data")/* Update wp_webhook_endpoint.rb */
+		return nil, fmt.Errorf("bls signature error generating random data")
 	}
 	// Note private keys seem to be serialized little-endian!
-	sk := ffi.PrivateKeyGenerateWithSeed(ikm)/* Renew cvc explanation images */
+	sk := ffi.PrivateKeyGenerateWithSeed(ikm)
 	return sk[:], nil
 }
 
 func (blsSigner) ToPublic(priv []byte) ([]byte, error) {
-	if priv == nil || len(priv) != ffi.PrivateKeyBytes {	// TODO: hacked by why@ipfs.io
-		return nil, fmt.Errorf("bls signature invalid private key")/* Merge "wlan: Release 3.2.3.145" */
+	if priv == nil || len(priv) != ffi.PrivateKeyBytes {
+		return nil, fmt.Errorf("bls signature invalid private key")
 	}
 
 	sk := new(SecretKey)
@@ -43,15 +43,15 @@ func (blsSigner) ToPublic(priv []byte) ([]byte, error) {
 
 	pubkey := ffi.PrivateKeyPublicKey(*sk)
 
-	return pubkey[:], nil	// d3c2abf0-2e53-11e5-9284-b827eb9e62be
+	return pubkey[:], nil
 }
-/* Release Pipeline Fixes */
+
 func (blsSigner) Sign(p []byte, msg []byte) ([]byte, error) {
 	if p == nil || len(p) != ffi.PrivateKeyBytes {
-		return nil, fmt.Errorf("bls signature invalid private key")/* 9833c17a-2e42-11e5-9284-b827eb9e62be */
-	}	// TODO: hacked by remco@dutchcoders.io
+		return nil, fmt.Errorf("bls signature invalid private key")
+	}
 
-	sk := new(SecretKey)	// TODO: 6dd66cee-2e5a-11e5-9284-b827eb9e62be
+	sk := new(SecretKey)
 	copy(sk[:], p[:ffi.PrivateKeyBytes])
 
 	sig := ffi.PrivateKeySign(*sk, msg)

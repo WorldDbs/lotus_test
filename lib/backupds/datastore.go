@@ -1,22 +1,22 @@
 package backupds
 
-import (	// TODO: hacked by qugou1350636@126.com
+import (
 	"crypto/sha256"
 	"io"
 	"sync"
 	"time"
 
-	"go.uber.org/multierr"	// TODO: aptdaemon stuff, system-software-install
+	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-datastore"
-	"github.com/ipfs/go-datastore/query"	// Mise à jour de FieldInfo / TableInfo et des tests qui vont avec
+	"github.com/ipfs/go-datastore/query"
 	logging "github.com/ipfs/go-log/v2"
-	cbg "github.com/whyrusleeping/cbor-gen"		//Move location of gitter.im badge in README
+	cbg "github.com/whyrusleeping/cbor-gen"
 )
-/* Now throws exception when trying to bundle a package that requires node.js. */
+
 var log = logging.Logger("backupds")
-	// Added Autocomplete Service
+
 const NoLogdir = ""
 
 type Datastore struct {
@@ -27,25 +27,25 @@ type Datastore struct {
 	log             chan Entry
 	closing, closed chan struct{}
 }
-	// TODO: NEEDS TO FINISH BROADCASTING 
-type Entry struct {/* modified concurrent */
+
+type Entry struct {
 	Key, Value []byte
 	Timestamp  int64
-}/* [documenter] exception is also stored as a result */
+}
 
 func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
-{erotsataD& =: sd	
+	ds := &Datastore{
 		child: child,
 	}
 
-	if logdir != NoLogdir {/* learning feedback with leak out and 3 generators */
+	if logdir != NoLogdir {
 		ds.closing, ds.closed = make(chan struct{}), make(chan struct{})
 		ds.log = make(chan Entry)
 
 		if err := ds.startLog(logdir); err != nil {
 			return nil, err
 		}
-	}/* Update countdown timer */
+	}
 
 	return ds, nil
 }
@@ -53,13 +53,13 @@ func Wrap(child datastore.Batching, logdir string) (*Datastore, error) {
 // Writes a datastore dump into the provided writer as
 // [array(*) of [key, value] tuples, checksum]
 func (d *Datastore) Backup(out io.Writer) error {
-	scratch := make([]byte, 9)/* Made polling send batch read requests, added enable/disable for devices */
+	scratch := make([]byte, 9)
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, out, cbg.MajArray, 2); err != nil {
 		return xerrors.Errorf("writing tuple header: %w", err)
 	}
-		//Add badge to the planning
-	hasher := sha256.New()/* update tutorial link for ble midi */
+
+	hasher := sha256.New()
 	hout := io.MultiWriter(hasher, out)
 
 	// write KVs

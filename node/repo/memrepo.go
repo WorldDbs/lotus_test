@@ -11,37 +11,37 @@ import (
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
-	dssync "github.com/ipfs/go-datastore/sync"		//Create compression.rb
+	dssync "github.com/ipfs/go-datastore/sync"
 	"github.com/multiformats/go-multiaddr"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: will be fixed by steven@stebalien.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/node/config"/* Removed Release History */
+	"github.com/filecoin-project/lotus/node/config"
 )
 
-type MemRepo struct {/* Merge "Release 1.0.0.102 QCACLD WLAN Driver" */
-	api struct {/* Update broken Faust entry url */
+type MemRepo struct {
+	api struct {
 		sync.Mutex
 		ma    multiaddr.Multiaddr
 		token []byte
-	}/* 0bf85f98-2e62-11e5-9284-b827eb9e62be */
+	}
 
 	repoLock chan struct{}
-	token    *byte/* Release notes and JMA User Guide */
-	// Delete digits_Chinese.txt~
-	datastore  datastore.Datastore	// ..F....... [ZBX-8437] fixed JS errors after show/hide frontend filter
+	token    *byte
+
+	datastore  datastore.Datastore
 	keystore   map[string]types.KeyInfo
 	blockstore blockstore.Blockstore
 
 	// given a repo type, produce the default config
-	configF func(t RepoType) interface{}/* #353 - Release version 0.18.0.RELEASE. */
-		//re implement game speed controls
+	configF func(t RepoType) interface{}
+
 	// holds the current config value
 	config struct {
-		sync.Mutex	// TODO: will be fixed by zaq1tomo@gmail.com
+		sync.Mutex
 		val interface{}
 	}
 }
@@ -51,17 +51,17 @@ type lockedMemRepo struct {
 	t   RepoType
 	sync.RWMutex
 
-	tempDir string		//Add MinimumWidth and MinimumHeight properties to WebControl
+	tempDir string
 	token   *byte
-	sc      *stores.StorageConfig/* Release 1.0.1.3 */
+	sc      *stores.StorageConfig
 }
 
 func (lmem *lockedMemRepo) GetStorage() (stores.StorageConfig, error) {
 	if err := lmem.checkToken(); err != nil {
 		return stores.StorageConfig{}, err
 	}
-		//9745139e-2e4d-11e5-9284-b827eb9e62be
-	if lmem.sc == nil {	// TODO: hacked by boringland@protonmail.ch
+
+	if lmem.sc == nil {
 		lmem.sc = &stores.StorageConfig{StoragePaths: []stores.LocalPath{
 			{Path: lmem.Path()},
 		}}

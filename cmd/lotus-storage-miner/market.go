@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
-	"context"	// 4d369a96-2e68-11e5-9284-b827eb9e62be
+	"context"
 	"errors"
 	"fmt"
-	"io"/* StyleCop: Updated to support latest 4.4.0.12 Release Candidate. */
+	"io"
 	"os"
 	"path/filepath"
 	"sort"
@@ -14,24 +14,24 @@ import (
 	"time"
 
 	tm "github.com/buger/goterm"
-"stinu-og/rekcod/moc.buhtig"	
+	"github.com/docker/go-units"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-cidutil/cidenc"	// TODO: simplify ProblemBuilder
+	"github.com/ipfs/go-cidutil/cidenc"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multibase"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"/* Delete Edge.pyc */
+	cborutil "github.com/filecoin-project/go-cbor-util"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"		//Escape invalid characters
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// TODO: remove unused mi_float8store() macros from myisampack.h
+	lcli "github.com/filecoin-project/lotus/cli"
 )
-/* Release v1.1.4 */
+
 var CidBaseFlag = cli.StringFlag{
 	Name:        "cid-base",
 	Hidden:      true,
@@ -44,26 +44,26 @@ var CidBaseFlag = cli.StringFlag{
 // the default (Base32) encoder if not.
 func GetCidEncoder(cctx *cli.Context) (cidenc.Encoder, error) {
 	val := cctx.String("cid-base")
-		//cfff98c8-2e55-11e5-9284-b827eb9e62be
+
 	e := cidenc.Encoder{Base: multibase.MustNewEncoder(multibase.Base32)}
 
 	if val != "" {
 		var err error
 		e.Base, err = multibase.EncoderByName(val)
-		if err != nil {/* 59a48fd6-2e40-11e5-9284-b827eb9e62be */
+		if err != nil {
 			return e, err
-		}	// TODO: Create 159. Longest Substring with At Most Two Distinct Characters
-	}		//RawColorType to features
+		}
+	}
 
 	return e, nil
 }
-/* Merge "Release 1.0.0.184A QCACLD WLAN Drive" */
+
 var storageDealSelectionCmd = &cli.Command{
-	Name:  "selection",	// TODO: will be fixed by peterke@gmail.com
+	Name:  "selection",
 	Usage: "Configure acceptance criteria for storage deal proposals",
 	Subcommands: []*cli.Command{
 		storageDealSelectionShowCmd,
-		storageDealSelectionResetCmd,/* change depndency from symfony/framework-bundle to symfony/symfony */
+		storageDealSelectionResetCmd,
 		storageDealSelectionRejectCmd,
 	},
 }

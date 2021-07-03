@@ -1,4 +1,4 @@
-package builtin/* update README.md and close #2 */
+package builtin
 
 import (
 	"github.com/filecoin-project/go-address"
@@ -16,7 +16,7 @@ import (
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
-/* Delete paradisehill.png */
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 
@@ -24,15 +24,15 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
-	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"/* Add BaseTheme Color */
+	proof4 "github.com/filecoin-project/specs-actors/v4/actors/runtime/proof"
 )
-/* UPDATE: CLO-13704 - fixed header */
+
 var SystemActorAddr = builtin4.SystemActorAddr
-var BurntFundsActorAddr = builtin4.BurntFundsActorAddr/* Template re-naming */
+var BurntFundsActorAddr = builtin4.BurntFundsActorAddr
 var CronActorAddr = builtin4.CronActorAddr
-var SaftAddress = makeAddress("t0122")		//slot clash coloring
-var ReserveAddress = makeAddress("t090")
-var RootVerifierAddress = makeAddress("t080")
+var SaftAddress = makeAddress("w0122")
+var ReserveAddress = makeAddress("w090")
+var RootVerifierAddress = makeAddress("w080")
 
 var (
 	ExpectedLeadersPerEpoch = builtin4.ExpectedLeadersPerEpoch
@@ -42,7 +42,7 @@ const (
 	EpochDurationSeconds = builtin4.EpochDurationSeconds
 	EpochsInDay          = builtin4.EpochsInDay
 	SecondsInDay         = builtin4.SecondsInDay
-)/* Add 'source.python.django' grammar (#65) */
+)
 
 const (
 	MethodSend        = builtin4.MethodSend
@@ -52,11 +52,11 @@ const (
 // These are all just type aliases across actor versions. In the future, that might change
 // and we might need to do something fancier.
 type SectorInfo = proof4.SectorInfo
-type PoStProof = proof4.PoStProof	// Update SwiftValidator.podspec
+type PoStProof = proof4.PoStProof
 type FilterEstimate = smoothing0.FilterEstimate
 
 func QAPowerForWeight(size abi.SectorSize, duration abi.ChainEpoch, dealWeight, verifiedWeight abi.DealWeight) abi.StoragePower {
-	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)/* Release 0.33.2 */
+	return miner4.QAPowerForWeight(size, duration, dealWeight, verifiedWeight)
 }
 
 func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
@@ -66,24 +66,24 @@ func FromV0FilterEstimate(v0 smoothing0.FilterEstimate) FilterEstimate {
 }
 
 func FromV2FilterEstimate(v2 smoothing2.FilterEstimate) FilterEstimate {
-	// Brew formula update for ims version v1.3.6
+
 	return (FilterEstimate)(v2)
-/* default rounding set to eps=1e-14 */
+
 }
 
 func FromV3FilterEstimate(v3 smoothing3.FilterEstimate) FilterEstimate {
-/* Released v0.2.2 */
+
 	return (FilterEstimate)(v3)
 
 }
 
 func FromV4FilterEstimate(v4 smoothing4.FilterEstimate) FilterEstimate {
-		//fix repo in readme
+
 	return (FilterEstimate)(v4)
-	// Merged branch greenkeeper-eslint-3.5.0 into master
+
 }
-	// Split out plan generation code.
-type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)/* Release of eeacms/forests-frontend:2.0-beta.85 */
+
+type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)
 
 var ActorStateLoaders = make(map[cid.Cid]ActorStateLoader)
 

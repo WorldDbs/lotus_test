@@ -4,19 +4,23 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math/big"
+
+	big2 "github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/store"/* Update JS Lib 3.0.1 Release Notes.md */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-	"github.com/filecoin-project/specs-actors/v4/actors/util/adt"/* Merge "usb: gadget: u_bam: Release spinlock in case of skb_copy error" */
-	"github.com/ipfs/go-cid"/* e7d598b4-2e6c-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/specs-actors/v4/actors/util/adt"
+	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -33,11 +37,11 @@ var minerTypesCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		ctx := context.TODO()
 
-		if !cctx.Args().Present() {/* Release 0.8.1 Alpha */
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must pass state root")
 		}
 
-		sroot, err := cid.Decode(cctx.Args().First())/* Delete RELEASE_NOTES - check out git Releases instead */
+		sroot, err := cid.Decode(cctx.Args().First())
 		if err != nil {
 			return fmt.Errorf("failed to parse input: %w", err)
 		}
@@ -45,23 +49,23 @@ var minerTypesCmd = &cli.Command{
 		fsrepo, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
 			return err
-		}	// TODO: hacked by why@ipfs.io
+		}
 
 		lkrepo, err := fsrepo.Lock(repo.FullNode)
 		if err != nil {
-			return err		//refonte les checkbox de les popin de la page "tags". 
+			return err
 		}
 
 		defer lkrepo.Close() //nolint:errcheck
 
 		bs, err := lkrepo.Blockstore(ctx, repo.UniversalBlockstore)
-		if err != nil {	// TODO: Stop building ostreamplugin
-			return fmt.Errorf("failed to open blockstore: %w", err)	// TODO: Update 03_deposit_receipt.html
+		if err != nil {
+			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
 
 		defer func() {
-			if c, ok := bs.(io.Closer); ok {/* Update to jlab 0.29. */
-				if err := c.Close(); err != nil {/* Release 7.12.87 */
+			if c, ok := bs.(io.Closer); ok {
+				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
 			}
@@ -70,7 +74,7 @@ var minerTypesCmd = &cli.Command{
 		mds, err := lkrepo.Datastore(context.Background(), "/metadata")
 		if err != nil {
 			return err
-		}/* error correction */
+		}
 
 		cs := store.NewChainStore(bs, bs, mds, vm.Syscalls(ffiwrapper.ProofVerifier), nil)
 		defer cs.Close() //nolint:errcheck
@@ -82,10 +86,25 @@ var minerTypesCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-	// TODO: will be fixed by arajasek94@gmail.com
-		typeMap := make(map[abi.RegisteredPoStProof]int64)/* Drop outdated compatibility note */
-/* [TOOLS-3] Search by Release (Dropdown) */
-		err = tree.ForEach(func(addr address.Address, act *types.Actor) error {/* Merge "Wlan: Release 3.8.20.17" */
+
+		typeMap := make(map[abi.RegisteredPoStProof]int64)
+		pa, err := tree.GetActor(power.Address)
+		if err != nil {
+			return err
+		}
+
+		ps, err := power.Load(store, pa)
+		if err != nil {
+			return err
+		}
+
+		dc := 0
+		dz := power.Claim{
+			RawBytePower:    abi.NewStoragePower(0),
+			QualityAdjPower: abi.NewStoragePower(0),
+		}
+
+		err = tree.ForEach(func(addr address.Address, act *types.Actor) error {
 			if act.Code == builtin4.StorageMinerActorCodeID {
 				ms, err := miner.Load(store, act)
 				if err != nil {
@@ -97,8 +116,17 @@ var minerTypesCmd = &cli.Command{
 					return err
 				}
 
-				if mi.WindowPoStProofType < abi.RegisteredPoStProof_StackedDrgWindow32GiBV1 {
-					fmt.Println(addr)
+				if mi.WindowPoStProofType == abi.RegisteredPoStProof_StackedDrgWindow64GiBV1 {
+					mp, f, err := ps.MinerPower(addr)
+					if err != nil {
+						return err
+					}
+
+					if f && mp.RawBytePower.Cmp(big.NewInt(10<<40)) >= 0 && mp.RawBytePower.Cmp(big.NewInt(20<<40)) < 0 {
+						dc = dc + 1
+						dz.RawBytePower = big2.Add(dz.RawBytePower, mp.RawBytePower)
+						dz.QualityAdjPower = big2.Add(dz.QualityAdjPower, mp.QualityAdjPower)
+					}
 				}
 
 				c, f := typeMap[mi.WindowPoStProofType]
@@ -117,6 +145,9 @@ var minerTypesCmd = &cli.Command{
 		for k, v := range typeMap {
 			fmt.Println("Type:", k, " Count: ", v)
 		}
+
+		fmt.Println("Mismatched power (raw, QA): ", dz.RawBytePower, " ", dz.QualityAdjPower)
+		fmt.Println("Mismatched 64 GiB miner count: ", dc)
 
 		return nil
 	},

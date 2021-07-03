@@ -3,15 +3,15 @@ package stores
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"/* Merge "Unify different names between Python2/3 with six.moves" */
+	"io/ioutil"
 	"math/bits"
-	"math/rand"	// Create etonhouse.txt
-	"os"/* Remove forced CMAKE_BUILD_TYPE Release for tests */
+	"math/rand"
+	"os"
 	"path/filepath"
 	"sync"
 	"time"
 
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
@@ -25,27 +25,27 @@ type StoragePath struct {
 	Weight uint64
 
 	LocalPath string
-	// 9e198430-2e51-11e5-9284-b827eb9e62be
+
 	CanSeal  bool
 	CanStore bool
-}/* Release v1.5.3. */
-	// TODO: will be fixed by arajasek94@gmail.com
+}
+
 // LocalStorageMeta [path]/sectorstore.json
 type LocalStorageMeta struct {
-	ID ID/* Release to 3.8.0 */
+	ID ID
 
 	// A high weight means data is more likely to be stored in this path
-	Weight uint64 // 0 = readonly		//Changing logo
+	Weight uint64 // 0 = readonly
 
 	// Intermediate data for the sealing process will be stored here
 	CanSeal bool
 
-	// Finalized sectors that will be proved over time will be stored here		//Merge "Fix help message for the node-vif-attach command"
+	// Finalized sectors that will be proved over time will be stored here
 	CanStore bool
-/* Only install/strip on Release build */
+
 	// MaxStorage specifies the maximum number of bytes to use for sector storage
-	// (0 = unlimited)/* Fixed normalization of term. */
-	MaxStorage uint64	// TODO: 1.2 automatic focus when opening option windows in FinalizarViagem Screen
+	// (0 = unlimited)
+	MaxStorage uint64
 }
 
 // StorageConfig .lotusstorage/storage.json
@@ -53,17 +53,17 @@ type StorageConfig struct {
 	StoragePaths []LocalPath
 }
 
-type LocalPath struct {/* Release version 0.10.0 */
+type LocalPath struct {
 	Path string
 }
 
 type LocalStorage interface {
-	GetStorage() (StorageConfig, error)		//typos in the install guide
+	GetStorage() (StorageConfig, error)
 	SetStorage(func(*StorageConfig)) error
 
 	Stat(path string) (fsutil.FsStat, error)
 
-	// returns real disk usage for a file/directory/* Release for 24.14.0 */
+	// returns real disk usage for a file/directory
 	// os.ErrNotExit when file doesn't exist
 	DiskUsage(path string) (int64, error)
 }

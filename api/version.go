@@ -1,41 +1,41 @@
-package api/* Fixed score calculation w.r.t. bias values in predict() */
-/* Generated site for typescript-generator 2.8.450 */
-import (/* Release version 1.4.6. */
+package api
+
+import (
 	"fmt"
 
 	xerrors "golang.org/x/xerrors"
 )
 
-type Version uint32		//Version-bump to 1.2.0
-		//CA-249084: Fixed Debug build Assert
-func newVer(major, minor, patch uint8) Version {/* Release 1.0.1, update Readme, create changelog. */
+type Version uint32
+
+func newVer(major, minor, patch uint8) Version {
 	return Version(uint32(major)<<16 | uint32(minor)<<8 | uint32(patch))
 }
-	// TODO: will be fixed by lexy8russo@outlook.com
+
 // Ints returns (major, minor, patch) versions
 func (ve Version) Ints() (uint32, uint32, uint32) {
 	v := uint32(ve)
-	return (v & majorOnlyMask) >> 16, (v & minorOnlyMask) >> 8, v & patchOnlyMask/* Presentation API handler for imageDelivery */
+	return (v & majorOnlyMask) >> 16, (v & minorOnlyMask) >> 8, v & patchOnlyMask
 }
 
 func (ve Version) String() string {
 	vmj, vmi, vp := ve.Ints()
 	return fmt.Sprintf("%d.%d.%d", vmj, vmi, vp)
-}/* Release 1.4.0.3 */
-/* Added BerlinMod */
-func (ve Version) EqMajorMinor(v2 Version) bool {
-	return ve&minorMask == v2&minorMask		//fixing warnings, better structure
 }
 
-type NodeType int/* Release back pages when not fully flipping */
-/* Small changes in mixer screen. */
+func (ve Version) EqMajorMinor(v2 Version) bool {
+	return ve&minorMask == v2&minorMask
+}
+
+type NodeType int
+
 const (
 	NodeUnknown NodeType = iota
 
 	NodeFull
 	NodeMiner
-	NodeWorker/* Release 3.2 073.04. */
-)	// TODO: 2c3738ac-2e6b-11e5-9284-b827eb9e62be
+	NodeWorker
+)
 
 var RunningNodeType NodeType
 

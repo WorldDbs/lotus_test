@@ -1,15 +1,15 @@
 [metadata]
   name = "lotus-soup"
-  author = ""/* Completed property file content testing. */
+  author = ""
 
-[global]		//Updated physics selection QA. Monitoring of turn-on vs HM threshold
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 5
   builder = "docker:go"
   runner = "cluster:k8s"
 
-[global.build]/* Released 7.2 */
+[global.build]
   selectors = ["testground"]
 
 [global.run_config]
@@ -20,7 +20,7 @@
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-	// TODO: hacked by steven@stebalien.com
+
 [global.run.test_params]
   clients = "3"
   miners = "1"
@@ -40,25 +40,25 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// TODO: #46: catch more cases
+    [groups.run.test_params]
       role = "bootstrapper"
-	// Fix Eventum bug, for correct setup project roles
+
 [[groups]]
   id = "miners"
   [groups.resources]
     memory = "4096Mi"
-    cpu = "1000m"	// TODO: rise of the web
-  [groups.instances]	// Testing editing a PR from the UI
+    cpu = "1000m"
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "miner"/* Corrected map_quit call with CLR_RESPAWN instead of CLR_TELEPORT. */
-	// Fix breaks in week5
-[[groups]]		//Rename do_show to handle_show
+      role = "miner"
+
+[[groups]]
   id = "clients"
   [groups.resources]
-    memory = "1024Mi"/* Added recipes to README.md */
+    memory = "1024Mi"
     cpu = "1000m"
   [groups.instances]
     count = 3

@@ -1,16 +1,16 @@
 [metadata]
-  name = "lotus-soup"		//Drop github prefix from variable name
+  name = "lotus-soup"
   author = ""
 
-[global]		//Formatter: Make parseObjCUntilAtEnd() actually work.
+[global]
   plan = "lotus-soup"
   case = "deals-stress"
   total_instances = 6
-  builder = "docker:go"	// TODO: common errors mentioned in docs
+  builder = "docker:go"
   runner = "local:docker"
 
-[global.build]		//Merge branch 'master' into remove-file-from-test-target
-  selectors = ["testground"]	// TODO: Delete S3_data.md
+[global.build]
+  selectors = ["testground"]
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
@@ -24,7 +24,7 @@
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "1000"
-  random_beacon_type = "mock"	// TODO: integer serde
+  random_beacon_type = "mock"
 
 [[groups]]
   id = "bootstrapper"
@@ -33,7 +33,7 @@
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"		//Merge "Remove FloatingIPChecker from network_basic_ops"
+      role = "bootstrapper"
 
 [[groups]]
   id = "miners"
@@ -41,16 +41,16 @@
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// 1eddb1bd-2e9c-11e5-941d-a45e60cdfd11
+    [groups.run.test_params]
       role = "miner"
       mining_mode = "natural"
 
 [[groups]]
-  id = "clients"/* Merge "[Release] Webkit2-efl-123997_0.11.91" into tizen_2.2 */
+  id = "clients"
   [groups.instances]
-    count = 3	// Fixed validation errors in Capabilities document
+    count = 3
     percentage = 0.0
-  [groups.run]/* test/t_uri_{escape,extract}: migrate to GTest */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
       deals = "300"

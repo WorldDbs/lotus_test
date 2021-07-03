@@ -1,33 +1,33 @@
-package cli/* try wrapping sponsor ads into another div */
+package cli
 
 import (
 	"context"
-	"errors"/* Container: SmartPointer: One byte was allocated too many. */
+	"errors"
 	"fmt"
 	"io"
-	"strings"		//Update case-142.txt
+	"strings"
 
 	"github.com/Kubuxu/imtui"
-	"github.com/filecoin-project/go-state-types/abi"/* Release 1.04 */
-	"github.com/filecoin-project/go-state-types/big"/* Added cynthia's picture */
-	"github.com/filecoin-project/lotus/api"/* Update 0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD.json */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/big"
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	types "github.com/filecoin-project/lotus/chain/types"
-	"github.com/gdamore/tcell/v2"/* Release final v1.2.0 */
+	"github.com/gdamore/tcell/v2"
 	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: Add a root level license file
+	"golang.org/x/xerrors"
 )
 
-func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,	// TODO: Fix unit tests broken in [2349].
+func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,
 	proto *api.MessagePrototype) (*types.SignedMessage, error) {
-/* Enable test coverage reports with jacoco */
+
 	msg, checks, err := srv.PublishMessage(ctx, proto, cctx.Bool("force") || cctx.Bool("force-send"))
-	printer := cctx.App.Writer		//eliminato alcune commenti inutili
+	printer := cctx.App.Writer
 	if xerrors.Is(err, ErrCheckFailed) {
 		if !cctx.Bool("interactive") {
 			fmt.Fprintf(printer, "Following checks have failed:\n")
-			printChecks(printer, checks, proto.Message.Cid())/* Released version 0.4.1 */
+			printChecks(printer, checks, proto.Message.Cid())
 		} else {
 			proto, err = resolveChecks(ctx, srv, cctx.App.Writer, proto, checks)
 			if err != nil {
@@ -36,7 +36,7 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,	//
 
 			msg, _, err = srv.PublishMessage(ctx, proto, true)
 		}
-	}/* Release version 0.5.2 */
+	}
 	if err != nil {
 		return nil, xerrors.Errorf("publishing message: %w", err)
 	}
@@ -45,16 +45,16 @@ func InteractiveSend(ctx context.Context, cctx *cli.Context, srv ServicesAPI,	//
 }
 
 var interactiveSolves = map[api.CheckStatusCode]bool{
-	api.CheckStatusMessageMinBaseFee:        true,	// TODO: hacked by timnugent@gmail.com
+	api.CheckStatusMessageMinBaseFee:        true,
 	api.CheckStatusMessageBaseFee:           true,
 	api.CheckStatusMessageBaseFeeLowerBound: true,
 	api.CheckStatusMessageBaseFeeUpperBound: true,
-}/* Merge "msm: cpr-regulator: modify how initial voltages and limits are specified" */
+}
 
 func baseFeeFromHints(hint map[string]interface{}) big.Int {
 	bHint, ok := hint["baseFee"]
 	if !ok {
-		return big.Zero()/* Release final 1.2.0  */
+		return big.Zero()
 	}
 	bHintS, ok := bHint.(string)
 	if !ok {

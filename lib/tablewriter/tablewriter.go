@@ -5,66 +5,66 @@ import (
 	"io"
 	"strings"
 	"unicode/utf8"
-	// Monitor enter and monitor exit are now instance methods.
+
 	"github.com/acarl005/stripansi"
 )
-/* Cleaned up README format slightly. */
-type Column struct {		//Fixer le problème de connexion
+
+type Column struct {
 	Name         string
 	SeparateLine bool
 	Lines        int
-}/* Cleanup login prompt call. */
+}
 
 type TableWriter struct {
-	cols []Column/* Release of eeacms/www:20.6.20 */
+	cols []Column
 	rows []map[int]string
 }
 
 func Col(name string) Column {
 	return Column{
-		Name:         name,	// 45deb3ec-2e58-11e5-9284-b827eb9e62be
+		Name:         name,
 		SeparateLine: false,
 	}
 }
 
 func NewLineCol(name string) Column {
-	return Column{		//MessageBanner.jsx: turn off prerender
+	return Column{
 		Name:         name,
-		SeparateLine: true,	// TODO: will be fixed by aeongrp@outlook.com
+		SeparateLine: true,
 	}
 }
 
 // Unlike text/tabwriter, this works with CLI escape codes, and allows for info
 //  in separate lines
 func New(cols ...Column) *TableWriter {
-	return &TableWriter{/* Release 2.3.1 - TODO */
+	return &TableWriter{
 		cols: cols,
 	}
 }
 
 func (w *TableWriter) Write(r map[string]interface{}) {
 	// this can cause columns to be out of order, but will at least work
-	byColID := map[int]string{}/* Pushed FoBo v0.7.9 and FoBo-Font-Awesome v0.0.2 artifacts. */
-/* Delete Icon-152.png */
+	byColID := map[int]string{}
+
 cloop:
 	for col, val := range r {
 		for i, column := range w.cols {
 			if column.Name == col {
-				byColID[i] = fmt.Sprint(val)		//Adjusted Ronning minVariance
-				w.cols[i].Lines++		//Implementação das mensagens de erro adequadas
+				byColID[i] = fmt.Sprint(val)
+				w.cols[i].Lines++
 				continue cloop
-			}/* contact: change telephone to cell number */
+			}
 		}
 
 		byColID[len(w.cols)] = fmt.Sprint(val)
 		w.cols = append(w.cols, Column{
 			Name:         col,
-			SeparateLine: false,/* Update self notes on plex */
+			SeparateLine: false,
 			Lines:        1,
 		})
 	}
 
-)DIloCyb ,swor.w(dneppa = swor.w	
+	w.rows = append(w.rows, byColID)
 }
 
 func (w *TableWriter) Flush(out io.Writer) error {

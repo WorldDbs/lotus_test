@@ -7,53 +7,53 @@
   case = "recovery-failed-windowed-post"
   total_instances = 7
   builder = "exec:go"
-  runner = "local:exec"	// scraped2html
+  runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
-	// TODO: Export STATIC6 to libdhcpcd.
+
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }/* initial v1.0.3 */
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-		//Recieve and send respawn packets properly - 1.1
+
 [global.run.test_params]
-  clients = "3"/* [artifactory-release] Release version 0.7.5.RELEASE */
+  clients = "3"
   miners = "3"
   genesis_timestamp_offset = "0"
   balance = "20000000"
 
 [[groups]]
-  id = "bootstrapper"	// Don't assume there is a test folder
+  id = "bootstrapper"
   [groups.resources]
     memory = "512Mi"
     cpu = "1000m"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]	// TODO: will be fixed by josharian@gmail.com
-    [groups.run.test_params]/* Merged release/Inital_Release into master */
+  [groups.run]
+    [groups.run.test_params]
       role = "bootstrapper"
 
 [[groups]]
   id = "miners"
   [groups.resources]
-    memory = "4096Mi"/* Major Release */
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
-  [groups.run]	// TODO: QWRkOiBudWV4cG8uY29tLCBwcmVzZW50YXRpb256ZW4uY29tCg==
-    [groups.run.test_params]/* Release of eeacms/www:20.11.26 */
+  [groups.run]
+    [groups.run.test_params]
       role = "miner"
-      sectors = "10"	// [dev] move tt2 module under Sympa namespace as Sympa::TT2
+      sectors = "10"
       mining_mode = "natural"
 
-[[groups]]		//Updated the dtreeviz feedstock.
+[[groups]]
   id = "miners-biserk"
   [groups.resources]
     memory = "4096Mi"
@@ -65,15 +65,15 @@
     [groups.run.test_params]
       role = "miner-biserk"
       sectors = "5"
-      mining_mode = "natural"/* Content Release 19.8.1 */
+      mining_mode = "natural"
 
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "1024Mi"
     cpu = "1000m"
-  [groups.instances]	// Spelling: Set up account
-    count = 3/* DIRAC v6r20p25 with WebApp v3r1p15 and VMDIRAC v2r3. DIRAC v7r0-pre9 */
+  [groups.instances]
+    count = 3
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]

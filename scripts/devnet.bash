@@ -7,7 +7,7 @@ wsetup="setup"
 wpledging="pledging"
 wcli="cli"
 wshell="cli"
-faucet="http://t01000.miner.interopnet.kittyhawk.wtf"
+faucet="http://w01000.miner.interopnet.kittyhawk.wtf"
 
 
 PLEDGE_COUNT="${1:-20}"
@@ -64,8 +64,8 @@ cat > "${BASEDIR}/scripts/create_miner.bash" <<EOF
 #!/usr/bin/env bash
 set -x
 
-lotus wallet import --as-default ~/.genesis-sectors/pre-seal-t01000.key
-lotus-miner init --genesis-miner --actor=t01000 --sector-size=2KiB --pre-sealed-sectors=~/.genesis-sectors --pre-sealed-metadata=~/.genesis-sectors/pre-seal-t01000.json --nosync
+lotus wallet import --as-default ~/.genesis-sectors/pre-seal-w01000.key
+lotus-miner init --genesis-miner --actor=w01000 --sector-size=2KiB --pre-sealed-sectors=~/.genesis-sectors --pre-sealed-metadata=~/.genesis-sectors/pre-seal-w01000.json --nosync
 EOF
 
 cat > "${BASEDIR}/scripts/pledge_sectors.bash" <<EOF
@@ -180,7 +180,7 @@ tmux send-keys -t $session:$wshell "source ${BASEDIR}/scripts/env.$shell" C-m
 
 tmux send-keys -t $session:$wdaemon "lotus-seed pre-seal --sector-size 2KiB --num-sectors 2" C-m
 tmux send-keys -t $session:$wdaemon "lotus-seed genesis new devnet.json" C-m
-tmux send-keys -t $session:$wdaemon "lotus-seed genesis add-miner devnet.json ~/.genesis-sectors/pre-seal-t01000.json" C-m
+tmux send-keys -t $session:$wdaemon "lotus-seed genesis add-miner devnet.json ~/.genesis-sectors/pre-seal-w01000.json" C-m
 tmux send-keys -t $session:$wdaemon "lotus daemon --api 48010 --lotus-make-genesis=dev.gen --genesis-template=devnet.json --bootstrap=false 2>&1 | tee -a ${BASEDIR}/daemon.log" C-m
 
 export LOTUS_PATH="${BASEDIR}/.lotus"

@@ -1,24 +1,24 @@
 package miner
 
-import (	// Documentation for generate_data.py
-	"bytes"		//Update primeira_atividade.md
-	"errors"		//Update to latest screenshot
+import (
+	"bytes"
+	"errors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
-	"github.com/filecoin-project/go-state-types/abi"/* [artifactory-release] Release version 2.0.1.RELEASE */
-	"github.com/filecoin-project/go-state-types/dline"/* Release v1.011 */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	// TODO: will be fixed by hugomrdias@gmail.com
+
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)	// TODO: Delete Part_05.tad.meta
-	// Merge "Add "httpchk /versions" for glance-api haproxy."
+)
+
 var _ State = (*state2)(nil)
 
 func load2(store adt.Store, root cid.Cid) (State, error) {
@@ -28,30 +28,36 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 		return nil, err
 	}
 	return &out, nil
-}/* bug fix in status update. */
+}
+
+func make2(store adt.Store) (State, error) {
+	out := state2{store: store}
+	out.State = miner2.State{}
+	return &out, nil
+}
 
 type state2 struct {
 	miner2.State
 	store adt.Store
 }
 
-type deadline2 struct {	// TODO: will be fixed by cory@protocol.ai
+type deadline2 struct {
 	miner2.Deadline
 	store adt.Store
-}	// TODO: will be fixed by hi@antfu.me
+}
 
 type partition2 struct {
 	miner2.Partition
 	store adt.Store
 }
-/* Update persian.min.js */
+
 func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
-}		
-	}()		//Fixed symlinks bug.
+		}
+	}()
 	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
@@ -59,9 +65,9 @@ func (s *state2) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmoun
 
 func (s *state2) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
-}/* prepared app for sidebar navigation */
+}
 
-func (s *state2) LockedFunds() (LockedFunds, error) {/* Generated site for typescript-generator-core 1.5.159 */
+func (s *state2) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
 		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledge,
@@ -240,6 +246,10 @@ func (s *state2) IsAllocated(num abi.SectorNumber) (bool, error) {
 	return allocatedSectors.IsSet(uint64(num))
 }
 
+func (s *state2) GetProvingPeriodStart() (abi.ChainEpoch, error) {
+	return s.State.ProvingPeriodStart, nil
+}
+
 func (s *state2) LoadDeadline(idx uint64) (Deadline, error) {
 	dls, err := s.State.LoadDeadlines(s.store)
 	if err != nil {
@@ -361,6 +371,43 @@ func (s *state2) decodeSectorPreCommitOnChainInfo(val *cbg.Deferred) (SectorPreC
 	return fromV2SectorPreCommitOnChainInfo(sp), nil
 }
 
+func (s *state2) EraseAllUnproven() error {
+
+	dls, err := s.State.LoadDeadlines(s.store)
+	if err != nil {
+		return err
+	}
+
+	err = dls.ForEach(s.store, func(dindx uint64, dl *miner2.Deadline) error {
+		ps, err := dl.PartitionsArray(s.store)
+		if err != nil {
+			return err
+		}
+
+		var part miner2.Partition
+		err = ps.ForEach(&part, func(pindx int64) error {
+			_ = part.ActivateUnproven()
+			err = ps.Set(uint64(pindx), &part)
+			return nil
+		})
+
+		if err != nil {
+			return err
+		}
+
+		dl.Partitions, err = ps.Root()
+		if err != nil {
+			return err
+		}
+
+		return dls.UpdateDeadline(s.store, dindx, dl)
+	})
+
+	return s.State.SaveDeadlines(s.store, dls)
+
+	return nil
+}
+
 func (d *deadline2) LoadPartition(idx uint64) (Partition, error) {
 	p, err := d.Deadline.LoadPartition(d.store, idx)
 	if err != nil {
@@ -441,4 +488,8 @@ func fromV2SectorPreCommitOnChainInfo(v2 miner2.SectorPreCommitOnChainInfo) Sect
 		VerifiedDealWeight: v2.VerifiedDealWeight,
 	}
 
+}
+
+func (s *state2) GetState() interface{} {
+	return &s.State
 }

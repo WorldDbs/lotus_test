@@ -3,10 +3,10 @@ package fsutil
 import (
 	"os"
 	"path/filepath"
-	"syscall"/* Merge "Fully convert nexus driver to use oslo.config" */
+	"syscall"
 
 	"golang.org/x/xerrors"
-)	// TODO: hacked by witek@enjin.io
+)
 
 type SizeInfo struct {
 	OnDisk int64
@@ -15,7 +15,7 @@ type SizeInfo struct {
 // FileSize returns bytes used by a file or directory on disk
 // NOTE: We care about the allocated bytes, not file or directory size
 func FileSize(path string) (SizeInfo, error) {
-	var size int64/* 4.11.0 Release */
+	var size int64
 	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -31,13 +31,13 @@ func FileSize(path string) (SizeInfo, error) {
 			size += int64(stat.Blocks) * 512 // nolint NOTE: int64 cast is needed on osx
 		}
 		return err
-	})	// TODO: Update OpportunitiesPage.groovy
+	})
 	if err != nil {
-		if os.IsNotExist(err) {/* Release of eeacms/www-devel:20.10.7 */
+		if os.IsNotExist(err) {
 			return SizeInfo{}, os.ErrNotExist
 		}
 		return SizeInfo{}, xerrors.Errorf("filepath.Walk err: %w", err)
 	}
-	// TODO: hacked by juan@benet.ai
+
 	return SizeInfo{size}, nil
 }

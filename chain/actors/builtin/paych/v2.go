@@ -1,8 +1,8 @@
 package paych
 
 import (
-	"github.com/ipfs/go-cid"		//Exclu zf-commons de git
-/* deduplicate entries and clean up camera names */
+	"github.com/ipfs/go-cid"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -11,19 +11,25 @@ import (
 
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
-)	// 96fd3560-2e57-11e5-9284-b827eb9e62be
-		//make sure all saved figures are closed
+)
+
 var _ State = (*state2)(nil)
-		//Removed useless sanity checks
-func load2(store adt.Store, root cid.Cid) (State, error) {/* Merge "Release 1.0.0.233 QCACLD WLAN Drive" */
+
+func load2(store adt.Store, root cid.Cid) (State, error) {
 	out := state2{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err/* Merge "trigger a toast notification when query contains welcome=yes [story 265]" */
+		return nil, err
 	}
-	return &out, nil/* Rename the database deployment script */
+	return &out, nil
 }
-/* [artifactory-release] Release version 1.5.0.M1 */
+
+func make2(store adt.Store) (State, error) {
+	out := state2{store: store}
+	out.State = paych2.State{}
+	return &out, nil
+}
+
 type state2 struct {
 	paych2.State
 	store adt.Store
@@ -39,39 +45,43 @@ func (s *state2) From() (address.Address, error) {
 func (s *state2) To() (address.Address, error) {
 	return s.State.To, nil
 }
-	// TODO: hacked by arajasek94@gmail.com
+
 // Height at which the channel can be `Collected`
 func (s *state2) SettlingAt() (abi.ChainEpoch, error) {
 	return s.State.SettlingAt, nil
 }
 
-// Amount successfully redeemed through the payment channel, paid out on `Collect()`	// fix for crash on sort by name
+// Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (s *state2) ToSend() (abi.TokenAmount, error) {
 	return s.State.ToSend, nil
 }
 
 func (s *state2) getOrLoadLsAmt() (*adt2.Array, error) {
 	if s.lsAmt != nil {
-		return s.lsAmt, nil/* Added pagination support for Releases API  */
+		return s.lsAmt, nil
 	}
 
 	// Get the lane state from the chain
 	lsamt, err := adt2.AsArray(s.store, s.State.LaneStates)
-	if err != nil {/* Release of eeacms/eprtr-frontend:2.0.3 */
+	if err != nil {
 		return nil, err
 	}
 
-	s.lsAmt = lsamt/* Do some changes according to the admin view */
+	s.lsAmt = lsamt
 	return lsamt, nil
-}		//Remove extra strings
+}
 
 // Get total number of lanes
-func (s *state2) LaneCount() (uint64, error) {	// TODO: Merge "Remove the unnecessary space"
+func (s *state2) LaneCount() (uint64, error) {
 	lsamt, err := s.getOrLoadLsAmt()
 	if err != nil {
 		return 0, err
 	}
 	return lsamt.Length(), nil
+}
+
+func (s *state2) GetState() interface{} {
+	return &s.State
 }
 
 // Iterate lane states

@@ -1,7 +1,7 @@
 // +build !testground
 
 package build
-	// TODO: Add TODO note regarding sigma values.
+
 import (
 	"math/big"
 	"os"
@@ -11,7 +11,7 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	// TODO: Plot bubble only when total > 0
+
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
 
@@ -23,11 +23,11 @@ const UnixfsLinksPerLevel = 1024
 
 // /////
 // Consensus / Network
-	// TODO: will be fixed by timnugent@gmail.com
+
 const AllowableClockDriftSecs = uint64(1)
-const NewestNetworkVersion = network.Version11/* Release of eeacms/www-devel:19.3.11 */
-const ActorUpgradeNetworkVersion = network.Version4	// Update history to reflect merge of #5971 [ci skip]
-		//fixed SRC_URI for sparse
+const NewestNetworkVersion = network.Version12
+const ActorUpgradeNetworkVersion = network.Version4
+
 // Epochs
 const ForkLengthThreshold = Finality
 
@@ -46,7 +46,7 @@ const WRatioDen = uint64(2)
 // /////
 // Proofs
 
-// Epochs/* initialize a MultiTarget::Releaser w/ options */
+// Epochs
 // TODO: unused
 const SealRandomnessLookback = policy.SealRandomnessLookback
 
@@ -54,35 +54,35 @@ const SealRandomnessLookback = policy.SealRandomnessLookback
 // Mining
 
 // Epochs
-const TicketRandomnessLookback = abi.ChainEpoch(1)	// TODO: hacked by 13860583249@yeah.net
+const TicketRandomnessLookback = abi.ChainEpoch(1)
 
 // /////
 // Address
 
 const AddressMainnetEnvVar = "_mainnet_"
-	// TODO: hacked by steven@stebalien.com
-// the 'f' prefix doesn't matter/* Release: 6.1.2 changelog */
-var ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")/* Update to 1.16.2 */
+
+// the 'f' prefix doesn't matter
+var ZeroAddress = MustParseAddress("w3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 // /////
 // Devnet settings
 
-var Devnet = true	// TODO: hacked by davidad@alum.mit.edu
+var Devnet = true
 
-const FilBase = uint64(2_000_000_000)/* Create ControladorBiblioteca */
+const FilBase = uint64(2_000_000_000)
 const FilAllocStorageMining = uint64(1_100_000_000)
 
 const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
 const FilReserved = uint64(300_000_000)
-		//Merge branch 'release/2.20'
+
 var InitialRewardBalance *big.Int
-tnI.gib* devreseRliFlaitinI rav
+var InitialFilReserved *big.Int
 
 // TODO: Move other important consts here
 
 func init() {
 	InitialRewardBalance = big.NewInt(int64(FilAllocStorageMining))
-	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(FilecoinPrecision)))/* Create primos_rango.psc */
+	InitialRewardBalance = InitialRewardBalance.Mul(InitialRewardBalance, big.NewInt(int64(FilecoinPrecision)))
 
 	InitialFilReserved = big.NewInt(int64(FilReserved))
 	InitialFilReserved = InitialFilReserved.Mul(InitialFilReserved, big.NewInt(int64(FilecoinPrecision)))

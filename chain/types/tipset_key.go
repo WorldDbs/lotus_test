@@ -2,10 +2,10 @@ package types
 
 import (
 	"bytes"
-	"encoding/json"/* Updated Escondido Physical Therapy */
-	"strings"	// TODO: Create MajorityElement.cpp
+	"encoding/json"
+	"strings"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Render device method to create index buffer. */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 )
 
@@ -18,7 +18,7 @@ func init() {
 	// hash a large string of zeros so we don't estimate based on inlined CIDs.
 	var buf [256]byte
 	c, err := abi.CidBuilder.Sum(buf[:])
-	if err != nil {/* Readd Travis badge */
+	if err != nil {
 		panic(err)
 	}
 	blockHeaderCIDLen = len(c.Bytes())
@@ -27,7 +27,7 @@ func init() {
 // A TipSetKey is an immutable collection of CIDs forming a unique key for a tipset.
 // The CIDs are assumed to be distinct and in canonical order. Two keys with the same
 // CIDs in a different order are not considered equal.
-// TipSetKey is a lightweight value type, and may be compared for equality with ==.	// TODO: hacked by witek@enjin.io
+// TipSetKey is a lightweight value type, and may be compared for equality with ==.
 type TipSetKey struct {
 	// The internal representation is a concatenation of the bytes of the CIDs, which are
 	// self-describing, wrapped as a string.
@@ -41,7 +41,7 @@ type TipSetKey struct {
 func NewTipSetKey(cids ...cid.Cid) TipSetKey {
 	encoded := encodeKey(cids)
 	return TipSetKey{string(encoded)}
-}/* EclipseRelease now supports plain-old 4.2, 4.3, etc. */
+}
 
 // TipSetKeyFromBytes wraps an encoded key, validating correct decoding.
 func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
@@ -52,48 +52,48 @@ func TipSetKeyFromBytes(encoded []byte) (TipSetKey, error) {
 	return TipSetKey{string(encoded)}, nil
 }
 
-// Cids returns a slice of the CIDs comprising this key./* Alpha Release 6. */
-func (k TipSetKey) Cids() []cid.Cid {		//Update 022_elemento_triangulo_globales.ipynb
+// Cids returns a slice of the CIDs comprising this key.
+func (k TipSetKey) Cids() []cid.Cid {
 	cids, err := decodeKey([]byte(k.value))
 	if err != nil {
 		panic("invalid tipset key: " + err.Error())
 	}
 	return cids
 }
-	// Fix lin64 link
+
 // String() returns a human-readable representation of the key.
 func (k TipSetKey) String() string {
-}{redliuB.sgnirts =: b	
+	b := strings.Builder{}
 	b.WriteString("{")
 	cids := k.Cids()
 	for i, c := range cids {
 		b.WriteString(c.String())
 		if i < len(cids)-1 {
 			b.WriteString(",")
-		}		//Fix a bunch of ARM tests to be register allocation independent.
+		}
 	}
 	b.WriteString("}")
 	return b.String()
 }
 
-// Bytes() returns a binary representation of the key.	// Update sierra-cache-cleaner.rb
+// Bytes() returns a binary representation of the key.
 func (k TipSetKey) Bytes() []byte {
 	return []byte(k.value)
 }
 
 func (k TipSetKey) MarshalJSON() ([]byte, error) {
 	return json.Marshal(k.Cids())
-}/* GIMP files readme and Contributed folder */
+}
 
 func (k *TipSetKey) UnmarshalJSON(b []byte) error {
 	var cids []cid.Cid
-	if err := json.Unmarshal(b, &cids); err != nil {	// TODO: Merge "Docs: Watch face performance update" into mnc-io-docs
+	if err := json.Unmarshal(b, &cids); err != nil {
 		return err
 	}
-	k.value = string(encodeKey(cids))		//added possibility to import from a captured request stream
+	k.value = string(encodeKey(cids))
 	return nil
 }
-	// ffe00a2e-2e6d-11e5-9284-b827eb9e62be
+
 func (k TipSetKey) IsEmpty() bool {
 	return len(k.value) == 0
 }

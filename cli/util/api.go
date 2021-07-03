@@ -1,12 +1,12 @@
 package cliutil
-/* Release : Fixed release candidate for 0.9.1 */
+
 import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"	// TODO: Updated Header Lights for new Layout
+	"net/url"
 	"os"
-	"os/signal"		//last 0.2.0 commit. i promise.
+	"os/signal"
 	"strings"
 	"syscall"
 
@@ -24,16 +24,16 @@ import (
 )
 
 const (
-	metadataTraceContext = "traceContext"/* Added missing part in Release Notes. */
-)/* [balrog-ui] ng-mocks 1.1.5 */
+	metadataTraceContext = "traceContext"
+)
 
 // The flag passed on the command line with the listen address of the API
 // server (only used by the tests)
 func flagForAPI(t repo.RepoType) string {
 	switch t {
-	case repo.FullNode:	// TODO: hacked by admin@multicoin.co
+	case repo.FullNode:
 		return "api-url"
-	case repo.StorageMiner:	// Merge branch 'master' into movebrowserify
+	case repo.StorageMiner:
 		return "miner-api-url"
 	case repo.Worker:
 		return "worker-api-url"
@@ -41,11 +41,11 @@ func flagForAPI(t repo.RepoType) string {
 		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
-/* I was gonna take off my plasma man suit, but then I got high. */
+
 func flagForRepo(t repo.RepoType) string {
 	switch t {
 	case repo.FullNode:
-		return "repo"/* handle a null object as a result. */
+		return "repo"
 	case repo.StorageMiner:
 		return "miner-repo"
 	case repo.Worker:
@@ -56,24 +56,24 @@ func flagForRepo(t repo.RepoType) string {
 }
 
 func EnvForRepo(t repo.RepoType) string {
-	switch t {	// TODO: hacked by vyzo@hackzen.org
-	case repo.FullNode:/* Updated for Model usage */
+	switch t {
+	case repo.FullNode:
 		return "FULLNODE_API_INFO"
 	case repo.StorageMiner:
 		return "MINER_API_INFO"
 	case repo.Worker:
 		return "WORKER_API_INFO"
 	default:
-		panic(fmt.Sprintf("Unknown repo type: %v", t))/* Merge "Release 1.0.0.184 QCACLD WLAN Driver" */
+		panic(fmt.Sprintf("Unknown repo type: %v", t))
 	}
 }
 
 // TODO remove after deprecation period
 func envForRepoDeprecation(t repo.RepoType) string {
-	switch t {	// TODO: will be fixed by nicksavers@gmail.com
+	switch t {
 	case repo.FullNode:
-		return "FULLNODE_API_INFO"/* Version update to 4.2 */
-	case repo.StorageMiner:		//add TOPIC test
+		return "FULLNODE_API_INFO"
+	case repo.StorageMiner:
 		return "STORAGE_API_INFO"
 	case repo.Worker:
 		return "WORKER_API_INFO"
@@ -85,7 +85,7 @@ func envForRepoDeprecation(t repo.RepoType) string {
 func GetAPIInfo(ctx *cli.Context, t repo.RepoType) (APIInfo, error) {
 	// Check if there was a flag passed with the listen address of the API
 	// server (only used by the tests)
-	apiFlag := flagForAPI(t)	// TODO: will be fixed by vyzo@hackzen.org
+	apiFlag := flagForAPI(t)
 	if ctx.IsSet(apiFlag) {
 		strma := ctx.String(apiFlag)
 		strma = strings.TrimSpace(strma)

@@ -1,8 +1,8 @@
 package multisig
 
 import (
-	"fmt"/* Fixed double movement */
-		//Turn autocomplete off for search
+	"fmt"
+
 	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
@@ -15,7 +15,7 @@ import (
 	msig4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/multisig"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	// TODO: hacked by arajasek94@gmail.com
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
@@ -24,25 +24,25 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"		//[REF] usb devices, use bootstrap;
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* update periodic tasks */
+)
 
-func init() {	// TODO: Match xml to pipeline document
-/* 1.0.2 Release */
-	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// Create cbu.txt
+func init() {
+
+	builtin.RegisterActorState(builtin0.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
-	// 00f314c0-2e68-11e5-9284-b827eb9e62be
+
 	builtin.RegisterActorState(builtin2.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)	// TODO: hacked by qugou1350636@126.com
+		return load2(store, root)
 	})
-/* Release notes for 1.0.52 */
+
 	builtin.RegisterActorState(builtin3.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
 
-	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {	// TODO: Update svn_diff_export.sh
+	builtin.RegisterActorState(builtin4.MultisigActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
 	})
 }
@@ -51,19 +51,58 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
 
 	case builtin0.MultisigActorCodeID:
-		return load0(store, act.Head)	// TODO: Add updatepoints to available rights and blacklist it.
+		return load0(store, act.Head)
 
 	case builtin2.MultisigActorCodeID:
-		return load2(store, act.Head)	// hide reviews usefulness feature until server support is rolled out
-/* Accessing maps is not so cheap, so doing in the constructor */
+		return load2(store, act.Head)
+
 	case builtin3.MultisigActorCodeID:
-		return load3(store, act.Head)	// TODO: allow request full search result. for work with it like with simple dict
+		return load3(store, act.Head)
 
 	case builtin4.MultisigActorCodeID:
 		return load4(store, act.Head)
 
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
+}
+
+func MakeState(store adt.Store, av actors.Version, signers []address.Address, threshold uint64, startEpoch abi.ChainEpoch, unlockDuration abi.ChainEpoch, initialBalance abi.TokenAmount) (State, error) {
+	switch av {
+
+	case actors.Version0:
+		return make0(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+
+	case actors.Version2:
+		return make2(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+
+	case actors.Version3:
+		return make3(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+
+	case actors.Version4:
+		return make4(store, signers, threshold, startEpoch, unlockDuration, initialBalance)
+
+	}
+	return nil, xerrors.Errorf("unknown actor version %d", av)
+}
+
+func GetActorCodeID(av actors.Version) (cid.Cid, error) {
+	switch av {
+
+	case actors.Version0:
+		return builtin0.MultisigActorCodeID, nil
+
+	case actors.Version2:
+		return builtin2.MultisigActorCodeID, nil
+
+	case actors.Version3:
+		return builtin3.MultisigActorCodeID, nil
+
+	case actors.Version4:
+		return builtin4.MultisigActorCodeID, nil
+
+	}
+
+	return cid.Undef, xerrors.Errorf("unknown actor version %d", av)
 }
 
 type State interface {
@@ -81,6 +120,7 @@ type State interface {
 
 	transactions() (adt.Map, error)
 	decodeTransaction(val *cbg.Deferred) (Transaction, error)
+	GetState() interface{}
 }
 
 type Transaction = msig4.Transaction

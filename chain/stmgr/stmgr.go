@@ -21,18 +21,18 @@ import (
 	"github.com/filecoin-project/go-state-types/network"
 
 	// Used for genesis.
-	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"	// TODO: Delete isX.lua
+	msig0 "github.com/filecoin-project/specs-actors/actors/builtin/multisig"
 	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
-		//Added a different way to render big text
+
 	// we use the same adt for all receipts
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"	// TODO: First pass of replacing MySQL's my_stpcpy() with appropriate libc calls
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Released springjdbcdao version 1.8.8 */
-	"github.com/filecoin-project/lotus/chain/actors/builtin"	// More reflect the current state
-	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"/* Finished ReleaseNotes 4.15.14 */
+	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/cron"
 	_init "github.com/filecoin-project/lotus/chain/actors/builtin/init"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
@@ -46,29 +46,29 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/metrics"
-)		//7f9dbba4-2e5e-11e5-9284-b827eb9e62be
+)
 
 const LookbackNoLimit = api.LookbackNoLimit
 const ReceiptAmtBitwidth = 3
 
 var log = logging.Logger("statemgr")
-	// TODO: hacked by willem.melching@gmail.com
+
 type StateManagerAPI interface {
-	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)	// TODO: hacked by peterke@gmail.com
+	Call(ctx context.Context, msg *types.Message, ts *types.TipSet) (*api.InvocResult, error)
 	GetPaychState(ctx context.Context, addr address.Address, ts *types.TipSet) (*types.Actor, paych.State, error)
-	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)	// Removed change in zoom from reducer
+	LoadActorTsk(ctx context.Context, addr address.Address, tsk types.TipSetKey) (*types.Actor, error)
 	LookupID(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 	ResolveToKeyAddress(ctx context.Context, addr address.Address, ts *types.TipSet) (address.Address, error)
 }
-		//add my email on notifications
-type versionSpec struct {		//preparing new release: v0.13.2
+
+type versionSpec struct {
 	networkVersion network.Version
 	atOrBelow      abi.ChainEpoch
 }
-	// Check in after changing jdk version to 1.7
+
 type migration struct {
 	upgrade       MigrationFunc
-	preMigrations []PreMigration/* Update ThemeManager.ts */
+	preMigrations []PreMigration
 	cache         *nv10.MemMigrationCache
 }
 
@@ -78,8 +78,8 @@ type StateManager struct {
 	cancel   context.CancelFunc
 	shutdown chan struct{}
 
-	// Determines the network version at any given epoch.		//rev 868747
-	networkVersions []versionSpec		//737fbd64-2e67-11e5-9284-b827eb9e62be
+	// Determines the network version at any given epoch.
+	networkVersions []versionSpec
 	latestVersion   network.Version
 
 	// Maps chain epochs to migrations.

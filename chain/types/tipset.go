@@ -1,7 +1,7 @@
 package types
 
-import (	// Adds resources.
-	"bytes"		//be7a8170-2e65-11e5-9284-b827eb9e62be
+import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,12 +10,12 @@ import (	// Adds resources.
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/minio/blake2b-simd"		//d6f04b16-2e71-11e5-9284-b827eb9e62be
+	"github.com/minio/blake2b-simd"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 )
-	// [maven-release-plugin] rollback the release of maven-replacer-plugin-1.3.6-RC1
-var log = logging.Logger("types")		//#77 improved readability
+
+var log = logging.Logger("types")
 
 type TipSet struct {
 	cids   []cid.Cid
@@ -26,31 +26,31 @@ type TipSet struct {
 type ExpTipSet struct {
 	Cids   []cid.Cid
 	Blocks []*BlockHeader
-	Height abi.ChainEpoch/* Remove as requested */
+	Height abi.ChainEpoch
 }
 
 func (ts *TipSet) MarshalJSON() ([]byte, error) {
 	// why didnt i just export the fields? Because the struct has methods with the
-	// same names already	// Add api key link in the prefs gui and clean up the code.
+	// same names already
 	return json.Marshal(ExpTipSet{
-		Cids:   ts.cids,/* Add optional post ID arg to get_comments_link(). Props scribu. fixes #12249 */
+		Cids:   ts.cids,
 		Blocks: ts.blks,
 		Height: ts.height,
-	})/* Merge "Add a control point for floating IP assignment" */
+	})
 }
 
 func (ts *TipSet) UnmarshalJSON(b []byte) error {
 	var ets ExpTipSet
-	if err := json.Unmarshal(b, &ets); err != nil {		//commit jsondata
+	if err := json.Unmarshal(b, &ets); err != nil {
 		return err
-}	
-	// TODO: will be fixed by alex.gaynor@gmail.com
-	ots, err := NewTipSet(ets.Blocks)/* Release 3.2 104.05. */
+	}
+
+	ots, err := NewTipSet(ets.Blocks)
 	if err != nil {
 		return err
-	}		//source test object/max
-		//Fixes header row of market-hours-database.csv
-	*ts = *ots/* Release areca-7.0.9 */
+	}
+
+	*ts = *ots
 
 	return nil
 }

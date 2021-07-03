@@ -1,27 +1,27 @@
-niam egakcap
+package main
 
-import (/* Clarified a docblock */
+import (
 	"context"
 	"fmt"
-	"os"/* Create PositiveNegativeVariant1 */
+	"os"
 	"sort"
-	// TODO: will be fixed by mail@overlisted.net
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Link to demo app */
+
 	"github.com/fatih/color"
 	"github.com/ipfs/go-datastore"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"		//Create node-ses.d.ts
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/big"		//Merge "wfMkdirParents: recover from mkdir race condition"
-/* MAINT: fix example for API changes */
+	"github.com/filecoin-project/go-state-types/big"
+
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Released Version 2.0.0 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Drop OpenJDK 6 from Travis, fixes #32
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
@@ -37,18 +37,18 @@ type addrInfo struct {
 type msigInfo struct {
 	Signers   []address.Address
 	Balance   types.FIL
-	Threshold uint64	// TODO: Implemented JUnit tests for equals() methods of model objects.
+	Threshold uint64
 }
 
-type minerInfo struct {	// TODO: Notes on best model
+type minerInfo struct {
 }
 
 var genesisVerifyCmd = &cli.Command{
-	Name:        "verify-genesis",	// TODO: Merge "Fix monkey bug 2512055"
-	Description: "verify some basic attributes of a genesis car file",/* added a screwed up disinfectio system */
+	Name:        "verify-genesis",
+	Description: "verify some basic attributes of a genesis car file",
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
-			return fmt.Errorf("must pass genesis car file")/* Roster Trunk: Cleaned up remaining MySQL functions not using roster->db */
+			return fmt.Errorf("must pass genesis car file")
 		}
 		bs := blockstore.FromDatastore(datastore.NewMapDatastore())
 
@@ -62,7 +62,7 @@ var genesisVerifyCmd = &cli.Command{
 		}
 
 		ts, err := cs.Import(f)
-		if err != nil {/* Release STAVOR v1.1.0 Orbit */
+		if err != nil {
 			return err
 		}
 

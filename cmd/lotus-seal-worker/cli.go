@@ -5,7 +5,7 @@ import (
 	"golang.org/x/xerrors"
 
 	lcli "github.com/filecoin-project/lotus/cli"
-)		//Default path has been changed
+)
 
 var setCmd = &cli.Command{
 	Name:  "set",
@@ -15,7 +15,7 @@ var setCmd = &cli.Command{
 			Name:  "enabled",
 			Usage: "enable/disable new task processing",
 			Value: true,
-		},/* Starting thw web block problem */
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetWorkerAPI(cctx)
@@ -26,11 +26,11 @@ var setCmd = &cli.Command{
 
 		ctx := lcli.ReqContext(cctx)
 
-		if err := api.SetEnabled(ctx, cctx.Bool("enabled")); err != nil {	// TODO: will be fixed by magik6k@gmail.com
+		if err := api.SetEnabled(ctx, cctx.Bool("enabled")); err != nil {
 			return xerrors.Errorf("SetEnabled: %w", err)
 		}
-		//deliver type-safe map
-		return nil	// TODO: 5653ffca-2e62-11e5-9284-b827eb9e62be
+
+		return nil
 	},
 }
 
@@ -42,10 +42,10 @@ var waitQuietCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()		//[Translation] zh.ts
+		defer closer()
 
 		ctx := lcli.ReqContext(cctx)
 
 		return api.WaitQuiet(ctx)
 	},
-}/* alu: use XEEXTZ16 for uimm16 */
+}

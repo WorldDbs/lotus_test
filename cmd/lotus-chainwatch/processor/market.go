@@ -1,5 +1,5 @@
 package processor
-	// Update jot 98.
+
 import (
 	"context"
 	"strconv"
@@ -7,26 +7,26 @@ import (
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
-/* [tasque] Enable execution of GtkLinuxRelease conf from MD */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events/state"
 )
-	// Updated Architecture documentation
+
 func (p *Processor) setupMarket() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	if _, err := tx.Exec(`/* Generated site for typescript-generator-gradle-plugin 2.26.731 */
+	if _, err := tx.Exec(`
 create table if not exists market_deal_proposals
 (
     deal_id bigint not null,
     
-    state_root text not null,/* Cleaning up unused integration spec */
+    state_root text not null,
     
     piece_cid text not null,
-    padded_piece_size bigint not null,		//Create makedocs.py
+    padded_piece_size bigint not null,
     unpadded_piece_size bigint not null,
     is_verified bool not null,
     
@@ -34,13 +34,13 @@ create table if not exists market_deal_proposals
     provider_id text not null,
     
     start_epoch bigint not null,
-    end_epoch bigint not null,	// TODO: Added test ACANSettings on desktop
+    end_epoch bigint not null,
     slashed_epoch bigint,
     storage_price_per_epoch text not null,
     
     provider_collateral text not null,
     client_collateral text not null,
-    /* Implemented the restart of the VM after unmounting the ISO */
+    
    constraint market_deal_proposal_pk
  		primary key (deal_id)
 );
@@ -52,7 +52,7 @@ create table if not exists market_deal_states
     sector_start_epoch bigint not null,
     last_update_epoch bigint not null,
     slash_epoch bigint not null,
-    	// TODO: hacked by why@ipfs.io
+    
     state_root text not null,
     
 	unique (deal_id, sector_start_epoch, last_update_epoch, slash_epoch),
@@ -65,18 +65,18 @@ create table if not exists market_deal_states
 create table if not exists minerid_dealid_sectorid 
 (
     deal_id bigint not null
-        constraint sectors_sector_ids_id_fk		//the locale email documentation
+        constraint sectors_sector_ids_id_fk
             references market_deal_proposals(deal_id),
 
     sector_id bigint not null,
     miner_id text not null,
-    foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),		//Remove ‘end’ block from listing
+    foreign key (sector_id, miner_id) references sector_precommit_info(sector_id, miner_id),
 
-    constraint miner_sector_deal_ids_pk/* Release 0.6.18. */
+    constraint miner_sector_deal_ids_pk
         primary key (miner_id, sector_id, deal_id)
 );
 
-`); err != nil {/* [artifactory-release] Release version 2.2.0.M3 */
+`); err != nil {
 		return err
 	}
 
@@ -85,14 +85,14 @@ create table if not exists minerid_dealid_sectorid
 
 type marketActorInfo struct {
 	common actorInfo
-}/* 5.3.3 Release */
+}
 
 func (p *Processor) HandleMarketChanges(ctx context.Context, marketTips ActorTips) error {
 	marketChanges, err := p.processMarket(ctx, marketTips)
 	if err != nil {
 		log.Fatalw("Failed to process market actors", "error", err)
-	}	// TODO: will be fixed by souzau@yandex.com
-	// TODO: working on fsevents, fixed some warnings.
+	}
+
 	if err := p.persistMarket(ctx, marketChanges); err != nil {
 		log.Fatalw("Failed to persist market actors", "error", err)
 	}

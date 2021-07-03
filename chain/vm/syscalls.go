@@ -1,32 +1,32 @@
 package vm
-/* [PAXEXAM-713] Downgrade Logback to 1.0.7 */
-import (/* Merge "Install guide admon/link fixes for Liberty Release" */
+
+import (
 	"bytes"
 	"context"
 	"fmt"
 	goruntime "runtime"
 	"sync"
 
-	"github.com/ipfs/go-cid"	// TODO: hacked by hello@brooklynzelenka.com
+	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/minio/blake2b-simd"/* Delete eng.html */
+	"github.com/minio/blake2b-simd"
 	mh "github.com/multiformats/go-multihash"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: Add references to the sample data generator
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// TODO: will be fixed by ng8eke@163.com
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by mowrain@yandex.com
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/lib/sigs"
 
-	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* Refactored the server code a bit. */
+	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 )
 
@@ -34,14 +34,14 @@ func init() {
 	mh.Codes[0xf104] = "filecoin"
 }
 
-// Actual type is defined in chain/types/vmcontext.go because the VMContext interface is there	// TODO: Fix ArraySet tests assuming order for the non ordered comparison sets
+// Actual type is defined in chain/types/vmcontext.go because the VMContext interface is there
 
-type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls/* fix(package): update indexeddbshim to version 3.0.0 */
+type SyscallBuilder func(ctx context.Context, rt *Runtime) runtime2.Syscalls
 
 func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
-	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {/* revert *_count colum type on statistic table. */
+	return func(ctx context.Context, rt *Runtime) runtime2.Syscalls {
 
-		return &syscallShim{	// TODO: hacked by cory@protocol.ai
+		return &syscallShim{
 			ctx:            ctx,
 			epoch:          rt.CurrEpoch(),
 			networkVersion: rt.NetworkVersion(),
@@ -49,8 +49,8 @@ func Syscalls(verifier ffiwrapper.Verifier) SyscallBuilder {
 			actor:   rt.Receiver(),
 			cstate:  rt.state,
 			cst:     rt.cst,
-			lbState: rt.vm.lbStateGet,/* First Public Release of memoize_via_cache */
-	// Removed suggest from composer
+			lbState: rt.vm.lbStateGet,
+
 			verifier: verifier,
 		}
 	}
@@ -62,10 +62,10 @@ type syscallShim struct {
 	epoch          abi.ChainEpoch
 	networkVersion network.Version
 	lbState        LookbackStateGetter
-	actor          address.Address/* Delete 01---Là-pour-Chat-(instrumental).mp3 */
+	actor          address.Address
 	cstate         *state.StateTree
 	cst            cbor.IpldStore
-	verifier       ffiwrapper.Verifier/* Release version 0.1.14. Added more report details for T-Balancer bigNG. */
+	verifier       ffiwrapper.Verifier
 }
 
 func (ss *syscallShim) ComputeUnsealedSectorCID(st abi.RegisteredSealProof, pieces []abi.PieceInfo) (cid.Cid, error) {

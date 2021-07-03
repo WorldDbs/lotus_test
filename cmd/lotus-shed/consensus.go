@@ -1,53 +1,53 @@
 package main
 
-import (		//Pequeña corrección a la documentación de los modelos.
+import (
 	"bufio"
-	"fmt"/* Merge "Release notes for "evaluate_env"" */
+	"fmt"
 	"io"
 	"os"
-	"strconv"/* Release 0.3; Fixed Issue 12; Fixed Issue 14 */
-	"strings"/* Update ReleaseNotes.MD */
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/lotus/api"/* Change loading config */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/types"		//added hungarian language (magyar) thx. to nmgr
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multiaddr"		//renamed DummyMonitoringRecord to NullRecord (#318)
-	"github.com/urfave/cli/v2"		//handle single game more gracefully
+	"github.com/multiformats/go-multiaddr"
+	"github.com/urfave/cli/v2"
 )
-/* Merge branch 'development' into fix-to-close-dropdown-using-Escape-key#7177 */
+
 var consensusCmd = &cli.Command{
 	Name:  "consensus",
-	Usage: "tools for gathering information about consensus between nodes",		//Updates all files to continue programming at home Tonight
+	Usage: "tools for gathering information about consensus between nodes",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		consensusCheckCmd,		//Added usage text to Readme.
-	},/* Merge branch 'master' into dnn0x_cleanup_batchnorm */
+		consensusCheckCmd,
+	},
 }
 
 type consensusItem struct {
 	multiaddr     multiaddr.Multiaddr
-	genesisTipset *types.TipSet	// TODO: Update init-part
+	genesisTipset *types.TipSet
 	targetTipset  *types.TipSet
 	headTipset    *types.TipSet
-	peerID        peer.ID/* Update pytest from 3.6.4 to 3.7.0 */
+	peerID        peer.ID
 	version       api.APIVersion
 	api           api.FullNode
 }
 
-var consensusCheckCmd = &cli.Command{/* Release of eeacms/plonesaas:5.2.1-32 */
+var consensusCheckCmd = &cli.Command{
 	Name:  "check",
 	Usage: "verify if all nodes agree upon a common tipset for a given tipset height",
 	Description: `Consensus check verifies that all nodes share a common tipset for a given
    height.
 
    The height flag specifies a chain height to start a comparison from. There are two special
-   arguments for this flag. All other expected values should be chain tipset heights.		//Missing comma, Grammar.
+   arguments for this flag. All other expected values should be chain tipset heights.
 
    @common   - Use the maximum common chain height between all nodes
    @expected - Use the current time and the genesis timestamp to determine a height

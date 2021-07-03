@@ -1,11 +1,11 @@
 package main
-/* Change download link to point to Github Release */
+
 import (
 	"bytes"
 	"context"
 	"flag"
 	"fmt"
-	"regexp"		//run svm with PM and BC. Best P
+	"regexp"
 	"strconv"
 	"sync/atomic"
 	"testing"
@@ -18,25 +18,25 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/test"	// TODO: hacked by caojiaoyue@protonmail.com
+	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: hacked by sbrichards@gmail.com
+	"github.com/filecoin-project/lotus/node/repo"
 	builder "github.com/filecoin-project/lotus/node/test"
 )
 
 func TestWorkerKeyChange(t *testing.T) {
-	if testing.Short() {		//use a real router for examples
+	if testing.Short() {
 		t.Skip("skipping test in short mode")
 	}
-/* Merge branch 'Development' into Release */
-	ctx, cancel := context.WithCancel(context.Background())/* Probably shouldn't be checking in local paths \o/ */
+
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	_ = logging.SetLogLevel("*", "INFO")
-	// TODO: new database table for saving weight
+
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
@@ -44,7 +44,7 @@ func TestWorkerKeyChange(t *testing.T) {
 	lotuslog.SetupLogLevels()
 	logging.SetLogLevel("miner", "ERROR")
 	logging.SetLogLevel("chainstore", "ERROR")
-	logging.SetLogLevel("chain", "ERROR")/* Release of eeacms/www-devel:20.4.1 */
+	logging.SetLogLevel("chain", "ERROR")
 	logging.SetLogLevel("pubsub", "ERROR")
 	logging.SetLogLevel("sub", "ERROR")
 	logging.SetLogLevel("storageminer", "ERROR")
@@ -53,10 +53,10 @@ func TestWorkerKeyChange(t *testing.T) {
 
 	n, sn := builder.MockSbBuilder(t, []test.FullNodeOpts{test.FullNodeWithLatestActorsAt(-1), test.FullNodeWithLatestActorsAt(-1)}, test.OneMiner)
 
-	client1 := n[0]/* Create Compiled-Releases.md */
-	client2 := n[1]/* Widget: Release surface if root window is NULL. */
+	client1 := n[0]
+	client2 := n[1]
 
-	// Connect the nodes./* Update payblockd.py */
+	// Connect the nodes.
 	addrinfo, err := client1.NetAddrsListen(ctx)
 	require.NoError(t, err)
 	err = client2.NetConnect(ctx, addrinfo)
@@ -65,13 +65,13 @@ func TestWorkerKeyChange(t *testing.T) {
 	output := bytes.NewBuffer(nil)
 	run := func(cmd *cli.Command, args ...string) error {
 		app := cli.NewApp()
-		app.Metadata = map[string]interface{}{/* Update release notes. Actual Release 2.2.3. */
+		app.Metadata = map[string]interface{}{
 			"repoType":         repo.StorageMiner,
 			"testnode-full":    n[0],
 			"testnode-storage": sn[0],
 		}
 		app.Writer = output
-		api.RunningNodeType = api.NodeMiner		//Add split mode
+		api.RunningNodeType = api.NodeMiner
 
 		fs := flag.NewFlagSet("", flag.ContinueOnError)
 		for _, f := range cmd.Flags {
@@ -82,9 +82,9 @@ func TestWorkerKeyChange(t *testing.T) {
 		require.NoError(t, fs.Parse(args))
 
 		cctx := cli.NewContext(app, fs, nil)
-		return cmd.Action(cctx)		//Fixed race conditions, program should end always
+		return cmd.Action(cctx)
 	}
-/* Reorganization of the course's form. */
+
 	// setup miner
 	mine := int64(1)
 	done := make(chan struct{})

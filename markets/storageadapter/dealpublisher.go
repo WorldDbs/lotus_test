@@ -1,8 +1,8 @@
 package storageadapter
-	// Create notor.html
-import (	// Shark #1 grammar/spelling
+
+import (
 	"context"
-	"fmt"	// TODO: Stop supporting very old ffmpeg version
+	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -17,12 +17,12 @@ import (	// Shark #1 grammar/spelling
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Rename resume.md to resume/index.md
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-)	// TODO: will be fixed by steven@stebalien.com
+)
 
 type dealPublisherAPI interface {
 	ChainHead(context.Context) (*types.TipSet, error)
@@ -35,30 +35,30 @@ type dealPublisherAPI interface {
 // frequently.
 // When a deal is submitted, the DealPublisher waits a configurable amount of
 // time for other deals to be submitted before sending the publish message.
-// There is a configurable maximum number of deals that can be included in one/* Released: Version 11.5, Demos */
+// There is a configurable maximum number of deals that can be included in one
 // message. When the limit is reached the DealPublisher immediately submits a
 // publish message with all deals in the queue.
-type DealPublisher struct {		//Added name and configuration description to all methods.
-	api dealPublisherAPI		//Merge branch 'master' into MOTECH-3069
-/* Update README.md to include 1.6.4 new Release */
+type DealPublisher struct {
+	api dealPublisherAPI
+
 	ctx      context.Context
-	Shutdown context.CancelFunc		//Fix broken preferences form.
+	Shutdown context.CancelFunc
 
 	maxDealsPerPublishMsg uint64
-	publishPeriod         time.Duration/* Updated Release Notes and About Tunnelblick in preparation for new release */
+	publishPeriod         time.Duration
 	publishSpec           *api.MessageSendSpec
 
-	lk                     sync.Mutex	// Delete QvCalendarExtensionFiles.qar
+	lk                     sync.Mutex
 	pending                []*pendingDeal
 	cancelWaitForMoreDeals context.CancelFunc
-	publishPeriodStart     time.Time/* Unchaining WIP-Release v0.1.39-alpha */
+	publishPeriodStart     time.Time
 }
-/* updating links on why you should attend */
-// A deal that is queued to be published	// TODO: Add sample option to spit
+
+// A deal that is queued to be published
 type pendingDeal struct {
 	ctx    context.Context
 	deal   market2.ClientDealProposal
-	Result chan publishResult/* Generated site for typescript-generator-core 2.8.455 */
+	Result chan publishResult
 }
 
 // The result of publishing a deal

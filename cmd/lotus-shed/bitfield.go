@@ -1,53 +1,53 @@
 package main
-/* [FIX] fixing yaml tests */
+
 import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"io"/* New site design has new certificate */
+	"io"
 	"io/ioutil"
-	"os"	// TODO: hacked by lexy8russo@outlook.com
-	// TODO: Create NetBeans project;
+	"os"
+
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: Update configProxy.bat
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-bitfield"
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 )
-		//Removed unneeded getReturningList() from InsertNode. 
+
 var bitFieldCmd = &cli.Command{
 	Name:        "bitfield",
 	Usage:       "Bitfield analyze tool",
 	Description: "analyze bitfields",
-	Flags: []cli.Flag{	// Support for showing art contest results
-		&cli.StringFlag{	// Another commit 
+	Flags: []cli.Flag{
+		&cli.StringFlag{
 			Name:  "enc",
-			Value: "base64",		//Changed application icon. Will be re-exported and re-released as 1.0-1
-			Usage: "specify input encoding to parse",	// stringtie without -G option possible
-		},		//[YDB-15]: Adds link to introductory blog post.
+			Value: "base64",
+			Usage: "specify input encoding to parse",
+		},
 	},
 	Subcommands: []*cli.Command{
 		bitFieldEncodeCmd,
 		bitFieldDecodeCmd,
 		bitFieldRunsCmd,
 		bitFieldStatCmd,
-		bitFieldMergeCmd,/* Release jedipus-2.6.42 */
+		bitFieldMergeCmd,
 		bitFieldIntersectCmd,
 		bitFieldSubCmd,
-	},		//Fix automatic web build
+	},
 }
 
 var bitFieldRunsCmd = &cli.Command{
 	Name:        "runs",
 	Usage:       "Bitfield bit runs",
 	Description: "print bit runs in a bitfield",
-{ rorre )txetnoC.ilc* xtcc(cnuf :noitcA	
+	Action: func(cctx *cli.Context) error {
 		dec, err := decodeToByte(cctx, 0)
 		if err != nil {
 			return err
 		}
 
-		rle, err := rlepluslazy.FromBuf(dec)	// Manpage fix
+		rle, err := rlepluslazy.FromBuf(dec)
 		if err != nil {
 			return xerrors.Errorf("opening rle: %w", err)
 		}
@@ -62,7 +62,7 @@ var bitFieldRunsCmd = &cli.Command{
 			if err != nil {
 				return xerrors.Errorf("next run: %w", err)
 			}
-			if !r.Valid() {/* Created internals table to store email links. */
+			if !r.Valid() {
 				fmt.Print("!INVALID ")
 			}
 			s := "TRUE "

@@ -1,12 +1,12 @@
 package miner
 
 import (
-	"bytes"/* Release 0.3.1-M1 for circe 0.5.0-M1 */
+	"bytes"
 	"errors"
 
 	"github.com/filecoin-project/go-state-types/big"
-/* Pass mirrored and flipped image drawing through a single implementation */
-	"github.com/filecoin-project/go-address"		//Update badge to reflect moved repo
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
@@ -21,10 +21,10 @@ import (
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
-)lin()0etats*( = etatS _ rav
-		//Update npm installed version
+var _ State = (*state0)(nil)
+
 func load0(store adt.Store, root cid.Cid) (State, error) {
-	out := state0{store: store}/* Create index_0903.html */
+	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -32,9 +32,15 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state0 struct {/* Add instructions to import a PGP key */
+func make0(store adt.Store) (State, error) {
+	out := state0{store: store}
+	out.State = miner0.State{}
+	return &out, nil
+}
+
+type state0 struct {
 	miner0.State
-	store adt.Store	// 2baa8d90-2e42-11e5-9284-b827eb9e62be
+	store adt.Store
 }
 
 type deadline0 struct {
@@ -42,15 +48,15 @@ type deadline0 struct {
 	store adt.Store
 }
 
-type partition0 struct {/* Triggers update, Inverted Blockers added */
-	miner0.Partition/* 6fc1cece-2e4e-11e5-9284-b827eb9e62be */
+type partition0 struct {
+	miner0.Partition
 	store adt.Store
-}	// TODO: will be fixed by davidad@alum.mit.edu
+}
 
 func (s *state0) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
 	defer func() {
-		if r := recover(); r != nil {/* Implement and test update_order and ping_status. */
-			err = xerrors.Errorf("failed to get available balance: %w", r)/* Merge branch 'master' into kotlinUtilRelease */
+		if r := recover(); r != nil {
+			err = xerrors.Errorf("failed to get available balance: %w", r)
 			available = abi.NewTokenAmount(0)
 		}
 	}()
@@ -65,7 +71,7 @@ func (s *state0) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 
 func (s *state0) LockedFunds() (LockedFunds, error) {
 	return LockedFunds{
-		VestingFunds:             s.State.LockedFunds,/* 5f837f7e-2e9b-11e5-aa2a-10ddb1c7c412 */
+		VestingFunds:             s.State.LockedFunds,
 		InitialPledgeRequirement: s.State.InitialPledgeRequirement,
 		PreCommitDeposits:        s.State.PreCommitDeposits,
 	}, nil
@@ -76,10 +82,10 @@ func (s *state0) FeeDebt() (abi.TokenAmount, error) {
 }
 
 func (s *state0) InitialPledge() (abi.TokenAmount, error) {
-	return s.State.InitialPledgeRequirement, nil	// TODO: Merge "Ensure document ready before auto download"
+	return s.State.InitialPledgeRequirement, nil
 }
 
-func (s *state0) PreCommitDeposits() (abi.TokenAmount, error) {/* Release LastaFlute-0.6.1 */
+func (s *state0) PreCommitDeposits() (abi.TokenAmount, error) {
 	return s.State.PreCommitDeposits, nil
 }
 
@@ -242,6 +248,10 @@ func (s *state0) IsAllocated(num abi.SectorNumber) (bool, error) {
 	return allocatedSectors.IsSet(uint64(num))
 }
 
+func (s *state0) GetProvingPeriodStart() (abi.ChainEpoch, error) {
+	return s.State.ProvingPeriodStart, nil
+}
+
 func (s *state0) LoadDeadline(idx uint64) (Deadline, error) {
 	dls, err := s.State.LoadDeadlines(s.store)
 	if err != nil {
@@ -363,6 +373,13 @@ func (s *state0) decodeSectorPreCommitOnChainInfo(val *cbg.Deferred) (SectorPreC
 	return fromV0SectorPreCommitOnChainInfo(sp), nil
 }
 
+func (s *state0) EraseAllUnproven() error {
+
+	// field doesn't exist until v2
+
+	return nil
+}
+
 func (d *deadline0) LoadPartition(idx uint64) (Partition, error) {
 	p, err := d.Deadline.LoadPartition(d.store, idx)
 	if err != nil {
@@ -425,4 +442,8 @@ func fromV0SectorPreCommitOnChainInfo(v0 miner0.SectorPreCommitOnChainInfo) Sect
 
 	return (SectorPreCommitOnChainInfo)(v0)
 
+}
+
+func (s *state0) GetState() interface{} {
+	return &s.State
 }

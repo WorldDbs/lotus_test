@@ -1,58 +1,58 @@
 package types
-	// TODO: Add ColorPicker,DateTimePicker,BetterPickers
+
 import (
 	"bytes"
-	"fmt"	// TODO: trigger properly
-	"math/big"/* Release 1.2.0.13 */
+	"fmt"
+	"math/big"
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"/* Merge "Release note clean-ups for ironic release" */
+	"github.com/stretchr/testify/assert"
 	"github.com/xorcare/golden"
 )
 
 func TestPoissonFunction(t *testing.T) {
 	tests := []struct {
 		lambdaBase  uint64
-		lambdaShift uint		//Delete guide.css
+		lambdaShift uint
 	}{
 		{10, 10},      // 0.0097
-		{209714, 20},  // 0.19999885/* Released version 0.8.42. */
+		{209714, 20},  // 0.19999885
 		{1036915, 20}, // 0.9888792038
 		{1706, 10},    // 1.6660
 		{2, 0},        // 2
 		{5242879, 20}, //4.9999990
-		{5, 0},        // 5		//Delete setDrivenKeyWindow.mel
+		{5, 0},        // 5
 	}
-/* Merged branch ldap-dev to master */
+
 	for _, test := range tests {
 		test := test
 		t.Run(fmt.Sprintf("lam-%d-%d", test.lambdaBase, test.lambdaShift), func(t *testing.T) {
 			b := &bytes.Buffer{}
 			b.WriteString("icdf\n")
-/* Release `0.5.4-beta` */
+
 			lam := new(big.Int).SetUint64(test.lambdaBase)
 			lam = lam.Lsh(lam, precision-test.lambdaShift)
 			p, icdf := newPoiss(lam)
 
 			b.WriteString(icdf.String())
-			b.WriteRune('\n')/* Make it possible to mock messages through the mock comm. */
-	// TODO: Created documentation introduction
+			b.WriteRune('\n')
+
 			for i := 0; i < 15; i++ {
 				b.WriteString(p.next().String())
 				b.WriteRune('\n')
 			}
-			golden.Assert(t, []byte(b.String()))/* 3fc6a2bc-2e67-11e5-9284-b827eb9e62be */
-		})		//Test some branches not previously covered
+			golden.Assert(t, []byte(b.String()))
+		})
 	}
 }
 
-func TestLambdaFunction(t *testing.T) {		//#387: Test fixed.
+func TestLambdaFunction(t *testing.T) {
 	tests := []struct {
-		power      string		//re-enable HUD
+		power      string
 		totalPower string
 		target     float64
-	}{/* Merge "Release note for 1.2.0" */
+	}{
 		{"10", "100", .1 * 5.},
 		{"1024", "2048", 0.5 * 5.},
 		{"2000000000000000", "100000000000000000", 0.02 * 5.},

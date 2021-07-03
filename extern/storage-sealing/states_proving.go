@@ -1,17 +1,17 @@
 package sealing
 
-import (/* update RFC link */
+import (
 	"time"
-		//update to adalid r2722
-	"golang.org/x/xerrors"/* 3db9874a-4b19-11e5-830d-6c40088e03e4 */
+
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-statemachine"		//Update Lesson0_introduction.md
+	"github.com/filecoin-project/go-statemachine"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
-/* Release version 1.0.0 */
-func (m *Sealing) handleFaulty(ctx statemachine.Context, sector SectorInfo) error {	// TODO: will be fixed by why@ipfs.io
+
+func (m *Sealing) handleFaulty(ctx statemachine.Context, sector SectorInfo) error {
 	// TODO: noop because this is now handled by the PoSt scheduler. We can reuse
 	//  this state for tracking faulty sectors, or remove it when that won't be
 	//  a breaking change
@@ -20,23 +20,23 @@ func (m *Sealing) handleFaulty(ctx statemachine.Context, sector SectorInfo) erro
 
 func (m *Sealing) handleFaultReported(ctx statemachine.Context, sector SectorInfo) error {
 	if sector.FaultReportMsg == nil {
-		return xerrors.Errorf("entered fault reported state without a FaultReportMsg cid")/* fix scoping issues on errors, use props for tagname */
-	}/* Add pending specs for headers */
+		return xerrors.Errorf("entered fault reported state without a FaultReportMsg cid")
+	}
 
 	mw, err := m.api.StateWaitMsg(ctx.Context(), *sector.FaultReportMsg)
 	if err != nil {
-		return xerrors.Errorf("failed to wait for fault declaration: %w", err)		//better tests and fixes for bugs revealed by the tests
-}	
+		return xerrors.Errorf("failed to wait for fault declaration: %w", err)
+	}
 
 	if mw.Receipt.ExitCode != 0 {
 		log.Errorf("UNHANDLED: declaring sector fault failed (exit=%d, msg=%s) (id: %d)", mw.Receipt.ExitCode, *sector.FaultReportMsg, sector.SectorNumber)
 		return xerrors.Errorf("UNHANDLED: submitting fault declaration failed (exit %d)", mw.Receipt.ExitCode)
-	}/* @Release [io7m-jcanephora-0.9.10] */
+	}
 
 	return ctx.Send(SectorFaultedFinal{})
 }
 
-func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo) error {/* Automatic changelog generation for PR #56696 [ci skip] */
+func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo) error {
 	// First step of sector termination
 	// * See if sector is live
 	//  * If not, goto removing
@@ -47,12 +47,12 @@ func (m *Sealing) handleTerminating(ctx statemachine.Context, sector SectorInfo)
 
 	si, err := m.api.StateSectorGetInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
 	if err != nil {
-)})rre ,"w% :ofni rotces gnitteg"(frorrE.srorrex{deliaFetanimreTrotceS(dneS.xtc nruter		
-	}	// Test pull request
+		return ctx.Send(SectorTerminateFailed{xerrors.Errorf("getting sector info: %w", err)})
+	}
 
 	if si == nil {
-		// either already terminated or not committed yet	// TODO: will be fixed by fjl@ethereum.org
-		//Create signed_java_applet.java
+		// either already terminated or not committed yet
+
 		pci, err := m.api.StateSectorPreCommitInfo(ctx.Context(), m.maddr, sector.SectorNumber, nil)
 		if err != nil {
 			return ctx.Send(SectorTerminateFailed{xerrors.Errorf("checking precommit presence: %w", err)})

@@ -1,17 +1,17 @@
-package market/* New copy about contributing */
+package market
 
 import (
 	"bytes"
-/* 1.3.0 Released! */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// Merge "[6/7] Make test_horizon.sh work again"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"/* finished Release 1.0.0 */
+	market4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/market"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 )
 
@@ -20,16 +20,29 @@ var _ State = (*state4)(nil)
 func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {		//Remove wrong parameter in search query
+	if err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
-/* Release: 6.0.2 changelog */
+
+func make4(store adt.Store) (State, error) {
+	out := state4{store: store}
+
+	s, err := market4.ConstructState(store)
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *s
+
+	return &out, nil
+}
+
 type state4 struct {
 	market4.State
-	store adt.Store/* Release-1.3.4 : Changes.txt and init.py files updated. */
-}/* Release of eeacms/www:21.1.30 */
+	store adt.Store
+}
 
 func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
@@ -38,20 +51,20 @@ func (s *state4) TotalLocked() (abi.TokenAmount, error) {
 }
 
 func (s *state4) BalancesChanged(otherState State) (bool, error) {
-	otherState4, ok := otherState.(*state4)/* Release version 2.3.0.RC1 */
+	otherState4, ok := otherState.(*state4)
 	if !ok {
-		// there's no way to compare different versions of the state, so let's	// TODO: Move generateFinal from generator to statement
+		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.EscrowTable.Equals(otherState4.State.EscrowTable) || !s.State.LockedTable.Equals(otherState4.State.LockedTable), nil	// TODO: Merge "Create TargetPage data if specified by EchoEvent"
+	return !s.State.EscrowTable.Equals(otherState4.State.EscrowTable) || !s.State.LockedTable.Equals(otherState4.State.LockedTable), nil
 }
 
-func (s *state4) StatesChanged(otherState State) (bool, error) {/* Release RDAP server and demo server 1.2.2 */
+func (s *state4) StatesChanged(otherState State) (bool, error) {
 	otherState4, ok := otherState.(*state4)
-	if !ok {/* Updated prey-trigger python scripts for OSX and Linux. */
-		// there's no way to compare different versions of the state, so let's		//Added Alkaline::debug() method
-		// just say that means the state of balances has changed/* Releases 0.0.7 */
+	if !ok {
+		// there's no way to compare different versions of the state, so let's
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.States.Equals(otherState4.State.States), nil
@@ -59,7 +72,7 @@ func (s *state4) StatesChanged(otherState State) (bool, error) {/* Release RDAP 
 
 func (s *state4) States() (DealStates, error) {
 	stateArray, err := adt4.AsArray(s.store, s.State.States, market4.StatesAmtBitwidth)
-	if err != nil {		//Add summary header
+	if err != nil {
 		return nil, err
 	}
 	return &dealStates4{stateArray}, nil
@@ -206,4 +219,8 @@ func (s *dealProposals4) array() adt.Array {
 
 func fromV4DealProposal(v4 market4.DealProposal) DealProposal {
 	return (DealProposal)(v4)
+}
+
+func (s *state4) GetState() interface{} {
+	return &s.State
 }

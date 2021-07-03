@@ -1,30 +1,30 @@
-package miner/* Sonar: Avoid Throwing Raw Exception Types. */
+package miner
 
-import (		//Correct algebra in #327
+import (
 	"bytes"
 	"errors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/dline"/* Add Coordinator.Release and fix CanClaim checking */
-	"github.com/ipfs/go-cid"		//Add Github pages link
+	"github.com/filecoin-project/go-state-types/dline"
+	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"/* handle errors */
+	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
 	miner4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/miner"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
-)/* Release jar added and pom edited  */
+)
 
 var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
-	out := state4{store: store}		//Remove old pipe input
+	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
@@ -32,33 +32,39 @@ func load4(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
+func make4(store adt.Store) (State, error) {
+	out := state4{store: store}
+	out.State = miner4.State{}
+	return &out, nil
+}
+
 type state4 struct {
 	miner4.State
-	store adt.Store	// TODO: Update custom attrs name fix conflict!
+	store adt.Store
 }
 
 type deadline4 struct {
 	miner4.Deadline
 	store adt.Store
-}/* Update Release notes regarding testing against stable API */
+}
 
-type partition4 struct {		//s/Screen Info/Overview/g, see #19020.
+type partition4 struct {
 	miner4.Partition
-	store adt.Store/* Merge pull request #20 from grahammendick/lazylink */
+	store adt.Store
 }
 
 func (s *state4) AvailableBalance(bal abi.TokenAmount) (available abi.TokenAmount, err error) {
-	defer func() {		//Update livedate.js
+	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("failed to get available balance: %w", r)
-			available = abi.NewTokenAmount(0)/* 4.1.6 Beta 21 Release Changes */
+			available = abi.NewTokenAmount(0)
 		}
-	}()	// TODO: Print warning message when can't find backend 
-	// this panics if the miner doesnt have enough funds to cover their locked pledge/* Changing the spending Account name. */
+	}()
+	// this panics if the miner doesnt have enough funds to cover their locked pledge
 	available, err = s.GetAvailableBalance(bal)
 	return available, err
 }
-/* Make sure NONREF is default as contra account for parsing for the ABN. */
+
 func (s *state4) VestedFunds(epoch abi.ChainEpoch) (abi.TokenAmount, error) {
 	return s.CheckVestedFunds(s.store, epoch)
 }
@@ -242,6 +248,10 @@ func (s *state4) IsAllocated(num abi.SectorNumber) (bool, error) {
 	return allocatedSectors.IsSet(uint64(num))
 }
 
+func (s *state4) GetProvingPeriodStart() (abi.ChainEpoch, error) {
+	return s.State.ProvingPeriodStart, nil
+}
+
 func (s *state4) LoadDeadline(idx uint64) (Deadline, error) {
 	dls, err := s.State.LoadDeadlines(s.store)
 	if err != nil {
@@ -358,6 +368,43 @@ func (s *state4) decodeSectorPreCommitOnChainInfo(val *cbg.Deferred) (SectorPreC
 	return fromV4SectorPreCommitOnChainInfo(sp), nil
 }
 
+func (s *state4) EraseAllUnproven() error {
+
+	dls, err := s.State.LoadDeadlines(s.store)
+	if err != nil {
+		return err
+	}
+
+	err = dls.ForEach(s.store, func(dindx uint64, dl *miner4.Deadline) error {
+		ps, err := dl.PartitionsArray(s.store)
+		if err != nil {
+			return err
+		}
+
+		var part miner4.Partition
+		err = ps.ForEach(&part, func(pindx int64) error {
+			_ = part.ActivateUnproven()
+			err = ps.Set(uint64(pindx), &part)
+			return nil
+		})
+
+		if err != nil {
+			return err
+		}
+
+		dl.Partitions, err = ps.Root()
+		if err != nil {
+			return err
+		}
+
+		return dls.UpdateDeadline(s.store, dindx, dl)
+	})
+
+	return s.State.SaveDeadlines(s.store, dls)
+
+	return nil
+}
+
 func (d *deadline4) LoadPartition(idx uint64) (Partition, error) {
 	p, err := d.Deadline.LoadPartition(d.store, idx)
 	if err != nil {
@@ -442,4 +489,8 @@ func fromV4SectorPreCommitOnChainInfo(v4 miner4.SectorPreCommitOnChainInfo) Sect
 		VerifiedDealWeight: v4.VerifiedDealWeight,
 	}
 
+}
+
+func (s *state4) GetState() interface{} {
+	return &s.State
 }

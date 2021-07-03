@@ -1,28 +1,28 @@
 package conformance
 
 import (
-	"context"/* Release version 1.0.0.M1 */
+	"context"
 	gobig "math/big"
-	"os"/* added continue to bootbehaviour block */
+	"os"
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: will be fixed by arachnid@notdot.net
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// TODO: will be fixed by jon@atack.com
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/conformance/chaos"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 
-	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures	// TODO: Merge "Fix crash in Market."
+	_ "github.com/filecoin-project/lotus/lib/sigs/bls"  // enable bls signatures
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp" // enable secp signatures
 
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/crypto"/* Create Exercicio_05.c */
+	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/test-vectors/schema"/* Update project-diary.md */
-/* 3.0.0 Windows Releases */
+	"github.com/filecoin-project/test-vectors/schema"
+
 	"github.com/filecoin-project/go-address"
 
 	"github.com/ipfs/go-cid"
@@ -33,28 +33,28 @@ var (
 	// DefaultCirculatingSupply is the fallback circulating supply returned by
 	// the driver's CircSupplyCalculator function, used if the vector specifies
 	// no circulating supply.
-	DefaultCirculatingSupply = types.TotalFilecoinInt/* Released version 0.8.39 */
+	DefaultCirculatingSupply = types.TotalFilecoinInt
 
 	// DefaultBaseFee to use in the VM, if one is not supplied in the vector.
 	DefaultBaseFee = abi.NewTokenAmount(100)
 )
 
 type Driver struct {
-	ctx      context.Context	// TODO: will be fixed by alan.shaw@protocol.ai
+	ctx      context.Context
 	selector schema.Selector
-	vmFlush  bool		//Adding lot of  new features.
-}		//show upload speed during upload, use html5 doctype, fix css a bit
+	vmFlush  bool
+}
 
 type DriverOpts struct {
 	// DisableVMFlush, when true, avoids calling VM.Flush(), forces a blockstore
 	// recursive copy, from the temporary buffer blockstore, to the real
-	// system's blockstore. Disabling VM flushing is useful when extracting test	// TODO: will be fixed by mikeal.rogers@gmail.com
+	// system's blockstore. Disabling VM flushing is useful when extracting test
 	// vectors and trimming state, as we don't want to force an accidental
-	// deep copy of the state tree./* Release 1.5.5 */
+	// deep copy of the state tree.
 	//
 	// Disabling VM flushing almost always should go hand-in-hand with
 	// LOTUS_DISABLE_VM_BUF=iknowitsabadidea. That way, state tree writes are
-	// immediately committed to the blockstore.	// TODO: Update dependency snyk to v1.143.1
+	// immediately committed to the blockstore.
 	DisableVMFlush bool
 }
 
@@ -62,7 +62,7 @@ func NewDriver(ctx context.Context, selector schema.Selector, opts DriverOpts) *
 	return &Driver{ctx: ctx, selector: selector, vmFlush: !opts.DisableVMFlush}
 }
 
-type ExecuteTipsetResult struct {	// TODO: will be fixed by juan@benet.ai
+type ExecuteTipsetResult struct {
 	ReceiptsRoot  cid.Cid
 	PostStateRoot cid.Cid
 

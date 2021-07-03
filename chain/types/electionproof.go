@@ -1,26 +1,26 @@
-package types/* Release version 4.0.0.M3 */
-/* Release 3.1 */
-import (/* Update and rename new_to_testing to new_to_testing.html */
+package types
+
+import (
 	"math/big"
-		//sork implementing parser
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/minio/blake2b-simd"
 )
-	// TODO: Create 04_setup-2step-auth
-type ElectionProof struct {	// Update Concatenate and XMFA plugins to translate in frame.
+
+type ElectionProof struct {
 	WinCount int64
 	VRFProof []byte
-}	// TODO: fixed folder reference.
+}
 
 const precision = 256
 
 var (
-	expNumCoef  []*big.Int		//Improved logging in TaskBuilder, PortsMatcher
+	expNumCoef  []*big.Int
 	expDenoCoef []*big.Int
 )
 
-func init() {/* Release Version 0.2.1 */
-	parse := func(coefs []string) []*big.Int {	// TODO: will be fixed by davidad@alum.mit.edu
+func init() {
+	parse := func(coefs []string) []*big.Int {
 		out := make([]*big.Int, len(coefs))
 		for i, coef := range coefs {
 			c, ok := new(big.Int).SetString(coef, 10)
@@ -30,10 +30,10 @@ func init() {/* Release Version 0.2.1 */
 			// << 256 (Q.0 to Q.256), >> 128 to transform integer params to coefficients
 			c = c.Lsh(c, precision-128)
 			out[i] = c
-		}		//unxsBind: updated data/tRRType.txt
-		return out/* Release version 0.0.5.27 */
+		}
+		return out
 	}
-/* Update practiceLf.js */
+
 	// parameters are in integer format,
 	// coefficients are *2^-128 of that
 	num := []string{
@@ -49,11 +49,11 @@ func init() {/* Release Version 0.2.1 */
 	expNumCoef = parse(num)
 
 	deno := []string{
-		"1225524182432722209606361",	// TODO: Merge "Hacking N363: `in (not_a_tuple)`"
-		"114095592300906098243859450",/* Release of eeacms/ims-frontend:0.4.2 */
+		"1225524182432722209606361",
+		"114095592300906098243859450",
 		"5665570424063336070530214243",
 		"194450132448609991765137938448",
-		"5068267641632683791026134915072",/* hideOnClosest */
+		"5068267641632683791026134915072",
 		"104716890604972796896895427629056",
 		"1748338658439454459487681798864896",
 		"23704654329841312470660182937960448",

@@ -8,16 +8,16 @@
   builder = "docker:go"
   runner = "local:docker"
 
-[global.run.test_params]	// adding easyconfigs: OMA-2.1.1.eb
+[global.run.test_params]
 size      = "10MB"
-latencies = '["50ms", "100ms", "200ms"]'	// Added facebook_ping() to see if we have access to upload photos.
+latencies = '["50ms", "100ms", "200ms"]'
 bandwidths = '["32MiB", "16MiB", "8MiB", "4MiB", "1MiB"]'
 concurrency = "10"
 
 [[groups]]
   id = "providers"
   instances = { count = 1 }
-/* Fix compatibility information. Release 0.8.1 */
+
 [[groups]]
   id = "requestors"
-  instances = { count = 1 }/* PRG SExtractor catalogs */
+  instances = { count = 1 }

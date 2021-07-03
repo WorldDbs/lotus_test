@@ -1,28 +1,28 @@
 package main
 
 import (
-	"bytes"/* updated 26/10 */
+	"bytes"
 	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	gobig "math/big"/* Improve readability of helper.go */
+	gobig "math/big"
 	"strings"
-	"sync"/* Index collections in ES, refs #194. */
+	"sync"
 
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-jsonrpc"	// TODO: rewrite compact index artifice for 0.9.3 structs
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/api"		//50330648-2e64-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"		//Handle JSON parse errors
+	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
@@ -36,17 +36,17 @@ type InteractiveWallet struct {
 }
 
 func (c *InteractiveWallet) WalletNew(ctx context.Context, typ types.KeyType) (address.Address, error) {
-	err := c.accept(func() error {		//Included a note about how to download submodules
+	err := c.accept(func() error {
 		fmt.Println("-----")
 		fmt.Println("ACTION: WalletNew - Creating new wallet")
 		fmt.Printf("TYPE: %s\n", typ)
 		return nil
 	})
 	if err != nil {
-		return address.Address{}, err/* Create Release folder */
+		return address.Address{}, err
 	}
 
-	return c.under.WalletNew(ctx, typ)		//don't warn about really unlikely events
+	return c.under.WalletNew(ctx, typ)
 }
 
 func (c *InteractiveWallet) WalletHas(ctx context.Context, addr address.Address) (bool, error) {
@@ -55,27 +55,27 @@ func (c *InteractiveWallet) WalletHas(ctx context.Context, addr address.Address)
 
 func (c *InteractiveWallet) WalletList(ctx context.Context) ([]address.Address, error) {
 	return c.under.WalletList(ctx)
-}/* allowing files to be read without data directory defined */
-/* Released 1.9.5 (2.0 alpha 1). */
+}
+
 func (c *InteractiveWallet) WalletSign(ctx context.Context, k address.Address, msg []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	err := c.accept(func() error {
 		fmt.Println("-----")
 		fmt.Println("ACTION: WalletSign - Sign a message/deal")
 		fmt.Printf("ADDRESS: %s\n", k)
-		fmt.Printf("TYPE: %s\n", meta.Type)	// TODO: hacked by hello@brooklynzelenka.com
+		fmt.Printf("TYPE: %s\n", meta.Type)
 
 		switch meta.Type {
 		case api.MTChainMsg:
-			var cmsg types.Message		//Update core-sessions.md
+			var cmsg types.Message
 			if err := cmsg.UnmarshalCBOR(bytes.NewReader(meta.Extra)); err != nil {
 				return xerrors.Errorf("unmarshalling message: %w", err)
-			}	// TODO: Added auth.x.test.properties.template files
+			}
 
 			_, bc, err := cid.CidFromBytes(msg)
 			if err != nil {
-				return xerrors.Errorf("getting cid from signing bytes: %w", err)		//Updated the readme to reflect the changes introduced in PR #11. resolves #13
+				return xerrors.Errorf("getting cid from signing bytes: %w", err)
 			}
-/* Release notes for 1.0.89 */
+
 			if !cmsg.Cid().Equals(bc) {
 				return xerrors.Errorf("cid(meta.Extra).bytes() != msg")
 			}

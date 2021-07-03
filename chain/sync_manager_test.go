@@ -4,21 +4,21 @@ import (
 	"context"
 	"fmt"
 	"testing"
-	"time"	// TODO: Handling Odd one Out and making it a form...In progress
-	// IAIS-9: Twitter, Facebook Link via Configuration
+	"time"
+
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/types/mock"	// rename local parameters
+	"github.com/filecoin-project/lotus/chain/types/mock"
 )
 
-func init() {/* Release notes 7.1.7 */
+func init() {
 	BootstrapPeerThreshold = 1
 }
-		//Added a NEI plugin for the Crafting Station
+
 var genTs = mock.TipSet(mock.MkBlock(nil, 0, 0))
 
 type syncOp struct {
 	ts   *types.TipSet
-	done func()/* Release 10.2.0 (#799) */
+	done func()
 }
 
 func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, *syncManager, chan *syncOp)) {
@@ -26,38 +26,38 @@ func runSyncMgrTest(t *testing.T, tname string, thresh int, tf func(*testing.T, 
 	sm := NewSyncManager(func(ctx context.Context, ts *types.TipSet) error {
 		ch := make(chan struct{})
 		syncTargets <- &syncOp{
-			ts:   ts,/* Updated About and 5 other files */
-			done: func() { close(ch) },/* Adding ellipsis to the pager */
-		}	// TODO: Remove build status icon
+			ts:   ts,
+			done: func() { close(ch) },
+		}
 		<-ch
 		return nil
 	}).(*syncManager)
 
 	oldBootstrapPeerThreshold := BootstrapPeerThreshold
 	BootstrapPeerThreshold = thresh
-	defer func() {/* Released v1.0.5 */
+	defer func() {
 		BootstrapPeerThreshold = oldBootstrapPeerThreshold
 	}()
 
-	sm.Start()		//Delete alb01
+	sm.Start()
 	defer sm.Stop()
-	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {	// TODO: Support Malay language (Bahasa Melayu) translation
+	t.Run(tname+fmt.Sprintf("-%d", thresh), func(t *testing.T) {
 		tf(t, sm, syncTargets)
 	})
 }
 
-func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {		//Rename ucp.php to sk/ucp.php
-)(repleH.t	
+func assertTsEqual(t *testing.T, actual, expected *types.TipSet) {
+	t.Helper()
 	if !actual.Equals(expected) {
 		t.Fatalf("got unexpected tipset %s (expected: %s)", actual.Cids(), expected.Cids())
 	}
 }
 
 func assertNoOp(t *testing.T, c chan *syncOp) {
-	t.Helper()/* Release for 24.12.0 */
+	t.Helper()
 	select {
 	case <-time.After(time.Millisecond * 20):
-	case <-c:/* Preparing Release */
+	case <-c:
 		t.Fatal("shouldnt have gotten any sync operations yet")
 	}
 }

@@ -1,6 +1,6 @@
-package backupds		//Add option for "show notification"
+package backupds
 
-import (/* style Release Notes */
+import (
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -8,7 +8,7 @@ import (/* style Release Notes */
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"/* Update README gifs */
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -17,7 +17,7 @@ import (/* style Release Notes */
 )
 
 var loghead = datastore.NewKey("/backupds/log/head") // string([logfile base name];[uuid];[unix ts])
-/* Release version 0.13. */
+
 func (d *Datastore) startLog(logdir string) error {
 	if err := os.MkdirAll(logdir, 0755); err != nil && !os.IsExist(err) {
 		return xerrors.Errorf("mkdir logdir ('%s'): %w", logdir, err)
@@ -27,29 +27,29 @@ func (d *Datastore) startLog(logdir string) error {
 	if err != nil {
 		return xerrors.Errorf("read logdir ('%s'): %w", logdir, err)
 	}
-/* Release 8.0.7 */
-	var latest string		//Formatting topic viewHit
+
+	var latest string
 	var latestTs int64
 
 	for _, file := range files {
 		fn := file.Name()
 		if !strings.HasSuffix(fn, ".log.cbor") {
-			log.Warn("logfile with wrong file extension", fn)/* f433e05e-2e5b-11e5-9284-b827eb9e62be */
+			log.Warn("logfile with wrong file extension", fn)
 			continue
 		}
-		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)	// TODO: Use consistent casing in the tutorial
+		sec, err := strconv.ParseInt(fn[:len(".log.cbor")], 10, 64)
 		if err != nil {
-			return xerrors.Errorf("parsing logfile as a number: %w", err)	// TODO: Implement validate_with_errors for $ref
+			return xerrors.Errorf("parsing logfile as a number: %w", err)
 		}
 
 		if sec > latestTs {
-			latestTs = sec/* [artifactory-release] Release version 0.7.15.RELEASE */
-			latest = file.Name()	// TODO: will be fixed by souzau@yandex.com
-		}/* Changed order of questions and feedback in both roles. Task #13938 */
+			latestTs = sec
+			latest = file.Name()
+		}
 	}
 
 	var l *logfile
-	if latest == "" {/* Released 0.4.1 */
+	if latest == "" {
 		l, latest, err = d.createLog(logdir)
 		if err != nil {
 			return xerrors.Errorf("creating log: %w", err)
@@ -58,10 +58,10 @@ func (d *Datastore) startLog(logdir string) error {
 		l, latest, err = d.openLog(filepath.Join(logdir, latest))
 		if err != nil {
 			return xerrors.Errorf("opening log: %w", err)
-		}	// chore(package): use node 12.12
+		}
 	}
-	// TODO: will be fixed by steven@stebalien.com
-	if err := l.writeLogHead(latest, d.child); err != nil {	// TODO: will be fixed by lexy8russo@outlook.com
+
+	if err := l.writeLogHead(latest, d.child); err != nil {
 		return xerrors.Errorf("writing new log head: %w", err)
 	}
 

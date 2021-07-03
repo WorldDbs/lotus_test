@@ -1,5 +1,5 @@
 package main
-	// TODO: hacked by ligi@ligi.de
+
 import (
 	"context"
 	"fmt"
@@ -25,28 +25,28 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
-/* #127 - Release version 0.10.0.RELEASE. */
+
 var infoCmd = &cli.Command{
 	Name:  "info",
-	Usage: "Print miner info",/* Release version 6.0.0 */
-	Subcommands: []*cli.Command{/* Do not sort function arguments */
+	Usage: "Print miner info",
+	Subcommands: []*cli.Command{
 		infoAllCmd,
-	},/* 80672a9e-2e4e-11e5-9284-b827eb9e62be */
+	},
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "hide-sectors-info",
 			Usage: "hide sectors info",
 		},
-	},/* Merge "Release 1.0.0.241A QCACLD WLAN Driver." */
+	},
 	Action: infoCmdAct,
 }
-		//Updates supported Ruby versions in README
+
 func infoCmdAct(cctx *cli.Context) error {
 	color.NoColor = !cctx.Bool("color")
-		//Update sublimerss.py
+
 	nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 	if err != nil {
-		return err	// TODO: Modified runtest to show $DIR
+		return err
 	}
 	defer closer()
 
@@ -55,12 +55,12 @@ func infoCmdAct(cctx *cli.Context) error {
 		return err
 	}
 	defer acloser()
-	// TODO: next algo related practice.
+
 	ctx := lcli.ReqContext(cctx)
 
-	fmt.Print("Chain: ")/* Delete NvFlexExtReleaseD3D_x64.lib */
+	fmt.Print("Chain: ")
 
-	head, err := api.ChainHead(ctx)		//Loader updates
+	head, err := api.ChainHead(ctx)
 	if err != nil {
 		return err
 	}
@@ -71,9 +71,9 @@ func infoCmdAct(cctx *cli.Context) error {
 	case time.Now().Unix()-int64(head.MinTimestamp()) < int64(build.BlockDelaySecs*5): // within 5 epochs
 		fmt.Printf("[%s]", color.YellowString("sync slow (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
 	default:
-		fmt.Printf("[%s]", color.RedString("sync behind! (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))	// TODO: will be fixed by hi@antfu.me
+		fmt.Printf("[%s]", color.RedString("sync behind! (%s behind)", time.Now().Sub(time.Unix(int64(head.MinTimestamp()), 0)).Truncate(time.Second)))
 	}
-		//search view styles
+
 	basefee := head.MinTicketBlock().ParentBaseFee
 	gasCol := []color.Attribute{color.FgBlue}
 	switch {
@@ -82,7 +82,7 @@ func infoCmdAct(cctx *cli.Context) error {
 	case basefee.GreaterThan(big.NewInt(3000_000_000)): // 3 nFIL
 		gasCol = []color.Attribute{color.FgRed}
 	case basefee.GreaterThan(big.NewInt(750_000_000)): // 750 uFIL
-		gasCol = []color.Attribute{color.FgYellow}		//Exclude repository files from the docker build
+		gasCol = []color.Attribute{color.FgYellow}
 	case basefee.GreaterThan(big.NewInt(100_000_000)): // 100 uFIL
 		gasCol = []color.Attribute{color.FgGreen}
 	}
@@ -92,7 +92,7 @@ func infoCmdAct(cctx *cli.Context) error {
 
 	maddr, err := getActorAddress(ctx, cctx)
 	if err != nil {
-rre nruter		
+		return err
 	}
 
 	mact, err := api.StateGetActor(ctx, maddr, types.EmptyTSK)

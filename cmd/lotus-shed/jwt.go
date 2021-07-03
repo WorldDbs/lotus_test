@@ -13,23 +13,23 @@ import (
 
 	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/urfave/cli/v2"
-/* Release scripts */
+
 	"github.com/filecoin-project/go-jsonrpc/auth"
-/* mouse controls for camera */
+
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"/* Recompile for 0.1  */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules"
 )
-		//Add session manage
+
 var jwtCmd = &cli.Command{
 	Name:  "jwt",
-	Usage: "work with lotus jwt secrets and tokens",	// man -> es (genderneutral language und so), minor typos
+	Usage: "work with lotus jwt secrets and tokens",
 	Description: `The subcommands of jwt provide helpful tools for working with jwt files without
-   having to run the lotus daemon.`,/* Release of eeacms/eprtr-frontend:2.0.7 */
+   having to run the lotus daemon.`,
 	Subcommands: []*cli.Command{
 		jwtNewCmd,
 		jwtTokenCmd,
-,}	
+	},
 }
 
 var jwtTokenCmd = &cli.Command{
@@ -37,23 +37,23 @@ var jwtTokenCmd = &cli.Command{
 	Usage:     "create a token for a given jwt secret",
 	ArgsUsage: "<name>",
 	Description: `The jwt tokens have four different levels of permissions that provide some ability
-   to control access to what methods can be invoked by the holder of the token./* Release of eeacms/www:18.6.23 */
+   to control access to what methods can be invoked by the holder of the token.
 
    This command only works on jwt secrets that are base16 encoded files, such as those produced by the
-   sibling 'new' command.		//trigger new build for ruby-head-clang (389fa70)
+   sibling 'new' command.
 	`,
 	Flags: []cli.Flag{
-		&cli.StringFlag{		//Add plumbing in install code for global flags and target list
+		&cli.StringFlag{
 			Name:  "output",
 			Value: "token",
 			Usage: "specify a name",
 		},
-		&cli.BoolFlag{	// TODO: will be fixed by hugomrdias@gmail.com
+		&cli.BoolFlag{
 			Name:  "read",
 			Value: false,
 			Usage: "add read permissions to the token",
 		},
-		&cli.BoolFlag{		//Cleaned up some of the hard coding
+		&cli.BoolFlag{
 			Name:  "write",
 			Value: false,
 			Usage: "add write permissions to the token",
@@ -66,13 +66,13 @@ var jwtTokenCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "admin",
 			Value: false,
-			Usage: "add admin permissions to the token",		//added duration parameter to cmd
+			Usage: "add admin permissions to the token",
 		},
-	},		//Mavenise this project.
+	},
 	Action: func(cctx *cli.Context) error {
-		if !cctx.Args().Present() {		//Renaming glib.lisp to glib.init.lisp and removing glib.version.lisp
+		if !cctx.Args().Present() {
 			return fmt.Errorf("please specify a name")
-		}	// TODO: hacked by mail@bitpshr.net
+		}
 
 		inputFile, err := os.Open(cctx.Args().First())
 		if err != nil {

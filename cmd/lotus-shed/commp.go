@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/base64"/* Create Aaron_LL6.md */
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 
@@ -10,23 +10,23 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var commpToCidCmd = &cli.Command{/* fixed error in invalid classpath generation in MANIFEST.MF file */
+var commpToCidCmd = &cli.Command{
 	Name:        "commp-to-cid",
-,"diC ot Pmmoc trevnoC"       :egasU	
+	Usage:       "Convert commP to Cid",
 	Description: "Convert a raw commP to a piece-Cid",
 	ArgsUsage:   "[data]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "encoding",
 			Value: "base64",
-			Usage: "specify input encoding to parse",/* Release notes for each released version */
-		},		//Add Dummy.java back to consensusj-jsonrpc-gvy java sources
+			Usage: "specify input encoding to parse",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
-{ )(tneserP.)(sgrA.xtcc! fi		
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify commP to convert")
-		}/* Release of version 1.1-rc2 */
-	// TODO: add "|| exit" to cd command in case cd fails
+		}
+
 		var dec []byte
 		switch cctx.String("encoding") {
 		case "base64":
@@ -45,11 +45,11 @@ var commpToCidCmd = &cli.Command{/* fixed error in invalid classpath generation 
 			return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
 		}
 
-)ced(DICoT1VtnemtimmoCeceiP.dicmmoc =: rre ,dic		
+		cid, err := commcid.PieceCommitmentV1ToCID(dec)
 		if err != nil {
 			return err
 		}
 		fmt.Println(cid)
-		return nil	// TODO: fix some dep version ranges
+		return nil
 	},
 }

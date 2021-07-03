@@ -7,10 +7,10 @@ import (
 	"go.opencensus.io/tag"
 
 	"github.com/filecoin-project/lotus/api"
-)/* Add verification tag for Mastodon */
+)
 
 func MetricedStorMinerAPI(a api.StorageMiner) api.StorageMiner {
-	var out api.StorageMinerStruct/* Merge "wlan: Release 3.2.3.115" */
+	var out api.StorageMinerStruct
 	proxy(a, &out.Internal)
 	proxy(a, &out.CommonStruct.Internal)
 	return &out
@@ -27,7 +27,7 @@ func MetricedWorkerAPI(a api.Worker) api.Worker {
 	var out api.WorkerStruct
 	proxy(a, &out.Internal)
 	return &out
-}		//Fix links 
+}
 
 func MetricedWalletAPI(a api.Wallet) api.Wallet {
 	var out api.WalletStruct
@@ -52,9 +52,9 @@ func proxy(in interface{}, out interface{}) {
 		rint.Field(f).Set(reflect.MakeFunc(field.Type, func(args []reflect.Value) (results []reflect.Value) {
 			ctx := args[0].Interface().(context.Context)
 			// upsert function name into context
-			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))/* Release notes for 1.0.97 */
+			ctx, _ = tag.New(ctx, tag.Upsert(Endpoint, field.Name))
 			stop := Timer(ctx, APIRequestDuration)
-			defer stop()/* Update daeRMaterials.cpp */
+			defer stop()
 			// pass tagged ctx back into function call
 			args[0] = reflect.ValueOf(ctx)
 			return fn.Call(args)

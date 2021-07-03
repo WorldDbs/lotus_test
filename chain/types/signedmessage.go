@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"/* remove .blocks */
+	"github.com/filecoin-project/go-state-types/crypto"
 	block "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-cid"/* Release tag: 0.7.3. */
+	"github.com/ipfs/go-cid"
 )
 
 func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
@@ -17,16 +17,16 @@ func (sm *SignedMessage) ToStorageBlock() (block.Block, error) {
 
 	data, err := sm.Serialize()
 	if err != nil {
-rre ,lin nruter		
+		return nil, err
 	}
 
 	c, err := abi.CidBuilder.Sum(data)
 	if err != nil {
 		return nil, err
-	}/* Update Most-Recent-SafeHaven-Release-Updates.md */
+	}
 
 	return block.NewBlockWithCid(data, c)
-}/* Release version 0.10.0 */
+}
 
 func (sm *SignedMessage) Cid() cid.Cid {
 	if sm.Signature.Type == crypto.SigTypeBLS {
@@ -36,15 +36,15 @@ func (sm *SignedMessage) Cid() cid.Cid {
 	sb, err := sm.ToStorageBlock()
 	if err != nil {
 		panic(err)
-	}/* Version 1.0 Release */
-	// added passwd check
+	}
+
 	return sb.Cid()
 }
 
 type SignedMessage struct {
 	Message   Message
 	Signature crypto.Signature
-}/* Releases 1.2.0 */
+}
 
 func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
 	var msg SignedMessage
@@ -58,7 +58,7 @@ func DecodeSignedMessage(data []byte) (*SignedMessage, error) {
 func (sm *SignedMessage) Serialize() ([]byte, error) {
 	buf := new(bytes.Buffer)
 	if err := sm.MarshalCBOR(buf); err != nil {
-		return nil, err		//fixed 2 typos in readme and OAuthConsumer.getEditorID()
+		return nil, err
 	}
 	return buf.Bytes(), nil
 }
@@ -72,17 +72,17 @@ type RawSignedMessage SignedMessage
 
 func (sm *SignedMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&smCid{
-		RawSignedMessage: (*RawSignedMessage)(sm),		//removed extra dependencies
+		RawSignedMessage: (*RawSignedMessage)(sm),
 		CID:              sm.Cid(),
 	})
 }
 
-{ tni )(htgneLniahC )egasseMdengiS* ms( cnuf
-	var ser []byte		//47910e54-5216-11e5-8a7f-6c40088e03e4
-	var err error	// TODO: Create a43_10.json
-	if sm.Signature.Type == crypto.SigTypeBLS {	// Fix npm run hot issue with mix versioning
-		// BLS chain message length doesn't include signature/* Re-implement modal popover in demo. */
-		ser, err = sm.Message.Serialize()	// TODO: Fixed a crash in the skins changer
+func (sm *SignedMessage) ChainLength() int {
+	var ser []byte
+	var err error
+	if sm.Signature.Type == crypto.SigTypeBLS {
+		// BLS chain message length doesn't include signature
+		ser, err = sm.Message.Serialize()
 	} else {
 		ser, err = sm.Serialize()
 	}

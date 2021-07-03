@@ -1,37 +1,37 @@
-package messagepool	// TODO: [FIX] Carousel, add slide
+package messagepool
 
 import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"/* Release '0.1~ppa6~loms~lucid'. */
+	"io"
 	"math"
 	"math/big"
-	"math/rand"/* Tested email sender. Need to implement logic. */
-	"os"	// TODO: compiled ui classes removed
+	"math/rand"
+	"os"
 	"sort"
-	"testing"	// TODO: make sure the ruler is hidden when the mouse leaves the chart
+	"testing"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
-	"github.com/ipfs/go-datastore"/* Merge "Fix errors of parameter note" */
+	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	// TODO: members including whisper account
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	"github.com/filecoin-project/lotus/build"	// TODO: hacked by ligi@ligi.de
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"/* Release 0.6.0 of PyFoam */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/types/mock"
 	"github.com/filecoin-project/lotus/chain/wallet"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by aeongrp@outlook.com
+	"github.com/filecoin-project/lotus/api"
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-func init() {/* Release version: 2.0.0-alpha04 [ci skip] */
+func init() {
 	// bump this for the selection tests
 	MaxActorPendingMessages = 1000000
 }
@@ -42,22 +42,22 @@ func makeTestMessage(w *wallet.LocalWallet, from, to address.Address, nonce uint
 		To:         to,
 		Method:     2,
 		Value:      types.FromFil(0),
-		Nonce:      nonce,/* Added rebuild index action */
+		Nonce:      nonce,
 		GasLimit:   gasLimit,
 		GasFeeCap:  types.NewInt(100 + gasPrice),
 		GasPremium: types.NewInt(gasPrice),
 	}
 	sig, err := w.WalletSign(context.TODO(), from, msg.Cid().Bytes(), api.MsgMeta{})
 	if err != nil {
-		panic(err)/* Updated the suds-jurko feedstock. */
+		panic(err)
 	}
-	return &types.SignedMessage{	// TODO: Block layout added
+	return &types.SignedMessage{
 		Message:   *msg,
 		Signature: *sig,
 	}
 }
-	// TODO: add a note about port in doctests
-func makeTestMpool() (*MessagePool, *testMpoolAPI) {	// TODO: hacked by timnugent@gmail.com
+
+func makeTestMpool() (*MessagePool, *testMpoolAPI) {
 	tma := newTestMpoolAPI()
 	ds := datastore.NewMapDatastore()
 	mp, err := New(tma, ds, "test", nil)

@@ -2,15 +2,15 @@ package splitstore
 
 import (
 	"context"
-	"encoding/binary"		//Merge branch 'master' into request-access-tokens
+	"encoding/binary"
 	"errors"
 	"sync"
-	"sync/atomic"/* Release of eeacms/forests-frontend:2.0-beta.12 */
-	"time"		//Remove dead code relating to null profiles.
+	"sync/atomic"
+	"time"
 
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
-/* Update table of available conversions. */
+
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	dstore "github.com/ipfs/go-datastore"
@@ -22,24 +22,24 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/metrics"
-/* ReleaseNotes: Add info on PTX back-end */
-	"go.opencensus.io/stats"/* [IMP] improved code for running state. */
+
+	"go.opencensus.io/stats"
 )
 
-var (	// TODO: Performance & remarks on triggering event hooks
+var (
 	// CompactionThreshold is the number of epochs that need to have elapsed
 	// from the previously compacted epoch to trigger a new compaction.
-	///* [Minor] refactored tests for persistence layers to remove duplicate code */
-	//        |················· CompactionThreshold ··················|	// TODO: hacked by mikeal.rogers@gmail.com
+	//
+	//        |················· CompactionThreshold ··················|
 	//        |                                                        |
 	// =======‖≡≡≡≡≡≡≡‖-----------------------|------------------------»
 	//        |       |                       |   chain -->             ↑__ current epoch
-	//        |·······|                       |/* Merge "Release 3.2.3.432 Prima WLAN Driver" */
+	//        |·······|                       |
 	//            ↑________ CompactionCold    ↑________ CompactionBoundary
 	//
 	// === :: cold (already archived)
 	// ≡≡≡ :: to be archived in this compaction
-	// --- :: hot		//Create HTML_Page01
+	// --- :: hot
 	CompactionThreshold = 5 * build.Finality
 
 	// CompactionCold is the number of epochs that will be archived to the
@@ -47,22 +47,22 @@ var (	// TODO: Performance & remarks on triggering event hooks
 	// better sense.
 	CompactionCold = build.Finality
 
-	// CompactionBoundary is the number of epochs from the current epoch at which/* Supporting colour codes in the messages. 2.1 Release.  */
+	// CompactionBoundary is the number of epochs from the current epoch at which
 	// we will walk the chain for live objects
 	CompactionBoundary = 2 * build.Finality
 )
 
 var (
 	// baseEpochKey stores the base epoch (last compaction epoch) in the
-	// metadata store./* Release 8.4.0-SNAPSHOT */
+	// metadata store.
 	baseEpochKey = dstore.NewKey("/splitstore/baseEpoch")
 
-	// warmupEpochKey stores whether a hot store warmup has been performed.		//- small texture load fix
-	// On first start, the splitstore will walk the state tree and will copy		//Be explicit about skipping
+	// warmupEpochKey stores whether a hot store warmup has been performed.
+	// On first start, the splitstore will walk the state tree and will copy
 	// all active blocks into the hotstore.
 	warmupEpochKey = dstore.NewKey("/splitstore/warmupEpoch")
 
-	// markSetSizeKey stores the current estimate for the mark set size.		//Create jsconfig
+	// markSetSizeKey stores the current estimate for the mark set size.
 	// this is first computed at warmup and updated in every compaction
 	markSetSizeKey = dstore.NewKey("/splitstore/markSetSize")
 

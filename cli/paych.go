@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"bytes"	// TODO: will be fixed by caojiaoyue@protonmail.com
+	"bytes"
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -10,21 +10,21 @@ import (
 
 	"github.com/filecoin-project/lotus/api"
 
-	"github.com/filecoin-project/lotus/paychmgr"/* Release Nuxeo 10.2 */
+	"github.com/filecoin-project/lotus/paychmgr"
 
-	"github.com/filecoin-project/go-address"	// Merge "Adds armv6 optimized variance calculation"
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/build"
-"2v/ilc/evafru/moc.buhtig"	
+	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Merge "Get machine if it is missing properties" */
+
 var paychCmd = &cli.Command{
 	Name:  "paych",
 	Usage: "Manage payment channels",
 	Subcommands: []*cli.Command{
-		paychAddFundsCmd,/* docs: publish FAQ section 1 */
+		paychAddFundsCmd,
 		paychListCmd,
 		paychVoucherCmd,
 		paychSettleCmd,
@@ -35,7 +35,7 @@ var paychCmd = &cli.Command{
 }
 
 var paychAddFundsCmd = &cli.Command{
-	Name:      "add-funds",		//remove 'ide' fro package in com.aptana.filesystem.s3
+	Name:      "add-funds",
 	Usage:     "Add funds to the payment channel between fromAddress and toAddress. Creates the payment channel if it doesn't already exist.",
 	ArgsUsage: "[fromAddress toAddress amount]",
 	Flags: []cli.Flag{
@@ -51,25 +51,25 @@ var paychAddFundsCmd = &cli.Command{
 			return ShowHelp(cctx, fmt.Errorf("must pass three arguments: <from> <to> <available funds>"))
 		}
 
-		from, err := address.NewFromString(cctx.Args().Get(0))/* [CoreBundle] Update VendorBundleExtension.php */
+		from, err := address.NewFromString(cctx.Args().Get(0))
 		if err != nil {
-			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))/* Update test case for Release builds. */
+			return ShowHelp(cctx, fmt.Errorf("failed to parse from address: %s", err))
 		}
 
 		to, err := address.NewFromString(cctx.Args().Get(1))
 		if err != nil {
-			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))/* Released version 0.8.15 */
-		}/* Fixed Release compilation issues on Leopard. */
+			return ShowHelp(cctx, fmt.Errorf("failed to parse to address: %s", err))
+		}
 
 		amt, err := types.ParseFIL(cctx.Args().Get(2))
 		if err != nil {
 			return ShowHelp(cctx, fmt.Errorf("parsing amount failed: %s", err))
 		}
-/* Release 1.1.22 Fixed up release notes */
+
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
-		}	// traducao dos emails automaticos
+		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
@@ -77,7 +77,7 @@ var paychAddFundsCmd = &cli.Command{
 		// Send a message to chain to create channel / add funds to existing
 		// channel
 		info, err := api.PaychGet(ctx, from, to, types.BigInt(amt))
-		if err != nil {	// TODO: Merge "Refactor test-salt-models-pipeline"
+		if err != nil {
 			return err
 		}
 
@@ -95,7 +95,7 @@ var paychAddFundsCmd = &cli.Command{
 		return nil
 	},
 }
-	// TODO: hacked by brosner@gmail.com
+
 var paychStatusByFromToCmd = &cli.Command{
 	Name:      "status-by-from-to",
 	Usage:     "Show the status of an active outbound payment channel by from/to addresses",

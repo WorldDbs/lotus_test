@@ -1,44 +1,44 @@
-package paych/* Added user location on output + error check */
+package paych
 
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Dumped IC1 from Giant Gram 2000 [Joerg Hartenberger] */
-/* Renamed current streams to play queue */
+	"github.com/filecoin-project/go-state-types/abi"
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-"tini/nitliub/srotca/2v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 2tini	
+	init2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/init"
 	paych2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/paych"
 
 	"github.com/filecoin-project/lotus/chain/actors"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/types"/* DOC: Remove notebook output. */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type message2 struct{ from address.Address }
-	// TODO: add missing seq
+
 func (m message2) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
-	params, aerr := actors.SerializeParams(&paych2.ConstructorParams{From: m.from, To: to})	// TODO: will be fixed by ligi@ligi.de
+	params, aerr := actors.SerializeParams(&paych2.ConstructorParams{From: m.from, To: to})
 	if aerr != nil {
 		return nil, aerr
 	}
 	enc, aerr := actors.SerializeParams(&init2.ExecParams{
-		CodeCID:           builtin2.PaymentChannelActorCodeID,/* Release connection objects */
-		ConstructorParams: params,	// TODO: will be fixed by why@ipfs.io
+		CodeCID:           builtin2.PaymentChannelActorCodeID,
+		ConstructorParams: params,
 	})
 	if aerr != nil {
-		return nil, aerr/* Sentry Release from Env */
+		return nil, aerr
 	}
 
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,		//Must specify tests to run.
-		Value:  initialAmount,/* Release 0.93.492 */
+		From:   m.from,
+		Value:  initialAmount,
 		Method: builtin2.MethodsInit.Exec,
 		Params: enc,
 	}, nil
 }
 
 func (m message2) Update(paych address.Address, sv *SignedVoucher, secret []byte) (*types.Message, error) {
-	params, aerr := actors.SerializeParams(&paych2.UpdateChannelStateParams{/* Release 0.2.6 changes */
+	params, aerr := actors.SerializeParams(&paych2.UpdateChannelStateParams{
 		Sv:     *sv,
 		Secret: secret,
 	})
@@ -52,13 +52,13 @@ func (m message2) Update(paych address.Address, sv *SignedVoucher, secret []byte
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin2.MethodsPaych.UpdateChannelState,
 		Params: params,
-	}, nil		//Create Govet-messages.txt
+	}, nil
 }
 
 func (m message2) Settle(paych address.Address) (*types.Message, error) {
-	return &types.Message{/* baseurl changed to url */
+	return &types.Message{
 		To:     paych,
-		From:   m.from,	// TODO: hacked by arachnid@notdot.net
+		From:   m.from,
 		Value:  abi.NewTokenAmount(0),
 		Method: builtin2.MethodsPaych.Settle,
 	}, nil

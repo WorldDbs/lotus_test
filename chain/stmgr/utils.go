@@ -1,17 +1,17 @@
 package stmgr
-/* Update orion-config.json */
+
 import (
-	"bytes"/* writerfilter08: tokenize FFData and fill FFDataHandler */
+	"bytes"
 	"context"
-"tmf"	
+	"fmt"
 	"os"
 	"reflect"
 	"runtime"
 	"strings"
-/* [PRE-9] pom cleanup */
+
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/go-state-types/network"/* #Register Issue */
+	"github.com/filecoin-project/go-state-types/network"
 
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -20,36 +20,36 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// Punch IE styles.
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/rt"
-		//Seitenanpassung
+
 	exported0 "github.com/filecoin-project/specs-actors/actors/builtin/exported"
-	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"/* Create form_object.min.js */
-	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"/* Add tio https://github.com/fisherman/tio plugin. */
-	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"/* new feature: annotations */
+	exported2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/exported"
+	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
+	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* vim: NewRelease function */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	init_ "github.com/filecoin-project/lotus/chain/actors/builtin/init"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"		//Merge branch 'main' into dependabot/composer/main/swoole/ide-helper-4.6.4
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
-	"github.com/filecoin-project/lotus/chain/state"	// TODO: Fix typo in mktree.sh
+	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/node/modules/dtypes"/* changed Experimenter such that additional training data can be added */
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
-func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {/* Merge "Revert "Several View's now pass className and isBorderBox as a property"" */
+func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {
 	act, err := sm.LoadActorRaw(ctx, init_.Address, st)
 	if err != nil {
 		return "", err
 	}
-	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)		//Rename .jshintrc.txt to .jshintrc
+	ias, err := init_.Load(sm.cs.ActorStore(ctx), act)
 	if err != nil {
 		return "", err
 	}

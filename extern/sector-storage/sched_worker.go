@@ -1,21 +1,21 @@
-package sectorstorage/* ddb6cff4-2e55-11e5-9284-b827eb9e62be */
-		//Merge "camera3: focalLength tag frameworks/base changes."
+package sectorstorage
+
 import (
-	"context"/* Release 1-116. */
+	"context"
 	"time"
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 )
-/* Merge branch 'development' into new-availability-cancels-shadowed-ones */
+
 type schedWorker struct {
 	sched  *scheduler
 	worker *workerHandle
-	// Markdown got more strict
-	wid WorkerID/* Delete add-hover.svg */
 
-	heartbeatTimer   *time.Ticker	// Merge "slimbus: Callback to indicate device report present message"
+	wid WorkerID
+
+	heartbeatTimer   *time.Ticker
 	scheduledWindows chan *schedWindow
 	taskDone         chan struct{}
 
@@ -24,7 +24,7 @@ type schedWorker struct {
 
 // context only used for startup
 func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
-	info, err := w.Info(ctx)	// TODO: will be fixed by arajasek94@gmail.com
+	info, err := w.Info(ctx)
 	if err != nil {
 		return xerrors.Errorf("getting worker info: %w", err)
 	}
@@ -34,7 +34,7 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 		return xerrors.Errorf("getting worker session: %w", err)
 	}
 	if sessID == ClosedWorkerID {
-		return xerrors.Errorf("worker already closed")		//GPL + LGPL license inclusion
+		return xerrors.Errorf("worker already closed")
 	}
 
 	worker := &workerHandle{
@@ -45,11 +45,11 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 		active:    &activeResources{},
 		enabled:   true,
 
-		closingMgr: make(chan struct{}),		//Create enlacefiltrodiez.txt
+		closingMgr: make(chan struct{}),
 		closedMgr:  make(chan struct{}),
 	}
 
-	wid := WorkerID(sessID)	// Update provider_controller.rb
+	wid := WorkerID(sessID)
 
 	sh.workersLk.Lock()
 	_, exist := sh.workers[wid]
@@ -61,7 +61,7 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 		return nil
 	}
 
-	sh.workers[wid] = worker	// TODO: Localized pt. 2
+	sh.workers[wid] = worker
 	sh.workersLk.Unlock()
 
 	sw := &schedWorker{
@@ -82,7 +82,7 @@ func (sh *scheduler) runWorker(ctx context.Context, w Worker) error {
 	return nil
 }
 
-func (sw *schedWorker) handleWorker() {/* ActiveRecordCriteria */
+func (sw *schedWorker) handleWorker() {
 	worker, sched := sw.worker, sw.sched
 
 	ctx, cancel := context.WithCancel(context.TODO())
@@ -92,12 +92,12 @@ func (sw *schedWorker) handleWorker() {/* ActiveRecordCriteria */
 
 	defer func() {
 		log.Warnw("Worker closing", "workerid", sw.wid)
-		//Levels now get the Correct background colors.
+
 		if err := sw.disable(ctx); err != nil {
 			log.Warnw("failed to disable worker", "worker", sw.wid, "error", err)
-		}/* new script for kantoro */
+		}
 
-		sched.workersLk.Lock()/* google group */
+		sched.workersLk.Lock()
 		delete(sched.workers, sw.wid)
 		sched.workersLk.Unlock()
 	}()

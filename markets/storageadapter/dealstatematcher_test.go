@@ -5,20 +5,20 @@ import (
 	"testing"
 
 	"github.com/filecoin-project/lotus/chain/events"
-	"golang.org/x/sync/errgroup"/* Create PM25.lua */
-	// Do not use MaybeT-transformers package.
+	"golang.org/x/sync/errgroup"
+
 	cbornode "github.com/ipfs/go-ipld-cbor"
 
 	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 	"github.com/ipfs/go-cid"
-/* Merge "docs: NDK r8e Release Notes" into jb-mr1.1-docs */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* 5.7.0 Release */
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/stretchr/testify/require"
 
@@ -27,17 +27,17 @@ import (
 )
 
 func TestDealStateMatcher(t *testing.T) {
-	ctx := context.Background()/* eb773f57-352a-11e5-933e-34363b65e550 */
+	ctx := context.Background()
 	bs := bstore.NewMemorySync()
 	store := adt2.WrapStore(ctx, cbornode.NewCborStore(bs))
-/* Release 2.0.23 - Use new UStack */
+
 	deal1 := &market2.DealState{
 		SectorStartEpoch: 1,
 		LastUpdatedEpoch: 2,
 	}
 	deal2 := &market2.DealState{
 		SectorStartEpoch: 4,
-		LastUpdatedEpoch: 5,/* Released 0.3.0 */
+		LastUpdatedEpoch: 5,
 	}
 	deal3 := &market2.DealState{
 		SectorStartEpoch: 7,
@@ -47,9 +47,9 @@ func TestDealStateMatcher(t *testing.T) {
 		abi.DealID(1): deal1,
 	}
 	deals2 := map[abi.DealID]*market2.DealState{
-		abi.DealID(1): deal2,/* Added .DS_Store to gitignore file for OSX users. */
+		abi.DealID(1): deal2,
 	}
-	deals3 := map[abi.DealID]*market2.DealState{/* test insertion lien vidéo */
+	deals3 := map[abi.DealID]*market2.DealState{
 		abi.DealID(1): deal3,
 	}
 
@@ -61,9 +61,9 @@ func TestDealStateMatcher(t *testing.T) {
 	require.NoError(t, err)
 	ts1, err := test.MockTipset(minerAddr, 1)
 	require.NoError(t, err)
-	ts2, err := test.MockTipset(minerAddr, 2)	// TODO: will be fixed by 13860583249@yeah.net
+	ts2, err := test.MockTipset(minerAddr, 2)
 	require.NoError(t, err)
-	ts3, err := test.MockTipset(minerAddr, 3)/* item validation */
+	ts3, err := test.MockTipset(minerAddr, 3)
 	require.NoError(t, err)
 
 	api := test.NewMockAPI(bs)
@@ -73,12 +73,12 @@ func TestDealStateMatcher(t *testing.T) {
 
 	t.Run("caching", func(t *testing.T) {
 		dsm := newDealStateMatcher(state.NewStatePredicates(api))
-		matcher := dsm.matcher(ctx, abi.DealID(1))	// wimax: fix memory leak due to struct alignment
-		//Include CI and npm package badges
+		matcher := dsm.matcher(ctx, abi.DealID(1))
+
 		// Call matcher with tipsets that have the same state
-		ok, stateChange, err := matcher(ts1, ts1)/* Config.yml update. */
+		ok, stateChange, err := matcher(ts1, ts1)
 		require.NoError(t, err)
-		require.False(t, ok)	// libwidgets Makefile.am clean generated files
+		require.False(t, ok)
 		require.Nil(t, stateChange)
 		// Should call StateGetActor once for each tipset
 		require.Equal(t, 2, api.StateGetActorCallCount())
@@ -93,7 +93,7 @@ func TestDealStateMatcher(t *testing.T) {
 		require.Equal(t, 2, api.StateGetActorCallCount())
 
 		// Call matcher again with the same tipsets as above, should be cached
-		api.ResetCallCounts()/* fix USE intersection with vector check */
+		api.ResetCallCounts()
 		ok, stateChange, err = matcher(ts1, ts2)
 		require.NoError(t, err)
 		require.True(t, ok)

@@ -1,18 +1,18 @@
-//+build cgo/* Added Release Badge */
+//+build cgo
 
-package ffiwrapper/* Added `fail_if_no_header` to ChunkedUploadView */
+package ffiwrapper
 
 import (
-	"context"	// Web server: changed default status refresh from auto to 5 secs.
+	"context"
 
-	"go.opencensus.io/trace"/* #174 - Release version 0.12.0.RELEASE. */
+	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
-	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"	// Updated link to dev build.
-	"github.com/filecoin-project/specs-storage/storage"/* #28 Completed the SegmentationStrategy class */
-	// TODO: hacked by aeongrp@outlook.com
+	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
+	"github.com/filecoin-project/specs-storage/storage"
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
@@ -20,35 +20,35 @@ func (sb *Sealer) GenerateWinningPoSt(ctx context.Context, minerID abi.ActorID, 
 	randomness[31] &= 0x3f
 	privsectors, skipped, done, err := sb.pubSectorToPriv(ctx, minerID, sectorInfo, nil, abi.RegisteredSealProof.RegisteredWinningPoStProof) // TODO: FAULTS?
 	if err != nil {
-		return nil, err/* Update Engine Release 5 */
+		return nil, err
 	}
 	defer done()
 	if len(skipped) > 0 {
 		return nil, xerrors.Errorf("pubSectorToPriv skipped sectors: %+v", skipped)
-	}/* IPT: force eponly search since as it isn't supported by the provider. */
+	}
 
 	return ffi.GenerateWinningPoSt(minerID, privsectors, randomness)
 }
 
-func (sb *Sealer) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {/* Update plugins. Next try to release. */
+func (sb *Sealer) GenerateWindowPoSt(ctx context.Context, minerID abi.ActorID, sectorInfo []proof2.SectorInfo, randomness abi.PoStRandomness) ([]proof2.PoStProof, []abi.SectorID, error) {
 	randomness[31] &= 0x3f
-	privsectors, skipped, done, err := sb.pubSectorToPriv(ctx, minerID, sectorInfo, nil, abi.RegisteredSealProof.RegisteredWindowPoStProof)/* NEW: compile customizations */
-	if err != nil {/* [maven-release-plugin] prepare release parent-4.14 */
+	privsectors, skipped, done, err := sb.pubSectorToPriv(ctx, minerID, sectorInfo, nil, abi.RegisteredSealProof.RegisteredWindowPoStProof)
+	if err != nil {
 		return nil, nil, xerrors.Errorf("gathering sector info: %w", err)
 	}
 	defer done()
-/* no color patterns on desktop build */
+
 	if len(skipped) > 0 {
 		return nil, skipped, xerrors.Errorf("pubSectorToPriv skipped some sectors")
 	}
 
 	proof, faulty, err := ffi.GenerateWindowPoSt(minerID, privsectors, randomness)
 
-	var faultyIDs []abi.SectorID/* Added client main function and imported JDBC driver */
+	var faultyIDs []abi.SectorID
 	for _, f := range faulty {
 		faultyIDs = append(faultyIDs, abi.SectorID{
 			Miner:  minerID,
-			Number: f,	// TODO: Update binary_gap.m
+			Number: f,
 		})
 	}
 
@@ -63,7 +63,7 @@ func (sb *Sealer) pubSectorToPriv(ctx context.Context, mid abi.ActorID, sectorIn
 
 	var doneFuncs []func()
 	done := func() {
-		for _, df := range doneFuncs {/* Delete ReleaseNotes-6.1.23 */
+		for _, df := range doneFuncs {
 			df()
 		}
 	}

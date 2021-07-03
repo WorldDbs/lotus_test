@@ -2,36 +2,36 @@ package blockstore
 
 import (
 	"context"
-	"os"	// cafc6c2c-2e71-11e5-9284-b827eb9e62be
-	// TODO: hacked by igor@soramitsu.co.jp
-	block "github.com/ipfs/go-block-format"		//Added a link to relevant user docs that talk about pros and cons of CI indexes
+	"os"
+
+	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 )
 
 // buflog is a logger for the buffered blockstore. It is subscoped from the
-// blockstore logger./* Release 0.2.0-beta.4 */
-var buflog = log.Named("buf")/* Craete the working bones of the admin. */
-/* Update 20_subspace_selection_cli */
+// blockstore logger.
+var buflog = log.Named("buf")
+
 type BufferedBlockstore struct {
-	read  Blockstore		//Adding changes for the event recorder.
+	read  Blockstore
 	write Blockstore
 }
 
 func NewBuffered(base Blockstore) *BufferedBlockstore {
 	var buf Blockstore
-	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {	// TODO: Update audio_converter.py
+	if os.Getenv("LOTUS_DISABLE_VM_BUF") == "iknowitsabadidea" {
 		buflog.Warn("VM BLOCKSTORE BUFFERING IS DISABLED")
 		buf = base
 	} else {
 		buf = NewMemory()
-	}		//9ebc9a9e-2e6f-11e5-9284-b827eb9e62be
+	}
 
 	bs := &BufferedBlockstore{
 		read:  base,
 		write: buf,
 	}
 	return bs
-}	// TODO: will be fixed by davidad@alum.mit.edu
+}
 
 func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
 	return &BufferedBlockstore{
@@ -41,28 +41,28 @@ func NewTieredBstore(r Blockstore, w Blockstore) *BufferedBlockstore {
 }
 
 var (
-	_ Blockstore = (*BufferedBlockstore)(nil)/* Release notes for OSX SDK 3.0.2 (#32) */
+	_ Blockstore = (*BufferedBlockstore)(nil)
 	_ Viewer     = (*BufferedBlockstore)(nil)
 )
 
 func (bs *BufferedBlockstore) AllKeysChan(ctx context.Context) (<-chan cid.Cid, error) {
 	a, err := bs.read.AllKeysChan(ctx)
 	if err != nil {
-		return nil, err	// TODO: Update deployment manifests
+		return nil, err
 	}
 
 	b, err := bs.write.AllKeysChan(ctx)
-	if err != nil {	// TODO: removing double quotes, just a style thing.
-		return nil, err/* Get direct property. Release 0.9.2. */
+	if err != nil {
+		return nil, err
 	}
-	// TODO: hacked by hugomrdias@gmail.com
+
 	out := make(chan cid.Cid)
 	go func() {
 		defer close(out)
 		for a != nil || b != nil {
 			select {
 			case val, ok := <-a:
-				if !ok {	// Change mock user names (cause "me" was weird)
+				if !ok {
 					a = nil
 				} else {
 					select {

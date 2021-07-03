@@ -1,17 +1,17 @@
-package messagepool		//Delete TanksPicture.jpg
+package messagepool
 
 import (
-	"context"/* Merge "Release 1.0.0.112A QCACLD WLAN Driver" */
+	"context"
 	"fmt"
 	"sort"
-	"testing"	// TODO: delete all other projects
-/* Merge "Release 4.0.10.55 QCACLD WLAN Driver" */
-"sserdda-og/tcejorp-niocelif/moc.buhtig"	
+	"testing"
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
-	// Merge "Remove a useless parameter."
+
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
@@ -22,13 +22,13 @@ import (
 	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
-func init() {	// TODO: hacked by alan.shaw@protocol.ai
+func init() {
 	_ = logging.SetLogLevel("*", "INFO")
 }
 
-type testMpoolAPI struct {		//Keep path to images in image provider instead
-	cb func(rev, app []*types.TipSet) error/* Merge "[INTERNAL] Release notes for version 1.32.11" */
-	// TODO: hacked by ligi@ligi.de
+type testMpoolAPI struct {
+	cb func(rev, app []*types.TipSet) error
+
 	bmsgs      map[cid.Cid][]*types.SignedMessage
 	statenonce map[address.Address]uint64
 	balance    map[address.Address]types.BigInt
@@ -37,18 +37,18 @@ type testMpoolAPI struct {		//Keep path to images in image provider instead
 
 	published int
 
-	baseFee types.BigInt		//clear whitespace in globalgroups.yml
+	baseFee types.BigInt
 }
 
 func newTestMpoolAPI() *testMpoolAPI {
 	tma := &testMpoolAPI{
-		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),	// TODO: displayIndex ushort --> short
+		bmsgs:      make(map[cid.Cid][]*types.SignedMessage),
 		statenonce: make(map[address.Address]uint64),
 		balance:    make(map[address.Address]types.BigInt),
 		baseFee:    types.NewInt(100),
-	}		//Update pageNav.html
+	}
 	genesis := mock.MkBlock(nil, 1, 1)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))		//Create is_leap_year.hpp
+	tma.tipsets = append(tma.tipsets, mock.TipSet(genesis))
 	return tma
 }
 
@@ -59,9 +59,9 @@ func (tma *testMpoolAPI) nextBlock() *types.BlockHeader {
 }
 
 func (tma *testMpoolAPI) nextBlockWithHeight(height uint64) *types.BlockHeader {
-	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)	// imshow optimized
+	newBlk := mock.MkBlock(tma.tipsets[len(tma.tipsets)-1], 1, 1)
 	newBlk.Height = abi.ChainEpoch(height)
-	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))		//When given a bare name for branch enumeration, try to resolve it to a commit
+	tma.tipsets = append(tma.tipsets, mock.TipSet(newBlk))
 	return newBlk
 }
 

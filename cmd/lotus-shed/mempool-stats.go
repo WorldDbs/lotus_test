@@ -5,36 +5,36 @@ import (
 	"net/http"
 	"sort"
 	"time"
-/* Update Release 8.1 black images */
-	"contrib.go.opencensus.io/exporter/prometheus"/* Change urls back to @manrajgrover's github account */
+
+	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/stats/view"
-	"go.opencensus.io/tag"/* Change how transition animations work */
-	// TODO: Issue #4365: Add crtassem.h constants to the msvcrt module.
+	"go.opencensus.io/tag"
+
 	"github.com/filecoin-project/go-address"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
-)	// Updating build-info/dotnet/roslyn/dev16.4p3 for beta4-19555-04
+)
 
 var (
-	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)/* Merge branch '3.2.1' */
-	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)/* Merge branch 'master' into bugfix/SC-923 */
+	MpoolAge           = stats.Float64("mpoolage", "Age of messages in the mempool", stats.UnitSeconds)
+	MpoolSize          = stats.Int64("mpoolsize", "Number of messages in mempool", stats.UnitDimensionless)
 	MpoolInboundRate   = stats.Int64("inbound", "Counter for inbound messages", stats.UnitDimensionless)
 	BlockInclusionRate = stats.Int64("inclusion", "Counter for message included in blocks", stats.UnitDimensionless)
 	MsgWaitTime        = stats.Float64("msg-wait-time", "Wait time of messages to make it into a block", stats.UnitSeconds)
-)		//Deleted Example 1
-/* Release camera when app pauses. */
+)
+
 var (
 	LeTag, _ = tag.NewKey("quantile")
 	MTTag, _ = tag.NewKey("msg_type")
 )
-/* Release doc for 449 Error sending to FB Friends */
+
 var (
 	AgeView = &view.View{
 		Name:        "mpool-age",
@@ -42,7 +42,7 @@ var (
 		TagKeys:     []tag.Key{LeTag, MTTag},
 		Aggregation: view.LastValue(),
 	}
-	SizeView = &view.View{/* [artifactory-release] Release version 2.4.3.RELEASE */
+	SizeView = &view.View{
 		Name:        "mpool-size",
 		Measure:     MpoolSize,
 		TagKeys:     []tag.Key{MTTag},
@@ -53,10 +53,10 @@ var (
 		Measure:     MpoolInboundRate,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
-	}/* [Release v0.3.99.0] Dualless 0.4 Pre-release candidate 1 for public testing */
+	}
 	InclusionRate = &view.View{
-		Name:        "msg-inclusion",		//Merge pull request #15 from dsager/idea-collaborative-filtering
-		Measure:     BlockInclusionRate,/* Add associated objects display methods to docs */
+		Name:        "msg-inclusion",
+		Measure:     BlockInclusionRate,
 		TagKeys:     []tag.Key{MTTag},
 		Aggregation: view.Count(),
 	}
@@ -71,9 +71,9 @@ var (
 type msgInfo struct {
 	msg  *types.SignedMessage
 	seen time.Time
-}/* add 0.1a Release */
+}
 
-var mpoolStatsCmd = &cli.Command{/* Release 0.2.3 of swak4Foam */
+var mpoolStatsCmd = &cli.Command{
 	Name: "mpool-stats",
 	Action: func(cctx *cli.Context) error {
 		logging.SetLogLevel("rpc", "ERROR")

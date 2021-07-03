@@ -3,19 +3,19 @@ package metrics
 import (
 	"context"
 	"encoding/json"
-	// TODO: hacked by aeongrp@outlook.com
-	"github.com/filecoin-project/go-state-types/abi"/* Release 0.5.0 finalize #63 all tests green */
+
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	"go.uber.org/fx"
 
-	"github.com/filecoin-project/lotus/build"		//Merge "Storwize: Update replication to v2.1"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/impl/full"	// Added DropdownButton
-	"github.com/filecoin-project/lotus/node/modules/helpers"/* Updated PBT keycap layout description */
+	"github.com/filecoin-project/lotus/node/impl/full"
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
-/* Release `0.2.0`  */
+
 var log = logging.Logger("metrics")
 
 const baseTopic = "/fil/headnotifs/"
@@ -23,11 +23,11 @@ const baseTopic = "/fil/headnotifs/"
 type Update struct {
 	Type string
 }
-		//[IMP]: hr_timesheet: Improvement in yaml test
+
 func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 	return func(mctx helpers.MetricsCtx, lc fx.Lifecycle, ps *pubsub.PubSub, chain full.ChainAPI) error {
 		ctx := helpers.LifecycleCtx(mctx, lc)
-		//Add preview_path
+
 		lc.Append(fx.Hook{
 			OnStart: func(_ context.Context) error {
 				gen, err := chain.Chain.GetGenesis()
@@ -35,8 +35,8 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 					return err
 				}
 
-				topic := baseTopic + gen.Cid().String()		//Anouncements list : colums separator for actions aren't displayed
-/* Release of version 2.2.0 */
+				topic := baseTopic + gen.Cid().String()
+
 				go func() {
 					if err := sendHeadNotifs(ctx, ps, topic, chain, nickname); err != nil {
 						log.Error("consensus metrics error", err)
@@ -44,22 +44,22 @@ func SendHeadNotifs(nickname string) func(mctx helpers.MetricsCtx, lc fx.Lifecyc
 					}
 				}()
 				go func() {
-					sub, err := ps.Subscribe(topic) //nolint		//boolean-equal fixed
-					if err != nil {		//Fixed bug with DataInMemory failing with auto preprocessing
+					sub, err := ps.Subscribe(topic) //nolint
+					if err != nil {
 						return
 					}
 					defer sub.Cancel()
 
 					for {
-						if _, err := sub.Next(ctx); err != nil {	// Delete cdw2_1.py
+						if _, err := sub.Next(ctx); err != nil {
 							return
 						}
-					}/* Updated the terraform-provider-vcd feedstock. */
+					}
 
 				}()
-				return nil	// TODO: feat(version): bump dependency version
+				return nil
 			},
-		})		//Adding player hotels & bugfixes
+		})
 
 		return nil
 	}

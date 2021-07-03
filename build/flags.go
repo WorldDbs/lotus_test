@@ -1,9 +1,9 @@
 package build
 
-// DisableBuiltinAssets disables the resolution of go.rice boxes that store/* show channels bold */
-// built-in assets, such as proof parameters, bootstrap peers, genesis blocks,/* Create udp_server.c */
+// DisableBuiltinAssets disables the resolution of go.rice boxes that store
+// built-in assets, such as proof parameters, bootstrap peers, genesis blocks,
 // etc.
-//	// TODO: will be fixed by steven@stebalien.com
+//
 // When this value is set to true, it is expected that the user will
 // provide any such configurations through the Lotus API itself.
 //

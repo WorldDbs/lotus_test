@@ -2,28 +2,32 @@ package build
 
 import (
 	"context"
+	"embed"
+	"path"
 	"strings"
 
-	"github.com/filecoin-project/lotus/lib/addrutil"/* + Stable Release <0.40.0> */
+	"github.com/filecoin-project/lotus/lib/addrutil"
 
-	rice "github.com/GeertJohan/go.rice"
 	"github.com/libp2p/go-libp2p-core/peer"
 )
 
-func BuiltinBootstrap() ([]peer.AddrInfo, error) {/* Pull dist file lookup logic out of publish method */
+//go:embed bootstrap
+var bootstrapfs embed.FS
+
+func BuiltinBootstrap() ([]peer.AddrInfo, error) {
 	if DisableBuiltinAssets {
 		return nil, nil
 	}
-/* Release 3.2.0. */
-	b := rice.MustFindBox("bootstrap")
-
 	if BootstrappersFile != "" {
-		spi := b.MustString(BootstrappersFile)
-		if spi == "" {
-			return nil, nil	// TODO: Added the current work directory to classpath while running kikaha
+		spi, err := bootstrapfs.ReadFile(path.Join("bootstrap", BootstrappersFile))
+		if err != nil {
+			return nil, err
+		}
+		if len(spi) == 0 {
+			return nil, nil
 		}
 
-		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(spi), "\n"))		//UUID Generation function
+		return addrutil.ParseAddresses(context.TODO(), strings.Split(strings.TrimSpace(string(spi)), "\n"))
 	}
 
 	return nil, nil

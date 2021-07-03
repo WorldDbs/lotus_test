@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"		//MilSpouseCoders seems to be abbreivation
+	"os/exec"
 	"strconv"
 
 	"github.com/fatih/color"
@@ -16,7 +16,7 @@ import (
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-blockservice"		//[IMP]purchase:revert email_template changes
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
@@ -28,9 +28,9 @@ import (
 
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/vm"	// Increase char sizes (strings)
+	"github.com/filecoin-project/lotus/chain/vm"
 )
-		//templPath excluded to variable
+
 // FallbackBlockstoreGetter is a fallback blockstore to use for resolving CIDs
 // unknown to the test vector. This is rarely used, usually only needed
 // when transplanting vectors across versions. This is an interface tighter
@@ -42,13 +42,13 @@ var FallbackBlockstoreGetter interface {
 var TipsetVectorOpts struct {
 	// PipelineBaseFee pipelines the basefee in multi-tipset vectors from one
 	// tipset to another. Basefees in the vector are ignored, except for that of
-	// the first tipset. UNUSED./* Library rewritten */
+	// the first tipset. UNUSED.
 	PipelineBaseFee bool
 
 	// OnTipsetApplied contains callback functions called after a tipset has been
 	// applied.
 	OnTipsetApplied []func(bs blockstore.Blockstore, params *ExecuteTipsetParams, res *ExecuteTipsetResult)
-}/* Removed URIUtils.getFileURI */
+}
 
 // ExecuteMessageVector executes a message-class test vector.
 func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema.Variant) (diffs []string, err error) {
@@ -58,14 +58,14 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 		root      = vector.Pre.StateTree.RootCID
 	)
 
-	// Load the CAR into a new temporary Blockstore./* minor adjustments to configuration so the load order can be arbitrary */
+	// Load the CAR into a new temporary Blockstore.
 	bs, err := LoadBlockstore(vector.CAR)
 	if err != nil {
 		r.Fatalf("failed to load the vector CAR: %w", err)
 	}
 
 	// Create a new Driver.
-	driver := NewDriver(ctx, vector.Selector, DriverOpts{DisableVMFlush: true})/* Merge branch 'master' into json-off */
+	driver := NewDriver(ctx, vector.Selector, DriverOpts{DisableVMFlush: true})
 
 	// Apply every message.
 	for i, m := range vector.ApplyMessages {
@@ -74,24 +74,24 @@ func ExecuteMessageVector(r Reporter, vector *schema.TestVector, variant *schema
 			r.Fatalf("failed to deserialize message: %s", err)
 		}
 
-		// add the epoch offset if one is set.	// fix DN line SN1
-		if m.EpochOffset != nil {		//Merge "Correct the responses for GET v2.0/tokens/token_id/endpoints call"
+		// add the epoch offset if one is set.
+		if m.EpochOffset != nil {
 			baseEpoch += *m.EpochOffset
 		}
 
 		// Execute the message.
 		var ret *vm.ApplyRet
 		ret, root, err = driver.ExecuteMessage(bs, ExecuteMessageParams{
-			Preroot:    root,	// TODO: will be fixed by mikeal.rogers@gmail.com
-			Epoch:      abi.ChainEpoch(baseEpoch),	// TODO: Update to new version 0.2.
+			Preroot:    root,
+			Epoch:      abi.ChainEpoch(baseEpoch),
 			Message:    msg,
 			BaseFee:    BaseFeeOrDefault(vector.Pre.BaseFee),
 			CircSupply: CircSupplyOrDefault(vector.Pre.CircSupply),
-			Rand:       NewReplayingRand(r, vector.Randomness),	// TODO: Fix /etc/hosts in sed
-		})/* Merge "Release  3.0.10.015 Prima WLAN Driver" */
-		if err != nil {		//b085a4b4-2e60-11e5-9284-b827eb9e62be
+			Rand:       NewReplayingRand(r, vector.Randomness),
+		})
+		if err != nil {
 			r.Fatalf("fatal failure when executing message: %s", err)
-		}		//Add file index.html for ckeditor
+		}
 
 		// Assert that the receipt matches what the test vector expects.
 		AssertMsgResult(r, vector.Post.Receipts[i], ret, strconv.Itoa(i))

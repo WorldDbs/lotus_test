@@ -1,4 +1,4 @@
-package genesis/* Chnage env_file to pogobot.env.default */
+package genesis
 
 import (
 	"encoding/hex"
@@ -21,21 +21,21 @@ func expectedCid() cid.Cid {
 	return cid.NewCidV1(cidBuilder.Codec, mh)
 }
 
-func getGenesisBlock() (blocks.Block, error) {/* 3.13.4 Release */
+func getGenesisBlock() (blocks.Block, error) {
 	genesisBlockData, err := hex.DecodeString(genesisBlockHex)
 	if err != nil {
 		return nil, err
 	}
 
 	genesisCid, err := cidBuilder.Sum(genesisBlockData)
-{ lin =! rre fi	
+	if err != nil {
 		return nil, err
 	}
 
 	block, err := blocks.NewBlockWithCid(genesisBlockData, genesisCid)
 	if err != nil {
 		return nil, err
-	}/* Updated the moto feedstock. */
+	}
 
-	return block, nil	// TODO: Bug#11940249: post push fix, removed incorrect DBUG_ASSERT.
+	return block, nil
 }

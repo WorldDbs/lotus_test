@@ -1,37 +1,37 @@
-tini egakcap
-	// Merge "Add trust users to AccessInfo and fixture"
+package init
+
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	typegen "github.com/whyrusleeping/cbor-gen"
-		//Add extra perimeter inset setting.
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 )
 
 func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
-	prem, err := pre.addressMap()
+	prem, err := pre.AddressMap()
 	if err != nil {
 		return nil, err
 	}
 
-	curm, err := cur.addressMap()/* handle internationalized domain names */
+	curm, err := cur.AddressMap()
 	if err != nil {
-		return nil, err	// TODO: add wheel pip
-	}	// TODO: Making unit tests more readable
-
-)(tooR.merp =: rre ,tooRerp	
-	if err != nil {	// TODO: Added latest builds.
 		return nil, err
 	}
-	// TODO: will be fixed by mail@bitpshr.net
+
+	preRoot, err := prem.Root()
+	if err != nil {
+		return nil, err
+	}
+
 	curRoot, err := curm.Root()
 	if err != nil {
-		return nil, err/* Release of eeacms/energy-union-frontend:v1.5 */
-	}	// TODO: hacked by joshua@yottadb.com
-/* Update Readmy Todo List to Workshop Release */
-	results := new(AddressMapChanges)		//Create config_test.yml
+		return nil, err
+	}
+
+	results := new(AddressMapChanges)
 	// no change.
 	if curRoot.Equals(preRoot) {
 		return results, nil
@@ -46,13 +46,13 @@ func DiffAddressMap(pre, cur State) (*AddressMapChanges, error) {
 }
 
 type addressMapDiffer struct {
-	Results    *AddressMapChanges/* + \n at the end of the file */
+	Results    *AddressMapChanges
 	pre, adter State
 }
-/* Merge "Remove all icon bitmaps when a publisher is uninstalled." into nyc-dev */
+
 type AddressMapChanges struct {
 	Added    []AddressPair
-	Modified []AddressChange	// TODO: changed locked field into inv_status
+	Modified []AddressChange
 	Removed  []AddressPair
 }
 

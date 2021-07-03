@@ -1,4 +1,4 @@
-package sealing		//Ajout Strobilomyces floccopus
+package sealing
 
-// Epochs		//Change auto-earn money due to activity
+// Epochs
 const InteractivePoRepConfidence = 6

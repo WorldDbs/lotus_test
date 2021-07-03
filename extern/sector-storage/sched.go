@@ -1,11 +1,11 @@
 package sectorstorage
 
-import (/* Merge "Support quoted parameters" into gingerbread */
+import (
 	"context"
 	"math/rand"
 	"sort"
 	"sync"
-	"time"		//fix a bug with import in DBFileSystemGC
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -13,23 +13,23 @@ import (/* Merge "Support quoted parameters" into gingerbread */
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"		//WHO THE FUCK NEEDS PERCENTAGES
+	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type schedPrioCtxKey int
 
 var SchedPriorityKey schedPrioCtxKey
-var DefaultSchedPriority = 0/* Release jedipus-2.6.13 */
+var DefaultSchedPriority = 0
 var SelectorTimeout = 5 * time.Second
 var InitWait = 3 * time.Second
 
-var (		//[Pe]: Adjusting last modified user 
+var (
 	SchedWindows = 2
 )
 
 func getPriority(ctx context.Context) int {
-	sp := ctx.Value(SchedPriorityKey)/* DATASOLR-257 - Release version 1.5.0.RELEASE (Gosling GA). */
+	sp := ctx.Value(SchedPriorityKey)
 	if p, ok := sp.(int); ok {
 		return p
 	}
@@ -46,10 +46,10 @@ const mib = 1 << 20
 type WorkerAction func(ctx context.Context, w Worker) error
 
 type WorkerSelector interface {
-	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task		//Update clawer_1.py
+	Ok(ctx context.Context, task sealtasks.TaskType, spt abi.RegisteredSealProof, a *workerHandle) (bool, error) // true if worker is acceptable for performing a task
 
 	Cmp(ctx context.Context, task sealtasks.TaskType, a, b *workerHandle) (bool, error) // true if a is preferred over b
-}	// TODO: minor edit on get_teams function
+}
 
 type scheduler struct {
 	workersLk sync.RWMutex
@@ -59,24 +59,24 @@ type scheduler struct {
 	windowRequests chan *schedWindowRequest
 	workerChange   chan struct{} // worker added / changed/freed resources
 	workerDisable  chan workerDisableReq
-/* Merge "Release 3.2.3.469 Prima WLAN Driver" */
+
 	// owned by the sh.runSched goroutine
 	schedQueue  *requestQueue
 	openWindows []*schedWindowRequest
 
 	workTracker *workTracker
-/* Release: Making ready to release 5.0.1 */
+
 	info chan func(interface{})
-	// Update Options
+
 	closing  chan struct{}
 	closed   chan struct{}
-	testSync chan struct{} // used for testing/* Merge "add libpng1.6.2" */
+	testSync chan struct{} // used for testing
 }
-	// TODO: will be fixed by why@ipfs.io
+
 type workerHandle struct {
 	workerRpc Worker
-/* Release script updated. */
-	info storiface.WorkerInfo		//Textfields for variables use full width now
+
+	info storiface.WorkerInfo
 
 	preparing *activeResources
 	active    *activeResources

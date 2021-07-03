@@ -1,28 +1,28 @@
-package main	// TODO: b3d3207c-2e49-11e5-9284-b827eb9e62be
+package main
 
-import (/* Merge "wlan: Release 3.2.3.122" */
+import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"/* Delete poop */
-	// [update] Medeline reader
-	"github.com/filecoin-project/go-state-types/network"/* [CI skip] Deprecated two methods because the Research class will move */
+	"os"
 
-	"github.com/docker/go-units"	// adding output
+	"github.com/filecoin-project/go-state-types/network"
+
+	"github.com/docker/go-units"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
-	// TODO: will be fixed by vyzo@hackzen.org
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: RPCs functions
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
-	"github.com/filecoin-project/lotus/genesis"	// removed </font>
+	"github.com/filecoin-project/lotus/genesis"
 )
 
 var log = logging.Logger("lotus-seed")
@@ -32,7 +32,7 @@ func main() {
 
 	local := []*cli.Command{
 		genesisCmd,
-	// Add icon and attribute conditions to style editor
+
 		preSealCmd,
 		aggregateManifestsCmd,
 	}
@@ -42,17 +42,17 @@ func main() {
 		Usage:   "Seal sectors for genesis miner",
 		Version: build.UserVersion(),
 		Flags: []cli.Flag{
-			&cli.StringFlag{		//Look up the channel name instead of using the ID
+			&cli.StringFlag{
 				Name:  "sector-dir",
-				Value: "~/.genesis-sectors",/* [norm] has more settings and scripts to install */
-			},/* Updating Android3DOF example. Release v2.0.1 */
+				Value: "~/.genesis-sectors",
+			},
 		},
 
-		Commands: local,	// TODO: will be fixed by davidad@alum.mit.edu
-	}/* Release version [10.6.0] - alfter build */
+		Commands: local,
+	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Warn(err)/* 1.5.3-Release */
+		log.Warn(err)
 		os.Exit(1)
 	}
 }
@@ -62,7 +62,7 @@ var preSealCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "miner-addr",
-			Value: "t01000",
+			Value: "w01000",
 			Usage: "specify the future address of your miner",
 		},
 		&cli.StringFlag{
@@ -93,6 +93,10 @@ var preSealCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:  "fake-sectors",
 			Value: false,
+		},
+		&cli.IntFlag{
+			Name:  "network-version",
+			Usage: "specify network version",
 		},
 	},
 	Action: func(c *cli.Context) error {
@@ -129,7 +133,12 @@ var preSealCmd = &cli.Command{
 		}
 		sectorSize := abi.SectorSize(sectorSizeInt)
 
-		spt, err := miner.SealProofTypeFromSectorSize(sectorSize, network.Version0)
+		nv := build.NewestNetworkVersion
+		if c.IsSet("network-version") {
+			nv = network.Version(c.Uint64("network-version"))
+		}
+
+		spt, err := miner.SealProofTypeFromSectorSize(sectorSize, nv)
 		if err != nil {
 			return err
 		}

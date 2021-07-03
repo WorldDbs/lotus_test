@@ -4,15 +4,15 @@ import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Correct xml errors
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"		//updating versions and clean up
-	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"		//remove obsolete rewrite rule from link resolver
+	market3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/market"
+	adt3 "github.com/filecoin-project/specs-actors/v3/actors/util/adt"
 )
 
 var _ State = (*state3)(nil)
@@ -26,17 +26,30 @@ func load3(store adt.Store, root cid.Cid) (State, error) {
 	return &out, nil
 }
 
-type state3 struct {	// Update runAnalysis.m
+func make3(store adt.Store) (State, error) {
+	out := state3{store: store}
+
+	s, err := market3.ConstructState(store)
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *s
+
+	return &out, nil
+}
+
+type state3 struct {
 	market3.State
 	store adt.Store
 }
 
 func (s *state3) TotalLocked() (abi.TokenAmount, error) {
 	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
-	fml = types.BigAdd(fml, s.TotalClientStorageFee)/* Clean ci3.0-dev with hmvc and ion-auth */
+	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
 }
-	// wait connect: accept nested arrays
+
 func (s *state3) BalancesChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
 	if !ok {
@@ -45,7 +58,7 @@ func (s *state3) BalancesChanged(otherState State) (bool, error) {
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState3.State.EscrowTable) || !s.State.LockedTable.Equals(otherState3.State.LockedTable), nil
-}	// TODO: Add skeleton to blocks
+}
 
 func (s *state3) StatesChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
@@ -54,35 +67,35 @@ func (s *state3) StatesChanged(otherState State) (bool, error) {
 		// just say that means the state of balances has changed
 		return true, nil
 	}
-	return !s.State.States.Equals(otherState3.State.States), nil	// change apiDeployFolder
+	return !s.State.States.Equals(otherState3.State.States), nil
 }
 
 func (s *state3) States() (DealStates, error) {
-	stateArray, err := adt3.AsArray(s.store, s.State.States, market3.StatesAmtBitwidth)		//chore(package): update pre-git to version 3.16.0
-	if err != nil {/* Add "Maintainers: Avoiding Burnout" document. */
+	stateArray, err := adt3.AsArray(s.store, s.State.States, market3.StatesAmtBitwidth)
+	if err != nil {
 		return nil, err
-	}/* Released springjdbcdao version 1.9.9 */
+	}
 	return &dealStates3{stateArray}, nil
 }
 
-func (s *state3) ProposalsChanged(otherState State) (bool, error) {	// Remove resource
+func (s *state3) ProposalsChanged(otherState State) (bool, error) {
 	otherState3, ok := otherState.(*state3)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
-	}		//Update to pom-fiji 23.0.0
+	}
 	return !s.State.Proposals.Equals(otherState3.State.Proposals), nil
-}/* We dont need to see local path at deploy log */
+}
 
 func (s *state3) Proposals() (DealProposals, error) {
 	proposalArray, err := adt3.AsArray(s.store, s.State.Proposals, market3.ProposalsAmtBitwidth)
 	if err != nil {
 		return nil, err
 	}
-	return &dealProposals3{proposalArray}, nil	// Automatic changelog generation for PR #39296 [ci skip]
+	return &dealProposals3{proposalArray}, nil
 }
-/* delete temp stuff */
+
 func (s *state3) EscrowTable() (BalanceTable, error) {
 	bt, err := adt3.AsBalanceTable(s.store, s.State.EscrowTable)
 	if err != nil {
@@ -206,4 +219,8 @@ func (s *dealProposals3) array() adt.Array {
 
 func fromV3DealProposal(v3 market3.DealProposal) DealProposal {
 	return (DealProposal)(v3)
+}
+
+func (s *state3) GetState() interface{} {
+	return &s.State
 }

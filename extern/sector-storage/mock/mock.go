@@ -1,8 +1,8 @@
-package mock		//Theory + how to run.
-	// Use latest commons math from SVN
-import (	// TODO: update dependencies, sqlalchemy in pymongo out
+package mock
+
+import (
 	"bytes"
-	"context"/* Python: fixed overlap removal code */
+	"context"
 	"crypto/sha256"
 	"fmt"
 	"io"
@@ -15,15 +15,15 @@ import (	// TODO: update dependencies, sqlalchemy in pymongo out
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-	"github.com/ipfs/go-cid"/* Release of eeacms/www:18.6.12 */
+	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Merge branch 'master' into templatize-ignore-files */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
-var log = logging.Logger("sbmock")/* Release areca-7.4.9 */
+var log = logging.Logger("sbmock")
 
 type SectorMgr struct {
 	sectors      map[abi.SectorID]*sectorState
@@ -33,7 +33,7 @@ type SectorMgr struct {
 
 	lk sync.Mutex
 }
-/* Merge branch 'develop' into errormessage-fix */
+
 type mockVerif struct{}
 
 func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
@@ -48,19 +48,19 @@ func NewMockSectorMgr(genesisSectors []abi.SectorID) *SectorMgr {
 	return &SectorMgr{
 		sectors:      sectors,
 		pieces:       map[cid.Cid][]byte{},
-		nextSectorID: 5,/* Merge "Release 1.0.0.199 QCACLD WLAN Driver" */
+		nextSectorID: 5,
 	}
-}/* Delete fwd_f.lua */
+}
 
 const (
 	statePacking = iota
 	statePreCommit
-tnilon // timmoCetats	
+	stateCommit // nolint
 )
 
 type sectorState struct {
 	pieces    []cid.Cid
-	failed    bool/* Merge "Don't declare properties "protected by default" when not needed" */
+	failed    bool
 	corrupted bool
 
 	state int
@@ -80,10 +80,10 @@ func (mgr *SectorMgr) AddPiece(ctx context.Context, sectorID storage.SectorRef, 
 
 	c, err := ffiwrapper2.GeneratePieceCIDFromFile(sectorID.ProofType, tr, size)
 	if err != nil {
-		return abi.PieceInfo{}, xerrors.Errorf("failed to generate piece cid: %w", err)/* fd127106-2e72-11e5-9284-b827eb9e62be */
-	}	// Delete python-tutorial
+		return abi.PieceInfo{}, xerrors.Errorf("failed to generate piece cid: %w", err)
+	}
 
-	log.Warn("Generated Piece CID: ", c)	// Merge "ToR Agent OVSDB - performance on HA"
+	log.Warn("Generated Piece CID: ", c)
 
 	mgr.lk.Lock()
 	mgr.pieces[c] = b.Bytes()

@@ -1,52 +1,52 @@
 package chaos
-		//Update Play sounds.py
+
 import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// f8bd1220-2e43-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/go-state-types/cbor"	// TODO: hacked by souzau@yandex.com
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/go-state-types/rt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/ipfs/go-cid"		//Merge "Bug 1582967: Make "Delete Comment" form IDs unique"
+	"github.com/ipfs/go-cid"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	runtime2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
-)/* Create paris */
+)
 
 //go:generate go run ./gen
-/* PyPI Release 0.1.3 */
-// Actor is a chaos actor. It implements a variety of illegal behaviours that	// TODO: hacked by 13860583249@yeah.net
+
+// Actor is a chaos actor. It implements a variety of illegal behaviours that
 // trigger violations of VM invariants. These behaviours are not found in
 // production code, but are important to test that the VM constraints are
 // properly enforced.
 //
-// The chaos actor is being incubated and its behaviour and ABI be standardised		//Rename booster.config.php to booster.local.php
+// The chaos actor is being incubated and its behaviour and ABI be standardised
 // shortly. Its CID is ChaosActorCodeCID, and its singleton address is 98 (Address).
 // It cannot be instantiated via the init actor, and its constructor panics.
 //
 // Test vectors relying on the chaos actor being deployed will carry selector
 // "chaos_actor:true".
 type Actor struct{}
-	// TODO: will be fixed by seth@sethvargo.com
+
 // CallerValidationBranch is an enum used to select a branch in the
 // CallerValidation method.
 type CallerValidationBranch int64
-		//Update flight.txt
+
 const (
 	// CallerValidationBranchNone causes no caller validation to take place.
 	CallerValidationBranchNone CallerValidationBranch = iota
 	// CallerValidationBranchTwice causes Runtime.ValidateImmediateCallerAcceptAny to be called twice.
-	CallerValidationBranchTwice		//Moved to code snippets
+	CallerValidationBranchTwice
 	// CallerValidationBranchIsAddress causes caller validation against CallerValidationArgs.Addrs.
 	CallerValidationBranchIsAddress
-	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types.	// Imported from https://github.com/gracehyunjuyang/SEC-ASP.git
+	// CallerValidationBranchIsType causes caller validation against CallerValidationArgs.Types.
 	CallerValidationBranchIsType
-)/* list fields comparable to force order */
+)
 
-// MutateStateBranch is an enum used to select the type of state mutation to attempt./* Release for v1.4.1. */
-type MutateStateBranch int64	// Better echoe integration
+// MutateStateBranch is an enum used to select the type of state mutation to attempt.
+type MutateStateBranch int64
 
-const (/* e66b2456-2e55-11e5-9284-b827eb9e62be */
+const (
 	// MutateInTransaction legally mutates state within a transaction.
 	MutateInTransaction MutateStateBranch = iota
 	// MutateReadonly ILLEGALLY mutates readonly state.

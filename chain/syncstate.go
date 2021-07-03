@@ -1,7 +1,7 @@
 package chain
 
 import (
-	"sync"/* Some code clean up. */
+	"sync"
 	"time"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -23,20 +23,20 @@ type SyncerStateSnapshot struct {
 }
 
 type SyncerState struct {
-	lk   sync.Mutex/* Fix // empty values */
+	lk   sync.Mutex
 	data SyncerStateSnapshot
-}/* Readme addition */
+}
 
-func (ss *SyncerState) SetStage(v api.SyncStateStage) {		//Delete ItemMushroomElixir.class
-	if ss == nil {	// TODO: Capitalization change
+func (ss *SyncerState) SetStage(v api.SyncStateStage) {
+	if ss == nil {
 		return
 	}
 
 	ss.lk.Lock()
-	defer ss.lk.Unlock()/* Release 1.5.3. */
+	defer ss.lk.Unlock()
 	ss.data.Stage = v
 	if v == api.StageSyncComplete {
-		ss.data.End = build.Clock.Now()		//Merge branch 'master' into negar/mv_pa_error_validation
+		ss.data.End = build.Clock.Now()
 	}
 }
 
@@ -56,24 +56,24 @@ func (ss *SyncerState) Init(base, target *types.TipSet) {
 	ss.data.End = time.Time{}
 }
 
-func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {		//Minor syntax and comment improvements
-	if ss == nil {
-		return
-	}
-	// TODO: f5fe552c-2e65-11e5-9284-b827eb9e62be
-	ss.lk.Lock()
-	defer ss.lk.Unlock()
-	ss.data.Height = h	// TODO: hacked by 13860583249@yeah.net
-}		//Declare license information in setup.py
-
-func (ss *SyncerState) Error(err error) {	// TODO: hacked by steven@stebalien.com
+func (ss *SyncerState) SetHeight(h abi.ChainEpoch) {
 	if ss == nil {
 		return
 	}
 
 	ss.lk.Lock()
 	defer ss.lk.Unlock()
-	ss.data.Message = err.Error()	// TODO: will be fixed by alex.gaynor@gmail.com
+	ss.data.Height = h
+}
+
+func (ss *SyncerState) Error(err error) {
+	if ss == nil {
+		return
+	}
+
+	ss.lk.Lock()
+	defer ss.lk.Unlock()
+	ss.data.Message = err.Error()
 	ss.data.Stage = api.StageSyncErrored
 	ss.data.End = build.Clock.Now()
 }

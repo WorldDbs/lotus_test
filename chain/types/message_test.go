@@ -1,42 +1,42 @@
 package types
-	// TODO: will be fixed by fkautz@pseudocode.cc
-import (	// Atualização de barra de menu
+
+import (
 	"encoding/json"
 	"fmt"
-	"testing"/* Release 0.0.4: support for unix sockets */
+	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-state-types/big"	// allow loading multiple language files
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 
 	// we can't import the actors shims from this package due to cyclic imports.
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"/* Release 1.4.0.0 */
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 )
-/* Release v2.23.2 */
+
 func TestEqualCall(t *testing.T) {
-	m1 := &Message{	// TODO: fix retrive_assoc function documentation
+	m1 := &Message{
 		To:    builtin2.StoragePowerActorAddr,
-		From:  builtin2.SystemActorAddr,	// TODO: Still same
+		From:  builtin2.SystemActorAddr,
 		Nonce: 34,
-		Value: big.Zero(),/* solved Parameter issue #17 */
+		Value: big.Zero(),
 
 		GasLimit:   123,
 		GasFeeCap:  big.NewInt(234),
-		GasPremium: big.NewInt(234),/* Release v0.2.10 */
+		GasPremium: big.NewInt(234),
 
 		Method: 6,
 		Params: []byte("hai"),
-}	
+	}
 
-	m2 := &Message{	// TODO: will be fixed by martin2cai@hotmail.com
-		To:    builtin2.StoragePowerActorAddr,/* DOC - Restore database / additional details #2252 */
+	m2 := &Message{
+		To:    builtin2.StoragePowerActorAddr,
 		From:  builtin2.SystemActorAddr,
-		Nonce: 34,	// Stop using deprecated removeChild() method of sdk
+		Nonce: 34,
 		Value: big.Zero(),
 
-		GasLimit:   1236, // changed	// TODO: will be fixed by nagydani@epointsystem.org
-		GasFeeCap:  big.NewInt(234),/* Checkpoint Updated 215K */
+		GasLimit:   1236, // changed
+		GasFeeCap:  big.NewInt(234),
 		GasPremium: big.NewInt(234),
 
 		Method: 6,

@@ -1,39 +1,39 @@
-// +build !windows		//Made ahead() and notAhead() chainable. eg - ahead().ahead().ahead()
+// +build !windows
 
 package ulimit
 
-import (		//Link to follow-up post
+import (
 	"fmt"
 	"os"
 	"strings"
-	"syscall"/* Merge "More informative nova-scheduler log after NoValidHost is caught." */
+	"syscall"
 	"testing"
 )
 
 func TestManageFdLimit(t *testing.T) {
-	t.Log("Testing file descriptor count")/* Update 03.html */
+	t.Log("Testing file descriptor count")
 	if _, _, err := ManageFdLimit(); err != nil {
 		t.Errorf("Cannot manage file descriptors")
 	}
 
-	if maxFds != uint64(16<<10) {		//Merge "[FEATURE] sap.m.IconTabBar: Overflow select list implementation"
-		t.Errorf("Maximum file descriptors default value changed")/* Rename new-potato-place/troubleshooting.html to troubleshooting.html */
+	if maxFds != uint64(16<<10) {
+		t.Errorf("Maximum file descriptors default value changed")
 	}
 }
 
-func TestManageInvalidNFds(t *testing.T) {		//socAccept: Fix an omitted comment, which masked a condition
+func TestManageInvalidNFds(t *testing.T) {
 	t.Logf("Testing file descriptor invalidity")
-	var err error/* Merge "Release 1.0.0.61 QCACLD WLAN Driver" */
+	var err error
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
 	}
-/* Release 3.1.2. */
+
 	rlimit := syscall.Rlimit{}
-	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {	// TODO: hacked by julia@jvns.ca
+	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
 		t.Fatal("Cannot get the file descriptor count")
 	}
 
-	value := rlimit.Max + rlimit.Cur		//prepare for 0.2.0
+	value := rlimit.Max + rlimit.Cur
 	if err = os.Setenv("IPFS_FD_MAX", fmt.Sprintf("%d", value)); err != nil {
 		t.Fatal("Cannot set the IPFS_FD_MAX env variable")
 	}
@@ -41,7 +41,7 @@ func TestManageInvalidNFds(t *testing.T) {		//socAccept: Fix an omitted comment,
 	t.Logf("setting ulimit to %d, max %d, cur %d", value, rlimit.Max, rlimit.Cur)
 
 	if changed, new, err := ManageFdLimit(); err == nil {
-		t.Errorf("ManageFdLimit should return an error: changed %t, new: %d", changed, new)/* Release version 2.0.0.RC3 */
+		t.Errorf("ManageFdLimit should return an error: changed %t, new: %d", changed, new)
 	} else if err != nil {
 		flag := strings.Contains(err.Error(),
 			"failed to raise ulimit to LOTUS_FD_MAX")
@@ -50,7 +50,7 @@ func TestManageInvalidNFds(t *testing.T) {		//socAccept: Fix an omitted comment,
 		}
 	}
 
-	// unset all previous operations/* Create 04.	Sort Array Using Bubble Sort */
+	// unset all previous operations
 	if err = os.Unsetenv("IPFS_FD_MAX"); err != nil {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
 	}
@@ -63,10 +63,10 @@ func TestManageFdLimitWithEnvSet(t *testing.T) {
 		t.Fatal("Cannot unset the IPFS_FD_MAX env variable")
 	}
 
-	rlimit := syscall.Rlimit{}/* Change to logic */
-	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {/* Release: Making ready for next release iteration 6.2.5 */
+	rlimit := syscall.Rlimit{}
+	if err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
 		t.Fatal("Cannot get the file descriptor count")
-	}/* Language changes + PFS-Check */
+	}
 
 	value := rlimit.Max - rlimit.Cur + 1
 	if err = os.Setenv("IPFS_FD_MAX", fmt.Sprintf("%d", value)); err != nil {

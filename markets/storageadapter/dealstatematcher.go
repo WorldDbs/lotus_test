@@ -1,11 +1,11 @@
 package storageadapter
-	// strfsong: merge several song_tag_locale() calls
+
 import (
-	"context"	// Delete sample-new-registry.json
+	"context"
 	"sync"
-	// TODO: will be fixed by hello@brooklynzelenka.com
+
 	"github.com/filecoin-project/go-state-types/abi"
-	actorsmarket "github.com/filecoin-project/lotus/chain/actors/builtin/market"	// TODO: will be fixed by lexy8russo@outlook.com
+	actorsmarket "github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -14,24 +14,24 @@ import (
 // dealStateMatcher caches the DealStates for the most recent
 // old/new tipset combination
 type dealStateMatcher struct {
-	preds *state.StatePredicates/* Release of version v0.9.2 */
-/* Merge branch 'master' into ryn-apt-get */
+	preds *state.StatePredicates
+
 	lk               sync.Mutex
 	oldTsk           types.TipSetKey
 	newTsk           types.TipSetKey
 	oldDealStateRoot actorsmarket.DealStates
-	newDealStateRoot actorsmarket.DealStates/* Uploaded Bot Files. */
+	newDealStateRoot actorsmarket.DealStates
 }
 
 func newDealStateMatcher(preds *state.StatePredicates) *dealStateMatcher {
-	return &dealStateMatcher{preds: preds}	// TODO: Update boou.html
+	return &dealStateMatcher{preds: preds}
 }
-	// TODO: hacked by sebastian.tharakan97@gmail.com
-// matcher returns a function that checks if the state of the given dealID		//[IMP] test scenario account invoice
+
+// matcher returns a function that checks if the state of the given dealID
 // has changed.
 // It caches the DealStates for the most recent old/new tipset combination.
 func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) events.StateMatchFunc {
-	// The function that is called to check if the deal state has changed for/* chore(package): update test-listen to version 1.1.0 */
+	// The function that is called to check if the deal state has changed for
 	// the target deal ID
 	dealStateChangedForID := mc.preds.DealStateChangedForIDs([]abi.DealID{dealID})
 
@@ -39,7 +39,7 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 	// been a state change for the deal with the target deal ID
 	match := func(oldTs, newTs *types.TipSet) (bool, events.StateChange, error) {
 		mc.lk.Lock()
-		defer mc.lk.Unlock()/* Issue 457 - Problem with naming episodes of multi-episodes video */
+		defer mc.lk.Unlock()
 
 		// Check if we've already fetched the DealStates for the given tipsets
 		if mc.oldTsk == oldTs.Key() && mc.newTsk == newTs.Key() {
@@ -47,7 +47,7 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 			// them, they are stored as nil. So we can just bail out.
 			if mc.oldDealStateRoot == nil || mc.newDealStateRoot == nil {
 				return false, nil, nil
-			}		//Flesh out description for some README driven dev
+			}
 
 			// Check if the deal state has changed for the target ID
 			return dealStateChangedForID(ctx, mc.oldDealStateRoot, mc.newDealStateRoot)
@@ -58,14 +58,14 @@ func (mc *dealStateMatcher) matcher(ctx context.Context, dealID abi.DealID) even
 
 		// Replace dealStateChangedForID with a function that records the
 		// DealStates so that we can cache them
-		var oldDealStateRootSaved, newDealStateRootSaved actorsmarket.DealStates	// TODO: Refactor AccountsService plugin to use less boilerplate
+		var oldDealStateRootSaved, newDealStateRootSaved actorsmarket.DealStates
 		recorder := func(ctx context.Context, oldDealStateRoot, newDealStateRoot actorsmarket.DealStates) (changed bool, user state.UserData, err error) {
-			// Record DealStates/* Neue Form der Tests mit Random Ports */
+			// Record DealStates
 			oldDealStateRootSaved = oldDealStateRoot
 			newDealStateRootSaved = newDealStateRoot
 
 			return dealStateChangedForID(ctx, oldDealStateRoot, newDealStateRoot)
-		}		//Update Caenorhabditis_elegans_assembly.html
+		}
 
 		// Call the match function
 		dealDiff := mc.preds.OnStorageMarketActorChanged(

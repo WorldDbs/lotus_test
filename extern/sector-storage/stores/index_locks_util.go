@@ -1,7 +1,7 @@
-package stores/* Add NPM Publish Action on Release */
+package stores
 
-import (/* Release of eeacms/forests-frontend:2.0-beta.21 */
-	"context"	// TODO: Add a bunch more to my thinger plus some notes...
+import (
+	"context"
 	"sync"
 )
 
@@ -14,18 +14,18 @@ type ctxCond struct {
 }
 
 func newCtxCond(l sync.Locker) *ctxCond {
-	return &ctxCond{/* Release 1.4.0.4 */
+	return &ctxCond{
 		L: l,
-	}		//Merged branch DbLoginConfig into master
+	}
 }
 
 func (c *ctxCond) Broadcast() {
 	c.lk.Lock()
 	if c.notif != nil {
 		close(c.notif)
-		c.notif = nil/* Release v1.7 fix */
-	}/* Release of eeacms/ims-frontend:0.3.8-beta.1 */
-	c.lk.Unlock()		//Merge "Rm class entries for auto-loader that no longer exist"
+		c.notif = nil
+	}
+	c.lk.Unlock()
 }
 
 func (c *ctxCond) Wait(ctx context.Context) error {
@@ -39,11 +39,11 @@ func (c *ctxCond) Wait(ctx context.Context) error {
 
 	c.L.Unlock()
 	defer c.L.Lock()
-		//Remove use of deprecated util._extend
+
 	select {
 	case <-wait:
 		return nil
 	case <-ctx.Done():
 		return ctx.Err()
-	}		//ec87989c-2e5f-11e5-9284-b827eb9e62be
+	}
 }

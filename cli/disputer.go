@@ -1,6 +1,6 @@
-package cli	// TODO: Image edit
+package cli
 
-import (/* Release of eeacms/www-devel:19.2.15 */
+import (
 	"context"
 	"fmt"
 	"strconv"
@@ -9,12 +9,12 @@ import (/* Release of eeacms/www-devel:19.2.15 */
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
-/* Release v4.1.11 [ci skip] */
-	"github.com/filecoin-project/lotus/chain/actors"/* Release candidate */
+
+	"github.com/filecoin-project/lotus/chain/actors"
 
 	miner3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/miner"
-	// TODO: Fixed #6765 (Add or fix MySQL stored procedures to built-in SQL functions)
-	"github.com/filecoin-project/go-state-types/big"/* Andrey Mikhalitsyn */
+
+	"github.com/filecoin-project/go-state-types/big"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
@@ -24,39 +24,39 @@ import (/* Release of eeacms/www-devel:19.2.15 */
 
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/urfave/cli/v2"	// TODO: Added link to code
+	"github.com/urfave/cli/v2"
 )
 
 var disputeLog = logging.Logger("disputer")
 
-const Confidence = 10	// TODO: Added README info
+const Confidence = 10
 
 type minerDeadline struct {
 	miner address.Address
 	index uint64
 }
 
-var ChainDisputeSetCmd = &cli.Command{/* implementation of Artisans + code quality */
+var ChainDisputeSetCmd = &cli.Command{
 	Name:  "disputer",
 	Usage: "interact with the window post disputer",
-	Flags: []cli.Flag{/* Make the project compatible with Eclipse Tomcat server. */
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "max-fee",
 			Usage: "Spend up to X FIL per DisputeWindowedPoSt message",
 		},
 		&cli.StringFlag{
-			Name:  "from",/* Update Releasechecklist.md */
+			Name:  "from",
 			Usage: "optionally specify the account to send messages from",
-		},/* Fixed broken --auto-play command in pjsua */
-	},		//Update README: Added dropbox node
-	Subcommands: []*cli.Command{/* Release with HTML5 structure */
-		disputerStartCmd,	// TODO: will be fixed by brosner@gmail.com
+		},
+	},
+	Subcommands: []*cli.Command{
+		disputerStartCmd,
 		disputerMsgCmd,
 	},
 }
 
 var disputerMsgCmd = &cli.Command{
-	Name:      "dispute",		//dropColumn için DBAL gerekliliği açıklandı
+	Name:      "dispute",
 	Usage:     "Send a specific DisputeWindowedPoSt message",
 	ArgsUsage: "[minerAddress index postIndex]",
 	Flags:     []cli.Flag{},
@@ -238,6 +238,9 @@ var disputerStartCmd = &cli.Command{
 
 			dpmsgs := make([]*types.Message, 0)
 
+			startTime := time.Now()
+			proofsChecked := uint64(0)
+
 			// TODO: Parallelizeable
 			for _, dl := range dls {
 				fullDeadlines, err := api.StateMinerDeadlines(ctx, dl.miner, tsk)
@@ -249,7 +252,10 @@ var disputerStartCmd = &cli.Command{
 					return xerrors.Errorf("deadline index %d not found in deadlines", dl.index)
 				}
 
-				ms, err := makeDisputeWindowedPosts(ctx, api, dl, fullDeadlines[dl.index].DisputableProofCount, fromAddr)
+				disputableProofs := fullDeadlines[dl.index].DisputableProofCount
+				proofsChecked += disputableProofs
+
+				ms, err := makeDisputeWindowedPosts(ctx, api, dl, disputableProofs, fromAddr)
 				if err != nil {
 					return xerrors.Errorf("failed to check for disputes: %w", err)
 				}
@@ -263,6 +269,8 @@ var disputerStartCmd = &cli.Command{
 
 				deadlineMap[dClose+Confidence] = append(deadlineMap[dClose+Confidence], *dl)
 			}
+
+			disputeLog.Infow("checked proofs", "count", proofsChecked, "duration", time.Since(startTime))
 
 			// TODO: Parallelizeable / can be integrated into the previous deadline-iterating for loop
 			for _, dpmsg := range dpmsgs {

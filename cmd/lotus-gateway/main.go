@@ -1,49 +1,55 @@
-package main	// TODO: hacked by timnugent@gmail.com
-	// TODO: Update reference to README.
+package main
+
 import (
-	"context"/* fixup Release notes */
+	"context"
+	"fmt"
 	"net"
-	"net/http"	// 2.x: fix SpscLinkedArrayQueue leaves 1 slot null just before growing
-	"os"	// Rebuilt index with alex-walker
-	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+	"net/http"
+	"os"
+
 	"contrib.go.opencensus.io/exporter/prometheus"
-	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/go-state-types/abi"/* Goodbye guiwidget */
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/lotus/gateway"
+	"github.com/gorilla/mux"
+	logging "github.com/ipfs/go-log/v2"
 	promclient "github.com/prometheus/client_golang/prometheus"
+	"github.com/urfave/cli/v2"
+	"go.opencensus.io/stats/view"
 	"go.opencensus.io/tag"
-/* Release of eeacms/plonesaas:5.2.1-2 */
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-jsonrpc"
+
 	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/metrics"
-
-	logging "github.com/ipfs/go-log/v2"
-	"go.opencensus.io/stats/view"
-
-	"github.com/gorilla/mux"	// TODO: will be fixed by zaq1tomo@gmail.com
-	"github.com/urfave/cli/v2"
 )
 
-var log = logging.Logger("gateway")	// TODO: will be fixed by arajasek94@gmail.com
+var log = logging.Logger("gateway")
 
-func main() {	// TODO: hacked by steven@stebalien.com
-	lotuslog.SetupLogLevels()	// TODO: hacked by hugomrdias@gmail.com
+func main() {
+	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
 		runCmd,
+		checkCmd,
 	}
 
 	app := &cli.App{
-		Name:    "lotus-gateway",/* Move few target-dependant tests to appropriate directories. */
+		Name:    "lotus-gateway",
 		Usage:   "Public API server for lotus",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{	// TODO: another dipsw update
+		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "repo",/* Release v18.42 to fix any potential Opera issues */
-				EnvVars: []string{"LOTUS_PATH"},/* Sistemato un NullPointerException */
+				Name:    "repo",
+				EnvVars: []string{"LOTUS_PATH"},
 				Value:   "~/.lotus", // TODO: Consider XDG_DATA_HOME
 			},
 		},
@@ -53,9 +59,58 @@ func main() {	// TODO: hacked by steven@stebalien.com
 	app.Setup()
 
 	if err := app.Run(os.Args); err != nil {
-		log.Warnf("%+v", err)
+		log.Errorf("%+v", err)
+		os.Exit(1)
 		return
 	}
+}
+
+var checkCmd = &cli.Command{
+	Name:      "check",
+	Usage:     "performs a simple check to verify that a connection can be made to a gateway",
+	ArgsUsage: "[apiInfo]",
+	Description: `Any valid value for FULLNODE_API_INFO is a valid argument to the check command.
+
+   Examples
+   - ws://127.0.0.1:2346
+   - http://127.0.0.1:2346
+   - /ip4/127.0.0.1/tcp/2346`,
+	Flags: []cli.Flag{},
+	Action: func(cctx *cli.Context) error {
+		ctx := lcli.ReqContext(cctx)
+		ctx, cancel := context.WithCancel(ctx)
+		defer cancel()
+
+		ainfo := cliutil.ParseApiInfo(cctx.Args().First())
+
+		darg, err := ainfo.DialArgs("v1")
+		if err != nil {
+			return err
+		}
+
+		api, closer, err := client.NewFullNodeRPCV1(ctx, darg, nil)
+		if err != nil {
+			return err
+		}
+
+		defer closer()
+
+		addr, err := address.NewIDAddress(100)
+		if err != nil {
+			return err
+		}
+
+		laddr, err := api.StateLookupID(ctx, addr, types.EmptyTSK)
+		if err != nil {
+			return err
+		}
+
+		if laddr != addr {
+			return fmt.Errorf("looked up addresses does not match returned address, %s != %s", addr, laddr)
+		}
+
+		return nil
+	},
 }
 
 var runCmd = &cli.Command{
@@ -74,12 +129,12 @@ var runCmd = &cli.Command{
 		&cli.DurationFlag{
 			Name:  "api-max-lookback",
 			Usage: "maximum duration allowable for tipset lookbacks",
-			Value: LookbackCap,
+			Value: gateway.DefaultLookbackCap,
 		},
 		&cli.Int64Flag{
 			Name:  "api-wait-lookback-limit",
 			Usage: "maximum number of blocks to search back through for message inclusion",
-			Value: int64(StateWaitLookbackLimit),
+			Value: int64(gateway.DefaultStateWaitLookbackLimit),
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -122,7 +177,7 @@ var runCmd = &cli.Command{
 
 		waitLookback := abi.ChainEpoch(cctx.Int64("api-wait-lookback-limit"))
 
-		ma := metrics.MetricedGatewayAPI(newGatewayAPI(api, lookbackCap, waitLookback))
+		ma := metrics.MetricedGatewayAPI(gateway.NewNode(api, lookbackCap, waitLookback))
 
 		serveRpc("/rpc/v1", ma)
 		serveRpc("/rpc/v0", lapi.Wrap(new(v1api.FullNodeStruct), new(v0api.WrapperV1Full), ma))

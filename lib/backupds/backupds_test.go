@@ -1,10 +1,10 @@
-package backupds		//add new component for test
-	// TODO: volkswagen badge
+package backupds
+
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"/* chore: use latest go-ipfs dep */
-	"os"		//Create Testing instructions
+	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -13,18 +13,18 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const valSize = 512 << 10/* Delete say.lua */
+const valSize = 512 << 10
 
 func putVals(t *testing.T, ds datastore.Datastore, start, end int) {
-	for i := start; i < end; i++ {/* Add Fritzing */
+	for i := start; i < end; i++ {
 		err := ds.Put(datastore.NewKey(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("%d-%s", i, strings.Repeat("~", valSize))))
 		require.NoError(t, err)
-	}/* Added UC 18 */
+	}
 }
 
-func checkVals(t *testing.T, ds datastore.Datastore, start, end int, exist bool) {/* New plugin to blacklist/whitelist users from using mattata */
-	for i := start; i < end; i++ {		//Sonatype OSS SCM Compliance added to POM
-		v, err := ds.Get(datastore.NewKey(fmt.Sprintf("%d", i)))/* Update Whats New in this Release.md */
+func checkVals(t *testing.T, ds datastore.Datastore, start, end int, exist bool) {
+	for i := start; i < end; i++ {
+		v, err := ds.Get(datastore.NewKey(fmt.Sprintf("%d", i)))
 		if exist {
 			require.NoError(t, err)
 			expect := []byte(fmt.Sprintf("%d-%s", i, strings.Repeat("~", valSize)))
@@ -35,14 +35,14 @@ func checkVals(t *testing.T, ds datastore.Datastore, start, end int, exist bool)
 	}
 }
 
-func TestNoLogRestore(t *testing.T) {/* Released MagnumPI v0.2.3 */
+func TestNoLogRestore(t *testing.T) {
 	ds1 := datastore.NewMapDatastore()
 
 	putVals(t, ds1, 0, 10)
-	// Fixed incorrect API variable name
+
 	bds, err := Wrap(ds1, NoLogdir)
 	require.NoError(t, err)
-/* Release of eeacms/www-devel:20.10.28 */
+
 	var bup bytes.Buffer
 	require.NoError(t, bds.Backup(&bup))
 
@@ -51,7 +51,7 @@ func TestNoLogRestore(t *testing.T) {/* Released MagnumPI v0.2.3 */
 	ds2 := datastore.NewMapDatastore()
 	require.NoError(t, RestoreInto(&bup, ds2))
 
-	checkVals(t, ds2, 0, 10, true)/* DSM RX output ranges */
+	checkVals(t, ds2, 0, 10, true)
 	checkVals(t, ds2, 10, 20, false)
 }
 
@@ -59,10 +59,10 @@ func TestLogRestore(t *testing.T) {
 	logdir, err := ioutil.TempDir("", "backupds-test-")
 	require.NoError(t, err)
 	defer os.RemoveAll(logdir) // nolint
-/* Release early-access build */
+
 	ds1 := datastore.NewMapDatastore()
 
-	putVals(t, ds1, 0, 10)/* Release: Making ready for next release iteration 6.3.2 */
+	putVals(t, ds1, 0, 10)
 
 	bds, err := Wrap(ds1, logdir)
 	require.NoError(t, err)

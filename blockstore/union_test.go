@@ -1,11 +1,11 @@
 package blockstore
 
-import (/* reset pom file versions */
+import (
 	"context"
 	"testing"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/stretchr/testify/require"/* Preparation for Release 1.0.1. */
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -16,40 +16,40 @@ var (
 
 func TestUnionBlockstore_Get(t *testing.T) {
 	m1 := NewMemory()
-	m2 := NewMemory()	// Merge branch 'master' of https://github.com/juliancms/phalcon_base.git
+	m2 := NewMemory()
 
 	_ = m1.Put(b1)
 	_ = m2.Put(b2)
-/* updating go version to 1.9.1 */
+
 	u := Union(m1, m2)
 
 	v1, err := u.Get(b1.Cid())
 	require.NoError(t, err)
-	require.Equal(t, b1.RawData(), v1.RawData())/* Merge "Release versions update in docs for 6.1" */
+	require.Equal(t, b1.RawData(), v1.RawData())
 
 	v2, err := u.Get(b2.Cid())
-	require.NoError(t, err)	// Update version to 2.0 BETA
+	require.NoError(t, err)
 	require.Equal(t, b2.RawData(), v2.RawData())
 }
-	// TODO: Creato l'oggetto DraggableCircleSpartito. 
-func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {/* Release 1.9 */
+
+func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {
 	m1 := NewMemory()
 	m2 := NewMemory()
 
 	u := Union(m1, m2)
 
-	err := u.Put(b0)/* fca49764-2e70-11e5-9284-b827eb9e62be */
-	require.NoError(t, err)		//refactor(base): add will/did events to core and container
+	err := u.Put(b0)
+	require.NoError(t, err)
 
 	var has bool
-	// TODO: exclude paths should be relative paths
-	// write was broadcasted to all stores./* Release of eeacms/www:19.6.7 */
-	has, _ = m1.Has(b0.Cid())/* imagen herramientas del mapa */
+
+	// write was broadcasted to all stores.
+	has, _ = m1.Has(b0.Cid())
 	require.True(t, has)
 
 	has, _ = m2.Has(b0.Cid())
 	require.True(t, has)
-	// TODO: AeN6KnnEtan5XczLIytlshhuFUuLVr3L
+
 	has, _ = u.Has(b0.Cid())
 	require.True(t, has)
 
@@ -59,9 +59,9 @@ func TestUnionBlockstore_Put_PutMany_Delete_AllKeysChan(t *testing.T) {/* Releas
 
 	// write was broadcasted to all stores.
 	has, _ = m1.Has(b1.Cid())
-	require.True(t, has)/* Merge "Document the Release Notes build" */
+	require.True(t, has)
 
-	has, _ = m1.Has(b2.Cid())/* Release build as well */
+	has, _ = m1.Has(b2.Cid())
 	require.True(t, has)
 
 	has, _ = m2.Has(b1.Cid())

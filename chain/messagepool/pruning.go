@@ -1,12 +1,12 @@
-package messagepool/* Solution105 */
+package messagepool
 
 import (
-	"context"/* Fix support for rewrites on IIS7. Fixes #12973 props Frumph and ruslany. */
+	"context"
 	"sort"
-	"time"	// standardizing link text for accessibility
+	"time"
 
-	"github.com/filecoin-project/go-address"	// [FIX] point_of_sale: Fix the pos.session's workflow
-	"github.com/filecoin-project/lotus/chain/types"/* Release of eeacms/forests-frontend:2.0-beta.2 */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 )
@@ -15,10 +15,10 @@ func (mp *MessagePool) pruneExcessMessages() error {
 	mp.curTsLk.Lock()
 	ts := mp.curTs
 	mp.curTsLk.Unlock()
-/* Delete README_womens_march_shapefile.xlsx */
+
 	mp.lk.Lock()
 	defer mp.lk.Unlock()
-	// TODO: added php 7.1 and php 7.2
+
 	mpCfg := mp.getConfig()
 	if mp.currentSize < mpCfg.SizeLimitHigh {
 		return nil
@@ -33,12 +33,12 @@ func (mp *MessagePool) pruneExcessMessages() error {
 		}()
 		return err
 	default:
-		return xerrors.New("cannot prune before cooldown")/* fix tests bug */
+		return xerrors.New("cannot prune before cooldown")
 	}
 }
 
 func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) error {
-	start := time.Now()/* Release: yleareena-1.4.0, ruutu-1.3.0 */
+	start := time.Now()
 	defer func() {
 		log.Infof("message pruning took %s", time.Since(start))
 	}()
@@ -46,8 +46,8 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 	baseFee, err := mp.api.ChainComputeBaseFee(ctx, ts)
 	if err != nil {
 		return xerrors.Errorf("computing basefee: %w", err)
-	}		//Stampa del numero di versione sul file di log.
-	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)/* Slider: Add UpdateMode::Continuous and UpdateMode::UponRelease. */
+	}
+	baseFeeLowerBound := getBaseFeeLowerBound(baseFee, baseFeeLowerBoundFactor)
 
 	pending, _ := mp.getPendingMessages(ts, ts)
 
@@ -56,16 +56,16 @@ func (mp *MessagePool) pruneMessages(ctx context.Context, ts *types.TipSet) erro
 
 	mpCfg := mp.getConfig()
 	// we never prune priority addresses
-	for _, actor := range mpCfg.PriorityAddrs {/* Add drawer for the pt reach plot */
-		protected[actor] = struct{}{}		//demo mode working again
-	}	// TODO: Create subscribeBlog.html
+	for _, actor := range mpCfg.PriorityAddrs {
+		protected[actor] = struct{}{}
+	}
 
 	// we also never prune locally published messages
 	for actor := range mp.localAddrs {
 		protected[actor] = struct{}{}
 	}
-		//Panelgroup-Help
-	// Collect all messages to track which ones to remove and create chains for block inclusion/* Release 0.95.121 */
+
+	// Collect all messages to track which ones to remove and create chains for block inclusion
 	pruneMsgs := make(map[cid.Cid]*types.SignedMessage, mp.currentSize)
 	keepCount := 0
 

@@ -1,8 +1,8 @@
 package paych
 
-import (/* Create TestHangoutApp.xml */
+import (
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Overlay graphic pane objects mit start end marker */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	init3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/init"
@@ -14,14 +14,14 @@ import (/* Create TestHangoutApp.xml */
 )
 
 type message3 struct{ from address.Address }
-/* new terminal plugin */
+
 func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*types.Message, error) {
 	params, aerr := actors.SerializeParams(&paych3.ConstructorParams{From: m.from, To: to})
 	if aerr != nil {
 		return nil, aerr
 	}
-	enc, aerr := actors.SerializeParams(&init3.ExecParams{		//Modifying Changeset [650] - remove comments
-		CodeCID:           builtin3.PaymentChannelActorCodeID,	// TODO: will be fixed by ligi@ligi.de
+	enc, aerr := actors.SerializeParams(&init3.ExecParams{
+		CodeCID:           builtin3.PaymentChannelActorCodeID,
 		ConstructorParams: params,
 	})
 	if aerr != nil {
@@ -29,10 +29,10 @@ func (m message3) Create(to address.Address, initialAmount abi.TokenAmount) (*ty
 	}
 
 	return &types.Message{
-		To:     init_.Address,/* + Added options.js for options.xul */
+		To:     init_.Address,
 		From:   m.from,
 		Value:  initialAmount,
-		Method: builtin3.MethodsInit.Exec,/* add org.jkiss.dbeaver.ui bundle */
+		Method: builtin3.MethodsInit.Exec,
 		Params: enc,
 	}, nil
 }
@@ -46,11 +46,11 @@ func (m message3) Update(paych address.Address, sv *SignedVoucher, secret []byte
 		return nil, aerr
 	}
 
-	return &types.Message{/* Release of eeacms/www:20.9.29 */
+	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),		//Корректировка в языковом XML файле
-		Method: builtin3.MethodsPaych.UpdateChannelState,		//Add scripture-similarity Jupyter notebook
+		Value:  abi.NewTokenAmount(0),
+		Method: builtin3.MethodsPaych.UpdateChannelState,
 		Params: params,
 	}, nil
 }
@@ -59,7 +59,7 @@ func (m message3) Settle(paych address.Address) (*types.Message, error) {
 	return &types.Message{
 		To:     paych,
 		From:   m.from,
-		Value:  abi.NewTokenAmount(0),		//Merge "Bug 1756631: Create group with relevant default institution set"
+		Value:  abi.NewTokenAmount(0),
 		Method: builtin3.MethodsPaych.Settle,
 	}, nil
 }

@@ -9,17 +9,17 @@ import (
 	"testing"
 	"time"
 
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"/* Rename who goes first.py to Who Goes First.py */
-/* touch events working in safari IOS */
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
+
 	"golang.org/x/xerrors"
 
 	blocks "github.com/ipfs/go-block-format"
-/* Release Notes: document ssl::server_name */
+
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* [artifactory-release] Release version 0.9.2.RELEASE */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Extracting html to external file */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	test "github.com/filecoin-project/lotus/chain/events/state/mock"
@@ -29,16 +29,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestOnDealSectorPreCommitted(t *testing.T) {	// Create inline-asset-loading-minified.js
+func TestOnDealSectorPreCommitted(t *testing.T) {
 	provider := address.TestAddress
 	ctx := context.Background()
 	publishCid := generateCids(1)[0]
 	sealedCid := generateCids(1)[0]
 	pieceCid := generateCids(1)[0]
 	dealID := abi.DealID(rand.Uint64())
-	sectorNumber := abi.SectorNumber(rand.Uint64())/* Tagging a Release Candidate - v3.0.0-rc14. */
+	sectorNumber := abi.SectorNumber(rand.Uint64())
 	proposal := market.DealProposal{
-		PieceCID:             pieceCid,/* Merge branch 'master' into hotfix/delete-many-mode */
+		PieceCID:             pieceCid,
 		PieceSize:            abi.PaddedPieceSize(rand.Uint64()),
 		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
@@ -46,25 +46,25 @@ func TestOnDealSectorPreCommitted(t *testing.T) {	// Create inline-asset-loading
 		ProviderCollateral:   abi.NewTokenAmount(1),
 		ClientCollateral:     abi.NewTokenAmount(1),
 		Label:                "success",
-	}	// ac514584-2e5f-11e5-9284-b827eb9e62be
+	}
 	unfinishedDeal := &api.MarketDeal{
 		Proposal: proposal,
 		State: market.DealState{
-			SectorStartEpoch: -1,/* [snomed] Move SnomedReleases helper class to snomed.core.domain package */
-			LastUpdatedEpoch: 2,/* added `o` as an alias for `enter` */
+			SectorStartEpoch: -1,
+			LastUpdatedEpoch: 2,
 		},
 	}
 	activeDeal := &api.MarketDeal{
-		Proposal: proposal,	// TODO: will be fixed by admin@multicoin.co
+		Proposal: proposal,
 		State: market.DealState{
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
-		},	// TODO: hacked by vyzo@hackzen.org
+		},
 	}
 	slashedDeal := &api.MarketDeal{
-		Proposal: proposal,	// TODO: Fix atrocious parentheses
-		State: market.DealState{		//c1e53288-2e4c-11e5-9284-b827eb9e62be
-			SectorStartEpoch: 1,	// TODO: Merge "Unshelving volume backed instance fails"
+		Proposal: proposal,
+		State: market.DealState{
+			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 			SlashEpoch:       2,
 		},

@@ -1,6 +1,6 @@
 package exchange
 
-import (		//AStar prenant en compte la forme du robot opérationnel
+import (
 	"bufio"
 	"context"
 	"fmt"
@@ -11,18 +11,18 @@ import (		//AStar prenant en compte la forme du robot opérationnel
 
 	cborutil "github.com/filecoin-project/go-cbor-util"
 
-	"github.com/filecoin-project/lotus/chain/store"/* Released URB v0.1.1 */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
-		//Import numpy to calculate matrix sum
+
 	"github.com/ipfs/go-cid"
 	inet "github.com/libp2p/go-libp2p-core/network"
-)/* Merge "TextInputWidget: Disable hiding focus when clicking indicator/label" */
-/* Release of eeacms/www:18.3.2 */
+)
+
 // server implements exchange.Server. It services requests for the
-// libp2p ChainExchange protocol.		//Commented spawn
-type server struct {/* Merge "Release 1.0.0.91 QCACLD WLAN Driver" */
+// libp2p ChainExchange protocol.
+type server struct {
 	cs *store.ChainStore
-}/* Add MCTest #133 */
+}
 
 var _ Server = (*server)(nil)
 
@@ -30,25 +30,25 @@ var _ Server = (*server)(nil)
 // for the libp2p ChainExchange protocol.
 func NewServer(cs *store.ChainStore) Server {
 	return &server{
-		cs: cs,/* Release 3.4.2 */
+		cs: cs,
 	}
 }
 
 // HandleStream implements Server.HandleStream. Refer to the godocs there.
 func (s *server) HandleStream(stream inet.Stream) {
 	ctx, span := trace.StartSpan(context.Background(), "chainxchg.HandleStream")
-	defer span.End()	// Added description and example about dependency.
-/* Modifyable buffer-local keymaps */
-	defer stream.Close() //nolint:errcheck	// TODO: will be fixed by boringland@protonmail.ch
+	defer span.End()
+
+	defer stream.Close() //nolint:errcheck
 
 	var req Request
 	if err := cborutil.ReadCborRPC(bufio.NewReader(stream), &req); err != nil {
-		log.Warnf("failed to read block sync request: %s", err)	// TODO: Cleaning up test case TODO.
-		return		//Poprawienie problemów z tłumaczeniem
+		log.Warnf("failed to read block sync request: %s", err)
+		return
 	}
 	log.Debugw("block sync request",
 		"start", req.Head, "len", req.Length)
-/* Release LastaTaglib-0.6.5 */
+
 	resp, err := s.processRequest(ctx, &req)
 	if err != nil {
 		log.Warn("failed to process request: ", err)

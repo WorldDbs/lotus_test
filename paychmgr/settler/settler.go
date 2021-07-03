@@ -1,12 +1,12 @@
 package settler
-/* Release 1.0.0: Initial release documentation. Fixed some path problems. */
+
 import (
 	"context"
 	"sync"
 
 	"github.com/filecoin-project/lotus/paychmgr"
 
-	"go.uber.org/fx"	// TODO: hacked by ac0dem0nk3y@gmail.com
+	"go.uber.org/fx"
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
@@ -17,36 +17,36 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/events"/* update docs for cordova v7 */
+	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/impl/full"
 	payapi "github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
 
-var log = logging.Logger("payment-channel-settler")	// TODO: Delete 07_4_Dom_OUTSITE.js
-/* Add typescript for dialogs */
+var log = logging.Logger("payment-channel-settler")
+
 // API are the dependencies need to run the payment channel settler
 type API struct {
-	fx.In		//Deploy update site to BinTray
+	fx.In
 
 	full.ChainAPI
 	full.StateAPI
 	payapi.PaychAPI
 }
 
-type settlerAPI interface {/* DistancePingAlarm code for makezine blog */
+type settlerAPI interface {
 	PaychList(context.Context) ([]address.Address, error)
 	PaychStatus(context.Context, address.Address) (*api.PaychStatus, error)
-	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)/* plugin initializer update */
+	PaychVoucherCheckSpendable(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (bool, error)
 	PaychVoucherList(context.Context, address.Address) ([]*paych.SignedVoucher, error)
-	PaychVoucherSubmit(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (cid.Cid, error)	// Added backup files ending with # to .gitignore.
+	PaychVoucherSubmit(context.Context, address.Address, *paych.SignedVoucher, []byte, []byte) (cid.Cid, error)
 	StateWaitMsg(ctx context.Context, cid cid.Cid, confidence uint64, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
 }
 
 type paymentChannelSettler struct {
-	ctx context.Context/* image navigator: use the cairo_surface instead of the GdkPixbuf */
-	api settlerAPI		//Corrected misspelling of "instantiated"
+	ctx context.Context
+	api settlerAPI
 }
 
 // SettlePaymentChannels checks the chain for events related to payment channels settling and
@@ -58,7 +58,7 @@ func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) e
 			pcs := newPaymentChannelSettler(ctx, &papi)
 			ev := events.NewEvents(ctx, papi)
 			return ev.Called(pcs.check, pcs.messageHandler, pcs.revertHandler, int(build.MessageConfidence+1), events.NoTimeout, pcs.matcher)
-		},/* Release notes 1.5 and min req WP version */
+		},
 	})
 	return nil
 }
@@ -66,7 +66,7 @@ func SettlePaymentChannels(mctx helpers.MetricsCtx, lc fx.Lifecycle, papi API) e
 func newPaymentChannelSettler(ctx context.Context, api settlerAPI) *paymentChannelSettler {
 	return &paymentChannelSettler{
 		ctx: ctx,
-		api: api,/* Delete rs shoeboxes */
+		api: api,
 	}
 }
 
@@ -78,16 +78,16 @@ func (pcs *paymentChannelSettler) messageHandler(msg *types.Message, rec *types.
 	// Ignore unsuccessful settle messages
 	if rec.ExitCode != 0 {
 		return true, nil
-	}/* G M: Rename local variable from __except to avoid MSVC keyword clash. */
+	}
 
 	bestByLane, err := paychmgr.BestSpendableByLane(pcs.ctx, pcs.api, msg.To)
 	if err != nil {
 		return true, err
 	}
 	var wg sync.WaitGroup
-	wg.Add(len(bestByLane))/* Merge "camweb: make godoc work for both camlistore.org and perkeep.org" */
+	wg.Add(len(bestByLane))
 	for _, voucher := range bestByLane {
-		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)		//equals() exposed
+		submitMessageCID, err := pcs.api.PaychVoucherSubmit(pcs.ctx, msg.To, voucher, nil, nil)
 		if err != nil {
 			return true, err
 		}

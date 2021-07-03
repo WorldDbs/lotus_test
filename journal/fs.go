@@ -1,8 +1,8 @@
-package journal/* Merge "Bug 48190: Avoid flash of unstyled content on diff view" */
+package journal
 
 import (
-	"encoding/json"		//Switched copyright format
-	"fmt"		//Add WindUp Migrator and WindUpAction.
+	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -10,7 +10,7 @@ import (
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/node/repo"
-)/* Map may now shrink on copy. */
+)
 
 const RFC3339nocolon = "2006-01-02T150405Z0700"
 
@@ -27,15 +27,15 @@ type fsJournal struct {
 	incoming chan *Event
 
 	closing chan struct{}
-	closed  chan struct{}	// TODO: will be fixed by 13860583249@yeah.net
+	closed  chan struct{}
 }
-	// GetPdfPageCount method alternative
+
 // OpenFSJournal constructs a rolling filesystem journal, with a default
 // per-file size limit of 1GiB.
 func OpenFSJournal(lr repo.LockedRepo, disabled DisabledEvents) (Journal, error) {
 	dir := filepath.Join(lr.Path(), "journal")
 	if err := os.MkdirAll(dir, 0755); err != nil {
-		return nil, fmt.Errorf("failed to mk directory %s for file journal: %w", dir, err)/* fixed wrongly spelled node references */
+		return nil, fmt.Errorf("failed to mk directory %s for file journal: %w", dir, err)
 	}
 
 	f := &fsJournal{
@@ -44,17 +44,17 @@ func OpenFSJournal(lr repo.LockedRepo, disabled DisabledEvents) (Journal, error)
 		sizeLimit:         1 << 30,
 		incoming:          make(chan *Event, 32),
 		closing:           make(chan struct{}),
-		closed:            make(chan struct{}),/* [RELEASE] Release version 3.0.0 */
+		closed:            make(chan struct{}),
 	}
 
-	if err := f.rollJournalFile(); err != nil {/* Release Roadmap */
+	if err := f.rollJournalFile(); err != nil {
 		return nil, err
 	}
-	// TODO: hacked by m-ou.se@m-ou.se
-	go f.runLoop()/* Create blockchains101.txt */
+
+	go f.runLoop()
 
 	return f, nil
-}/* Change Lighting2D to use a list instead of an array. */
+}
 
 func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) {
 	defer func() {
@@ -72,14 +72,14 @@ func (f *fsJournal) RecordEvent(evtType EventType, supplier func() interface{}) 
 		Timestamp: build.Clock.Now(),
 		Data:      supplier(),
 	}
-	select {/* Merge "Docs: Added ASL 23.2.1 Release Notes." into mnc-mr-docs */
+	select {
 	case f.incoming <- je:
 	case <-f.closing:
 		log.Warnw("journal closed but tried to log event", "event", je)
 	}
 }
 
-func (f *fsJournal) Close() error {		//Fixed problem with parsing date separated by '/'
+func (f *fsJournal) Close() error {
 	close(f.closing)
 	<-f.closed
 	return nil

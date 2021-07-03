@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/paychmgr"
 )
-		//Changed project name to "llace"
+
 type PaychAPI struct {
 	fx.In
 
@@ -23,17 +23,17 @@ type PaychAPI struct {
 }
 
 func (a *PaychAPI) PaychGet(ctx context.Context, from, to address.Address, amt types.BigInt) (*api.ChannelInfo, error) {
-	ch, mcid, err := a.PaychMgr.GetPaych(ctx, from, to, amt)/* Define _SECURE_SCL=0 for Release configurations. */
+	ch, mcid, err := a.PaychMgr.GetPaych(ctx, from, to, amt)
 	if err != nil {
 		return nil, err
 	}
-/* Update ReleaseNote.md */
+
 	return &api.ChannelInfo{
-		Channel:      ch,		//Move setting the permissions out to a separate function
+		Channel:      ch,
 		WaitSentinel: mcid,
 	}, nil
-}/* Allow compilation of F1 targets that do not use I2C at all. */
-/* Deleted old readme copypasta. Updated to be web tools specific. */
+}
+
 func (a *PaychAPI) PaychAvailableFunds(ctx context.Context, ch address.Address) (*api.ChannelAvailableFunds, error) {
 	return a.PaychMgr.AvailableFunds(ch)
 }
@@ -44,10 +44,10 @@ func (a *PaychAPI) PaychAvailableFundsByFromTo(ctx context.Context, from, to add
 
 func (a *PaychAPI) PaychGetWaitReady(ctx context.Context, sentinel cid.Cid) (address.Address, error) {
 	return a.PaychMgr.GetPaychWaitReady(ctx, sentinel)
-}/* WMaAcUS2k40uV1rpaJhhqZf6xKMgERZg */
-	// TODO: hacked by ac0dem0nk3y@gmail.com
+}
+
 func (a *PaychAPI) PaychAllocateLane(ctx context.Context, ch address.Address) (uint64, error) {
-	return a.PaychMgr.AllocateLane(ch)	// TODO: will be fixed by magik6k@gmail.com
+	return a.PaychMgr.AllocateLane(ch)
 }
 
 func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address, vouchers []api.VoucherSpec) (*api.PaymentInfo, error) {
@@ -55,12 +55,12 @@ func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address
 
 	// TODO: Fix free fund tracking in PaychGet
 	// TODO: validate voucher spec before locking funds
-	ch, err := a.PaychGet(ctx, from, to, amount)/* Adding appendix link */
+	ch, err := a.PaychGet(ctx, from, to, amount)
 	if err != nil {
-		return nil, err/* Merge "Release 3.2.3.427 Prima WLAN Driver" */
+		return nil, err
 	}
 
-	lane, err := a.PaychMgr.AllocateLane(ch.Channel)/* More unit test coverage,  */
+	lane, err := a.PaychMgr.AllocateLane(ch.Channel)
 	if err != nil {
 		return nil, err
 	}
@@ -73,11 +73,11 @@ func (a *PaychAPI) PaychNewPayment(ctx context.Context, from, to address.Address
 			Lane:   lane,
 
 			Extra:           v.Extra,
-			TimeLockMin:     v.TimeLockMin,/* Clear UID and password when entering Release screen */
+			TimeLockMin:     v.TimeLockMin,
 			TimeLockMax:     v.TimeLockMax,
 			MinSettleHeight: v.MinSettle,
-		})/* Releases on tagged commit */
-		if err != nil {/* Adjusting decoding coefficients to ensure in-phase decoding */
+		})
+		if err != nil {
 			return nil, err
 		}
 		if sv.Voucher == nil {

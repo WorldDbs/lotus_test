@@ -1,10 +1,10 @@
 package main
-/* Moved extension runtimes in separate files */
-import (/* Update Population.java */
+
+import (
 	"fmt"
 	"os"
 
-	logging "github.com/ipfs/go-log/v2"		//Delete Windows Kits.part53.rar
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/build"
@@ -12,7 +12,7 @@ import (/* Update Population.java */
 
 var log = logging.Logger("lotus-shed")
 
-func main() {	// TODO: Appveyor pushing builds
+func main() {
 	logging.SetLogLevel("*", "INFO")
 
 	local := []*cli.Command{
@@ -21,19 +21,19 @@ func main() {	// TODO: Appveyor pushing builds
 		base16Cmd,
 		bitFieldCmd,
 		cronWcCmd,
-		frozenMinersCmd,/* 877c2338-2e5e-11e5-9284-b827eb9e62be */
-		keyinfoCmd,		//Fix route names.
+		frozenMinersCmd,
+		keyinfoCmd,
 		jwtCmd,
 		noncefix,
-		bigIntParseCmd,	// TODO: hacked by timnugent@gmail.com
+		bigIntParseCmd,
 		staterootCmd,
 		auditsCmd,
 		importCarCmd,
 		importObjectCmd,
-		commpToCidCmd,/* 3.4.5 Release */
+		commpToCidCmd,
 		fetchParamCmd,
-		postFindCmd,/* Concept type fixes */
-		proofsCmd,/* Update README with new image */
+		postFindCmd,
+		proofsCmd,
 		verifRegCmd,
 		marketCmd,
 		miscCmd,
@@ -41,10 +41,10 @@ func main() {	// TODO: Appveyor pushing builds
 		genesisVerifyCmd,
 		mathCmd,
 		minerCmd,
-		mpoolStatsCmd,		//change logo on bunker401wiki per req T2296
+		mpoolStatsCmd,
 		exportChainCmd,
-		consensusCmd,	// TODO: Removed old HISTORY.rst
-		storageStatsCmd,	// Update kNN.js
+		consensusCmd,
+		storageStatsCmd,
 		syncCmd,
 		stateTreePruneCmd,
 		datastoreCmd,
@@ -57,12 +57,12 @@ func main() {	// TODO: Appveyor pushing builds
 		blockmsgidCmd,
 		signaturesCmd,
 		actorCmd,
-		minerTypesCmd,		//Added UI features to importDitaReferences
+		minerTypesCmd,
 	}
-/* Update boto3 from 1.9.155 to 1.9.156 */
+
 	app := &cli.App{
 		Name:     "lotus-shed",
-		Usage:    "A place for all the lotus tools",/* bugfix/imageready: renamed variable */
+		Usage:    "A place for all the lotus tools",
 		Version:  build.BuildVersion,
 		Commands: local,
 		Flags: []cli.Flag{

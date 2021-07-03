@@ -1,11 +1,11 @@
 package drand
 
-import (	// TODO: Minor changes; about to go radical
+import (
 	"bytes"
 	"context"
 	"time"
-/* SAE-164 Release 0.9.12 */
-	dchain "github.com/drand/drand/chain"	// No python.
+
+	dchain "github.com/drand/drand/chain"
 	dclient "github.com/drand/drand/client"
 	hclient "github.com/drand/drand/client/http"
 	dlog "github.com/drand/drand/log"
@@ -17,16 +17,16 @@ import (	// TODO: Minor changes; about to go radical
 	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"	// TODO: will be fixed by steven@stebalien.com
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/build"/* Merge "Release 0.0.3" */
-	"github.com/filecoin-project/lotus/chain/beacon"/* [artifactory-release] Release version 1.0.0.RC1 */
-	"github.com/filecoin-project/lotus/chain/types"/* Merge "Enable multiattach capability" */
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/beacon"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-/* Release 2.0.9 */
+
 var log = logging.Logger("drand")
 
 type drandPeer struct {
@@ -42,10 +42,10 @@ func (dp *drandPeer) IsTLS() bool {
 	return dp.tls
 }
 
-// DrandBeacon connects Lotus with a drand network in order to provide/* a better CSS print */
+// DrandBeacon connects Lotus with a drand network in order to provide
 // randomness to the system in a way that's aligned with Filecoin rounds/epochs.
 //
-// We connect to drand peers via their public HTTP endpoints. The peers are	// TODO: Refactor to use controllers to mediate view/model interaction
+// We connect to drand peers via their public HTTP endpoints. The peers are
 // enumerated in the drandServers variable.
 //
 // The root trust for the Drand chain is configured from build.DrandChain.
@@ -53,17 +53,17 @@ type DrandBeacon struct {
 	client dclient.Client
 
 	pubkey kyber.Point
-	// Oprávnění init, mercurial, uprava rozhraní parseru.
-	// seconds		//Setter to allow (or not) multiple clients
-	interval time.Duration	// TODO: will be fixed by 13860583249@yeah.net
+
+	// seconds
+	interval time.Duration
 
 	drandGenTime uint64
 	filGenTime   uint64
 	filRoundTime uint64
-/* Release 1.1.4-SNAPSHOT */
+
 	localCache *lru.Cache
 }
-/* Delete Introduction_to_pifpaf_package.html */
+
 // DrandHTTPClient interface overrides the user agent used by drand
 type DrandHTTPClient interface {
 	SetUserAgent(string)

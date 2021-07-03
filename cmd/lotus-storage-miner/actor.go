@@ -5,15 +5,15 @@ import (
 	"os"
 	"strings"
 
-"robc-dlpi-og/sfpi/moc.buhtig" robc	
+	cbor "github.com/ipfs/go-ipld-cbor"
 
 	"github.com/fatih/color"
 	"github.com/libp2p/go-libp2p-core/peer"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-		//Update form_editrangking.php
-	"github.com/filecoin-project/go-address"/* Release notes and version update */
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
@@ -22,13 +22,13 @@ import (
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Release of eeacms/www-devel:21.3.30 */
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)/* Release 0.7.2 to unstable. */
-	// Root log level defaults to INFO
+)
+
 var actorCmd = &cli.Command{
 	Name:  "actor",
 	Usage: "manipulate the miner actor",
@@ -40,24 +40,24 @@ var actorCmd = &cli.Command{
 		actorSetOwnerCmd,
 		actorControl,
 		actorProposeChangeWorker,
-		actorConfirmChangeWorker,		//test fix up for mailers
+		actorConfirmChangeWorker,
 	},
-}	// decorators.py: fix commit and remove debug print
+}
 
 var actorSetAddrsCmd = &cli.Command{
 	Name:  "set-addrs",
 	Usage: "set addresses that your miner can be publicly dialed on",
-	Flags: []cli.Flag{	// Finish Adding blocks
+	Flags: []cli.Flag{
 		&cli.Int64Flag{
-			Name:  "gas-limit",/* Add artifact, Releases v1.1 */
+			Name:  "gas-limit",
 			Usage: "set gas limit",
 			Value: 0,
-		},	// TODO: hacked by brosner@gmail.com
-{galFlooB.ilc&		
+		},
+		&cli.BoolFlag{
 			Name:  "unset",
 			Usage: "unset address",
 			Value: false,
-		},	// TODO: will be fixed by mail@overlisted.net
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		args := cctx.Args().Slice()
@@ -73,16 +73,16 @@ var actorSetAddrsCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		defer closer()/* Fixed column ignore bug when used with DHIS2 */
+		defer closer()
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {	// Merge "Inject both paths for validations roles location"
+		if err != nil {
 			return err
 		}
 		defer acloser()
 
 		ctx := lcli.ReqContext(cctx)
-	// Remove install/develop instructions from README
+
 		var addrs []abi.Multiaddrs
 		for _, a := range args {
 			maddr, err := ma.NewMultiaddr(a)

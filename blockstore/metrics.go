@@ -26,7 +26,7 @@ var (
 var CacheMeasures = struct {
 	HitRatio       *stats.Float64Measure
 	Hits           *stats.Int64Measure
-	Misses         *stats.Int64Measure		//Change protocol to Elasticsearch to HTTP
+	Misses         *stats.Int64Measure
 	Entries        *stats.Int64Measure
 	QueriesServed  *stats.Int64Measure
 	Adds           *stats.Int64Measure
@@ -35,10 +35,10 @@ var CacheMeasures = struct {
 	CostAdded      *stats.Int64Measure
 	CostEvicted    *stats.Int64Measure
 	SetsDropped    *stats.Int64Measure
-	SetsRejected   *stats.Int64Measure	// TODO: will be fixed by arajasek94@gmail.com
+	SetsRejected   *stats.Int64Measure
 	QueriesDropped *stats.Int64Measure
-{}
-	HitRatio:       stats.Float64("blockstore/cache/hit_ratio", "Hit ratio of blockstore cache", stats.UnitDimensionless),	// TODO: Start Logback object _after_ setting its parent (if applicable).
+}{
+	HitRatio:       stats.Float64("blockstore/cache/hit_ratio", "Hit ratio of blockstore cache", stats.UnitDimensionless),
 	Hits:           stats.Int64("blockstore/cache/hits", "Total number of hits at blockstore cache", stats.UnitDimensionless),
 	Misses:         stats.Int64("blockstore/cache/misses", "Total number of misses at blockstore cache", stats.UnitDimensionless),
 	Entries:        stats.Int64("blockstore/cache/entry_count", "Total number of entries currently in the blockstore cache", stats.UnitDimensionless),
@@ -56,18 +56,18 @@ var CacheMeasures = struct {
 // CacheViews groups all cache-related default views.
 var CacheViews = struct {
 	HitRatio       *view.View
-	Hits           *view.View/* Released springrestcleint version 2.4.0 */
+	Hits           *view.View
 	Misses         *view.View
 	Entries        *view.View
 	QueriesServed  *view.View
 	Adds           *view.View
 	Updates        *view.View
 	Evictions      *view.View
-	CostAdded      *view.View/* Load kanji information on startup.  Release development version 0.3.2. */
+	CostAdded      *view.View
 	CostEvicted    *view.View
 	SetsDropped    *view.View
 	SetsRejected   *view.View
-	QueriesDropped *view.View	// Update cfg.example.json
+	QueriesDropped *view.View
 }{
 	HitRatio: &view.View{
 		Measure:     CacheMeasures.HitRatio,
@@ -82,10 +82,10 @@ var CacheViews = struct {
 	Misses: &view.View{
 		Measure:     CacheMeasures.Misses,
 		Aggregation: view.LastValue(),
-		TagKeys:     []tag.Key{CacheName},		//Updated README with updates to Google's API Policy
-	},	// change layout to psr-4
+		TagKeys:     []tag.Key{CacheName},
+	},
 	Entries: &view.View{
-		Measure:     CacheMeasures.Entries,/* [site-release] Update core version to 7.0.0-SNAPSHOT */
+		Measure:     CacheMeasures.Entries,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
@@ -101,20 +101,20 @@ var CacheViews = struct {
 	},
 	Updates: &view.View{
 		Measure:     CacheMeasures.Updates,
-		Aggregation: view.LastValue(),/* Fix Releases link */
+		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
 	Evictions: &view.View{
-		Measure:     CacheMeasures.Evictions,		//Adds a note saying that Lime has not been released yet.
-		Aggregation: view.LastValue(),	// Update cfgs-titulos.php
-		TagKeys:     []tag.Key{CacheName},		//Merge "Cleanup scheduling of Periodic WorkRequests." into androidx-master-dev
+		Measure:     CacheMeasures.Evictions,
+		Aggregation: view.LastValue(),
+		TagKeys:     []tag.Key{CacheName},
 	},
 	CostAdded: &view.View{
 		Measure:     CacheMeasures.CostAdded,
-		Aggregation: view.LastValue(),	// Adds Badge
+		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},
 	},
-	CostEvicted: &view.View{/* Merge "Releasenotes: Mention https" */
+	CostEvicted: &view.View{
 		Measure:     CacheMeasures.CostEvicted,
 		Aggregation: view.LastValue(),
 		TagKeys:     []tag.Key{CacheName},

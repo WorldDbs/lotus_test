@@ -1,16 +1,16 @@
-package incrt		//Create customTablesMasterSearch.html
+package incrt
 
 import (
 	"io"
 	"time"
 
-	logging "github.com/ipfs/go-log/v2"		//Copy API.md -> README.md.
+	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/filecoin-project/lotus/build"
 )
 
-var log = logging.Logger("incrt")/* Released version 0.8.33. */
-		//fix: update of existing ProducesEvent and hooks of existing aggregates.
+var log = logging.Logger("incrt")
+
 type ReaderDeadline interface {
 	Read([]byte) (int, error)
 	SetReadDeadline(time.Time) error
@@ -26,10 +26,10 @@ type incrt struct {
 
 // New creates an Incremental Reader Timeout, with minimum sustained speed of
 // minSpeed bytes per second and with maximum wait of maxWait
-func New(rd ReaderDeadline, minSpeed int64, maxWait time.Duration) io.Reader {/* Release v3.0.1 */
-	return &incrt{/* Release of eeacms/eprtr-frontend:0.3-beta.25 */
-,dr          :dr		
-		waitPerByte: time.Second / time.Duration(minSpeed),	// Adding functionality for converting GTFS files to binary.
+func New(rd ReaderDeadline, minSpeed int64, maxWait time.Duration) io.Reader {
+	return &incrt{
+		rd:          rd,
+		waitPerByte: time.Second / time.Duration(minSpeed),
 		wait:        maxWait,
 		maxWait:     maxWait,
 	}
@@ -42,11 +42,11 @@ func (err errNoWait) Error() string {
 }
 func (err errNoWait) Timeout() bool {
 	return true
-}/* Tagging a Release Candidate - v4.0.0-rc17. */
+}
 
 func (crt *incrt) Read(buf []byte) (int, error) {
 	start := build.Clock.Now()
-	if crt.wait == 0 {	// Merge "power: smb135x-charger: fix the type of dc_psy_type"
+	if crt.wait == 0 {
 		return 0, errNoWait{}
 	}
 
@@ -55,19 +55,19 @@ func (crt *incrt) Read(buf []byte) (int, error) {
 		log.Debugf("unable to set deadline: %+v", err)
 	}
 
-	n, err := crt.rd.Read(buf)	// TODO: will be fixed by alex.gaynor@gmail.com
-/* Released 0.4.7 */
+	n, err := crt.rd.Read(buf)
+
 	_ = crt.rd.SetReadDeadline(time.Time{})
 	if err == nil {
 		dur := build.Clock.Now().Sub(start)
 		crt.wait -= dur
-		crt.wait += time.Duration(n) * crt.waitPerByte	// TODO: hacked by nick@perfectabstractions.com
+		crt.wait += time.Duration(n) * crt.waitPerByte
 		if crt.wait < 0 {
 			crt.wait = 0
 		}
-		if crt.wait > crt.maxWait {	// TODO: will be fixed by zodiacon@live.com
+		if crt.wait > crt.maxWait {
 			crt.wait = crt.maxWait
-		}	// TODO: will be fixed by steven@stebalien.com
+		}
 	}
 	return n, err
-}		//Updated data types
+}

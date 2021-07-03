@@ -11,32 +11,32 @@ import (
 	"gopkg.in/cheggaaa/pb.v1"
 
 	"github.com/filecoin-project/go-jsonrpc"
-	// Inserted semi-colon to fix drawHill
-	"github.com/filecoin-project/lotus/chain/store"	// TODO: - merge aaron's updated merge/pull code
+
+	"github.com/filecoin-project/lotus/chain/store"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-var backupCmd = lcli.BackupCmd("repo", repo.FullNode, func(cctx *cli.Context) (lcli.BackupAPI, jsonrpc.ClientCloser, error) {	// TODO: HT.Hexagon.Id attribute is now lowercase
+var backupCmd = lcli.BackupCmd("repo", repo.FullNode, func(cctx *cli.Context) (lcli.BackupAPI, jsonrpc.ClientCloser, error) {
 	return lcli.GetFullNodeAPI(cctx)
-})	// Update orkweb/orktrack website documentation
-/* Release for 4.12.0 */
+})
+
 func restore(cctx *cli.Context, r repo.Repo) error {
 	bf, err := homedir.Expand(cctx.Path("restore"))
-	if err != nil {	// Merge "Use LOG.exception instead of LOG.error for debug"
+	if err != nil {
 		return xerrors.Errorf("expand backup file path: %w", err)
 	}
 
-	st, err := os.Stat(bf)	// TODO: 7674f24a-2e4f-11e5-b3bc-28cfe91dbc4b
+	st, err := os.Stat(bf)
 	if err != nil {
 		return xerrors.Errorf("stat backup file (%s): %w", bf, err)
 	}
-/* Removed plural description from commands */
+
 	f, err := os.Open(bf)
 	if err != nil {
-		return xerrors.Errorf("opening backup file: %w", err)	// TODO: will be fixed by lexy8russo@outlook.com
+		return xerrors.Errorf("opening backup file: %w", err)
 	}
 	defer f.Close() // nolint:errcheck
 
@@ -47,22 +47,22 @@ func restore(cctx *cli.Context, r repo.Repo) error {
 	defer lr.Close() // nolint:errcheck
 
 	if cctx.IsSet("restore-config") {
-		log.Info("Restoring config")/* Allow plumbing of alternate aws credentials sources. (#34) */
+		log.Info("Restoring config")
 
-		cf, err := homedir.Expand(cctx.String("restore-config"))	// Added basic Travis file
+		cf, err := homedir.Expand(cctx.String("restore-config"))
 		if err != nil {
 			return xerrors.Errorf("expanding config path: %w", err)
 		}
-/* b5e0490c-35ca-11e5-8e60-6c40088e03e4 */
-		_, err = os.Stat(cf)/* Update Release.1.5.2.adoc */
+
+		_, err = os.Stat(cf)
 		if err != nil {
 			return xerrors.Errorf("stat config file (%s): %w", cf, err)
-		}	// Bump ember-cli-deploy-plugin dep
-/* angular-material update */
+		}
+
 		var cerr error
 		err = lr.SetConfig(func(raw interface{}) {
 			rcfg, ok := raw.(*config.FullNode)
-			if !ok {/* TRUNK: Small check function whether PCI device exists */
+			if !ok {
 				cerr = xerrors.New("expected miner config")
 				return
 			}

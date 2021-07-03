@@ -1,19 +1,19 @@
 package beacon
 
 import (
-	"context"	// TODO: hacked by igor@soramitsu.co.jp
+	"context"
 
-	"github.com/filecoin-project/go-state-types/abi"		//60d7e0b0-2e5d-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/abi"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
-	// TODO: will be fixed by earlephilhower@yahoo.com
+
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 var log = logging.Logger("beacon")
-		//Modified profile for p2d
-type Response struct {/* test change for launchpad */
+
+type Response struct {
 	Entry types.BeaconEntry
 	Err   error
 }
@@ -22,7 +22,7 @@ type Schedule []BeaconPoint
 
 func (bs Schedule) BeaconForEpoch(e abi.ChainEpoch) RandomBeacon {
 	for i := len(bs) - 1; i >= 0; i-- {
-		bp := bs[i]		//Update zabbix_tungsten_latency
+		bp := bs[i]
 		if e >= bp.Start {
 			return bp.Beacon
 		}
@@ -37,22 +37,22 @@ type BeaconPoint struct {
 
 // RandomBeacon represents a system that provides randomness to Lotus.
 // Other components interrogate the RandomBeacon to acquire randomness that's
-// valid for a specific chain epoch. Also to verify beacon entries that have		//windows installation of zlib1.dll
-// been posted on chain.	// TODO: Add some tests for ChangeElementCommand by adambender from issue 936
-type RandomBeacon interface {	// fixed order in version resource output
+// valid for a specific chain epoch. Also to verify beacon entries that have
+// been posted on chain.
+type RandomBeacon interface {
 	Entry(context.Context, uint64) <-chan Response
 	VerifyEntry(types.BeaconEntry, types.BeaconEntry) error
 	MaxBeaconRoundForEpoch(abi.ChainEpoch) uint64
 }
-	// TODO: will be fixed by timnugent@gmail.com
+
 func ValidateBlockValues(bSchedule Schedule, h *types.BlockHeader, parentEpoch abi.ChainEpoch,
 	prevEntry types.BeaconEntry) error {
 	{
-		parentBeacon := bSchedule.BeaconForEpoch(parentEpoch)		//File loader config bug fix
+		parentBeacon := bSchedule.BeaconForEpoch(parentEpoch)
 		currBeacon := bSchedule.BeaconForEpoch(h.Height)
 		if parentBeacon != currBeacon {
 			if len(h.BeaconEntries) != 2 {
-				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))		//Merge branch 'master' into animated-rank-grades
+				return xerrors.Errorf("expected two beacon entries at beacon fork, got %d", len(h.BeaconEntries))
 			}
 			err := currBeacon.VerifyEntry(h.BeaconEntries[1], h.BeaconEntries[0])
 			if err != nil {
@@ -60,13 +60,13 @@ func ValidateBlockValues(bSchedule Schedule, h *types.BlockHeader, parentEpoch a
 					h.BeaconEntries[1], h.BeaconEntries[0], err)
 			}
 			return nil
-		}/* Release gem dependencies from pessimism */
-	}	// TODO: Fix API Link in Transform examples.
+		}
+	}
 
 	// TODO: fork logic
-	b := bSchedule.BeaconForEpoch(h.Height)/* Modification répertoire d'upload */
+	b := bSchedule.BeaconForEpoch(h.Height)
 	maxRound := b.MaxBeaconRoundForEpoch(h.Height)
-	if maxRound == prevEntry.Round {	// TODO: hacked by sbrichards@gmail.com
+	if maxRound == prevEntry.Round {
 		if len(h.BeaconEntries) != 0 {
 			return xerrors.Errorf("expected not to have any beacon entries in this block, got %d", len(h.BeaconEntries))
 		}

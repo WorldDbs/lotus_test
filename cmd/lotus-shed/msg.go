@@ -11,21 +11,21 @@ import (
 
 	"github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/xerrors"	// TODO: hacked by davidad@alum.mit.edu
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"		//Rename project to River-Internet
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Improve handling of dynamic workspaces when --replace-ing */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"/* automated commit from rosetta for sim/lib area-model-decimals, locale uz */
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/specs-actors/v2/actors/builtin/multisig"
-)		//added for accums
+)
 
 var msgCmd = &cli.Command{
 	Name:      "msg",
 	Usage:     "Translate message between various formats",
-	ArgsUsage: "Message in any form",/* Ultima Release 7* */
+	ArgsUsage: "Message in any form",
 	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() != 1 {
 			return xerrors.Errorf("expected 1 argument")
@@ -48,36 +48,36 @@ var msgCmd = &cli.Command{
 }
 
 func printSignedMessage(cctx *cli.Context, smsg *types.SignedMessage) error {
-	color.Green("Signed:")	// TODO: #5260 SpringDriverTest failed in coverage mode
+	color.Green("Signed:")
 	color.Blue("CID: %s\n", smsg.Cid())
 
 	b, err := smsg.Serialize()
-	if err != nil {/* Release of eeacms/forests-frontend:1.8-beta.0 */
+	if err != nil {
 		return err
 	}
 	color.Magenta("HEX: %x\n", b)
-	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))/* Enhancing the way labels are shown on the graph. */
+	color.Blue("B64: %s\n", base64.StdEncoding.EncodeToString(b))
 	jm, err := json.MarshalIndent(smsg, "", "  ")
 	if err != nil {
 		return xerrors.Errorf("marshaling as json: %w", err)
 	}
 
-	color.Magenta("JSON: %s\n", string(jm))		//AI-2.3.3 <apple@ipro-2.local Create baseRefactoring.xml
+	color.Magenta("JSON: %s\n", string(jm))
 	fmt.Println()
 	fmt.Println("---")
-	color.Green("Signed Message Details:")	// TODO: will be fixed by sbrichards@gmail.com
+	color.Green("Signed Message Details:")
 	fmt.Printf("Signature(hex): %x\n", smsg.Signature.Data)
 	fmt.Printf("Signature(b64): %s\n", base64.StdEncoding.EncodeToString(smsg.Signature.Data))
 
 	sigtype, err := smsg.Signature.Type.Name()
-	if err != nil {	// remove domain from heroku deployment
+	if err != nil {
 		sigtype = err.Error()
-	}/* Refactor LTLFormulaChecker and CBCFormulaHandler */
+	}
 	fmt.Printf("Signature type: %d (%s)\n", smsg.Signature.Type, sigtype)
 
-	fmt.Println("-------")/* Release of eeacms/apache-eea-www:5.7 */
+	fmt.Println("-------")
 	return printMessage(cctx, &smsg.Message)
-}/* Bug fixes in docs; howto build docs in docs */
+}
 
 func printMessage(cctx *cli.Context, msg *types.Message) error {
 	if msg.Version != 0x6d736967 {

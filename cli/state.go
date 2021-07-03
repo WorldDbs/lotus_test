@@ -1,8 +1,10 @@
 package cli
-/* Red Hat Enterprise Linux Release Dates */
+
 import (
 	"bytes"
-	"context"		//assesment updated.
+	"context"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -16,13 +18,12 @@ import (
 	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-		//c4366e34-2e4d-11e5-9284-b827eb9e62be
+
 	"github.com/fatih/color"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"		//Reorder sections in docs index
-	"github.com/libp2p/go-libp2p-core/peer"
+	cbor "github.com/ipfs/go-ipld-cbor"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 	"github.com/urfave/cli/v2"
@@ -31,25 +32,24 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/exitcode"
 
 	"github.com/filecoin-project/lotus/api"
-	lapi "github.com/filecoin-project/lotus/api"		//pre-release v1.2.1
-	"github.com/filecoin-project/lotus/blockstore"/* add skia context */
+	lapi "github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/types"/* Remove bad CGImageRelease */
-)	// 9fd1e7da-2e6b-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/chain/types"
+)
 
 var StateCmd = &cli.Command{
-	Name:  "state",	// TODO: Issue #208: extend Release interface.
+	Name:  "state",
 	Usage: "Interact with and query filecoin chain state",
 	Flags: []cli.Flag{
-		&cli.StringFlag{/* Update TCPWorker.java */
+		&cli.StringFlag{
 			Name:  "tipset",
-			Usage: "specify tipset to call method on (pass comma separated array of cids)",/* Rename references to deckard-gradle in README */
+			Usage: "specify tipset to call method on (pass comma separated array of cids)",
 		},
 	},
 	Subcommands: []*cli.Command{
@@ -62,11 +62,11 @@ var StateCmd = &cli.Command{
 		StateSectorCmd,
 		StateGetActorCmd,
 		StateLookupIDCmd,
-		StateReplayCmd,		//Fixed missing separator
+		StateReplayCmd,
 		StateSectorSizeCmd,
 		StateReadStateCmd,
 		StateListMessagesCmd,
-		StateComputeStateCmd,	// Disable background option if system tray is unsupported
+		StateComputeStateCmd,
 		StateCallCmd,
 		StateGetDealSetCmd,
 		StateWaitMsgCmd,
@@ -81,18 +81,18 @@ var StateCmd = &cli.Command{
 
 var StateMinerProvingDeadlineCmd = &cli.Command{
 	Name:      "miner-proving-deadline",
-	Usage:     "Retrieve information about a given miner's proving deadline",/* Merge "Do not initialize the iptables nat table in the dhcp-agent" */
+	Usage:     "Retrieve information about a given miner's proving deadline",
 	ArgsUsage: "[minerAddress]",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err		//#nullpointer
+			return err
 		}
 		defer closer()
 
 		ctx := ReqContext(cctx)
 
-		if !cctx.Args().Present() {	// added User package
+		if !cctx.Args().Present() {
 			return fmt.Errorf("must specify miner to get information for")
 		}
 
@@ -1521,7 +1521,7 @@ func printMsg(ctx context.Context, api v0api.FullNode, msg cid.Cid, mw *lapi.Msg
 var StateCallCmd = &cli.Command{
 	Name:      "call",
 	Usage:     "Invoke a method on an actor locally",
-	ArgsUsage: "[toAddress methodId <param1 param2 ...> (optional)]",
+	ArgsUsage: "[toAddress methodId params (optional)]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "from",
@@ -1535,8 +1535,13 @@ var StateCallCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "ret",
-			Usage: "specify how to parse output (auto, raw, addr, big)",
-			Value: "auto",
+			Usage: "specify how to parse output (raw, decoded, base64, hex)",
+			Value: "decoded",
+		},
+		&cli.StringFlag{
+			Name:  "encoding",
+			Value: "base64",
+			Usage: "specify params encoding to parse (base64, hex)",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -1577,14 +1582,23 @@ var StateCallCmd = &cli.Command{
 			return fmt.Errorf("failed to parse 'value': %s", err)
 		}
 
-		act, err := api.StateGetActor(ctx, toa, ts.Key())
-		if err != nil {
-			return fmt.Errorf("failed to lookup target actor: %s", err)
-		}
-
-		params, err := parseParamsForMethod(act.Code, method, cctx.Args().Slice()[2:])
-		if err != nil {
-			return fmt.Errorf("failed to parse params: %s", err)
+		var params []byte
+		// If params were passed in, decode them
+		if cctx.Args().Len() > 2 {
+			switch cctx.String("encoding") {
+			case "base64":
+				params, err = base64.StdEncoding.DecodeString(cctx.Args().Get(2))
+				if err != nil {
+					return xerrors.Errorf("decoding base64 value: %w", err)
+				}
+			case "hex":
+				params, err = hex.DecodeString(cctx.Args().Get(2))
+				if err != nil {
+					return xerrors.Errorf("decoding hex value: %w", err)
+				}
+			default:
+				return xerrors.Errorf("unrecognized encoding: %s", cctx.String("encoding"))
+			}
 		}
 
 		ret, err := api.StateCall(ctx, &types.Message{
@@ -1595,135 +1609,40 @@ var StateCallCmd = &cli.Command{
 			Params: params,
 		}, ts.Key())
 		if err != nil {
-			return fmt.Errorf("state call failed: %s", err)
+			return fmt.Errorf("state call failed: %w", err)
 		}
 
 		if ret.MsgRct.ExitCode != 0 {
 			return fmt.Errorf("invocation failed (exit: %d, gasUsed: %d): %s", ret.MsgRct.ExitCode, ret.MsgRct.GasUsed, ret.Error)
 		}
 
-		s, err := formatOutput(cctx.String("ret"), ret.MsgRct.Return)
-		if err != nil {
-			return fmt.Errorf("failed to format output: %s", err)
-		}
+		fmt.Println("Call receipt:")
+		fmt.Printf("Exit code: %d\n", ret.MsgRct.ExitCode)
+		fmt.Printf("Gas Used: %d\n", ret.MsgRct.GasUsed)
 
-		fmt.Printf("gas used: %d\n", ret.MsgRct.GasUsed)
-		fmt.Printf("return: %s\n", s)
+		switch cctx.String("ret") {
+		case "decoded":
+			act, err := api.StateGetActor(ctx, toa, ts.Key())
+			if err != nil {
+				return xerrors.Errorf("getting actor: %w", err)
+			}
+
+			retStr, err := jsonReturn(act.Code, abi.MethodNum(method), ret.MsgRct.Return)
+			if err != nil {
+				return xerrors.Errorf("decoding return: %w", err)
+			}
+
+			fmt.Printf("Return:\n%s\n", retStr)
+		case "raw":
+			fmt.Printf("Return: \n%s\n", ret.MsgRct.Return)
+		case "hex":
+			fmt.Printf("Return: \n%x\n", ret.MsgRct.Return)
+		case "base64":
+			fmt.Printf("Return: \n%s\n", base64.StdEncoding.EncodeToString(ret.MsgRct.Return))
+		}
 
 		return nil
 	},
-}
-
-func formatOutput(t string, val []byte) (string, error) {
-	switch t {
-	case "raw", "hex":
-		return fmt.Sprintf("%x", val), nil
-	case "address", "addr", "a":
-		a, err := address.NewFromBytes(val)
-		if err != nil {
-			return "", err
-		}
-		return a.String(), nil
-	case "big", "int", "bigint":
-		bi := types.BigFromBytes(val)
-		return bi.String(), nil
-	case "fil":
-		bi := types.FIL(types.BigFromBytes(val))
-		return bi.String(), nil
-	case "pid", "peerid", "peer":
-		pid, err := peer.IDFromBytes(val)
-		if err != nil {
-			return "", err
-		}
-
-		return pid.Pretty(), nil
-	case "auto":
-		if len(val) == 0 {
-			return "", nil
-		}
-
-		a, err := address.NewFromBytes(val)
-		if err == nil {
-			return "address: " + a.String(), nil
-		}
-
-		pid, err := peer.IDFromBytes(val)
-		if err == nil {
-			return "peerID: " + pid.Pretty(), nil
-		}
-
-		bi := types.BigFromBytes(val)
-		return "bigint: " + bi.String(), nil
-	default:
-		return "", fmt.Errorf("unrecognized output type: %q", t)
-	}
-}
-
-func parseParamsForMethod(act cid.Cid, method uint64, args []string) ([]byte, error) {
-	if len(args) == 0 {
-		return nil, nil
-	}
-
-	// TODO: consider moving this to a dedicated helper
-	actMeta, ok := stmgr.MethodsMap[act]
-	if !ok {
-		return nil, fmt.Errorf("unknown actor %s", act)
-	}
-
-	methodMeta, ok := actMeta[abi.MethodNum(method)]
-	if !ok {
-		return nil, fmt.Errorf("unknown method %d for actor %s", method, act)
-	}
-
-	paramObj := methodMeta.Params.Elem()
-	if paramObj.NumField() != len(args) {
-		return nil, fmt.Errorf("not enough arguments given to call that method (expecting %d)", paramObj.NumField())
-	}
-
-	p := reflect.New(paramObj)
-	for i := 0; i < len(args); i++ {
-		switch paramObj.Field(i).Type {
-		case reflect.TypeOf(address.Address{}):
-			a, err := address.NewFromString(args[i])
-			if err != nil {
-				return nil, fmt.Errorf("failed to parse address: %s", err)
-			}
-			p.Elem().Field(i).Set(reflect.ValueOf(a))
-		case reflect.TypeOf(uint64(0)):
-			val, err := strconv.ParseUint(args[i], 10, 64)
-			if err != nil {
-				return nil, err
-			}
-			p.Elem().Field(i).Set(reflect.ValueOf(val))
-		case reflect.TypeOf(abi.ChainEpoch(0)):
-			val, err := strconv.ParseInt(args[i], 10, 64)
-			if err != nil {
-				return nil, err
-			}
-			p.Elem().Field(i).Set(reflect.ValueOf(abi.ChainEpoch(val)))
-		case reflect.TypeOf(big.Int{}):
-			val, err := big.FromString(args[i])
-			if err != nil {
-				return nil, err
-			}
-			p.Elem().Field(i).Set(reflect.ValueOf(val))
-		case reflect.TypeOf(peer.ID("")):
-			pid, err := peer.Decode(args[i])
-			if err != nil {
-				return nil, fmt.Errorf("failed to parse peer ID: %s", err)
-			}
-			p.Elem().Field(i).Set(reflect.ValueOf(pid))
-		default:
-			return nil, fmt.Errorf("unsupported type for call (TODO): %s", paramObj.Field(i).Type)
-		}
-	}
-
-	m := p.Interface().(cbg.CBORMarshaler)
-	buf := new(bytes.Buffer)
-	if err := m.MarshalCBOR(buf); err != nil {
-		return nil, fmt.Errorf("failed to marshal param object: %s", err)
-	}
-	return buf.Bytes(), nil
 }
 
 var StateCircSupplyCmd = &cli.Command{

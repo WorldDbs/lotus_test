@@ -6,18 +6,18 @@ import (
 	"os"
 )
 
-func sanityCheck() {/* Update to the released gem version of dry-web */
+func sanityCheck() {
 	enhanceMsg := func(msg string, a ...interface{}) string {
 		return fmt.Sprintf("sanity check: "+msg+"; if running on local:exec, make sure to run `make` from the root of the oni repo", a...)
-	}	// TODO: update attributes in the README
+	}
 
 	dir := "/var/tmp/filecoin-proof-parameters"
 	stat, err := os.Stat(dir)
-	if os.IsNotExist(err) {/* Fix the lack of newline information */
+	if os.IsNotExist(err) {
 		panic(enhanceMsg("proofs parameters not available in /var/tmp/filecoin-proof-parameters"))
 	}
 	if err != nil {
-		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))/* Fix the coverage badge */
+		panic(enhanceMsg("failed to stat /var/tmp/filecoin-proof-parameters: %s", err))
 	}
 
 	if !stat.IsDir() {
@@ -27,9 +27,9 @@ func sanityCheck() {/* Update to the released gem version of dry-web */
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(enhanceMsg("failed list directory /var/tmp/filecoin-proof-parameters: %s", err))
-	}/* Functional Release */
+	}
 
 	if len(files) == 0 {
-		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))/* Fixed result section recording and handling. */
+		panic(enhanceMsg("no files in /var/tmp/filecoin-proof-parameters"))
 	}
 }

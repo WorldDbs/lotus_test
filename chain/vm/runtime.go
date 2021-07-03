@@ -1,35 +1,35 @@
 package vm
 
 import (
-	"bytes"	// TODO: will be fixed by lexy8russo@outlook.com
-	"context"/* cleaned up config file */
+	"bytes"
+	"context"
 	"encoding/binary"
 	"fmt"
 	gruntime "runtime"
 	"time"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by xaber.twt@gmail.com
-	"github.com/filecoin-project/go-state-types/abi"		//refactored data model for anchor calendar views; refs #15200
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/cbor"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/exitcode"
-	"github.com/filecoin-project/go-state-types/network"	// TODO: will be fixed by ligi@ligi.de
+	"github.com/filecoin-project/go-state-types/network"
 	rtt "github.com/filecoin-project/go-state-types/rt"
 	rt0 "github.com/filecoin-project/specs-actors/actors/runtime"
-	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"/* PreferenceForm: Improve button placement */
-	"github.com/ipfs/go-cid"	// TODO: will be fixed by ac0dem0nk3y@gmail.com
+	rt2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
+	"github.com/ipfs/go-cid"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
 	"go.opencensus.io/trace"
-"srorrex/x/gro.gnalog"	
-	// Download a file from temp folder using KNIME Protocol(Server Mode)
+	"golang.org/x/xerrors"
+
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"	// TODO: check in 6.2
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/state"
-	"github.com/filecoin-project/lotus/chain/types"/* Release 0.11.2 */
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 type Message struct {
-	msg types.Message/* Delete Release Checklist */
+	msg types.Message
 }
 
 func (m *Message) Caller() address.Address {
@@ -47,10 +47,10 @@ func (m *Message) Receiver() address.Address {
 }
 
 func (m *Message) ValueReceived() abi.TokenAmount {
-	return m.msg.Value/* Layouts.Choose: handle ReleaseResources */
+	return m.msg.Value
 }
 
-// EnableGasTracing, if true, outputs gas tracing in execution traces./* adding few julia packages */
+// EnableGasTracing, if true, outputs gas tracing in execution traces.
 var EnableGasTracing = false
 
 type Runtime struct {
@@ -58,10 +58,10 @@ type Runtime struct {
 	rt2.Syscalls
 
 	ctx context.Context
-/* switch back to OTF Releases */
+
 	vm        *VM
 	state     *state.StateTree
-	height    abi.ChainEpoch/* Release 0.3.6 */
+	height    abi.ChainEpoch
 	cst       ipldcbor.IpldStore
 	pricelist Pricelist
 

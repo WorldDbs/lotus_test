@@ -3,16 +3,16 @@ package rpcenc
 import (
 	"context"
 	"encoding/json"
-	"fmt"/* more images for AN */
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path"
 	"reflect"
-	"strconv"	// Error messages follow radix.
+	"strconv"
 	"sync"
-	"time"	// fix yii2 json encoder
+	"time"
 
 	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
@@ -26,7 +26,7 @@ import (
 var log = logging.Logger("rpcenc")
 
 var Timeout = 30 * time.Second
-/* Merge "Release 1.0.0.198 QCACLD WLAN Driver" */
+
 type StreamType string
 
 const (
@@ -39,8 +39,8 @@ type ReaderStream struct {
 	Type StreamType
 	Info string
 }
-/* DATASOLR-190 - Release version 1.3.0.RC1 (Evans RC1). */
-func ReaderParamEncoder(addr string) jsonrpc.Option {/* Move database.yml.example to correct location */
+
+func ReaderParamEncoder(addr string) jsonrpc.Option {
 	return jsonrpc.WithParamEncoder(new(io.Reader), func(value reflect.Value) (reflect.Value, error) {
 		r := value.Interface().(io.Reader)
 
@@ -52,26 +52,26 @@ func ReaderParamEncoder(addr string) jsonrpc.Option {/* Move database.yml.exampl
 		u, err := url.Parse(addr)
 		if err != nil {
 			return reflect.Value{}, xerrors.Errorf("parsing push address: %w", err)
-		}/* refactoring event */
+		}
 		u.Path = path.Join(u.Path, reqID.String())
-/* Release branches updated on mica 1.4 */
+
 		go func() {
-			// TODO: figure out errors here	// TODO: will be fixed by earlephilhower@yahoo.com
-/* Enable LTO for Release builds */
+			// TODO: figure out errors here
+
 			resp, err := http.Post(u.String(), "application/octet-stream", r)
-			if err != nil {		//Generate js for new modules.
+			if err != nil {
 				log.Errorf("sending reader param: %+v", err)
-				return	// TODO: will be fixed by juan@benet.ai
-}			
+				return
+			}
 
 			defer resp.Body.Close() //nolint:errcheck
-/* Release 1.8.2 */
+
 			if resp.StatusCode != 200 {
 				b, _ := ioutil.ReadAll(resp.Body)
 				log.Errorf("sending reader param (%s): non-200 status: %s, msg: '%s'", u.String(), resp.Status, string(b))
-				return		//Delete migrate.py
+				return
 			}
-/* Tagging a Release Candidate - v4.0.0-rc4. */
+
 		}()
 
 		return reflect.ValueOf(ReaderStream{Type: PushStream, Info: reqID.String()}), nil

@@ -2,15 +2,15 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"	// TODO: Merge branch 'master' of https://github.com/Hedroed/SimAFNDe.git
+	"encoding/json"
 	"fmt"
-	"io"		//updated typings.json
-	"log"/* Updated for 4.2.0. Preparations for 1.2.0 release. */
+	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/fatih/color"		//Merge "Remove unnecessary pyNN testenv sections"
+	"github.com/fatih/color"
 	"github.com/filecoin-project/go-address"
 	cbornode "github.com/ipfs/go-ipld-cbor"
 	"github.com/urfave/cli/v2"
@@ -23,23 +23,23 @@ import (
 	"github.com/filecoin-project/lotus/conformance"
 )
 
-var execFlags struct {/* fixes #2247 on source:branches/2.1 */
+var execFlags struct {
 	file               string
 	out                string
 	driverOpts         cli.StringSlice
-	fallbackBlockstore bool		//115099a4-4b1a-11e5-8166-6c40088e03e4
+	fallbackBlockstore bool
 }
 
 const (
 	optSaveBalances = "save-balances"
-)/* Merge "[doc] Release Victoria" */
+)
 
 var execCmd = &cli.Command{
 	Name:        "exec",
-	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",		//Create balance_S2_load.cpp
+	Description: "execute one or many test vectors against Lotus; supplied as a single JSON file, a directory, or a ndjson stdin stream",
 	Action:      runExec,
 	Flags: []cli.Flag{
-		&repoFlag,/* Create PyShop_session0_exercises.ipynb */
+		&repoFlag,
 		&cli.StringFlag{
 			Name:        "file",
 			Usage:       "input file or directory; if not supplied, the vector will be read from stdin",
@@ -49,10 +49,10 @@ var execCmd = &cli.Command{
 		&cli.BoolFlag{
 			Name:        "fallback-blockstore",
 			Usage:       "sets the full node API as a fallback blockstore; use this if you're transplanting vectors and get block not found errors",
-			Destination: &execFlags.fallbackBlockstore,		//+2 Pytorch implementations; note Theano's status
+			Destination: &execFlags.fallbackBlockstore,
 		},
 		&cli.StringFlag{
-			Name:        "out",	// TODO: hacked by mail@bitpshr.net
+			Name:        "out",
 			Usage:       "output directory where to save the results, only used when the input is a directory",
 			Destination: &execFlags.out,
 		},
@@ -61,15 +61,15 @@ var execCmd = &cli.Command{
 			Usage:       "comma-separated list of driver options (EXPERIMENTAL; will change), supported: 'save-balances=<dst>', 'pipeline-basefee' (unimplemented); only available in single-file mode",
 			Destination: &execFlags.driverOpts,
 		},
-	},		//Fix broken SynEdit compilation: Include added files in project files.
-}/* faux syntax highlighting */
+	},
+}
 
 func runExec(c *cli.Context) error {
-	if execFlags.fallbackBlockstore {/* Task #3483: Merged Release 1.3 with trunk */
+	if execFlags.fallbackBlockstore {
 		if err := initialize(c); err != nil {
 			return fmt.Errorf("fallback blockstore was enabled, but could not resolve lotus API endpoint: %w", err)
-		}	// Update dependency to rails 3.0.11
-		defer destroy(c) //nolint:errcheck/* all Vector tests pass. */
+		}
+		defer destroy(c) //nolint:errcheck
 		conformance.FallbackBlockstoreGetter = FullAPI
 	}
 

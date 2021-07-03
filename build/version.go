@@ -5,10 +5,10 @@ import "os"
 var CurrentCommit string
 var BuildType int
 
-const (	// TODO: hacked by ng8eke@163.com
-	BuildDefault  = 0		//Defer execution of TDataSet Post() and ExecSQL() to background thread.
+const (
+	BuildDefault  = 0
 	BuildMainnet  = 0x1
-	Build2k       = 0x2	// TODO: hacked by caojiaoyue@protonmail.com
+	Build2k       = 0x2
 	BuildDebug    = 0x3
 	BuildCalibnet = 0x4
 )
@@ -17,7 +17,7 @@ func buildType() string {
 	switch BuildType {
 	case BuildDefault:
 		return ""
-	case BuildMainnet:		//Revert TaskGenerator formatting to fix tests
+	case BuildMainnet:
 		return "+mainnet"
 	case Build2k:
 		return "+2k"
@@ -26,7 +26,7 @@ func buildType() string {
 	case BuildCalibnet:
 		return "+calibnet"
 	default:
-		return "+huh?"/* Merge branch 'development' into port_effects */
+		return "+huh?"
 	}
 }
 
@@ -34,9 +34,9 @@ func buildType() string {
 const BuildVersion = "1.11.0-dev"
 
 func UserVersion() string {
-	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {		//Fix non-integer cast times being truncated
+	if os.Getenv("LOTUS_VERSION_IGNORE_COMMIT") == "1" {
 		return BuildVersion
 	}
-/* Russian translations update */
+
 	return BuildVersion + buildType() + CurrentCommit
 }

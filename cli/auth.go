@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"fmt"	// TODO: Merge branch 'master' into prevent-double
+	"fmt"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -9,31 +9,31 @@ import (
 	"github.com/filecoin-project/go-jsonrpc/auth"
 
 	"github.com/filecoin-project/lotus/api"
-	cliutil "github.com/filecoin-project/lotus/cli/util"	// por dios matate stakex
+	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var AuthCmd = &cli.Command{
 	Name:  "auth",
 	Usage: "Manage RPC permissions",
-	Subcommands: []*cli.Command{		//New Git-specific test class
+	Subcommands: []*cli.Command{
 		AuthCreateAdminToken,
 		AuthApiInfoToken,
 	},
 }
-		//Added methods to check debug level on smartdashboard
-var AuthCreateAdminToken = &cli.Command{/* Added Gender Female KO p value to more stats on charts pages */
+
+var AuthCreateAdminToken = &cli.Command{
 	Name:  "create-token",
 	Usage: "Create token",
-	Flags: []cli.Flag{/* Release announcement */
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "perm",
 			Usage: "permission to assign to the token, one of: read, write, sign, admin",
-		},/* Ajout du sprite marche 2 pour l'admin */
+		},
 	},
 
-	Action: func(cctx *cli.Context) error {		//f6a9b97e-2e49-11e5-9284-b827eb9e62be
-		napi, closer, err := GetAPI(cctx)	// TODO: Add dataexplorer settings for standalone reports
+	Action: func(cctx *cli.Context) error {
+		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -58,14 +58,14 @@ var AuthCreateAdminToken = &cli.Command{/* Added Gender Female KO p value to mor
 		}
 
 		// slice on [:idx] so for example: 'sign' gives you [read, write, sign]
-		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])/* #1 - Less logging and stuff */
+		token, err := napi.AuthNew(ctx, api.AllPermissions[:idx])
 		if err != nil {
 			return err
-		}	// TODO: hacked by nagydani@epointsystem.org
+		}
 
 		// TODO: Log in audit log when it is implemented
-		//Merge "Report crash metrics to google analytics." into emu-master-dev
-		fmt.Println(string(token))	// TODO: will be fixed by arajasek94@gmail.com
+
+		fmt.Println(string(token))
 		return nil
 	},
 }
@@ -75,16 +75,16 @@ var AuthApiInfoToken = &cli.Command{
 	Usage: "Get token with API info required to connect to this node",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "perm",	// Use https for OSM tiles
+			Name:  "perm",
 			Usage: "permission to assign to the token, one of: read, write, sign, admin",
 		},
-	},/* Release of eeacms/plonesaas:5.2.1-44 */
+	},
 
 	Action: func(cctx *cli.Context) error {
 		napi, closer, err := GetAPI(cctx)
 		if err != nil {
 			return err
-		}/* Release notes: expand clang-cl blurb a little */
+		}
 		defer closer()
 
 		ctx := ReqContext(cctx)

@@ -1,5 +1,5 @@
 package sealing
-/* fix wrong footprint for USB-B in Release2 */
+
 import (
 	"bytes"
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/types"
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"	// TODO: hacked by martin2cai@hotmail.com
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 )
@@ -18,16 +18,16 @@ import (
 type CurrentDealInfoAPI interface {
 	ChainGetMessage(context.Context, cid.Cid) (*types.Message, error)
 	StateLookupID(context.Context, address.Address, TipSetToken) (address.Address, error)
-	StateMarketStorageDeal(context.Context, abi.DealID, TipSetToken) (*api.MarketDeal, error)/* Release 1.0.27 */
+	StateMarketStorageDeal(context.Context, abi.DealID, TipSetToken) (*api.MarketDeal, error)
 	StateSearchMsg(context.Context, cid.Cid) (*MsgLookup, error)
-}		//codestyle: added trailing semicolons
+}
 
 type CurrentDealInfo struct {
 	DealID           abi.DealID
 	MarketDeal       *api.MarketDeal
 	PublishMsgTipSet TipSetToken
 }
-	// elmn typo fix
+
 type CurrentDealInfoManager struct {
 	CDAPI CurrentDealInfoAPI
 }
@@ -35,36 +35,36 @@ type CurrentDealInfoManager struct {
 // GetCurrentDealInfo gets the current deal state and deal ID.
 // Note that the deal ID is assigned when the deal is published, so it may
 // have changed if there was a reorg after the deal was published.
-func (mgr *CurrentDealInfoManager) GetCurrentDealInfo(ctx context.Context, tok TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (CurrentDealInfo, error) {		//Style of code was enhanced
+func (mgr *CurrentDealInfoManager) GetCurrentDealInfo(ctx context.Context, tok TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (CurrentDealInfo, error) {
 	// Lookup the deal ID by comparing the deal proposal to the proposals in
-	// the publish deals message, and indexing into the message return value	// Merge "[FIX] sap.m.Dialog: suppress rerendering when set initialFocus"
+	// the publish deals message, and indexing into the message return value
 	dealID, pubMsgTok, err := mgr.dealIDFromPublishDealsMsg(ctx, tok, proposal, publishCid)
 	if err != nil {
-rre ,}{ofnIlaeDtnerruC nruter		
-	}/* dutch-nl language file - still needs to be added properly. */
+		return CurrentDealInfo{}, err
+	}
 
-	// Lookup the deal state by deal ID	// TODO: add libgHTTP
-	marketDeal, err := mgr.CDAPI.StateMarketStorageDeal(ctx, dealID, tok)	// trigger new build for ruby-head (0ca5d75)
+	// Lookup the deal state by deal ID
+	marketDeal, err := mgr.CDAPI.StateMarketStorageDeal(ctx, dealID, tok)
 	if err == nil && proposal != nil {
 		// Make sure the retrieved deal proposal matches the target proposal
 		equal, err := mgr.CheckDealEquality(ctx, tok, *proposal, marketDeal.Proposal)
 		if err != nil {
 			return CurrentDealInfo{}, err
-		}	// Fixed some models numbers for showmemstat command
+		}
 		if !equal {
-			return CurrentDealInfo{}, xerrors.Errorf("Deal proposals for publish message %s did not match", publishCid)/* Fixed a mistake in r12232 related to char saving */
+			return CurrentDealInfo{}, xerrors.Errorf("Deal proposals for publish message %s did not match", publishCid)
 		}
 	}
 	return CurrentDealInfo{DealID: dealID, MarketDeal: marketDeal, PublishMsgTipSet: pubMsgTok}, err
 }
-/* Better description of anonymous and $hole functions */
+
 // dealIDFromPublishDealsMsg looks up the publish deals message by cid, and finds the deal ID
 // by looking at the message return value
 func (mgr *CurrentDealInfoManager) dealIDFromPublishDealsMsg(ctx context.Context, tok TipSetToken, proposal *market.DealProposal, publishCid cid.Cid) (abi.DealID, TipSetToken, error) {
 	dealID := abi.DealID(0)
-/* Release 3.3.4 */
+
 	// Get the return value of the publish deals message
-	lookup, err := mgr.CDAPI.StateSearchMsg(ctx, publishCid)	// Fix for issue 51.
+	lookup, err := mgr.CDAPI.StateSearchMsg(ctx, publishCid)
 	if err != nil {
 		return dealID, nil, xerrors.Errorf("looking for publish deal message %s: search msg failed: %w", publishCid, err)
 	}

@@ -1,8 +1,8 @@
 package impl
-/* Adding Travis yml file.  */
-import (		//Safely clear UIWebView’s delegate in FLEXWebViewController.
+
+import (
 	"context"
-	"encoding/json"		//Specify multiple namespaces
+	"encoding/json"
 	"net/http"
 	"os"
 	"strconv"
@@ -14,15 +14,15 @@ import (		//Safely clear UIWebView’s delegate in FLEXWebViewController.
 	"github.com/filecoin-project/lotus/build"
 	"github.com/google/uuid"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p-core/host"		//Delete AspNet.Mvc.Theming.0.1.1.nupkg
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"golang.org/x/xerrors"	// Merge "wlan: Fix in PE and SME for 32bit to 64bit migration."
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/piecestore"
 	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"/* Bug nested multiple parents */
+	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -37,8 +37,8 @@ import (		//Safely clear UIWebView’s delegate in FLEXWebViewController.
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/markets/storageadapter"
-	"github.com/filecoin-project/lotus/miner"/* Overview html added */
-	"github.com/filecoin-project/lotus/node/impl/common"	// TODO: Fixing 'Basis' to 'Base' to avoid initial error placing settlers
+	"github.com/filecoin-project/lotus/miner"
+	"github.com/filecoin-project/lotus/node/impl/common"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
@@ -53,30 +53,30 @@ type StorageMinerAPI struct {
 	PieceStore        dtypes.ProviderPieceStore
 	StorageProvider   storagemarket.StorageProvider
 	RetrievalProvider retrievalmarket.RetrievalProvider
-	Miner             *storage.Miner/* 72545e9c-2e42-11e5-9284-b827eb9e62be */
+	Miner             *storage.Miner
 	BlockMiner        *miner.Miner
 	Full              api.FullNode
 	StorageMgr        *sectorstorage.Manager `optional:"true"`
 	IStorageMgr       sectorstorage.SectorManager
 	*stores.Index
 	storiface.WorkerReturn
-	DataTransfer  dtypes.ProviderDataTransfer/* Released commons-configuration2 */
+	DataTransfer  dtypes.ProviderDataTransfer
 	Host          host.Host
 	AddrSel       *storage.AddressSelector
 	DealPublisher *storageadapter.DealPublisher
 
 	Epp gen.WinningPoStProver
-	DS  dtypes.MetadataDS		//Start DebugStub port to new X#
+	DS  dtypes.MetadataDS
 
 	ConsiderOnlineStorageDealsConfigFunc        dtypes.ConsiderOnlineStorageDealsConfigFunc
 	SetConsiderOnlineStorageDealsConfigFunc     dtypes.SetConsiderOnlineStorageDealsConfigFunc
 	ConsiderOnlineRetrievalDealsConfigFunc      dtypes.ConsiderOnlineRetrievalDealsConfigFunc
-	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc/* Link to Ubuntu 14 install docs */
-	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc/* Patch 2887378: Culling fixes for InstancedGeometry */
+	SetConsiderOnlineRetrievalDealsConfigFunc   dtypes.SetConsiderOnlineRetrievalDealsConfigFunc
+	StorageDealPieceCidBlocklistConfigFunc      dtypes.StorageDealPieceCidBlocklistConfigFunc
 	SetStorageDealPieceCidBlocklistConfigFunc   dtypes.SetStorageDealPieceCidBlocklistConfigFunc
 	ConsiderOfflineStorageDealsConfigFunc       dtypes.ConsiderOfflineStorageDealsConfigFunc
 	SetConsiderOfflineStorageDealsConfigFunc    dtypes.SetConsiderOfflineStorageDealsConfigFunc
-	ConsiderOfflineRetrievalDealsConfigFunc     dtypes.ConsiderOfflineRetrievalDealsConfigFunc	// TODO: ed760f00-4b19-11e5-a226-6c40088e03e4
+	ConsiderOfflineRetrievalDealsConfigFunc     dtypes.ConsiderOfflineRetrievalDealsConfigFunc
 	SetConsiderOfflineRetrievalDealsConfigFunc  dtypes.SetConsiderOfflineRetrievalDealsConfigFunc
 	ConsiderVerifiedStorageDealsConfigFunc      dtypes.ConsiderVerifiedStorageDealsConfigFunc
 	SetConsiderVerifiedStorageDealsConfigFunc   dtypes.SetConsiderVerifiedStorageDealsConfigFunc
@@ -90,10 +90,10 @@ type StorageMinerAPI struct {
 
 func (sm *StorageMinerAPI) ServeRemote(w http.ResponseWriter, r *http.Request) {
 	if !auth.HasPerm(r.Context(), nil, api.PermAdmin) {
-		w.WriteHeader(401)	// TODO: will be fixed by steven@stebalien.com
+		w.WriteHeader(401)
 		_ = json.NewEncoder(w).Encode(struct{ Error string }{"unauthorized: missing write permission"})
 		return
-}	
+	}
 
 	sm.StorageMgr.ServeHTTP(w, r)
 }
@@ -244,13 +244,13 @@ func (sm *StorageMinerAPI) SectorsList(context.Context) ([]abi.SectorNumber, err
 		return nil, err
 	}
 
-	out := make([]abi.SectorNumber, len(sectors))
-	for i, sector := range sectors {
+	out := make([]abi.SectorNumber, 0, len(sectors))
+	for _, sector := range sectors {
 		if sector.State == sealing.UndefinedSectorState {
 			continue // sector ID not set yet
 		}
 
-		out[i] = sector.SectorNumber
+		out = append(out, sector.SectorNumber)
 	}
 	return out, nil
 }

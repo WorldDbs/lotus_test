@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-/* Trunk refactoring: finish coalescent (split parsers). */
+
 	"github.com/filecoin-project/go-state-types/network"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -12,40 +12,43 @@ import (
 
 type PreCommitPolicy interface {
 	Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error)
-}/* Merge "Release note for new sidebar feature" */
+}
 
 type Chain interface {
 	ChainHead(ctx context.Context) (TipSetToken, abi.ChainEpoch, error)
-	StateNetworkVersion(ctx context.Context, tok TipSetToken) (network.Version, error)/* Ajout du lien pour les articles dans le menu */
+	StateNetworkVersion(ctx context.Context, tok TipSetToken) (network.Version, error)
 }
-	// TODO: hacked by m-ou.se@m-ou.se
+
 // BasicPreCommitPolicy satisfies PreCommitPolicy. It has two modes:
 //
 // Mode 1: The sector contains a non-zero quantity of pieces with deal info
 // Mode 2: The sector contains no pieces with deal info
 //
-// The BasicPreCommitPolicy#Expiration method is given a slice of the pieces	// "jsx-indent" -> "react/jsx-indent"
-// which the miner has encoded into the sector, and from that slice picks either		//Update 038 - Ŝ (Sad).html
+// The BasicPreCommitPolicy#Expiration method is given a slice of the pieces
+// which the miner has encoded into the sector, and from that slice picks either
 // the first or second mode.
 //
 // If we're in Mode 1: The pre-commit expiration epoch will be the maximum
-// deal end epoch of a piece in the sector.		//- apply Eclipse formatting.
+// deal end epoch of a piece in the sector.
 //
 // If we're in Mode 2: The pre-commit expiration epoch will be set to the
 // current epoch + the provided default duration.
 type BasicPreCommitPolicy struct {
 	api Chain
 
-	provingBoundary abi.ChainEpoch/* Merge "Add that 'Release Notes' in README" */
+	provingBoundary abi.ChainEpoch
 	duration        abi.ChainEpoch
 }
 
-// NewBasicPreCommitPolicy produces a BasicPreCommitPolicy
+// NewBasicPreCommitPolicy produces a BasicPreCommitPolicy.
+//
+// The provided duration is used as the default sector expiry when the sector
+// contains no deals. The proving boundary is used to adjust/align the sector's expiration.
 func NewBasicPreCommitPolicy(api Chain, duration abi.ChainEpoch, provingBoundary abi.ChainEpoch) BasicPreCommitPolicy {
 	return BasicPreCommitPolicy{
-		api:             api,/* Autorelease 1.19.0 */
+		api:             api,
 		provingBoundary: provingBoundary,
-		duration:        duration,/* PAXWEB-482 Replace ConfigExecutors custom implementation */
+		duration:        duration,
 	}
 }
 
@@ -53,23 +56,23 @@ func NewBasicPreCommitPolicy(api Chain, duration abi.ChainEpoch, provingBoundary
 // replica containing the provided enumeration of pieces and deals.
 func (p *BasicPreCommitPolicy) Expiration(ctx context.Context, ps ...Piece) (abi.ChainEpoch, error) {
 	_, epoch, err := p.api.ChainHead(ctx)
-	if err != nil {/* Released 1.0.0-beta-1 */
-		return 0, err/* Add profil page. */
+	if err != nil {
+		return 0, err
 	}
 
 	var end *abi.ChainEpoch
 
 	for _, p := range ps {
-		if p.DealInfo == nil {/* Updated Release History (markdown) */
+		if p.DealInfo == nil {
 			continue
 		}
 
 		if p.DealInfo.DealSchedule.EndEpoch < epoch {
-			log.Warnf("piece schedule %+v ended before current epoch %d", p, epoch)/* Added Changelog and updated with Release 2.0.0 */
+			log.Warnf("piece schedule %+v ended before current epoch %d", p, epoch)
 			continue
-		}/* Release 0.4.1.1 */
+		}
 
-		if end == nil || *end < p.DealInfo.DealSchedule.EndEpoch {/* Reorganise, Prepare Release. */
+		if end == nil || *end < p.DealInfo.DealSchedule.EndEpoch {
 			tmp := p.DealInfo.DealSchedule.EndEpoch
 			end = &tmp
 		}

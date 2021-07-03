@@ -2,17 +2,17 @@
   name = "lotus-soup"
   author = ""
 
-[global]/* Release 2.1.2 - Fix long POST request parsing */
+[global]
   plan = "lotus-soup"
   case = "deals-e2e"
-  total_instances = 6/* Release for v13.1.0. */
+  total_instances = 6
   builder = "exec:go"
-  runner = "local:exec"/* Release v0.5.7 */
+  runner = "local:exec"
 
-[global.build]/* Release: Making ready to release 6.3.1 */
+[global.build]
   selectors = ["testground"]
-/* Added some examples that I've been working with */
-[global.run_config]	// TODO: will be fixed by boringland@protonmail.ch
+
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
@@ -21,33 +21,33 @@
 [global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "0"/* EpiInfo7: EI-442 */
+  genesis_timestamp_offset = "0"
   balance = "20000000.5" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
-  random_beacon_type = "mock"	// - Fixing some saving issues and reactor controller resetting itself
+  random_beacon_type = "mock"
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* Release candidate 2.4.4-RC1. */
-  [groups.instances]		//80100c98-2e6a-11e5-9284-b827eb9e62be
+  id = "bootstrapper"
+  [groups.instances]
     count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]		//fix typo in name of benchmark
+[[groups]]
   id = "miners"
   [groups.instances]
-    count = 2		//[TASK] add gulp task to bump bower version
+    count = 2
     percentage = 0.0
-  [groups.run]/* Release v5.09 */
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-[[groups]]	// TODO: hacked by sjors@sprovoost.nl
+[[groups]]
   id = "clients"
-  [groups.instances]/* Release 0.7.6 Version */
+  [groups.instances]
     count = 3
     percentage = 0.0
   [groups.run]

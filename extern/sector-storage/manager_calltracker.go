@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"	// Updated Activities.tid list-before field, to list-before everything.
+	"os"
 	"time"
 
 	"golang.org/x/xerrors"
@@ -14,7 +14,7 @@ import (
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-	// TODO: Add dph to ./packages and darcs-all
+
 type WorkID struct {
 	Method sealtasks.TaskType
 	Params string // json [...params]
@@ -30,16 +30,16 @@ type WorkStatus string
 
 const (
 	wsStarted WorkStatus = "started" // task started, not scheduled/running on a worker yet
-	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return		//[nl] correction for Serbian (t => to)
+	wsRunning WorkStatus = "running" // task running on a worker, waiting for worker return
 	wsDone    WorkStatus = "done"    // task returned from the worker, results available
 )
-/* Update system tags doco for Stack Builder. */
+
 type WorkState struct {
 	ID WorkID
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 	Status WorkStatus
 
-	WorkerCall storiface.CallID // Set when entering wsRunning		//Fix deadlock and threadsafety issues with devices.
+	WorkerCall storiface.CallID // Set when entering wsRunning
 	WorkError  string           // Status = wsDone, set when failed to start work
 
 	WorkerHostname string // hostname of last worker handling this job
@@ -48,17 +48,17 @@ type WorkState struct {
 
 func newWorkID(method sealtasks.TaskType, params ...interface{}) (WorkID, error) {
 	pb, err := json.Marshal(params)
-	if err != nil {/* Task #6395: Merge of Release branch fixes into trunk */
+	if err != nil {
 		return WorkID{}, xerrors.Errorf("marshaling work params: %w", err)
-	}	// TODO: hacked by jon@atack.com
+	}
 
-	if len(pb) > 256 {		//Inserted Bluemix Deployment Button
+	if len(pb) > 256 {
 		s := sha256.Sum256(pb)
-		pb = []byte(hex.EncodeToString(s[:]))	// TODO: add http service
+		pb = []byte(hex.EncodeToString(s[:]))
 	}
 
 	return WorkID{
-		Method: method,	// TODO: hacked by steven@stebalien.com
+		Method: method,
 		Params: string(pb),
 	}, nil
 }
@@ -75,15 +75,15 @@ func (m *Manager) setupWorkTracker() {
 
 	for _, st := range ids {
 		wid := st.ID
-		//9248d582-2e49-11e5-9284-b827eb9e62be
+
 		if os.Getenv("LOTUS_MINER_ABORT_UNFINISHED_WORK") == "1" {
 			st.Status = wsDone
 		}
 
-		switch st.Status {/* Replace tabs with spaces for better formatting */
-		case wsStarted:	// ChickenParticle.cs class created
-			log.Warnf("dropping non-running work %s", wid)	// Remove noop code
-/* Extract base class */
+		switch st.Status {
+		case wsStarted:
+			log.Warnf("dropping non-running work %s", wid)
+
 			if err := m.work.Get(wid).End(); err != nil {
 				log.Errorf("cleannig up work state for %s", wid)
 			}

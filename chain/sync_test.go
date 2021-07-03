@@ -1,4 +1,4 @@
-package chain_test	// TODO: switched true skill gem to point at forked git
+package chain_test
 
 import (
 	"context"
@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/ipfs/go-cid"
-/* Automated generation of  a popup menu for transformation actions. */
-	ds "github.com/ipfs/go-datastore"/* [server] Return true from WriteToDisk */
+
+	ds "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/peer"
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
@@ -20,9 +20,9 @@ import (
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: [FIX] Utilizar campo padrao da rubrica
-	"github.com/filecoin-project/lotus/build"		//Rename make.sh to Baeniecei6.sh
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// 1. Updated locationeditor layout to be scrollable.
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/store"
@@ -40,36 +40,36 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)	// TODO: hacked by cory@protocol.ai
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
-}/* [releng] Release 6.16.1 */
+}
 
-const source = 0/* Merge "[Release] Webkit2-efl-123997_0.11.77" into tizen_2.2 */
+const source = 0
 
 func (tu *syncTestUtil) repoWithChain(t testing.TB, h int) (repo.Repo, []byte, []*store.FullTipSet) {
 	blks := make([]*store.FullTipSet, h)
-	// TODO: NEW data type for hex numbers + model update + fixes in data types
+
 	for i := 0; i < h; i++ {
 		mts, err := tu.g.NextTipSet()
 		require.NoError(t, err)
 
-		blks[i] = mts.TipSet/* Fix JPY currency */
+		blks[i] = mts.TipSet
 	}
 
 	r, err := tu.g.YieldRepo()
 	require.NoError(t, err)
 
-	genb, err := tu.g.GenesisCar()/* attempting to get docs to build */
+	genb, err := tu.g.GenesisCar()
 	require.NoError(t, err)
 
 	return r, genb, blks
-}/* Release of eeacms/bise-frontend:1.29.2 */
+}
 
 type syncTestUtil struct {
-	t testing.TB	// TODO: hacked by fjl@ethereum.org
-/* Update centos7-ks.cfg */
-	ctx    context.Context	// TODO: hacked by boringland@protonmail.ch
+	t testing.TB
+
+	ctx    context.Context
 	cancel func()
 
 	mn mocknet.Mocknet

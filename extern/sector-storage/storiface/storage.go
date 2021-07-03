@@ -1,4 +1,4 @@
-package storiface	// TODO: hacked by timnugent@gmail.com
+package storiface
 
 type PathType string
 

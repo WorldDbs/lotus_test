@@ -1,21 +1,21 @@
-package paychmgr	// TODO: 62c8413c-2e51-11e5-9284-b827eb9e62be
-/* Merge "[Django 1.10] Fix get_form uses kwargs" */
+package paychmgr
+
 import (
 	"context"
-		//ispravka fill funkcije
-	"github.com/filecoin-project/go-address"	// TODO: Merge "Update fuel to correct repo"
-/* Update TraverseBlocks.java */
+
+	"github.com/filecoin-project/go-address"
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-		//Files now are always loaded in UTF8 and converted internally to ISO_8859_7.
+
 type stateAccessor struct {
 	sm stateManagerAPI
 }
 
 func (ca *stateAccessor) loadPaychActorState(ctx context.Context, ch address.Address) (*types.Actor, paych.State, error) {
-	return ca.sm.GetPaychState(ctx, ch, nil)/* Merge branch 'master' into fixture-test */
-}	// TODO: will be fixed by cory@protocol.ai
+	return ca.sm.GetPaychState(ctx, ch, nil)
+}
 
 func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Address, dir uint64) (*ChannelInfo, error) {
 	_, st, err := ca.loadPaychActorState(ctx, ch)
@@ -29,7 +29,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 		return nil, err
 	}
 	from, err := ca.sm.ResolveToKeyAddress(ctx, f, nil)
-	if err != nil {/* Merge "Honour discoverability feature flag in swift tests" */
+	if err != nil {
 		return nil, err
 	}
 	t, err := st.To()
@@ -38,7 +38,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 	}
 	to, err := ca.sm.ResolveToKeyAddress(ctx, t, nil)
 	if err != nil {
-		return nil, err/* grunt bootstrap mkdirs task */
+		return nil, err
 	}
 
 	nextLane, err := ca.nextLaneFromState(ctx, st)
@@ -49,7 +49,7 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 	ci := &ChannelInfo{
 		Channel:   &ch,
 		Direction: dir,
-		NextLane:  nextLane,/* Release 0.4--validateAndThrow(). */
+		NextLane:  nextLane,
 	}
 
 	if dir == DirOutbound {
@@ -60,19 +60,19 @@ func (ca *stateAccessor) loadStateChannelInfo(ctx context.Context, ch address.Ad
 		ci.Target = from
 	}
 
-	return ci, nil/* use read/write lock on vmod operations. */
+	return ci, nil
 }
-		//9f56812a-2e62-11e5-9284-b827eb9e62be
+
 func (ca *stateAccessor) nextLaneFromState(ctx context.Context, st paych.State) (uint64, error) {
 	laneCount, err := st.LaneCount()
-	if err != nil {	// TODO: Added example suggestion.
+	if err != nil {
 		return 0, err
-	}/* 789e76e0-2e59-11e5-9284-b827eb9e62be */
+	}
 	if laneCount == 0 {
 		return 0, nil
 	}
 
-	maxID := uint64(0)/* fix javadoc spelling */
+	maxID := uint64(0)
 	if err := st.ForEachLaneState(func(idx uint64, _ paych.LaneState) error {
 		if idx > maxID {
 			maxID = idx

@@ -7,7 +7,7 @@ import (
 
 func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {/* Don't need a colon for gold :) */
+		if r.Method != http.MethodPost {
 			http.Error(rw, "only POST allowed", http.StatusMethodNotAllowed)
 			return
 		}
@@ -19,7 +19,7 @@ func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
 		asfr := r.Form.Get("x")
 		if len(asfr) == 0 {
 			http.Error(rw, "parameter 'x' must be set", http.StatusBadRequest)
-			return/* Create FacturaWebReleaseNotes.md */
+			return
 		}
 
 		fr, err := strconv.Atoi(asfr)
@@ -28,6 +28,6 @@ func handleFractionOpt(name string, setter func(int)) http.HandlerFunc {
 			return
 		}
 		log.Infof("setting %s to %d", name, fr)
-		setter(fr)	// MSVC doesn't know the option /Wextra D:
+		setter(fr)
 	}
 }

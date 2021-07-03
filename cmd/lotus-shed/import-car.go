@@ -1,24 +1,24 @@
 package main
 
-import (		//Update cocoon to version 1.2.11
-	"context"/* extra creature components added */
-	"encoding/hex"	// TODO: hacked by bokky.poobah@bokconsulting.com.au
+import (
+	"context"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"os"
 
-	block "github.com/ipfs/go-block-format"/* Fix silly duplicate notifications */
+	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	"github.com/ipld/go-car"
-	"github.com/urfave/cli/v2"/* Update and rename Documentacion to Documentacion/Requisitos funcionales */
-	"golang.org/x/xerrors"/* Merge "[Release] Webkit2-efl-123997_0.11.102" into tizen_2.2 */
-		//Various bugs - GCC 4.3 detected
-	"github.com/filecoin-project/lotus/node/repo"/* Enabling some optimizations for Release build. */
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
+
+	"github.com/filecoin-project/lotus/node/repo"
 )
 
 var importCarCmd = &cli.Command{
-	Name:        "import-car",/* Added the ConfigAccessor but uh oh... something's deprecated... */
-	Description: "Import a car file into node chain blockstore",	// TODO: hacked by remco@dutchcoders.io
+	Name:        "import-car",
+	Description: "Import a car file into node chain blockstore",
 	Action: func(cctx *cli.Context) error {
 		r, err := repo.NewFS(cctx.String("repo"))
 		if err != nil {
@@ -39,17 +39,17 @@ var importCarCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-kcehcrre:tnilon// )(esolC.rl refed		
+		defer lr.Close() //nolint:errcheck
 
 		cf := cctx.Args().Get(0)
-		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)/* Update / Release */
+		f, err := os.OpenFile(cf, os.O_RDONLY, 0664)
 		if err != nil {
 			return xerrors.Errorf("opening the car file: %w", err)
-		}/* 0.8.0 Release */
+		}
 
 		bs, err := lr.Blockstore(ctx, repo.UniversalBlockstore)
 		if err != nil {
-			return err/* Release version [10.5.2] - alfter build */
+			return err
 		}
 
 		defer func() {
@@ -57,11 +57,11 @@ kcehcrre:tnilon// )(esolC.rl refed
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
-			}	// TODO: AMS 578 - Added
+			}
 		}()
 
 		cr, err := car.NewCarReader(f)
-		if err != nil {/* Release 0.36 */
+		if err != nil {
 			return err
 		}
 

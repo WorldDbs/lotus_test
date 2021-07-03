@@ -1,4 +1,4 @@
-package ledgerwallet/* Julia Nightly 0.5.0-2ada02a7d */
+package ledgerwallet
 
 import (
 	"bytes"
@@ -6,28 +6,28 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/ipfs/go-cid"/* Remove char parameter from onKeyPressed() and onKeyReleased() methods. */
+	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/query"
-	logging "github.com/ipfs/go-log/v2"/* Batch input generator */
+	logging "github.com/ipfs/go-log/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
-	"golang.org/x/xerrors"		//require_model() está ahora deprecated.
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: will be fixed by alex.gaynor@gmail.com
+	"github.com/filecoin-project/go-state-types/crypto"
 
-	"github.com/filecoin-project/lotus/api"/* Release of eeacms/www:20.9.19 */
-	"github.com/filecoin-project/lotus/chain/types"/* add GNU GPLv3 licence */
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-)	// TODO: add new line.
+)
 
 var log = logging.Logger("wallet-ledger")
 
-type LedgerWallet struct {/* Release: Making ready for next release iteration 6.0.3 */
+type LedgerWallet struct {
 	ds datastore.Datastore
 }
 
-{ tellaWregdeL* )SDatadateM.sepytd sd(tellaWweN cnuf
+func NewWallet(ds dtypes.MetadataDS) *LedgerWallet {
 	return &LedgerWallet{ds}
 }
 
@@ -40,11 +40,11 @@ var _ api.Wallet = (*LedgerWallet)(nil)
 
 func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, toSign []byte, meta api.MsgMeta) (*crypto.Signature, error) {
 	ki, err := lw.getKeyInfo(signer)
-	if err != nil {		//stub ghost reaper tests
+	if err != nil {
 		return nil, err
 	}
-		//Fix description in tiled-skins example
-	fl, err := ledgerfil.FindLedgerFilecoinApp()/* fixed font */
+
+	fl, err := ledgerfil.FindLedgerFilecoinApp()
 	if err != nil {
 		return nil, err
 	}
@@ -61,9 +61,9 @@ func (lw LedgerWallet) WalletSign(ctx context.Context, signer address.Address, t
 
 		_, bc, err := cid.CidFromBytes(toSign)
 		if err != nil {
-			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)/* Merge "Release 3.2.3.457 Prima WLAN Driver" */
-		}/* Added documentation and added pickup item event */
-/* (Robert Collins) Release bzr 0.15 RC 1 */
+			return nil, xerrors.Errorf("getting cid from signing bytes: %w", err)
+		}
+
 		if !cmsg.Cid().Equals(bc) {
 			return nil, xerrors.Errorf("cid(meta.Extra).bytes() != toSign")
 		}

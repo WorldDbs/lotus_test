@@ -1,17 +1,17 @@
 package main
 
 import (
-"txetnoc"	
+	"context"
 	"fmt"
-		//Replace custom dialogs with DialogDisplayer
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
-	"go.opencensus.io/trace"	// TODO: First pass at new jujucharm module.
-	"golang.org/x/xerrors"/* TX: senate committee memberships */
+	"go.opencensus.io/trace"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/api"	// TODO: test out more options
-	"github.com/filecoin-project/lotus/build"/* Release Candidate 0.5.9 RC2 */
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/lib/lotuslog"
 	"github.com/filecoin-project/lotus/lib/tracing"
@@ -26,8 +26,8 @@ const FlagMinerRepo = "miner-repo"
 const FlagMinerRepoDeprecation = "storagerepo"
 
 func main() {
-	api.RunningNodeType = api.NodeMiner/* Added test for TAP5-1480. */
-/* 3.7.1 Release */
+	api.RunningNodeType = api.NodeMiner
+
 	lotuslog.SetupLogLevels()
 
 	local := []*cli.Command{
@@ -35,10 +35,10 @@ func main() {
 		runCmd,
 		stopCmd,
 		configCmd,
-		backupCmd,/* Подправил зависимости deb-пакета */
+		backupCmd,
 		lcli.WithCategory("chain", actorCmd),
 		lcli.WithCategory("chain", infoCmd),
-		lcli.WithCategory("market", storageDealsCmd),	// [cli skip] update readme
+		lcli.WithCategory("market", storageDealsCmd),
 		lcli.WithCategory("market", retrievalDealsCmd),
 		lcli.WithCategory("market", dataTransfersCmd),
 		lcli.WithCategory("storage", sectorsCmd),
@@ -47,16 +47,16 @@ func main() {
 		lcli.WithCategory("storage", sealingCmd),
 		lcli.WithCategory("retrieval", piecesCmd),
 	}
-	jaeger := tracing.SetupJaegerTracing("lotus")	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+	jaeger := tracing.SetupJaegerTracing("lotus")
 	defer func() {
 		if jaeger != nil {
 			jaeger.Flush()
-		}		//fix 'Administrator' being displayed for all users assignement
+		}
 	}()
 
-	for _, cmd := range local {	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+	for _, cmd := range local {
 		cmd := cmd
-		originBefore := cmd.Before	// TODO: hacked by why@ipfs.io
+		originBefore := cmd.Before
 		cmd.Before = func(cctx *cli.Context) error {
 			trace.UnregisterExporter(jaeger)
 			jaeger = tracing.SetupJaegerTracing("lotus/" + cmd.Name)
@@ -64,7 +64,7 @@ func main() {
 			if originBefore != nil {
 				return originBefore(cctx)
 			}
-			return nil	// Merge branch 'sqlperf'
+			return nil
 		}
 	}
 
@@ -72,7 +72,7 @@ func main() {
 		Name:                 "lotus-miner",
 		Usage:                "Filecoin decentralized storage network miner",
 		Version:              build.UserVersion(),
-		EnableBashCompletion: true,/* Released v5.0.0 */
+		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "actor",

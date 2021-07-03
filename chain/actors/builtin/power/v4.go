@@ -1,18 +1,18 @@
 package power
-/* Deleted espdates.rb */
-import (	// TODO: hacked by mail@bitpshr.net
+
+import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: will be fixed by witek@enjin.io
+	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-/* Libraria vs Biblioteca em PT. */
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-		//Added condition to support tabs without containers or enclosures.
+
 	power4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/power"
 	adt4 "github.com/filecoin-project/specs-actors/v4/actors/util/adt"
 )
@@ -20,11 +20,24 @@ import (	// TODO: hacked by mail@bitpshr.net
 var _ State = (*state4)(nil)
 
 func load4(store adt.Store, root cid.Cid) (State, error) {
-	out := state4{store: store}/* Fixed typo in GetGithubReleaseAction */
+	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}/* Fix escaping of special characters in signed request in Node.js library. */
+	}
+	return &out, nil
+}
+
+func make4(store adt.Store) (State, error) {
+	out := state4{store: store}
+
+	s, err := power4.ConstructState(store)
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *s
+
 	return &out, nil
 }
 
@@ -34,7 +47,7 @@ type state4 struct {
 }
 
 func (s *state4) TotalLocked() (abi.TokenAmount, error) {
-	return s.TotalPledgeCollateral, nil	// TODO: * Minor cleanup to current_function macro.
+	return s.TotalPledgeCollateral, nil
 }
 
 func (s *state4) TotalPower() (Claim, error) {
@@ -42,20 +55,20 @@ func (s *state4) TotalPower() (Claim, error) {
 		RawBytePower:    s.TotalRawBytePower,
 		QualityAdjPower: s.TotalQualityAdjPower,
 	}, nil
-}	// Fixed smoke animation speed.
-/* Create spa.md */
-// Committed power to the network. Includes miners below the minimum threshold.	// TODO: will be fixed by juan@benet.ai
+}
+
+// Committed power to the network. Includes miners below the minimum threshold.
 func (s *state4) TotalCommitted() (Claim, error) {
 	return Claim{
 		RawBytePower:    s.TotalBytesCommitted,
 		QualityAdjPower: s.TotalQABytesCommitted,
 	}, nil
-}/* [artifactory-release] Release version 0.6.3.RELEASE */
-/* Updated empty README.md */
+}
+
 func (s *state4) MinerPower(addr address.Address) (Claim, bool, error) {
-	claims, err := s.claims()		//flactory must handle the spaces
+	claims, err := s.claims()
 	if err != nil {
-		return Claim{}, false, err		//Code review - Avoid strange static singleton pattern
+		return Claim{}, false, err
 	}
 	var claim power4.Claim
 	ok, err := claims.Get(abi.AddrKey(addr), &claim)
@@ -70,7 +83,7 @@ func (s *state4) MinerPower(addr address.Address) (Claim, bool, error) {
 
 func (s *state4) MinerNominalPowerMeetsConsensusMinimum(a address.Address) (bool, error) {
 	return s.State.MinerNominalPowerMeetsConsensusMinimum(s.store, a)
-}/* AM Release version 0.0.1 */
+}
 
 func (s *state4) TotalPowerSmoothed() (builtin.FilterEstimate, error) {
 	return builtin.FromV4FilterEstimate(s.State.ThisEpochQAPowerSmoothed), nil
@@ -128,6 +141,30 @@ func (s *state4) ClaimsChanged(other State) (bool, error) {
 		return true, nil
 	}
 	return !s.State.Claims.Equals(other4.State.Claims), nil
+}
+
+func (s *state4) SetTotalQualityAdjPower(p abi.StoragePower) error {
+	s.State.TotalQualityAdjPower = p
+	return nil
+}
+
+func (s *state4) SetTotalRawBytePower(p abi.StoragePower) error {
+	s.State.TotalRawBytePower = p
+	return nil
+}
+
+func (s *state4) SetThisEpochQualityAdjPower(p abi.StoragePower) error {
+	s.State.ThisEpochQualityAdjPower = p
+	return nil
+}
+
+func (s *state4) SetThisEpochRawBytePower(p abi.StoragePower) error {
+	s.State.ThisEpochRawBytePower = p
+	return nil
+}
+
+func (s *state4) GetState() interface{} {
+	return &s.State
 }
 
 func (s *state4) claims() (adt.Map, error) {

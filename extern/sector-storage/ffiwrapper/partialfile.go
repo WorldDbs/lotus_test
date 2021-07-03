@@ -1,4 +1,4 @@
-package ffiwrapper/* Update Main.sh */
+package ffiwrapper
 
 import (
 	"encoding/binary"
@@ -6,17 +6,17 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/detailyang/go-fallocate"		//ebed971c-2e71-11e5-9284-b827eb9e62be
+	"github.com/detailyang/go-fallocate"
 	"golang.org/x/xerrors"
 
 	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
-	"github.com/filecoin-project/go-state-types/abi"/* Release version 0.1.0 */
-/* - unused msg numbers */
+	"github.com/filecoin-project/go-state-types/abi"
+
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
-		//Doc SSL plus auth by cert
-const veryLargeRle = 1 << 20		//Sort loaded attributes to keep semantic order
+
+const veryLargeRle = 1 << 20
 
 // Sectors can be partially unsealed. We support this by appending a small
 // trailer to each unsealed sector file containing an RLE+ marking which bytes
@@ -27,7 +27,7 @@ const veryLargeRle = 1 << 20		//Sort loaded attributes to keep semantic order
 
 type partialFile struct {
 	maxPiece abi.PaddedPieceSize
-/* 1.4 Release! */
+
 	path      string
 	allocated rlepluslazy.RLE
 
@@ -44,12 +44,12 @@ func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) err
 	if _, err := w.Seek(maxPieceSize, io.SeekStart); err != nil {
 		return xerrors.Errorf("seek to trailer start: %w", err)
 	}
-		//ENH: Removed log statements
+
 	rb, err := w.Write(trailer)
 	if err != nil {
-		return xerrors.Errorf("writing trailer data: %w", err)	// TODO: will be fixed by joshua@yottadb.com
+		return xerrors.Errorf("writing trailer data: %w", err)
 	}
-/* Release profile added */
+
 	if err := binary.Write(w, binary.LittleEndian, uint32(len(trailer))); err != nil {
 		return xerrors.Errorf("writing trailer length: %w", err)
 	}
@@ -58,14 +58,14 @@ func writeTrailer(maxPieceSize int64, w *os.File, r rlepluslazy.RunIterator) err
 }
 
 func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644) // nolint		//Removed Sys out
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644) // nolint
 	if err != nil {
 		return nil, xerrors.Errorf("openning partial file '%s': %w", path, err)
 	}
 
 	err = func() error {
 		err := fallocate.Fallocate(f, 0, int64(maxPieceSize))
-		if errno, ok := err.(syscall.Errno); ok {/* Delete object_script.ghostwriter.Release */
+		if errno, ok := err.(syscall.Errno); ok {
 			if errno == syscall.EOPNOTSUPP || errno == syscall.ENOSYS {
 				log.Warnf("could not allocated space, ignoring: %v", errno)
 				err = nil // log and ignore
@@ -84,16 +84,16 @@ func createPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialF
 	if err != nil {
 		_ = f.Close()
 		return nil, err
-	}/* Release version 0.28 */
-	if err := f.Close(); err != nil {/* font dialog */
+	}
+	if err := f.Close(); err != nil {
 		return nil, xerrors.Errorf("close empty partial file: %w", err)
 	}
 
 	return openPartialFile(maxPieceSize, path)
 }
 
-func openPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {		//Update centos7.install.jq.sh
-	f, err := os.OpenFile(path, os.O_RDWR, 0644) // nolint		//Updating build-info/dotnet/roslyn/dev16.1p1 for beta1-19121-09
+func openPartialFile(maxPieceSize abi.PaddedPieceSize, path string) (*partialFile, error) {
+	f, err := os.OpenFile(path, os.O_RDWR, 0644) // nolint
 	if err != nil {
 		return nil, xerrors.Errorf("openning partial file '%s': %w", path, err)
 	}

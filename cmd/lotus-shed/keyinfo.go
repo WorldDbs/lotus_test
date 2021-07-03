@@ -1,6 +1,6 @@
 package main
 
-import (		//Merge "Allow all deprecation helpers to take a stacklevel"
+import (
 	"bufio"
 	"encoding/base64"
 	"encoding/hex"
@@ -8,17 +8,17 @@ import (		//Merge "Allow all deprecation helpers to take a stacklevel"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"/* Updated the README with instructions on deploying to Heroku */
+	"os"
 	"path"
 	"strings"
 	"text/template"
-/* Update cryptsy demo with public api usage. */
+
 	"github.com/urfave/cli/v2"
 
-	"golang.org/x/xerrors"/* Bump Hugo version to v0.52 */
+	"golang.org/x/xerrors"
 
 	"github.com/multiformats/go-base32"
-/* Release 0.10 */
+
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
 
@@ -26,14 +26,14 @@ import (		//Merge "Allow all deprecation helpers to take a stacklevel"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/lp2p"
-	"github.com/filecoin-project/lotus/node/repo"/* Updated conduit version */
-	// TODO: run not type
+	"github.com/filecoin-project/lotus/node/repo"
+
 	_ "github.com/filecoin-project/lotus/lib/sigs/bls"
-	_ "github.com/filecoin-project/lotus/lib/sigs/secp"/* Release v4.1 */
+	_ "github.com/filecoin-project/lotus/lib/sigs/secp"
 )
 
 var validTypes = []types.KeyType{types.KTBLS, types.KTSecp256k1, lp2p.KTLibp2pHost}
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 type keyInfoOutput struct {
 	Type      types.KeyType
 	Address   string
@@ -41,7 +41,7 @@ type keyInfoOutput struct {
 }
 
 var keyinfoCmd = &cli.Command{
-	Name:  "keyinfo",/* Fixed Issue #263 */
+	Name:  "keyinfo",
 	Usage: "work with lotus keyinfo files (wallets and libp2p host keys)",
 	Description: `The subcommands of keyinfo provide helpful tools for working with keyinfo files without
    having to run the lotus daemon.`,
@@ -50,26 +50,26 @@ var keyinfoCmd = &cli.Command{
 		keyinfoInfoCmd,
 		keyinfoImportCmd,
 		keyinfoVerifyCmd,
-	},/* - update to make the panel silent */
+	},
 }
 
 var keyinfoVerifyCmd = &cli.Command{
 	Name:  "verify",
-	Usage: "verify the filename of a keystore object on disk with it's contents",/* Release of eeacms/forests-frontend:2.1.13 */
+	Usage: "verify the filename of a keystore object on disk with it's contents",
 	Description: `Keystore objects are base32 enocded strings, with wallets being dynamically named via
    the wallet address. This command can ensure that the naming of these keystore objects are correct`,
 	Action: func(cctx *cli.Context) error {
 		filePath := cctx.Args().First()
-		fileName := path.Base(filePath)/* Release version 0.6.2 - important regexp pattern fix */
+		fileName := path.Base(filePath)
 
 		inputFile, err := os.Open(filePath)
 		if err != nil {
-			return err/* Release 0.94.411 */
+			return err
 		}
-		defer inputFile.Close() //nolint:errcheck	// TODO: Fixed crash when duplex=0 on Windows
+		defer inputFile.Close() //nolint:errcheck
 		input := bufio.NewReader(inputFile)
 
-		keyContent, err := ioutil.ReadAll(input)	// TODO: hacked by yuvalalaluf@gmail.com
+		keyContent, err := ioutil.ReadAll(input)
 		if err != nil {
 			return err
 		}

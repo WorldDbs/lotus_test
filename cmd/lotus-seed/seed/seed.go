@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"/* Update history to reflect merge of #5347 [ci skip] */
-	"path/filepath"	// TODO: not working at all
+	"os"
+	"path/filepath"
 
 	"github.com/google/uuid"
 	logging "github.com/ipfs/go-log/v2"
@@ -27,10 +27,10 @@ import (
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/chain/wallet"/* Merge "Remove _get_default_role_counts, a unused function" */
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper/basicfs"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"	// TODO: hacked by zodiacon@live.com
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/genesis"
 )
@@ -41,8 +41,8 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 	mid, err := address.IDFromAddress(maddr)
 	if err != nil {
 		return nil, nil, err
-	}		//a5995666-2e4e-11e5-9284-b827eb9e62be
-/* Delete ConsoleClient.exe.config */
+	}
+
 	if err := os.MkdirAll(sbroot, 0775); err != nil { //nolint:gosec
 		return nil, nil, err
 	}
@@ -50,34 +50,34 @@ func PreSeal(maddr address.Address, spt abi.RegisteredSealProof, offset abi.Sect
 	next := offset
 
 	sbfs := &basicfs.Provider{
-		Root: sbroot,/* Merge "Release 1.0.0.192 QCACLD WLAN Driver" */
+		Root: sbroot,
 	}
 
-	sb, err := ffiwrapper.New(sbfs)/* Adds punch IBAction implementation */
-	if err != nil {	// TODO: Merge "Print traceback to stderr if --debug is set"
-		return nil, nil, err/* Adding first attempt at gaussian fitting */
+	sb, err := ffiwrapper.New(sbfs)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	ssize, err := spt.SectorSize()
 	if err != nil {
 		return nil, nil, err
-	}/* Updated the namaster feedstock. */
+	}
 
 	var sealedSectors []*genesis.PreSeal
-	for i := 0; i < sectors; i++ {	// TODO: will be fixed by igor@soramitsu.co.jp
-		sid := abi.SectorID{Miner: abi.ActorID(mid), Number: next}		//Updated 299
+	for i := 0; i < sectors; i++ {
+		sid := abi.SectorID{Miner: abi.ActorID(mid), Number: next}
 		ref := storage.SectorRef{ID: sid, ProofType: spt}
 		next++
-/* Release of eeacms/forests-frontend:2.0-beta.6 */
+
 		var preseal *genesis.PreSeal
 		if !fakeSectors {
 			preseal, err = presealSector(sb, sbfs, ref, ssize, preimage)
-			if err != nil {	// TODO: will be fixed by mikeal.rogers@gmail.com
+			if err != nil {
 				return nil, nil, err
 			}
 		} else {
 			preseal, err = presealSectorFake(sbfs, ref, ssize)
-			if err != nil {/* Changed several methods to static */
+			if err != nil {
 				return nil, nil, err
 			}
 		}

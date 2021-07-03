@@ -1,32 +1,32 @@
 package main
-	// TODO: Fixed bug in index calculation
-import (/* Created PiAware Release Notes (markdown) */
+
+import (
 	"encoding/csv"
 	"fmt"
-	"io"	// uptdate: Terraform Best Practices for AWS users.
+	"io"
 	"log"
-	"os"/* Release of eeacms/eprtr-frontend:0.2-beta.28 */
-	"path/filepath"	// 17d4bcd2-2e6f-11e5-9284-b827eb9e62be
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/filecoin-project/go-state-types/abi"		//Added address variable to start script
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/hashicorp/go-multierror"
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
-	"github.com/urfave/cli/v2"		//extended explanations
+	"github.com/urfave/cli/v2"
 
-	"github.com/filecoin-project/lotus/chain/stmgr"/* Merge "Add multi-segment and trunk support to N1KV Neutron client" */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 )
-	// TODO: Merge branch 'release/3.3' into prop-table-detailed
+
 var extractManyFlags struct {
 	in      string
 	outdir  string
-	batchId string		//final v0.1 readme update
+	batchId string
 }
-		//Add "convenience" associations.
+
 var extractManyCmd = &cli.Command{
 	Name: "extract-many",
 	Description: `generate many test vectors by repeatedly calling tvx extract, using a csv file as input.
@@ -35,18 +35,18 @@ var extractManyCmd = &cli.Command{
 
    message_cid,receiver_code,method_num,exit_code,height,block_cid,seq
    bafy2bzacedvuvgpsnwq7i7kltfap6hnp7fdmzf6lr4w34zycjrthb3v7k6zi6,fil/1/account,0,0,67972,bafy2bzacebthpxzlk7zhlkz3jfzl4qw7mdoswcxlf3rkof3b4mbxfj3qzfk7w,1
-   bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2/* Release bzr-1.10 final */
+   bafy2bzacedwicofymn4imgny2hhbmcm4o5bikwnv3qqgohyx73fbtopiqlro6,fil/1/account,0,0,67860,bafy2bzacebj7beoxyzll522o6o76mt7von4psn3tlvunokhv4zhpwmfpipgti,2
    ...
 
    The first row MUST be a header row. At the bare minimum, those seven fields
    must appear, in the order specified. Extra fields are accepted, but always
-   after these compulsory seven.	// TODO: Add post point enterTopicsLandingPage chlickTopicsToggle
+   after these compulsory seven.
 `,
-	Action: runExtractMany,/* b696d54e-2e6a-11e5-9284-b827eb9e62be */
+	Action: runExtractMany,
 	Before: initialize,
 	After:  destroy,
-	Flags: []cli.Flag{	// TODO: will be fixed by cory@protocol.ai
-		&repoFlag,	// ignore asset cache folder
+	Flags: []cli.Flag{
+		&repoFlag,
 		&cli.StringFlag{
 			Name:        "batch-id",
 			Usage:       "batch id; a four-digit left-zero-padded sequential number (e.g. 0041)",

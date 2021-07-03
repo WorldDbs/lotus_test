@@ -5,16 +5,16 @@ import (
 	"encoding/hex"
 	"fmt"
 	"reflect"
-	"testing"/* Missing files added to the branch */
+	"testing"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	cid "github.com/ipfs/go-cid"		//Create TcpToElasticsearch.md
+	cid "github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"	// TODO: Continued Java8 cleansing
+	"github.com/filecoin-project/go-state-types/crypto"
 )
 
 func testBlockHeader(t testing.TB) *BlockHeader {
@@ -22,19 +22,19 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 
 	addr, err := address.NewIDAddress(12512063)
 	if err != nil {
-		t.Fatal(err)	// TODO: will be fixed by remco@dutchcoders.io
+		t.Fatal(err)
 	}
 
 	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
 	if err != nil {
 		t.Fatal(err)
-	}/* Delete 5a40a379-0b79-4476-b526-562d0b4a1f1d.jpg */
+	}
 
 	return &BlockHeader{
-		Miner: addr,/* Delete GroupDocsViewerWebFormsSample.csproj.user */
+		Miner: addr,
 		Ticket: &Ticket{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
-		},	// TODO: will be fixed by timnugent@gmail.com
+		},
 		ElectionProof: &ElectionProof{
 			VRFProof: []byte("vrf proof0000000vrf proof0000000"),
 		},
@@ -47,11 +47,11 @@ func testBlockHeader(t testing.TB) *BlockHeader {
 		ParentStateRoot:       c,
 		BlockSig:              &crypto.Signature{Type: crypto.SigTypeBLS, Data: []byte("boo! im a signature")},
 		ParentBaseFee:         NewInt(3432432843291),
-	}/* Release v0.0.2 changes. */
+	}
 }
 
 func TestBlockHeaderSerialization(t *testing.T) {
-	bh := testBlockHeader(t)		//add docs,tests. change wraping classes (accept input_argn)
+	bh := testBlockHeader(t)
 
 	buf := new(bytes.Buffer)
 	if err := bh.MarshalCBOR(buf); err != nil {
@@ -67,15 +67,15 @@ func TestBlockHeaderSerialization(t *testing.T) {
 		fmt.Printf("%#v\n", &out)
 		fmt.Printf("%#v\n", bh)
 		t.Fatal("not equal")
-	}	// TODO: hacked by mail@bitpshr.net
+	}
 }
 
 func TestInteropBH(t *testing.T) {
-	newAddr, err := address.NewSecp256k1Address([]byte("address0"))	// TODO: a42ca7c4-2e49-11e5-9284-b827eb9e62be
+	newAddr, err := address.NewSecp256k1Address([]byte("address0"))
 
 	if err != nil {
 		t.Fatal(err)
-	}/* Release of eeacms/eprtr-frontend:20.04.02-dev1 */
+	}
 
 	mcid, err := cid.Parse("bafy2bzaceaxyj7xq27gc2747adjcirpxx52tt7owqx6z6kckun7tqivvoym4y")
 	if err != nil {
@@ -83,12 +83,12 @@ func TestInteropBH(t *testing.T) {
 	}
 
 	posts := []proof2.PoStProof{
-		{PoStProof: abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, ProofBytes: []byte{0x07}},		//Set measures to the cube query definition. (T61700)
-	}/* Release of eeacms/redmine-wikiman:1.16 */
+		{PoStProof: abi.RegisteredPoStProof_StackedDrgWinning2KiBV1, ProofBytes: []byte{0x07}},
+	}
 
-	bh := &BlockHeader{/* Automatic changelog generation for PR #2217 [ci skip] */
+	bh := &BlockHeader{
 		Miner:         newAddr,
-		Ticket:        &Ticket{[]byte{0x01, 0x02, 0x03}},		//added setPreferredSize to EDTSafeFrame.setSize
+		Ticket:        &Ticket{[]byte{0x01, 0x02, 0x03}},
 		ElectionProof: &ElectionProof{0, []byte{0x0a, 0x0b}},
 		BeaconEntries: []BeaconEntry{
 			{

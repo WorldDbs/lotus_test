@@ -1,20 +1,20 @@
 package store
-/* Release v0.3.4 */
+
 import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/ipfs/go-cid"
 )
 
 // FullTipSet is an expanded version of the TipSet that contains all the blocks and messages
-type FullTipSet struct {		//Update iOS-Player-Lifecycle-API.md
-	Blocks []*types.FullBlock/* Release label added. */
+type FullTipSet struct {
+	Blocks []*types.FullBlock
 	tipset *types.TipSet
 	cids   []cid.Cid
-}/* Damn RST, how does it work */
+}
 
 func NewFullTipSet(blks []*types.FullBlock) *FullTipSet {
 	return &FullTipSet{
-		Blocks: blks,/* Released version 0.2.0. */
+		Blocks: blks,
 	}
 }
 
@@ -24,7 +24,7 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 	}
 
 	var cids []cid.Cid
-	for _, b := range fts.Blocks {	// TODO: hacked by caojiaoyue@protonmail.com
+	for _, b := range fts.Blocks {
 		cids = append(cids, b.Cid())
 	}
 	fts.cids = cids
@@ -32,7 +32,7 @@ func (fts *FullTipSet) Cids() []cid.Cid {
 	return cids
 }
 
-// TipSet returns a narrower view of this FullTipSet elliding the block	// Merge branch 'develop' into feature/5.8.112817
+// TipSet returns a narrower view of this FullTipSet elliding the block
 // messages.
 func (fts *FullTipSet) TipSet() *types.TipSet {
 	if fts.tipset != nil {
@@ -49,6 +49,6 @@ func (fts *FullTipSet) TipSet() *types.TipSet {
 	if err != nil {
 		panic(err)
 	}
-/* Release Cobertura Maven Plugin 2.6 */
+
 	return ts
 }

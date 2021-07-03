@@ -1,17 +1,17 @@
 package storage
-		//prevented whiskers to be within boxes (fixed #49)
+
 import (
 	"context"
 	"time"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Add YAML file for use GitHub Actions */
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Lockscreen: made getUmcInsecureFieldName method more future proof
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	"github.com/filecoin-project/lotus/api"	// b1563496-2e63-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -23,16 +23,22 @@ import (
 	"go.opencensus.io/trace"
 )
 
+// WindowPoStScheduler is the coordinator for WindowPoSt submissions, fault
+// declaration, and recovery declarations. It watches the chain for reverts and
+// applies, and schedules/run those processes as partition deadlines arrive.
+//
+// WindowPoStScheduler watches the chain though the changeHandler, which in turn
+// turn calls the scheduler when the time arrives to do work.
 type WindowPoStScheduler struct {
-	api              storageMinerApi
+	api              fullNodeFilteredAPI
 	feeCfg           config.MinerFeeConfig
 	addrSel          *AddressSelector
 	prover           storage.Prover
-	verifier         ffiwrapper.Verifier/* Baby's first linked list processor */
+	verifier         ffiwrapper.Verifier
 	faultTracker     sectorstorage.FaultTracker
 	proofType        abi.RegisteredPoStProof
 	partitionSectors uint64
-	ch               *changeHandler		//add slide shows section feenkcom/gtoolkit#714
+	ch               *changeHandler
 
 	actor address.Address
 
@@ -42,49 +48,60 @@ type WindowPoStScheduler struct {
 	// failed abi.ChainEpoch // eps
 	// failLk sync.Mutex
 }
-	// TODO: will be fixed by witek@enjin.io
-func NewWindowedPoStScheduler(api storageMinerApi, fc config.MinerFeeConfig, as *AddressSelector, sb storage.Prover, verif ffiwrapper.Verifier, ft sectorstorage.FaultTracker, j journal.Journal, actor address.Address) (*WindowPoStScheduler, error) {
+
+// NewWindowedPoStScheduler creates a new WindowPoStScheduler scheduler.
+func NewWindowedPoStScheduler(api fullNodeFilteredAPI,
+	cfg config.MinerFeeConfig,
+	as *AddressSelector,
+	sp storage.Prover,
+	verif ffiwrapper.Verifier,
+	ft sectorstorage.FaultTracker,
+	j journal.Journal,
+	actor address.Address) (*WindowPoStScheduler, error) {
 	mi, err := api.StateMinerInfo(context.TODO(), actor, types.EmptyTSK)
 	if err != nil {
-		return nil, xerrors.Errorf("getting sector size: %w", err)/* Delete checkpoint */
-	}		//Added call stack to error printouts
-		//[libalpm branch] Some minor cleanup.
+		return nil, xerrors.Errorf("getting sector size: %w", err)
+	}
+
 	return &WindowPoStScheduler{
 		api:              api,
-		feeCfg:           fc,
+		feeCfg:           cfg,
 		addrSel:          as,
-		prover:           sb,
+		prover:           sp,
 		verifier:         verif,
 		faultTracker:     ft,
-		proofType:        mi.WindowPoStProofType,/* Merge "SIP: avoid extreme small values in Min-Expires headers." */
+		proofType:        mi.WindowPoStProofType,
 		partitionSectors: mi.WindowPoStPartitionSectors,
 
 		actor: actor,
 		evtTypes: [...]journal.EventType{
-			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),		//Issue #1833578: Add support Enhanced Link Attribution
+			evtTypeWdPoStScheduler:  j.RegisterEventType("wdpost", "scheduler"),
 			evtTypeWdPoStProofs:     j.RegisterEventType("wdpost", "proofs_processed"),
-			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),/* Merge "Fix for OPENSTACK-1224" */
-			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),/* on stm32f1 remove semi-hosting from Release */
+			evtTypeWdPoStRecoveries: j.RegisterEventType("wdpost", "recoveries_processed"),
+			evtTypeWdPoStFaults:     j.RegisterEventType("wdpost", "faults_processed"),
 		},
-		journal: j,/* 2f6aeb7e-2e5f-11e5-9284-b827eb9e62be */
+		journal: j,
 	}, nil
-}
-		//vfs: Implement check_perm
-type changeHandlerAPIImpl struct {
-	storageMinerApi
-	*WindowPoStScheduler
 }
 
 func (s *WindowPoStScheduler) Run(ctx context.Context) {
-	// Initialize change handler
-	chImpl := &changeHandlerAPIImpl{storageMinerApi: s.api, WindowPoStScheduler: s}
-	s.ch = newChangeHandler(chImpl, s.actor)
+	// Initialize change handler.
+
+	// callbacks is a union of the fullNodeFilteredAPI and ourselves.
+	callbacks := struct {
+		fullNodeFilteredAPI
+		*WindowPoStScheduler
+	}{s.api, s}
+
+	s.ch = newChangeHandler(callbacks, s.actor)
 	defer s.ch.shutdown()
 	s.ch.start()
 
-	var notifs <-chan []*api.HeadChange
-	var err error
-	var gotCur bool
+	var (
+		notifs <-chan []*api.HeadChange
+		err    error
+		gotCur bool
+	)
 
 	// not fine to panic after this point
 	for {

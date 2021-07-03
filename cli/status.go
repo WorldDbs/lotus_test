@@ -1,10 +1,10 @@
 package cli
-/* #116 - PlaySound fix for inventory. */
-import (/* * Mark as Release Candidate 1. */
+
+import (
 	"fmt"
 
-	"github.com/urfave/cli/v2"/* first Librera */
-/* added validation messages to EditAccountView */
+	"github.com/urfave/cli/v2"
+
 	"github.com/filecoin-project/lotus/build"
 )
 
@@ -22,7 +22,7 @@ var StatusCmd = &cli.Command{
 		apic, closer, err := GetFullNodeAPIV1(cctx)
 		if err != nil {
 			return err
-		}		//travis install morflogik plugin for elasticsearch
+		}
 		defer closer()
 		ctx := ReqContext(cctx)
 
@@ -36,14 +36,14 @@ var StatusCmd = &cli.Command{
 		fmt.Printf("Sync Epoch: %d\n", status.SyncStatus.Epoch)
 		fmt.Printf("Epochs Behind: %d\n", status.SyncStatus.Behind)
 		fmt.Printf("Peers to Publish Messages: %d\n", status.PeerStatus.PeersToPublishMsgs)
-		fmt.Printf("Peers to Publish Blocks: %d\n", status.PeerStatus.PeersToPublishBlocks)	// Rollback of unfair decorator changes
+		fmt.Printf("Peers to Publish Blocks: %d\n", status.PeerStatus.PeersToPublishBlocks)
 
 		if inclChainStatus && status.SyncStatus.Epoch > uint64(build.Finality) {
 			var ok100, okFin string
 			if status.ChainStatus.BlocksPerTipsetLast100 >= 4.75 {
 				ok100 = "[OK]"
 			} else {
-				ok100 = "[UNHEALTHY]"/* Fix flipped scores */
+				ok100 = "[UNHEALTHY]"
 			}
 			if status.ChainStatus.BlocksPerTipsetLastFinality >= 4.75 {
 				okFin = "[OK]"
@@ -56,5 +56,5 @@ var StatusCmd = &cli.Command{
 		}
 
 		return nil
-	},/* e2040884-2e59-11e5-9284-b827eb9e62be */
-}/* [ADD] PRE-Release */
+	},
+}

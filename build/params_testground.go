@@ -105,7 +105,7 @@ var (
 	ActorUpgradeNetworkVersion = network.Version4
 
 	Devnet      = true
-	ZeroAddress = MustParseAddress("f3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
+	ZeroAddress = MustParseAddress("w3yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby2smx7a")
 
 	WhitelistedBlock  = cid.Undef
 	BootstrappersFile = ""

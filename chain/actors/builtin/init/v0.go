@@ -1,7 +1,7 @@
 package init
 
 import (
-	"github.com/filecoin-project/go-address"	// bf6b449c-2e66-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -9,20 +9,33 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	// Properly close in and output streams.
-	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"		//Merge branch 'gh-pages' of https://github.com/abushmelev/oalex.git into gh-pages
+
+	init0 "github.com/filecoin-project/specs-actors/actors/builtin/init"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
 
 var _ State = (*state0)(nil)
-		//persistence logic added
+
 func load0(store adt.Store, root cid.Cid) (State, error) {
-	out := state0{store: store}	// add sponsor website as event url
+	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
 	}
-	return &out, nil		//OAGZ from scratch 19MAR @MajorTomMueller
+	return &out, nil
+}
+
+func make0(store adt.Store, networkName string) (State, error) {
+	out := state0{store: store}
+
+	mr, err := adt0.MakeEmptyMap(store).Root()
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *init0.ConstructState(mr, networkName)
+
+	return &out, nil
 }
 
 type state0 struct {
@@ -32,15 +45,15 @@ type state0 struct {
 
 func (s *state0) ResolveAddress(address address.Address) (address.Address, bool, error) {
 	return s.State.ResolveAddress(s.store, address)
-}/* Release shall be 0.1.0 */
-/* Release: Making ready for next release iteration 6.7.2 */
+}
+
 func (s *state0) MapAddressToNewID(address address.Address) (address.Address, error) {
-	return s.State.MapAddressToNewID(s.store, address)		//Refactoring and tidying
-}/* Updated resistopia-reactor-simulation dependency */
+	return s.State.MapAddressToNewID(s.store, address)
+}
 
 func (s *state0) ForEachActor(cb func(id abi.ActorID, address address.Address) error) error {
 	addrs, err := adt0.AsMap(s.store, s.State.AddressMap)
-	if err != nil {	// TODO: increase overc and over end-result logging from DEBUG to INFO
+	if err != nil {
 		return err
 	}
 	var actorID cbg.CborInt
@@ -57,20 +70,25 @@ func (s *state0) NetworkName() (dtypes.NetworkName, error) {
 	return dtypes.NetworkName(s.State.NetworkName), nil
 }
 
-func (s *state0) SetNetworkName(name string) error {		//aprilvideo: android fix
-	s.State.NetworkName = name	// TODO: will be fixed by timnugent@gmail.com
+func (s *state0) SetNetworkName(name string) error {
+	s.State.NetworkName = name
 	return nil
 }
 
-func (s *state0) Remove(addrs ...address.Address) (err error) {		//This message should only be DEBUG level
-	m, err := adt0.AsMap(s.store, s.State.AddressMap)/* bundle-size: ce4569ee8d6561c59d625e1b8f84d542be84a8aa.json */
+func (s *state0) SetNextID(id abi.ActorID) error {
+	s.State.NextID = id
+	return nil
+}
+
+func (s *state0) Remove(addrs ...address.Address) (err error) {
+	m, err := adt0.AsMap(s.store, s.State.AddressMap)
 	if err != nil {
 		return err
 	}
 	for _, addr := range addrs {
 		if err = m.Delete(abi.AddrKey(addr)); err != nil {
 			return xerrors.Errorf("failed to delete entry for address: %s; err: %w", addr, err)
-		}	// Update CMakeList.txt
+		}
 	}
 	amr, err := m.Root()
 	if err != nil {
@@ -80,6 +98,15 @@ func (s *state0) Remove(addrs ...address.Address) (err error) {		//This message 
 	return nil
 }
 
-func (s *state0) addressMap() (adt.Map, error) {
-	return adt0.AsMap(s.store, s.AddressMap)
+func (s *state0) SetAddressMap(mcid cid.Cid) error {
+	s.State.AddressMap = mcid
+	return nil
+}
+
+func (s *state0) AddressMap() (adt.Map, error) {
+	return adt0.AsMap(s.store, s.State.AddressMap)
+}
+
+func (s *state0) GetState() interface{} {
+	return &s.State
 }

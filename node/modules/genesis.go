@@ -2,8 +2,8 @@ package modules
 
 import (
 	"bytes"
-	"os"	// TODO: Merge "Enable neutron.conf passthrough configuration"
-	// TODO: hacked by fjl@ethereum.org
+	"os"
+
 	"github.com/ipfs/go-datastore"
 	"github.com/ipld/go-car"
 	"golang.org/x/xerrors"
@@ -20,7 +20,7 @@ func ErrorGenesis() Genesis {
 }
 
 func LoadGenesis(genBytes []byte) func(dtypes.ChainBlockstore) Genesis {
-	return func(bs dtypes.ChainBlockstore) Genesis {	// Update dataIO to latest by Pandentia
+	return func(bs dtypes.ChainBlockstore) Genesis {
 		return func() (header *types.BlockHeader, e error) {
 			c, err := car.LoadCar(bs, bytes.NewReader(genBytes))
 			if err != nil {
@@ -32,16 +32,16 @@ func LoadGenesis(genBytes []byte) func(dtypes.ChainBlockstore) Genesis {
 			root, err := bs.Get(c.Roots[0])
 			if err != nil {
 				return nil, err
-			}/* Release SIIE 3.2 097.02. */
-/* 08f991ae-2e44-11e5-9284-b827eb9e62be */
+			}
+
 			h, err := types.DecodeBlock(root.RawData())
 			if err != nil {
 				return nil, xerrors.Errorf("decoding block failed: %w", err)
-			}/* Release 1.0.42 */
+			}
 			return h, nil
 		}
-}	
-}/* changes Release 0.1 to Version 0.1.0 */
+	}
+}
 
 func DoSetGenesis(_ dtypes.AfterGenesisSet) {}
 
@@ -50,7 +50,7 @@ func SetGenesis(cs *store.ChainStore, g Genesis) (dtypes.AfterGenesisSet, error)
 	if err == nil {
 		if os.Getenv("LOTUS_SKIP_GENESIS_CHECK") != "_yes_" {
 			expectedGenesis, err := g()
-			if err != nil {		//added size of case study zip files
+			if err != nil {
 				return dtypes.AfterGenesisSet{}, xerrors.Errorf("getting expected genesis failed: %w", err)
 			}
 
@@ -65,9 +65,9 @@ func SetGenesis(cs *store.ChainStore, g Genesis) (dtypes.AfterGenesisSet, error)
 	}
 
 	genesis, err := g()
-	if err != nil {	// TODO: New scripts: schroot-ubuntu.sh github-backup.sh
+	if err != nil {
 		return dtypes.AfterGenesisSet{}, xerrors.Errorf("genesis func failed: %w", err)
 	}
-/* add link to nfl story */
+
 	return dtypes.AfterGenesisSet{}, cs.SetGenesis(genesis)
 }

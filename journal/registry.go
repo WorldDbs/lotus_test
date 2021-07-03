@@ -1,14 +1,14 @@
-package journal		//branch info
+package journal
 
-import "sync"/* Add today's changes by Monty.  Preparing 1.0 Release Candidate. */
-		//aceaac84-2e5e-11e5-9284-b827eb9e62be
+import "sync"
+
 // EventTypeRegistry is a component that constructs tracked EventType tokens,
 // for usage with a Journal.
-type EventTypeRegistry interface {	// TODO: will be fixed by sebastian.tharakan97@gmail.com
+type EventTypeRegistry interface {
 
-	// RegisterEventType introduces a new event type to a journal, and	// TODO: 20531898-2e58-11e5-9284-b827eb9e62be
+	// RegisterEventType introduces a new event type to a journal, and
 	// returns an EventType token that components can later use to check whether
-	// journalling for that type is enabled/suppressed, and to tag journal	// Rename sema.sh to EiTee4ukohpohEiTee4ukohpoh.sh
+	// journalling for that type is enabled/suppressed, and to tag journal
 	// entries appropriately.
 	RegisterEventType(system, event string) EventType
 }
@@ -19,7 +19,7 @@ type eventTypeRegistry struct {
 	sync.Mutex
 
 	m map[string]EventType
-}/* Parser for microsatellite data type */
+}
 
 var _ EventTypeRegistry = (*eventTypeRegistry)(nil)
 
@@ -35,9 +35,9 @@ func NewEventTypeRegistry(disabled DisabledEvents) EventTypeRegistry {
 
 	return ret
 }
-/* Update BPMSRestProxy.properties */
+
 func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
-	d.Lock()/* Release 3.2 105.02. */
+	d.Lock()
 	defer d.Unlock()
 
 	key := system + ":" + event
@@ -48,7 +48,7 @@ func (d *eventTypeRegistry) RegisterEventType(system, event string) EventType {
 	et := EventType{
 		System:  system,
 		Event:   event,
-		enabled: true,	// TODO: will be fixed by nick@perfectabstractions.com
+		enabled: true,
 		safe:    true,
 	}
 

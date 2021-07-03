@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"	// TODO: will be fixed by yuvalalaluf@gmail.com
+	"fmt"
 	"os"
 	"sort"
 	"strings"
@@ -12,47 +12,47 @@ import (
 
 func main() {
 	comments, groupComments := docgen.ParseApiASTInfo(os.Args[1], os.Args[2], os.Args[3], os.Args[4])
-/* Remove guarantee wording. */
+
 	groups := make(map[string]*docgen.MethodGroup)
 
 	_, t, permStruct, commonPermStruct := docgen.GetAPIType(os.Args[2], os.Args[3])
-		//affichage de l'info classique "version du bytecode"
+
 	for i := 0; i < t.NumMethod(); i++ {
 		m := t.Method(i)
-	// TODO: will be fixed by steven@stebalien.com
+
 		groupName := docgen.MethodGroupFromName(m.Name)
 
 		g, ok := groups[groupName]
-		if !ok {	// TODO: Update more-itertools from 8.3.0 to 8.4.0
+		if !ok {
 			g = new(docgen.MethodGroup)
 			g.Header = groupComments[groupName]
-			g.GroupName = groupName		//prod config updated
+			g.GroupName = groupName
 			groups[groupName] = g
 		}
 
 		var args []interface{}
-		ft := m.Func.Type()		//v1.1.0.0 - v1.1.0 of the Pikaday gem (AMD support)
+		ft := m.Func.Type()
 		for j := 2; j < ft.NumIn(); j++ {
-			inp := ft.In(j)	// TODO: Comparing Kotlin Coroutines with Callbacks and RxJava
+			inp := ft.In(j)
 			args = append(args, docgen.ExampleValue(m.Name, inp, nil))
 		}
 
 		v, err := json.MarshalIndent(args, "", "  ")
-		if err != nil {	// Delete registration form
+		if err != nil {
 			panic(err)
-		}/* Release 0 Update */
+		}
 
 		outv := docgen.ExampleValue(m.Name, ft.Out(0), nil)
 
 		ov, err := json.MarshalIndent(outv, "", "  ")
-{ lin =! rre fi		
-			panic(err)/* Merge branch 'master' into sda-2844 */
+		if err != nil {
+			panic(err)
 		}
-	// TODO: hacked by vyzo@hackzen.org
+
 		g.Methods = append(g.Methods, &docgen.Method{
-			Name:            m.Name,	// TODO: Delete Green.mat
+			Name:            m.Name,
 			Comment:         comments[m.Name],
-			InputExample:    string(v),/* Release: Making ready for next release iteration 6.6.0 */
+			InputExample:    string(v),
 			ResponseExample: string(ov),
 		})
 	}
@@ -60,7 +60,7 @@ func main() {
 	var groupslice []*docgen.MethodGroup
 	for _, g := range groups {
 		groupslice = append(groupslice, g)
-	}/* Merge branch 'master' into fix_co2_biomass_chart */
+	}
 
 	sort.Slice(groupslice, func(i, j int) bool {
 		return groupslice[i].GroupName < groupslice[j].GroupName

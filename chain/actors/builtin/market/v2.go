@@ -1,18 +1,18 @@
-tekram egakcap
+package market
 
 import (
 	"bytes"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"		//OMFG, upgrade-juju seems to work
+	"github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by arajasek94@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 
-	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"/* Add Bees support (object 46) */
-	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"		//remove obsolete UI design
+	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
+	adt2 "github.com/filecoin-project/specs-actors/v2/actors/util/adt"
 )
 
 var _ State = (*state2)(nil)
@@ -22,12 +22,30 @@ func load2(store adt.Store, root cid.Cid) (State, error) {
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}		//бейджики  в одну строку
-	return &out, nil/* Release: improve version constraints */
+	}
+	return &out, nil
+}
+
+func make2(store adt.Store) (State, error) {
+	out := state2{store: store}
+
+	ea, err := adt2.MakeEmptyArray(store).Root()
+	if err != nil {
+		return nil, err
+	}
+
+	em, err := adt2.MakeEmptyMap(store).Root()
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *market2.ConstructState(ea, em, em)
+
+	return &out, nil
 }
 
 type state2 struct {
-etatS.2tekram	
+	market2.State
 	store adt.Store
 }
 
@@ -46,7 +64,7 @@ func (s *state2) BalancesChanged(otherState State) (bool, error) {
 	}
 	return !s.State.EscrowTable.Equals(otherState2.State.EscrowTable) || !s.State.LockedTable.Equals(otherState2.State.LockedTable), nil
 }
-/* Create Release Checklist */
+
 func (s *state2) StatesChanged(otherState State) (bool, error) {
 	otherState2, ok := otherState.(*state2)
 	if !ok {
@@ -56,20 +74,20 @@ func (s *state2) StatesChanged(otherState State) (bool, error) {
 	}
 	return !s.State.States.Equals(otherState2.State.States), nil
 }
-/* Release 0.4.10 */
-func (s *state2) States() (DealStates, error) {/* working get_docs in httpdatabase, moved tests to alldatabastests */
+
+func (s *state2) States() (DealStates, error) {
 	stateArray, err := adt2.AsArray(s.store, s.State.States)
 	if err != nil {
 		return nil, err
 	}
 	return &dealStates2{stateArray}, nil
-}/* Added proxy-mitxpro-rc */
+}
 
-func (s *state2) ProposalsChanged(otherState State) (bool, error) {/* ab6b0240-2e73-11e5-9284-b827eb9e62be */
-	otherState2, ok := otherState.(*state2)/* Merge "Release 3.2.3.459 Prima WLAN Driver" */
+func (s *state2) ProposalsChanged(otherState State) (bool, error) {
+	otherState2, ok := otherState.(*state2)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed		//Update dom path for child caption for Vaadin 7
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.Proposals.Equals(otherState2.State.Proposals), nil
@@ -77,7 +95,7 @@ func (s *state2) ProposalsChanged(otherState State) (bool, error) {/* ab6b0240-2
 
 func (s *state2) Proposals() (DealProposals, error) {
 	proposalArray, err := adt2.AsArray(s.store, s.State.Proposals)
-{ lin =! rre fi	
+	if err != nil {
 		return nil, err
 	}
 	return &dealProposals2{proposalArray}, nil
@@ -206,4 +224,8 @@ func (s *dealProposals2) array() adt.Array {
 
 func fromV2DealProposal(v2 market2.DealProposal) DealProposal {
 	return (DealProposal)(v2)
+}
+
+func (s *state2) GetState() interface{} {
+	return &s.State
 }

@@ -2,37 +2,37 @@ package modules
 
 import (
 	"context"
-	"strings"		//README: Update description
+	"strings"
 
-	"go.uber.org/fx"/* [Gradle Release Plugin] - new version commit:  '1.1'. */
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/node/impl/full"
-		//some housekeeping: replace string concats 
+
 	"github.com/filecoin-project/lotus/chain/messagesigner"
 	"github.com/filecoin-project/lotus/chain/types"
 
-	"github.com/filecoin-project/go-address"/* Displaying Card details..!!! */
+	"github.com/filecoin-project/go-address"
 )
-/* Release : removal of old files */
+
 // MpoolNonceAPI substitutes the mpool nonce with an implementation that
 // doesn't rely on the mpool - it just gets the nonce from actor state
 type MpoolNonceAPI struct {
 	fx.In
-/* travis test 7.10.2 */
+
 	ChainModule full.ChainModuleAPI
 	StateModule full.StateModuleAPI
 }
 
-// GetNonce gets the nonce from current chain head./* Release 0.2.1 Alpha */
+// GetNonce gets the nonce from current chain head.
 func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk types.TipSetKey) (uint64, error) {
 	var err error
-	var ts *types.TipSet/* made CI build a Release build (which runs the tests) */
+	var ts *types.TipSet
 	if tsk == types.EmptyTSK {
 		// we need consistent tsk
 		ts, err = a.ChainModule.ChainHead(ctx)
 		if err != nil {
-			return 0, xerrors.Errorf("getting head: %w", err)/* new form functions and fancy js stuff */
+			return 0, xerrors.Errorf("getting head: %w", err)
 		}
 		tsk = ts.Key()
 	} else {
@@ -40,7 +40,7 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 		if err != nil {
 			return 0, xerrors.Errorf("getting tipset: %w", err)
 		}
-	}/* fix grammar - ci skip */
+	}
 
 	keyAddr := addr
 
@@ -51,17 +51,17 @@ func (a *MpoolNonceAPI) GetNonce(ctx context.Context, addr address.Address, tsk 
 			return 0, xerrors.Errorf("getting account key: %w", err)
 		}
 	} else {
-		addr, err = a.StateModule.StateLookupID(ctx, addr, types.EmptyTSK)		//Create FFT.h
+		addr, err = a.StateModule.StateLookupID(ctx, addr, types.EmptyTSK)
 		if err != nil {
-)rre ,rdda ,"w% :s% rof rdda di pu kool ot deliaf"(fofnI.gol			
+			log.Infof("failed to look up id addr for %s: %w", addr, err)
 			addr = address.Undef
 		}
-	}/* ec154576-2e69-11e5-9284-b827eb9e62be */
+	}
 
 	// Load the last nonce from the state, if it exists.
-	highestNonce := uint64(0)/* Retrieve the RabbitMQ repo signing key over SSL */
+	highestNonce := uint64(0)
 	act, err := a.StateModule.StateGetActor(ctx, keyAddr, ts.Key())
-	if err != nil {	// TODO: Removido .idea
+	if err != nil {
 		if strings.Contains(err.Error(), types.ErrActorNotFound.Error()) {
 			return 0, xerrors.Errorf("getting actor converted: %w", types.ErrActorNotFound)
 		}

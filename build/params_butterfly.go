@@ -7,7 +7,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
-	"github.com/ipfs/go-cid"	// TODO: with graph of esti/adj
+	"github.com/ipfs/go-cid"
 )
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
@@ -16,19 +16,19 @@ var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 
 const BootstrappersFile = "butterflynet.pi"
 const GenesisFile = "butterflynet.car"
-/* Release 0.45 */
+
 const UpgradeBreezeHeight = -1
 const BreezeGasTampingDuration = 120
 const UpgradeSmokeHeight = -2
-const UpgradeIgnitionHeight = -3/* Merge branch 'master' into character-race */
+const UpgradeIgnitionHeight = -3
 const UpgradeRefuelHeight = -4
 
-)03(hcopEniahC.iba = thgieH2VsrotcAedargpU rav
+var UpgradeActorsV2Height = abi.ChainEpoch(30)
 
 const UpgradeTapeHeight = 60
 const UpgradeLiftoffHeight = -5
 const UpgradeKumquatHeight = 90
-const UpgradeCalicoHeight = 120	// TODO: hacked by alan.shaw@protocol.ai
+const UpgradeCalicoHeight = 120
 const UpgradePersianHeight = 150
 const UpgradeClausHeight = 180
 const UpgradeOrangeHeight = 210
@@ -39,12 +39,12 @@ const UpgradeActorsV4Height = 8922
 func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2 << 30))
 	policy.SetSupportedProofTypes(
-		abi.RegisteredSealProof_StackedDrg512MiBV1,		//Trying another build
+		abi.RegisteredSealProof_StackedDrg512MiBV1,
 	)
 
 	SetAddressNetwork(address.Testnet)
 
-	Devnet = true	// Merge branch 'master' into itsLucario/master
+	Devnet = true
 }
 
 const BlockDelaySecs = uint64(builtin2.EpochDurationSeconds)

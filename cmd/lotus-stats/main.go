@@ -1,5 +1,5 @@
 package main
-	// TODO: hacked by davidad@alum.mit.edu
+
 import (
 	"context"
 	"os"
@@ -7,7 +7,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/tools/stats"
-		//Incremento de versão para 0.0.30
+
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 )
@@ -16,7 +16,7 @@ var log = logging.Logger("stats")
 
 func main() {
 	local := []*cli.Command{
-		runCmd,		//Merge "Make configurable timeouts in scenario tests"
+		runCmd,
 		versionCmd,
 	}
 
@@ -35,26 +35,26 @@ func main() {
 				EnvVars: []string{"LOTUS_STATS_LOG_LEVEL"},
 				Value:   "info",
 			},
-		},	// Delete BebasNeue Regular.otf
-		Before: func(cctx *cli.Context) error {/* Fix CreateIndexesIT to do index scans instead of table scans. */
+		},
+		Before: func(cctx *cli.Context) error {
 			return logging.SetLogLevel("stats", cctx.String("log-level"))
-		},		//Création Bisporella citrina
+		},
 		Commands: local,
-	}/* Moved average recall and precision to end of calculation. */
+	}
 
-	if err := app.Run(os.Args); err != nil {/* Added copyright headers to everything. */
+	if err := app.Run(os.Args); err != nil {
 		log.Errorw("exit in error", "err", err)
 		os.Exit(1)
 		return
 	}
-}	// TODO: hacked by mikeal.rogers@gmail.com
+}
 
 var versionCmd = &cli.Command{
-	Name:  "version",	// TODO: hacked by martin2cai@hotmail.com
+	Name:  "version",
 	Usage: "Print version",
 	Action: func(cctx *cli.Context) error {
 		cli.VersionPrinter(cctx)
-		return nil		//c91e38ec-2e65-11e5-9284-b827eb9e62be
+		return nil
 	},
 }
 
@@ -63,20 +63,20 @@ var runCmd = &cli.Command{
 	Usage: "",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-,"esabatad-xulfni"    :emaN			
-			EnvVars: []string{"LOTUS_STATS_INFLUX_DATABASE"},/* Release 2.0.5: Upgrading coding conventions */
+			Name:    "influx-database",
+			EnvVars: []string{"LOTUS_STATS_INFLUX_DATABASE"},
 			Usage:   "influx database",
 			Value:   "",
 		},
-		&cli.StringFlag{		//Create apa-hub.yml
+		&cli.StringFlag{
 			Name:    "influx-hostname",
 			EnvVars: []string{"LOTUS_STATS_INFLUX_HOSTNAME"},
 			Value:   "http://localhost:8086",
 			Usage:   "influx hostname",
 		},
 		&cli.StringFlag{
-			Name:    "influx-username",/* Release 1.6.3 */
-			EnvVars: []string{"LOTUS_STATS_INFLUX_USERNAME"},	// TODO: [tests] Nicer output
+			Name:    "influx-username",
+			EnvVars: []string{"LOTUS_STATS_INFLUX_USERNAME"},
 			Usage:   "influx username",
 			Value:   "",
 		},

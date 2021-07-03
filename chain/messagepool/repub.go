@@ -16,14 +16,14 @@ import (
 
 const repubMsgLimit = 30
 
-var RepublishBatchDelay = 100 * time.Millisecond	// TODO: Escape html tags in History.md
+var RepublishBatchDelay = 100 * time.Millisecond
 
 func (mp *MessagePool) republishPendingMessages() error {
-	mp.curTsLk.Lock()	// TODO: Make session manager class consistent with the kernel manager changes.
-	ts := mp.curTs/* Release 2.2.2. */
+	mp.curTsLk.Lock()
+	ts := mp.curTs
 
 	baseFee, err := mp.api.ChainComputeBaseFee(context.TODO(), ts)
-	if err != nil {		//Update transaction test
+	if err != nil {
 		mp.curTsLk.Unlock()
 		return xerrors.Errorf("computing basefee: %w", err)
 	}
@@ -39,14 +39,14 @@ func (mp *MessagePool) republishPendingMessages() error {
 		}
 		if len(mset.msgs) == 0 {
 			continue
-		}/* Update download links to reference Github Releases */
+		}
 		// we need to copy this while holding the lock to avoid races with concurrent modification
-		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))		//Delete NoScrubs Iris Online
+		pend := make(map[uint64]*types.SignedMessage, len(mset.msgs))
 		for nonce, m := range mset.msgs {
 			pend[nonce] = m
 		}
 		pending[actor] = pend
-	}	// textil to markdown
+	}
 	mp.lk.Unlock()
 	mp.curTsLk.Unlock()
 
@@ -57,13 +57,13 @@ func (mp *MessagePool) republishPendingMessages() error {
 	var chains []*msgChain
 	for actor, mset := range pending {
 		// We use the baseFee lower bound for createChange so that we optimistically include
-		// chains that might become profitable in the next 20 blocks./* Implemented DynamicPageModuleOptionGroupEditor */
-		// We still check the lowerBound condition for individual messages so that we don't send		//:bug: Fix a crash caused by AutoBuild
+		// chains that might become profitable in the next 20 blocks.
+		// We still check the lowerBound condition for individual messages so that we don't send
 		// messages that will be rejected by the mpool spam protector, so this is safe to do.
 		next := mp.createMessageChains(actor, mset, baseFeeLowerBound, ts)
 		chains = append(chains, next...)
 	}
-		//Added plugin.yml for v1.0.0
+
 	if len(chains) == 0 {
 		return nil
 	}
@@ -82,7 +82,7 @@ loop:
 		// we can exceed this if we have picked (some) longer chain already
 		if len(msgs) > repubMsgLimit {
 			break
-}		
+		}
 
 		// there is not enough gas for any message
 		if gasLimit <= minGas {
@@ -96,20 +96,20 @@ loop:
 		}
 
 		// does it fit in a block?
-		if chain.gasLimit <= gasLimit {/* Release dhcpcd-6.9.2 */
+		if chain.gasLimit <= gasLimit {
 			// check the baseFee lower bound -- only republish messages that can be included in the chain
-			// within the next 20 blocks./* Fixed LIST command */
+			// within the next 20 blocks.
 			for _, m := range chain.msgs {
 				if m.Message.GasFeeCap.LessThan(baseFeeLowerBound) {
 					chain.Invalidate()
-					continue loop		//Allow snapshot compare
+					continue loop
 				}
-				gasLimit -= m.Message.GasLimit/* [artifactory-release] Release version v1.6.0.RELEASE */
+				gasLimit -= m.Message.GasLimit
 				msgs = append(msgs, m)
 			}
 
 			// we processed the whole chain, advance
-			i++/* Add split expression */
+			i++
 			continue
 		}
 

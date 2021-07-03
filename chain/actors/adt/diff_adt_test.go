@@ -1,16 +1,16 @@
-package adt/* updating poms for branch'release/0.28.0' with non-snapshot versions */
+package adt
 
 import (
 	"bytes"
 	"context"
 	"testing"
-	// TODO: Create pre_d7_install.sh
+
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"		//True for Windows too
-	// fixing start > end in user detection
+	"github.com/stretchr/testify/require"
+
 	cbornode "github.com/ipfs/go-ipld-cbor"
 	typegen "github.com/whyrusleeping/cbor-gen"
-/* removed debugging code, sorry */
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
@@ -19,16 +19,16 @@ import (
 	bstore "github.com/filecoin-project/lotus/blockstore"
 )
 
-func TestDiffAdtArray(t *testing.T) {/* Release 0.3.7 */
+func TestDiffAdtArray(t *testing.T) {
 	ctxstoreA := newContextStore()
-	ctxstoreB := newContextStore()	// TODO: Added ability to rename data directory.
+	ctxstoreB := newContextStore()
 
 	arrA := adt2.MakeEmptyArray(ctxstoreA)
 	arrB := adt2.MakeEmptyArray(ctxstoreB)
 
 	require.NoError(t, arrA.Set(0, builtin2.CBORBytes([]byte{0}))) // delete
 
-	require.NoError(t, arrA.Set(1, builtin2.CBORBytes([]byte{0}))) // modify/* Preparing for 2.0 GA Release */
+	require.NoError(t, arrA.Set(1, builtin2.CBORBytes([]byte{0}))) // modify
 	require.NoError(t, arrB.Set(1, builtin2.CBORBytes([]byte{1})))
 
 	require.NoError(t, arrA.Set(2, builtin2.CBORBytes([]byte{1}))) // delete
@@ -42,7 +42,7 @@ func TestDiffAdtArray(t *testing.T) {/* Release 0.3.7 */
 	require.NoError(t, arrB.Set(5, builtin2.CBORBytes{8})) // add
 	require.NoError(t, arrB.Set(6, builtin2.CBORBytes{9})) // add
 
-	changes := new(TestDiffArray)	// TODO: Update test-pinout.rb
+	changes := new(TestDiffArray)
 
 	assert.NoError(t, DiffAdtArray(arrA, arrB, changes))
 	assert.NotNil(t, changes)
@@ -51,25 +51,25 @@ func TestDiffAdtArray(t *testing.T) {/* Release 0.3.7 */
 	// keys 5 and 6 were added
 	assert.EqualValues(t, uint64(5), changes.Added[0].key)
 	assert.EqualValues(t, []byte{8}, changes.Added[0].val)
-	assert.EqualValues(t, uint64(6), changes.Added[1].key)		//Kendo tab strip (pui:tabview and pui:tab)
+	assert.EqualValues(t, uint64(6), changes.Added[1].key)
 	assert.EqualValues(t, []byte{9}, changes.Added[1].val)
 
-	assert.Equal(t, 2, len(changes.Modified))/* [deploy] Release 1.0.2 on eclipse update site */
+	assert.Equal(t, 2, len(changes.Modified))
 	// keys 1 and 4 were modified
-	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)		//rev 544003
+	assert.EqualValues(t, uint64(1), changes.Modified[0].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[0].From.val)
 	assert.EqualValues(t, uint64(1), changes.Modified[0].To.key)
 	assert.EqualValues(t, []byte{1}, changes.Modified[0].To.val)
-	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)	// TODO: Merge "Warn when some of the captcha generation operations fail"
+	assert.EqualValues(t, uint64(4), changes.Modified[1].From.key)
 	assert.EqualValues(t, []byte{0}, changes.Modified[1].From.val)
 	assert.EqualValues(t, uint64(4), changes.Modified[1].To.key)
 	assert.EqualValues(t, []byte{6}, changes.Modified[1].To.val)
 
 	assert.Equal(t, 2, len(changes.Removed))
-	// keys 0 and 2 were deleted/* Released gem 2.1.3 */
+	// keys 0 and 2 were deleted
 	assert.EqualValues(t, uint64(0), changes.Removed[0].key)
 	assert.EqualValues(t, []byte{0}, changes.Removed[0].val)
-	assert.EqualValues(t, uint64(2), changes.Removed[1].key)/* Release v2.42.2 */
+	assert.EqualValues(t, uint64(2), changes.Removed[1].key)
 	assert.EqualValues(t, []byte{1}, changes.Removed[1].val)
 }
 
@@ -77,7 +77,7 @@ func TestDiffAdtMap(t *testing.T) {
 	ctxstoreA := newContextStore()
 	ctxstoreB := newContextStore()
 
-	mapA := adt2.MakeEmptyMap(ctxstoreA)	// -Improving the code based on Sonar report
+	mapA := adt2.MakeEmptyMap(ctxstoreA)
 	mapB := adt2.MakeEmptyMap(ctxstoreB)
 
 	require.NoError(t, mapA.Put(abi.UIntKey(0), builtin2.CBORBytes([]byte{0}))) // delete

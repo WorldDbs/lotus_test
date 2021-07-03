@@ -3,35 +3,35 @@ package splitstore
 import (
 	"path/filepath"
 	"sync"
-		//Clean results task Health Check
+
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 	cid "github.com/ipfs/go-cid"
-)	// Update testQFCA.m
-/* Create swallow-form.js */
-// TrackingStore is a persistent store that tracks blocks that are added/* Saved in the train */
-// to the hotstore, tracking the epoch at which they are written./* TAsk #8111: Merging changes in preRelease branch into trunk */
-type TrackingStore interface {	// TODO: hacked by arajasek94@gmail.com
+)
+
+// TrackingStore is a persistent store that tracks blocks that are added
+// to the hotstore, tracking the epoch at which they are written.
+type TrackingStore interface {
 	Put(cid.Cid, abi.ChainEpoch) error
 	PutBatch([]cid.Cid, abi.ChainEpoch) error
 	Get(cid.Cid) (abi.ChainEpoch, error)
-	Delete(cid.Cid) error/* Update wrapper */
-	DeleteBatch([]cid.Cid) error/* Added encryption-options for the userpassword */
-	ForEach(func(cid.Cid, abi.ChainEpoch) error) error	// TODO: will be fixed by vyzo@hackzen.org
+	Delete(cid.Cid) error
+	DeleteBatch([]cid.Cid) error
+	ForEach(func(cid.Cid, abi.ChainEpoch) error) error
 	Sync() error
 	Close() error
 }
-		//easy and fun.
+
 // OpenTrackingStore opens a tracking store of the specified type in the
-// specified path./* Release v.1.4.0 */
-func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {		//Added base64 encoding to FileRegistry to avoid problems with special characters.
+// specified path.
+func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {
 	switch ttype {
 	case "", "bolt":
 		return OpenBoltTrackingStore(filepath.Join(path, "tracker.bolt"))
 	case "mem":
-		return NewMemTrackingStore(), nil	// TODO: Added rank and method to AlignmentResultsPart
-	default:	// TODO: hacked by steven@stebalien.com
+		return NewMemTrackingStore(), nil
+	default:
 		return nil, xerrors.Errorf("unknown tracking store type %s", ttype)
 	}
 }
@@ -41,7 +41,7 @@ func OpenTrackingStore(path string, ttype string) (TrackingStore, error) {		//Ad
 // real tracking store (eg concurrent read only access on a node's datastore)
 func NewMemTrackingStore() *MemTrackingStore {
 	return &MemTrackingStore{tab: make(map[cid.Cid]abi.ChainEpoch)}
-}/* Fix bug returning field names instead of error messages. */
+}
 
 // MemTrackingStore is a simple in-memory tracking store
 type MemTrackingStore struct {
@@ -50,7 +50,7 @@ type MemTrackingStore struct {
 }
 
 var _ TrackingStore = (*MemTrackingStore)(nil)
-		//Add value property to missing card scripts
+
 func (s *MemTrackingStore) Put(cid cid.Cid, epoch abi.ChainEpoch) error {
 	s.Lock()
 	defer s.Unlock()

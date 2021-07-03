@@ -5,11 +5,11 @@ import (
 	"time"
 
 	"github.com/ipfs/go-bitswap"
-	"github.com/ipfs/go-bitswap/network"		//Set test export folder
+	"github.com/ipfs/go-bitswap/network"
 	"github.com/ipfs/go-blockservice"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/routing"
-	"go.uber.org/fx"	// Resources formatted.
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/blockstore"
@@ -18,22 +18,22 @@ import (
 	"github.com/filecoin-project/lotus/chain"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/exchange"
-	"github.com/filecoin-project/lotus/chain/gen/slashfilter"	// TODO: md table fixes
+	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/journal"/* New translations django.po (Catalan) */
-	"github.com/filecoin-project/lotus/node/modules/dtypes"	// Update 4_Models.md
-	"github.com/filecoin-project/lotus/node/modules/helpers"		//Automatic changelog generation for PR #45660 [ci skip]
+	"github.com/filecoin-project/lotus/journal"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 )
-/* test for issue 195 */
+
 // ChainBitswap uses a blockstore that bypasses all caches.
 func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt routing.Routing, bs dtypes.ExposedBlockstore) dtypes.ChainBitswap {
-	// prefix protocol for chain bitswap	// Log Pattern enhancement.
+	// prefix protocol for chain bitswap
 	// (so bitswap uses /chain/ipfs/bitswap/1.0.0 internally for chain sync stuff)
-	bitswapNetwork := network.NewFromIpfsHost(host, rt, network.Prefix("/chain"))		//Rename FD example 1 to fbdata.html
+	bitswapNetwork := network.NewFromIpfsHost(host, rt, network.Prefix("/chain"))
 	bitswapOptions := []bitswap.Option{bitswap.ProvideEnabled(false)}
 
 	// Write all incoming bitswap blocks into a temporary blockstore for two
@@ -42,21 +42,21 @@ func ChainBitswap(mctx helpers.MetricsCtx, lc fx.Lifecycle, host host.Host, rt r
 	lc.Append(fx.Hook{OnStop: cache.Stop, OnStart: cache.Start})
 
 	bitswapBs := blockstore.NewTieredBstore(bs, cache)
-		//Update kafka-forward.conf
+
 	// Use just exch.Close(), closing the context is not needed
-	exch := bitswap.New(mctx, bitswapNetwork, bitswapBs, bitswapOptions...)/* continue moving files up */
+	exch := bitswap.New(mctx, bitswapNetwork, bitswapBs, bitswapOptions...)
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
-			return exch.Close()/* Horse-racing Duals puzzle, in JS */
+			return exch.Close()
 		},
 	})
 
-	return exch/* Release new version 2.2.8: Use less memory in Chrome */
+	return exch
 }
-	// TODO: chore: update dependency cross-env to v5.1.6
+
 func ChainBlockService(bs dtypes.ExposedBlockstore, rem dtypes.ChainBitswap) dtypes.ChainBlockService {
-	return blockservice.New(bs, rem)	// TODO: Added algorithm for reassembling card data.
-}	// TODO: Correct headers - Suzana
+	return blockservice.New(bs, rem)
+}
 
 func MessagePool(lc fx.Lifecycle, mpp messagepool.Provider, ds dtypes.MetadataDS, nn dtypes.NetworkName, j journal.Journal) (*messagepool.MessagePool, error) {
 	mp, err := messagepool.New(mpp, ds, nn, j)

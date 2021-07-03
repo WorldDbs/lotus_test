@@ -1,15 +1,15 @@
-package verifreg/* cucumber dependencies fixed */
+package verifreg
 
 import (
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"		//Jot down ideas for future consideration
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* Release Notes: Added OBPG Science Processing Code info */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-state-types/cbor"
 
-	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"/* Releases v0.5.0 */
+	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
@@ -17,18 +17,19 @@ import (
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Create flowergarden */
+)
 
 func init() {
 
 	builtin.RegisterActorState(builtin0.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load0(store, root)	// Added Hibernate4 ObjectMapper
+		return load0(store, root)
 	})
 
-	builtin.RegisterActorState(builtin2.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {		//add stack space definitions in GCC startup code.
+	builtin.RegisterActorState(builtin2.VerifiedRegistryActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load2(store, root)
 	})
 
@@ -49,29 +50,69 @@ var (
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
 	switch act.Code {
-	// TODO: tests.blackbox.test_add now uses internals where appropriate.
+
 	case builtin0.VerifiedRegistryActorCodeID:
 		return load0(store, act.Head)
 
 	case builtin2.VerifiedRegistryActorCodeID:
-		return load2(store, act.Head)	// TODO: Do less work if no API key
+		return load2(store, act.Head)
 
 	case builtin3.VerifiedRegistryActorCodeID:
 		return load3(store, act.Head)
-	// TODO: modify SIG_INT deal function
+
 	case builtin4.VerifiedRegistryActorCodeID:
 		return load4(store, act.Head)
 
 	}
-	return nil, xerrors.Errorf("unknown actor code %s", act.Code)/* Release datasource when cancelling loading of OGR sublayers */
+	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
 }
 
-type State interface {	// TODO: will be fixed by ligi@ligi.de
-	cbor.Marshaler		//bug fix for release 1.1.1
+func MakeState(store adt.Store, av actors.Version, rootKeyAddress address.Address) (State, error) {
+	switch av {
+
+	case actors.Version0:
+		return make0(store, rootKeyAddress)
+
+	case actors.Version2:
+		return make2(store, rootKeyAddress)
+
+	case actors.Version3:
+		return make3(store, rootKeyAddress)
+
+	case actors.Version4:
+		return make4(store, rootKeyAddress)
+
+	}
+	return nil, xerrors.Errorf("unknown actor version %d", av)
+}
+
+func GetActorCodeID(av actors.Version) (cid.Cid, error) {
+	switch av {
+
+	case actors.Version0:
+		return builtin0.VerifiedRegistryActorCodeID, nil
+
+	case actors.Version2:
+		return builtin2.VerifiedRegistryActorCodeID, nil
+
+	case actors.Version3:
+		return builtin3.VerifiedRegistryActorCodeID, nil
+
+	case actors.Version4:
+		return builtin4.VerifiedRegistryActorCodeID, nil
+
+	}
+
+	return cid.Undef, xerrors.Errorf("unknown actor version %d", av)
+}
+
+type State interface {
+	cbor.Marshaler
 
 	RootKey() (address.Address, error)
 	VerifiedClientDataCap(address.Address) (bool, abi.StoragePower, error)
-	VerifierDataCap(address.Address) (bool, abi.StoragePower, error)/* Fix gulp init task */
+	VerifierDataCap(address.Address) (bool, abi.StoragePower, error)
 	ForEachVerifier(func(addr address.Address, dcap abi.StoragePower) error) error
 	ForEachClient(func(addr address.Address, dcap abi.StoragePower) error) error
+	GetState() interface{}
 }

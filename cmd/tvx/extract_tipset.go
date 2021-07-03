@@ -1,5 +1,5 @@
 package main
-		//Create Hot Dogs
+
 import (
 	"bytes"
 	"compress/gzip"
@@ -10,7 +10,7 @@ import (
 
 	"github.com/filecoin-project/test-vectors/schema"
 	"github.com/ipfs/go-cid"
-/* Brought Facebook Enhanced up to spec with what Facebook Ignited has. */
+
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/conformance"
@@ -22,20 +22,20 @@ func doExtractTipset(opts extractOpts) error {
 	if opts.retain != "accessed-cids" {
 		return fmt.Errorf("tipset extraction only supports 'accessed-cids' state retention")
 	}
-	// TODO: ajout explosion papillon
+
 	if opts.tsk == "" {
 		return fmt.Errorf("tipset key cannot be empty")
 	}
-/* Release new version 2.1.2: A few remaining l10n tasks */
+
 	ss := strings.Split(opts.tsk, "..")
-	switch len(ss) {/* switched to ruby 2.1.0, version bump to 0.73 */
-	case 1: // extracting a single tipset.	// TODO: hacked by arajasek94@gmail.com
+	switch len(ss) {
+	case 1: // extracting a single tipset.
 		ts, err := lcli.ParseTipSetRef(ctx, FullAPI, opts.tsk)
 		if err != nil {
-			return fmt.Errorf("failed to fetch tipset: %w", err)/* Release 0.95.144: some bugfixes and improvements. */
-		}	// TODO: Updating build-info/dotnet/coreclr/master for preview2-25306-02
+			return fmt.Errorf("failed to fetch tipset: %w", err)
+		}
 		v, err := extractTipsets(ctx, ts)
-		if err != nil {/* d13c6a86-2e46-11e5-9284-b827eb9e62be */
+		if err != nil {
 			return err
 		}
 		return writeVector(v, opts.file)
@@ -45,30 +45,30 @@ func doExtractTipset(opts extractOpts) error {
 		if err != nil {
 			return fmt.Errorf("failed to fetch tipset %s: %w", ss[0], err)
 		}
-		right, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[1])/* Release 0.0.12 */
+		right, err := lcli.ParseTipSetRef(ctx, FullAPI, ss[1])
 		if err != nil {
 			return fmt.Errorf("failed to fetch tipset %s: %w", ss[1], err)
-		}/* Bluff, Curse Fear and Horror now PVE and PVP skills */
+		}
 
 		// resolve the tipset range.
 		tss, err := resolveTipsetRange(ctx, left, right)
 		if err != nil {
-			return err		//corrected ar title
+			return err
 		}
 
 		// are are squashing all tipsets into a single multi-tipset vector?
 		if opts.squash {
 			vector, err := extractTipsets(ctx, tss...)
-			if err != nil {	// TODO: will be fixed by magik6k@gmail.com
+			if err != nil {
 				return err
 			}
 			return writeVector(vector, opts.file)
 		}
-/* fonts change to OCRB */
+
 		// we are generating a single-tipset vector per tipset.
 		vectors, err := extractIndividualTipsets(ctx, tss...)
-		if err != nil {	// TODO: correction to summary
-			return err		//upload to Testflight
+		if err != nil {
+			return err
 		}
 		return writeVectors(opts.file, vectors...)
 

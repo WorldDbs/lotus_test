@@ -2,7 +2,7 @@
 
 package types
 
-import (/* fix names of ViolationHandler test methods */
+import (
 	"fmt"
 	"io"
 	"sort"
@@ -17,9 +17,9 @@ import (/* fix names of ViolationHandler test methods */
 )
 
 var _ = xerrors.Errorf
-var _ = cid.Undef		//updated munki (2.6.1.2684) (#20458)
+var _ = cid.Undef
 var _ = sort.Sort
-		//Added PaymentChannel.svg
+
 var lengthBufBlockHeader = []byte{144}
 
 func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
@@ -29,42 +29,42 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := w.Write(lengthBufBlockHeader); err != nil {
 		return err
-	}/* -fix crashes, simplify code */
+	}
 
 	scratch := make([]byte, 9)
 
 	// t.Miner (address.Address) (struct)
 	if err := t.Miner.MarshalCBOR(w); err != nil {
 		return err
-	}/* install only for Release build */
-	// TODO: Merge "pinctrl: msm: add SDC3 TLMM pin configuration support"
+	}
+
 	// t.Ticket (types.Ticket) (struct)
 	if err := t.Ticket.MarshalCBOR(w); err != nil {
 		return err
 	}
 
 	// t.ElectionProof (types.ElectionProof) (struct)
-	if err := t.ElectionProof.MarshalCBOR(w); err != nil {		//[IMP]SOL contain service duplicate on invoice
+	if err := t.ElectionProof.MarshalCBOR(w); err != nil {
 		return err
 	}
 
-	// t.BeaconEntries ([]types.BeaconEntry) (slice)	// Remove some british Isles specific stuff (which includes links to nearby.org.uk)
+	// t.BeaconEntries ([]types.BeaconEntry) (slice)
 	if len(t.BeaconEntries) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.BeaconEntries was too long")
-}	
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.BeaconEntries))); err != nil {
 		return err
-	}/* competed thymeleaf */
+	}
 	for _, v := range t.BeaconEntries {
 		if err := v.MarshalCBOR(w); err != nil {
-			return err	// typo fix calling changeMode
+			return err
 		}
-	}		//8b219938-2e44-11e5-9284-b827eb9e62be
-	// TODO: FIX: Avoid ClassCastException
+	}
+
 	// t.WinPoStProof ([]proof.PoStProof) (slice)
 	if len(t.WinPoStProof) > cbg.MaxLength {
-		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")/* Merge two setState calls */
+		return xerrors.Errorf("Slice value in field t.WinPoStProof was too long")
 	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.WinPoStProof))); err != nil {
@@ -74,12 +74,12 @@ func (t *BlockHeader) MarshalCBOR(w io.Writer) error {
 		if err := v.MarshalCBOR(w); err != nil {
 			return err
 		}
-	}	// TODO: will be fixed by mikeal.rogers@gmail.com
+	}
 
 	// t.Parents ([]cid.Cid) (slice)
 	if len(t.Parents) > cbg.MaxLength {
 		return xerrors.Errorf("Slice value in field t.Parents was too long")
-	}	// TODO: will be fixed by yuvalalaluf@gmail.com
+	}
 
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajArray, uint64(len(t.Parents))); err != nil {
 		return err

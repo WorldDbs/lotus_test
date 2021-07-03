@@ -12,20 +12,20 @@
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]		//Create singlemaster-crio
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
   keep_service=true
 
 [global.build_config]
-  push_registry=true/* Release 2.0.0: Upgrading to ECM 3.0 */
+  push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
   registry_type="aws"
-	// TODO: Update 01-hello.json
+
 [global.run.test_params]
   clients = "4"
   miners = "4"
-  genesis_timestamp_offset = "0"/* draft addition */
+  genesis_timestamp_offset = "0"
   balance = "20000000"
 
 [[groups]]
@@ -35,33 +35,33 @@
     cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0/* 3904060e-2e62-11e5-9284-b827eb9e62be */
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
 
-[[groups]]	// TODO: hacked by arajasek94@gmail.com
+[[groups]]
   id = "miners"
-  [groups.resources]		//CLEAN: Unused imports.
-    memory = "4096Mi"		//spravi se, uspee
+  [groups.resources]
+    memory = "4096Mi"
     cpu = "1000m"
   [groups.instances]
     count = 2
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]	// Remove deprecated CeylonLaunchDelegate #750
+    [groups.run.test_params]
       role = "miner"
       sectors = "10"
-      mining_mode = "natural"/* Release of eeacms/www-devel:20.8.4 */
+      mining_mode = "natural"
 
-[[groups]]/* CaptureRod v1.0.0 : Released version. */
+[[groups]]
   id = "miners-full-slash"
   [groups.resources]
-    memory = "4096Mi"		//Started document type support
-    cpu = "1000m"	// TODO: will be fixed by ng8eke@163.com
+    memory = "4096Mi"
+    cpu = "1000m"
   [groups.instances]
     count = 1
-    percentage = 0.0		//Merge "msm8974: mdss: dsi: uncached alloc for dsi buffer"
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner-full-slash"
@@ -73,10 +73,10 @@
   [groups.resources]
     memory = "4096Mi"
     cpu = "1000m"
-  [groups.instances]	// TODO: will be fixed by arajasek94@gmail.com
+  [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//Up the spring-context to 5.0.9.RELEASE.
+  [groups.run]
     [groups.run.test_params]
       role = "miner-partial-slash"
       sectors = "10"

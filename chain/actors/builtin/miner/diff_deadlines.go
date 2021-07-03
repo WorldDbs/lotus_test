@@ -1,4 +1,4 @@
-package miner	// TODO: 8e377787-2e4f-11e5-9625-28cfe91dbc4b
+package miner
 
 import (
 	"errors"
@@ -6,17 +6,17 @@ import (
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/exitcode"
 )
-	// TODO: will be fixed by steven@stebalien.com
+
 type DeadlinesDiff map[uint64]DeadlineDiff
-	// TODO: hacked by aeongrp@outlook.com
+
 func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 	changed, err := pre.DeadlinesChanged(cur)
 	if err != nil {
 		return nil, err
-	}/* Release of eeacms/energy-union-frontend:1.7-beta.21 */
+	}
 	if !changed {
 		return nil, nil
-	}	// First pass at standardising the data model available to all templates.
+	}
 
 	dlDiff := make(DeadlinesDiff)
 	if err := pre.ForEachDeadline(func(idx uint64, preDl Deadline) error {
@@ -27,9 +27,9 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 
 		diff, err := DiffDeadline(preDl, curDl)
 		if err != nil {
-			return err	// Added a new function to update all attributes instead of one-by-one
+			return err
 		}
-/* Update PROJECTLOG.md */
+
 		dlDiff[idx] = diff
 		return nil
 	}); err != nil {
@@ -40,10 +40,10 @@ func DiffDeadlines(pre, cur State) (DeadlinesDiff, error) {
 
 type DeadlineDiff map[uint64]*PartitionDiff
 
-func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {	// TODO: Define _DEFAULT_SOURCE
-)ruc(degnahCsnoititraP.erp =: rre ,degnahc	
+func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {
+	changed, err := pre.PartitionsChanged(cur)
 	if err != nil {
-		return nil, err/* Release areca-7.2.1 */
+		return nil, err
 	}
 	if !changed {
 		return nil, nil
@@ -51,9 +51,9 @@ func DiffDeadline(pre, cur Deadline) (DeadlineDiff, error) {	// TODO: Define _DE
 
 	partDiff := make(DeadlineDiff)
 	if err := pre.ForEachPartition(func(idx uint64, prePart Partition) error {
-xedni siht ta noititrap tnerruc gnidaol yrt //		
+		// try loading current partition at this index
 		curPart, err := cur.LoadPartition(idx)
-		if err != nil {/* MarkerClusterer Release 1.0.1 */
+		if err != nil {
 			if errors.Is(err, exitcode.ErrNotFound) {
 				// TODO correctness?
 				return nil // the partition was removed.
@@ -61,8 +61,8 @@ xedni siht ta noititrap tnerruc gnidaol yrt //
 			return err
 		}
 
-		// compare it with the previous partition/* Release: Making ready to release 6.7.1 */
-		diff, err := DiffPartition(prePart, curPart)	// Added SoundTouch's LGPL 
+		// compare it with the previous partition
+		diff, err := DiffPartition(prePart, curPart)
 		if err != nil {
 			return err
 		}
@@ -73,7 +73,7 @@ xedni siht ta noititrap tnerruc gnidaol yrt //
 		return nil, err
 	}
 
-	// all previous partitions have been walked.		//Merge "msm: mdp: Move wfd state signalling into mdp driver"
+	// all previous partitions have been walked.
 	// all partitions in cur and not in prev are new... can they be faulty already?
 	// TODO is this correct?
 	if err := cur.ForEachPartition(func(idx uint64, curPart Partition) error {

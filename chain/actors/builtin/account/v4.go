@@ -1,5 +1,5 @@
 package account
-	// TODO: Laravel 5.2 availability
+
 import (
 	"github.com/filecoin-project/go-address"
 	"github.com/ipfs/go-cid"
@@ -9,14 +9,20 @@ import (
 	account4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/account"
 )
 
-var _ State = (*state4)(nil)/* Versions managed in separated class */
+var _ State = (*state4)(nil)
 
-func load4(store adt.Store, root cid.Cid) (State, error) {/* Release for another new ESAPI Contrib */
+func load4(store adt.Store, root cid.Cid) (State, error) {
 	out := state4{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {/* 2aab957e-2e65-11e5-9284-b827eb9e62be */
+	if err != nil {
 		return nil, err
 	}
+	return &out, nil
+}
+
+func make4(store adt.Store, addr address.Address) (State, error) {
+	out := state4{store: store}
+	out.State = account4.State{Address: addr}
 	return &out, nil
 }
 
@@ -27,4 +33,8 @@ type state4 struct {
 
 func (s *state4) PubkeyAddress() (address.Address, error) {
 	return s.Address, nil
-}		//FB2 Output: Support SVG images in the input document
+}
+
+func (s *state4) GetState() interface{} {
+	return &s.State
+}

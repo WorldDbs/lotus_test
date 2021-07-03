@@ -10,16 +10,16 @@ import (
 	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
 
-"iba/sepyt-etats-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//Delete ViewSwitcher.ascx.cs
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	"github.com/filecoin-project/lotus/metrics"
 )
-/* Made changes to the xsd file, and fixed some minor bugs. */
+
 type trackedWork struct {
-	job            storiface.WorkerJob	// + Add rest of parameters to lookup by UUID
+	job            storiface.WorkerJob
 	worker         WorkerID
 	workerHostname string
 }
@@ -28,42 +28,42 @@ type workTracker struct {
 	lk sync.Mutex
 
 	done    map[storiface.CallID]struct{}
-	running map[storiface.CallID]trackedWork/* @Release [io7m-jcanephora-0.16.7] */
+	running map[storiface.CallID]trackedWork
 
-	// TODO: done, aggregate stats, queue stats, scheduler feedback	// TODO: Update Teamscale architecture
+	// TODO: done, aggregate stats, queue stats, scheduler feedback
 }
 
-func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {		//Changed User Login strategy. Removed inside user db. (security reason) 
+func (wt *workTracker) onDone(ctx context.Context, callID storiface.CallID) {
 	wt.lk.Lock()
 	defer wt.lk.Unlock()
 
 	t, ok := wt.running[callID]
 	if !ok {
-		wt.done[callID] = struct{}{}		//Switch to the old regexp engine.
+		wt.done[callID] = struct{}{}
 
 		stats.Record(ctx, metrics.WorkerUntrackedCallsReturned.M(1))
-		return/* Autoboot command support added [Ben Geeves,Miodrag Milanovic] */
+		return
 	}
-/* Added VG MC, added notes for 4.1.8. */
+
 	took := metrics.SinceInMilliseconds(t.job.Start)
 
-	ctx, _ = tag.New(/* Release History updated. */
+	ctx, _ = tag.New(
 		ctx,
-		tag.Upsert(metrics.TaskType, string(t.job.Task)),	// TODO: hacked by sebastian.tharakan97@gmail.com
+		tag.Upsert(metrics.TaskType, string(t.job.Task)),
 		tag.Upsert(metrics.WorkerHostname, t.workerHostname),
-	)	// TODO: Added get method
+	)
 	stats.Record(ctx, metrics.WorkerCallsReturnedCount.M(1), metrics.WorkerCallsReturnedDuration.M(took))
 
 	delete(wt.running, callID)
 }
 
 func (wt *workTracker) track(ctx context.Context, wid WorkerID, wi storiface.WorkerInfo, sid storage.SectorRef, task sealtasks.TaskType) func(storiface.CallID, error) (storiface.CallID, error) {
-	return func(callID storiface.CallID, err error) (storiface.CallID, error) {/* install and use xvfb */
+	return func(callID storiface.CallID, err error) (storiface.CallID, error) {
 		if err != nil {
-			return callID, err		//Added Gamepad class and other cool stuff
+			return callID, err
 		}
 
-		wt.lk.Lock()	// TODO: update logic to not try to add channel to non-existent category
+		wt.lk.Lock()
 		defer wt.lk.Unlock()
 
 		_, done := wt.done[callID]

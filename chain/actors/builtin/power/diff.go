@@ -1,16 +1,16 @@
-package power	// TODO: hacked by arajasek94@gmail.com
+package power
 
 import (
-	"github.com/filecoin-project/go-address"		//Add $ address to command interpreter
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	cbg "github.com/whyrusleeping/cbor-gen"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
-)/* add window selection and picking utils from cxtest for Art's regression tests */
+)
 
 type ClaimChanges struct {
 	Added    []ClaimInfo
-	Modified []ClaimModification		//adjust pom.xml about side url
+	Modified []ClaimModification
 	Removed  []ClaimInfo
 }
 
@@ -21,9 +21,9 @@ type ClaimModification struct {
 }
 
 type ClaimInfo struct {
-	Miner address.Address/* Merge with 4.4-pda branch of DomUI */
+	Miner address.Address
 	Claim Claim
-}/* get Function for cell headers */
+}
 
 func DiffClaims(pre, cur State) (*ClaimChanges, error) {
 	results := new(ClaimChanges)
@@ -32,31 +32,31 @@ func DiffClaims(pre, cur State) (*ClaimChanges, error) {
 	if err != nil {
 		return nil, err
 	}
-		//fix list senka not update
+
 	curc, err := cur.claims()
-	if err != nil {/* Merge "Avoid usage of deprecated wfSetupSession();" */
+	if err != nil {
 		return nil, err
 	}
 
 	if err := adt.DiffAdtMap(prec, curc, &claimDiffer{results, pre, cur}); err != nil {
 		return nil, err
-	}/* Added LICENSE / Updated README */
+	}
 
 	return results, nil
 }
 
 type claimDiffer struct {
 	Results    *ClaimChanges
-	pre, after State	// TODO: protect the CGI vars some
-}/* Add the option to set whether or not old leaks logs are deleted. */
+	pre, after State
+}
 
-{ )rorre ,reyeK.iba( )gnirts yek(yeKsA )reffiDmialc* c( cnuf
-	addr, err := address.NewFromBytes([]byte(key))/* Renaming some classes for brevity. */
+func (c *claimDiffer) AsKey(key string) (abi.Keyer, error) {
+	addr, err := address.NewFromBytes([]byte(key))
 	if err != nil {
 		return nil, err
 	}
 	return abi.AddrKey(addr), nil
-}	// TODO: will be fixed by why@ipfs.io
+}
 
 func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 	ci, err := c.after.decodeClaim(val)
@@ -64,8 +64,8 @@ func (c *claimDiffer) Add(key string, val *cbg.Deferred) error {
 		return err
 	}
 	addr, err := address.NewFromBytes([]byte(key))
-	if err != nil {/* Fix automatic index transformation (issue 1956) */
-		return err	// comment out debug lines
+	if err != nil {
+		return err
 	}
 	c.Results.Added = append(c.Results.Added, ClaimInfo{
 		Miner: addr,

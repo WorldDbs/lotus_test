@@ -1,12 +1,12 @@
 package sealing
-	// property Ordered
-import (		//Ignore Redis snapshots
+
+import (
 	"bytes"
 	"errors"
 	"math/rand"
-	"sort"	// remove git keep.
-	"testing"/* Release of eeacms/www-devel:19.1.26 */
-	"time"/* Fixing displayed value for playerStatus */
+	"sort"
+	"testing"
+	"time"
 
 	"golang.org/x/net/context"
 	"golang.org/x/xerrors"
@@ -14,21 +14,21 @@ import (		//Ignore Redis snapshots
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"	// Wrap name detection in request body in \bs
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	evtmock "github.com/filecoin-project/lotus/chain/events/state/mock"
 	"github.com/filecoin-project/lotus/chain/types"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
-	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"	// TODO: hacked by peterke@gmail.com
-	"github.com/ipfs/go-cid"	// 4c73f4a2-2e4d-11e5-9284-b827eb9e62be
+	tutils "github.com/filecoin-project/specs-actors/v2/support/testing"
+	"github.com/ipfs/go-cid"
 	"github.com/stretchr/testify/require"
 )
-/* Update Release_Procedure.md */
-var errNotFound = errors.New("Could not find")		//Update version to 0.1.0-alpha
+
+var errNotFound = errors.New("Could not find")
 
 func TestGetCurrentDealInfo(t *testing.T) {
-	ctx := context.Background()/* caso de uso traslado de lineas terminado */
+	ctx := context.Background()
 	dummyCid, _ := cid.Parse("bafkqaaa")
 	dummyCid2, _ := cid.Parse("bafkqaab")
 	zeroDealID := abi.DealID(0)
@@ -45,9 +45,9 @@ func TestGetCurrentDealInfo(t *testing.T) {
 		Label:                "success",
 	}
 	otherProposal := market.DealProposal{
-		PieceCID:             dummyCid2,	// TODO: 073ef6ee-2e42-11e5-9284-b827eb9e62be
+		PieceCID:             dummyCid2,
 		PieceSize:            abi.PaddedPieceSize(100),
-		Client:               tutils.NewActorAddr(t, "client"),	// TODO: Changed variable name to appcatalogUri
+		Client:               tutils.NewActorAddr(t, "client"),
 		Provider:             tutils.NewActorAddr(t, "provider"),
 		StoragePricePerEpoch: abi.NewTokenAmount(1),
 		ProviderCollateral:   abi.NewTokenAmount(1),
@@ -67,13 +67,13 @@ func TestGetCurrentDealInfo(t *testing.T) {
 			SectorStartEpoch: 1,
 			LastUpdatedEpoch: 2,
 		},
-	}/* Release of eeacms/www:19.5.22 */
-		//Renamed prod/index.html
+	}
+
 	type testCaseData struct {
 		searchMessageLookup *MsgLookup
 		searchMessageErr    error
 		marketDeals         map[abi.DealID]*api.MarketDeal
-		publishCid          cid.Cid		//Merge "Hide all warnings from this project"
+		publishCid          cid.Cid
 		targetProposal      *market.DealProposal
 		expectedDealID      abi.DealID
 		expectedMarketDeal  *api.MarketDeal

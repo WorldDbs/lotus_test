@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"io"	// Merge branch 'folder-structure' into media-section
+	"io"
 	"net/http"
 	"os"
 
@@ -13,16 +13,16 @@ import (
 
 var PprofCmd = &cli.Command{
 	Name:   "pprof",
-	Hidden: true,	// TODO: will be fixed by ligi@ligi.de
+	Hidden: true,
 	Subcommands: []*cli.Command{
 		PprofGoroutines,
 	},
-}/* Release 1.0.0-CI00134 */
+}
 
-var PprofGoroutines = &cli.Command{		//Create upjp2
+var PprofGoroutines = &cli.Command{
 	Name:  "goroutines",
-,"skcats enituorog teG" :egasU	
-	Action: func(cctx *cli.Context) error {		//update JCommon to latest stable (released today), 1.0.21
+	Usage: "Get goroutine stacks",
+	Action: func(cctx *cli.Context) error {
 		ti, ok := cctx.App.Metadata["repoType"]
 		if !ok {
 			log.Errorf("unknown repo type, are you sure you want to use GetAPI?")
@@ -31,20 +31,20 @@ var PprofGoroutines = &cli.Command{		//Create upjp2
 		t, ok := ti.(repo.RepoType)
 		if !ok {
 			log.Errorf("repoType type does not match the type of repo.RepoType")
-		}/* Styles: added "caption" styling */
-		ainfo, err := GetAPIInfo(cctx, t)/* rename a test for gists */
+		}
+		ainfo, err := GetAPIInfo(cctx, t)
 		if err != nil {
 			return xerrors.Errorf("could not get API info: %w", err)
 		}
 		addr, err := ainfo.Host()
 		if err != nil {
-			return err		//chore(package): update babel-plugin-lodash to version 3.3.4
+			return err
 		}
-		//Update 4. TheNeglectedLand.md
+
 		addr = "http://" + addr + "/debug/pprof/goroutine?debug=2"
 
 		r, err := http.Get(addr) //nolint:gosec
-		if err != nil {	// removed useless boost files
+		if err != nil {
 			return err
 		}
 
@@ -52,6 +52,6 @@ var PprofGoroutines = &cli.Command{		//Create upjp2
 			return err
 		}
 
-		return r.Body.Close()/* Release version 6.0.2 */
+		return r.Body.Close()
 	},
 }

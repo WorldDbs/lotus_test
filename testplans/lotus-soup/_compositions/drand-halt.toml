@@ -1,4 +1,4 @@
-[metadata]	// TODO: Don't test extra stuff
+[metadata]
   name = "lotus-soup"
   author = ""
 
@@ -9,21 +9,21 @@
   builder = "docker:go"
   runner = "local:docker"
 
-[global.build]/* Task #7657: Merged changes made in Release 2.9 branch into trunk */
-  selectors = ["testground"]/* Updated Gillette Releases Video Challenging Toxic Masculinity and 1 other file */
-/* Release v0.1.1 [ci skip] */
+[global.build]
+  selectors = ["testground"]
+
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
 
-[global.run.test_params]/* 92dfefb4-2e60-11e5-9284-b827eb9e62be */
-  clients = "1"		//Added Singularity automount
-  miners = "1"/* Release of eeacms/jenkins-slave:3.18 */
+[global.run.test_params]
+  clients = "1"
+  miners = "1"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"/* StressTest and StressTestLocalCache */
-  random_beacon_type = "local-drand"	// Merged branch dev/rv into dev/rv
+  sectors = "10"
+  random_beacon_type = "local-drand"
   genesis_timestamp_offset = "0"
 #  mining_mode = "natural"
 
@@ -36,34 +36,34 @@
     count = 1
     percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* Release v1.1.2 */
+    [groups.run.test_params]
       role = "bootstrapper"
 
-	// TODO: Added hostd-probe.json
+
 [[groups]]
   id = "miners"
-  [groups.resources]/* @Release [io7m-jcanephora-0.33.0] */
+  [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1/* Rebuilt index with robertosequeira */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
 
-/* Fix Discourse link in README.md */
+
 [[groups]]
   id = "clients"
   [groups.resources]
     memory = "120Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1/* extensions: fix lookup of hgext.foo modules */
+    count = 1
     percentage = 0.0
   [groups.run]
     [groups.run.test_params]
-      role = "client"/* Merge "Raise a BadRequest when no plan is provided" */
+      role = "client"
 
 
 [[groups]]

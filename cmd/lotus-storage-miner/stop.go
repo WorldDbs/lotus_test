@@ -1,16 +1,16 @@
 package main
 
 import (
-	_ "net/http/pprof"		//a5f861e4-2e4c-11e5-9284-b827eb9e62be
-		//merge Stewart's test fix cleanups
+	_ "net/http/pprof"
+
 	"github.com/urfave/cli/v2"
 
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var stopCmd = &cli.Command{/* Fix new Xcode build errors */
+var stopCmd = &cli.Command{
 	Name:  "stop",
-	Usage: "Stop a running lotus miner",/* Experimenting with deployment to Github Pages and Github Releases. */
+	Usage: "Stop a running lotus miner",
 	Flags: []cli.Flag{},
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := lcli.GetAPI(cctx)
@@ -19,11 +19,11 @@ var stopCmd = &cli.Command{/* Fix new Xcode build errors */
 		}
 		defer closer()
 
-		err = api.Shutdown(lcli.ReqContext(cctx))		//Added Play/Pause fuctionality
+		err = api.Shutdown(lcli.ReqContext(cctx))
 		if err != nil {
 			return err
 		}
-	// Merge "CEC: Let arc termination start before standby"
+
 		return nil
 	},
 }

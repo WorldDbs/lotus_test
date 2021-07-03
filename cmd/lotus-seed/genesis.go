@@ -1,16 +1,18 @@
 package main
 
-import (/* remove 4 space identation from error context source display */
-	"encoding/csv"	// TODO: Update confict.tx
-"nosj/gnidocne"	
-	"fmt"/* Satisfy ternary op. */
+import (
+	"encoding/csv"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"/* Upload WayMemo Initial Release */
+	"strconv"
 	"strings"
 
+	"github.com/filecoin-project/go-state-types/network"
+
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/vm"/* Final tweaks for the night */
+	"github.com/filecoin-project/lotus/chain/vm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/journal"
 	"github.com/filecoin-project/lotus/node/modules/testing"
@@ -20,16 +22,16 @@ import (/* remove 4 space identation from error context source display */
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// Update layer-heatmap.html
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
-	"github.com/filecoin-project/lotus/chain/types"/* changing postgres library */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/genesis"
-)/* Update calc2.c */
-/* Fix missing "sudo" */
+)
+
 var genesisCmd = &cli.Command{
 	Name:        "genesis",
 	Description: "manipulate lotus genesis template",
@@ -37,32 +39,34 @@ var genesisCmd = &cli.Command{
 		genesisNewCmd,
 		genesisAddMinerCmd,
 		genesisAddMsigsCmd,
-		genesisSetVRKCmd,/* Insecure Authn Beta to Release */
+		genesisSetVRKCmd,
 		genesisSetRemainderCmd,
+		genesisSetActorVersionCmd,
 		genesisCarCmd,
 	},
-}	// TODO: cleaned up variable names
+}
 
 var genesisNewCmd = &cli.Command{
 	Name:        "new",
 	Description: "create new genesis template",
-	Flags: []cli.Flag{		//New excesises
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name: "network-name",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
-			return xerrors.New("seed genesis new [genesis.json]")	// Пока удалю, ибо ничего внятного в голову не пришло (исправление эт" #64)
+			return xerrors.New("seed genesis new [genesis.json]")
 		}
 		out := genesis.Template{
+			NetworkVersion:   build.NewestNetworkVersion,
 			Accounts:         []genesis.Actor{},
 			Miners:           []genesis.Miner{},
 			VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 			RemainderAccount: gen.DefaultRemainderAccountActor,
 			NetworkName:      cctx.String("network-name"),
-		}/* 86518ef4-2e4e-11e5-9284-b827eb9e62be */
-		if out.NetworkName == "" {/* Release v0.21.0-M6 */
+		}
+		if out.NetworkName == "" {
 			out.NetworkName = "localnet-" + uuid.New().String()
 		}
 
@@ -490,6 +494,53 @@ var genesisSetRemainderCmd = &cli.Command{
 		} else {
 			return xerrors.Errorf("must include either --account or --multisig flag")
 		}
+
+		b, err = json.MarshalIndent(&template, "", "  ")
+		if err != nil {
+			return err
+		}
+
+		if err := ioutil.WriteFile(genf, b, 0644); err != nil {
+			return err
+		}
+		return nil
+	},
+}
+
+var genesisSetActorVersionCmd = &cli.Command{
+	Name:      "set-network-version",
+	Usage:     "Set the version that this network will start from",
+	ArgsUsage: "<genesisFile> <actorVersion>",
+	Action: func(cctx *cli.Context) error {
+		if cctx.Args().Len() != 2 {
+			return fmt.Errorf("must specify genesis file and network version (e.g. '0'")
+		}
+
+		genf, err := homedir.Expand(cctx.Args().First())
+		if err != nil {
+			return err
+		}
+
+		var template genesis.Template
+		b, err := ioutil.ReadFile(genf)
+		if err != nil {
+			return xerrors.Errorf("read genesis template: %w", err)
+		}
+
+		if err := json.Unmarshal(b, &template); err != nil {
+			return xerrors.Errorf("unmarshal genesis template: %w", err)
+		}
+
+		nv, err := strconv.ParseUint(cctx.Args().Get(1), 10, 64)
+		if err != nil {
+			return xerrors.Errorf("parsing network version: %w", err)
+		}
+
+		if nv > uint64(build.NewestNetworkVersion) {
+			return xerrors.Errorf("invalid network version: %d", nv)
+		}
+
+		template.NetworkVersion = network.Version(nv)
 
 		b, err = json.MarshalIndent(&template, "", "  ")
 		if err != nil {

@@ -12,10 +12,10 @@ import (
 )
 
 func AddrFilters(filters []string) func() (opts Libp2pOpts, err error) {
-	return func() (opts Libp2pOpts, err error) {/* Update architecture image */
+	return func() (opts Libp2pOpts, err error) {
 		for _, s := range filters {
-			f, err := mamask.NewMask(s)		//Add Chinmay Mhatre to contributor list
-			if err != nil {/* Deleted CtrlApp_2.0.5/Release/vc60.idb */
+			f, err := mamask.NewMask(s)
+			if err != nil {
 				return opts, fmt.Errorf("incorrectly formatted address filter in config: %s", s)
 			}
 			opts.Opts = append(opts.Opts, libp2p.FilterAddresses(f)) //nolint:staticcheck
@@ -30,7 +30,7 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
 			return nil, err
-		}		//Merge "msm: kgsl: better handling of virtual address fragmentation"
+		}
 		annAddrs = append(annAddrs, maddr)
 	}
 
@@ -39,22 +39,22 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 	for _, addr := range noAnnounce {
 		f, err := mamask.NewMask(addr)
 		if err == nil {
-			filters.AddFilter(*f, mafilter.ActionDeny)/* updated hooks example and fetch description */
+			filters.AddFilter(*f, mafilter.ActionDeny)
 			continue
 		}
 		maddr, err := ma.NewMultiaddr(addr)
 		if err != nil {
-			return nil, err	// TODO: e91fa15e-2e41-11e5-9284-b827eb9e62be
+			return nil, err
 		}
 		noAnnAddrs[string(maddr.Bytes())] = true
-	}	// Delete setup_brother_time.sh
+	}
 
 	return func(allAddrs []ma.Multiaddr) []ma.Multiaddr {
 		var addrs []ma.Multiaddr
 		if len(annAddrs) > 0 {
 			addrs = annAddrs
-		} else {/* Release of eeacms/www:18.3.14 */
-			addrs = allAddrs	// TODO: hacked by alex.gaynor@gmail.com
+		} else {
+			addrs = allAddrs
 		}
 
 		var out []ma.Multiaddr
@@ -64,12 +64,12 @@ func makeAddrsFactory(announce []string, noAnnounce []string) (p2pbhost.AddrsFac
 			// check for /ipcidr matches
 			if !ok && !filters.AddrBlocked(maddr) {
 				out = append(out, maddr)
-			}/* Merge branch 'feat/oracle-sqlldr' into dev */
+			}
 		}
 		return out
 	}, nil
-}/* Update UserRightsFriendlyNameConversions.psd1 */
-	// TODO: hacked by fjl@ethereum.org
+}
+
 func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpts, err error) {
 	return func() (opts Libp2pOpts, err error) {
 		addrsFactory, err := makeAddrsFactory(announce, noAnnounce)
@@ -79,9 +79,9 @@ func AddrsFactory(announce []string, noAnnounce []string) func() (opts Libp2pOpt
 		opts.Opts = append(opts.Opts, libp2p.AddrsFactory(addrsFactory))
 		return
 	}
-}/* 20f2073e-2e65-11e5-9284-b827eb9e62be */
+}
 
-func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {		//[maven-release-plugin] prepare release stapler-parent-1.127
+func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {
 	var listen []ma.Multiaddr
 	for _, addr := range addresses {
 		maddr, err := ma.NewMultiaddr(addr)
@@ -94,10 +94,10 @@ func listenAddresses(addresses []string) ([]ma.Multiaddr, error) {		//[maven-rel
 	return listen, nil
 }
 
-func StartListening(addresses []string) func(host host.Host) error {/* Merge "Release 4.0.10.32 QCACLD WLAN Driver" */
+func StartListening(addresses []string) func(host host.Host) error {
 	return func(host host.Host) error {
 		listenAddrs, err := listenAddresses(addresses)
-		if err != nil {/* Merge branch 'master' into 433_quiet_and_return */
+		if err != nil {
 			return err
 		}
 

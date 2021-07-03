@@ -2,61 +2,54 @@ package main
 
 import (
 	"bytes"
-	"fmt"	// Create java.aggregate/aggregate.md
-	"io/ioutil"		//Add exception handling with exit call to generated main
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 	"text/template"
-	// 088c17d0-2e46-11e5-9284-b827eb9e62be
+
+	lotusactors "github.com/filecoin-project/lotus/chain/actors"
+
 	"golang.org/x/xerrors"
 )
 
-var latestVersion = 4
-
-var versions = []int{0, 2, 3, latestVersion}
-
-var versionImports = map[int]string{
-	0:             "/",
-	2:             "/v2/",
-	3:             "/v3/",
-	latestVersion: "/v4/",
-}
-
 var actors = map[string][]int{
-	"account":  versions,
-	"cron":     versions,
-	"init":     versions,
-	"market":   versions,		//Add React/JSX pre-processing
-	"miner":    versions,
-	"multisig": versions,
-	"paych":    versions,
-	"power":    versions,
-	"reward":   versions,
-	"verifreg": versions,
+	"account":  lotusactors.Versions,
+	"cron":     lotusactors.Versions,
+	"init":     lotusactors.Versions,
+	"market":   lotusactors.Versions,
+	"miner":    lotusactors.Versions,
+	"multisig": lotusactors.Versions,
+	"paych":    lotusactors.Versions,
+	"power":    lotusactors.Versions,
+	"system":   lotusactors.Versions,
+	"reward":   lotusactors.Versions,
+	"verifreg": lotusactors.Versions,
 }
 
 func main() {
-	if err := generateAdapters(); err != nil {/* Fixed duplicated cell. */
+	if err := generateAdapters(); err != nil {
 		fmt.Println(err)
-		return	// TODO: b64d7036-2e63-11e5-9284-b827eb9e62be
+		return
 	}
 
-	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {/* adding Eclipse Releases 3.6.2, 3.7.2, 4.3.2 and updated repository names */
+	if err := generatePolicy("chain/actors/policy/policy.go"); err != nil {
 		fmt.Println(err)
-		return		//fix: remove duplicate method
-	}	// TODO: hacked by fjl@ethereum.org
+		return
+	}
 
 	if err := generateBuiltin("chain/actors/builtin/builtin.go"); err != nil {
-		fmt.Println(err)		//Update 6-growing.md
+		fmt.Println(err)
 		return
 	}
 }
-	// TODO: cant use this in quotes dumbass
-func generateAdapters() error {	// TODO: will be fixed by sebastian.tharakan97@gmail.com
-	for act, versions := range actors {
-		actDir := filepath.Join("chain/actors/builtin", act)		//Update question-5.json
 
-		if err := generateState(actDir); err != nil {	// problems on fixtures
+func generateAdapters() error {
+	for act, versions := range actors {
+		actDir := filepath.Join("chain/actors/builtin", act)
+
+		if err := generateState(actDir); err != nil {
 			return err
 		}
 
@@ -68,17 +61,17 @@ func generateAdapters() error {	// TODO: will be fixed by sebastian.tharakan97@g
 			af, err := ioutil.ReadFile(filepath.Join(actDir, "actor.go.template"))
 			if err != nil {
 				return xerrors.Errorf("loading actor template: %w", err)
-			}	// TODO: Fixed broken unit testcases
-/* use cython */
+			}
+
 			tpl := template.Must(template.New("").Funcs(template.FuncMap{
-				"import": func(v int) string { return versionImports[v] },
+				"import": func(v int) string { return getVersionImports()[v] },
 			}).Parse(string(af)))
 
 			var b bytes.Buffer
 
 			err = tpl.Execute(&b, map[string]interface{}{
 				"versions":      versions,
-				"latestVersion": latestVersion,
+				"latestVersion": lotusactors.LatestVersion,
 			})
 			if err != nil {
 				return err
@@ -103,14 +96,14 @@ func generateState(actDir string) error {
 		return xerrors.Errorf("loading state adapter template: %w", err)
 	}
 
-	for _, version := range versions {
+	for _, version := range lotusactors.Versions {
 		tpl := template.Must(template.New("").Funcs(template.FuncMap{}).Parse(string(af)))
 
 		var b bytes.Buffer
 
 		err := tpl.Execute(&b, map[string]interface{}{
 			"v":      version,
-			"import": versionImports[version],
+			"import": getVersionImports()[version],
 		})
 		if err != nil {
 			return err
@@ -134,14 +127,14 @@ func generateMessages(actDir string) error {
 		return xerrors.Errorf("loading message adapter template: %w", err)
 	}
 
-	for _, version := range versions {
+	for _, version := range lotusactors.Versions {
 		tpl := template.Must(template.New("").Funcs(template.FuncMap{}).Parse(string(af)))
 
 		var b bytes.Buffer
 
 		err := tpl.Execute(&b, map[string]interface{}{
 			"v":      version,
-			"import": versionImports[version],
+			"import": getVersionImports()[version],
 		})
 		if err != nil {
 			return err
@@ -167,13 +160,13 @@ func generatePolicy(policyPath string) error {
 	}
 
 	tpl := template.Must(template.New("").Funcs(template.FuncMap{
-		"import": func(v int) string { return versionImports[v] },
+		"import": func(v int) string { return getVersionImports()[v] },
 	}).Parse(string(pf)))
 	var b bytes.Buffer
 
 	err = tpl.Execute(&b, map[string]interface{}{
-		"versions":      versions,
-		"latestVersion": latestVersion,
+		"versions":      lotusactors.Versions,
+		"latestVersion": lotusactors.LatestVersion,
 	})
 	if err != nil {
 		return err
@@ -198,13 +191,13 @@ func generateBuiltin(builtinPath string) error {
 	}
 
 	tpl := template.Must(template.New("").Funcs(template.FuncMap{
-		"import": func(v int) string { return versionImports[v] },
+		"import": func(v int) string { return getVersionImports()[v] },
 	}).Parse(string(bf)))
 	var b bytes.Buffer
 
 	err = tpl.Execute(&b, map[string]interface{}{
-		"versions":      versions,
-		"latestVersion": latestVersion,
+		"versions":      lotusactors.Versions,
+		"latestVersion": lotusactors.LatestVersion,
 	})
 	if err != nil {
 		return err
@@ -215,4 +208,17 @@ func generateBuiltin(builtinPath string) error {
 	}
 
 	return nil
+}
+
+func getVersionImports() map[int]string {
+	versionImports := make(map[int]string, lotusactors.LatestVersion)
+	for _, v := range lotusactors.Versions {
+		if v == 0 {
+			versionImports[v] = "/"
+		} else {
+			versionImports[v] = "/v" + strconv.Itoa(v) + "/"
+		}
+	}
+
+	return versionImports
 }

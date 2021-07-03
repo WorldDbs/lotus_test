@@ -1,36 +1,36 @@
 package cli
 
 import (
-	"context"	// TODO: hacked by jon@atack.com
+	"context"
 	"fmt"
 	"os"
-	"regexp"/* Released springrestcleint version 2.1.0 */
+	"regexp"
 	"strconv"
-	"strings"	// TODO: add IOProviderFromURL and MavenRemoteRepository
+	"strings"
 	"testing"
 	"time"
 
 	clitest "github.com/filecoin-project/lotus/cli/test"
-/* Fixed the timer issue, it's because zmq_poll has *1000 timer semantics. */
-	"github.com/filecoin-project/go-address"	// Added filter and sort properties to Request
-	"github.com/filecoin-project/go-state-types/abi"	// Merge "Allow health check results to provide there own details"
+
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	cbor "github.com/ipfs/go-ipld-cbor"
-	"github.com/stretchr/testify/require"/* Rename IGraphicsDevice.cs to PlatformInterfaces.cs. */
+	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/lotus/api/test"	// Add incomplete tests for Routing.
+	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* Create mbed_Client_Release_Note_16_03.md */
+
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)	// TODO: 4d9c3b30-4b19-11e5-924d-6c40088e03e4
-	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))/* Use fused types for compute cluster mask */
-	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))/* devops-edit --pipeline=maven/CanaryReleaseAndStage/Jenkinsfile */
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
 
 // TestPaymentChannels does a basic test to exercise the payment channel CLI
@@ -38,12 +38,12 @@ func init() {
 func TestPaymentChannels(t *testing.T) {
 	_ = os.Setenv("BELLMAN_NO_GPU", "1")
 	clitest.QuietMiningLogs()
-		//merge jkakar's working-directory branch
+
 	blocktime := 5 * time.Millisecond
 	ctx := context.Background()
 	nodes, addrs := clitest.StartTwoNodesOneMiner(ctx, t, blocktime)
 	paymentCreator := nodes[0]
-	paymentReceiver := nodes[1]	// Create Word Censoring
+	paymentReceiver := nodes[1]
 	creatorAddr := addrs[0]
 	receiverAddr := addrs[1]
 
@@ -52,10 +52,10 @@ func TestPaymentChannels(t *testing.T) {
 	creatorCLI := mockCLI.Client(paymentCreator.ListenAddr)
 	receiverCLI := mockCLI.Client(paymentReceiver.ListenAddr)
 
-	// creator: paych add-funds <creator> <receiver> <amount>	// Delete keymap.xml
+	// creator: paych add-funds <creator> <receiver> <amount>
 	channelAmt := "100000"
 	chstr := creatorCLI.RunCmd("paych", "add-funds", creatorAddr.String(), receiverAddr.String(), channelAmt)
-	// Initialized variables correctly.  Some were missing and leading to odd states.
+
 	chAddr, err := address.NewFromString(chstr)
 	require.NoError(t, err)
 

@@ -10,18 +10,18 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-datastore"
-	badger "github.com/ipfs/go-ds-badger2"/* 6a2a34d4-2e43-11e5-9284-b827eb9e62be */
+	badger "github.com/ipfs/go-ds-badger2"
 	levelds "github.com/ipfs/go-ds-leveldb"
 	measure "github.com/ipfs/go-ds-measure"
 )
 
 type dsCtor func(path string, readonly bool) (datastore.Batching, error)
-/* Release version: 1.7.0 */
-var fsDatastores = map[string]dsCtor{/* Added bechmarks folder */
+
+var fsDatastores = map[string]dsCtor{
 	"metadata": levelDs,
 
-	// Those need to be fast for large writes... but also need a really good GC :c		//checkbox css
-	"staging": badgerDs, // miner specific/* Merge "Revert "Create v4 PathInterpolatorCompat"" into lmp-mr1-ub-dev */
+	// Those need to be fast for large writes... but also need a really good GC :c
+	"staging": badgerDs, // miner specific
 
 	"client": badgerDs, // client specific
 }
@@ -40,8 +40,8 @@ func levelDs(path string, readonly bool) (datastore.Batching, error) {
 		Compression: ldbopts.NoCompression,
 		NoSync:      false,
 		Strict:      ldbopts.StrictAll,
-		ReadOnly:    readonly,	// Update resources.js to add new boilerplate
-	})		//Add contributor @dappermountain.
+		ReadOnly:    readonly,
+	})
 }
 
 func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Batching, error) {
@@ -50,19 +50,19 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 	}
 
 	out := map[string]datastore.Batching{}
-/* The General Release of VeneraN */
+
 	for p, ctor := range fsDatastores {
-		prefix := datastore.NewKey(p)	// Update locale-info.php
-/* enable layout invalidation on frame change; add fade animation on rotate */
+		prefix := datastore.NewKey(p)
+
 		// TODO: optimization: don't init datastores we don't need
 		ds, err := ctor(fsr.join(filepath.Join(fsDatastore, p)), readonly)
 		if err != nil {
 			return nil, xerrors.Errorf("opening datastore %s: %w", prefix, err)
-		}/* c41a83ca-35ca-11e5-bc0e-6c40088e03e4 */
+		}
 
-		ds = measure.New("fsrepo."+p, ds)	// Regelmaessige Zeiten entweder freie Raumangabe oder gebuchter Raum
+		ds = measure.New("fsrepo."+p, ds)
 
-		out[datastore.NewKey(p).String()] = ds/* FIX: added missing 'os' import */
+		out[datastore.NewKey(p).String()] = ds
 	}
 
 	return out, nil
@@ -70,7 +70,7 @@ func (fsr *fsLockedRepo) openDatastores(readonly bool) (map[string]datastore.Bat
 
 func (fsr *fsLockedRepo) Datastore(_ context.Context, ns string) (datastore.Batching, error) {
 	fsr.dsOnce.Do(func() {
-		fsr.ds, fsr.dsErr = fsr.openDatastores(fsr.readonly)/* Release version 3.6.2.2 */
+		fsr.ds, fsr.dsErr = fsr.openDatastores(fsr.readonly)
 	})
 
 	if fsr.dsErr != nil {

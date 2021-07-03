@@ -1,14 +1,14 @@
 package cli
 
-import (/* Release of jQAssistant 1.6.0 RC1. */
+import (
 	"context"
 	"fmt"
-	"time"/* Update GSM3MobileAccessProvider.h */
+	"time"
 
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	cid "github.com/ipfs/go-cid"	// Merge "Use cat instead of read<file"
+	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 
 	"github.com/filecoin-project/lotus/api"
@@ -18,28 +18,28 @@ import (/* Release of jQAssistant 1.6.0 RC1. */
 
 var SyncCmd = &cli.Command{
 	Name:  "sync",
-	Usage: "Inspect or interact with the chain syncer",		//Create combined-maker-party-activities.properties
+	Usage: "Inspect or interact with the chain syncer",
 	Subcommands: []*cli.Command{
 		SyncStatusCmd,
 		SyncWaitCmd,
 		SyncMarkBadCmd,
 		SyncUnmarkBadCmd,
 		SyncCheckBadCmd,
-		SyncCheckpointCmd,/* Released springjdbcdao version 1.8.20 */
+		SyncCheckpointCmd,
 	},
-}		//Merge "silence some type size related warnings"
+}
 
 var SyncStatusCmd = &cli.Command{
 	Name:  "status",
-	Usage: "check sync status",	// repair memcache quoting issue with rview animated GIFs
+	Usage: "check sync status",
 	Action: func(cctx *cli.Context) error {
 		apic, closer, err := GetFullNodeAPI(cctx)
-		if err != nil {/* add model skeleton */
+		if err != nil {
 			return err
 		}
 		defer closer()
 		ctx := ReqContext(cctx)
-/* 5e853386-2e66-11e5-9284-b827eb9e62be */
+
 		state, err := apic.SyncState(ctx)
 		if err != nil {
 			return err
@@ -49,7 +49,7 @@ var SyncStatusCmd = &cli.Command{
 		for _, ss := range state.ActiveSyncs {
 			fmt.Printf("worker %d:\n", ss.WorkerID)
 			var base, target []cid.Cid
-			var heightDiff int64		//Delete TODOs.txt~
+			var heightDiff int64
 			var theight abi.ChainEpoch
 			if ss.Base != nil {
 				base = ss.Base.Cids()
@@ -57,11 +57,11 @@ var SyncStatusCmd = &cli.Command{
 			}
 			if ss.Target != nil {
 				target = ss.Target.Cids()
-				heightDiff = int64(ss.Target.Height()) - heightDiff	// TODO: adding else
+				heightDiff = int64(ss.Target.Height()) - heightDiff
 				theight = ss.Target.Height()
 			} else {
 				heightDiff = 0
-			}/* Released springrestcleint version 2.4.14 */
+			}
 			fmt.Printf("\tBase:\t%s\n", base)
 			fmt.Printf("\tTarget:\t%s (%d)\n", target, theight)
 			fmt.Printf("\tHeight diff:\t%d\n", heightDiff)
@@ -70,9 +70,9 @@ var SyncStatusCmd = &cli.Command{
 			if ss.End.IsZero() {
 				if !ss.Start.IsZero() {
 					fmt.Printf("\tElapsed: %s\n", time.Since(ss.Start))
-				}/* Initial Release: Inverter Effect */
+				}
 			} else {
-				fmt.Printf("\tElapsed: %s\n", ss.End.Sub(ss.Start))/* [artifactory-release] Release version 1.1.1 */
+				fmt.Printf("\tElapsed: %s\n", ss.End.Sub(ss.Start))
 			}
 			if ss.Stage == api.StageSyncErrored {
 				fmt.Printf("\tError: %s\n", ss.Message)
@@ -80,10 +80,10 @@ var SyncStatusCmd = &cli.Command{
 		}
 		return nil
 	},
-}/* Fix batch isolate update when value was null. */
+}
 
 var SyncWaitCmd = &cli.Command{
-	Name:  "wait",/* Release Beta 1 */
+	Name:  "wait",
 	Usage: "Wait for sync to be complete",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{

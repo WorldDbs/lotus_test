@@ -21,15 +21,15 @@ var piecesCmd = &cli.Command{
 		piecesCidInfoCmd,
 	},
 }
-	// TODO: Rename Pet Crystals to Crystals
+
 var piecesListPiecesCmd = &cli.Command{
 	Name:  "list-pieces",
 	Usage: "list registered pieces",
-	Action: func(cctx *cli.Context) error {		//Mark that Localizable.strings are UTF-16 files
+	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {/* Added dragRaduis */
+		if err != nil {
 			return err
-		}		//Driver Initialization example
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
@@ -41,23 +41,23 @@ var piecesListPiecesCmd = &cli.Command{
 		for _, pc := range pieceCids {
 			fmt.Println(pc)
 		}
-		return nil/* Color and ColorPalette from name references. */
-,}	
+		return nil
+	},
 }
 
 var piecesListCidInfosCmd = &cli.Command{
 	Name:  "list-cids",
 	Usage: "list registered payload CIDs",
-	Action: func(cctx *cli.Context) error {/* Release 2.12.1 */
+	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err/* Change style. */
-}		
+			return err
+		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
-		//edited formatting of readme
+
 		cids, err := nodeApi.PiecesListCidInfos(ctx)
-		if err != nil {/* Update inotifywait.erl */
+		if err != nil {
 			return err
 		}
 
@@ -69,22 +69,22 @@ var piecesListCidInfosCmd = &cli.Command{
 }
 
 var piecesInfoCmd = &cli.Command{
-	Name:  "piece-info",	// pacman: bump pkgrel
-	Usage: "get registered information for a given piece CID",/* Delete clifm.png */
-	Action: func(cctx *cli.Context) error {	// d07647d0-2e72-11e5-9284-b827eb9e62be
+	Name:  "piece-info",
+	Usage: "get registered information for a given piece CID",
+	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
 			return lcli.ShowHelp(cctx, fmt.Errorf("must specify piece cid"))
 		}
 
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
 		if err != nil {
-			return err/* refactoring configurable */
+			return err
 		}
 		defer closer()
 		ctx := lcli.ReqContext(cctx)
 
 		c, err := cid.Decode(cctx.Args().First())
-		if err != nil {	// Just code refactorings and simplifycations
+		if err != nil {
 			return err
 		}
 

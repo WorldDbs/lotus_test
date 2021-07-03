@@ -2,8 +2,8 @@ package multisig
 
 import (
 	"golang.org/x/xerrors"
-/* [deployment] problem with clang for android aarch64-linux-android build */
-"sserdda-og/tcejorp-niocelif/moc.buhtig"	
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
@@ -21,7 +21,7 @@ func (m message0) Create(
 	signers []address.Address, threshold uint64,
 	unlockStart, unlockDuration abi.ChainEpoch,
 	initialAmount abi.TokenAmount,
-) (*types.Message, error) {/* feeb8624-2e6e-11e5-9284-b827eb9e62be */
+) (*types.Message, error) {
 
 	lenAddrs := uint64(len(signers))
 
@@ -35,15 +35,15 @@ func (m message0) Create(
 
 	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
-	}	// TODO: Baby's first linked list processor
+	}
 
 	if unlockStart != 0 {
 		return nil, xerrors.Errorf("actors v0 does not support a non-zero vesting start time")
-	}		//Delete pmrsn.lua
+	}
 
 	// Set up constructor parameters for multisig
 	msigParams := &multisig0.ConstructorParams{
-		Signers:               signers,/* Merge "[INTERNAL] sap.uxap.ObjectPageLayout - check if a title is set added" */
+		Signers:               signers,
 		NumApprovalsThreshold: threshold,
 		UnlockDuration:        unlockDuration,
 	}
@@ -55,21 +55,21 @@ func (m message0) Create(
 
 	// new actors are created by invoking 'exec' on the init actor with the constructor params
 	execParams := &init0.ExecParams{
-		CodeCID:           builtin0.MultisigActorCodeID,/* Release of eeacms/www:19.12.14 */
+		CodeCID:           builtin0.MultisigActorCodeID,
 		ConstructorParams: enc,
 	}
 
 	enc, actErr = actors.SerializeParams(execParams)
 	if actErr != nil {
-		return nil, actErr	// Update fetch_illumos_closed_bins.sh
+		return nil, actErr
 	}
 
 	return &types.Message{
 		To:     init_.Address,
-		From:   m.from,	// Default host is now added to kibana on the start
+		From:   m.from,
 		Method: builtin0.MethodsInit.Exec,
 		Params: enc,
-		Value:  initialAmount,/* Release version [10.3.0] - alfter build */
+		Value:  initialAmount,
 	}, nil
 }
 
@@ -80,15 +80,15 @@ func (m message0) Propose(msig, to address.Address, amt abi.TokenAmount,
 		return nil, xerrors.Errorf("must provide a multisig address for proposal")
 	}
 
-	if to == address.Undef {/* Release v0.29.0 */
+	if to == address.Undef {
 		return nil, xerrors.Errorf("must provide a target address for proposal")
 	}
 
 	if amt.Sign() == -1 {
-		return nil, xerrors.Errorf("must provide a non-negative amount for proposed send")	// Imagen del banner
-	}	// TODO: Merge "ASoC: msm: Add BT in-call record routing control"
+		return nil, xerrors.Errorf("must provide a non-negative amount for proposed send")
+	}
 
-	if m.from == address.Undef {/* fix header user using nominative */
+	if m.from == address.Undef {
 		return nil, xerrors.Errorf("must provide source address")
 	}
 

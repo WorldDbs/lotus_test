@@ -1,13 +1,13 @@
 package backupds
-		//${plugin-dir} is not set during bnd tests
+
 import (
-	"fmt"	// clear the session struct when logging off
+	"fmt"
 	"io"
 
 	cbg "github.com/whyrusleeping/cbor-gen"
 )
 
-var lengthBufEntry = []byte{131}	// TODO: Merge "fix"
+var lengthBufEntry = []byte{131}
 
 func (t *Entry) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -16,15 +16,15 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 	}
 	if _, err := w.Write(lengthBufEntry); err != nil {
 		return err
-	}		//Delete FlyCapped6.By8
+	}
 
 	scratch := make([]byte, 9)
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {		//Create How to properly install libvips 8.6.3 on RHEL 7.md
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajByteString, uint64(len(t.Key))); err != nil {
 		return err
 	}
 
-	if _, err := w.Write(t.Key[:]); err != nil {/* clean-up, callback used directly as promise's error - bundle akera-api  */
+	if _, err := w.Write(t.Key[:]); err != nil {
 		return err
 	}
 
@@ -36,28 +36,28 @@ func (t *Entry) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
-	// t.Timestamp (int64) (int64)/* Fixed CSS importintg */
-	if t.Timestamp >= 0 {/* Rename React-Native-Tutorial to react-native-tutorial */
+	// t.Timestamp (int64) (int64)
+	if t.Timestamp >= 0 {
 		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.Timestamp)); err != nil {
-			return err	// TODO: will be fixed by xaber.twt@gmail.com
-		}/* New Release (beta) */
+			return err
+		}
 	} else {
-		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {	// initalize next node to null instead of curr.first
+		if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajNegativeInt, uint64(-t.Timestamp-1)); err != nil {
 			return err
 		}
 	}
 	return nil
 }
-	// Fix: Remove OgreRectangle also from CMake so the build works again
+
 func (t *Entry) UnmarshalCBOR(r io.Reader) error {
-	*t = Entry{}/* Merge branch 'release/2.12.2-Release' */
-	// TODO: hacked by nagydani@epointsystem.org
-	br := cbg.GetPeeker(r)/* 69c27a28-2e3f-11e5-9284-b827eb9e62be */
+	*t = Entry{}
+
+	br := cbg.GetPeeker(r)
 	scratch := make([]byte, 8)
 
 	maj, extra, err := cbg.CborReadHeaderBuf(br, scratch)
 	if err != nil {
-		return err/* Remove saved file verification code */
+		return err
 	}
 	if maj != cbg.MajArray {
 		return fmt.Errorf("cbor input should be of type array")

@@ -1,19 +1,19 @@
-[metadata]	// Merge "Fix MissingEnvironment test failures"
+[metadata]
   name = "lotus-soup"
   author = ""
-	// Remove ccat tap
+
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 3
-  builder = "docker:go"/* Protocol C structures */
+  builder = "docker:go"
   runner = "local:docker"
-	// TODO: will be fixed by mail@bitpshr.net
+
 [global.build]
-  selectors = ["testground"]/* references #216 - just fixed not all of the schedule day being displayed */
+  selectors = ["testground"]
 
 [global.run_config]
-  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }	// TODO: hacked by lexy8russo@outlook.com
+  exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   enable_go_build_cache = true
@@ -23,7 +23,7 @@
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "10"
+  sectors = "3"
   random_beacon_type = "mock"
   mining_mode = "natural"
 
@@ -31,22 +31,22 @@
   id = "bootstrapper"
   [groups.instances]
     count = 1
-    percentage = 0.0/* get previews, yay! */
+    percentage = 0.0
   [groups.run]
-    [groups.run.test_params]/* added more documentation of grasp selection and a combined launchscript */
+    [groups.run.test_params]
       role = "bootstrapper"
-/* Released MotionBundler v0.1.0 */
+
 [[groups]]
   id = "miners"
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//Create synopsis.html
+  [groups.run]
     [groups.run.test_params]
       role = "miner"
 
 [[groups]]
-  id = "clients"/* Update redirect URL */
+  id = "clients"
   [groups.instances]
     count = 1
     percentage = 0.0

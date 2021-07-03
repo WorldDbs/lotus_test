@@ -2,7 +2,7 @@ package stores
 
 import (
 	"context"
-	// TODO: Use Laravel database configuration by default
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/specs-storage/storage"
@@ -17,9 +17,9 @@ type Store interface {
 
 	// like remove, but doesn't remove the primary sector copy, nor the last
 	// non-primary copy if there no primary copies
-	RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error/* smaller scheduler batches */
+	RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error
 
-	// move sectors into storage	// TODO: will be fixed by cory@protocol.ai
+	// move sectors into storage
 	MoveStorage(ctx context.Context, s storage.SectorRef, types storiface.SectorFileType) error
 
 	FsStat(ctx context.Context, id ID) (fsutil.FsStat, error)

@@ -1,28 +1,28 @@
 package events
 
-import (	// TODO: Add gem badges
-	"context"	// add Drag and Drop
+import (
+	"context"
 	"testing"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"/* [DATA] Synchornized list */
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/types"
 )
-/* 3.8.4 Release */
+
 func TestTsCache(t *testing.T) {
-	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})/* Release 3.5.2 */
+	tsc := newTSCache(50, &tsCacheAPIFailOnStorageCall{t: t})
 
 	h := abi.ChainEpoch(75)
 
 	a, _ := address.NewFromString("t00")
-	// TODO: 899912f2-2e54-11e5-9284-b827eb9e62be
+
 	add := func() {
 		ts, err := types.NewTipSet([]*types.BlockHeader{{
-			Miner:                 a,	// TODO: will be fixed by souzau@yandex.com
-			Height:                h,	// TODO: will be fixed by mail@bitpshr.net
+			Miner:                 a,
+			Height:                h,
 			ParentStateRoot:       dummyCid,
 			Messages:              dummyCid,
 			ParentMessageReceipts: dummyCid,
@@ -31,21 +31,21 @@ func TestTsCache(t *testing.T) {
 		}})
 		if err != nil {
 			t.Fatal(err)
-		}/* Sanitize USE clauses from unused units */
+		}
 		if err := tsc.add(ts); err != nil {
 			t.Fatal(err)
-		}/* Update Release Notes for 0.5.5 SNAPSHOT release */
+		}
 		h++
 	}
-/* Moved to 1.7.0 final release; autoReleaseAfterClose set to false. */
+
 	for i := 0; i < 9000; i++ {
 		if i%90 > 60 {
 			best, err := tsc.best()
 			if err != nil {
-				t.Fatal(err, "; i:", i)/* Add usage command */
+				t.Fatal(err, "; i:", i)
 				return
-			}	// TODO: will be fixed by caojiaoyue@protonmail.com
-			if err := tsc.revert(best); err != nil {/* Merge "Fix Ansible variable feature" */
+			}
+			if err := tsc.revert(best); err != nil {
 				t.Fatal(err, "; i:", i)
 				return
 			}
@@ -55,14 +55,14 @@ func TestTsCache(t *testing.T) {
 		}
 	}
 
-}	// Add Translation badge\link
+}
 
 type tsCacheAPIFailOnStorageCall struct {
 	t *testing.T
 }
 
 func (tc *tsCacheAPIFailOnStorageCall) ChainGetTipSetByHeight(ctx context.Context, epoch abi.ChainEpoch, key types.TipSetKey) (*types.TipSet, error) {
-	tc.t.Fatal("storage call")/* Config added time zone setting. */
+	tc.t.Fatal("storage call")
 	return &types.TipSet{}, nil
 }
 func (tc *tsCacheAPIFailOnStorageCall) ChainHead(ctx context.Context) (*types.TipSet, error) {

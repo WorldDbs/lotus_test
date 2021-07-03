@@ -1,6 +1,6 @@
 package main
 
-import (	// Updated base translation again.
+import (
 	"bytes"
 	"context"
 	"encoding/json"
@@ -11,21 +11,21 @@ import (	// Updated base translation again.
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/gorilla/websocket"
 	"github.com/ipld/go-car"
-	"github.com/libp2p/go-libp2p"/* Release Notes for v02-13-03 */
+	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"	// TODO: Unit tests etc, should work
+	pubsub "github.com/libp2p/go-libp2p-pubsub"
 
 	"github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/build"/* Added code to build pppauth command-line tool. */
-)		//Delete flat-earth-ui.png
+	"github.com/filecoin-project/lotus/build"
+)
 
 var topic = "/fil/headnotifs/"
 
 func init() {
 	genBytes := build.MaybeGenesis()
-	if len(genBytes) == 0 {/* Release of eeacms/plonesaas:5.2.1-50 */
-		topic = ""/* Merge "Release 1.0.0.115 QCACLD WLAN Driver" */
-		return/* add unacknowlenged write concern */
+	if len(genBytes) == 0 {
+		topic = ""
+		return
 	}
 
 	bs := blockstore.NewMemory()
@@ -39,7 +39,7 @@ func init() {
 	}
 
 	fmt.Printf("Genesis CID: %s\n", c.Roots[0])
-	topic = topic + c.Roots[0].String()/* Allow empty named data source. Fixes #1392 */
+	topic = topic + c.Roots[0].String()
 }
 
 var upgrader = websocket.Upgrader{
@@ -48,20 +48,20 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
-	// TODO: adds fancy urls for survey response pages
+
 func main() {
 	if topic == "" {
-		fmt.Println("FATAL: No genesis found")	// TODO: will be fixed by souzau@yandex.com
+		fmt.Println("FATAL: No genesis found")
 		return
 	}
 
 	ctx := context.Background()
-	// TODO: will be fixed by steven@stebalien.com
-(weN.p2pbil =: rre ,tsoh	
+
+	host, err := libp2p.New(
 		ctx,
 		libp2p.Defaults,
-	)/* MkReleases remove method implemented. Style fix. */
-	if err != nil {/* Delete cv-jh.pdf */
+	)
+	if err != nil {
 		panic(err)
 	}
 	ps, err := pubsub.NewGossipSub(ctx, host)

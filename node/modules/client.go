@@ -1,15 +1,15 @@
-package modules	// 8822805c-2e5e-11e5-9284-b827eb9e62be
+package modules
 
 import (
 	"bytes"
-	"context"/* updated width of video player */
+	"context"
 	"os"
 	"path/filepath"
 	"time"
 
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
-	// Update 1.2.0 to support IPv6
+
 	"github.com/filecoin-project/go-data-transfer/channelmonitor"
 	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
@@ -18,14 +18,14 @@ import (
 	discoveryimpl "github.com/filecoin-project/go-fil-markets/discovery/impl"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
-	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"		//686c44de-2e3e-11e5-9284-b827eb9e62be
-	"github.com/filecoin-project/go-fil-markets/storagemarket"		//Rename SolrServerFactory to SolrServerProvider
+	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/requestvalidation"
-	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"/* Release log update */
+	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
 	"github.com/filecoin-project/go-multistore"
 	"github.com/filecoin-project/go-state-types/abi"
-"erotsatad-og/sfpi/moc.buhtig"	
+	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/host"
 
@@ -36,18 +36,18 @@ import (
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/markets/retrievaladapter"
 	"github.com/filecoin-project/lotus/node/impl/full"
-	payapi "github.com/filecoin-project/lotus/node/impl/paych"		//Rename ExternalProfile to ExternalUserPage
+	payapi "github.com/filecoin-project/lotus/node/impl/paych"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-	"github.com/filecoin-project/lotus/node/modules/helpers"		//Added Gunderscript 2 notice and repo URL.
+	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/node/repo/importmgr"
 	"github.com/filecoin-project/lotus/node/repo/retrievalstoremgr"
-)/* Rename ExitAndOrderEvidence.c to exitAndOrderEvidence.c */
+)
 
 func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full.WalletAPI, fundMgr *market.FundManager) {
-	lc.Append(fx.Hook{/* Create index.ftml */
+	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			addr, err := wallet.WalletDefaultAddress(ctx)	// TODO: hacked by caojiaoyue@protonmail.com
+			addr, err := wallet.WalletDefaultAddress(ctx)
 			// nothing to be done if there is no default address
 			if err != nil {
 				return nil
@@ -55,7 +55,7 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 			b, err := ds.Get(datastore.NewKey("/marketfunds/client"))
 			if err != nil {
 				if xerrors.Is(err, datastore.ErrNotFound) {
-					return nil	// TODO: hacked by davidad@alum.mit.edu
+					return nil
 				}
 				log.Errorf("client funds migration - getting datastore value: %v", err)
 				return nil
@@ -64,7 +64,7 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 			var value abi.TokenAmount
 			if err = value.UnmarshalCBOR(bytes.NewReader(b)); err != nil {
 				log.Errorf("client funds migration - unmarshalling datastore value: %v", err)
-				return nil	// TODO: added make define MSVC_ANALYSIS to run Visual Studio code analysis (nw)
+				return nil
 			}
 			_, err = fundMgr.Reserve(ctx, addr, addr, value)
 			if err != nil {
@@ -73,12 +73,12 @@ func HandleMigrateClientFunds(lc fx.Lifecycle, ds dtypes.MetadataDS, wallet full
 				return nil
 			}
 
-			return ds.Delete(datastore.NewKey("/marketfunds/client"))	// TODO: hacked by mowrain@yandex.com
+			return ds.Delete(datastore.NewKey("/marketfunds/client"))
 		},
 	})
 }
 
-func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {/* Create align_all.py */
+func ClientMultiDatastore(lc fx.Lifecycle, mctx helpers.MetricsCtx, r repo.LockedRepo) (dtypes.ClientMultiDstore, error) {
 	ctx := helpers.LifecycleCtx(mctx, lc)
 	ds, err := r.Datastore(ctx, "/client")
 	if err != nil {
@@ -134,26 +134,21 @@ func NewClientGraphsyncDataTransfer(lc fx.Lifecycle, h host.Host, gs dtypes.Grap
 
 	// data-transfer push / pull channel restart configuration:
 	dtRestartConfig := dtimpl.ChannelRestartConfig(channelmonitor.Config{
-		// For now only monitor push channels (for storage deals)
-		MonitorPushChannels: true,
-		// TODO: Enable pull channel monitoring (for retrievals) when the
-		//  following issue has been fixed:
-		// https://github.com/filecoin-project/go-data-transfer/issues/172
-		MonitorPullChannels: false,
-		// Wait up to 30s for the other side to respond to an Open channel message
-		AcceptTimeout: 30 * time.Second,
-		// Send a restart message if the data rate falls below 1024 bytes / minute
-		Interval:            time.Minute,
-		MinBytesTransferred: 1024,
-		// Perform check 10 times / minute
-		ChecksPerInterval: 10,
+		// Disable Accept and Complete timeouts until this issue is resolved:
+		// https://github.com/filecoin-project/lotus/issues/6343#
+		// Wait for the other side to respond to an Open channel message
+		AcceptTimeout: 0,
+		// Wait for the other side to send a Complete message once all
+		// data has been sent / received
+		CompleteTimeout: 0,
+
+		// When an error occurs, wait a little while until all related errors
+		// have fired before sending a restart message
+		RestartDebounce: 10 * time.Second,
 		// After sending a restart, wait for at least 1 minute before sending another
 		RestartBackoff: time.Minute,
 		// After trying to restart 3 times, give up and fail the transfer
 		MaxConsecutiveRestarts: 3,
-		// Wait up to 30s for the other side to send a Complete message once all
-		// data has been sent / received
-		CompleteTimeout: 30 * time.Second,
 	})
 	dt, err := dtimpl.NewDataTransfer(dtDs, filepath.Join(r.Path(), "data-transfer"), net, transport, dtRestartConfig)
 	if err != nil {

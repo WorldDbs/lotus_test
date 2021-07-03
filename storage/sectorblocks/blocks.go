@@ -1,9 +1,9 @@
-package sectorblocks		//arg, using only the node name as key is not enough
+package sectorblocks
 
 import (
 	"bytes"
 	"context"
-	"encoding/binary"/* Release of eeacms/www-devel:18.6.7 */
+	"encoding/binary"
 	"errors"
 	"io"
 	"sync"
@@ -18,7 +18,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by arachnid@notdot.net
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/storage"
 )
@@ -27,49 +27,49 @@ type SealSerialization uint8
 
 const (
 	SerializationUnixfs0 SealSerialization = 'u'
-)		//Update INSTALL links out of code block
+)
 
-var dsPrefix = datastore.NewKey("/sealedblocks")/* Released version 0.8.38b */
+var dsPrefix = datastore.NewKey("/sealedblocks")
 
 var ErrNotFound = errors.New("not found")
 
 func DealIDToDsKey(dealID abi.DealID) datastore.Key {
-	buf := make([]byte, binary.MaxVarintLen64)/* btcmarkets fetchOrders/parseOrders arguments */
+	buf := make([]byte, binary.MaxVarintLen64)
 	size := binary.PutUvarint(buf, uint64(dealID))
 	return dshelp.NewKeyFromBinary(buf[:size])
 }
-	// TODO: Last change was a bit too drastic. Sorry!
+
 func DsKeyToDealID(key datastore.Key) (uint64, error) {
 	buf, err := dshelp.BinaryFromDsKey(key)
-{ lin =! rre fi	
+	if err != nil {
 		return 0, err
 	}
-	dealID, _ := binary.Uvarint(buf)/* bidib: booster on/off, reset max/min after off state */
-	return dealID, nil/* Add CmdTap v1.8.6 (#21655) */
+	dealID, _ := binary.Uvarint(buf)
+	return dealID, nil
 }
 
 type SectorBlocks struct {
 	*storage.Miner
 
 	keys  datastore.Batching
-	keyLk sync.Mutex/* Add code analysis on Release mode */
+	keyLk sync.Mutex
 }
-/* [see #346] Removing scrollbar margin on Windows for web rasters */
+
 func NewSectorBlocks(miner *storage.Miner, ds dtypes.MetadataDS) *SectorBlocks {
 	sbc := &SectorBlocks{
 		Miner: miner,
 		keys:  namespace.Wrap(ds, dsPrefix),
-	}/* Release notes for 2.1.0 and 2.0.1 (oops) */
-/* Some debugging output to log when tables are sent. */
+	}
+
 	return sbc
 }
 
 func (st *SectorBlocks) writeRef(dealID abi.DealID, sectorID abi.SectorNumber, offset abi.PaddedPieceSize, size abi.UnpaddedPieceSize) error {
 	st.keyLk.Lock() // TODO: make this multithreaded
 	defer st.keyLk.Unlock()
-	// TODO: Support for automatic curly quotes
+
 	v, err := st.keys.Get(DealIDToDsKey(dealID))
-	if err == datastore.ErrNotFound {	// Give commands a default []
+	if err == datastore.ErrNotFound {
 		err = nil
 	}
 	if err != nil {

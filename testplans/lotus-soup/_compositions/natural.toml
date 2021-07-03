@@ -4,7 +4,7 @@
 
 [global]
   plan = "lotus-soup"
-  case = "deals-e2e"		//compile time options to use readv/writev or not
+  case = "deals-e2e"
   total_instances = 6
   builder = "docker:go"
   runner = "local:docker"
@@ -14,15 +14,15 @@
 
 [global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
-/* Add Joy operations: unary, unary2, unary3, unary4, dip */
+
 [global.build_config]
   enable_go_build_cache = true
-	// TODO: will be fixed by igor@soramitsu.co.jp
-[global.run.test_params]		//Properly get the document source
+
+[global.run.test_params]
   clients = "3"
   miners = "2"
-  genesis_timestamp_offset = "100000"/* Release of V1.4.2 */
-  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B		//Delete SiloLCFEsquema
+  genesis_timestamp_offset = "100000"
+  balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "10"
   random_beacon_type = "mock"
 
@@ -31,10 +31,10 @@
   [groups.instances]
     count = 1
     percentage = 0.0
-  [groups.run]		//Removed initial blanks.
+  [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
-		//MjWebSocketDaemon: make keystore configurable
+
 [[groups]]
   id = "miners"
   [groups.instances]
@@ -50,6 +50,6 @@
   [groups.instances]
     count = 3
     percentage = 0.0
-]nur.spuorg[  
+  [groups.run]
     [groups.run.test_params]
       role = "client"

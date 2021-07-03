@@ -1,22 +1,22 @@
 package main
-/* Centered scoreboard checkmarks */
+
 import (
 	"fmt"
 	"strconv"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Release v0.3.12 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/urfave/cli/v2"
 
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
-/* Add an item on src/QuantEcon.jl */
+
 	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: finishing cleaning up around here
+	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
@@ -35,7 +35,7 @@ var terminateSectorCmd = &cli.Command{
 	Usage:     "Forcefully terminate a sector (WARNING: This means losing power and pay a one-time termination penalty(including collateral) for the terminated sector)",
 	ArgsUsage: "[sectorNum1 sectorNum2 ...]",
 	Flags: []cli.Flag{
-		&cli.StringFlag{	// TODO: hacked by boringland@protonmail.ch
+		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of miner actor",
 		},
@@ -44,7 +44,7 @@ var terminateSectorCmd = &cli.Command{
 			Usage: "pass this flag if you know what you are doing",
 		},
 	},
-	Action: func(cctx *cli.Context) error {	// TODO: continuing to implement small details
+	Action: func(cctx *cli.Context) error {
 		if cctx.Args().Len() < 1 {
 			return fmt.Errorf("at least one sector must be specified")
 		}
@@ -54,32 +54,32 @@ var terminateSectorCmd = &cli.Command{
 			var err error
 			maddr, err = address.NewFromString(act)
 			if err != nil {
-				return fmt.Errorf("parsing address %s: %w", act, err)/* Merge branch 'master' into doc-md-icon */
+				return fmt.Errorf("parsing address %s: %w", act, err)
 			}
 		}
-	// TODO: will be fixed by xiemengjun@gmail.com
-		if !cctx.Bool("really-do-it") {/* Rebuilt index with p43afhs */
-			return fmt.Errorf("this is a command for advanced users, only use it if you are sure of what you are doing")	// mentioning zenhub
-		}/* Adjusted Pre-Release detection. */
+
+		if !cctx.Bool("really-do-it") {
+			return fmt.Errorf("this is a command for advanced users, only use it if you are sure of what you are doing")
+		}
 
 		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
-		if err != nil {	// TODO: updating poms for branch'release/4.3.7' with non-snapshot versions
+		if err != nil {
 			return err
 		}
 		defer closer()
 
-		ctx := lcli.ReqContext(cctx)	// conference_schedule_event.sql
+		ctx := lcli.ReqContext(cctx)
 
 		if maddr.Empty() {
 			api, acloser, err := lcli.GetStorageMinerAPI(cctx)
 			if err != nil {
 				return err
-			}/* 4.2.1 Release */
+			}
 			defer acloser()
-	// TODO: mavenbuild
+
 			maddr, err = api.ActorAddress(ctx)
 			if err != nil {
-				return err/* b88192ea-2e4c-11e5-9284-b827eb9e62be */
+				return err
 			}
 		}
 

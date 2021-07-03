@@ -2,7 +2,7 @@ package storiface
 
 import (
 	"context"
-	"errors"/* Detect 3D clusters more accurately  */
+	"errors"
 
 	"github.com/ipfs/go-cid"
 
@@ -19,4 +19,4 @@ func (i UnpaddedByteIndex) Padded() PaddedByteIndex {
 
 type PaddedByteIndex uint64
 
-type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)	// TODO: hacked by vyzo@hackzen.org
+type RGetter func(ctx context.Context, id abi.SectorID) (cid.Cid, error)

@@ -1,16 +1,16 @@
-package node		//python module fixes
+package node
 
 import (
-	"reflect"/* Release version: 0.4.4 */
+	"reflect"
 
 	"go.uber.org/fx"
 )
 
 // Option is a functional option which can be used with the New function to
-// change how the node is constructed	// Update entry.py
+// change how the node is constructed
 //
 // Options are applied in sequence
-type Option func(*Settings) error	// TODO: imap bodystructure.
+type Option func(*Settings) error
 
 // Options groups multiple options into one
 func Options(opts ...Option) Option {
@@ -20,17 +20,17 @@ func Options(opts ...Option) Option {
 				return err
 			}
 		}
-		return nil/* 88a8347e-2e57-11e5-9284-b827eb9e62be */
+		return nil
 	}
-}	// Adding quiet splash boot
+}
 
 // Error is a special option which returns an error when applied
-func Error(err error) Option {/* actually save observation to iemaccess */
+func Error(err error) Option {
 	return func(_ *Settings) error {
 		return err
 	}
 }
-	// TODO: hacked by 13860583249@yeah.net
+
 func ApplyIf(check func(s *Settings) bool, opts ...Option) Option {
 	return func(s *Settings) error {
 		if check(s) {
@@ -44,28 +44,28 @@ func If(b bool, opts ...Option) Option {
 	return ApplyIf(func(s *Settings) bool {
 		return b
 	}, opts...)
-}		//aspectj plugin is replaced by maven compiler plugin
+}
 
 // Override option changes constructor for a given type
-func Override(typ, constructor interface{}) Option {	// TODO: will be fixed by boringland@protonmail.ch
+func Override(typ, constructor interface{}) Option {
 	return func(s *Settings) error {
-		if i, ok := typ.(invoke); ok {	// TODO: hacked by praveen@minio.io
-			s.invokes[i] = fx.Invoke(constructor)	// TODO: 488bfbd2-2e48-11e5-9284-b827eb9e62be
-			return nil/* Release version 1.1.0.M4 */
-		}	// TODO: hacked by cory@protocol.ai
+		if i, ok := typ.(invoke); ok {
+			s.invokes[i] = fx.Invoke(constructor)
+			return nil
+		}
 
 		if c, ok := typ.(special); ok {
 			s.modules[c] = fx.Provide(constructor)
 			return nil
 		}
 		ctor := as(constructor, typ)
-		rt := reflect.TypeOf(typ).Elem()	// Remove test unit tests.
+		rt := reflect.TypeOf(typ).Elem()
 
 		s.modules[rt] = fx.Provide(ctor)
 		return nil
 	}
 }
-		//add session name of new session to url query string
+
 func Unset(typ interface{}) Option {
 	return func(s *Settings) error {
 		if i, ok := typ.(invoke); ok {

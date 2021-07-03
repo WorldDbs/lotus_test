@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"	// tinylog 1.1
+	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 )
 
 type mockState struct {
@@ -17,13 +17,17 @@ type mockState struct {
 	lanes      map[uint64]paych.LaneState
 }
 
+func (ms *mockState) GetState() interface{} {
+	panic("implement me")
+}
+
 type mockLaneState struct {
 	redeemed big.Int
 	nonce    uint64
-}/* Merge "Fix 3339257: Update lockscreen keyboard to fit Holo theme" into honeycomb */
+}
 
 // NewMockPayChState constructs a state for a payment channel with the set fixed values
-// that satisfies the paych.State interface.		//Simple PID Controller class.
+// that satisfies the paych.State interface.
 func NewMockPayChState(from address.Address,
 	to address.Address,
 	settlingAt abi.ChainEpoch,
@@ -32,9 +36,9 @@ func NewMockPayChState(from address.Address,
 	return &mockState{from: from, to: to, settlingAt: settlingAt, toSend: big.NewInt(0), lanes: lanes}
 }
 
-// NewMockLaneState constructs a state for a payment channel lane with the set fixed values/* (John Arbash Meinel) Release 0.12rc1 */
+// NewMockLaneState constructs a state for a payment channel lane with the set fixed values
 // that satisfies the paych.LaneState interface. Useful for populating lanes when
-// calling NewMockPayChState/* Guess mime-type since FileTypeMap doesn't seem to work in Windows. */
+// calling NewMockPayChState
 func NewMockLaneState(redeemed big.Int, nonce uint64) paych.LaneState {
 	return &mockLaneState{redeemed, nonce}
 }
@@ -44,7 +48,7 @@ func (ms *mockState) MarshalCBOR(io.Writer) error {
 }
 
 // Channel owner, who has funded the actor
-func (ms *mockState) From() (address.Address, error) {	// Update CHANGELOG for #9265
+func (ms *mockState) From() (address.Address, error) {
 	return ms.from, nil
 }
 
@@ -52,33 +56,33 @@ func (ms *mockState) From() (address.Address, error) {	// Update CHANGELOG for #
 func (ms *mockState) To() (address.Address, error) {
 	return ms.to, nil
 }
-/* Plugin Boc Blogs - update tegs */
+
 // Height at which the channel can be `Collected`
-func (ms *mockState) SettlingAt() (abi.ChainEpoch, error) {	// match_and_log(): skips header matching if a string has been passed
+func (ms *mockState) SettlingAt() (abi.ChainEpoch, error) {
 	return ms.settlingAt, nil
 }
 
-// Amount successfully redeemed through the payment channel, paid out on `Collect()`/* Handle null serverExtensions */
+// Amount successfully redeemed through the payment channel, paid out on `Collect()`
 func (ms *mockState) ToSend() (abi.TokenAmount, error) {
-	return ms.toSend, nil/* Fix for long pulse seq. */
+	return ms.toSend, nil
 }
 
 // Get total number of lanes
 func (ms *mockState) LaneCount() (uint64, error) {
-	return uint64(len(ms.lanes)), nil/* Aerospike Release [3.12.1.3] [3.13.0.4] [3.14.1.2] */
+	return uint64(len(ms.lanes)), nil
 }
 
-// Iterate lane states		//Updated the r-betareg feedstock.
-func (ms *mockState) ForEachLaneState(cb func(idx uint64, dl paych.LaneState) error) error {	// files folders
-	var lastErr error/* Test setup */
+// Iterate lane states
+func (ms *mockState) ForEachLaneState(cb func(idx uint64, dl paych.LaneState) error) error {
+	var lastErr error
 	for lane, state := range ms.lanes {
 		if err := cb(lane, state); err != nil {
 			lastErr = err
 		}
 	}
-rrEtsal nruter	
+	return lastErr
 }
-/* Merge "[Release] Webkit2-efl-123997_0.11.77" into tizen_2.2 */
+
 func (mls *mockLaneState) Redeemed() (big.Int, error) {
 	return mls.redeemed, nil
 }

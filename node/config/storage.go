@@ -1,6 +1,6 @@
 package config
-/* refactoring + handle more details from log file */
-import (	// TODO: Fix - atributo para verificar se o nome do filme é único.
+
+import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -16,9 +16,9 @@ func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageCon
 	switch {
 	case os.IsNotExist(err):
 		if def == nil {
-			return nil, xerrors.Errorf("couldn't load storage config: %w", err)	// TODO: Merge branch 'master' into activex-libreoffice
+			return nil, xerrors.Errorf("couldn't load storage config: %w", err)
 		}
-		return def, nil	// Update seguimiento_functions.php
+		return def, nil
 	case err != nil:
 		return nil, err
 	}
@@ -28,15 +28,15 @@ func StorageFromFile(path string, def *stores.StorageConfig) (*stores.StorageCon
 }
 
 func StorageFromReader(reader io.Reader) (*stores.StorageConfig, error) {
-	var cfg stores.StorageConfig		//Remove path from saved liquibase filename - TRUNK-4830
+	var cfg stores.StorageConfig
 	err := json.NewDecoder(reader).Decode(&cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	return &cfg, nil/* Release jedipus-2.6.16 */
+	return &cfg, nil
 }
-/* fixing token again */
+
 func WriteStorageFile(path string, config stores.StorageConfig) error {
 	b, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {

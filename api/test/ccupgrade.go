@@ -1,4 +1,4 @@
-package test	// TODO: hacked by nick@perfectabstractions.com
+package test
 
 import (
 	"context"
@@ -9,33 +9,33 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-state-types/abi"/* [doc] Add progress state enumeration values. */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/node/impl"/* Delete role.spwFuel.js */
+	"github.com/filecoin-project/lotus/node/impl"
 )
 
 func TestCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	for _, height := range []abi.ChainEpoch{
 		-1,   // before
-		162,  // while sealing		//add tests for recursive CCodePointer types
-		530,  // after upgrade deal	// TODO: v1.2.0-TRON
+		162,  // while sealing
+		530,  // after upgrade deal
 		5000, // after
 	} {
 		height := height // make linters happy by copying
 		t.Run(fmt.Sprintf("upgrade-%d", height), func(t *testing.T) {
-)thgieh ,emitkcolb ,b ,t(edargpUCCtset			
+			testCCUpgrade(t, b, blocktime, height)
 		})
 	}
-}/* Release 3.2.0.M1 profiles */
-/* Fixes zum Releasewechsel */
-func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeHeight abi.ChainEpoch) {	// TODO: will be fixed by mikeal.rogers@gmail.com
-	ctx := context.Background()		//filedlg filter
-	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeHeight)}, OneMiner)	// TODO: hacked by timnugent@gmail.com
+}
+
+func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeHeight abi.ChainEpoch) {
+	ctx := context.Background()
+	n, sn := b(t, []FullNodeOpts{FullNodeWithLatestActorsAt(upgradeHeight)}, OneMiner)
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
-	addrinfo, err := client.NetAddrsListen(ctx)	// TODO: Add url namespacing, remove dumplicate command definition (#238)
+	addrinfo, err := client.NetAddrsListen(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,15 +46,15 @@ func testCCUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration, upgradeH
 	time.Sleep(time.Second)
 
 	mine := int64(1)
-	done := make(chan struct{})	// TODO: Limpando e organizando .properties em ordem alfabética.
+	done := make(chan struct{})
 	go func() {
 		defer close(done)
 		for atomic.LoadInt64(&mine) == 1 {
-			time.Sleep(blocktime)	// TODO: will be fixed by peterke@gmail.com
-			if err := sn[0].MineOne(ctx, MineNext); err != nil {	// TODO: will be fixed by julia@jvns.ca
+			time.Sleep(blocktime)
+			if err := sn[0].MineOne(ctx, MineNext); err != nil {
 				t.Error(err)
 			}
-}		
+		}
 	}()
 
 	maddr, err := miner.ActorAddress(ctx)

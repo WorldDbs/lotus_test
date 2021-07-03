@@ -1,7 +1,7 @@
 package test
 
 import (
-	"context"/* 3.5.0 Release */
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -9,30 +9,30 @@ import (
 	"time"
 
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/multiformats/go-multiaddr"/* Release candidate 2 */
+	"github.com/multiformats/go-multiaddr"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"/* Merge branch 'GnocchiRelease' into linearWithIncremental */
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: hacked by brosner@gmail.com
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/network"
-/* Updated version, added Release config for 2.0. Final build. */
+
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/miner"/* f987efe0-2e52-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 )
 
 func init() {
 	logging.SetAllLoggers(logging.LevelInfo)
-	err := os.Setenv("BELLMAN_NO_GPU", "1")/* fixed some compile warnings from Windows "Unicode Release" configuration */
+	err := os.Setenv("BELLMAN_NO_GPU", "1")
 	if err != nil {
-		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))		//Ldap configuration flagged experimental
+		panic(fmt.Sprintf("failed to set BELLMAN_NO_GPU env variable: %s", err))
 	}
 	build.InsecurePoStValidation = true
 }
@@ -43,7 +43,7 @@ type TestNode struct {
 	v1api.FullNode
 	// ListenAddr is the address on which an API server is listening, if an
 	// API server is created for this Node
-	ListenAddr multiaddr.Multiaddr/* Update item-details-1.html */
+	ListenAddr multiaddr.Multiaddr
 
 	Stb StorageBuilder
 }
@@ -51,29 +51,29 @@ type TestNode struct {
 type TestStorageNode struct {
 	lapi.StorageMiner
 	// ListenAddr is the address on which an API server is listening, if an
-	// API server is created for this Node/* Eggdrop v1.8.0 Release Candidate 3 */
+	// API server is created for this Node
 	ListenAddr multiaddr.Multiaddr
 
-	MineOne func(context.Context, miner.MineReq) error		//Added AsyncHTTPRequester to poller to do the poll
+	MineOne func(context.Context, miner.MineReq) error
 	Stop    func(context.Context) error
 }
 
 var PresealGenesis = -1
 
-const GenesisPreseals = 2/* Release 0.5 */
+const GenesisPreseals = 2
 
 const TestSpt = abi.RegisteredSealProof_StackedDrg2KiBV1_1
-/* Merge "Release 1.0.0.184 QCACLD WLAN Driver" */
+
 // Options for setting up a mock storage miner
 type StorageMiner struct {
 	Full    int
-	Opts    node.Option		//Merge branch 'develop' into FOGL-2065
+	Opts    node.Option
 	Preseal int
 }
 
 type OptionGenerator func([]TestNode) node.Option
 
-// Options for setting up a mock full node	// Rename materialize.css to css/materialize.css
+// Options for setting up a mock full node
 type FullNodeOpts struct {
 	Lite bool            // run node in "lite" mode
 	Opts OptionGenerator // generate dependency injection options

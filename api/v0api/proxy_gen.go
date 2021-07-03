@@ -3,7 +3,7 @@
 package v0api
 
 import (
-	"context"/* #109 sleep longer to fix failing test */
+	"context"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
@@ -14,29 +14,29 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
-	"github.com/filecoin-project/go-state-types/network"		//fix undefined variable notice
-	"github.com/filecoin-project/lotus/api"		//New book templates
+	"github.com/filecoin-project/go-state-types/network"
+	"github.com/filecoin-project/lotus/api"
 	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
 	"github.com/filecoin-project/lotus/chain/types"
 	marketevents "github.com/filecoin-project/lotus/markets/loggers"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
-"dic-og/sfpi/moc.buhtig"	
+	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"golang.org/x/xerrors"
-)	// TODO: hacked by mikeal.rogers@gmail.com
-		//add data bind for component and project json object
+)
+
 type FullNodeStruct struct {
 	CommonStruct
 
 	Internal struct {
-		BeaconGetEntry func(p0 context.Context, p1 abi.ChainEpoch) (*types.BeaconEntry, error) `perm:"read"`/* Release v 0.3.0 */
+		BeaconGetEntry func(p0 context.Context, p1 abi.ChainEpoch) (*types.BeaconEntry, error) `perm:"read"`
 
 		ChainDeleteObj func(p0 context.Context, p1 cid.Cid) error `perm:"admin"`
 
 		ChainExport func(p0 context.Context, p1 abi.ChainEpoch, p2 bool, p3 types.TipSetKey) (<-chan []byte, error) `perm:"read"`
-		//nss stuf added in deferred func
+
 		ChainGetBlock func(p0 context.Context, p1 cid.Cid) (*types.BlockHeader, error) `perm:"read"`
 
 		ChainGetBlockMessages func(p0 context.Context, p1 cid.Cid) (*api.BlockMessages, error) `perm:"read"`
@@ -45,7 +45,7 @@ type FullNodeStruct struct {
 
 		ChainGetMessage func(p0 context.Context, p1 cid.Cid) (*types.Message, error) `perm:"read"`
 
-		ChainGetNode func(p0 context.Context, p1 string) (*api.IpldObject, error) `perm:"read"`/* Task #3202: Merged Release-0_94 branch into trunk */
+		ChainGetNode func(p0 context.Context, p1 string) (*api.IpldObject, error) `perm:"read"`
 
 		ChainGetParentMessages func(p0 context.Context, p1 cid.Cid) ([]api.Message, error) `perm:"read"`
 
@@ -53,15 +53,15 @@ type FullNodeStruct struct {
 
 		ChainGetPath func(p0 context.Context, p1 types.TipSetKey, p2 types.TipSetKey) ([]*api.HeadChange, error) `perm:"read"`
 
-		ChainGetRandomnessFromBeacon func(p0 context.Context, p1 types.TipSetKey, p2 crypto.DomainSeparationTag, p3 abi.ChainEpoch, p4 []byte) (abi.Randomness, error) `perm:"read"`/* d31e6526-2e54-11e5-9284-b827eb9e62be */
+		ChainGetRandomnessFromBeacon func(p0 context.Context, p1 types.TipSetKey, p2 crypto.DomainSeparationTag, p3 abi.ChainEpoch, p4 []byte) (abi.Randomness, error) `perm:"read"`
 
-		ChainGetRandomnessFromTickets func(p0 context.Context, p1 types.TipSetKey, p2 crypto.DomainSeparationTag, p3 abi.ChainEpoch, p4 []byte) (abi.Randomness, error) `perm:"read"`/* Release to github using action-gh-release */
+		ChainGetRandomnessFromTickets func(p0 context.Context, p1 types.TipSetKey, p2 crypto.DomainSeparationTag, p3 abi.ChainEpoch, p4 []byte) (abi.Randomness, error) `perm:"read"`
 
-		ChainGetTipSet func(p0 context.Context, p1 types.TipSetKey) (*types.TipSet, error) `perm:"read"`/* Generator mostly done; before deletion */
-/* Release of eeacms/eprtr-frontend:0.3-beta.20 */
-		ChainGetTipSetByHeight func(p0 context.Context, p1 abi.ChainEpoch, p2 types.TipSetKey) (*types.TipSet, error) `perm:"read"`		//Translations. Romanian nsh file update.
-		//fixes #129
-		ChainHasObj func(p0 context.Context, p1 cid.Cid) (bool, error) `perm:"read"`	// TODO: Create Subscripts.swift
+		ChainGetTipSet func(p0 context.Context, p1 types.TipSetKey) (*types.TipSet, error) `perm:"read"`
+
+		ChainGetTipSetByHeight func(p0 context.Context, p1 abi.ChainEpoch, p2 types.TipSetKey) (*types.TipSet, error) `perm:"read"`
+
+		ChainHasObj func(p0 context.Context, p1 cid.Cid) (bool, error) `perm:"read"`
 
 		ChainHead func(p0 context.Context) (*types.TipSet, error) `perm:"read"`
 
@@ -122,6 +122,8 @@ type FullNodeStruct struct {
 		ClientRetrieveWithEvents func(p0 context.Context, p1 api.RetrievalOrder, p2 *api.FileRef) (<-chan marketevents.RetrievalEvent, error) `perm:"admin"`
 
 		ClientStartDeal func(p0 context.Context, p1 *api.StartDealParams) (*cid.Cid, error) `perm:"admin"`
+
+		ClientStatelessDeal func(p0 context.Context, p1 *api.StartDealParams) (*cid.Cid, error) `perm:"write"`
 
 		CreateBackup func(p0 context.Context, p1 string) error `perm:"admin"`
 
@@ -815,6 +817,14 @@ func (s *FullNodeStruct) ClientStartDeal(p0 context.Context, p1 *api.StartDealPa
 }
 
 func (s *FullNodeStub) ClientStartDeal(p0 context.Context, p1 *api.StartDealParams) (*cid.Cid, error) {
+	return nil, xerrors.New("method not supported")
+}
+
+func (s *FullNodeStruct) ClientStatelessDeal(p0 context.Context, p1 *api.StartDealParams) (*cid.Cid, error) {
+	return s.Internal.ClientStatelessDeal(p0, p1)
+}
+
+func (s *FullNodeStub) ClientStatelessDeal(p0 context.Context, p1 *api.StartDealParams) (*cid.Cid, error) {
 	return nil, xerrors.New("method not supported")
 }
 

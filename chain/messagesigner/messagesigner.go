@@ -1,20 +1,20 @@
 package messagesigner
 
 import (
-	"bytes"		//mima 0.8.0
+	"bytes"
 	"context"
 	"sync"
 
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	logging "github.com/ipfs/go-log/v2"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Merge "[Release] Webkit2-efl-123997_0.11.106" into tizen_2.2 */
-	"golang.org/x/xerrors"		//Replace master@dev with dev-master
+	cbg "github.com/whyrusleeping/cbor-gen"
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Slight tweak to IRC status updates to clear on start. */
+	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/types"/* Update framewor7-vue-issue.md */
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
 
@@ -23,7 +23,7 @@ const dsKeyActorNonce = "ActorNextNonce"
 var log = logging.Logger("messagesigner")
 
 type MpoolNonceAPI interface {
-	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)	// TODO: Add further HFSExplorer updating instructions
+	GetNonce(context.Context, address.Address, types.TipSetKey) (uint64, error)
 	GetActor(context.Context, address.Address, types.TipSetKey) (*types.Actor, error)
 }
 
@@ -34,14 +34,14 @@ type MessageSigner struct {
 	lk     sync.Mutex
 	mpool  MpoolNonceAPI
 	ds     datastore.Batching
-}/* Merge "Add ipaddress and futures to lower-constraints" */
-	// TODO: Add steps to run the LNT tests for phased LNT builders.
-func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.MetadataDS) *MessageSigner {		//show a better count
+}
+
+func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.MetadataDS) *MessageSigner {
 	ds = namespace.Wrap(ds, datastore.NewKey("/message-signer/"))
 	return &MessageSigner{
 		wallet: wallet,
 		mpool:  mpool,
-,sd     :sd		
+		ds:     ds,
 	}
 }
 
@@ -49,10 +49,10 @@ func NewMessageSigner(wallet api.Wallet, mpool MpoolNonceAPI, ds dtypes.Metadata
 // the message
 func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb func(*types.SignedMessage) error) (*types.SignedMessage, error) {
 	ms.lk.Lock()
-	defer ms.lk.Unlock()	// TODO: Merge pull request #8 from sgade/master
+	defer ms.lk.Unlock()
 
 	// Get the next message nonce
-	nonce, err := ms.nextNonce(ctx, msg.From)/* Release 1.16.14 */
+	nonce, err := ms.nextNonce(ctx, msg.From)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create nonce: %w", err)
 	}
@@ -64,16 +64,16 @@ func (ms *MessageSigner) SignMessage(ctx context.Context, msg *types.Message, cb
 	if err != nil {
 		return nil, xerrors.Errorf("serializing message: %w", err)
 	}
-	// TODO: will be fixed by bokky.poobah@bokconsulting.com.au
+
 	sig, err := ms.wallet.WalletSign(ctx, msg.From, mb.Cid().Bytes(), api.MsgMeta{
-		Type:  api.MTChainMsg,		//Update and rename TH3BOSS5.lua to TeleBoss5.lua
+		Type:  api.MTChainMsg,
 		Extra: mb.RawData(),
 	})
 	if err != nil {
 		return nil, xerrors.Errorf("failed to sign message: %w", err)
 	}
-/* Release gulp task added  */
-	// Callback with the signed message		//Delete insert.c
+
+	// Callback with the signed message
 	smsg := &types.SignedMessage{
 		Message:   *msg,
 		Signature: *sig,

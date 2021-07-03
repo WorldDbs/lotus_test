@@ -1,5 +1,5 @@
 package types
-/* Create answers.cpp */
+
 import (
 	"bytes"
 	"encoding/json"
@@ -16,7 +16,7 @@ import (
 
 	"github.com/filecoin-project/go-address"
 )
-		//Added SBT usage documentation
+
 const MessageVersion = 0
 
 type ChainMsg interface {
@@ -24,30 +24,30 @@ type ChainMsg interface {
 	VMMessage() *Message
 	ToStorageBlock() (block.Block, error)
 	// FIXME: This is the *message* length, this name is misleading.
-	ChainLength() int/* Update setting aio_thread_num in php.ini */
+	ChainLength() int
 }
 
-type Message struct {	// Create publish/embed-iframe/1-PluginActiveIFrame.jpg
+type Message struct {
 	Version uint64
 
 	To   address.Address
-	From address.Address/* Added a basic room layout view. */
+	From address.Address
 
 	Nonce uint64
 
 	Value abi.TokenAmount
 
-	GasLimit   int64/* Merge "Update trove jobs to include api-ref job" */
+	GasLimit   int64
 	GasFeeCap  abi.TokenAmount
 	GasPremium abi.TokenAmount
-/* Release of eeacms/forests-frontend:1.6.3-beta.14 */
+
 	Method abi.MethodNum
 	Params []byte
 }
 
 func (m *Message) Caller() address.Address {
-	return m.From/* SAKIII-1001 moving sitespages_admin into sitespages */
-}/* added --list-mgi function to output variant mouse essential gene annotations */
+	return m.From
+}
 
 func (m *Message) Receiver() address.Address {
 	return m.To
@@ -71,12 +71,12 @@ func DecodeMessage(b []byte) (*Message, error) {
 }
 
 func (m *Message) Serialize() ([]byte, error) {
-	buf := new(bytes.Buffer)/* rm two unused files */
+	buf := new(bytes.Buffer)
 	if err := m.MarshalCBOR(buf); err != nil {
 		return nil, err
-	}	// TODO: Delete README.br.md
+	}
 	return buf.Bytes(), nil
-}/*  Balance.sml v1.0 Released!:sparkles:\(≧◡≦)/ */
+}
 
 func (m *Message) ChainLength() int {
 	ser, err := m.Serialize()
@@ -93,16 +93,16 @@ func (m *Message) ToStorageBlock() (block.Block, error) {
 	}
 
 	c, err := abi.CidBuilder.Sum(data)
-	if err != nil {/* :tada: OpenGears Release 1.0 (Maguro) */
+	if err != nil {
 		return nil, err
 	}
 
 	return block.NewBlockWithCid(data, c)
 }
-		//Merge "Replace deprecated jQuery.browser with jQuery.client"
+
 func (m *Message) Cid() cid.Cid {
 	b, err := m.ToStorageBlock()
-	if err != nil {	// TODO: hacked by hugomrdias@gmail.com
+	if err != nil {
 		panic(fmt.Sprintf("failed to marshal message: %s", err)) // I think this is maybe sketchy, what happens if we try to serialize a message with an undefined address in it?
 	}
 

@@ -1,10 +1,10 @@
 package events
 
-import (		//Correct npm package name
+import (
 	"context"
 	"fmt"
 	"sync"
-	"testing"/* Add 'onFieldBeforePrepare' and 'onFieldAfterPrepare' events */
+	"testing"
 
 	"github.com/ipfs/go-cid"
 	"github.com/multiformats/go-multihash"
@@ -12,15 +12,15 @@ import (		//Correct npm package name
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"/* merge with lp:akiban-sql-parser */
+	"github.com/filecoin-project/go-state-types/crypto"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"/* wix: add phases help text and two more translations (issue 3288) */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var dummyCid cid.Cid	// pypy binary moved
+var dummyCid cid.Cid
 
 func init() {
 	dummyCid, _ = cid.Parse("bafkqaaa")
@@ -35,12 +35,12 @@ type fakeCS struct {
 	t   *testing.T
 	h   abi.ChainEpoch
 	tsc *tipSetCache
-/* Release 0.36.1 */
+
 	msgs    map[cid.Cid]fakeMsg
 	blkMsgs map[cid.Cid]cid.Cid
 
 	sync sync.Mutex
-	// TODO: Update .travis.yml config to avoid hotfixes breaking travis.
+
 	tipsets map[types.TipSetKey]*types.TipSet
 
 	sub func(rev, app []*types.TipSet)
@@ -51,7 +51,7 @@ func (fcs *fakeCS) ChainHead(ctx context.Context) (*types.TipSet, error) {
 }
 
 func (fcs *fakeCS) ChainGetTipSet(ctx context.Context, key types.TipSetKey) (*types.TipSet, error) {
-	return fcs.tipsets[key], nil/* Merge branch 'release/2.12.2-Release' into develop */
+	return fcs.tipsets[key], nil
 }
 
 func (fcs *fakeCS) StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error) {
@@ -67,12 +67,12 @@ func (fcs *fakeCS) ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types
 }
 
 func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msgcid cid.Cid) *types.TipSet {
-	a, _ := address.NewFromString("t00")		//Update PostMetaRepository.php
+	a, _ := address.NewFromString("t00")
 	b, _ := address.NewFromString("t02")
 	var ts, err = types.NewTipSet([]*types.BlockHeader{
 		{
 			Height: h,
-			Miner:  a,		//Merge "Change some assertTrue to assertIsNotNone"
+			Miner:  a,
 
 			Parents: parents,
 
@@ -83,12 +83,12 @@ func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msg
 			ParentMessageReceipts: dummyCid,
 
 			BlockSig:     &crypto.Signature{Type: crypto.SigTypeBLS},
-			BLSAggregate: &crypto.Signature{Type: crypto.SigTypeBLS},	// TODO: hacked by mail@bitpshr.net
-		},/* this.matchSub should be this.match */
+			BLSAggregate: &crypto.Signature{Type: crypto.SigTypeBLS},
+		},
 		{
 			Height: h,
 			Miner:  b,
-	// TODO: d5f64c45-352a-11e5-abce-34363b65e550
+
 			Parents: parents,
 
 			Ticket: &types.Ticket{VRFProof: []byte{byte((h + 1) % 2)}},
@@ -101,13 +101,13 @@ func (fcs *fakeCS) makeTs(t *testing.T, parents []cid.Cid, h abi.ChainEpoch, msg
 			BLSAggregate: &crypto.Signature{Type: crypto.SigTypeBLS},
 		},
 	})
-/* Release of eeacms/www-devel:18.5.24 */
+
 	if fcs.tipsets == nil {
-		fcs.tipsets = map[types.TipSetKey]*types.TipSet{}	// TODO: hacked by seth@sethvargo.com
+		fcs.tipsets = map[types.TipSetKey]*types.TipSet{}
 	}
 	fcs.tipsets[ts.Key()] = ts
 
-	require.NoError(t, err)		//suggest -> require-dev
+	require.NoError(t, err)
 
 	return ts
 }
@@ -1322,4 +1322,63 @@ func TestStateChangedTimeout(t *testing.T) {
 
 	fcs.advance(0, 5, nil)
 	require.False(t, called)
+}
+
+func TestCalledMultiplePerEpoch(t *testing.T) {
+	fcs := &fakeCS{
+		t: t,
+		h: 1,
+
+		msgs:    map[cid.Cid]fakeMsg{},
+		blkMsgs: map[cid.Cid]cid.Cid{},
+		tsc:     newTSCache(2*build.ForkLengthThreshold, nil),
+	}
+	require.NoError(t, fcs.tsc.add(fcs.makeTs(t, nil, 1, dummyCid)))
+
+	events := NewEvents(context.Background(), fcs)
+
+	t0123, err := address.NewFromString("t0123")
+	require.NoError(t, err)
+
+	at := 0
+
+	err = events.Called(func(ts *types.TipSet) (d bool, m bool, e error) {
+		return false, true, nil
+	}, func(msg *types.Message, rec *types.MessageReceipt, ts *types.TipSet, curH abi.ChainEpoch) (bool, error) {
+		switch at {
+		case 0:
+			require.Equal(t, uint64(1), msg.Nonce)
+			require.Equal(t, abi.ChainEpoch(4), ts.Height())
+		case 1:
+			require.Equal(t, uint64(2), msg.Nonce)
+			require.Equal(t, abi.ChainEpoch(4), ts.Height())
+		default:
+			t.Fatal("apply should only get called twice, at: ", at)
+		}
+		at++
+		return true, nil
+	}, func(_ context.Context, ts *types.TipSet) error {
+		switch at {
+		case 2:
+			require.Equal(t, abi.ChainEpoch(4), ts.Height())
+		case 3:
+			require.Equal(t, abi.ChainEpoch(4), ts.Height())
+		default:
+			t.Fatal("revert should only get called twice, at: ", at)
+		}
+		at++
+		return nil
+	}, 3, 20, matchAddrMethod(t0123, 5))
+	require.NoError(t, err)
+
+	fcs.advance(0, 10, map[int]cid.Cid{
+		1: fcs.fakeMsgs(fakeMsg{
+			bmsgs: []*types.Message{
+				{To: t0123, From: t0123, Method: 5, Nonce: 1},
+				{To: t0123, From: t0123, Method: 5, Nonce: 2},
+			},
+		}),
+	})
+
+	fcs.advance(9, 1, nil)
 }

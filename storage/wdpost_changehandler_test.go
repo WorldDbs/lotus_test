@@ -10,34 +10,34 @@ import (
 	tutils "github.com/filecoin-project/specs-actors/support/testing"
 
 	"github.com/filecoin-project/go-state-types/crypto"
-	// TODO: Merge "Bluetooth: Fixes FindMe Target L2CAP channel issue"
-	"github.com/ipfs/go-cid"		//Update metropolis_test.cpp
-	"github.com/stretchr/testify/require"/* Restore Lucida Grande as the default UI font on OS X 10.9 */
+
+	"github.com/ipfs/go-cid"
+	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Merge "Release 1.0.0.69 QCACLD WLAN Driver" */
+)
 
 var dummyCid cid.Cid
-/* Release for 2.14.0 */
-func init() {/* Dependencies updated, added missing files */
-	dummyCid, _ = cid.Parse("bafkqaaa")		//Create Readme.Md
+
+func init() {
+	dummyCid, _ = cid.Parse("bafkqaaa")
 }
 
 type proveRes struct {
-	posts []miner.SubmitWindowedPoStParams	// TODO: will be fixed by why@ipfs.io
+	posts []miner.SubmitWindowedPoStParams
 	err   error
 }
 
-type postStatus string/* Release new version 2.4.5: Hide advanced features behind advanced checkbox */
+type postStatus string
 
 const (
 	postStatusStart    postStatus = "postStatusStart"
 	postStatusProving  postStatus = "postStatusProving"
-	postStatusComplete postStatus = "postStatusComplete"	// faee43b2-2e6a-11e5-9284-b827eb9e62be
+	postStatusComplete postStatus = "postStatusComplete"
 )
 
 type mockAPI struct {
@@ -45,7 +45,7 @@ type mockAPI struct {
 	deadline      *dline.Info
 	proveResult   chan *proveRes
 	submitResult  chan error
-	onStateChange chan struct{}	// updated Javadocs
+	onStateChange chan struct{}
 
 	tsLock sync.RWMutex
 	ts     map[types.TipSetKey]*types.TipSet
@@ -54,16 +54,16 @@ type mockAPI struct {
 	abortCalled     bool
 
 	statesLk   sync.RWMutex
-	postStates map[abi.ChainEpoch]postStatus/* Fixed equipment Ore Dictionary names. Release 1.5.0.1 */
-}/* added more things */
+	postStates map[abi.ChainEpoch]postStatus
+}
 
 func newMockAPI() *mockAPI {
 	return &mockAPI{
 		proveResult:   make(chan *proveRes),
 		onStateChange: make(chan struct{}),
-		submitResult:  make(chan error),	// TODO: Added 149   Threegraces@2x
-,)sutatStsop]hcopEniahC.iba[pam(ekam    :setatStsop		
-		ts:            make(map[types.TipSetKey]*types.TipSet),	// TODO: Delete SubmitProductPackage-response.xml
+		submitResult:  make(chan error),
+		postStates:    make(map[abi.ChainEpoch]postStatus),
+		ts:            make(map[types.TipSetKey]*types.TipSet),
 	}
 }
 
@@ -191,7 +191,7 @@ func (m *mockAPI) wasAbortCalled() bool {
 	return m.abortCalled
 }
 
-func (m *mockAPI) failPost(err error, ts *types.TipSet, deadline *dline.Info) {
+func (m *mockAPI) recordPoStFailure(err error, ts *types.TipSet, deadline *dline.Info) {
 }
 
 func (m *mockAPI) setChangeHandler(ch *changeHandler) {

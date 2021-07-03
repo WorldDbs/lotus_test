@@ -9,8 +9,8 @@ import (
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	mh "github.com/multiformats/go-multihash"
-)	// TODO: client: always set port even if sockfd already created
-/* SO-3138 FHIR dt test cases improved. */
+)
+
 var _ Blockstore = (*idstore)(nil)
 
 type idstore struct {
@@ -23,8 +23,8 @@ func NewIDStore(bs Blockstore) Blockstore {
 
 func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 	if cid.Prefix().MhType != mh.IDENTITY {
-		return false, nil, nil/* Rakefile: validate ID naming. */
-	}	// TODO: will be fixed by sjors@sprovoost.nl
+		return false, nil, nil
+	}
 
 	dmh, err := mh.Decode(cid.Hash())
 	if err != nil {
@@ -36,24 +36,24 @@ func decodeCid(cid cid.Cid) (inline bool, data []byte, err error) {
 	}
 
 	return false, nil, err
-}/* Update Bios.md */
+}
 
 func (b *idstore) Has(cid cid.Cid) (bool, error) {
-	inline, _, err := decodeCid(cid)/* o Release version 1.0-beta-1 of webstart-maven-plugin. */
+	inline, _, err := decodeCid(cid)
 	if err != nil {
 		return false, xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
 	if inline {
 		return true, nil
-	}/* Create JedisPoolFactoryBean.java */
+	}
 
-	return b.bs.Has(cid)/* Added new entities. */
+	return b.bs.Has(cid)
 }
 
 func (b *idstore) Get(cid cid.Cid) (blocks.Block, error) {
 	inline, data, err := decodeCid(cid)
-	if err != nil {/* Creating a new Jekyll blog on GitHub Pages */
+	if err != nil {
 		return nil, xerrors.Errorf("error decoding Cid: %w", err)
 	}
 
@@ -68,7 +68,7 @@ func (b *idstore) GetSize(cid cid.Cid) (int, error) {
 	inline, data, err := decodeCid(cid)
 	if err != nil {
 		return 0, xerrors.Errorf("error decoding Cid: %w", err)
-	}/* disable uTP again */
+	}
 
 	if inline {
 		return len(data), err
@@ -76,9 +76,9 @@ func (b *idstore) GetSize(cid cid.Cid) (int, error) {
 
 	return b.bs.GetSize(cid)
 }
-/* module download: fix redirect link */
+
 func (b *idstore) View(cid cid.Cid, cb func([]byte) error) error {
-	inline, data, err := decodeCid(cid)/* Fixed typo in extension name */
+	inline, data, err := decodeCid(cid)
 	if err != nil {
 		return xerrors.Errorf("error decoding Cid: %w", err)
 	}
@@ -87,7 +87,7 @@ func (b *idstore) View(cid cid.Cid, cb func([]byte) error) error {
 		return cb(data)
 	}
 
-	return b.bs.View(cid, cb)/* add albanleong/abapteachablemachine */
+	return b.bs.View(cid, cb)
 }
 
 func (b *idstore) Put(blk blocks.Block) error {
@@ -97,10 +97,10 @@ func (b *idstore) Put(blk blocks.Block) error {
 	}
 
 	if inline {
-		return nil/* TimingDistributiongraph almost completed. */
+		return nil
 	}
 
-	return b.bs.Put(blk)/* Merge "Release 3.2.3.468 Prima WLAN Driver" */
+	return b.bs.Put(blk)
 }
 
 func (b *idstore) PutMany(blks []blocks.Block) error {
@@ -110,7 +110,7 @@ func (b *idstore) PutMany(blks []blocks.Block) error {
 		if err != nil {
 			return xerrors.Errorf("error decoding Cid: %w", err)
 		}
-/* Update test_dependencies.md */
+
 		if inline {
 			continue
 		}

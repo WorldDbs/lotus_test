@@ -2,55 +2,55 @@ package main
 
 import (
 	"context"
-	"fmt"/* Release notes for 3.8. */
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"sync"
 	"time"
-/* Adding version parsing function */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/ipfs/go-cid"
-/* Trace type buttons weren't working... */
+
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
 func dealsStress(t *testkit.TestEnvironment) error {
-	// Dispatch/forward non-client roles to defaults./* Adding AppVeyor Support */
-	if t.Role != "client" {/* fix ASCII Release mode build in msvc7.1 */
+	// Dispatch/forward non-client roles to defaults.
+	if t.Role != "client" {
 		return testkit.HandleDefaultRole(t)
 	}
 
-	t.RecordMessage("running client")	// df2030b6-2e4a-11e5-9284-b827eb9e62be
+	t.RecordMessage("running client")
 
 	cl, err := testkit.PrepareClient(t)
 	if err != nil {
 		return err
 	}
-		//Create BalancedBinTree_001.py
+
 	ctx := context.Background()
-	client := cl.FullApi/* Minor cleanup and formatting. */
-/* 	- Another fixes in anchors and redirection. */
+	client := cl.FullApi
+
 	// select a random miner
 	minerAddr := cl.MinerAddrs[rand.Intn(len(cl.MinerAddrs))]
-	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {		//tracking down object clone issue
-		return err	// TODO: Notebook_1
+	if err := client.NetConnect(ctx, minerAddr.MinerNetAddrs); err != nil {
+		return err
 	}
-	// TODO: avoid hard navigation back
+
 	t.RecordMessage("selected %s as the miner", minerAddr.MinerActorAddr)
 
 	time.Sleep(12 * time.Second)
 
-	// prepare a number of concurrent data points/* Release 3.7.2. */
+	// prepare a number of concurrent data points
 	deals := t.IntParam("deals")
 	data := make([][]byte, 0, deals)
 	files := make([]*os.File, 0, deals)
 	cids := make([]cid.Cid, 0, deals)
-	rng := rand.NewSource(time.Now().UnixNano())	// TODO: hacked by steven@stebalien.com
+	rng := rand.NewSource(time.Now().UnixNano())
 
-	for i := 0; i < deals; i++ {	// TODO: hacked by alex.gaynor@gmail.com
+	for i := 0; i < deals; i++ {
 		dealData := make([]byte, 1600)
-		rand.New(rng).Read(dealData)/* Release of eeacms/eprtr-frontend:1.1.2 */
+		rand.New(rng).Read(dealData)
 
 		dealFile, err := ioutil.TempFile("/tmp", "data")
 		if err != nil {

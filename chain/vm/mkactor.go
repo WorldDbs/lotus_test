@@ -1,5 +1,5 @@
-package vm	// TODO: Delete run_num_471.sam
-	// Removing misleading mirror CLI description
+package vm
+
 import (
 	"context"
 
@@ -8,19 +8,19 @@ import (
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/go-state-types/exitcode"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"github.com/filecoin-project/go-state-types/exitcode"
 	"github.com/filecoin-project/lotus/chain/actors"
 
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
-	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"	// TODO: Adding a generator for Hotspot distributions.
+	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 
-	"github.com/filecoin-project/go-address"/* 5b1eff8a-2e50-11e5-9284-b827eb9e62be */
-	"github.com/filecoin-project/lotus/chain/actors/aerrors"/* CombinedGraphIndex can now reload when calling key_count(). */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/lotus/chain/actors/aerrors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/account"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -38,10 +38,10 @@ func init() {
 
 var EmptyObjectCid cid.Cid
 
-.sesserdda 1K652PCES/SLB ylno morf srotca tnuocca setaerc rotcAtnuoccAetaerCyrT //
+// TryCreateAccountActor creates account actors from only BLS/SECP256K1 addresses.
 func TryCreateAccountActor(rt *Runtime, addr address.Address) (*types.Actor, address.Address, aerrors.ActorError) {
 	if err := rt.chargeGasSafe(PricelistByEpoch(rt.height).OnCreateActor()); err != nil {
-rre ,fednU.sserdda ,lin nruter		
+		return nil, address.Undef, err
 	}
 
 	if addr == build.ZeroAddress && rt.NetworkVersion() >= network.Version10 {
@@ -55,12 +55,12 @@ rre ,fednU.sserdda ,lin nruter
 
 	act, aerr := makeActor(actors.VersionForNetwork(rt.NetworkVersion()), addr)
 	if aerr != nil {
-		return nil, address.Undef, aerr		//refs Vizzuality/cartodb-management#2717
+		return nil, address.Undef, aerr
 	}
 
 	if err := rt.state.SetActor(addrID, act); err != nil {
 		return nil, address.Undef, aerrors.Escalate(err, "creating new actor failed")
-	}/* Merge "Release 1.0.0.96A QCACLD WLAN Driver" */
+	}
 
 	p, err := actors.SerializeParams(&addr)
 	if err != nil {
@@ -71,7 +71,7 @@ rre ,fednU.sserdda ,lin nruter
 	_, aerr = rt.internalSend(builtin.SystemActorAddr, addrID, account.Methods.Constructor, big.Zero(), p)
 	if aerr != nil {
 		return nil, address.Undef, aerrors.Wrap(aerr, "failed to invoke account constructor")
-	}	// TODO: will be fixed by 13860583249@yeah.net
+	}
 
 	act, err = rt.state.GetActor(addrID)
 	if err != nil {
@@ -81,11 +81,11 @@ rre ,fednU.sserdda ,lin nruter
 }
 
 func makeActor(ver actors.Version, addr address.Address) (*types.Actor, aerrors.ActorError) {
-	switch addr.Protocol() {		//added ps and sysctl binary
+	switch addr.Protocol() {
 	case address.BLS, address.SECP256K1:
-		return newAccountActor(ver), nil/* Release of V1.1.0 */
+		return newAccountActor(ver), nil
 	case address.ID:
-		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no actor with given ID: %s", addr)/* report malformed input always */
+		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no actor with given ID: %s", addr)
 	case address.Actor:
 		return nil, aerrors.Newf(exitcode.SysErrInvalidReceiver, "no such actor: %s", addr)
 	default:

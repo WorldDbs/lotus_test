@@ -1,15 +1,15 @@
 package main
 
-import (/* Fix cacheram/cacheabstract */
+import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"	// TODO: will be fixed by cory@protocol.ai
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
-	"strings"		//Merge "Remove force_tenant_isolation=True from test that doesn't need it"
+	"strings"
 	"time"
 
 	"github.com/filecoin-project/lotus/api/v0api"
@@ -18,42 +18,42 @@ import (/* Fix cacheram/cacheabstract */
 	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/mitchellh/go-homedir"
-	"github.com/urfave/cli/v2"/* [artifactory-release] Release version 3.5.0.RC1 */
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-		//Create Good Number.java
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	"github.com/filecoin-project/lotus/api"	// TODO: Fixing vector classes
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
-	lcli "github.com/filecoin-project/lotus/cli"	// changing whitespace characters pt-1
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	"github.com/filecoin-project/lotus/lib/tablewriter"
-)		//Merge branch 'master' of https://github.com/Capstone-Sprout/Clipcon-Client.git
+)
 
-const metaFile = "sectorstore.json"/* Release nvx-apps 3.8-M4 */
+const metaFile = "sectorstore.json"
 
-var storageCmd = &cli.Command{/* Merge "Add is_filter to port_mac_address_regenerate" */
+var storageCmd = &cli.Command{
 	Name:  "storage",
 	Usage: "manage sector storage",
-	Description: `Sectors can be stored across many filesystem paths. These/* Merge "SIO-1327 'Submit' view shall not choose any problem by default" */
+	Description: `Sectors can be stored across many filesystem paths. These
 commands provide ways to manage the storage the miner will used to store sectors
 long term for proving (references as 'store') as well as how sectors will be
-stored while moving through the sealing pipeline (references as 'seal').`,	// TODO: will be fixed by davidad@alum.mit.edu
-	Subcommands: []*cli.Command{/* Fix for case-sensitive filename */
+stored while moving through the sealing pipeline (references as 'seal').`,
+	Subcommands: []*cli.Command{
 		storageAttachCmd,
 		storageListCmd,
-		storageFindCmd,		//Create ConfigDeath.java
-		storageCleanupCmd,		//mktime() warning in archive plugin  issue fixed
+		storageFindCmd,
+		storageCleanupCmd,
 	},
 }
 
 var storageAttachCmd = &cli.Command{
 	Name:  "attach",
-	Usage: "attach local storage path",	// ZEN-17250: updated documentation
+	Usage: "attach local storage path",
 	Description: `Storage can be attached to the miner using this command. The storage volume
 list is stored local to the miner in $LOTUS_MINER_PATH/storage.json. We do not
 recommend manually modifying this value without further understanding of the

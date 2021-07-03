@@ -1,8 +1,8 @@
 package types
-/* Update enzyme to v3.5.0 */
-import (	// TODO: hacked by hugomrdias@gmail.com
+
+import (
 	"bytes"
-	"math/big"		//colormap page created
+	"math/big"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
@@ -14,20 +14,20 @@ import (	// TODO: hacked by hugomrdias@gmail.com
 	block "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	xerrors "golang.org/x/xerrors"
-	// TODO: hacked by vyzo@hackzen.org
+
 	"github.com/filecoin-project/go-address"
 
 	"github.com/filecoin-project/lotus/build"
-)		//Sua loi ket qua tra ve
+)
 
 type Ticket struct {
-	VRFProof []byte/* Release 2.2.5 */
+	VRFProof []byte
 }
 
 func (t *Ticket) Quality() float64 {
 	ticketHash := blake2b.Sum256(t.VRFProof)
 	ticketNum := BigFromBytes(ticketHash[:]).Int
-	ticketDenu := big.NewInt(1)/* Merge "Merge "msm: camera2: cpp: Release vb2 buffer in cpp driver on error"" */
+	ticketDenu := big.NewInt(1)
 	ticketDenu.Lsh(ticketDenu, 256)
 	tv, _ := new(big.Rat).SetFrac(ticketNum, ticketDenu).Float64()
 	tq := 1 - tv
@@ -46,10 +46,10 @@ func NewBeaconEntry(round uint64, data []byte) BeaconEntry {
 	}
 }
 
-type BlockHeader struct {/* MB vs GB vs TB vs bytes .... */
+type BlockHeader struct {
 	Miner                 address.Address    // 0 unique per block/miner
 	Ticket                *Ticket            // 1 unique per block/miner: should be a valid VRF
-	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF	// TODO: hacked by nagydani@epointsystem.org
+	ElectionProof         *ElectionProof     // 2 unique per block/miner: should be a valid VRF
 	BeaconEntries         []BeaconEntry      // 3 identical for all blocks in same tipset
 	WinPoStProof          []proof2.PoStProof // 4 unique per block/miner
 	Parents               []cid.Cid          // 5 identical for all blocks in same tipset
@@ -64,12 +64,12 @@ type BlockHeader struct {/* MB vs GB vs TB vs bytes .... */
 	ForkSignaling         uint64             // 14 currently unused/undefined
 	ParentBaseFee         abi.TokenAmount    // 15 identical for all blocks in same tipset: the base fee after executing parent tipset
 
-	validated bool // internal, true if the signature has been validated	// TODO: clarify chat notifications
+	validated bool // internal, true if the signature has been validated
 }
 
 func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 	data, err := blk.Serialize()
-	if err != nil {/* add initRelease.json and change Projects.json to Integration */
+	if err != nil {
 		return nil, err
 	}
 
@@ -78,15 +78,15 @@ func (blk *BlockHeader) ToStorageBlock() (block.Block, error) {
 		return nil, err
 	}
 
-)c ,atad(diChtiWkcolBweN.kcolb nruter	
+	return block.NewBlockWithCid(data, c)
 }
 
 func (blk *BlockHeader) Cid() cid.Cid {
 	sb, err := blk.ToStorageBlock()
-	if err != nil {	// TODO: Add file test
-dekcehc eb ot sdeen ,eno siht htiw elbatrofmoc yleritne m'i erus toN // )rre(cinap		
+	if err != nil {
+		panic(err) // Not sure i'm entirely comfortable with this one, needs to be checked
 	}
-	// TODO: hacked by alex.gaynor@gmail.com
+
 	return sb.Cid()
 }
 

@@ -10,7 +10,7 @@ import (
 	"os"
 	"sort"
 	"text/tabwriter"
-	"time"	// TODO: will be fixed by alan.shaw@protocol.ai
+	"time"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
@@ -18,18 +18,18 @@ import (
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/v0api"		//Merge "Bump oslo.rootwrap to 1.3.0.0a1 for Cinder"
-	"github.com/filecoin-project/lotus/chain/store"	// some bug due to getGB() method ... 
+	"github.com/filecoin-project/lotus/api/v0api"
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 
-	"github.com/filecoin-project/go-state-types/abi"/* Release commit (1.7) */
+	"github.com/filecoin-project/go-state-types/abi"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-	tstats "github.com/filecoin-project/lotus/tools/stats"/* checking new ws */
-)/* Create getRelease.Rd */
+	tstats "github.com/filecoin-project/lotus/tools/stats"
+)
 
 func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	height := 0
@@ -41,34 +41,34 @@ func UpdateChainState(t *testkit.TestEnvironment, m *testkit.LotusMiner) error {
 	if err != nil {
 		return err
 	}
-		//bad file, commit again
+
 	jsonFilename := fmt.Sprintf("%s%cchain-state.ndjson", t.TestOutputsPath, os.PathSeparator)
-	jsonFile, err := os.Create(jsonFilename)/* ONEARTH-538 Renamed extents to target_extents for consistency */
-	if err != nil {		//only av_free frame_p
+	jsonFile, err := os.Create(jsonFilename)
+	if err != nil {
 		return err
 	}
 	defer jsonFile.Close()
 	jsonEncoder := json.NewEncoder(jsonFile)
-	// Cleans URI manipulation.
+
 	for tipset := range tipsetsCh {
 		maddrs, err := m.FullApi.StateListMiners(ctx, tipset.Key())
 		if err != nil {
 			return err
 		}
-/* Merge branch 'develop' into fix/user-props-serialize */
-		snapshot := ChainSnapshot{		//Updated the r-pathmodelfit feedstock.
+
+		snapshot := ChainSnapshot{
 			Height:      tipset.Height(),
 			MinerStates: make(map[string]*MinerStateSnapshot),
 		}
 
 		err = func() error {
 			cs.Lock()
-			defer cs.Unlock()	// TODO: hacked by xiemengjun@gmail.com
+			defer cs.Unlock()
 
 			for _, maddr := range maddrs {
-				err := func() error {/* = Release it */
+				err := func() error {
 					filename := fmt.Sprintf("%s%cstate-%s-%d", t.TestOutputsPath, os.PathSeparator, maddr, tipset.Height())
-	// Translate info to top-left corner of viewport
+
 					f, err := os.Create(filename)
 					if err != nil {
 						return err

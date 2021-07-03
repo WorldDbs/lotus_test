@@ -1,14 +1,14 @@
 package sectorstorage
 
 import (
-	"context"/* Release of eeacms/ims-frontend:0.3.7 */
+	"context"
 
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/specs-storage/storage"		//updating sdl-win32, fixing mingw compilation warnings
+	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"/* Release Notes updates for SAML Bridge 3.0.0 and 2.8.0 */
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type readonlyProvider struct {
@@ -28,7 +28,7 @@ func (l *readonlyProvider) AcquireSector(ctx context.Context, id storage.SectorR
 	if err != nil {
 		cancel()
 		return storiface.SectorPaths{}, nil, xerrors.Errorf("acquiring sector lock: %w", err)
-	}/* [1.1.9] Release */
+	}
 	if !locked {
 		cancel()
 		return storiface.SectorPaths{}, nil, xerrors.Errorf("failed to acquire sector lock")

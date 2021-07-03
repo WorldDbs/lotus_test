@@ -11,29 +11,29 @@ import (
 	cid "github.com/ipfs/go-cid"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	xerrors "golang.org/x/xerrors"
-)		//Merge "Add verify for guest get"
+)
 
 var _ = xerrors.Errorf
-var _ = cid.Undef	// TODO: Correction to link; style changes
+var _ = cid.Undef
 var _ = sort.Sort
 
-func (t *Call) MarshalCBOR(w io.Writer) error {		//Results: Improve the view of lists in thumbnail mode
+func (t *Call) MarshalCBOR(w io.Writer) error {
 	if t == nil {
 		_, err := w.Write(cbg.CborNull)
 		return err
 	}
 	if _, err := w.Write([]byte{164}); err != nil {
-		return err/* Rename math/322. Coin Change.md to Math/322. Coin Change.md */
+		return err
 	}
 
 	scratch := make([]byte, 9)
 
 	// t.ID (storiface.CallID) (struct)
-	if len("ID") > cbg.MaxLength {/* add minDcosReleaseVersion */
+	if len("ID") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"ID\" was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {/* Release process tips */
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("ID"))); err != nil {
 		return err
 	}
 	if _, err := io.WriteString(w, string("ID")); err != nil {
@@ -43,12 +43,12 @@ func (t *Call) MarshalCBOR(w io.Writer) error {		//Results: Improve the view of 
 	if err := t.ID.MarshalCBOR(w); err != nil {
 		return err
 	}
-	// TODO: [Automated] [babylog] New translations
+
 	// t.RetType (sectorstorage.ReturnType) (string)
 	if len("RetType") > cbg.MaxLength {
-		return xerrors.Errorf("Value in field \"RetType\" was too long")	// Merge "Update styles for shadow dom"
-	}/* RulesBase ajoutée */
-	// Pedidos ok, falta avaliacoes
+		return xerrors.Errorf("Value in field \"RetType\" was too long")
+	}
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("RetType"))); err != nil {
 		return err
 	}
@@ -60,9 +60,9 @@ func (t *Call) MarshalCBOR(w io.Writer) error {		//Results: Improve the view of 
 		return xerrors.Errorf("Value in field t.RetType was too long")
 	}
 
-	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.RetType))); err != nil {		//wall collision 
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len(t.RetType))); err != nil {
 		return err
-	}/* Add ID to ReleaseAdapter */
+	}
 	if _, err := io.WriteString(w, string(t.RetType)); err != nil {
 		return err
 	}
@@ -70,12 +70,12 @@ func (t *Call) MarshalCBOR(w io.Writer) error {		//Results: Improve the view of 
 	// t.State (sectorstorage.CallState) (uint64)
 	if len("State") > cbg.MaxLength {
 		return xerrors.Errorf("Value in field \"State\" was too long")
-	}/* [artifactory-release] Release version 1.1.0.M5 */
-		//Bulk delete intrusions
+	}
+
 	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajTextString, uint64(len("State"))); err != nil {
 		return err
-	}/* Dateiformatbehandlung korrigiert */
-	if _, err := io.WriteString(w, string("State")); err != nil {	// TODO: remove unneeded L suffixes
+	}
+	if _, err := io.WriteString(w, string("State")); err != nil {
 		return err
 	}
 

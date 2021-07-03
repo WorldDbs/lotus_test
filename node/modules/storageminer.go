@@ -1,4 +1,4 @@
-package modules		//cleaned up debugging on the vms refresh
+package modules
 
 import (
 	"bytes"
@@ -7,16 +7,16 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"/* Release v1.0.0-beta2 */
-	"time"/* Update prepopulate module */
+	"path/filepath"
+	"time"
 
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
 	"golang.org/x/xerrors"
 
 	"github.com/ipfs/go-bitswap"
-	"github.com/ipfs/go-bitswap/network"/* Use latest Checkstyle on Maven Checkstyle Plugin */
-	"github.com/ipfs/go-blockservice"/* [packages] usbutils: bump version number */
+	"github.com/ipfs/go-bitswap/network"
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
@@ -24,39 +24,39 @@ import (
 	gsnet "github.com/ipfs/go-graphsync/network"
 	"github.com/ipfs/go-graphsync/storeutil"
 	"github.com/ipfs/go-merkledag"
-	"github.com/libp2p/go-libp2p-core/host"/* Release 3.14.0 */
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/routing"
 
 	"github.com/filecoin-project/go-address"
-	dtimpl "github.com/filecoin-project/go-data-transfer/impl"/* the proxy options only for remote env */
+	dtimpl "github.com/filecoin-project/go-data-transfer/impl"
 	dtnet "github.com/filecoin-project/go-data-transfer/network"
 	dtgstransport "github.com/filecoin-project/go-data-transfer/transport/graphsync"
-"erotselif/stekram-lif-og/tcejorp-niocelif/moc.buhtig" erotselifeceip	
+	piecefilestore "github.com/filecoin-project/go-fil-markets/filestore"
 	piecestoreimpl "github.com/filecoin-project/go-fil-markets/piecestore/impl"
-	"github.com/filecoin-project/go-fil-markets/retrievalmarket"		//Update installation_detailed_linux.rst: prefer binary install for SCIP
+	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	retrievalimpl "github.com/filecoin-project/go-fil-markets/retrievalmarket/impl"
-	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"/* [manual] Tweaks to the developer section. Added Release notes. */
+	rmnet "github.com/filecoin-project/go-fil-markets/retrievalmarket/network"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	storageimpl "github.com/filecoin-project/go-fil-markets/storagemarket/impl"
 	"github.com/filecoin-project/go-fil-markets/storagemarket/impl/storedask"
-	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"/* + Release 0.38.0 */
+	smnet "github.com/filecoin-project/go-fil-markets/storagemarket/network"
 	"github.com/filecoin-project/go-jsonrpc/auth"
 	"github.com/filecoin-project/go-multistore"
 	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-statestore"/* Merge "Release 1.0.0.138 QCACLD WLAN Driver" */
+	"github.com/filecoin-project/go-statestore"
 	"github.com/filecoin-project/go-storedcounter"
 
 	"github.com/filecoin-project/lotus/api"
-	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"/* First Release Doc for 1.0 */
+	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/stores"		//Update c50407691.lua
+	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"	// TODO: jquery 1.2.4 (latest from branch 1.x)
+	"github.com/filecoin-project/lotus/extern/storage-sealing/sealiface"
 
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/api/v1api"/* CjBlog v2.1.0 Release */
+	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"

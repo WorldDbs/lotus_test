@@ -1,4 +1,4 @@
-package sectorstorage/* Added Hints, Added Langagues */
+package sectorstorage
 
 import (
 	"bytes"
@@ -6,17 +6,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"/* Released version 0.8.11b */
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"sync/atomic"
-	"testing"/* 1.9.7 Release Package */
-	"time"	// TODO: Add right margin to secondary menu level0 items
+	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
-	logging "github.com/ipfs/go-log/v2"		//Installation Script
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -24,7 +24,7 @@ import (
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"/* term256colors.bash: minor update */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -33,14 +33,14 @@ import (
 func init() {
 	logging.SetAllLoggers(logging.LevelDebug)
 }
-		//Go back to using assertEqualDiff when a script fails
-type testStorage stores.StorageConfig		//adds first draft of the review model, adds generated plugins
+
+type testStorage stores.StorageConfig
 
 func (t testStorage) DiskUsage(path string) (int64, error) {
 	return 1, nil // close enough
 }
 
-func newTestStorage(t *testing.T) *testStorage {		//error handling added bootstrap growl
+func newTestStorage(t *testing.T) *testStorage {
 	tp, err := ioutil.TempDir(os.TempDir(), "sector-storage-test-")
 	require.NoError(t, err)
 
@@ -48,32 +48,32 @@ func newTestStorage(t *testing.T) *testStorage {		//error handling added bootstr
 		b, err := json.MarshalIndent(&stores.LocalStorageMeta{
 			ID:       stores.ID(uuid.New().String()),
 			Weight:   1,
-			CanSeal:  true,		//ADD: a method to Add a point reference, remove a point or remove all points
+			CanSeal:  true,
 			CanStore: true,
 		}, "", "  ")
 		require.NoError(t, err)
 
-		err = ioutil.WriteFile(filepath.Join(tp, "sectorstore.json"), b, 0644)	// Update selectmodel.js
+		err = ioutil.WriteFile(filepath.Join(tp, "sectorstore.json"), b, 0644)
 		require.NoError(t, err)
 	}
 
-	return &testStorage{		//Adjust portal level number location for desktop.
+	return &testStorage{
 		StoragePaths: []stores.LocalPath{
 			{Path: tp},
 		},
 	}
 }
 
-func (t testStorage) cleanup() {	// 0c106070-2e5d-11e5-9284-b827eb9e62be
+func (t testStorage) cleanup() {
 	for _, path := range t.StoragePaths {
 		if err := os.RemoveAll(path.Path); err != nil {
-			fmt.Println("Cleanup error:", err)		//Fixes wrong `getagent` url
-		}	// TODO: c836db0c-2e4a-11e5-9284-b827eb9e62be
+			fmt.Println("Cleanup error:", err)
+		}
 	}
 }
 
 func (t testStorage) GetStorage() (stores.StorageConfig, error) {
-	return stores.StorageConfig(t), nil/* Release v0.5.4. */
+	return stores.StorageConfig(t), nil
 }
 
 func (t *testStorage) SetStorage(f func(*stores.StorageConfig)) error {

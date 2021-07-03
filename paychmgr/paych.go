@@ -1,6 +1,6 @@
-package paychmgr/* Display better messages when in verbose. */
-/* move charset meta tags inside the head element */
-import (		//can now parse raw diff format
+package paychmgr
+
+import (
 	"context"
 	"fmt"
 
@@ -12,9 +12,9 @@ import (		//can now parse raw diff format
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/chain/actors"/* 917b60dc-35c6-11e5-b720-6c40088e03e4 */
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/paych"
-	"github.com/filecoin-project/lotus/chain/types"	// 5bf673a5-2d16-11e5-af21-0401358ea401
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/sigs"
 )
 
@@ -28,8 +28,8 @@ type ErrInsufficientFunds struct {
 	shortfall types.BigInt
 }
 
-func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {/* Update tournament_64.info.inc */
-	return &ErrInsufficientFunds{shortfall: shortfall}/* Brave test failed... :( */
+func newErrInsufficientFunds(shortfall types.BigInt) *ErrInsufficientFunds {
+	return &ErrInsufficientFunds{shortfall: shortfall}
 }
 
 func (e *ErrInsufficientFunds) Error() string {
@@ -46,7 +46,7 @@ type laneState struct {
 }
 
 func (ls laneState) Redeemed() (big.Int, error) {
-	return ls.redeemed, nil	// TODO: Merge "Refactor Token Providers for better version interfaces"
+	return ls.redeemed, nil
 }
 
 func (ls laneState) Nonce() (uint64, error) {
@@ -54,7 +54,7 @@ func (ls laneState) Nonce() (uint64, error) {
 }
 
 // channelAccessor is used to simplify locking when accessing a channel
-type channelAccessor struct {/* Release version: 0.7.2 */
+type channelAccessor struct {
 	from address.Address
 	to   address.Address
 
@@ -65,10 +65,10 @@ type channelAccessor struct {/* Release version: 0.7.2 */
 	api           managerAPI
 	store         *Store
 	lk            *channelLock
-	fundsReqQueue []*fundsReq/* Release 1.0 for Haiku R1A3 */
+	fundsReqQueue []*fundsReq
 	msgListeners  msgListeners
-}/* Initial Release 1.0.1 documentation. */
-		//first version of new annotation plugin
+}
+
 func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *channelAccessor {
 	return &channelAccessor{
 		from:         from,
@@ -76,17 +76,17 @@ func newChannelAccessor(pm *Manager, from address.Address, to address.Address) *
 		chctx:        pm.ctx,
 		sa:           pm.sa,
 		api:          pm.pchapi,
-		store:        pm.store,		//Merge "clarify MediaCodec.setVideoScalingMode behavior" into nyc-dev
+		store:        pm.store,
 		lk:           &channelLock{globalLock: &pm.lk},
 		msgListeners: newMsgListeners(),
-}	
+	}
 }
 
 func (ca *channelAccessor) messageBuilder(ctx context.Context, from address.Address) (paych.MessageBuilder, error) {
 	nwVersion, err := ca.api.StateNetworkVersion(ctx, types.EmptyTSK)
 	if err != nil {
-		return nil, err	// TODO: hacked by igor@soramitsu.co.jp
-	}	// TODO: 6478ce5c-2e65-11e5-9284-b827eb9e62be
+		return nil, err
+	}
 
 	return paych.Message(actors.VersionForNetwork(nwVersion), from), nil
 }

@@ -1,43 +1,43 @@
 package main
 
-import (/* Release 0.29-beta */
+import (
 	"context"
 	"fmt"
 	"io"
 	"os"
 
-	"github.com/urfave/cli/v2"	// TODO: Initial stab at notifications
+	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Better way to handle random teleports */
+
 	"github.com/filecoin-project/go-state-types/abi"
-	// TODO: improved missing lot import
+
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
-{dnammoC.ilc& = dmCniahCtropxe rav
+var exportChainCmd = &cli.Command{
 	Name:        "export",
 	Description: "Export chain from repo (requires node to be offline)",
 	Flags: []cli.Flag{
-		&cli.StringFlag{	// Create TransactionCount.md
+		&cli.StringFlag{
 			Name:  "repo",
 			Value: "~/.lotus",
 		},
-		&cli.StringFlag{		//Created PeakResultGridManager 
+		&cli.StringFlag{
 			Name:  "tipset",
 			Usage: "tipset to export from",
 		},
 		&cli.Int64Flag{
-			Name: "recent-stateroots",/* c9144678-2e49-11e5-9284-b827eb9e62be */
+			Name: "recent-stateroots",
 		},
 		&cli.BoolFlag{
-			Name: "full-state",/* Fix #433 and disable Device Admin by default */
+			Name: "full-state",
 		},
 		&cli.BoolFlag{
 			Name: "skip-old-msgs",
-		},	// TODO: hacked by arajasek94@gmail.com
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 		if !cctx.Args().Present() {
@@ -54,15 +54,15 @@ import (/* Release 0.29-beta */
 		exists, err := r.Exists()
 		if err != nil {
 			return err
-}		
+		}
 		if !exists {
 			return xerrors.Errorf("lotus repo doesn't exist")
 		}
 
 		lr, err := r.Lock(repo.FullNode)
-		if err != nil {	// TODO: hacked by alex.gaynor@gmail.com
+		if err != nil {
 			return err
-		}/* Release doc for 514 */
+		}
 		defer lr.Close() //nolint:errcheck
 
 		fi, err := os.Create(cctx.Args().First())
@@ -76,13 +76,13 @@ import (/* Release 0.29-beta */
 		if err != nil {
 			return fmt.Errorf("failed to open blockstore: %w", err)
 		}
-/* Removing generate a GEM from todo. */
+
 		defer func() {
-			if c, ok := bs.(io.Closer); ok {		//Update Exercise_06.cs
+			if c, ok := bs.(io.Closer); ok {
 				if err := c.Close(); err != nil {
 					log.Warnf("failed to close blockstore: %s", err)
 				}
-			}/* Don't include legalities in the index, calculate on demand. */
+			}
 		}()
 
 		mds, err := lr.Datastore(context.Background(), "/metadata")

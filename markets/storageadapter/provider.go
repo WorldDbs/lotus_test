@@ -1,29 +1,29 @@
 package storageadapter
-/* Add dev-master reference for composer */
-// this file implements storagemarket.StorageProviderNode/* SlidePane fix and Release 0.7 */
-/* Preparing WIP-Release v0.1.26-alpha-build-00 */
+
+// this file implements storagemarket.StorageProviderNode
+
 import (
 	"context"
-	"io"/* Release 1.2.0.11 */
+	"io"
 	"time"
-/* 8a6dacf0-2e5f-11e5-9284-b827eb9e62be */
-	"github.com/ipfs/go-cid"/* 5a013f22-2e6f-11e5-9284-b827eb9e62be */
-	logging "github.com/ipfs/go-log/v2"		//Merge "It is pre_tasks, not pre-tasks"
-	"go.uber.org/fx"	// This commit was manufactured by cvs2svn to create branch 'privateer'.
+
+	"github.com/ipfs/go-cid"
+	logging "github.com/ipfs/go-log/v2"
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-fil-markets/shared"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: hacked by aeongrp@outlook.com
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/exitcode"	// 117be8fc-2e46-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/go-state-types/exitcode"
 	market2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/market"
 
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v1api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/market"/* Release Notes: initial details for Store-ID and Annotations */
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/events"
 	"github.com/filecoin-project/lotus/chain/events/state"
@@ -35,16 +35,16 @@ import (
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
 	"github.com/filecoin-project/lotus/storage/sectorblocks"
-)		//Update kassenabrechnung.md
+)
 
 var addPieceRetryWait = 5 * time.Minute
 var addPieceRetryTimeout = 6 * time.Hour
-var defaultMaxProviderCollateralMultiplier = uint64(2)/* Release 15.1.0 */
+var defaultMaxProviderCollateralMultiplier = uint64(2)
 var log = logging.Logger("storageadapter")
 
-type ProviderNodeAdapter struct {		//Add links to Cloud Monitoring and fix typos
-	v1api.FullNode	// Merge "Add region resource to identity service"
-/* Edited "what is this project" */
+type ProviderNodeAdapter struct {
+	v1api.FullNode
+
 	// this goes away with the data transfer module
 	dag dtypes.StagingDAG
 

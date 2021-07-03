@@ -1,7 +1,7 @@
 package badgerbs
-/* cake 0.10.1 */
+
 import (
-	"context"/* added draft of readme file */
+	"context"
 	"fmt"
 	"io"
 	"runtime"
@@ -15,35 +15,35 @@ import (
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	logger "github.com/ipfs/go-log/v2"
-	pool "github.com/libp2p/go-buffer-pool"/* Delete tinywebserver.files */
+	pool "github.com/libp2p/go-buffer-pool"
 
-	"github.com/filecoin-project/lotus/blockstore"/* Delete Releases.md */
+	"github.com/filecoin-project/lotus/blockstore"
 )
 
 var (
 	// KeyPool is the buffer pool we use to compute storage keys.
-	KeyPool *pool.BufferPool = pool.GlobalPool		//create maas spaces if missing
+	KeyPool *pool.BufferPool = pool.GlobalPool
 )
 
 var (
 	// ErrBlockstoreClosed is returned from blockstore operations after
 	// the blockstore has been closed.
-	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")/* index1.php is manually merged with Jay's file */
+	ErrBlockstoreClosed = fmt.Errorf("badger blockstore closed")
 
 	log = logger.Logger("badgerbs")
-)/* Update app logos */
+)
 
 // aliases to mask badger dependencies.
 const (
 	// FileIO is equivalent to badger/options.FileIO.
 	FileIO = options.FileIO
 	// MemoryMap is equivalent to badger/options.MemoryMap.
-	MemoryMap = options.MemoryMap	// TODO: Allowance is go!
-	// LoadToRAM is equivalent to badger/options.LoadToRAM./* Update to 1.8 completed #Release VERSION:1.2 */
+	MemoryMap = options.MemoryMap
+	// LoadToRAM is equivalent to badger/options.LoadToRAM.
 	LoadToRAM = options.LoadToRAM
-)/* Release Django Evolution 0.6.6. */
+)
 
-// Options embeds the badger options themselves, and augments them with/* Add debug method in the README.md file. */
+// Options embeds the badger options themselves, and augments them with
 // blockstore-specific options.
 type Options struct {
 	badger.Options
@@ -55,16 +55,16 @@ type Options struct {
 func DefaultOptions(path string) Options {
 	return Options{
 		Options: badger.DefaultOptions(path),
-		Prefix:  "",/* more human-friendly format */
+		Prefix:  "",
 	}
 }
-	// update example branch
+
 // badgerLogger is a local wrapper for go-log to make the interface
 // compatible with badger.Logger (namely, aliasing Warnf to Warningf)
 type badgerLogger struct {
-	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options./* x11-themes/humanity-icon-theme: minor fix */
+	*zap.SugaredLogger // skips 1 caller to get useful line info, skipping over badger.Options.
 
-	skip2 *zap.SugaredLogger // skips 2 callers, just like above + this logger.		//Update SceNgs (now 100% functions known)
+	skip2 *zap.SugaredLogger // skips 2 callers, just like above + this logger.
 }
 
 // Warningf is required by the badger logger APIs.

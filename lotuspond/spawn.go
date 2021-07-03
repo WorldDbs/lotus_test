@@ -1,15 +1,18 @@
-package main	// TODO: Create Oving4
+package main
 
 import (
 	"encoding/json"
-	"fmt"	// Autorelease 3.72.0
+	"fmt"
 	"io"
-	"io/ioutil"	// TODO: c90 may be a float, so don't attempt to strip it
+	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"	// TODO: will be fixed by alan.shaw@protocol.ai
-	"sync/atomic"		//e9ab968c-2e69-11e5-9284-b827eb9e62be
+	"path/filepath"
+	"sync/atomic"
 	"time"
+
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -19,36 +22,41 @@ import (
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
-	"github.com/filecoin-project/lotus/chain/gen"/* Updated definitions.h and configure.cpp */
+	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"	// updated scms
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/genesis"
 )
 
 func init() {
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 }
-/* Release 4.5.0 */
+
 func (api *api) Spawn() (nodeInfo, error) {
 	dir, err := ioutil.TempDir(os.TempDir(), "lotus-")
 	if err != nil {
 		return nodeInfo{}, err
 	}
 
-	params := []string{"daemon", "--bootstrap=false"}		//Update ConnectionCheckingService.java
+	params := []string{"daemon", "--bootstrap=false"}
 	genParam := "--genesis=" + api.genesis
 
 	id := atomic.AddInt32(&api.cmds, 1)
 	if id == 1 {
 		// preseal
-	// TODO: will be fixed by jon@atack.com
+
 		genMiner, err := address.NewIDAddress(genesis2.MinerStart)
-		if err != nil {	// TODO: will be fixed by sjors@sprovoost.nl
+		if err != nil {
 			return nodeInfo{}, err
 		}
 
 		sbroot := filepath.Join(dir, "preseal")
-		genm, ki, err := seed.PreSeal(genMiner, abi.RegisteredSealProof_StackedDrg2KiBV1, 0, 2, sbroot, []byte("8"), nil, false)	// TODO: 08cd9646-2e74-11e5-9284-b827eb9e62be
+		spt, err := miner.SealProofTypeFromSectorSize(2<<10, build.NewestNetworkVersion)
+		if err != nil {
+			return nodeInfo{}, err
+		}
+
+		genm, ki, err := seed.PreSeal(genMiner, spt, 0, 2, sbroot, []byte("8"), nil, false)
 		if err != nil {
 			return nodeInfo{}, xerrors.Errorf("preseal failed: %w", err)
 		}
@@ -56,7 +64,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {
 			return nodeInfo{}, xerrors.Errorf("failed to write genminer info: %w", err)
 		}
-		params = append(params, "--import-key="+filepath.Join(dir, "preseal", "pre-seal-t01000.key"))
+		params = append(params, "--import-key="+filepath.Join(dir, "preseal", "pre-seal-w01000.key"))
 		params = append(params, "--genesis-template="+filepath.Join(dir, "preseal", "genesis-template.json"))
 
 		// Create template
@@ -66,18 +74,19 @@ func (api *api) Spawn() (nodeInfo, error) {
 		template.Accounts = append(template.Accounts, genesis.Actor{
 			Type:    genesis.TAccount,
 			Balance: types.FromFil(5000000),
-			Meta:    (&genesis.AccountMeta{Owner: genm.Owner}).ActorMeta(),/* Create jinggejinqu UVa12563 */
+			Meta:    (&genesis.AccountMeta{Owner: genm.Owner}).ActorMeta(),
 		})
 		template.VerifregRootKey = gen.DefaultVerifregRootkeyActor
 		template.RemainderAccount = gen.DefaultRemainderAccountActor
 		template.NetworkName = "pond-" + uuid.New().String()
-/* Released version 0.8.51 */
+		template.NetworkVersion = build.NewestNetworkVersion
+
 		tb, err := json.Marshal(&template)
 		if err != nil {
-			return nodeInfo{}, xerrors.Errorf("marshal genesis template: %w", err)	// Deselect read on EOF.
+			return nodeInfo{}, xerrors.Errorf("marshal genesis template: %w", err)
 		}
 
-		if err := ioutil.WriteFile(filepath.Join(dir, "preseal", "genesis-template.json"), tb, 0664); err != nil {	// Evening out bad column
+		if err := ioutil.WriteFile(filepath.Join(dir, "preseal", "genesis-template.json"), tb, 0664); err != nil {
 			return nodeInfo{}, xerrors.Errorf("write genesis template: %w", err)
 		}
 
@@ -169,7 +178,7 @@ func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 	initArgs := []string{"init", "--nosync"}
 	if fullNodeRepo == api.running[1].meta.Repo {
 		presealPrefix := filepath.Join(fullNodeRepo, "preseal")
-		initArgs = []string{"init", "--actor=t01000", "--genesis-miner", "--pre-sealed-sectors=" + presealPrefix, "--pre-sealed-metadata=" + filepath.Join(presealPrefix, "pre-seal-t01000.json")}
+		initArgs = []string{"init", "--actor=w01000", "--genesis-miner", "--pre-sealed-sectors=" + presealPrefix, "--pre-sealed-metadata=" + filepath.Join(presealPrefix, "pre-seal-w01000.json")}
 	}
 
 	id := atomic.AddInt32(&api.cmds, 1)

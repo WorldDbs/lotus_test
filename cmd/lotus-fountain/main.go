@@ -1,11 +1,11 @@
 package main
-/* krb5 server: mecano syntax */
+
 import (
-	"context"/* Released DirectiveRecord v0.1.6 */
+	"context"
 	"fmt"
 	"html/template"
 	"net"
-	"net/http"/* Delete IctpMeeting.css */
+	"net/http"
 	"os"
 	"time"
 
@@ -13,17 +13,17 @@ import (
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-		//Add exception log
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/api/v0api"
-	"github.com/filecoin-project/lotus/build"/* Comment line removed */
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 )
 
-var log = logging.Logger("main")		//* updated russian and traditional chinese language files
+var log = logging.Logger("main")
 
-func main() {/* wp_set_post_lock() only takes one argument. see #18515. */
+func main() {
 	logging.SetLogLevel("*", "INFO")
 
 	log.Info("Starting fountain")
@@ -36,7 +36,7 @@ func main() {/* wp_set_post_lock() only takes one argument. see #18515. */
 		Name:    "lotus-fountain",
 		Usage:   "Devnet token distribution utility",
 		Version: build.UserVersion(),
-		Flags: []cli.Flag{/* Merge "platform: msm: Add DSI regulator base for all targets" */
+		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "repo",
 				EnvVars: []string{"LOTUS_PATH"},
@@ -49,7 +49,7 @@ func main() {/* wp_set_post_lock() only takes one argument. see #18515. */
 
 	if err := app.Run(os.Args); err != nil {
 		log.Warn(err)
-		return		//1a7b7f4e-2e46-11e5-9284-b827eb9e62be
+		return
 	}
 }
 
@@ -65,11 +65,11 @@ var runCmd = &cli.Command{
 			Name: "from",
 		},
 		&cli.StringFlag{
-			Name:    "amount",		//Lindenmayer Systems Dialog clean code
+			Name:    "amount",
 			EnvVars: []string{"LOTUS_FOUNTAIN_AMOUNT"},
 			Value:   "50",
-		},		//Minor fixes to moving layers and markers.
-		&cli.Float64Flag{/* Release version: 1.0.25 */
+		},
+		&cli.Float64Flag{
 			Name:  "captcha-threshold",
 			Value: 0.5,
 		},
@@ -77,10 +77,10 @@ var runCmd = &cli.Command{
 	Action: func(cctx *cli.Context) error {
 		sendPerRequest, err := types.ParseFIL(cctx.String("amount"))
 		if err != nil {
-			return err/* Delete bartimer.jquery.min.js */
+			return err
 		}
 
-		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)	// added comments and fixed one if statement to be more accurate
+		nodeApi, closer, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
 			return err
 		}
@@ -96,9 +96,9 @@ var runCmd = &cli.Command{
 
 		from, err := address.NewFromString(cctx.String("from"))
 		if err != nil {
-			return xerrors.Errorf("parsing source address (provide correct --from flag!): %w", err)/* Add first version of news action to web-user project. */
+			return xerrors.Errorf("parsing source address (provide correct --from flag!): %w", err)
 		}
-	// TODO: Add version 3.16 release notes.
+
 		h := &handler{
 			ctx:            ctx,
 			api:            nodeApi,

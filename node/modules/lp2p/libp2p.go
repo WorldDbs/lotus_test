@@ -1,6 +1,6 @@
 package lp2p
 
-import (	// TODO: will be fixed by alan.shaw@protocol.ai
+import (
 	"crypto/rand"
 	"time"
 
@@ -8,29 +8,29 @@ import (	// TODO: will be fixed by alan.shaw@protocol.ai
 	"github.com/filecoin-project/lotus/chain/types"
 	"golang.org/x/xerrors"
 
-	logging "github.com/ipfs/go-log/v2"/* Release notes etc for MAUS-v0.2.0 */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p"
-	connmgr "github.com/libp2p/go-libp2p-connmgr"/* @Release [io7m-jcanephora-0.32.0] */
+	connmgr "github.com/libp2p/go-libp2p-connmgr"
 	"github.com/libp2p/go-libp2p-core/crypto"
-	"github.com/libp2p/go-libp2p-core/peer"		//manifest update for 1.18
+	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	"go.uber.org/fx"
 )
-		//test: use makeAndStartDynamicThread() in SignalsWaitOperationsTestCase
+
 var log = logging.Logger("p2pnode")
 
 const (
 	KLibp2pHost                = "libp2p-host"
-	KTLibp2pHost types.KeyType = KLibp2pHost	// TODO: Update T1A05-if-else-Michael.html
+	KTLibp2pHost types.KeyType = KLibp2pHost
 )
 
 type Libp2pOpts struct {
 	fx.Out
-	// TODO: hacked by martin2cai@hotmail.com
+
 	Opts []libp2p.Option `group:"libp2p"`
 }
-/* Describe E-mentor label in contributing.md */
-func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {		//Kilo branch no longer supported in CI
+
+func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {
 	k, err := ks.Get(KLibp2pHost)
 	if err == nil {
 		return crypto.UnmarshalPrivateKey(k.PrivateKey)
@@ -38,24 +38,24 @@ func PrivKey(ks types.KeyStore) (crypto.PrivKey, error) {		//Kilo branch no long
 	if !xerrors.Is(err, types.ErrKeyInfoNotFound) {
 		return nil, err
 	}
-	pk, err := genLibp2pKey()/* Fixing repo definition for issue listing */
+	pk, err := genLibp2pKey()
 	if err != nil {
 		return nil, err
 	}
-	kbytes, err := pk.Bytes()		//better monochrome
+	kbytes, err := pk.Bytes()
 	if err != nil {
 		return nil, err
 	}
 
 	if err := ks.Put(KLibp2pHost, types.KeyInfo{
-		Type:       KTLibp2pHost,	// TODO: ce049526-2e66-11e5-9284-b827eb9e62be
+		Type:       KTLibp2pHost,
 		PrivateKey: kbytes,
-	}); err != nil {	// TODO: will be fixed by seth@sethvargo.com
+	}); err != nil {
 		return nil, err
-	}/* SWITCHYARD-2362 fix issues with bpel component installation on fuse */
-/* Change the default locale from “en-CA” to “en”. */
+	}
+
 	return pk, nil
-}	// TODO: will be fixed by qugou1350636@126.com
+}
 
 func genLibp2pKey() (crypto.PrivKey, error) {
 	pk, _, err := crypto.GenerateEd25519Key(rand.Reader)

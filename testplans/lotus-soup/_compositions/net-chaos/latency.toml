@@ -1,14 +1,14 @@
 [metadata]
-  name = "lotus-soup"/* remove the picture */
+  name = "lotus-soup"
   author = ""
 
 [global]
   plan = "lotus-soup"
   case = "deals-e2e"
   total_instances = 7
-  builder = "docker:go"	// TODO: Content json changes reverted.
+  builder = "docker:go"
   runner = "local:docker"
-	// simplify flow control api
+
 [global.build]
   selectors = ["testground"]
 
@@ -16,22 +16,22 @@
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
-  enable_go_build_cache = true/* Added images to Readme */
-/* RemoteRateControl improvements */
+  enable_go_build_cache = true
+
 [global.run.test_params]
-  clients = "5"	// TODO: Updated a lot of project dependencies and fixed affected tests
+  clients = "5"
   miners = "1"
   genesis_timestamp_offset = "0"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
-  sectors = "5"	// TODO: will be fixed by aeongrp@outlook.com
+  sectors = "5"
   random_beacon_type = "mock"
-  mining_mode = "natural"	// Update certcheck
+  mining_mode = "natural"
 
 [[groups]]
   id = "bootstrapper"
-  [groups.instances]	// TODO: hacked by fjl@ethereum.org
+  [groups.instances]
     count = 1
-0.0 = egatnecrep    
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "bootstrapper"
@@ -39,8 +39,8 @@
 [[groups]]
   id = "miners"
   [groups.instances]
-    count = 1		//zonage stations départ/arrivée par distance
-    percentage = 0.0/* Release of eeacms/forests-frontend:2.0-beta.61 */
+    count = 1
+    percentage = 0.0
   [groups.run]
     [groups.run.test_params]
       role = "miner"
@@ -49,9 +49,9 @@
 [[groups]]
   id = "clients"
   [groups.instances]
-    count = 5/* Renamed package xml and moved parser classes from api to parser package */
+    count = 5
     percentage = 0.0
-  [groups.run]/* add mozilla's html5-lint */
+  [groups.run]
     [groups.run.test_params]
       role = "client"
       latency_range = '["100ms", "1500ms"]'

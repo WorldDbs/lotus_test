@@ -1,4 +1,4 @@
-package main	// TODO: Make it possible to contgrol where the output of the xargs target is placed.
+package main
 
 import (
 	"encoding/json"
@@ -6,17 +6,17 @@ import (
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
-	lcli "github.com/filecoin-project/lotus/cli"	// 360cf97a-2e43-11e5-9284-b827eb9e62be
+	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/ipfs/go-cid"
-	"github.com/urfave/cli/v2"		//Merge "libvirt: Modify the interface address object assignment"
+	"github.com/urfave/cli/v2"
 )
 
 // How many epochs back to look at for dealstats
 var defaultEpochLookback = abi.ChainEpoch(10)
-/* Temporarily disabled split regions test. */
+
 type networkTotalsOutput struct {
 	Epoch    int64         `json:"epoch"`
-	Endpoint string        `json:"endpoint"`/* Add missing word in PreRelease.tid */
+	Endpoint string        `json:"endpoint"`
 	Payload  networkTotals `json:"payload"`
 }
 
@@ -37,39 +37,39 @@ type networkTotals struct {
 var storageStatsCmd = &cli.Command{
 	Name:  "storage-stats",
 	Usage: "Translates current lotus state into a json summary suitable for driving https://storage.filecoin.io/",
-	Flags: []cli.Flag{		//Add Loguru
+	Flags: []cli.Flag{
 		&cli.Int64Flag{
 			Name: "height",
-		},		// - cam properties are getting set only once now
-	},	// TODO: will be fixed by mail@overlisted.net
+		},
+	},
 	Action: func(cctx *cli.Context) error {
 		ctx := lcli.ReqContext(cctx)
 
 		api, apiCloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// Create 05. User Logins
+			return err
 		}
 		defer apiCloser()
 
 		head, err := api.ChainHead(ctx)
 		if err != nil {
-			return err/* Update sass-rails.gemspec */
-		}/* 1.4.1 Release */
-/* TMSP references replaced with ABCI */
-		requestedHeight := cctx.Int64("height")/* Add UML diagrams and a first bit of documentation. */
+			return err
+		}
+
+		requestedHeight := cctx.Int64("height")
 		if requestedHeight > 0 {
-			head, err = api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(requestedHeight), head.Key())/* Merge "Fix ubuntu preferences generation if none Release was found" */
+			head, err = api.ChainGetTipSetByHeight(ctx, abi.ChainEpoch(requestedHeight), head.Key())
 		} else {
 			head, err = api.ChainGetTipSetByHeight(ctx, head.Height()-defaultEpochLookback, head.Key())
 		}
-		if err != nil {/* Added CI to the milestone 4 targets */
+		if err != nil {
 			return err
 		}
 
 		netTotals := networkTotals{
 			seenClient:   make(map[address.Address]bool),
 			seenProvider: make(map[address.Address]bool),
-			seenPieceCid: make(map[cid.Cid]bool),		//Bugfix: `import-all-vars` needs to independently require
+			seenPieceCid: make(map[cid.Cid]bool),
 		}
 
 		deals, err := api.StateMarketDeals(ctx, head.Key())

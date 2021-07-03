@@ -7,7 +7,7 @@ import (
 
 func PermissionedFullAPI(a FullNode) FullNode {
 	var out FullNodeStruct
-	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.Internal)	// TODO: hacked by mikeal.rogers@gmail.com
+	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.Internal)
 	auth.PermissionedProxy(api.AllPermissions, api.DefaultPerms, a, &out.CommonStruct.Internal)
 	return &out
 }

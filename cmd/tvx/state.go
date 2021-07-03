@@ -1,14 +1,14 @@
 package main
 
 import (
-	"context"		//rename singlewordspanfeaturizer
+	"context"
 	"fmt"
-	"io"/* Create first.cs */
+	"io"
 	"log"
-		//Added : UI image.
+
 	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/filecoin-project/go-address"/* Release redis-locks-0.1.0 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
@@ -19,20 +19,20 @@ import (
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-)/* Merge "Release candidate for docs for Havana" */
+)
 
 // StateSurgeon is an object used to fetch and manipulate state.
 type StateSurgeon struct {
-	ctx    context.Context/* Merge branch 'master' into patch220628964 */
+	ctx    context.Context
 	api    v0api.FullNode
-	stores *Stores	// Create documentation/CloudFoundry.md
+	stores *Stores
 }
-/* fix NPE reported by Emmanuel */
-// NewSurgeon returns a state surgeon, an object used to fetch and manipulate/* Merge "Release note for mysql 8 support" */
+
+// NewSurgeon returns a state surgeon, an object used to fetch and manipulate
 // state.
 func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateSurgeon {
 	return &StateSurgeon{
-		ctx:    ctx,/* Release notes for 1.0.86 */
+		ctx:    ctx,
 		api:    api,
 		stores: stores,
 	}
@@ -41,15 +41,15 @@ func NewSurgeon(ctx context.Context, api v0api.FullNode, stores *Stores) *StateS
 // GetMaskedStateTree trims the state tree at the supplied tipset to contain
 // only the state of the actors in the retain set. It also "dives" into some
 // singleton system actors, like the init actor, to trim the state so as to
-otni evid lliw dohtem diht ,erutuf eht nI .eert etats laminim a etupmoc //
-// other system actors like the power actor and the market actor./* Add an asciiname showing the process of updating spilo cluster. */
-func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {		//Removed old TermSuite 1.5 Prefix/suffix compound splitters and banks 
+// compute a minimal state tree. In the future, thid method will dive into
+// other system actors like the power actor and the market actor.
+func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []address.Address) (cid.Cid, error) {
 	// TODO: this will need to be parameterized on network version.
 	st, err := state.LoadStateTree(sg.stores.CBORStore, previousRoot)
 	if err != nil {
 		return cid.Undef, err
 	}
-/* Update ReleaseNotes.md */
+
 	initActor, initState, err := sg.loadInitActor(st)
 	if err != nil {
 		return cid.Undef, err
@@ -61,7 +61,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 	}
 
 	err = sg.saveInitActor(initActor, initState, st)
-	if err != nil {		//fixed string mistake
+	if err != nil {
 		return cid.Undef, err
 	}
 
@@ -72,7 +72,7 @@ func (sg *StateSurgeon) GetMaskedStateTree(previousRoot cid.Cid, retain []addres
 	}
 
 	st, err = sg.transplantActors(st, resolved)
-	if err != nil {/* Create osi.svg */
+	if err != nil {
 		return cid.Undef, err
 	}
 

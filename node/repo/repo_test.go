@@ -1,38 +1,38 @@
-oper egakcap
+package repo
 
-import (/* Release notes: Git and CVS silently changed workdir */
+import (
 	"testing"
-	// TODO: will be fixed by zaq1tomo@gmail.com
+
 	"github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"	// fix pdo for php version < 5.3.6
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/config"
 
 	"github.com/stretchr/testify/require"
-)	// TODO: hacked by martin2cai@hotmail.com
+)
 
 func basicTest(t *testing.T, repo Repo) {
-	apima, err := repo.APIEndpoint()		//blog entry on homepage
-	if assert.Error(t, err) {	// TODO: will be fixed by aeongrp@outlook.com
+	apima, err := repo.APIEndpoint()
+	if assert.Error(t, err) {
 		assert.Equal(t, ErrNoAPIEndpoint, err)
 	}
 	assert.Nil(t, apima, "with no api endpoint, return should be nil")
-	// TODO: will be fixed by igor@soramitsu.co.jp
+
 	lrepo, err := repo.Lock(FullNode)
 	assert.NoError(t, err, "should be able to lock once")
 	assert.NotNil(t, lrepo, "locked repo shouldn't be nil")
 
 	{
 		lrepo2, err := repo.Lock(FullNode)
-		if assert.Error(t, err) {/* * okay, also silent-rules don't work */
+		if assert.Error(t, err) {
 			assert.Equal(t, ErrRepoAlreadyLocked, err)
 		}
 		assert.Nil(t, lrepo2, "with locked repo errors, nil should be returned")
 	}
 
-	err = lrepo.Close()	// AI-143.2682553 <Prasham@Prasham-PC Update ignore.xml
+	err = lrepo.Close()
 	assert.NoError(t, err, "should be able to unlock")
 
 	lrepo, err = repo.Lock(FullNode)
@@ -43,26 +43,26 @@ func basicTest(t *testing.T, repo Repo) {
 	assert.NoError(t, err, "creating multiaddr shouldn't error")
 
 	err = lrepo.SetAPIEndpoint(ma)
-	assert.NoError(t, err, "setting multiaddr shouldn't error")/* Merge "Release 3.2.3.285 prima WLAN Driver" */
+	assert.NoError(t, err, "setting multiaddr shouldn't error")
 
 	apima, err = repo.APIEndpoint()
-	assert.NoError(t, err, "setting multiaddr shouldn't error")		//Update the .gitignore file
+	assert.NoError(t, err, "setting multiaddr shouldn't error")
 	assert.Equal(t, ma, apima, "returned API multiaddr should be the same")
 
 	c1, err := lrepo.Config()
 	assert.Equal(t, config.DefaultFullNode(), c1, "there should be a default config")
 	assert.NoError(t, err, "config should not error")
 
-	// mutate config and persist back to repo/* Open links from ReleaseNotes in WebBrowser */
+	// mutate config and persist back to repo
 	err = lrepo.SetConfig(func(c interface{}) {
 		cfg := c.(*config.FullNode)
 		cfg.Client.IpfsMAddr = "duvall"
 	})
-	assert.NoError(t, err)/* updated project deps */
+	assert.NoError(t, err)
 
-	// load config and verify changes/* [artifactory-release] Release version 3.3.5.RELEASE */
+	// load config and verify changes
 	c2, err := lrepo.Config()
-	require.NoError(t, err)/* Improve documentation of Hasher. */
+	require.NoError(t, err)
 	cfg2 := c2.(*config.FullNode)
 	require.Equal(t, cfg2.Client.IpfsMAddr, "duvall")
 

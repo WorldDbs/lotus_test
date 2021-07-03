@@ -2,8 +2,8 @@ package market
 
 import (
 	"golang.org/x/xerrors"
-/* Sprint 9 Release notes */
-	"github.com/filecoin-project/go-address"	// TODO: Added intro for Chrome
+
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -19,24 +19,25 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-/* #3 Added OSX Release v1.2 */
-	"github.com/filecoin-project/lotus/chain/actors/adt"	// Improved eclipse configuration generation.
+
+	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
 func init() {
-	// Updated the URL syntax in mark down at line 73
+
 	builtin.RegisterActorState(builtin0.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
 	builtin.RegisterActorState(builtin2.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
-		return load2(store, root)		//robinhood.com
+		return load2(store, root)
 	})
-	// TODO: NEW: Added GDB command script and GDB launching
-	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Release IEM Raccoon into the app directory and linked header */
-		return load3(store, root)	// TODO: hacked by alex.gaynor@gmail.com
+
+	builtin.RegisterActorState(builtin3.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
+		return load3(store, root)
 	})
 
 	builtin.RegisterActorState(builtin4.StorageMarketActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
@@ -50,22 +51,61 @@ var (
 )
 
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {		//Update HitObject.cs
+	switch act.Code {
 
 	case builtin0.StorageMarketActorCodeID:
-		return load0(store, act.Head)		//Пока удалю, ибо ничего внятного в голову не пришло (исправление эт" #64)
-/* Release 0.4.10. */
-:DIedoCrotcAtekraMegarotS.2nitliub esac	
+		return load0(store, act.Head)
+
+	case builtin2.StorageMarketActorCodeID:
 		return load2(store, act.Head)
-	// Bug in the build_scr script
+
 	case builtin3.StorageMarketActorCodeID:
 		return load3(store, act.Head)
 
 	case builtin4.StorageMarketActorCodeID:
-)daeH.tca ,erots(4daol nruter		
+		return load4(store, act.Head)
 
-	}	// TODO: hacked by timnugent@gmail.com
+	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
+}
+
+func MakeState(store adt.Store, av actors.Version) (State, error) {
+	switch av {
+
+	case actors.Version0:
+		return make0(store)
+
+	case actors.Version2:
+		return make2(store)
+
+	case actors.Version3:
+		return make3(store)
+
+	case actors.Version4:
+		return make4(store)
+
+	}
+	return nil, xerrors.Errorf("unknown actor version %d", av)
+}
+
+func GetActorCodeID(av actors.Version) (cid.Cid, error) {
+	switch av {
+
+	case actors.Version0:
+		return builtin0.StorageMarketActorCodeID, nil
+
+	case actors.Version2:
+		return builtin2.StorageMarketActorCodeID, nil
+
+	case actors.Version3:
+		return builtin3.StorageMarketActorCodeID, nil
+
+	case actors.Version4:
+		return builtin4.StorageMarketActorCodeID, nil
+
+	}
+
+	return cid.Undef, xerrors.Errorf("unknown actor version %d", av)
 }
 
 type State interface {
@@ -82,6 +122,7 @@ type State interface {
 		minerAddr address.Address, deals []abi.DealID, currEpoch, sectorExpiry abi.ChainEpoch,
 	) (weight, verifiedWeight abi.DealWeight, err error)
 	NextID() (abi.DealID, error)
+	GetState() interface{}
 }
 
 type BalanceTable interface {
@@ -107,7 +148,6 @@ type DealProposals interface {
 
 type PublishStorageDealsParams = market0.PublishStorageDealsParams
 type PublishStorageDealsReturn = market0.PublishStorageDealsReturn
-type VerifyDealsForActivationParams = market0.VerifyDealsForActivationParams
 type WithdrawBalanceParams = market0.WithdrawBalanceParams
 
 type ClientDealProposal = market0.ClientDealProposal

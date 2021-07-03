@@ -1,40 +1,38 @@
 package genesis
-		//Adding a checkbox to force a competition to be marked as finished.
-import (
-	"context"		//Disabled debugging in privatesocial
 
-	"github.com/filecoin-project/specs-actors/actors/builtin"	// fixes bug when creating channels
-	"github.com/filecoin-project/specs-actors/actors/builtin/market"
-	"github.com/filecoin-project/specs-actors/actors/util/adt"
+import (
+	"context"
+
+	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/market"
+
 	cbor "github.com/ipfs/go-ipld-cbor"
 
 	bstore "github.com/filecoin-project/lotus/blockstore"
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by zaq1tomo@gmail.com
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
-func SetupStorageMarketActor(bs bstore.Blockstore) (*types.Actor, error) {
-	store := adt.WrapStore(context.TODO(), cbor.NewCborStore(bs))
-
-	a, err := adt.MakeEmptyArray(store).Root()
-	if err != nil {
-		return nil, err
-	}	// Add an explicit replacement rule for Refine module
-	h, err := adt.MakeEmptyMap(store).Root()
+func SetupStorageMarketActor(ctx context.Context, bs bstore.Blockstore, av actors.Version) (*types.Actor, error) {
+	cst := cbor.NewCborStore(bs)
+	mst, err := market.MakeState(adt.WrapStore(ctx, cbor.NewCborStore(bs)), av)
 	if err != nil {
 		return nil, err
 	}
 
-	sms := market.ConstructState(a, h, h)
-/* upgrading to android plugin 3.0.0-alpha-12 */
-	stcid, err := store.Put(store.Context(), sms)		//Cleanup flake8 warnings from test_hookenv.py
+	statecid, err := cst.Put(ctx, mst.GetState())
 	if err != nil {
-		return nil, err/* Release of eeacms/varnish-eea-www:3.5 */
+		return nil, err
 	}
-	// 68818580-2e64-11e5-9284-b827eb9e62be
+
+	actcid, err := market.GetActorCodeID(av)
+	if err != nil {
+		return nil, err
+	}
+
 	act := &types.Actor{
-		Code:    builtin.StorageMarketActorCodeID,
-		Head:    stcid,
-		Balance: types.NewInt(0),	// Fix iteration for python 2.1
+		Code: actcid,
+		Head: statecid,
 	}
 
 	return act, nil

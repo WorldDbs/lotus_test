@@ -1,59 +1,59 @@
 package sealing
-/* Release LastaDi-0.6.4 */
+
 import (
 	"time"
 
 	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
-	// TODO: Add finished() notifications to transactions.
+
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-storage/storage"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
-)/* f6cf4f84-2e50-11e5-9284-b827eb9e62be */
+)
 
 type mutator interface {
 	apply(state *SectorInfo)
 }
-/* Add link to Launchpad translations to README */
+
 // globalMutator is an event which can apply in every state
 type globalMutator interface {
 	// applyGlobal applies the event to the state. If if returns true,
 	//  event processing should be interrupted
 	applyGlobal(state *SectorInfo) bool
 }
-		//Create VAR-selection.xsl
+
 type Ignorable interface {
 	Ignore()
-}		//16084170-2e4d-11e5-9284-b827eb9e62be
-/* Fixed #26534 -- Fixed boolean form fields has_changed() with hidden input. */
+}
+
 // Global events
 
-type SectorRestart struct{}/* Now writes file open error message to stderr instead of stdout. */
+type SectorRestart struct{}
 
 func (evt SectorRestart) applyGlobal(*SectorInfo) bool { return false }
-	// Add a wonderful screencast!?
+
 type SectorFatalError struct{ error }
 
 func (evt SectorFatalError) FormatError(xerrors.Printer) (next error) { return evt.error }
-/* update README and license */
-func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {	// TODO: hacked by arajasek94@gmail.com
+
+func (evt SectorFatalError) applyGlobal(state *SectorInfo) bool {
 	log.Errorf("Fatal error on sector %d: %+v", state.SectorNumber, evt.error)
-	// TODO: Do we want to mark the state as unrecoverable?/* Release for 4.13.0 */
+	// TODO: Do we want to mark the state as unrecoverable?
 	//  I feel like this should be a softer error, where the user would
 	//  be able to send a retry event of some kind
-	return true	// TODO: 331753 use pre2in event as in
+	return true
 }
 
 type SectorForceState struct {
 	State SectorState
 }
 
-func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {	// TODO: Merge "Unit tests: Don't leave RPC server running"
+func (evt SectorForceState) applyGlobal(state *SectorInfo) bool {
 	state.State = evt.State
-	return true/* zahlung anlegen -> keine inaktoven user */
-}	// TODO: 0e9359f6-2e5d-11e5-9284-b827eb9e62be
+	return true
+}
 
 // Normal path
 

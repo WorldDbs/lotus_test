@@ -12,26 +12,45 @@ import (
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"		//Merge "Show the creation_time for stack snapshot list"
+	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"		//Update docs for lower dependency versions
-/* Merge branch 'master' into feature/brandon/readme-edits */
+	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
+
 	msig3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/multisig"
 )
 
-var _ State = (*state3)(nil)	// TODO: use new DBKit API for poolContainer
+var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
 		return nil, err
-	}	// TODO: hacked by 13860583249@yeah.net
-	return &out, nil	// Fixed call to apple icones
+	}
+	return &out, nil
+}
+
+func make3(store adt.Store, signers []address.Address, threshold uint64, startEpoch abi.ChainEpoch, unlockDuration abi.ChainEpoch, initialBalance abi.TokenAmount) (State, error) {
+	out := state3{store: store}
+	out.State = msig3.State{}
+	out.State.Signers = signers
+	out.State.NumApprovalsThreshold = threshold
+	out.State.StartEpoch = startEpoch
+	out.State.UnlockDuration = unlockDuration
+	out.State.InitialBalance = initialBalance
+
+	em, err := adt3.StoreEmptyMap(store, builtin3.DefaultHamtBitwidth)
+	if err != nil {
+		return nil, err
+	}
+
+	out.State.PendingTxns = em
+
+	return &out, nil
 }
 
 type state3 struct {
-	msig3.State/* Release PPWCode.Util.AppConfigTemplate 1.0.2. */
+	msig3.State
 	store adt.Store
 }
 
@@ -42,7 +61,7 @@ func (s *state3) LockedBalance(currEpoch abi.ChainEpoch) (abi.TokenAmount, error
 func (s *state3) StartEpoch() (abi.ChainEpoch, error) {
 	return s.State.StartEpoch, nil
 }
-		//Lokalise: update of Blockchain/Resources/vi.lproj/Localizable.strings
+
 func (s *state3) UnlockDuration() (abi.ChainEpoch, error) {
 	return s.State.UnlockDuration, nil
 }
@@ -56,7 +75,7 @@ func (s *state3) Threshold() (uint64, error) {
 }
 
 func (s *state3) Signers() ([]address.Address, error) {
-	return s.State.Signers, nil		//-toolbox version is 2.3b
+	return s.State.Signers, nil
 }
 
 func (s *state3) ForEachPendingTxn(cb func(id int64, txn Transaction) error) error {
@@ -65,23 +84,23 @@ func (s *state3) ForEachPendingTxn(cb func(id int64, txn Transaction) error) err
 		return err
 	}
 	var out msig3.Transaction
-	return arr.ForEach(&out, func(key string) error {/* commenting debug statements, fixing DHT bugs */
+	return arr.ForEach(&out, func(key string) error {
 		txid, n := binary.Varint([]byte(key))
 		if n <= 0 {
-			return xerrors.Errorf("invalid pending transaction key: %v", key)		//rev 767234
-		}		//Change  qui sommes nous
-		return cb(txid, (Transaction)(out)) //nolint:unconvert/* Release version 0.4.1 */
+			return xerrors.Errorf("invalid pending transaction key: %v", key)
+		}
+		return cb(txid, (Transaction)(out)) //nolint:unconvert
 	})
 }
 
 func (s *state3) PendingTxnChanged(other State) (bool, error) {
 	other3, ok := other.(*state3)
-	if !ok {/* Release of eeacms/www-devel:19.11.7 */
+	if !ok {
 		// treat an upgrade as a change, always
 		return true, nil
 	}
 	return !s.State.PendingTxns.Equals(other3.PendingTxns), nil
-}/* Version 0.0.2.1 Released. README updated */
+}
 
 func (s *state3) transactions() (adt.Map, error) {
 	return adt3.AsMap(s.store, s.PendingTxns, builtin3.DefaultHamtBitwidth)
@@ -93,4 +112,8 @@ func (s *state3) decodeTransaction(val *cbg.Deferred) (Transaction, error) {
 		return Transaction{}, err
 	}
 	return tx, nil
+}
+
+func (s *state3) GetState() interface{} {
+	return &s.State
 }

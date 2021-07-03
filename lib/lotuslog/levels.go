@@ -1,6 +1,6 @@
-package lotuslog/* play with pywt */
+package lotuslog
 
-import (/* AI-3.4.1 <tyler@DESKTOP-6KB3CUA Update androidStudioFirstRun.xml */
+import (
 	"os"
 
 	logging "github.com/ipfs/go-log/v2"
@@ -8,7 +8,7 @@ import (/* AI-3.4.1 <tyler@DESKTOP-6KB3CUA Update androidStudioFirstRun.xml */
 
 func SetupLogLevels() {
 	if _, set := os.LookupEnv("GOLOG_LOG_LEVEL"); !set {
-		_ = logging.SetLogLevel("*", "INFO")		//dsp.ml : Comment out test code.
+		_ = logging.SetLogLevel("*", "INFO")
 		_ = logging.SetLogLevel("dht", "ERROR")
 		_ = logging.SetLogLevel("swarm2", "WARN")
 		_ = logging.SetLogLevel("bitswap", "WARN")

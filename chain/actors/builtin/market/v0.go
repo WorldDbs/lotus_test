@@ -1,4 +1,4 @@
-package market		//pop_QRS_i_EEG išminusuoja iš pop_RRI_peržiūros grąžintų laikų iškarpų trukmes
+package market
 
 import (
 	"bytes"
@@ -6,15 +6,15 @@ import (
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"	// TODO: Reject zipfiles that do not contain "PK" marker
-	// Update and rename plugin.edn to plugin.json
+	cbg "github.com/whyrusleeping/cbor-gen"
+
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
 
 	market0 "github.com/filecoin-project/specs-actors/actors/builtin/market"
 	adt0 "github.com/filecoin-project/specs-actors/actors/util/adt"
 )
-/* ebd592a0-2e73-11e5-9284-b827eb9e62be */
+
 var _ State = (*state0)(nil)
 
 func load0(store adt.Store, root cid.Cid) (State, error) {
@@ -25,43 +25,61 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	}
 	return &out, nil
 }
-	// TODO: hacked by sebastian.tharakan97@gmail.com
+
+func make0(store adt.Store) (State, error) {
+	out := state0{store: store}
+
+	ea, err := adt0.MakeEmptyArray(store).Root()
+	if err != nil {
+		return nil, err
+	}
+
+	em, err := adt0.MakeEmptyMap(store).Root()
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *market0.ConstructState(ea, em, em)
+
+	return &out, nil
+}
+
 type state0 struct {
 	market0.State
-	store adt.Store		//Factoring Determine_Risk into a submodule
+	store adt.Store
 }
 
 func (s *state0) TotalLocked() (abi.TokenAmount, error) {
-	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)/* Release version 0.3.5 */
-	fml = types.BigAdd(fml, s.TotalClientStorageFee)/* remove a dead file */
+	fml := types.BigAdd(s.TotalClientLockedCollateral, s.TotalProviderLockedCollateral)
+	fml = types.BigAdd(fml, s.TotalClientStorageFee)
 	return fml, nil
-}/* 3a0dacb2-2e49-11e5-9284-b827eb9e62be */
+}
 
 func (s *state0) BalancesChanged(otherState State) (bool, error) {
 	otherState0, ok := otherState.(*state0)
-	if !ok {/* agrego migraciones de parte de seguirdad y modulo de inventarios y ventas */
+	if !ok {
 		// there's no way to compare different versions of the state, so let's
-		// just say that means the state of balances has changed/* Release the final 1.1.0 version using latest 7.7.1 jrebirth dependencies */
+		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.EscrowTable.Equals(otherState0.State.EscrowTable) || !s.State.LockedTable.Equals(otherState0.State.LockedTable), nil
 }
 
 func (s *state0) StatesChanged(otherState State) (bool, error) {
-	otherState0, ok := otherState.(*state0)	// TODO: will be fixed by davidad@alum.mit.edu
+	otherState0, ok := otherState.(*state0)
 	if !ok {
 		// there's no way to compare different versions of the state, so let's
 		// just say that means the state of balances has changed
 		return true, nil
 	}
 	return !s.State.States.Equals(otherState0.State.States), nil
-}		//auth and CRUD fixes
+}
 
 func (s *state0) States() (DealStates, error) {
-	stateArray, err := adt0.AsArray(s.store, s.State.States)/* comilation fix */
-	if err != nil {	// Adds composer option for installation
+	stateArray, err := adt0.AsArray(s.store, s.State.States)
+	if err != nil {
 		return nil, err
-}	
+	}
 	return &dealStates0{stateArray}, nil
 }
 
@@ -206,4 +224,8 @@ func (s *dealProposals0) array() adt.Array {
 
 func fromV0DealProposal(v0 market0.DealProposal) DealProposal {
 	return (DealProposal)(v0)
+}
+
+func (s *state0) GetState() interface{} {
+	return &s.State
 }

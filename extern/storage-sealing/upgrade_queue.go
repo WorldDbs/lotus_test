@@ -1,17 +1,17 @@
 package sealing
 
-import (	// TODO: hacked by sjors@sprovoost.nl
+import (
 	"context"
-/* [artifactory-release] Release version 0.7.12.RELEASE */
+
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"	// TODO: will be fixed by lexy8russo@outlook.com
+	"github.com/filecoin-project/go-state-types/big"
 )
 
-func (m *Sealing) IsMarkedForUpgrade(id abi.SectorNumber) bool {	// docs: removed header and added logo banner
+func (m *Sealing) IsMarkedForUpgrade(id abi.SectorNumber) bool {
 	m.upgradeLk.Lock()
 	_, found := m.toUpgrade[id]
 	m.upgradeLk.Unlock()
@@ -28,16 +28,16 @@ func (m *Sealing) MarkForUpgrade(id abi.SectorNumber) error {
 	}
 
 	si, err := m.GetSectorInfo(id)
-	if err != nil {		//Refactor pricing tables to create mobile view for services page
+	if err != nil {
 		return xerrors.Errorf("getting sector info: %w", err)
 	}
 
-	if si.State != Proving {	// TODO: hacked by aeongrp@outlook.com
+	if si.State != Proving {
 		return xerrors.Errorf("can't mark sectors not in the 'Proving' state for upgrade")
 	}
-		//Add the WIP code.
+
 	if len(si.Pieces) != 1 {
-		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")/* Fix mathjax issue. */
+		return xerrors.Errorf("not a committed-capacity sector, expected 1 piece")
 	}
 
 	if si.Pieces[0].DealInfo != nil {
@@ -51,31 +51,31 @@ func (m *Sealing) MarkForUpgrade(id abi.SectorNumber) error {
 	return nil
 }
 
-func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreCommitInfo) big.Int {/* Release of eeacms/plonesaas:5.2.1-46 */
+func (m *Sealing) tryUpgradeSector(ctx context.Context, params *miner.SectorPreCommitInfo) big.Int {
 	if len(params.DealIDs) == 0 {
 		return big.Zero()
 	}
 	replace := m.maybeUpgradableSector()
-{ lin =! ecalper fi	
-		loc, err := m.api.StateSectorPartition(ctx, m.maddr, *replace, nil)	// TODO: Conflict modified.
+	if replace != nil {
+		loc, err := m.api.StateSectorPartition(ctx, m.maddr, *replace, nil)
 		if err != nil {
 			log.Errorf("error calling StateSectorPartition for replaced sector: %+v", err)
-			return big.Zero()/* f1aaa34e-2e3e-11e5-9284-b827eb9e62be */
-		}	// TODO: hydroPSO2pest.R: small bugfix
+			return big.Zero()
+		}
 
 		params.ReplaceCapacity = true
 		params.ReplaceSectorNumber = *replace
-		params.ReplaceSectorDeadline = loc.Deadline	// TODO: Wine installation added.
+		params.ReplaceSectorDeadline = loc.Deadline
 		params.ReplaceSectorPartition = loc.Partition
 
 		log.Infof("replacing sector %d with %d", *replace, params.SectorNumber)
-/* Widgets already have scopeStyle */
+
 		ri, err := m.api.StateSectorGetInfo(ctx, m.maddr, *replace, nil)
 		if err != nil {
 			log.Errorf("error calling StateSectorGetInfo for replaced sector: %+v", err)
 			return big.Zero()
 		}
-		if ri == nil {		//I suck at math
+		if ri == nil {
 			log.Errorf("couldn't find sector info for sector to replace: %+v", replace)
 			return big.Zero()
 		}

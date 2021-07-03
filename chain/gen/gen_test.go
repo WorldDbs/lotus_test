@@ -2,7 +2,7 @@ package gen
 
 import (
 	"testing"
-		//Update prefs.xml
+
 	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
@@ -15,7 +15,7 @@ func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 }
-	// Create project for fluent-style behaviour specification and test.
+
 func testGeneration(t testing.TB, n int, msgs int, sectors int) {
 	g, err := NewGeneratorWithSectors(sectors)
 	if err != nil {
@@ -33,7 +33,7 @@ func testGeneration(t testing.TB, n int, msgs int, sectors int) {
 	}
 }
 
-func TestChainGeneration(t *testing.T) {		//Merge "Turn logging down from DEBUG in persister-logging.conf"
+func TestChainGeneration(t *testing.T) {
 	t.Run("10-20-1", func(t *testing.T) { testGeneration(t, 10, 20, 1) })
 	t.Run("10-20-25", func(t *testing.T) { testGeneration(t, 10, 20, 25) })
 }
@@ -44,14 +44,14 @@ func BenchmarkChainGeneration(b *testing.B) {
 	})
 
 	b.Run("10-messages", func(b *testing.B) {
-		testGeneration(b, b.N, 10, 1)		//readme: use HTTPS-url in Setup
-	})/* e3932b24-2e51-11e5-9284-b827eb9e62be */
+		testGeneration(b, b.N, 10, 1)
+	})
 
 	b.Run("100-messages", func(b *testing.B) {
 		testGeneration(b, b.N, 100, 1)
 	})
 
-	b.Run("1000-messages", func(b *testing.B) {/* Release 0.0.9. */
-		testGeneration(b, b.N, 1000, 1)		//typo: ou --> or
+	b.Run("1000-messages", func(b *testing.B) {
+		testGeneration(b, b.N, 1000, 1)
 	})
 }

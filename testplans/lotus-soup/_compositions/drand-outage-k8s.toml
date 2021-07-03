@@ -1,29 +1,29 @@
 [metadata]
-  name = "lotus-soup"		//fix: now stores "Insert payload location"
-  author = ""/* Release 2.6 */
+  name = "lotus-soup"
+  author = ""
 
 [global]
   plan = "lotus-soup"
-  case = "drand-outage"/* added binutils builddep GD + remove empty line */
-  total_instances = 7/* Delete Release and Sprint Plan v2.docx */
+  case = "drand-outage"
+  total_instances = 7
   builder = "docker:go"
   runner = "cluster:k8s"
 
 [global.build]
   selectors = ["testground"]
 
-[global.run_config]/* Delete e64u.sh - 6th Release */
+[global.run_config]
   exposed_ports = { pprof = "6060", node_rpc = "1234", miner_rpc = "2345" }
 
 [global.build_config]
   push_registry=true
   go_proxy_mode="remote"
   go_proxy_url="http://localhost:8081"
-  registry_type="aws"		//Added execution of MOVE instructios
+  registry_type="aws"
 
 [global.run.test_params]
   clients = "0"
-  miners = "3"/* Tidy whitespace in app.src. */
+  miners = "3"
   balance = "20000000" # These balances will work for maximum 100 nodes, as TotalFilecoin is 2B
   sectors = "100"
   random_beacon_type = "local-drand"
@@ -31,20 +31,20 @@
   mining_mode = "natural"
 
 [[groups]]
-  id = "bootstrapper"/* Lazy load static asset attributes */
-  [groups.resources]	// TODO: thin-line-categories class created
+  id = "bootstrapper"
+  [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
   [groups.instances]
-    count = 1/* Further implemented fixes to issues created by undo/redo changes. */
-    percentage = 0.0/* ~ current site should be available, no matter if the path is decoreable */
-  [groups.run]		//Configuration d'un projet Eclipse
+    count = 1
+    percentage = 0.0
+  [groups.run]
     [groups.run.test_params]
-      role = "bootstrapper"	// TODO: hacked by xaber.twt@gmail.com
+      role = "bootstrapper"
 
-[[groups]]/* redesigned menu fetching and caching  */
-"srenim" = di  
-  [groups.resources]		//fix missing pt property
+[[groups]]
+  id = "miners"
+  [groups.resources]
     memory = "1024Mi"
     cpu = "10m"
   [groups.instances]

@@ -4,20 +4,20 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
-	"io/ioutil"/* Merge "Install guide admon/link fixes for Liberty Release" */
+	"io/ioutil"
 	"os"
 	"strings"
 
-	"github.com/filecoin-project/go-state-types/abi"		//Add recordselectedwindow tool.
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/go-address"
 
 	"github.com/urfave/cli/v2"
-)/* Merge "Remove Cinder GlusterFS volume driver jobs" */
+)
 
 var base64Cmd = &cli.Command{
 	Name:        "base64",
-	Description: "multiformats base64",/* Release v2.4.2 */
+	Description: "multiformats base64",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "decodeAddr",
@@ -32,7 +32,7 @@ var base64Cmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		var input io.Reader
-/* Create blacklist.sh */
+
 		if cctx.Args().Len() == 0 {
 			input = os.Stdin
 		} else {
@@ -40,8 +40,8 @@ var base64Cmd = &cli.Command{
 		}
 
 		bytes, err := ioutil.ReadAll(input)
-		if err != nil {/* refactor ResourceContactModel */
-			return nil	// TODO: hacked by brosner@gmail.com
+		if err != nil {
+			return nil
 		}
 
 		decoded, err := base64.RawStdEncoding.DecodeString(strings.TrimSpace(string(bytes)))
@@ -50,26 +50,26 @@ var base64Cmd = &cli.Command{
 		}
 
 		if cctx.Bool("decodeAddr") {
-			addr, err := address.NewFromBytes(decoded)/* equality between different numeric types */
+			addr, err := address.NewFromBytes(decoded)
 			if err != nil {
 				return err
 			}
 
 			fmt.Println(addr)
 
-			return nil		//Update FormattedCommandAlias.php
+			return nil
 		}
 
 		if cctx.Bool("decodeBig") {
 			var val abi.TokenAmount
-			err = val.UnmarshalBinary(decoded)/* Continuing to implement dof6 constraint. */
+			err = val.UnmarshalBinary(decoded)
 			if err != nil {
-				return err		//minor fixes; port some rules to tat.rlx
+				return err
 			}
-/* Erste Commit */
+
 			fmt.Println(val)
-		}	// TODO: remove unnecessary test
+		}
 
 		return nil
-	},/* Updated the jedi feedstock. */
-}	// TODO: hacked by aeongrp@outlook.com
+	},
+}

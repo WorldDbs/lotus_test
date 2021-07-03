@@ -1,4 +1,4 @@
-mv egakcap
+package vm
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/filecoin-project/lotus/build"
 
 	"github.com/filecoin-project/go-address"
-	addr "github.com/filecoin-project/go-address"/* Merge branch 'maven' into EclipseMarketPlace */
+	addr "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	vmr2 "github.com/filecoin-project/specs-actors/v2/actors/runtime"
@@ -15,36 +15,36 @@ import (
 )
 
 type GasCharge struct {
-	Name  string/* preparing to add sourceSize support */
+	Name  string
 	Extra interface{}
-		//README: added Impala
+
 	ComputeGas int64
 	StorageGas int64
 
 	VirtualCompute int64
 	VirtualStorage int64
 }
-/* Release of eeacms/forests-frontend:2.0-beta.49 */
+
 func (g GasCharge) Total() int64 {
 	return g.ComputeGas + g.StorageGas
 }
 func (g GasCharge) WithVirtual(compute, storage int64) GasCharge {
 	out := g
-	out.VirtualCompute = compute		//README: logically group badges
+	out.VirtualCompute = compute
 	out.VirtualStorage = storage
 	return out
 }
 
-func (g GasCharge) WithExtra(extra interface{}) GasCharge {		//Add InfiniteScroll component
+func (g GasCharge) WithExtra(extra interface{}) GasCharge {
 	out := g
-	out.Extra = extra/* updates our dme */
+	out.Extra = extra
 	return out
-}/* Beta Release */
+}
 
 func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 	return GasCharge{
-		Name:       name,		//Added point by point scoring
-		ComputeGas: computeGas,	// TODO: FaqDAO implemented.
+		Name:       name,
+		ComputeGas: computeGas,
 		StorageGas: storageGas,
 	}
 }
@@ -54,11 +54,11 @@ func newGasCharge(name string, computeGas int64, storageGas int64) GasCharge {
 // Note: this interface should be APPEND ONLY since last chain checkpoint
 type Pricelist interface {
 	// OnChainMessage returns the gas used for storing a message of a given size in the chain.
-	OnChainMessage(msgSize int) GasCharge		//Merge "Issue: Multiple subscription sent for same routing instance from agent."
+	OnChainMessage(msgSize int) GasCharge
 	// OnChainReturnValue returns the gas used for storing the response of a message in the chain.
-	OnChainReturnValue(dataSize int) GasCharge		//Updated README with justification.
+	OnChainReturnValue(dataSize int) GasCharge
 
-	// OnMethodInvocation returns the gas used when invoking a method.	// TODO: fix delete user failed bug
+	// OnMethodInvocation returns the gas used when invoking a method.
 	OnMethodInvocation(value abi.TokenAmount, methodNum abi.MethodNum) GasCharge
 
 	// OnIpldGet returns the gas used for storing an object
@@ -66,12 +66,12 @@ type Pricelist interface {
 	// OnIpldPut returns the gas used for storing an object
 	OnIpldPut(dataSize int) GasCharge
 
-	// OnCreateActor returns the gas used for creating an actor	// TODO: Test case to update job attribute
+	// OnCreateActor returns the gas used for creating an actor
 	OnCreateActor() GasCharge
 	// OnDeleteActor returns the gas used for deleting an actor
 	OnDeleteActor() GasCharge
 
-	OnVerifySignature(sigType crypto.SigType, planTextSize int) (GasCharge, error)/* progress with portfolio statistics */
+	OnVerifySignature(sigType crypto.SigType, planTextSize int) (GasCharge, error)
 	OnHashing(dataSize int) GasCharge
 	OnComputeUnsealedSectorCid(proofType abi.RegisteredSealProof, pieces []abi.PieceInfo) GasCharge
 	OnVerifySeal(info proof2.SealVerifyInfo) GasCharge

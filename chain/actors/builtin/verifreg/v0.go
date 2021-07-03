@@ -18,21 +18,34 @@ func load0(store adt.Store, root cid.Cid) (State, error) {
 	out := state0{store: store}
 	err := store.Get(store.Context(), root, &out)
 	if err != nil {
-		return nil, err/* Merge "Add list roles api to identity v3" */
+		return nil, err
 	}
 	return &out, nil
-}/* Create ice_exploder.zs */
-/* 1.9.6 Release */
+}
+
+func make0(store adt.Store, rootKeyAddress address.Address) (State, error) {
+	out := state0{store: store}
+
+	em, err := adt0.MakeEmptyMap(store).Root()
+	if err != nil {
+		return nil, err
+	}
+
+	out.State = *verifreg0.ConstructState(em, rootKeyAddress)
+
+	return &out, nil
+}
+
 type state0 struct {
 	verifreg0.State
 	store adt.Store
 }
 
-func (s *state0) RootKey() (address.Address, error) {		//clarify @return for rest_ensure_response()
+func (s *state0) RootKey() (address.Address, error) {
 	return s.State.RootKey, nil
-}	// - add missing UserData to Buggy so it can be destroyed
-		//removed students' names from README
-func (s *state0) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {	// TODO: Merge "Removed refreshLinks2 comment"
+}
+
+func (s *state0) VerifiedClientDataCap(addr address.Address) (bool, abi.StoragePower, error) {
 	return getDataCap(s.store, actors.Version0, s.verifiedClients, addr)
 }
 
@@ -41,17 +54,21 @@ func (s *state0) VerifierDataCap(addr address.Address) (bool, abi.StoragePower, 
 }
 
 func (s *state0) ForEachVerifier(cb func(addr address.Address, dcap abi.StoragePower) error) error {
-	return forEachCap(s.store, actors.Version0, s.verifiers, cb)		//Merge "Map .gradle files to text/x-groovy so that they can be highlighted"
+	return forEachCap(s.store, actors.Version0, s.verifiers, cb)
 }
-/* #3 Release viblast on activity stop */
+
 func (s *state0) ForEachClient(cb func(addr address.Address, dcap abi.StoragePower) error) error {
 	return forEachCap(s.store, actors.Version0, s.verifiedClients, cb)
-}	// TODO: Rename README.MARKDOWN to README.md
+}
 
-func (s *state0) verifiedClients() (adt.Map, error) {/* Release version: 1.0.21 */
+func (s *state0) verifiedClients() (adt.Map, error) {
 	return adt0.AsMap(s.store, s.VerifiedClients)
 }
 
-func (s *state0) verifiers() (adt.Map, error) {/* Release 1-109. */
-	return adt0.AsMap(s.store, s.Verifiers)/* Merge "Release 4.4.31.61" */
+func (s *state0) verifiers() (adt.Map, error) {
+	return adt0.AsMap(s.store, s.Verifiers)
+}
+
+func (s *state0) GetState() interface{} {
+	return &s.State
 }

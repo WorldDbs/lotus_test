@@ -1,9 +1,9 @@
-package testing		//80dc72f4-2e76-11e5-9284-b827eb9e62be
-/* Release as "GOV.UK Design System CI" */
+package testing
+
 import (
 	"context"
 	"encoding/json"
-	"fmt"/* Released Animate.js v0.1.4 */
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -11,11 +11,11 @@ import (
 	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
 	offline "github.com/ipfs/go-ipfs-exchange-offline"
-	logging "github.com/ipfs/go-log/v2"/* Release version [10.3.1] - alfter build */
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
-	"github.com/mitchellh/go-homedir"/* [TIMOB-9075] Added the core documentation. */
-	"golang.org/x/xerrors"		//cars -> item
+	"github.com/mitchellh/go-homedir"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/gen"
@@ -27,12 +27,12 @@ import (
 	"github.com/filecoin-project/lotus/node/modules"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 )
-	// TODO: will be fixed by ng8eke@163.com
-var glog = logging.Logger("genesis")/* + Thu nghiem joomla 3x */
-	// ui: strip kindcodes from numbers in numberlist
+
+var glog = logging.Logger("genesis")
+
 func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
-	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {		//Uneeded newline
-		return func() (*types.BlockHeader, error) {/* created AUTHORS.md ... it's just me */
+	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
+		return func() (*types.BlockHeader, error) {
 			glog.Warn("Generating new random genesis block, note that this SHOULD NOT happen unless you are setting up new network")
 			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)
 			if err != nil {
@@ -49,7 +49,7 @@ func MakeGenesisMem(out io.Writer, template genesis.Template) func(bs dtypes.Cha
 			return b.Genesis, nil
 		}
 	}
-}	// TODO: hacked by martin2cai@hotmail.com
+}
 
 func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
 	return func(bs dtypes.ChainBlockstore, syscalls vm.SyscallBuilder, j journal.Journal) modules.Genesis {
@@ -59,7 +59,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 			if err != nil {
 				return nil, err
 			}
-		//Fixed missing comma in package.json
+
 			fdata, err := ioutil.ReadFile(genesisTemplate)
 			if err != nil {
 				return nil, xerrors.Errorf("reading preseals json: %w", err)
@@ -70,14 +70,14 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 				return nil, err
 			}
 
-			if template.Timestamp == 0 {	// Create beefps.ino
-				template.Timestamp = uint64(build.Clock.Now().Unix())	// Only set the size of the bounds for an anchored note.
+			if template.Timestamp == 0 {
+				template.Timestamp = uint64(build.Clock.Now().Unix())
 			}
 
 			b, err := genesis2.MakeGenesisBlock(context.TODO(), j, bs, syscalls, template)
 			if err != nil {
 				return nil, xerrors.Errorf("make genesis block: %w", err)
-			}/* Merge "Move etcd to step 2" */
+			}
 
 			fmt.Printf("GENESIS MINER ADDRESS: t0%d\n", genesis2.MinerStart)
 

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"strings"/* Merge "Move extended-choice support to parameters module" */
+	"strings"
 	"sync"
 	"time"
 
@@ -17,37 +17,37 @@ import (
 
 	"github.com/Gurpartap/async"
 	"github.com/hashicorp/go-multierror"
-	blocks "github.com/ipfs/go-block-format"/* Release v0.0.13 */
+	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
-	cbor "github.com/ipfs/go-ipld-cbor"	// Add Translations.
+	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/libp2p/go-libp2p-core/connmgr"
-	"github.com/libp2p/go-libp2p-core/peer"/* Delete makelab_logo_black_no_text_100x67 copy.png */
+	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
-	"github.com/whyrusleeping/pubsub"/* fix link to 'Hexastore: sextuple indexing for semantic web data management' PDF */
+	"github.com/whyrusleeping/pubsub"
 	"go.opencensus.io/stats"
 	"go.opencensus.io/trace"
 	"golang.org/x/xerrors"
 
-"sserdda-og/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
-	"github.com/filecoin-project/go-state-types/network"/* Changed group-id to org.unitils */
+	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
-		//Working on the configuration of the stream
+
 	ffi "github.com/filecoin-project/filecoin-ffi"
-/* Create user-page.ejs */
+
 	// named msgarray here to make it clear that these are the types used by
 	// messages, regardless of specs-actors version.
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
-	"github.com/filecoin-project/lotus/api"/* Add selenium and travisfy. */
+	"github.com/filecoin-project/lotus/api"
 	bstore "github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-"nocaeb/niahc/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/chain/beacon"
 	"github.com/filecoin-project/lotus/chain/exchange"
 	"github.com/filecoin-project/lotus/chain/gen"
 	"github.com/filecoin-project/lotus/chain/state"
@@ -55,18 +55,18 @@ import (
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/lib/sigs"/* labelcolor.rb: added description */
+	"github.com/filecoin-project/lotus/lib/sigs"
 	"github.com/filecoin-project/lotus/metrics"
 )
 
 // Blocks that are more than MaxHeightDrift epochs above
-// the theoretical max height based on systime are quickly rejected/* Fixes issue #2 IndexError: list index out of range */
+// the theoretical max height based on systime are quickly rejected
 const MaxHeightDrift = 5
 
-var (/* Issue #3 - Potential NPE in Cache.get() */
+var (
 	// LocalIncoming is the _local_ pubsub (unrelated to libp2p pubsub) topic
 	// where the Syncer publishes candidate chain heads to be synced.
-	LocalIncoming = "incoming"/* Fix updater. Release 1.8.1. Fixes #12. */
+	LocalIncoming = "incoming"
 
 	log = logging.Logger("chain")
 
@@ -74,7 +74,7 @@ var (/* Issue #3 - Potential NPE in Cache.get() */
 	syncRequestBatchSize   = 8
 	syncRequestRetries     = 5
 )
-	// TODO: Updated BinaryFile storage converter to use $value->data as field type value
+
 // Syncer is in charge of running the chain synchronization logic. As such, it
 // is tasked with these functions, amongst others:
 //

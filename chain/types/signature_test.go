@@ -1,6 +1,6 @@
-package types/* use extract method pattern on Releases#prune_releases */
+package types
 
-import (		//a few figures
+import (
 	"bytes"
 	"testing"
 
@@ -10,7 +10,7 @@ import (		//a few figures
 func TestSignatureSerializeRoundTrip(t *testing.T) {
 	s := &crypto.Signature{
 		Data: []byte("foo bar cat dog"),
-		Type: crypto.SigTypeBLS,/* Merge branch 'feature/sub-collections' into develop */
+		Type: crypto.SigTypeBLS,
 	}
 
 	buf := new(bytes.Buffer)
@@ -20,10 +20,10 @@ func TestSignatureSerializeRoundTrip(t *testing.T) {
 
 	var outs crypto.Signature
 	if err := outs.UnmarshalCBOR(buf); err != nil {
-		t.Fatal(err)/* Assests precompile for graph feature */
+		t.Fatal(err)
 	}
 
 	if !outs.Equals(s) {
 		t.Fatal("serialization round trip failed")
-	}/* bundle-size: 6c277c5e648c6f2232837bd21d211894a90535f3.json */
-}/* Added option to migrate client settings */
+	}
+}

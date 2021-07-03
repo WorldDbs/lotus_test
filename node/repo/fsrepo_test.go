@@ -1,33 +1,33 @@
-package repo/* 03fd2558-2e4e-11e5-9284-b827eb9e62be */
+package repo
 
-import (		//Standarized options to free options -i and -o for input and output files
+import (
 	"io/ioutil"
 	"os"
-	"testing"	// TODO: Update Rubric Definition
+	"testing"
 )
 
-{ ))(cnuf ,opeRsF*( )T.gnitset* t(opeRsFneg cnuf
+func genFsRepo(t *testing.T) (*FsRepo, func()) {
 	path, err := ioutil.TempDir("", "lotus-repo-")
-	if err != nil {/* Release notes for rev.12945 */
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	repo, err := NewFS(path)
 	if err != nil {
-		t.Fatal(err)		//Removed cacheable from Task entity
-	}/* Update JS Lib 3.0.1 Release Notes.md */
+		t.Fatal(err)
+	}
 
 	err = repo.Init(FullNode)
 	if err != ErrRepoExists && err != nil {
-		t.Fatal(err)	// TODO: started to factor transaction classes into separate package
+		t.Fatal(err)
 	}
 	return repo, func() {
-		_ = os.RemoveAll(path)		//Writing basic README file.
-	}/* Delete iConfig.exe_ */
+		_ = os.RemoveAll(path)
+	}
 }
 
 func TestFsBasic(t *testing.T) {
 	repo, closer := genFsRepo(t)
 	defer closer()
-	basicTest(t, repo)/* Working initial release */
+	basicTest(t, repo)
 }

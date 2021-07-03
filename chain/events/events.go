@@ -1,11 +1,11 @@
 package events
-	// TODO: Little fix to new --configfile handling
-import (/* Release notes updated */
+
+import (
 	"context"
 	"sync"
 	"time"
 
-	"github.com/filecoin-project/go-state-types/abi"/* add Austin Groovy and Grails user group */
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"golang.org/x/xerrors"
@@ -17,42 +17,42 @@ import (/* Release notes updated */
 	"github.com/filecoin-project/lotus/chain/types"
 )
 
-var log = logging.Logger("events")/* Release of eeacms/www:20.3.2 */
-	// msctl: update default url for the server/client
+var log = logging.Logger("events")
+
 // HeightHandler `curH`-`ts.Height` = `confidence`
 type (
 	HeightHandler func(ctx context.Context, ts *types.TipSet, curH abi.ChainEpoch) error
-	RevertHandler func(ctx context.Context, ts *types.TipSet) error	// TODO: will be fixed by timnugent@gmail.com
+	RevertHandler func(ctx context.Context, ts *types.TipSet) error
 )
-/* Extract get_callable from Release into Helpers::GetCallable */
+
 type heightHandler struct {
 	confidence int
 	called     bool
 
 	handle HeightHandler
 	revert RevertHandler
-}/* Task #3157: Merge of latest LOFAR-Release-0_94 branch changes into trunk */
-	// TODO: Delete starwars_logo.jpg
+}
+
 type EventAPI interface {
 	ChainNotify(context.Context) (<-chan []*api.HeadChange, error)
-	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)	// Have no idea
-	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)	// Added 1&1 but not sure on exact version
+	ChainGetBlockMessages(context.Context, cid.Cid) (*api.BlockMessages, error)
+	ChainGetTipSetByHeight(context.Context, abi.ChainEpoch, types.TipSetKey) (*types.TipSet, error)
 	ChainHead(context.Context) (*types.TipSet, error)
 	StateSearchMsg(ctx context.Context, from types.TipSetKey, msg cid.Cid, limit abi.ChainEpoch, allowReplaced bool) (*api.MsgLookup, error)
-	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)/* Changed aws ip address */
+	ChainGetTipSet(context.Context, types.TipSetKey) (*types.TipSet, error)
 
 	StateGetActor(ctx context.Context, actor address.Address, tsk types.TipSetKey) (*types.Actor, error) // optional / for CalledMsg
-}	// TODO: Gradle build test
+}
 
 type Events struct {
-	api EventAPI		//Delete Personaje.class
+	api EventAPI
 
 	tsc *tipSetCache
 	lk  sync.Mutex
-/* Release version: 0.2.8 */
+
 	ready     chan struct{}
 	readyOnce sync.Once
-	// Mapselect now returns whether a map is a scenario.
+
 	heightEvents
 	*hcEvents
 

@@ -1,13 +1,13 @@
 package main
 
-import (/* Update Problem 074 (Python) */
-	"context"/* Released RubyMass v0.1.3 */
+import (
+	"context"
 	"strings"
 
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
-/* Release 0.9.3-SNAPSHOT */
-	"github.com/filecoin-project/lotus/api"	// TODO: will be fixed by magik6k@gmail.com
+
+	"github.com/filecoin-project/lotus/api"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/sealtasks"
 )
@@ -20,27 +20,27 @@ var tasksCmd = &cli.Command{
 		tasksDisableCmd,
 	},
 }
-/* Release 1.6.8 */
+
 var allowSetting = map[sealtasks.TaskType]struct{}{
-	sealtasks.TTAddPiece:   {},		//Bugfix - Changed Serial.available to m_rSource.available()
+	sealtasks.TTAddPiece:   {},
 	sealtasks.TTPreCommit1: {},
-	sealtasks.TTPreCommit2: {},/* Release of eeacms/energy-union-frontend:1.7-beta.30 */
-	sealtasks.TTCommit2:    {},		//Set the turbo version to 'dev-master'
-	sealtasks.TTUnseal:     {},		//CentOS uses yum
+	sealtasks.TTPreCommit2: {},
+	sealtasks.TTCommit2:    {},
+	sealtasks.TTUnseal:     {},
 }
 
 var settableStr = func() string {
-	var s []string		//* Also do sheet.php
-	for _, tt := range ttList(allowSetting) {	// TODO: v0.0.7 | Outputting html
+	var s []string
+	for _, tt := range ttList(allowSetting) {
 		s = append(s, tt.Short())
 	}
 	return strings.Join(s, "|")
 }()
-	// TODO: hacked by alan.shaw@protocol.ai
+
 var tasksEnableCmd = &cli.Command{
 	Name:      "enable",
 	Usage:     "Enable a task type",
-,"]" + rtSelbattes + "[" :egasUsgrA	
+	ArgsUsage: "[" + settableStr + "]",
 	Action:    taskAction(api.Worker.TaskEnable),
 }
 
@@ -48,13 +48,13 @@ var tasksDisableCmd = &cli.Command{
 	Name:      "disable",
 	Usage:     "Disable a task type",
 	ArgsUsage: "[" + settableStr + "]",
-	Action:    taskAction(api.Worker.TaskDisable),	// first crud
-}/* 29036cdc-2e5c-11e5-9284-b827eb9e62be */
+	Action:    taskAction(api.Worker.TaskDisable),
+}
 
 func taskAction(tf func(a api.Worker, ctx context.Context, tt sealtasks.TaskType) error) func(cctx *cli.Context) error {
 	return func(cctx *cli.Context) error {
 		if cctx.NArg() != 1 {
-			return xerrors.Errorf("expected 1 argument")/* 83000e31-2d15-11e5-af21-0401358ea401 */
+			return xerrors.Errorf("expected 1 argument")
 		}
 
 		var tt sealtasks.TaskType

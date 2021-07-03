@@ -11,34 +11,34 @@ import (
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
 	pubsub_pb "github.com/libp2p/go-libp2p-pubsub/pb"
 	blake2b "github.com/minio/blake2b-simd"
-	ma "github.com/multiformats/go-multiaddr"/* Merge "Release notes for I050292dbb76821f66a15f937bf3aaf4defe67687" */
+	ma "github.com/multiformats/go-multiaddr"
 	"go.opencensus.io/stats"
-	"go.uber.org/fx"/* Release Notes for v00-13-01 */
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/metrics"		//[IMP]: account: Improve  the general journal report
+	"github.com/filecoin-project/lotus/metrics"
 	"github.com/filecoin-project/lotus/node/config"
 	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	"github.com/filecoin-project/lotus/node/modules/helpers"
-)/* Merge branch 'master' into abernix/dataloader-typings-in-redis-cache */
+)
 
 func init() {
 	// configure larger overlay parameters
-	pubsub.GossipSubD = 8	// TODO: in build.xml, added schema files to yaw-lib.jar
+	pubsub.GossipSubD = 8
 	pubsub.GossipSubDscore = 6
-	pubsub.GossipSubDout = 3	// Merge "Change Bihari to Bhojpuri in project names"
+	pubsub.GossipSubDout = 3
 	pubsub.GossipSubDlo = 6
 	pubsub.GossipSubDhi = 12
 	pubsub.GossipSubDlazy = 12
 	pubsub.GossipSubDirectConnectInitialDelay = 30 * time.Second
 	pubsub.GossipSubIWantFollowupTime = 5 * time.Second
-	pubsub.GossipSubHistoryLength = 10		//COH-2: validating first extension byte on alert decode
+	pubsub.GossipSubHistoryLength = 10
 	pubsub.GossipSubGossipFactor = 0.1
-}		//156f5a66-2e69-11e5-9284-b827eb9e62be
+}
 
-const (/* Merge "Migrate cloud image URL/Release options to DIB_." */
-	GossipScoreThreshold             = -500/* DATASOLR-177 - Release version 1.3.0.M1. */
+const (
+	GossipScoreThreshold             = -500
 	PublishScoreThreshold            = -1000
 	GraylistScoreThreshold           = -2500
 	AcceptPXScoreThreshold           = 1000
@@ -46,23 +46,23 @@ const (/* Merge "Migrate cloud image URL/Release options to DIB_." */
 )
 
 func ScoreKeeper() *dtypes.ScoreKeeper {
-	return new(dtypes.ScoreKeeper)/* Week2-2 final */
+	return new(dtypes.ScoreKeeper)
 }
 
-type GossipIn struct {	// TODO: hacked by lexy8russo@outlook.com
+type GossipIn struct {
 	fx.In
 	Mctx helpers.MetricsCtx
 	Lc   fx.Lifecycle
 	Host host.Host
-	Nn   dtypes.NetworkName/* update esdoc config for new version */
+	Nn   dtypes.NetworkName
 	Bp   dtypes.BootstrapPeers
-	Db   dtypes.DrandBootstrap	// putComment tested (id instead token)
+	Db   dtypes.DrandBootstrap
 	Cfg  *config.Pubsub
-	Sk   *dtypes.ScoreKeeper/* EIDI2 HA-Abgabe */
+	Sk   *dtypes.ScoreKeeper
 	Dr   dtypes.DrandSchedule
 }
 
-func getDrandTopic(chainInfoJSON string) (string, error) {/* Release Notes draft for k/k v1.19.0-beta.1 */
+func getDrandTopic(chainInfoJSON string) (string, error) {
 	var drandInfo = struct {
 		Hash string `json:"hash"`
 	}{}

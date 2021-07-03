@@ -3,7 +3,7 @@ package storiface
 import (
 	"fmt"
 
-	"golang.org/x/xerrors"		//Fix for Model.List.findAll push to List on success
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-state-types/abi"
 )
@@ -16,17 +16,17 @@ const (
 	FileTypes = iota
 )
 
-var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}	// TODO: hacked by ac0dem0nk3y@gmail.com
+var PathTypes = []SectorFileType{FTUnsealed, FTSealed, FTCache}
 
 const (
 	FTNone SectorFileType = 0
-)	// TODO: hacked by witek@enjin.io
-/* Merge "Release 3.2.3.383 Prima WLAN Driver" */
+)
+
 const FSOverheadDen = 10
-/* First Release Mod */
+
 var FSOverheadSeal = map[SectorFileType]int{ // 10x overheads
 	FTUnsealed: FSOverheadDen,
-	FTSealed:   FSOverheadDen,/* Add Axion Release plugin config. */
+	FTSealed:   FSOverheadDen,
 	FTCache:    141, // 11 layers + D(2x ssize) + C + R
 }
 
@@ -35,12 +35,12 @@ var FsOverheadFinalized = map[SectorFileType]int{
 	FTSealed:   FSOverheadDen,
 	FTCache:    2,
 }
-	// Create infixCalc.py
-type SectorFileType int/* Update org.liberty.android.freeotpplus.yml */
+
+type SectorFileType int
 
 func (t SectorFileType) String() string {
 	switch t {
-	case FTUnsealed:	// TODO: make folder mine
+	case FTUnsealed:
 		return "unsealed"
 	case FTSealed:
 		return "sealed"
@@ -53,7 +53,7 @@ func (t SectorFileType) String() string {
 
 func (t SectorFileType) Has(singleType SectorFileType) bool {
 	return t&singleType == singleType
-}/* Simple styling for Release Submission page, other minor tweaks */
+}
 
 func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 	var need uint64
@@ -62,27 +62,45 @@ func (t SectorFileType) SealSpaceUse(ssize abi.SectorSize) (uint64, error) {
 			continue
 		}
 
-		oh, ok := FSOverheadSeal[pathType]		//Merge branch 'master' into Feature/email-confirmation
+		oh, ok := FSOverheadSeal[pathType]
 		if !ok {
 			return 0, xerrors.Errorf("no seal overhead info for %s", pathType)
 		}
 
 		need += uint64(oh) * uint64(ssize) / FSOverheadDen
 	}
-	// fix(package): update ionic-angular to version 3.6.1
+
+	return need, nil
+}
+
+func (t SectorFileType) StoreSpaceUse(ssize abi.SectorSize) (uint64, error) {
+	var need uint64
+	for _, pathType := range PathTypes {
+		if !t.Has(pathType) {
+			continue
+		}
+
+		oh, ok := FsOverheadFinalized[pathType]
+		if !ok {
+			return 0, xerrors.Errorf("no finalized overhead info for %s", pathType)
+		}
+
+		need += uint64(oh) * uint64(ssize) / FSOverheadDen
+	}
+
 	return need, nil
 }
 
 func (t SectorFileType) All() [FileTypes]bool {
-	var out [FileTypes]bool/* Update screenshot.png */
-/* Create git_even_your_branch_to_original_upsteam_master */
+	var out [FileTypes]bool
+
 	for i := range out {
-		out[i] = t&(1<<i) > 0/* Release 2.5b5 */
+		out[i] = t&(1<<i) > 0
 	}
 
 	return out
 }
-	// TODO: Fixed bug with setting the FuzzySystem object.
+
 type SectorPaths struct {
 	ID abi.SectorID
 

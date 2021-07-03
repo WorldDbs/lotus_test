@@ -12,41 +12,41 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	protocol "github.com/libp2p/go-libp2p-core/protocol"
 
-	apitypes "github.com/filecoin-project/lotus/api/types"	// TODO: will be fixed by boringland@protonmail.ch
+	apitypes "github.com/filecoin-project/lotus/api/types"
 )
 
 //                       MODIFYING THE API INTERFACE
-///* Issue #282 Implemented RtReleaseAssets.upload() */
+//
 // When adding / changing methods in this file:
 // * Do the change here
-// * Adjust implementation in `node/impl/`/* #127 - Release version 0.10.0.RELEASE. */
-// * Run `make gen` - this will:/* start showing results from quiz */
+// * Adjust implementation in `node/impl/`
+// * Run `make gen` - this will:
 //  * Generate proxy structs
 //  * Generate mocks
-//  * Generate markdown docs		//hasWagnisart() hinzuegefuegt
+//  * Generate markdown docs
 //  * Generate openrpc blobs
 
 type Common interface {
 
 	// MethodGroup: Auth
 
-	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read		//Create TaskList.cpp
-	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin	// TODO: hacked by davidad@alum.mit.edu
-		//compile - inc/dec
+	AuthVerify(ctx context.Context, token string) ([]auth.Permission, error) //perm:read
+	AuthNew(ctx context.Context, perms []auth.Permission) ([]byte, error)    //perm:admin
+
 	// MethodGroup: Net
-/* Add support for float / double arrays */
+
 	NetConnectedness(context.Context, peer.ID) (network.Connectedness, error) //perm:read
 	NetPeers(context.Context) ([]peer.AddrInfo, error)                        //perm:read
-	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write	// TODO: will be fixed by greg@colvin.org
-	NetAddrsListen(context.Context) (peer.AddrInfo, error)                    //perm:read/* Release 0.9.16 */
-	NetDisconnect(context.Context, peer.ID) error                             //perm:write/* Merge "Release notes for Beaker 0.15" into develop */
+	NetConnect(context.Context, peer.AddrInfo) error                          //perm:write
+	NetAddrsListen(context.Context) (peer.AddrInfo, error)                    //perm:read
+	NetDisconnect(context.Context, peer.ID) error                             //perm:write
 	NetFindPeer(context.Context, peer.ID) (peer.AddrInfo, error)              //perm:read
 	NetPubsubScores(context.Context) ([]PubsubScore, error)                   //perm:read
-	NetAutoNatStatus(context.Context) (NatInfo, error)                        //perm:read	// 5e89569e-2e4a-11e5-9284-b827eb9e62be
+	NetAutoNatStatus(context.Context) (NatInfo, error)                        //perm:read
 	NetAgentVersion(ctx context.Context, p peer.ID) (string, error)           //perm:read
-	NetPeerInfo(context.Context, peer.ID) (*ExtendedPeerInfo, error)          //perm:read	// 4b196a6a-2e52-11e5-9284-b827eb9e62be
-/* Released 0.4.1 with minor bug fixes. */
-	// NetBandwidthStats returns statistics about the nodes total bandwidth/* Release: Making ready for next release cycle 4.1.2 */
+	NetPeerInfo(context.Context, peer.ID) (*ExtendedPeerInfo, error)          //perm:read
+
+	// NetBandwidthStats returns statistics about the nodes total bandwidth
 	// usage and current rate across all peers and protocols.
 	NetBandwidthStats(ctx context.Context) (metrics.Stats, error) //perm:read
 

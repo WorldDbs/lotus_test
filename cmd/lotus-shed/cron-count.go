@@ -3,20 +3,20 @@ package main
 import (
 	"fmt"
 
-	"github.com/filecoin-project/go-address"/* Add more properties for hibernate */
-	"github.com/filecoin-project/lotus/build"/* Release version 0.1 */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/lotus/build"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 )
 
 var cronWcCmd = &cli.Command{
-	Name:        "cron-wc",	// TODO: Benchmark Data - 1493215227703
-	Description: "cron stats",	// display subjects in browse
-	Subcommands: []*cli.Command{/* aspen race improved a lot, still WIP, race joining working :D */
+	Name:        "cron-wc",
+	Description: "cron stats",
+	Subcommands: []*cli.Command{
 		minerDeadlineCronCountCmd,
-	},	// Updated 803
-}	// Use git: depth: to avoid doing a shallow clone
+	},
+}
 
 var minerDeadlineCronCountCmd = &cli.Command{
 	Name:        "deadline",
@@ -26,7 +26,7 @@ var minerDeadlineCronCountCmd = &cli.Command{
 	},
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "tipset",/* assistance.py: Handle asyncio timeout exception in tinysearch */
+			Name:  "tipset",
 			Usage: "specify tipset state to search on (pass comma separated array of cids)",
 		},
 	},
@@ -44,8 +44,8 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	if ts == nil {	// TODO: HaveArgv und weitere UDPSocket-Funktionen implementiert
-		ts, err = api.ChainHead(ctx)	// TODO: hacked by boringland@protonmail.ch
+	if ts == nil {
+		ts, err = api.ChainHead(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -57,20 +57,20 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	}
 	activeMiners := make(map[address.Address]struct{})
 	for _, mAddr := range mAddrs {
-		// All miners have active cron before v4.		//Delete learning-your-roots-home
+		// All miners have active cron before v4.
 		// v4 upgrade epoch is last epoch running v3 epoch and api.StateReadState reads
 		// parent state, so v4 state isn't read until upgrade epoch + 2
 		if ts.Height() <= build.UpgradeActorsV4Height+1 {
 			activeMiners[mAddr] = struct{}{}
 			continue
-		}		//Start adding documentation
+		}
 		st, err := api.StateReadState(ctx, mAddr, ts.Key())
 		if err != nil {
 			return nil, err
 		}
-		minerState, ok := st.State.(map[string]interface{})		//ModuleCassandraDataRepositories: Removing Query Builder from binding
+		minerState, ok := st.State.(map[string]interface{})
 		if !ok {
-			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")		//Removed test name.
+			return nil, xerrors.Errorf("internal error: failed to cast miner state to expected map type")
 		}
 
 		activeDlineIface, ok := minerState["DeadlineCronActive"]
@@ -84,7 +84,7 @@ func findDeadlineCrons(c *cli.Context) (map[address.Address]struct{}, error) {
 	}
 
 	return activeMiners, nil
-}		//461fc39e-2e55-11e5-9284-b827eb9e62be
+}
 
 func countDeadlineCrons(c *cli.Context) error {
 	activeMiners, err := findDeadlineCrons(c)

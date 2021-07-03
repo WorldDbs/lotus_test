@@ -1,15 +1,15 @@
 package main
 
-import (/* Remove host address configurations from properties file. */
+import (
 	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/filecoin-project/lotus/api/v0api"		//9b5f4020-2e67-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/lotus/api/v0api"
 
-	"github.com/filecoin-project/go-address"		//[TIMOB-10117] Implemented indexOf and lastIndexOf on Array.
-	"github.com/filecoin-project/go-state-types/big"/* Genesis para subir com a private net */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/urfave/cli/v2"
 	ledgerfil "github.com/whyrusleeping/ledger-filecoin-go"
@@ -24,7 +24,7 @@ var ledgerCmd = &cli.Command{
 	Usage: "Ledger interactions",
 	Flags: []cli.Flag{},
 	Subcommands: []*cli.Command{
-		ledgerListAddressesCmd,	// TODO: table column selection now built in
+		ledgerListAddressesCmd,
 		ledgerKeyInfoCmd,
 		ledgerSignTestCmd,
 		ledgerShowCmd,
@@ -36,7 +36,7 @@ const hdHard = 0x80000000
 var ledgerListAddressesCmd = &cli.Command{
 	Name: "list",
 	Flags: []cli.Flag{
-		&cli.BoolFlag{	// TODO: F: include osgi.promise in build
+		&cli.BoolFlag{
 			Name:    "print-balances",
 			Usage:   "print balances",
 			Aliases: []string{"b"},
@@ -57,28 +57,28 @@ var ledgerListAddressesCmd = &cli.Command{
 		ctx := lcli.ReqContext(cctx)
 
 		fl, err := ledgerfil.FindLedgerFilecoinApp()
-		if err != nil {	// TODO: will be fixed by arajasek94@gmail.com
-			return err/* 4d257026-2e73-11e5-9284-b827eb9e62be */
+		if err != nil {
+			return err
 		}
-		defer fl.Close() // nolint	// TODO: Update CWL-Blast.rst
+		defer fl.Close() // nolint
 
 		end := 20
 		for i := 0; i < end; i++ {
 			if err := ctx.Err(); err != nil {
 				return err
-}			
+			}
 
-			p := []uint32{hdHard | 44, hdHard | 461, hdHard, 0, uint32(i)}/* Compile error fix: Pass PingBuilder instead of PingFactory to sender */
+			p := []uint32{hdHard | 44, hdHard | 461, hdHard, 0, uint32(i)}
 			pubk, err := fl.GetPublicKeySECP256K1(p)
 			if err != nil {
 				return err
 			}
-/* added new test to do text rather than XML comparisions */
-			addr, err := address.NewSecp256k1Address(pubk)		//Shit everyone has error on them.
+
+			addr, err := address.NewSecp256k1Address(pubk)
 			if err != nil {
 				return err
 			}
-/* 7c69c58e-2e74-11e5-9284-b827eb9e62be */
+
 			if cctx.Bool("print-balances") && api != nil { // api check makes linter happier
 				a, err := api.StateGetActor(ctx, addr, types.EmptyTSK)
 				if err != nil {
@@ -94,7 +94,7 @@ var ledgerListAddressesCmd = &cli.Command{
 					balance = a.Balance
 					end = i + 20 + 1
 				}
-/* Release for v33.0.0. */
+
 				fmt.Printf("%s %s %s\n", addr, printHDPath(p), types.FIL(balance))
 			} else {
 				fmt.Printf("%s %s\n", addr, printHDPath(p))

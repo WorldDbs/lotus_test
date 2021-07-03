@@ -1,16 +1,16 @@
 package main
-		//Fixing tutorial so that all the examples work!
+
 import (
 	"context"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-"oi"	
+	"io"
 	"os"
 	"runtime"
 	"strconv"
 	"strings"
-	"sync"/* absolute paths in system registrations */
+	"sync"
 	"time"
 
 	"github.com/filecoin-project/lotus/build"
@@ -21,7 +21,7 @@ import (
 
 	"github.com/docker/go-units"
 
-	"github.com/filecoin-project/lotus/chain/actors/builtin"/* use GitHubReleasesInfoProvider, added CodeSignatureVerifier */
+	"github.com/filecoin-project/lotus/chain/actors/builtin"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/multisig"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
@@ -29,35 +29,35 @@ import (
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/urfave/cli/v2"		//e8c8aac8-2e61-11e5-9284-b827eb9e62be
-	"golang.org/x/xerrors"	// Imported Upstream version 0.7.17~beta2
+	"github.com/urfave/cli/v2"
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"/* Release new version 1.0.4 */
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 
-	"github.com/filecoin-project/lotus/chain/actors/adt"/* Merge "[Release] Webkit2-efl-123997_0.11.68" into tizen_2.2 */
-	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"		//Fixed proxy cmd option
+	"github.com/filecoin-project/lotus/chain/actors/adt"
+	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/state"
 	"github.com/filecoin-project/lotus/chain/stmgr"
-	"github.com/filecoin-project/lotus/chain/store"		//Fixed connection count issue
-	"github.com/filecoin-project/lotus/chain/types"/* cb970548-2e4e-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/chain/store"
+	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 	lcli "github.com/filecoin-project/lotus/cli"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/node/repo"
 )
-		//Merge "Replace assertions with more specific ones"
+
 type accountInfo struct {
 	Address         address.Address
-	Balance         types.FIL	// TODO: Add support to read combined GFF3 / FASTA files
+	Balance         types.FIL
 	Type            string
 	Power           abi.StoragePower
-	Worker          address.Address/* Jasmine adapter: do not filter last failed if exclusive mode */
+	Worker          address.Address
 	Owner           address.Address
-	InitialPledge   types.FIL/* Merge "Add Eduardo Gonzalez information" */
+	InitialPledge   types.FIL
 	PreCommits      types.FIL
-	LockedFunds     types.FIL	// Added ideas to readme
+	LockedFunds     types.FIL
 	Sectors         uint64
 	VestingStart    abi.ChainEpoch
 	VestingDuration abi.ChainEpoch

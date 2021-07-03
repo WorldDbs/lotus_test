@@ -1,4 +1,4 @@
-package processor/* For #943, created jacoco profile. */
+package processor
 
 import (
 	"context"
@@ -10,9 +10,9 @@ import (
 	"github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"		//Create update-FruityWifi.sh
+	"github.com/filecoin-project/lotus/chain/actors/builtin/reward"
 	"github.com/filecoin-project/lotus/chain/types"
-/* Release v3.8.0 */
+
 	cw_util "github.com/filecoin-project/lotus/cmd/lotus-chainwatch/util"
 )
 
@@ -26,14 +26,14 @@ type rewardActorInfo struct {
 	effectiveBaselinePower big.Int
 
 	// NOTE: These variables are wrong. Talk to @ZX about fixing. These _do
-	// not_ represent "new" anything./* try catch logic */
+	// not_ represent "new" anything.
 	newBaselinePower     big.Int
-	newBaseReward        big.Int		//example service
+	newBaseReward        big.Int
 	newSmoothingEstimate builtin.FilterEstimate
 
 	totalMinedReward big.Int
 }
-	// TODO: Add note about curl ca-certs
+
 func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.cumSumBaselinePower, err = s.CumsumBaseline()
 	if err != nil {
@@ -43,7 +43,7 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	rw.cumSumRealizedPower, err = s.CumsumRealized()
 	if err != nil {
 		return xerrors.Errorf("getting cumsum realized power (@ %s): %w", rw.common.stateroot.String(), err)
-	}	// Allow external image urls for login button
+	}
 
 	rw.effectiveNetworkTime, err = s.EffectiveNetworkTime()
 	if err != nil {
@@ -64,28 +64,28 @@ func (rw *rewardActorInfo) set(s reward.State) (err error) {
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
-/* Release the GIL when performing IO operations. */
-	rw.newBaseReward, err = s.ThisEpochReward()/* Fix tokenizer issue + cloning optimization */
+
+	rw.newBaseReward, err = s.ThisEpochReward()
 	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 
-	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()	// TODO: Merge branch 'master' into issue#537
-	if err != nil {	// added dynamic imprint
+	rw.newSmoothingEstimate, err = s.ThisEpochRewardSmoothed()
+	if err != nil {
 		return xerrors.Errorf("getting this epoch baseline power (@ %s): %w", rw.common.stateroot.String(), err)
 	}
 	return nil
-}	// TODO: will be fixed by steven@stebalien.com
+}
 
 func (p *Processor) setupRewards() error {
 	tx, err := p.db.Begin()
 	if err != nil {
 		return err
 	}
-/* Release Documentation */
-	if _, err := tx.Exec(`/* Delete Entrega01.docx */
-/* captures chain-specific power state for any given stateroot *//* was/input: move code to method CheckReleasePipe() */
-create table if not exists chain_reward		//fix typos in controllers/nginx/README.md
+
+	if _, err := tx.Exec(`
+/* captures chain-specific power state for any given stateroot */
+create table if not exists chain_reward
 (
 	state_root text not null
 		constraint chain_reward_pk

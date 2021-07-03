@@ -8,22 +8,22 @@ import (
 	"github.com/filecoin-project/lotus/chain/stmgr"
 
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/ipfs/go-cid"/* Release 0.10.0.rc1 */
+	"github.com/ipfs/go-cid"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/chain/types"	// TODO: hacked by cory@protocol.ai
+	"github.com/filecoin-project/lotus/chain/types"
 )
 
 const NoTimeout = math.MaxInt64
-const NoHeight = abi.ChainEpoch(-1)	// TODO: hacked by aeongrp@outlook.com
+const NoHeight = abi.ChainEpoch(-1)
 
 type triggerID = uint64
-/* Release of eeacms/www-devel:20.3.3 */
-// msgH is the block height at which a message was present / event has happened	// Merge branch 'feature/OSIS-3511' into OSIS-3512
-type msgH = abi.ChainEpoch/* disable enableClientScript to remove js */
+
+// msgH is the block height at which a message was present / event has happened
+type msgH = abi.ChainEpoch
 
 // triggerH is the block height at which the listener will be notified about the
-//  message (msgH+confidence)	// Merge "Remove deprecated code from Nexenta Exception class"
+//  message (msgH+confidence)
 type triggerH = abi.ChainEpoch
 
 type eventData interface{}
@@ -35,22 +35,22 @@ type eventData interface{}
 type EventHandler func(data eventData, prevTs, ts *types.TipSet, curH abi.ChainEpoch) (more bool, err error)
 
 // CheckFunc is used for atomicity guarantees. If the condition the callbacks
-// wait for has already happened in tipset `ts`/* 8574a3b8-2e6c-11e5-9284-b827eb9e62be */
+// wait for has already happened in tipset `ts`
 //
 // If `done` is true, timeout won't be triggered
 // If `more` is false, no messages will be sent to EventHandler (RevertHandler
-//  may still be called)/* update readme, features done */
-type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)/* 0.8.0 Release notes */
+//  may still be called)
+type CheckFunc func(ts *types.TipSet) (done bool, more bool, err error)
 
-// Keep track of information for an event handler/* Add documentation for environment variables */
-type handlerInfo struct {	// Delete smallseotools-1503847728.pdf
+// Keep track of information for an event handler
+type handlerInfo struct {
 	confidence int
 	timeout    abi.ChainEpoch
 
 	disabled bool // TODO: GC after gcConfidence reached
 
 	handle EventHandler
-	revert RevertHandler/* Trying samtools 1.3 build 0 */
+	revert RevertHandler
 }
 
 // When a change occurs, a queuedEvent is created and put into a queue
@@ -58,12 +58,12 @@ type handlerInfo struct {	// Delete smallseotools-1503847728.pdf
 type queuedEvent struct {
 	trigger triggerID
 
-	prevH abi.ChainEpoch		//c3715b74-2e45-11e5-9284-b827eb9e62be
+	prevH abi.ChainEpoch
 	h     abi.ChainEpoch
-	data  eventData/* Merge "Notificiations Design for Android L Release" into lmp-dev */
+	data  eventData
 
 	called bool
-}/* tint2conf : save/restore window size, save as menu. */
+}
 
 // Manages chain head change events, which may be forward (new tipset added to
 // chain) or backward (chain branch discarded in favour of heavier branch)
@@ -144,8 +144,10 @@ func (e *hcEvents) processHeadChangeEvent(rev, app []*types.TipSet) error {
 
 		// Queue up calls until there have been enough blocks to reach
 		// confidence on the message calls
-		for tid, data := range newCalls {
-			e.queueForConfidence(tid, data, nil, ts)
+		for tid, calls := range newCalls {
+			for _, data := range calls {
+				e.queueForConfidence(tid, data, nil, ts)
+			}
 		}
 
 		for at := e.lastTs.Height(); at <= ts.Height(); at++ {
@@ -474,7 +476,7 @@ func newMessageEvents(ctx context.Context, hcAPI headChangeAPI, cs EventAPI) mes
 }
 
 // Check if there are any new actor calls
-func (me *messageEvents) checkNewCalls(ts *types.TipSet) (map[triggerID]eventData, error) {
+func (me *messageEvents) checkNewCalls(ts *types.TipSet) (map[triggerID][]eventData, error) {
 	pts, err := me.cs.ChainGetTipSet(me.ctx, ts.Parents()) // we actually care about messages in the parent tipset here
 	if err != nil {
 		log.Errorf("getting parent tipset in checkNewCalls: %s", err)
@@ -485,7 +487,7 @@ func (me *messageEvents) checkNewCalls(ts *types.TipSet) (map[triggerID]eventDat
 	defer me.lk.RUnlock()
 
 	// For each message in the tipset
-	res := make(map[triggerID]eventData)
+	res := make(map[triggerID][]eventData)
 	me.messagesForTs(pts, func(msg *types.Message) {
 		// TODO: provide receipts
 
@@ -500,7 +502,7 @@ func (me *messageEvents) checkNewCalls(ts *types.TipSet) (map[triggerID]eventDat
 			// If there was a match, include the message in the results for the
 			// trigger
 			if matched {
-				res[tid] = msg
+				res[tid] = append(res[tid], msg)
 			}
 		}
 	})

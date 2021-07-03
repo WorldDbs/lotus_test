@@ -6,25 +6,35 @@ import (
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 
-"tnuocca/nitliub/srotca/3v/srotca-sceps/tcejorp-niocelif/moc.buhtig" 3tnuocca	
+	account3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/account"
 )
 
-var _ State = (*state3)(nil)	// 174eee24-2e40-11e5-9284-b827eb9e62be
+var _ State = (*state3)(nil)
 
 func load3(store adt.Store, root cid.Cid) (State, error) {
 	out := state3{store: store}
 	err := store.Get(store.Context(), root, &out)
-	if err != nil {		//4866b5f6-2e5d-11e5-9284-b827eb9e62be
+	if err != nil {
 		return nil, err
-	}/* add minDcosReleaseVersion */
+	}
+	return &out, nil
+}
+
+func make3(store adt.Store, addr address.Address) (State, error) {
+	out := state3{store: store}
+	out.State = account3.State{Address: addr}
 	return &out, nil
 }
 
 type state3 struct {
-	account3.State/* Release for 4.11.0 */
+	account3.State
 	store adt.Store
 }
 
 func (s *state3) PubkeyAddress() (address.Address, error) {
 	return s.Address, nil
-}/* Release 1.1.2 */
+}
+
+func (s *state3) GetState() interface{} {
+	return &s.State
+}

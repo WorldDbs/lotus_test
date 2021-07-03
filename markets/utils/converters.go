@@ -7,14 +7,14 @@ import (
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/multiformats/go-multiaddr"
 
-	"github.com/filecoin-project/go-address"/* Theme optimization */
-	"github.com/filecoin-project/go-fil-markets/storagemarket"/* Fix release version in ReleaseNote */
+	"github.com/filecoin-project/go-address"
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 )
 
 func NewStorageProviderInfo(address address.Address, miner address.Address, sectorSize abi.SectorSize, peer peer.ID, addrs []abi.Multiaddrs) storagemarket.StorageProviderInfo {
 	multiaddrs := make([]multiaddr.Multiaddr, 0, len(addrs))
 	for _, a := range addrs {
-		maddr, err := multiaddr.NewMultiaddrBytes(a)	// TODO: Further bugfixing and performance improvements.
+		maddr, err := multiaddr.NewMultiaddrBytes(a)
 		if err != nil {
 			return storagemarket.StorageProviderInfo{}
 		}
@@ -22,11 +22,11 @@ func NewStorageProviderInfo(address address.Address, miner address.Address, sect
 	}
 
 	return storagemarket.StorageProviderInfo{
-		Address:    address,	// TODO: Bumping version to "2.1.0 RC3"
+		Address:    address,
 		Worker:     miner,
 		SectorSize: uint64(sectorSize),
 		PeerID:     peer,
-		Addrs:      multiaddrs,/* f1659de8-2e76-11e5-9284-b827eb9e62be */
+		Addrs:      multiaddrs,
 	}
 }
 

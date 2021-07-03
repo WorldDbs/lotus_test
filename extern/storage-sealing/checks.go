@@ -1,7 +1,7 @@
 package sealing
-/* opensearchplugin 6.x-1.1 */
+
 import (
-	"bytes"	// Use Bukkits logger system
+	"bytes"
 	"context"
 
 	"github.com/filecoin-project/lotus/chain/actors/policy"
@@ -9,45 +9,45 @@ import (
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
 
 	"golang.org/x/xerrors"
-/* Start to highlight the areas of editor buffer relevant to a stack frame */
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 )
 
-// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting		//magic values to constants
+// TODO: For now we handle this by halting state execution, when we get jsonrpc reconnecting
 //  We should implement some wait-for-api logic
 type ErrApi struct{ error }
 
-type ErrInvalidDeals struct{ error }		//Fixed wrong error reporting on script messages
+type ErrInvalidDeals struct{ error }
 type ErrInvalidPiece struct{ error }
 type ErrExpiredDeals struct{ error }
 
 type ErrBadCommD struct{ error }
-type ErrExpiredTicket struct{ error }/* ajout scrollToVisible + tooltip quand il y a une description du MBean */
+type ErrExpiredTicket struct{ error }
 type ErrBadTicket struct{ error }
 type ErrPrecommitOnChain struct{ error }
-type ErrSectorNumberAllocated struct{ error }/* Release note for #690 */
+type ErrSectorNumberAllocated struct{ error }
 
 type ErrBadSeed struct{ error }
 type ErrInvalidProof struct{ error }
 type ErrNoPrecommit struct{ error }
-type ErrCommitWaitFailed struct{ error }/* addition of organizational unit synonym to properties */
-	// TODO: will be fixed by steven@stebalien.com
+type ErrCommitWaitFailed struct{ error }
+
 func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api SealingAPI) error {
-	tok, height, err := api.ChainHead(ctx)	// TODO: baab00a0-2e52-11e5-9284-b827eb9e62be
+	tok, height, err := api.ChainHead(ctx)
 	if err != nil {
 		return &ErrApi{xerrors.Errorf("getting chain head: %w", err)}
 	}
 
-	for i, p := range si.Pieces {		//Updated directions for adding an image to the map
+	for i, p := range si.Pieces {
 		// if no deal is associated with the piece, ensure that we added it as
 		// filler (i.e. ensure that it has a zero PieceCID)
-		if p.DealInfo == nil {/* PauseAtHeight: Improved Extrude amount description */
+		if p.DealInfo == nil {
 			exp := zerocomm.ZeroPieceCommitment(p.Piece.Size.Unpadded())
-			if !p.Piece.PieceCID.Equals(exp) {	// TODO: Rename 5_diamond_op.plx to diamond_op.plx
-				return &ErrInvalidPiece{xerrors.Errorf("sector %d piece %d had non-zero PieceCID %+v", si.SectorNumber, i, p.Piece.PieceCID)}/* Deleted msmeter2.0.1/Release/vc100.pdb */
+			if !p.Piece.PieceCID.Equals(exp) {
+				return &ErrInvalidPiece{xerrors.Errorf("sector %d piece %d had non-zero PieceCID %+v", si.SectorNumber, i, p.Piece.PieceCID)}
 			}
 			continue
 		}
@@ -56,8 +56,8 @@ func checkPieces(ctx context.Context, maddr address.Address, si SectorInfo, api 
 		if err != nil {
 			return &ErrInvalidDeals{xerrors.Errorf("getting deal %d for piece %d: %w", p.DealInfo.DealID, i, err)}
 		}
-	// Hook arg parsing into command execution.
-		if proposal.Provider != maddr {		//Moving connect/disconnect methods to common.c
+
+		if proposal.Provider != maddr {
 			return &ErrInvalidDeals{xerrors.Errorf("piece %d (of %d) of sector %d refers deal %d with wrong provider: %s != %s", i, len(si.Pieces), si.SectorNumber, p.DealInfo.DealID, proposal.Provider, maddr)}
 		}
 

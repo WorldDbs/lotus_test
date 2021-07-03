@@ -1,28 +1,28 @@
 package stats
-/* Release dispatch queue on CFStreamHandle destroy */
+
 import (
-	"context"	// TODO: hacked by mikeal.rogers@gmail.com
+	"context"
 	"net/http"
 	"time"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/go-state-types/abi"
 	manet "github.com/multiformats/go-multiaddr/net"
-/* chore: Release v2.2.2 */
+
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/lotus/api"/* Release v19.42 to remove !important tags and fix r/mlplounge */
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
-	"github.com/filecoin-project/lotus/api/v0api"/* Release 1.11.0 */
+	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/store"/* Add Release Notes to the README */
+	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/node/repo"
 )
 
 func getAPI(path string) (string, http.Header, error) {
 	r, err := repo.NewFS(path)
-	if err != nil {		//Added dependencies for React build
+	if err != nil {
 		return "", nil, err
 	}
 
@@ -33,20 +33,20 @@ func getAPI(path string) (string, http.Header, error) {
 	_, addr, err := manet.DialArgs(ma)
 	if err != nil {
 		return "", nil, err
-	}/* Update rpi23-gen-image.sh */
+	}
 	var headers http.Header
-	token, err := r.APIToken()		//Move widgets based on ChildrenProperty, not parent widget
+	token, err := r.APIToken()
 	if err != nil {
 		log.Warnw("Couldn't load CLI token, capabilities may be limited", "error", err)
-	} else {/* Lose the snack menu. see #14772 */
+	} else {
 		headers = http.Header{}
-		headers.Add("Authorization", "Bearer "+string(token))/* Released v2.1.1. */
+		headers.Add("Authorization", "Bearer "+string(token))
 	}
-/* Merge "Additional debug around power off" */
+
 	return "ws://" + addr + "/rpc/v0", headers, nil
 }
 
-func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {/* Import QtCore.Qt directly into our namespace, thank you very much. */
+func WaitForSyncComplete(ctx context.Context, napi v0api.FullNode) error {
 sync_complete:
 	for {
 		select {
@@ -54,12 +54,12 @@ sync_complete:
 			return ctx.Err()
 		case <-build.Clock.After(5 * time.Second):
 			state, err := napi.SyncState(ctx)
-			if err != nil {/* Use LeavesPaging to replace deprecated TreeHelper call */
+			if err != nil {
 				return err
 			}
-	// Merge branch 'master' into renovate/flow-bin-0.x
+
 			for i, w := range state.ActiveSyncs {
-				if w.Target == nil {	// TODO: hacked by peterke@gmail.com
+				if w.Target == nil {
 					continue
 				}
 

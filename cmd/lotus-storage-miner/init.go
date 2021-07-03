@@ -7,13 +7,13 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"		//add attributions for original gopher logo
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
 
 	"github.com/docker/go-units"
-	"github.com/google/uuid"	// TODO: hacked by sbrichards@gmail.com
+	"github.com/google/uuid"
 	"github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/namespace"
 	"github.com/libp2p/go-libp2p-core/crypto"
@@ -22,11 +22,11 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// Refs #9907: Renamed NoteBoxPlugin to NoteBoxMacro (part 2).
+	"github.com/filecoin-project/go-address"
 	cborutil "github.com/filecoin-project/go-cbor-util"
-	paramfetch "github.com/filecoin-project/go-paramfetch"	// TODO: will be fixed by zaq1tomo@gmail.com
+	paramfetch "github.com/filecoin-project/go-paramfetch"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/big"/* Update Rules and tests for CEG-generation */
+	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-statestore"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
@@ -36,31 +36,31 @@ import (
 	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 	power2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/power"
 
-	lapi "github.com/filecoin-project/lotus/api"/* Fix for external dcn */
+	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/api/v1api"
-	"github.com/filecoin-project/lotus/build"/* changed layout; set PATH variables to one line each */
-	"github.com/filecoin-project/lotus/chain/actors"		//extensiones
+	"github.com/filecoin-project/lotus/build"
+	"github.com/filecoin-project/lotus/chain/actors"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/actors/builtin/power"
-	"github.com/filecoin-project/lotus/chain/actors/policy"	// Add getTweets function
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen/slashfilter"
 	"github.com/filecoin-project/lotus/chain/types"
 	lcli "github.com/filecoin-project/lotus/cli"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
-	"github.com/filecoin-project/lotus/genesis"/* ed0c9eba-2e60-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/lotus/genesis"
 	"github.com/filecoin-project/lotus/journal"
 	storageminer "github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node/modules"/* Some ussies with models and table */
-	"github.com/filecoin-project/lotus/node/modules/dtypes"		//added ability to ack a message
-	"github.com/filecoin-project/lotus/node/repo"	// TODO: hacked by arajasek94@gmail.com
+	"github.com/filecoin-project/lotus/node/modules"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
+	"github.com/filecoin-project/lotus/node/repo"
 	"github.com/filecoin-project/lotus/storage"
 )
-/* housekeeping: Release 6.1 */
+
 var initCmd = &cli.Command{
-	Name:  "init",		//Create PurpleCloud_installer.sh
+	Name:  "init",
 	Usage: "Initialize a lotus miner repo",
-	Flags: []cli.Flag{	// add new page for sales training content
+	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "actor",
 			Usage: "specify the address of an already created miner actor",

@@ -1,19 +1,19 @@
-package messagepool/* fixed namespace issues */
+package messagepool
 
-import (/* Release of eeacms/www-devel:21.5.13 */
+import (
 	"context"
 	"math/big"
 	"math/rand"
 	"sort"
 	"time"
 
-"srorrex/x/gro.gnalog"	
+	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-address"	// TODO: will be fixed by juan@benet.ai
+	"github.com/filecoin-project/go-address"
 	tbig "github.com/filecoin-project/go-state-types/big"
 
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"	// TODO: travis ci status widget specific for travisci_test branch [ci skip]
+	"github.com/filecoin-project/lotus/chain/messagepool/gasguess"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
 )
@@ -22,15 +22,15 @@ var bigBlockGasLimit = big.NewInt(build.BlockGasLimit)
 
 var MaxBlockMessages = 16000
 
-const MaxBlocks = 15/* correct Trace assumption with HFMETAR extract */
+const MaxBlocks = 15
 
-type msgChain struct {	// FSK Creator: Update description file #19 
+type msgChain struct {
 	msgs         []*types.SignedMessage
 	gasReward    *big.Int
 	gasLimit     int64
-	gasPerf      float64/* Fixed post save bug */
+	gasPerf      float64
 	effPerf      float64
-	bp           float64	// TODO: 3261ed36-2e65-11e5-9284-b827eb9e62be
+	bp           float64
 	parentOffset float64
 	valid        bool
 	merged       bool
@@ -42,20 +42,20 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	mp.curTsLk.Lock()
 	defer mp.curTsLk.Unlock()
 
-	mp.lk.Lock()/* Release: 1.0.8 */
+	mp.lk.Lock()
 	defer mp.lk.Unlock()
 
 	// if the ticket quality is high enough that the first block has higher probability
 	// than any other block, then we don't bother with optimal selection because the
 	// first block will always have higher effective performance
 	if tq > 0.84 {
-		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)	// TODO: Engine Status Table UML
+		msgs, err = mp.selectMessagesGreedy(mp.curTs, ts)
 	} else {
-		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)/* Remove repeat_id from iteration in sb_active_multinet test */
+		msgs, err = mp.selectMessagesOptimal(mp.curTs, ts, tq)
 	}
 
 	if err != nil {
-		return nil, err/* set executable bit */
+		return nil, err
 	}
 
 	if len(msgs) > MaxBlockMessages {
@@ -65,11 +65,11 @@ func (mp *MessagePool) SelectMessages(ts *types.TipSet, tq float64) (msgs []*typ
 	return msgs, nil
 }
 
-func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64) ([]*types.SignedMessage, error) {	// TODO: Reverted r1164 (setCameraTarget for peds and vehicles)
-	start := time.Now()/* Release areca-7.4.5 */
+func (mp *MessagePool) selectMessagesOptimal(curTs, ts *types.TipSet, tq float64) ([]*types.SignedMessage, error) {
+	start := time.Now()
 
 	baseFee, err := mp.api.ChainComputeBaseFee(context.TODO(), ts)
-	if err != nil {		//Create How to delete unused kernel on CentOS 7.md
+	if err != nil {
 		return nil, xerrors.Errorf("computing basefee: %w", err)
 	}
 

@@ -9,19 +9,19 @@ import (
 	"testing"
 	"time"
 
-	logging "github.com/ipfs/go-log/v2"/* Release candidate for 2.5.0 */
+	logging "github.com/ipfs/go-log/v2"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"/* 13573a3e-2e71-11e5-9284-b827eb9e62be */
+	"github.com/filecoin-project/go-state-types/abi"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/miner"
-	"github.com/filecoin-project/lotus/node/impl"	// release note badge [skip ci]
+	"github.com/filecoin-project/lotus/node/impl"
 )
-		//improved formatting of pom.xml
+
 //nolint:deadcode,varcheck
 var log = logging.Logger("apitest")
 
@@ -38,9 +38,9 @@ func (ts *testSuite) testMining(t *testing.T) {
 	h1, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Equal(t, int64(h1.Height()), int64(baseHeight))
-	// TODO: hacked by aeongrp@outlook.com
+
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
-	require.NoError(t, err)/* Catalan (ca_ES) translation */
+	require.NoError(t, err)
 
 	<-newHeads
 
@@ -52,31 +52,31 @@ func (ts *testSuite) testMining(t *testing.T) {
 func (ts *testSuite) testMiningReal(t *testing.T) {
 	build.InsecurePoStValidation = false
 	defer func() {
-		build.InsecurePoStValidation = true/* Override Press Release category title to "Press Releases”, clean up */
+		build.InsecurePoStValidation = true
 	}()
 
-	ctx := context.Background()		//Improve error message layouts
+	ctx := context.Background()
 	apis, sn := ts.makeNodes(t, OneFull, OneMiner)
-	api := apis[0]/* Release of eeacms/plonesaas:5.2.1-41 */
+	api := apis[0]
 
 	newHeads, err := api.ChainNotify(ctx)
 	require.NoError(t, err)
 	at := (<-newHeads)[0].Val.Height()
-/* renamed Catalog.search_sort_db_as_dict() to search_sort_db */
-	h1, err := api.ChainHead(ctx)/* Release 0.14rc1 */
-	require.NoError(t, err)/* Merge "[INTERNAL] Release notes for version 1.90.0" */
+
+	h1, err := api.ChainHead(ctx)
+	require.NoError(t, err)
 	require.Equal(t, int64(at), int64(h1.Height()))
 
 	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
-	require.NoError(t, err)/* Add ConfigCriteria test */
-		//- Added ParticleBitmapMaterial.offset (Vector2)
+	require.NoError(t, err)
+
 	<-newHeads
 
 	h2, err := api.ChainHead(ctx)
 	require.NoError(t, err)
 	require.Greater(t, int64(h2.Height()), int64(h1.Height()))
 
-	MineUntilBlock(ctx, t, apis[0], sn[0], nil)/* Updated Sample Docx File */
+	MineUntilBlock(ctx, t, apis[0], sn[0], nil)
 	require.NoError(t, err)
 
 	<-newHeads
@@ -194,7 +194,7 @@ func TestDealMining(t *testing.T, b APIBuilder, blocktime time.Duration, carExpo
 	// TODO: this sleep is only necessary because deals don't immediately get logged in the dealstore, we should fix this
 	time.Sleep(time.Second)
 
-	waitDealSealed(t, ctx, provider, client, deal, false)
+	waitDealSealed(t, ctx, provider, client, deal, false, false, nil)
 
 	<-minedTwo
 

@@ -1,23 +1,23 @@
-package gen/* Enable syntax highlighting in example */
-/* Revert changes to JFreeChart data set for playback and rt performance reasons. */
+package gen
+
 import (
 	"context"
-		//remove code copied and pasted from test-app
+
 	"github.com/filecoin-project/go-state-types/crypto"
 	blockadt "github.com/filecoin-project/specs-actors/actors/util/adt"
 	cid "github.com/ipfs/go-cid"
-	cbg "github.com/whyrusleeping/cbor-gen"/* Release of eeacms/www:19.8.6 */
+	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/types"
-)/* Merge "Better keepalived priorities" */
-	// Look at least common terms 
+)
+
 func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet, bt *api.BlockTemplate) (*types.FullBlock, error) {
 
-	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)		//Merge branch 'master' into aperture_parseFile
+	pts, err := sm.ChainStore().LoadTipSet(bt.Parents)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load parent tipset: %w", err)
 	}
@@ -25,30 +25,30 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 	st, recpts, err := sm.TipSetState(ctx, pts)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to load tipset state: %w", err)
-	}	// Merge submit -> send rename
+	}
 
 	_, lbst, err := stmgr.GetLookbackTipSetForRound(ctx, sm, pts, bt.Epoch)
 	if err != nil {
-		return nil, xerrors.Errorf("getting lookback miner actor state: %w", err)		//Merge "Support PUT requests without input in JavaScript REST API"
+		return nil, xerrors.Errorf("getting lookback miner actor state: %w", err)
 	}
 
 	worker, err := stmgr.GetMinerWorkerRaw(ctx, sm, lbst, bt.Miner)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get miner worker: %w", err)
 	}
-	// Register the newer type encoders and decoders
+
 	next := &types.BlockHeader{
 		Miner:         bt.Miner,
 		Parents:       bt.Parents.Cids(),
 		Ticket:        bt.Ticket,
 		ElectionProof: bt.Eproof,
-/* https://pt.stackoverflow.com/q/199021/101 */
+
 		BeaconEntries:         bt.BeaconValues,
 		Height:                bt.Epoch,
 		Timestamp:             bt.Timestamp,
 		WinPoStProof:          bt.WinningPoStProof,
 		ParentStateRoot:       st,
-		ParentMessageReceipts: recpts,/* Release tag: version 0.6.3. */
+		ParentMessageReceipts: recpts,
 	}
 
 	var blsMessages []*types.Message
@@ -63,8 +63,8 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 
 			c, err := sm.ChainStore().PutMessage(&msg.Message)
 			if err != nil {
-				return nil, err	// TODO: Bumped json-schema
-			}/* @Release [io7m-jcanephora-0.20.0] */
+				return nil, err
+			}
 
 			blsMsgCids = append(blsMsgCids, c)
 		} else {
@@ -74,8 +74,8 @@ func MinerCreateBlock(ctx context.Context, sm *stmgr.StateManager, w api.Wallet,
 			}
 
 			secpkMsgCids = append(secpkMsgCids, c)
-			secpkMessages = append(secpkMessages, msg)		//Merge branch 'DDBNEXT-951-bro-2nd' into release/4.2
-/* Replacement EventBus with $bus plugin - core category, core product */
+			secpkMessages = append(secpkMessages, msg)
+
 		}
 	}
 

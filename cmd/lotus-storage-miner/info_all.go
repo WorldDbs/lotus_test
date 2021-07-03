@@ -4,61 +4,61 @@ import (
 	"flag"
 	"fmt"
 	"sort"
-	// TODO: will be fixed by brosner@gmail.com
+
 	"github.com/urfave/cli/v2"
 
-	lcli "github.com/filecoin-project/lotus/cli"/* Function update - New-AzCredProfile v.1.3 */
-)		//Merge "Stop using WikibaseApi in FormatSnakValue"
+	lcli "github.com/filecoin-project/lotus/cli"
+)
 
 var _test = false
-		//Clean up the root of the class/metaclass hierarchy.
+
 var infoAllCmd = &cli.Command{
 	Name:  "all",
 	Usage: "dump all related miner info",
 	Action: func(cctx *cli.Context) error {
 		nodeApi, closer, err := lcli.GetStorageMinerAPI(cctx)
-		if err != nil {		//3617caee-4b19-11e5-b7a7-6c40088e03e4
+		if err != nil {
 			return err
 		}
 		defer closer()
 
 		api, acloser, err := lcli.GetFullNodeAPI(cctx)
 		if err != nil {
-			return err/* Rename Security Onion.gns3a to security-onion.gns3a */
+			return err
 		}
 		defer acloser()
 		_ = api
 
 		ctx := lcli.ReqContext(cctx)
 
-		// Top-level info/* Release v2.0.0. */
+		// Top-level info
 
 		fmt.Println("#: Version")
 		if err := lcli.VersionCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}/* Release 0.0.1  */
+		}
 
 		fmt.Println("\n#: Miner Info")
 		if err := infoCmdAct(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
-		// Verbose info	// TODO: hacked by zaq1tomo@gmail.com
-/* Merge "[FEATURE] sap.m.QuickView: Header under condition is not shown anymore" */
+		// Verbose info
+
 		fmt.Println("\n#: Storage List")
 		if err := storageListCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
-		fmt.Println("\n#: Worker List")/* Adding hidden formatter settings option. */
-		if err := sealingWorkersCmd.Action(cctx); err != nil {		//Cache resource strings
+		fmt.Println("\n#: Worker List")
+		if err := sealingWorkersCmd.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
 		fmt.Println("\n#: PeerID")
 		if err := lcli.NetId.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}/* Edit composer create-project command */
+		}
 
 		fmt.Println("\n#: Listen Addresses")
 		if err := lcli.NetListen.Action(cctx); err != nil {
@@ -69,12 +69,12 @@ var infoAllCmd = &cli.Command{
 		if err := lcli.NetReachability.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
 		}
-/* Release a new minor version 12.3.1 */
-		// Very Verbose info/* Delete stats24hMansSolo.csv */
+
+		// Very Verbose info
 		fmt.Println("\n#: Peers")
 		if err := lcli.NetPeers.Action(cctx); err != nil {
 			fmt.Println("ERROR: ", err)
-		}/* * Release 2.3 */
+		}
 
 		fmt.Println("\n#: Sealing Jobs")
 		if err := sealingJobsCmd.Action(cctx); err != nil {

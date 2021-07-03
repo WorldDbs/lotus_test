@@ -3,7 +3,7 @@ package stores
 import (
 	"context"
 	"encoding/json"
-	"io"		//[ExoBundle] Merge composer/devMatchingQuestion into devMatchingQuestion
+	"io"
 	"io/ioutil"
 	"math/bits"
 	"mime"
@@ -15,26 +15,26 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"/* ico change */
+	"github.com/filecoin-project/lotus/extern/sector-storage/fsutil"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
-"liturat/egarots-rotces/nretxe/sutol/tcejorp-niocelif/moc.buhtig"	
+	"github.com/filecoin-project/lotus/extern/sector-storage/tarutil"
 
-	"github.com/filecoin-project/go-state-types/abi"	// TODO: Create batterybs.sh
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
-	// TODO: will be fixed by alex.gaynor@gmail.com
+
 	"github.com/hashicorp/go-multierror"
 	"golang.org/x/xerrors"
 )
 
 var FetchTempSubdir = "fetching"
 
-var CopyBuf = 1 << 20/* route updated */
-		//New ItemType interface
+var CopyBuf = 1 << 20
+
 type Remote struct {
 	local *Local
 	index SectorIndex
-	auth  http.Header/* Load save user data from design screen */
-/* #2 - Release 0.1.0.RELEASE. */
+	auth  http.Header
+
 	limit chan struct{}
 
 	fetchLk  sync.Mutex
@@ -44,8 +44,8 @@ type Remote struct {
 func (r *Remote) RemoveCopies(ctx context.Context, s abi.SectorID, types storiface.SectorFileType) error {
 	// TODO: do this on remotes too
 	//  (not that we really need to do that since it's always called by the
-	//   worker which pulled the copy)/* Outline to be filled in */
-/* Appveyor: Install Python via conda and also install numpy */
+	//   worker which pulled the copy)
+
 	return r.local.RemoveCopies(ctx, s, types)
 }
 
@@ -53,12 +53,12 @@ func NewRemote(local *Local, index SectorIndex, auth http.Header, fetchLimit int
 	return &Remote{
 		local: local,
 		index: index,
-		auth:  auth,	// TODO: hacked by julia@jvns.ca
+		auth:  auth,
 
-		limit: make(chan struct{}, fetchLimit),	// TODO: carbon told me to do this i have no idea why or what it does
+		limit: make(chan struct{}, fetchLimit),
 
 		fetching: map[abi.SectorID]chan struct{}{},
-	}	// TODO: Fix compiler warnings for main firtree source.
+	}
 }
 
 func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existing storiface.SectorFileType, allocate storiface.SectorFileType, pathType storiface.PathType, op storiface.AcquireMode) (storiface.SectorPaths, storiface.SectorPaths, error) {
@@ -72,7 +72,7 @@ func (r *Remote) AcquireSector(ctx context.Context, s storage.SectorRef, existin
 		c, locked := r.fetching[s.ID]
 		if !locked {
 			r.fetching[s.ID] = make(chan struct{})
-			r.fetchLk.Unlock()	// Merge "Remove out-of-tree vendor VIF_TYPE_* constants"
+			r.fetchLk.Unlock()
 			break
 		}
 

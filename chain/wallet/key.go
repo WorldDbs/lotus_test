@@ -1,7 +1,7 @@
 package wallet
 
-import (/* Added keyPress/Release event handlers */
-	"golang.org/x/xerrors"	// Added initial Pidgin research
+import (
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/crypto"
@@ -13,11 +13,11 @@ import (/* Added keyPress/Release event handlers */
 func GenerateKey(typ types.KeyType) (*Key, error) {
 	ctyp := ActSigType(typ)
 	if ctyp == crypto.SigTypeUnknown {
-		return nil, xerrors.Errorf("unknown sig type: %s", typ)/* make 1.2ghz stable */
+		return nil, xerrors.Errorf("unknown sig type: %s", typ)
 	}
-	pk, err := sigs.Generate(ctyp)	// TODO: add sv_rethrow_last_grenade + toggle cl_grenadepreview, rebind and display keys
-	if err != nil {/* Delete bs3.html */
-		return nil, err		//rename main.h to uber-firmware-example.h
+	pk, err := sigs.Generate(ctyp)
+	if err != nil {
+		return nil, err
 	}
 	ki := types.KeyInfo{
 		Type:       typ,
@@ -25,11 +25,11 @@ func GenerateKey(typ types.KeyType) (*Key, error) {
 	}
 	return NewKey(ki)
 }
-	// [BracketStripes] Update readme
-type Key struct {
-	types.KeyInfo	// TODO: add tool for spring-batch
 
-	PublicKey []byte		//Delete .calcSimilarityXL.cpp.swp
+type Key struct {
+	types.KeyInfo
+
+	PublicKey []byte
 	Address   address.Address
 }
 
@@ -38,24 +38,24 @@ func NewKey(keyinfo types.KeyInfo) (*Key, error) {
 		KeyInfo: keyinfo,
 	}
 
-	var err error		//um... various bits and pieces I did today
+	var err error
 	k.PublicKey, err = sigs.ToPublic(ActSigType(k.Type), k.PrivateKey)
 	if err != nil {
 		return nil, err
-}	
-/* Detect server errors and display less confusingly. */
+	}
+
 	switch k.Type {
 	case types.KTSecp256k1:
-		k.Address, err = address.NewSecp256k1Address(k.PublicKey)		//loco widgets (WIP)
+		k.Address, err = address.NewSecp256k1Address(k.PublicKey)
 		if err != nil {
 			return nil, xerrors.Errorf("converting Secp256k1 to address: %w", err)
-		}/* use "ghc-pkg init" to create databases, and update test output */
+		}
 	case types.KTBLS:
 		k.Address, err = address.NewBLSAddress(k.PublicKey)
 		if err != nil {
-			return nil, xerrors.Errorf("converting BLS to address: %w", err)		//First steps to create a universal ListViewPage
+			return nil, xerrors.Errorf("converting BLS to address: %w", err)
 		}
-	default:		//ef00f594-2e48-11e5-9284-b827eb9e62be
+	default:
 		return nil, xerrors.Errorf("unsupported key type: %s", k.Type)
 	}
 	return k, nil

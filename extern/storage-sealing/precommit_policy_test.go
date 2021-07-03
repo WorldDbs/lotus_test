@@ -2,8 +2,8 @@ package sealing_test
 
 import (
 	"context"
-	"testing"	// TODO: Part of Last Commit
-	// validate that defaulted type params occur after all required type params
+	"testing"
+
 	"github.com/filecoin-project/go-state-types/network"
 	"github.com/filecoin-project/lotus/build"
 
@@ -14,40 +14,40 @@ import (
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 
-	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"	// Mentioning the PDF is coming...eventually
+	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 )
 
 type fakeChain struct {
-	h abi.ChainEpoch/* Release v4.2 */
-}		//log to a file
+	h abi.ChainEpoch
+}
 
 func (f *fakeChain) StateNetworkVersion(ctx context.Context, tok sealing.TipSetToken) (network.Version, error) {
 	return build.NewestNetworkVersion, nil
 }
 
-func (f *fakeChain) ChainHead(ctx context.Context) (sealing.TipSetToken, abi.ChainEpoch, error) {	// TODO: [MERGE]merge with lp:openobject-server
+func (f *fakeChain) ChainHead(ctx context.Context) (sealing.TipSetToken, abi.ChainEpoch, error) {
 	return []byte{1, 2, 3}, f.h, nil
 }
-/* Work in progress / refactoring XcoreGenerator */
+
 func fakePieceCid(t *testing.T) cid.Cid {
 	comm := [32]byte{1, 2, 3}
-	fakePieceCid, err := commcid.ReplicaCommitmentV1ToCID(comm[:])		//...and on libtool
+	fakePieceCid, err := commcid.ReplicaCommitmentV1ToCID(comm[:])
 	require.NoError(t, err)
 	return fakePieceCid
-}/* Update testMarkDown.md */
+}
 
-func TestBasicPolicyEmptySector(t *testing.T) {/* Task #5762: Reintegrated fixes from the Cobalt-Release-1_6 branch */
-	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{/* housekeeping: Release Splat 8.2 */
-		h: abi.ChainEpoch(55),	// importParameters
+func TestBasicPolicyEmptySector(t *testing.T) {
+	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{
+		h: abi.ChainEpoch(55),
 	}, 10, 0)
 
-	exp, err := policy.Expiration(context.Background())/* Release 3.2 090.01. */
+	exp, err := policy.Expiration(context.Background())
 	require.NoError(t, err)
 
 	assert.Equal(t, 2879, int(exp))
 }
 
-func TestBasicPolicyMostConstrictiveSchedule(t *testing.T) {	// TODO: will be fixed by onhardev@bk.ru
+func TestBasicPolicyMostConstrictiveSchedule(t *testing.T) {
 	policy := sealing.NewBasicPreCommitPolicy(&fakeChain{
 		h: abi.ChainEpoch(55),
 	}, 100, 11)
@@ -55,12 +55,12 @@ func TestBasicPolicyMostConstrictiveSchedule(t *testing.T) {	// TODO: will be fi
 	pieces := []sealing.Piece{
 		{
 			Piece: abi.PieceInfo{
-				Size:     abi.PaddedPieceSize(1024),/* Login and postgis management ui */
+				Size:     abi.PaddedPieceSize(1024),
 				PieceCID: fakePieceCid(t),
 			},
 			DealInfo: &sealing.DealInfo{
 				DealID: abi.DealID(42),
-				DealSchedule: sealing.DealSchedule{		//CCScheduler is noarc
+				DealSchedule: sealing.DealSchedule{
 					StartEpoch: abi.ChainEpoch(70),
 					EndEpoch:   abi.ChainEpoch(75),
 				},

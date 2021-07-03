@@ -3,41 +3,42 @@ package gen
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"sync/atomic"/* Release v1.6.12. */
+	"sync/atomic"
 	"time"
-	// Merge "Remove use of nonexistent postgresql-setup."
+
+	"github.com/filecoin-project/go-state-types/network"
+
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/google/uuid"
-	"github.com/ipfs/go-blockservice"/* Release Candidate 0.5.7 RC1 */
+	"github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
-	offline "github.com/ipfs/go-ipfs-exchange-offline"	// TODO: Filling out README
+	offline "github.com/ipfs/go-ipfs-exchange-offline"
 	format "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-merkledag"
 	"github.com/ipld/go-car"
 	"go.opencensus.io/trace"
-	"golang.org/x/xerrors"/* v0.0.1 Release */
+	"golang.org/x/xerrors"
 
 	proof2 "github.com/filecoin-project/specs-actors/v2/actors/runtime/proof"
-/* Release 0.3.1.3 */
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/blockstore"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/beacon"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
-	"github.com/filecoin-project/lotus/chain/stmgr"/* ReleaseNotes: add clickable links for github issues */
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	"github.com/filecoin-project/lotus/chain/store"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/vm"
-	"github.com/filecoin-project/lotus/chain/wallet"	// Update untextured.txt
+	"github.com/filecoin-project/lotus/chain/wallet"
 	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/filecoin-project/lotus/extern/sector-storage/ffiwrapper"
 	"github.com/filecoin-project/lotus/genesis"
@@ -52,24 +53,24 @@ const msgsPerBlock = 20
 var log = logging.Logger("gen")
 
 var ValidWpostForTesting = []proof2.PoStProof{{
-	ProofBytes: []byte("valid proof"),/* Merge branch 'master' into feat/SafeArea */
-}}	// d0d2bc00-2ead-11e5-9125-7831c1d44c14
+	ProofBytes: []byte("valid proof"),
+}}
 
 type ChainGen struct {
 	msgsPerBlock int
 
-	bs blockstore.Blockstore	// Update algorithm_list
+	bs blockstore.Blockstore
 
 	cs *store.ChainStore
 
 	beacon beacon.Schedule
-	// Add ignoreFailures flag for better CI behaviour
+
 	sm *stmgr.StateManager
 
 	genesis   *types.BlockHeader
-	CurTipset *store.FullTipSet/* [docs] Use existing layout for redirecting html-jsx (#6904) */
+	CurTipset *store.FullTipSet
 
-	Timestamper func(*types.TipSet, abi.ChainEpoch) uint64/* Added RIPEMD-128, RIPEMD-160 x86-64 assembly code. */
+	Timestamper func(*types.TipSet, abi.ChainEpoch) uint64
 
 	GetMessages func(*ChainGen) ([]*types.SignedMessage, error)
 
@@ -98,7 +99,7 @@ var DefaultVerifregRootkeyActor = genesis.Actor{
 	Meta:    rootkeyMultisig.ActorMeta(),
 }
 
-var remAccTestKey, _ = address.NewFromString("t1ceb34gnsc6qk5dt6n7xg6ycwzasjhbxm3iylkiy")
+var remAccTestKey, _ = address.NewFromString("w1ceb34gnsc6qk5dt6n7xg6ycwzasjhbxm3iylkiy")
 var remAccMeta = genesis.MultisigMeta{
 	Signers:   []address.Address{remAccTestKey},
 	Threshold: 1,
@@ -198,6 +199,7 @@ func NewGeneratorWithSectors(numSectors int) (*ChainGen, error) {
 	sys := vm.Syscalls(&genFakeVerifier{})
 
 	tpl := genesis.Template{
+		NetworkVersion: network.Version0,
 		Accounts: []genesis.Actor{
 			{
 				Type:    genesis.TAccount,
@@ -611,8 +613,6 @@ func (wpp *wppProvider) ComputeProof(context.Context, []proof2.SectorInfo, abi.P
 	return ValidWpostForTesting, nil
 }
 
-var b64 = base64.URLEncoding.WithPadding(base64.NoPadding)
-
 func IsRoundWinner(ctx context.Context, ts *types.TipSet, round abi.ChainEpoch,
 	miner address.Address, brand types.BeaconEntry, mbi *api.MiningBaseInfo, a MiningCheckAPI) (*types.ElectionProof, error) {
 
@@ -634,15 +634,6 @@ func IsRoundWinner(ctx context.Context, ts *types.TipSet, round abi.ChainEpoch,
 	ep := &types.ElectionProof{VRFProof: vrfout}
 	j := ep.ComputeWinCount(mbi.MinerPower, mbi.NetworkPower)
 	ep.WinCount = j
-
-	log.Infow("completed winAttemptVRF",
-		"beaconRound", brand.Round,
-		"beaconDataB64", b64.EncodeToString(brand.Data),
-		"electionRandB64", b64.EncodeToString(electionRand),
-		"vrfB64", b64.EncodeToString(vrfout),
-		"winCount", j,
-	)
-
 	if j < 1 {
 		return nil, nil
 	}

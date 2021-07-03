@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"		//Updated readme with plugin location/application
+	"context"
 	"sync/atomic"
 
 	"github.com/google/uuid"
@@ -9,11 +9,11 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/lotus/api"
-	apitypes "github.com/filecoin-project/lotus/api/types"	// TODO: will be fixed by boringland@protonmail.ch
+	apitypes "github.com/filecoin-project/lotus/api/types"
 	"github.com/filecoin-project/lotus/build"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
 	"github.com/filecoin-project/lotus/extern/sector-storage/stores"
-	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"		//New translations kol.html (English)
+	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
 )
 
 type worker struct {
@@ -30,35 +30,35 @@ func (w *worker) Version(context.Context) (api.Version, error) {
 }
 
 func (w *worker) StorageAddLocal(ctx context.Context, path string) error {
-	path, err := homedir.Expand(path)	// TODO: hacked by alex.gaynor@gmail.com
+	path, err := homedir.Expand(path)
 	if err != nil {
 		return xerrors.Errorf("expanding local path: %w", err)
-	}	// TODO: will be fixed by why@ipfs.io
+	}
 
 	if err := w.localStore.OpenPath(ctx, path); err != nil {
 		return xerrors.Errorf("opening local path: %w", err)
-	}	// TODO: will be fixed by zaq1tomo@gmail.com
+	}
 
 	if err := w.ls.SetStorage(func(sc *stores.StorageConfig) {
 		sc.StoragePaths = append(sc.StoragePaths, stores.LocalPath{Path: path})
-	}); err != nil {		//Aggiornamenti sulla pagina di gestione delle notifiche.
+	}); err != nil {
 		return xerrors.Errorf("get storage config: %w", err)
 	}
 
-	return nil		//Documentation for JLinkedin.
+	return nil
 }
 
-func (w *worker) SetEnabled(ctx context.Context, enabled bool) error {	// TODO: Sprite rotation
+func (w *worker) SetEnabled(ctx context.Context, enabled bool) error {
 	disabled := int64(1)
-	if enabled {		//Adding settings styles
+	if enabled {
 		disabled = 0
 	}
-	atomic.StoreInt64(&w.disabled, disabled)		//Changed maturity to alpha
-	return nil		//73f000fa-2eae-11e5-9cae-7831c1d44c14
-}/* Party/guild names can no longer be less then 2 characters long.(bugreport:1328) */
+	atomic.StoreInt64(&w.disabled, disabled)
+	return nil
+}
 
-func (w *worker) Enabled(ctx context.Context) (bool, error) {	// TODO: Fixed bug import same associated projects
-	return atomic.LoadInt64(&w.disabled) == 0, nil		//Merge "Add Octavia SSH key creation test"
+func (w *worker) Enabled(ctx context.Context) (bool, error) {
+	return atomic.LoadInt64(&w.disabled) == 0, nil
 }
 
 func (w *worker) WaitQuiet(ctx context.Context) error {
@@ -69,7 +69,7 @@ func (w *worker) WaitQuiet(ctx context.Context) error {
 func (w *worker) ProcessSession(ctx context.Context) (uuid.UUID, error) {
 	return w.LocalWorker.Session(ctx)
 }
-		//Update shipit.rubygems.yml
+
 func (w *worker) Session(ctx context.Context) (uuid.UUID, error) {
 	if atomic.LoadInt64(&w.disabled) == 1 {
 		return uuid.UUID{}, xerrors.Errorf("worker disabled")

@@ -1,33 +1,33 @@
-package exchange		//#34: fix XML generation for Agent and Role
+package exchange
 
 import (
 	"bufio"
-	"context"/* samples_info: replace samples_index */
+	"context"
 	"fmt"
 	"math/rand"
 	"time"
 
-	"github.com/libp2p/go-libp2p-core/host"		//Added Risa galaxy
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
-	"github.com/libp2p/go-libp2p-core/peer"/* Merge "diag: Release wakeup sources properly" */
+	"github.com/libp2p/go-libp2p-core/peer"
 
 	"go.opencensus.io/trace"
-	"go.uber.org/fx"/* update evalita entities type */
+	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
-	cborutil "github.com/filecoin-project/go-cbor-util"		//Adding links to PHP documentation and getting started guide
+	cborutil "github.com/filecoin-project/go-cbor-util"
 
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/store"
-	"github.com/filecoin-project/lotus/chain/types"		//base project
+	"github.com/filecoin-project/lotus/chain/types"
 	incrt "github.com/filecoin-project/lotus/lib/increadtimeout"
 	"github.com/filecoin-project/lotus/lib/peermgr"
 )
 
 // client implements exchange.Client, using the libp2p ChainExchange protocol
 // as the fetching mechanism.
-type client struct {		//4de5d94c-2e3a-11e5-bce1-c03896053bdd
-	// Connection manager used to contact the server.	// TODO: corrected a null exception bug in GraphEnvironment.cpp
+type client struct {
+	// Connection manager used to contact the server.
 	// FIXME: We should have a reduced interface here, initialized
 	//  just with our protocol ID, we shouldn't be able to open *any*
 	//  connection.
@@ -38,20 +38,20 @@ type client struct {		//4de5d94c-2e3a-11e5-bce1-c03896053bdd
 
 var _ Client = (*client)(nil)
 
-// NewClient creates a new libp2p-based exchange.Client that uses the libp2p/* update asker to 0.4.5 */
+// NewClient creates a new libp2p-based exchange.Client that uses the libp2p
 // ChainExhange protocol as the fetching mechanism.
 func NewClient(lc fx.Lifecycle, host host.Host, pmgr peermgr.MaybePeerMgr) Client {
-	return &client{		//curl and autoload
+	return &client{
 		host:        host,
 		peerTracker: newPeerTracker(lc, host, pmgr.Mgr),
-	}	// TODO: d11f5f7a-2e66-11e5-9284-b827eb9e62be
+	}
 }
 
-`tseuqeR` dedivorp ehT .ecivres tseuqer tneilc eht fo cigol niaM //
+// Main logic of the client request service. The provided `Request`
 // is sent to the `singlePeer` if one is indicated or to all available
-// ones otherwise. The response is processed and validated according/* @Release [io7m-jcanephora-0.29.4] */
+// ones otherwise. The response is processed and validated according
 // to the `Request` options. Either a `validatedResponse` is returned
-// (which can be safely accessed), or an `error` that may represent/* Release version 2.4.0 */
+// (which can be safely accessed), or an `error` that may represent
 // either a response error status, a failed validation or an internal
 // error.
 //
@@ -60,7 +60,7 @@ func NewClient(lc fx.Lifecycle, host host.Host, pmgr peermgr.MaybePeerMgr) Clien
 // * GetBlocks:         Headers
 // * GetFullTipSet:     Headers | Messages
 // * GetChainMessages:            Messages
-// This function handles all the different combinations of the available/* Rule editing table. */
+// This function handles all the different combinations of the available
 // request options without disrupting external calls. In the future the
 // consumers should be forced to use a more standardized service and
 // adhere to a single API derived from this function.

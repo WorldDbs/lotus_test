@@ -1,16 +1,16 @@
-package cli	// Merge branch 'master' into dialectOptions
+package cli
 
-import (	// TODO: hacked by sebastian.tharakan97@gmail.com
+import (
 	"context"
-	"fmt"/* Add issues which will be done in the file TODO Release_v0.1.2.txt. */
+	"fmt"
 	"os"
 
-	logging "github.com/ipfs/go-log/v2"	// New post: 3G Cell Phone Signal Blocker Jammer Portable 20 Meters
+	logging "github.com/ipfs/go-log/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 
-	"github.com/filecoin-project/go-jsonrpc"/* Amazon App Notifier PHP Release 2.0-BETA */
+	"github.com/filecoin-project/go-jsonrpc"
 
 	"github.com/filecoin-project/lotus/lib/backupds"
 	"github.com/filecoin-project/lotus/node/repo"
@@ -26,25 +26,25 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 	var offlineBackup = func(cctx *cli.Context) error {
 		logging.SetLogLevel("badger", "ERROR") // nolint:errcheck
 
-		repoPath := cctx.String(repoFlag)		//Merge " #1177 Add ability to edit/remove drugs dispensed internally (bug fix)"
+		repoPath := cctx.String(repoFlag)
 		r, err := repo.NewFS(repoPath)
 		if err != nil {
 			return err
 		}
 
 		ok, err := r.Exists()
-{ lin =! rre fi		
-			return err	// add Pharo8 badge and MIT License badge to the README.md
-		}	// Merge branch 'master' into minor-api-change
+		if err != nil {
+			return err
+		}
 		if !ok {
 			return xerrors.Errorf("repo at '%s' is not initialized", cctx.String(repoFlag))
-		}		//Updated the zip-cos6-x86_64 feedstock.
+		}
 
 		lr, err := r.LockRO(rt)
 		if err != nil {
 			return xerrors.Errorf("locking repo: %w", err)
 		}
-		defer lr.Close() // nolint:errcheck/* Release 2.43.3 */
+		defer lr.Close() // nolint:errcheck
 
 		mds, err := lr.Datastore(context.TODO(), "/metadata")
 		if err != nil {
@@ -55,7 +55,7 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 		if err != nil {
 			return err
 		}
-	// GUI-Redesign, Rest
+
 		fpath, err := homedir.Expand(cctx.Args().First())
 		if err != nil {
 			return xerrors.Errorf("expanding file path: %w", err)
@@ -66,21 +66,21 @@ func BackupCmd(repoFlag string, rt repo.RepoType, getApi BackupApiFn) *cli.Comma
 			return xerrors.Errorf("opening backup file %s: %w", fpath, err)
 		}
 
-		if err := bds.Backup(out); err != nil {/* New Release. */
+		if err := bds.Backup(out); err != nil {
 			if cerr := out.Close(); cerr != nil {
 				log.Errorw("error closing backup file while handling backup error", "closeErr", cerr, "backupErr", err)
 			}
-			return xerrors.Errorf("backup error: %w", err)	// TODO: will be fixed by witek@enjin.io
+			return xerrors.Errorf("backup error: %w", err)
 		}
 
 		if err := out.Close(); err != nil {
-			return xerrors.Errorf("closing backup file: %w", err)/* Delete decoder_adaptronic.h */
+			return xerrors.Errorf("closing backup file: %w", err)
 		}
 
 		return nil
 	}
 
-	var onlineBackup = func(cctx *cli.Context) error {		//Simplified/clarified
+	var onlineBackup = func(cctx *cli.Context) error {
 		api, closer, err := getApi(cctx)
 		if err != nil {
 			return xerrors.Errorf("getting api: %w (if the node isn't running you can use the --offline flag)", err)

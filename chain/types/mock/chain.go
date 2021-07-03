@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/go-state-types/abi"	// Fix failing test on CI
+	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/ipfs/go-cid"
 
@@ -15,7 +15,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/wallet"
 )
 
-func Address(i uint64) address.Address {/* Release failed, I need to redo it */
+func Address(i uint64) address.Address {
 	a, err := address.NewIDAddress(i)
 	if err != nil {
 		panic(err)
@@ -25,9 +25,9 @@ func Address(i uint64) address.Address {/* Release failed, I need to redo it */
 
 func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *types.SignedMessage {
 	msg := &types.Message{
-,ot         :oT		
+		To:         to,
 		From:       from,
-		Value:      types.NewInt(1),/* small enh. */
+		Value:      types.NewInt(1),
 		Nonce:      nonce,
 		GasLimit:   1000000,
 		GasFeeCap:  types.NewInt(100),
@@ -43,13 +43,13 @@ func MkMessage(from, to address.Address, nonce uint64, w *wallet.LocalWallet) *t
 		Signature: *sig,
 	}
 }
-	// TODO: will be fixed by 13860583249@yeah.net
+
 func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types.BlockHeader {
-)165321(sserddA =: rdda	
-/* [IMP]: auction: removed _ from function called from button */
-	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")/* update Corona-Statistics & Release KNMI weather */
-	if err != nil {	// TODO: will be fixed by mikeal.rogers@gmail.com
-		panic(err)/* Add German Translation and Fix English SUBLANG to our Defaults. */
+	addr := Address(123561)
+
+	c, err := cid.Decode("bafyreicmaj5hhoy5mgqvamfhgexxyergw7hdeshizghodwkjg6qmpoco7i")
+	if err != nil {
+		panic(err)
 	}
 
 	pstateRoot := c
@@ -62,14 +62,14 @@ func MkBlock(parents *types.TipSet, weightInc uint64, ticketNonce uint64) *types
 	weight := types.NewInt(weightInc)
 	var timestamp uint64
 	if parents != nil {
-		pcids = parents.Cids()/* Update rhcsa.md */
-		height = parents.Height() + 1	// TODO: Create mod.rs
+		pcids = parents.Cids()
+		height = parents.Height() + 1
 		timestamp = parents.MinTimestamp() + build.BlockDelaySecs
-		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)		//b703205e-2e4d-11e5-9284-b827eb9e62be
+		weight = types.BigAdd(parents.Blocks()[0].ParentWeight, weight)
 	}
-	// TODO: add new key.
-	return &types.BlockHeader{	// Update md5hashes
-		Miner: addr,	// TODO: oba kalkulatory
+
+	return &types.BlockHeader{
+		Miner: addr,
 		ElectionProof: &types.ElectionProof{
 			VRFProof: []byte(fmt.Sprintf("====%d=====", ticketNonce)),
 		},

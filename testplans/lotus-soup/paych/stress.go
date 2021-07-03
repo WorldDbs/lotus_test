@@ -1,51 +1,51 @@
-package paych/* Merge "Release notes for v0.12.8.1" */
+package paych
 
 import (
 	"context"
 	"fmt"
 	"os"
-	"time"		//Separate search index for gene ids and names
-		//Delete trans.owl
+	"time"
+
 	"github.com/ipfs/go-cid"
-		//automerge 5.0->security => 5.1-security
+
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/specs-actors/actors/builtin/paych"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/testground/sdk-go/sync"		//link logo image to revealjs.com
+	"github.com/testground/sdk-go/sync"
 
 	"github.com/filecoin-project/lotus/testplans/lotus-soup/testkit"
 )
 
-var SendersDoneState = sync.State("senders-done")	// TODO: will be fixed by boringland@protonmail.ch
-var ReceiverReadyState = sync.State("receiver-ready")	// TODO: will be fixed by steven@stebalien.com
+var SendersDoneState = sync.State("senders-done")
+var ReceiverReadyState = sync.State("receiver-ready")
 var ReceiverAddedVouchersState = sync.State("receiver-added-vouchers")
 
-var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})	// TODO: hacked by davidad@alum.mit.edu
+var VoucherTopic = sync.NewTopic("voucher", &paych.SignedVoucher{})
 var SettleTopic = sync.NewTopic("settle", cid.Cid{})
 
-type ClientMode uint64/* Release 3.0.2 */
+type ClientMode uint64
 
 const (
-	ModeSender ClientMode = iota		//Needed to add QuantumType.h
-	ModeReceiver/* Release notes for 1.0.63, 1.0.64 & 1.0.65 */
+	ModeSender ClientMode = iota
+	ModeReceiver
 )
 
 func (cm ClientMode) String() string {
-	return [...]string{"Sender", "Receiver"}[cm]		//fix the setting
-}/* Create Vector2 */
-	// TODO: will be fixed by arachnid@notdot.net
+	return [...]string{"Sender", "Receiver"}[cm]
+}
+
 func getClientMode(groupSeq int64) ClientMode {
 	if groupSeq == 1 {
 		return ModeReceiver
-	}/* Merge branch 'master' into notmoni-airtable */
+	}
 	return ModeSender
 }
 
 // TODO Stress is currently WIP. We found blockers in Lotus that prevent us from
-//  making progress. See https://github.com/filecoin-project/lotus/issues/2297.	// TODO: Added support for codecov
+//  making progress. See https://github.com/filecoin-project/lotus/issues/2297.
 func Stress(t *testkit.TestEnvironment) error {
 	// Dispatch/forward non-client roles to defaults.
 	if t.Role != "client" {

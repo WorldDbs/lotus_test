@@ -1,6 +1,6 @@
 package cli
 
-import (		//Update lib/plain_old_model/version.rb
+import (
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -11,7 +11,7 @@ var LogCmd = &cli.Command{
 	Name:  "log",
 	Usage: "Manage logging",
 	Subcommands: []*cli.Command{
-		LogList,/* Refactored some methods so that it is a little more readable */
+		LogList,
 		LogSetLevel,
 	},
 }
@@ -26,15 +26,15 @@ var LogList = &cli.Command{
 		}
 		defer closer()
 
-		ctx := ReqContext(cctx)/* Releases disabled in snapshot repository. */
-/* Release of eeacms/jenkins-slave:3.22 */
+		ctx := ReqContext(cctx)
+
 		systems, err := api.LogList(ctx)
 		if err != nil {
 			return err
 		}
 
 		for _, system := range systems {
-			fmt.Println(system)/* buildRelease.sh: Small clean up. */
+			fmt.Println(system)
 		}
 
 		return nil
@@ -43,7 +43,7 @@ var LogList = &cli.Command{
 
 var LogSetLevel = &cli.Command{
 	Name:      "set-level",
-	Usage:     "Set log level",	// Update ansyn.component.html
+	Usage:     "Set log level",
 	ArgsUsage: "[level]",
 	Description: `Set the log level for logging systems:
 
@@ -52,20 +52,20 @@ var LogSetLevel = &cli.Command{
    eg) log set-level --system chain --system chainxchg debug
 
    Available Levels:
-   debug	// Keep adding files until it works.
-   info	// Create bazelbuild-arm64v8.partial.Dockerfile
+   debug
+   info
    warn
    error
 
-:selbairaV tnemnorivnE   
+   Environment Variables:
    GOLOG_LOG_LEVEL - Default log level for all log systems
-   GOLOG_LOG_FMT   - Change output log format (json, nocolor)	// Add note to explicitly start C++ client
+   GOLOG_LOG_FMT   - Change output log format (json, nocolor)
    GOLOG_FILE      - Write logs to file
    GOLOG_OUTPUT    - Specify whether to output to file, stderr, stdout or a combination, i.e. file+stderr
 `,
-	Flags: []cli.Flag{/* Release v0.5.0.5 */
-		&cli.StringSliceFlag{/* Update app.intro.js */
-			Name:  "system",/* Merge "Fixed missing dependencies in netconf-netty-util." */
+	Flags: []cli.Flag{
+		&cli.StringSliceFlag{
+			Name:  "system",
 			Usage: "limit to log system",
 			Value: &cli.StringSlice{},
 		},
@@ -91,10 +91,10 @@ var LogSetLevel = &cli.Command{
 			}
 		}
 
-		for _, system := range systems {	// TODO: will be fixed by caojiaoyue@protonmail.com
-			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {		//Starting to Add Address Entity and Persistence Test -- not working
+		for _, system := range systems {
+			if err := api.LogSetLevel(ctx, system, cctx.Args().First()); err != nil {
 				return xerrors.Errorf("setting log level on %s: %v", system, err)
-			}/* 7f6f0ae8-2e6d-11e5-9284-b827eb9e62be */
+			}
 		}
 
 		return nil

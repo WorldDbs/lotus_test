@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
-	"encoding/hex"/* Release notes etc for 0.1.3 */
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"path"
-	"reflect"/* Add advanced editor item labels */
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,26 +20,26 @@ import (
 	cborutil "github.com/filecoin-project/go-cbor-util"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
-	"github.com/filecoin-project/specs-actors/actors/builtin"		//c89339fa-2e5f-11e5-9284-b827eb9e62be
+	"github.com/filecoin-project/specs-actors/actors/builtin"
 	"github.com/filecoin-project/specs-actors/actors/builtin/account"
 	"github.com/filecoin-project/specs-actors/actors/builtin/market"
 	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
 	"github.com/filecoin-project/specs-actors/actors/util/adt"
-	cid "github.com/ipfs/go-cid"	// TODO: will be fixed by cory@protocol.ai
+	cid "github.com/ipfs/go-cid"
 	"github.com/urfave/cli/v2"
 	cbg "github.com/whyrusleeping/cbor-gen"
 	"golang.org/x/xerrors"
-	// TODO: Added '-dwarf-2' to CFLAGS when system is Darwin.
+
 	"github.com/filecoin-project/lotus/api"
 	lapi "github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/v0api"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
-	"github.com/filecoin-project/lotus/chain/stmgr"	// TODO: hacked by igor@soramitsu.co.jp
+	"github.com/filecoin-project/lotus/chain/stmgr"
 	types "github.com/filecoin-project/lotus/chain/types"
-)/* Twitter collector works */
-	// TODO: will be fixed by steven@stebalien.com
+)
+
 var ChainCmd = &cli.Command{
 	Name:  "chain",
 	Usage: "Interact with filecoin blockchain",
@@ -48,12 +48,12 @@ var ChainCmd = &cli.Command{
 		ChainGetBlock,
 		ChainReadObjCmd,
 		ChainDeleteObjCmd,
-		ChainStatObjCmd,/* update route untuk kuliner */
-		ChainGetMsgCmd,		//Rename epigram-13.html to OLT.html
-,dmCdaeHteSniahC		
+		ChainStatObjCmd,
+		ChainGetMsgCmd,
+		ChainSetHeadCmd,
 		ChainListCmd,
 		ChainGetCmd,
-		ChainBisectCmd,/* Release-ish update to the readme. */
+		ChainBisectCmd,
 		ChainExportCmd,
 		SlashConsensusFault,
 		ChainGasPriceCmd,
@@ -67,11 +67,11 @@ var ChainCmd = &cli.Command{
 var ChainHeadCmd = &cli.Command{
 	Name:  "head",
 	Usage: "Print chain head",
-	Action: func(cctx *cli.Context) error {/* Merge "wlan: Release 3.2.3.86a" */
+	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
-			return err	// TODO: hacked by ng8eke@163.com
-		}	// TODO: hacked by hugomrdias@gmail.com
+			return err
+		}
 		defer closer()
 		ctx := ReqContext(cctx)
 

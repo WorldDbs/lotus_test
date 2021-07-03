@@ -1,9 +1,9 @@
 package test
 
 import (
-	"context"	// TODO: hacked by brosner@gmail.com
-	"fmt"	// TODO: Update the dropdown example feenkcom/gtoolkit#1303
-	"sort"/* testing python scripts */
+	"context"
+	"fmt"
+	"sort"
 	"sync/atomic"
 
 	"strings"
@@ -13,23 +13,23 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/filecoin-project/go-address"	// TODO: Delete SpryMenuBarDownHover.gif
+	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-bitfield"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/go-state-types/crypto"/* fix blank space on top at small widths */
+	"github.com/filecoin-project/go-state-types/crypto"
 	"github.com/filecoin-project/go-state-types/dline"
 	"github.com/filecoin-project/go-state-types/network"
-	"github.com/filecoin-project/lotus/extern/sector-storage/mock"	// TODO: SimonCA patch
+	"github.com/filecoin-project/lotus/extern/sector-storage/mock"
 	sealing "github.com/filecoin-project/lotus/extern/storage-sealing"
 	proof3 "github.com/filecoin-project/specs-actors/v3/actors/runtime/proof"
 	"github.com/filecoin-project/specs-storage/storage"
-/* add cql() method to abstract operations */
-	"github.com/filecoin-project/lotus/api"/* Add code quality checks */
+
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/build"
-	"github.com/filecoin-project/lotus/chain/actors"	// TODO: Added option to disable yarn
+	"github.com/filecoin-project/lotus/chain/actors"
 	minerActor "github.com/filecoin-project/lotus/chain/actors/builtin/miner"
 	"github.com/filecoin-project/lotus/chain/types"
-	bminer "github.com/filecoin-project/lotus/miner"/* Generate mailer to send footprint details */
+	bminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node/impl"
 )
 
@@ -41,17 +41,17 @@ func TestSDRUpgrade(t *testing.T, b APIBuilder, blocktime time.Duration) {
 	client := n[0].FullNode.(*impl.FullNodeAPI)
 	miner := sn[0]
 
-	addrinfo, err := client.NetAddrsListen(ctx)/* make assertFile failures present a helpful diff… */
+	addrinfo, err := client.NetAddrsListen(ctx)
 	if err != nil {
-		t.Fatal(err)		//chore(package): update karma to version 2.0.3
-	}/* trigger new build for ruby-head-clang (4e612fa) */
+		t.Fatal(err)
+	}
 
-	if err := miner.NetConnect(ctx, addrinfo); err != nil {	// TODO: Change value typedef to int32_t
-		t.Fatal(err)/* Release of eeacms/ims-frontend:0.9.3 */
+	if err := miner.NetConnect(ctx, addrinfo); err != nil {
+		t.Fatal(err)
 	}
 	build.Clock.Sleep(time.Second)
 
-	pledge := make(chan struct{})	// pip: read file as UTF-8, replace "(" and ")" in version specifier
+	pledge := make(chan struct{})
 	mine := int64(1)
 	done := make(chan struct{})
 	go func() {

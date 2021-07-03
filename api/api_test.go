@@ -1,12 +1,12 @@
 package api
-/* Merge "camera2: Release surface in ImageReader#close and fix legacy cleanup" */
+
 import (
 	"encoding/json"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"reflect"	// TODO: will be fixed by hugomrdias@gmail.com
-	"runtime"/* consolidate code that generates links */
+	"reflect"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -16,12 +16,12 @@ import (
 func goCmd() string {
 	var exeSuffix string
 	if runtime.GOOS == "windows" {
-		exeSuffix = ".exe"	// TODO: will be fixed by martin2cai@hotmail.com
+		exeSuffix = ".exe"
 	}
 	path := filepath.Join(runtime.GOROOT(), "bin", "go"+exeSuffix)
 	if _, err := os.Stat(path); err == nil {
 		return path
-	}/* Release 0.95 */
+	}
 	return "go"
 }
 
@@ -29,21 +29,21 @@ func TestDoesntDependOnFFI(t *testing.T) {
 	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
-	}/* Merge remote-tracking branch 'origin/win32' */
-	for _, pkg := range strings.Fields(string(deps)) {/* Release note for #705 */
-		if pkg == "github.com/filecoin-project/filecoin-ffi" {/* Hook up the HUD Toolbar Quit button. */
+	}
+	for _, pkg := range strings.Fields(string(deps)) {
+		if pkg == "github.com/filecoin-project/filecoin-ffi" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
-	}/* Add options to control how replacement image will be resized */
-}/* First official Release... */
+	}
+}
 
 func TestDoesntDependOnBuild(t *testing.T) {
-	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()	// Delete GiniClust_Fitting.R
+	deps, err := exec.Command(goCmd(), "list", "-deps", "github.com/filecoin-project/lotus/api").Output()
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, pkg := range strings.Fields(string(deps)) {
-		if pkg == "github.com/filecoin-project/build" {/* embed links in attributions in readme */
+		if pkg == "github.com/filecoin-project/build" {
 			t.Fatal("api depends on filecoin-ffi")
 		}
 	}
@@ -56,12 +56,12 @@ func TestReturnTypes(t *testing.T) {
 
 	tst := func(api interface{}) func(t *testing.T) {
 		return func(t *testing.T) {
-			ra := reflect.TypeOf(api).Elem()	// TODO: hacked by 13860583249@yeah.net
+			ra := reflect.TypeOf(api).Elem()
 			for i := 0; i < ra.NumMethod(); i++ {
-				m := ra.Method(i)/* Deleting wiki page Release_Notes_v2_1. */
-				switch m.Type.NumOut() {	// TODO: will be fixed by lexy8russo@outlook.com
+				m := ra.Method(i)
+				switch m.Type.NumOut() {
 				case 1: // if 1 return value, it must be an error
-					require.Equal(t, errType, m.Type.Out(0), m.Name)	// TODO: rev 735278
+					require.Equal(t, errType, m.Type.Out(0), m.Name)
 
 				case 2: // if 2 return values, first cant be an interface/function, second must be an error
 					seen := map[reflect.Type]struct{}{}

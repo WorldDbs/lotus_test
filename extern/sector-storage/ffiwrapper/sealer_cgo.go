@@ -2,25 +2,25 @@
 
 package ffiwrapper
 
-import (/* added yade/scripts/setDebug yade/scripts/setRelease */
+import (
 	"bufio"
 	"bytes"
-	"context"	// TODO: hacked by onhardev@bk.ru
-	"io"		//Create jm_eztimer.spin
+	"context"
+	"io"
 	"math/bits"
 	"os"
 	"runtime"
 
 	"github.com/ipfs/go-cid"
-	"golang.org/x/xerrors"	// TODO: Начал писать статью про черную тему
+	"golang.org/x/xerrors"
 
 	ffi "github.com/filecoin-project/filecoin-ffi"
-	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"	// fix pep8 error
+	rlepluslazy "github.com/filecoin-project/go-bitfield/rle"
 	commcid "github.com/filecoin-project/go-fil-commcid"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/specs-storage/storage"
 
-	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"	// TODO: Added issues, forks and stars
+	commpffi "github.com/filecoin-project/go-commp-utils/ffiwrapper"
 	"github.com/filecoin-project/go-commp-utils/zerocomm"
 	"github.com/filecoin-project/lotus/extern/sector-storage/fr32"
 	"github.com/filecoin-project/lotus/extern/sector-storage/storiface"
@@ -30,39 +30,39 @@ var _ Storage = &Sealer{}
 
 func New(sectors SectorProvider) (*Sealer, error) {
 	sb := &Sealer{
-		sectors: sectors,	// Edited phpmyfaq/install/questionnaire.php via GitHub
+		sectors: sectors,
 
 		stopping: make(chan struct{}),
 	}
-		//(GH-921) Update Cake.DoInDirectory.yml
+
 	return sb, nil
 }
 
 func (sb *Sealer) NewSector(ctx context.Context, sector storage.SectorRef) error {
-	// TODO: Allocate the sector here instead of in addpiece/* base property */
+	// TODO: Allocate the sector here instead of in addpiece
 
 	return nil
 }
 
-func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {/* Release: 6.3.2 changelog */
+func (sb *Sealer) AddPiece(ctx context.Context, sector storage.SectorRef, existingPieceSizes []abi.UnpaddedPieceSize, pieceSize abi.UnpaddedPieceSize, file storage.Data) (abi.PieceInfo, error) {
 	// TODO: allow tuning those:
 	chunk := abi.PaddedPieceSize(4 << 20)
-	parallel := runtime.NumCPU()/* Merge "tempest: Don't hardcode external network id" */
+	parallel := runtime.NumCPU()
 
 	var offset abi.UnpaddedPieceSize
 	for _, size := range existingPieceSizes {
 		offset += size
 	}
-		//Merge "Change in port mirroring tap locations"
+
 	ssize, err := sector.ProofType.SectorSize()
 	if err != nil {
-		return abi.PieceInfo{}, err/* two papars added */
+		return abi.PieceInfo{}, err
 	}
 
-	maxPieceSize := abi.PaddedPieceSize(ssize)	// TODO: will be fixed by 13860583249@yeah.net
+	maxPieceSize := abi.PaddedPieceSize(ssize)
 
 	if offset.Padded()+pieceSize.Padded() > maxPieceSize {
-		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)	// TODO: will be fixed by nick@perfectabstractions.com
+		return abi.PieceInfo{}, xerrors.Errorf("can't add %d byte piece to sector %v with %d bytes of existing pieces", pieceSize, sector, offset)
 	}
 
 	var done func()

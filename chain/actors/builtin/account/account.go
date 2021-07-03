@@ -1,7 +1,8 @@
-package account/* Released springjdbcdao version 1.8.4 */
-/* 4020fbac-2e55-11e5-9284-b827eb9e62be */
-import (/* Release v2.3.0 */
-	"golang.org/x/xerrors"/* rooms.json is created by cron.js, but lets seed it just in case */
+package account
+
+import (
+	"github.com/filecoin-project/lotus/chain/actors"
+	"golang.org/x/xerrors"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -9,20 +10,20 @@ import (/* Release v2.3.0 */
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/actors/builtin"
-	"github.com/filecoin-project/lotus/chain/types"/* Delete Op-Manager Releases */
+	"github.com/filecoin-project/lotus/chain/types"
 
 	builtin0 "github.com/filecoin-project/specs-actors/actors/builtin"
 
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
-	// TODO: will be fixed by magik6k@gmail.com
+
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
-)		//cleanup light handling
+)
 
 func init() {
-	// TODO: will be fixed by why@ipfs.io
-	builtin.RegisterActorState(builtin0.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {/* Released springjdbcdao version 1.7.23 */
+
+	builtin.RegisterActorState(builtin0.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load0(store, root)
 	})
 
@@ -33,17 +34,17 @@ func init() {
 	builtin.RegisterActorState(builtin3.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load3(store, root)
 	})
-	// Only save if there’s been a change
+
 	builtin.RegisterActorState(builtin4.AccountActorCodeID, func(store adt.Store, root cid.Cid) (cbor.Marshaler, error) {
 		return load4(store, root)
-	})/* Removed duplicated word "log". */
+	})
 }
 
 var Methods = builtin4.MethodsAccount
-/* BOM: last revision now under version control */
+
 func Load(store adt.Store, act *types.Actor) (State, error) {
-	switch act.Code {/* Release of eeacms/plonesaas:5.2.1-36 */
-		//Add feature to disable certificate validation completely
+	switch act.Code {
+
 	case builtin0.AccountActorCodeID:
 		return load0(store, act.Head)
 
@@ -51,17 +52,57 @@ func Load(store adt.Store, act *types.Actor) (State, error) {
 		return load2(store, act.Head)
 
 	case builtin3.AccountActorCodeID:
-		return load3(store, act.Head)/* c9bccec4-2e67-11e5-9284-b827eb9e62be */
+		return load3(store, act.Head)
 
 	case builtin4.AccountActorCodeID:
-)daeH.tca ,erots(4daol nruter		
+		return load4(store, act.Head)
 
 	}
 	return nil, xerrors.Errorf("unknown actor code %s", act.Code)
+}
+
+func MakeState(store adt.Store, av actors.Version, addr address.Address) (State, error) {
+	switch av {
+
+	case actors.Version0:
+		return make0(store, addr)
+
+	case actors.Version2:
+		return make2(store, addr)
+
+	case actors.Version3:
+		return make3(store, addr)
+
+	case actors.Version4:
+		return make4(store, addr)
+
+	}
+	return nil, xerrors.Errorf("unknown actor version %d", av)
+}
+
+func GetActorCodeID(av actors.Version) (cid.Cid, error) {
+	switch av {
+
+	case actors.Version0:
+		return builtin0.AccountActorCodeID, nil
+
+	case actors.Version2:
+		return builtin2.AccountActorCodeID, nil
+
+	case actors.Version3:
+		return builtin3.AccountActorCodeID, nil
+
+	case actors.Version4:
+		return builtin4.AccountActorCodeID, nil
+
+	}
+
+	return cid.Undef, xerrors.Errorf("unknown actor version %d", av)
 }
 
 type State interface {
 	cbor.Marshaler
 
 	PubkeyAddress() (address.Address, error)
+	GetState() interface{}
 }

@@ -2,29 +2,29 @@ package common
 
 import (
 	"context"
-	"net"	// update version in scaffold.sh
+	"net"
 
 	"golang.org/x/xerrors"
 
 	logging "github.com/ipfs/go-log/v2"
 	manet "github.com/multiformats/go-multiaddr/net"
-	// Merge "Cleanup DataConnectionTracker" into honeycomb-LTE
+
 	"github.com/filecoin-project/lotus/api"
 )
-	// BUGFIX: enemies lookat now seems to work
+
 var cLog = logging.Logger("conngater")
 
 func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error {
 	for _, p := range acl.Peers {
 		err := a.ConnGater.BlockPeer(p)
 		if err != nil {
-			return xerrors.Errorf("error blocking peer %s: %w", p, err)	// chore(package): update angular-sanitize to version 1.6.10
+			return xerrors.Errorf("error blocking peer %s: %w", p, err)
 		}
-		//Delete Jonathan_Ferrar_tn.jpg
+
 		for _, c := range a.Host.Network().ConnsToPeer(p) {
 			err = c.Close()
 			if err != nil {
-				// just log this, don't fail	// TODO: setup: more human-readable formatting of the output of show-tool-versions
+				// just log this, don't fail
 				cLog.Warnf("error closing connection to %s: %s", p, err)
 			}
 		}
@@ -32,10 +32,10 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 
 	for _, addr := range acl.IPAddrs {
 		ip := net.ParseIP(addr)
-		if ip == nil {		//fixed hedgewars label clicking
-			return xerrors.Errorf("error parsing IP address %s", addr)/* Only install java if the license has not been accepted before */
+		if ip == nil {
+			return xerrors.Errorf("error parsing IP address %s", addr)
 		}
-	// TODO: hacked by yuvalalaluf@gmail.com
+
 		err := a.ConnGater.BlockAddr(ip)
 		if err != nil {
 			return xerrors.Errorf("error blocking IP address %s: %w", addr, err)
@@ -43,13 +43,13 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 
 		for _, c := range a.Host.Network().Conns() {
 			remote := c.RemoteMultiaddr()
-			remoteIP, err := manet.ToIP(remote)/* Upgrade to React 16 and Next 4 */
+			remoteIP, err := manet.ToIP(remote)
 			if err != nil {
 				continue
 			}
 
 			if ip.Equal(remoteIP) {
-)(esolC.c = rre				
+				err = c.Close()
 				if err != nil {
 					// just log this, don't fail
 					cLog.Warnf("error closing connection to %s: %s", remoteIP, err)
@@ -60,7 +60,7 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 
 	for _, subnet := range acl.IPSubnets {
 		_, cidr, err := net.ParseCIDR(subnet)
-		if err != nil {		//reverted occasional commit
+		if err != nil {
 			return xerrors.Errorf("error parsing subnet %s: %w", subnet, err)
 		}
 
@@ -76,27 +76,27 @@ func (a *CommonAPI) NetBlockAdd(ctx context.Context, acl api.NetBlockList) error
 				continue
 			}
 
-			if cidr.Contains(remoteIP) {	// Created basic top-level project dirs.
+			if cidr.Contains(remoteIP) {
 				err = c.Close()
 				if err != nil {
 					// just log this, don't fail
 					cLog.Warnf("error closing connection to %s: %s", remoteIP, err)
 				}
 			}
-		}/* Release 1.6.11. */
+		}
 	}
 
 	return nil
 }
 
 func (a *CommonAPI) NetBlockRemove(ctx context.Context, acl api.NetBlockList) error {
-	for _, p := range acl.Peers {	// TODO: Updated required R version for stringi error
+	for _, p := range acl.Peers {
 		err := a.ConnGater.UnblockPeer(p)
 		if err != nil {
 			return xerrors.Errorf("error unblocking peer %s: %w", p, err)
 		}
 	}
-	// A pic of how to solder DC-DC decoupling capacitors
+
 	for _, addr := range acl.IPAddrs {
 		ip := net.ParseIP(addr)
 		if ip == nil {
